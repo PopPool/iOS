@@ -41,6 +41,12 @@ final class SignUpVM: ViewModelable {
         var tap_step4_ageButton: ControlEvent<Void>
         /// Sign Up Step4 secondary button  탭 이벤트
         var tap_step4_secondaryButton: ControlEvent<Void>
+        
+//        var event_age_selection: ControlEvent<Void>
+//        
+//        var tap_age_confirm_selection: ControlEvent<Void>
+//        
+//        var tap_age_cancel_selection: ControlEvent<Void>
     }
     
     /// 출력 이벤트

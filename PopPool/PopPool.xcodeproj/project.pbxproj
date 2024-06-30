@@ -89,6 +89,7 @@
 		BD3C4C6B2C30C8880087917B /* CMPTToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C692C30C8880087917B /* CMPTToolTipView.swift */; };
 		BD3C4C6D2C30C8AE0087917B /* HeaderViewCPNT.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C6C2C30C8AE0087917B /* HeaderViewCPNT.swift */; };
 		BD3C4C6F2C313D6C0087917B /* LoginBottomSheetVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C6E2C313D6C0087917B /* LoginBottomSheetVM.swift */; };
+		BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */; };
 		BD57D4E82C30C63A0036E874 /* LoginBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D4E72C30C63A0036E874 /* LoginBottomSheetVC.swift */; };
 		BD6368082C0CBEFE00891A1B /* PopPoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6368072C0CBEFE00891A1B /* PopPoolTests.swift */; };
 		BD8607972C23418800726692 /* LocalDeleteUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8607962C23418800726692 /* LocalDeleteUseCaseImpl.swift */; };
@@ -207,6 +208,7 @@
 		BD3C4C692C30C8880087917B /* CMPTToolTipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTToolTipView.swift; sourceTree = "<group>"; };
 		BD3C4C6C2C30C8AE0087917B /* HeaderViewCPNT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewCPNT.swift; sourceTree = "<group>"; };
 		BD3C4C6E2C313D6C0087917B /* LoginBottomSheetVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBottomSheetVM.swift; sourceTree = "<group>"; };
+		BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSelectionBottomSheet.swift; sourceTree = "<group>"; };
 		BD57D4E72C30C63A0036E874 /* LoginBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBottomSheetVC.swift; sourceTree = "<group>"; };
 		BD6368072C0CBEFE00891A1B /* PopPoolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopPoolTests.swift; sourceTree = "<group>"; };
 		BD8607962C23418800726692 /* LocalDeleteUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDeleteUseCaseImpl.swift; sourceTree = "<group>"; };
@@ -612,6 +614,7 @@
 				08A28CAB2C27E5FB00DF7A90 /* ProgressIndicatorCPNT.swift */,
 				08A28CB32C280F9600DF7A90 /* ProgressViewCPNT.swift */,
 				BD9901CC2C2877BF0024F30D /* ToastMSGCPNT.swift */,
+				BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */,
 				08A28CB52C2A97E300DF7A90 /* ContentTitleCPNT.swift */,
 				BD353B462C2C13460004659D /* HeaderViewCPNT.swift */,
 				08C813DF2C2D82EF009239FE /* SegmentedControlCPNT.swift */,
@@ -952,6 +955,7 @@
 				08C813F12C2EF60B009239FE /* CheckNickNameRequestDTO.swift in Sources */,
 				BD86079B2C23429D00726692 /* DatabaseTYPE.swift in Sources */,
 				085105822C102F8000ED7DBB /* KakaoAuthServiceImpl.swift in Sources */,
+				BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheet.swift in Sources */,
 				087346152C0AAD2900534FFA /* ViewController.swift in Sources */,
 				08A28CC62C2BE1EA00DF7A90 /* Inputable.swift in Sources */,
 				08B9658C2C15FF0600BF95AA /* FetchSocialCredentialUseCase.swift in Sources */,
