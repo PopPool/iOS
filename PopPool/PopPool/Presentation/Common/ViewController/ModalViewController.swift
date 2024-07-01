@@ -22,8 +22,9 @@ class ModalViewController: UIViewController {
     // 전체 콘텐츠를 감싸는 View
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.layer.cornerRadius = 15
+        view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -31,11 +32,17 @@ class ModalViewController: UIViewController {
     // 교체가 가능한 View
     private let contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         return view
     }()
     
-    private let minimumHeight: CGFloat = 80
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.isScrollEnabled = true
+        return scrollView
+    }()
+    
+    private let minimumHeight: CGFloat = 80 // autolayout 기준 - 고정된 값은 제외하도록!
     private let minimumPanHeight: CGFloat = 20
     private let maxDimAlpha: CGFloat = 0.8
 }
@@ -72,9 +79,9 @@ extension ModalViewController {
         // 각 ModalVC별로 담는 콘텐츠
         containerView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview()
             make.top.equalToSuperview()
-            make.bottom.equalToSuperview().inset(32)
+            make.bottom.equalToSuperview()
         }
     }
     

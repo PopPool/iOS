@@ -63,9 +63,9 @@ class LoginVC: UIViewController {
     
     let kakaoSignInButton: ButtonCPNT = ButtonCPNT(type: .kakao, title: "카카오톡으로 로그인")
     let appleSignInButton: ButtonCPNT = ButtonCPNT(type: .apple, title: "Apple로 로그인")
-    lazy var spacer28 = SpacingFactory.shared.createSpace(on: self.view, size: 28)
-    lazy var spacer64 = SpacingFactory.shared.createSpace(on: self.view, size: 64)
-    lazy var spacer156 = SpacingFactory.shared.createSpace(on: self.view, size: 156)
+    lazy var spacer28 = SpacingFactory.shared.createSpace(size: 28)
+    lazy var spacer64 = SpacingFactory.shared.createSpace(size: 64)
+    lazy var spacer156 = SpacingFactory.shared.createSpace(size: 156)
     lazy var belowTip = CMPTToolTipView(frame: .zero, direction: .notifyBelow)
     lazy var aboveTip = CMPTToolTipView(frame: .zero, direction: .notifyAbove)
     
@@ -158,7 +158,9 @@ extension LoginVC {
         output.showLoginBottomSheet
             .subscribe(onNext: { [weak self] _ in
                 print("버튼이 눌렸습니다")
-                let vc = AgeSelectionBottomSheet()
+//                let vc = LoginBottomSheetVC()
+//                let vc = informBottomSheet()
+                let vc = AgeSelectionBottomSheetVC()
                 self?.presentViewControllerModally(vc: vc)
             })
             .disposed(by: disposeBag)

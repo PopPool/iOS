@@ -89,7 +89,9 @@
 		BD3C4C6B2C30C8880087917B /* CMPTToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C692C30C8880087917B /* CMPTToolTipView.swift */; };
 		BD3C4C6D2C30C8AE0087917B /* HeaderViewCPNT.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C6C2C30C8AE0087917B /* HeaderViewCPNT.swift */; };
 		BD3C4C6F2C313D6C0087917B /* LoginBottomSheetVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C6E2C313D6C0087917B /* LoginBottomSheetVM.swift */; };
-		BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */; };
+		BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheetVC.swift */; };
+		BD3C4C802C31CD310087917B /* informBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C7F2C31CD310087917B /* informBottomSheet.swift */; };
+		BD3C4C832C3271000087917B /* AgeSelectionBottomSheetVC+.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3C4C822C3271000087917B /* AgeSelectionBottomSheetVC+.swift */; };
 		BD57D4E82C30C63A0036E874 /* LoginBottomSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D4E72C30C63A0036E874 /* LoginBottomSheetVC.swift */; };
 		BD6368082C0CBEFE00891A1B /* PopPoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6368072C0CBEFE00891A1B /* PopPoolTests.swift */; };
 		BD8607972C23418800726692 /* LocalDeleteUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8607962C23418800726692 /* LocalDeleteUseCaseImpl.swift */; };
@@ -208,7 +210,9 @@
 		BD3C4C692C30C8880087917B /* CMPTToolTipView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMPTToolTipView.swift; sourceTree = "<group>"; };
 		BD3C4C6C2C30C8AE0087917B /* HeaderViewCPNT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewCPNT.swift; sourceTree = "<group>"; };
 		BD3C4C6E2C313D6C0087917B /* LoginBottomSheetVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBottomSheetVM.swift; sourceTree = "<group>"; };
-		BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSelectionBottomSheet.swift; sourceTree = "<group>"; };
+		BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSelectionBottomSheetVC.swift; sourceTree = "<group>"; };
+		BD3C4C7F2C31CD310087917B /* informBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = informBottomSheet.swift; sourceTree = "<group>"; };
+		BD3C4C822C3271000087917B /* AgeSelectionBottomSheetVC+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AgeSelectionBottomSheetVC+.swift"; sourceTree = "<group>"; };
 		BD57D4E72C30C63A0036E874 /* LoginBottomSheetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBottomSheetVC.swift; sourceTree = "<group>"; };
 		BD6368072C0CBEFE00891A1B /* PopPoolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopPoolTests.swift; sourceTree = "<group>"; };
 		BD8607962C23418800726692 /* LocalDeleteUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDeleteUseCaseImpl.swift; sourceTree = "<group>"; };
@@ -607,6 +611,7 @@
 		08F49DF72C23FC5F002D5202 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				BD3C4C812C3270EA0087917B /* AgeSelectionSheet */,
 				08F49DFC2C2400FC002D5202 /* ButtonCPNT.swift */,
 				BD3C4C682C30C8880087917B /* CMPTInfoBoxView.swift */,
 				BD3C4C692C30C8880087917B /* CMPTToolTipView.swift */,
@@ -614,7 +619,7 @@
 				08A28CAB2C27E5FB00DF7A90 /* ProgressIndicatorCPNT.swift */,
 				08A28CB32C280F9600DF7A90 /* ProgressViewCPNT.swift */,
 				BD9901CC2C2877BF0024F30D /* ToastMSGCPNT.swift */,
-				BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheet.swift */,
+				BD3C4C7F2C31CD310087917B /* informBottomSheet.swift */,
 				08A28CB52C2A97E300DF7A90 /* ContentTitleCPNT.swift */,
 				BD353B462C2C13460004659D /* HeaderViewCPNT.swift */,
 				08C813DF2C2D82EF009239FE /* SegmentedControlCPNT.swift */,
@@ -693,6 +698,15 @@
 				BD3C4C6E2C313D6C0087917B /* LoginBottomSheetVM.swift */,
 			);
 			path = LoginBottomSheet;
+			sourceTree = "<group>";
+		};
+		BD3C4C812C3270EA0087917B /* AgeSelectionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				BD3C4C7D2C31BD7A0087917B /* AgeSelectionBottomSheetVC.swift */,
+				BD3C4C822C3271000087917B /* AgeSelectionBottomSheetVC+.swift */,
+			);
+			path = AgeSelectionSheet;
 			sourceTree = "<group>";
 		};
 		BDC622AF2C22580E009411AE /* Common */ = {
@@ -945,6 +959,7 @@
 			files = (
 				08A28CBE2C2AEAF600DF7A90 /* CheckBoxCPNT.swift in Sources */,
 				08A28CAC2C27E5FB00DF7A90 /* ProgressIndicatorCPNT.swift in Sources */,
+				BD3C4C832C3271000087917B /* AgeSelectionBottomSheetVC+.swift in Sources */,
 				08A28CC42C2B00B700DF7A90 /* TermsViewCPNT.swift in Sources */,
 				087346522C0ABC4B00534FFA /* ViewModelable.swift in Sources */,
 				BDA0B1372C2E622B007BDCA4 /* ModalViewController.swift in Sources */,
@@ -955,7 +970,7 @@
 				08C813F12C2EF60B009239FE /* CheckNickNameRequestDTO.swift in Sources */,
 				BD86079B2C23429D00726692 /* DatabaseTYPE.swift in Sources */,
 				085105822C102F8000ED7DBB /* KakaoAuthServiceImpl.swift in Sources */,
-				BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheet.swift in Sources */,
+				BD3C4C7E2C31BD7A0087917B /* AgeSelectionBottomSheetVC.swift in Sources */,
 				087346152C0AAD2900534FFA /* ViewController.swift in Sources */,
 				08A28CC62C2BE1EA00DF7A90 /* Inputable.swift in Sources */,
 				08B9658C2C15FF0600BF95AA /* FetchSocialCredentialUseCase.swift in Sources */,
@@ -988,6 +1003,7 @@
 				08C813F72C2F15DC009239FE /* FetchInterestListResponseDTO.swift in Sources */,
 				0873464E2C0AB1CA00534FFA /* ViewControllerViewModel.swift in Sources */,
 				BDC622B72C229517009411AE /* UserdefaultRepositoryImpl.swift in Sources */,
+				BD3C4C802C31CD310087917B /* informBottomSheet.swift in Sources */,
 				BD353B4B2C2D3D7D0004659D /* LoginVM.swift in Sources */,
 				087346132C0AAD2900534FFA /* SceneDelegate.swift in Sources */,
 				08F49DE82C231C40002D5202 /* SocialTYPE.swift in Sources */,
