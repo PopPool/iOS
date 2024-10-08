@@ -9,6 +9,17 @@ xcuserdata/
 *.xcscmblueprint
 *.xccheckout
 
+## After updating Developer account (ignore provisioning Profiles from being uploaded)
+*.xcuserstate
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/xcschemes/xcschememanagement.plist
+build/
+DerivedData/
+*.mobileprovision
+*.provisionprofile
+
 ## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
