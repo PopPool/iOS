@@ -51,11 +51,23 @@ final class DetailReactor: Reactor {
     }()
     
     private var imageBannerSection = ImageBannerSection(inputDataList: [])
-    private var spacing36Section = SpacingSection(inputDataList: [.init(spacing: 36)])
-    private var spacing20Section = SpacingSection(inputDataList: [.init(spacing: 20)])
     private var titleSection = DetailTitleSection(inputDataList: [.init(title: "hi", isBookMark: false)])
     private var contentSection = DetailContentSection(inputDataList: [])
+    private var infoSection = DetailInfoSection(inputDataList: [])
+    private var commentTitleSection = DetailCommentTitleSection(inputDataList: [])
+    private var commentSection = DetailCommentSection(inputDataList: [])
+    private var similarTitleSecion = SearchTitleSection(inputDataList: [.init(title: "지금 보고있는 팝업과 비슷한 팝업")])
+    private var similarSection = DetailSimilarSection(inputDataList: [])
     
+    
+    private var spacing70Section = SpacingSection(inputDataList: [.init(spacing: 70)])
+    private var spacing40Section = SpacingSection(inputDataList: [.init(spacing: 40)])
+    private var spacing36Section = SpacingSection(inputDataList: [.init(spacing: 36)])
+    private var spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
+    private var spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
+    private var spacing20Section = SpacingSection(inputDataList: [.init(spacing: 20)])
+    private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
+    private var spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
     // MARK: - init
     init(popUpID: Int64) {
         self.popUpID = popUpID
@@ -115,6 +127,19 @@ final class DetailReactor: Reactor {
             titleSection,
             spacing20Section,
             contentSection,
+            spacing28Section,
+            infoSection,
+            spacing40Section,
+            spacing16GraySection,
+            spacing36Section,
+            commentTitleSection,
+            spacing16Section,
+            commentSection,
+            spacing40Section,
+            similarTitleSecion,
+            spacing24Section,
+            similarSection,
+            spacing70Section
         ]
     }
     
@@ -122,7 +147,7 @@ final class DetailReactor: Reactor {
         return popUpAPIUseCase.getPopUpDetail(commentType: "NORMAL", popUpStoredId: popUpID)
             .withUnretained(self)
             .map { (owner, response) in
-
+                
                 // image Banner
                 let imagePaths = response.imageList.compactMap { $0.imageUrl }
                 let idList = response.imageList.map { $0.id }
@@ -133,8 +158,31 @@ final class DetailReactor: Reactor {
                 owner.popUpName = response.name
                 
                 // contentSection
-                owner.contentSection.inputDataList = [.init(content: response.desc)]
-                print(response.commentList)
+                let testText = "1231231231231231232314123413412341234123412341341234123412412341234141341234141234124123412341234123-84901283409182309481209384-01238-94081290384-90182-903849012-9038490182-30948-90182-30948-901238-9048-0921384-098213-9084-09123809481-2093840981-02938409812-3094809128-03948091238-094091238904-812-0938409182-03948091283-0948-0912384-90"
+                //                owner.contentSection.inputDataList = [.init(content: response.desc)]
+                owner.contentSection.inputDataList = [.init(content: testText)]
+                owner.infoSection.inputDataList = [.init(
+                    startDate: response.startDate,
+                    endDate: response.endDate,
+                    startTime: response.startTime,
+                    endTime: response.endTime,
+                    address: response.address)
+                ]
+                owner.commentTitleSection.inputDataList = [.init(commentCount: response.commentCount)]
+                owner.commentSection.inputDataList = response.commentList.map({ response in
+                    return .init(
+                        nickName: response.nickname,
+                        profileImagePath: response.profileImageUrl,
+                        date: response.createDateTime,
+                        comment: response.content,
+                        imageList: response.commentImageList.map { $0.imageUrl }
+                    )
+                })
+                
+                owner.similarSection.inputDataList = response.similarPopUpStoreList.map {
+                    return .init(imagePath: $0.mainImageUrl, date: $0.endDate, title: $0.name)
+                }
+                print(response)
                 return .loadView
             }
     }

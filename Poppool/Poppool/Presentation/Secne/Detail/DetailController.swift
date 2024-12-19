@@ -44,6 +44,11 @@ private extension DetailController {
         mainView.contentCollectionView.register(SpacingSectionCell.self, forCellWithReuseIdentifier: SpacingSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailTitleSectionCell.self, forCellWithReuseIdentifier: DetailTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailContentSectionCell.self, forCellWithReuseIdentifier: DetailContentSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailInfoSectionCell.self, forCellWithReuseIdentifier: DetailInfoSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailCommentTitleSectionCell.self, forCellWithReuseIdentifier: DetailCommentTitleSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailCommentSectionCell.self, forCellWithReuseIdentifier: DetailCommentSectionCell.identifiers)
+        mainView.contentCollectionView.register(SearchTitleSectionCell.self, forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailSimilarSectionCell.self, forCellWithReuseIdentifier: DetailSimilarSectionCell.identifiers)
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -94,6 +99,25 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
+        
+        if let cell = cell as? DetailContentSectionCell {
+            cell.dropDownButton.rx.tap
+                .withUnretained(collectionView)
+                .subscribe { (collectionView, _) in
+                    cell.isOpen.toggle()
+                    if cell.isOpen {
+                        cell.buttonTitleLabel.setLineHeightText(text: "닫기")
+                        cell.contentLabel.numberOfLines = 0
+                        cell.buttonImageView.image = UIImage(named: "icon_dropdown_top_gray")
+                    } else {
+                        cell.contentLabel.numberOfLines = 3
+                        cell.buttonTitleLabel.setLineHeightText(text: "더보기")
+                        cell.buttonImageView.image = UIImage(named: "icon_dropdown_bottom_gray")
+                    }
+                    collectionView.reloadData()
+                }
+                .disposed(by: cell.disposeBag)
+        }
         return cell
     }
 

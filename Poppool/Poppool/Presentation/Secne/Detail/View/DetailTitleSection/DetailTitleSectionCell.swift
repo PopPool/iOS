@@ -15,6 +15,7 @@ final class DetailTitleSectionCell: UICollectionViewCell {
     // MARK: - Components
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 18)
+        label.numberOfLines = 2
         return label
     }()
     

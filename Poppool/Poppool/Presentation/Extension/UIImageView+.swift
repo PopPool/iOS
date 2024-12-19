@@ -11,9 +11,11 @@ import Kingfisher
 
 extension UIImageView {
     func setPPImage(path: String?) {
-        guard let path = path else { return }
+        guard let path = path else {
+            self.image = UIImage(named: "image_profileImage")
+            return
+        }
         let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
-        
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             let imageURL = URL(string: cenvertimageURL)
             self.kf.setImage(with: imageURL) { result in

@@ -12,6 +12,8 @@ struct GetPopUpDetailResponse {
     let desc: String?
     let startDate: String?
     let endDate: String?
+    let startTime: String?
+    let endTime: String?
     let address: String?
     let commentCount: Int64
     let bookmarkYn: Bool

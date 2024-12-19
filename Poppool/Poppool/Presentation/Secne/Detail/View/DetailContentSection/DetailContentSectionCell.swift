@@ -14,13 +14,39 @@ final class DetailContentSectionCell: UICollectionViewCell {
     
     // MARK: - Components
 
-    private let contentLabel: PPLabel = {
+    private let contentStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .center
+        view.spacing = 16
+        return view
+    }()
+    let contentLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
-        label.numberOfLines = 0
+        label.numberOfLines = 3
         return label
     }()
     
-    let disposeBag = DisposeBag()
+    let dropDownButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    
+    let buttonTitleLabel: PPLabel = {
+        let label = PPLabel(style: .medium, fontSize: 13, text: "더보기")
+        label.textColor = .g600
+        return label
+    }()
+    
+    let buttonImageView: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "icon_dropdown_bottom_gray")
+        return view
+    }()
+    
+    var isOpen: Bool = false
+    
+    var disposeBag = DisposeBag()
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -31,13 +57,34 @@ final class DetailContentSectionCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
 }
 
 // MARK: - SetUp
 private extension DetailContentSectionCell {
     func setUpConstraints() {
-        contentView.addSubview(contentLabel)
-        contentLabel.snp.makeConstraints { make in
+        dropDownButton.addSubview(buttonTitleLabel)
+        buttonTitleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        dropDownButton.addSubview(buttonImageView)
+        buttonImageView.snp.makeConstraints { make in
+            make.size.equalTo(14)
+            make.trailing.equalToSuperview()
+            make.leading.equalTo(buttonTitleLabel.snp.trailing).offset(3)
+            make.centerY.equalToSuperview()
+        }
+        contentStackView.addArrangedSubview(contentLabel)
+        contentStackView.addArrangedSubview(dropDownButton)
+        contentView.addSubview(contentStackView)
+        contentStackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -49,6 +96,12 @@ extension DetailContentSectionCell: Inputable {
     }
     
     func injection(with input: Input) {
-        contentLabel.setLineHeightText(text: input.content)
+        let text = input.content ?? ""
+        contentLabel.setLineHeightText(text: text)
+        if text.count >= 68 {
+            dropDownButton.isHidden = false
+        } else {
+            dropDownButton.isHidden = true
+        }
     }
 }
