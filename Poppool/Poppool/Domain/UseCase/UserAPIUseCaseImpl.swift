@@ -22,4 +22,12 @@ final class UserAPIUseCaseImpl {
     func deleteBookmarkPopUp(popUpID: Int64) -> Completable {
         return repository.deleteBookmarkPopUp(request: .init(popUpStoreId: popUpID))
     }
+    
+    func postCommentLike(commentId: Int64) -> Completable {
+        return repository.postCommentLike(request: .init(commentId: commentId))
+    }
+    
+    func deleteCommentLike(commentId: Int64) -> Completable {
+        return repository.deleteCommentLike(request: .init(commentId: commentId))
+    }
 }

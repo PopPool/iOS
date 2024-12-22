@@ -28,4 +28,22 @@ struct UserAPIEndPoint {
             queryParameters: request
         )
     }
+    
+    static func postCommentLike(request: CommentLikeRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/likes",
+            method: .post,
+            queryParameters: request
+        )
+    }
+    
+    static func deleteCommentLike(request: CommentLikeRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/likes",
+            method: .delete,
+            queryParameters: request
+        )
+    }
 }

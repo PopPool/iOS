@@ -105,12 +105,13 @@ private extension AddCommentSectionCell {
         contentView.backgroundColor = .w100
         contentView.addSubview(countLabel)
         countLabel.snp.makeConstraints { make in
-            make.trailing.bottom.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(16)
         }
         contentView.addSubview(commentTextView)
         commentTextView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(countLabel.snp.top)
+            make.bottom.equalTo(countLabel.snp.top).offset(-4)
         }
         contentView.addSubview(placeHolderLabel)
         placeHolderLabel.snp.makeConstraints { make in
@@ -118,7 +119,8 @@ private extension AddCommentSectionCell {
         }
         contentView.addSubview(noticeLabel)
         noticeLabel.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(16)
         }
     }
 }

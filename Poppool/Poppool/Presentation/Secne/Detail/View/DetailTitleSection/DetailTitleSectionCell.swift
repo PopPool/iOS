@@ -15,6 +15,7 @@ final class DetailTitleSectionCell: UICollectionViewCell {
     // MARK: - Components
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 18)
+        label.numberOfLines = 2
         return label
     }()
     
@@ -29,7 +30,7 @@ final class DetailTitleSectionCell: UICollectionViewCell {
         return button
     }()
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -39,6 +40,11 @@ final class DetailTitleSectionCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
 }
 
@@ -71,11 +77,13 @@ extension DetailTitleSectionCell: Inputable {
     struct Input {
         var title: String?
         var isBookMark: Bool
+        var isLogin: Bool
     }
     
     func injection(with input: Input) {
         let bookMarkImage = input.isBookMark ? UIImage(named: "icon_bookmark_blue") : UIImage(named: "icon_bookmark_gray")
         bookMarkButton.setImage(bookMarkImage, for: .normal)
         titleLabel.setLineHeightText(text: input.title)
+        bookMarkButton.isHidden = !input.isLogin
     }
 }

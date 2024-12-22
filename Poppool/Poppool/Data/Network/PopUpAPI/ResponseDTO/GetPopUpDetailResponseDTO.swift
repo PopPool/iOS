@@ -27,8 +27,10 @@ extension GetPopUpDetailResponseDTO {
         return .init(
             name: name,
             desc: desc,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: startDate.toDate().toPPDateString(),
+            endDate: endDate.toDate().toPPDateString(),
+            startTime: startDate.toDate().toPPTimeeString(),
+            endTime: startDate.toDate().toPPTimeeString(),
             address: address,
             commentCount: commentCount,
             bookmarkYn: bookmarkYn,
@@ -53,6 +55,8 @@ extension GetPopUpDetailImageResponseDTO {
 }
 
 struct GetPopUpDetailCommentResponseDTO: Decodable {
+    let commentId: Int64
+    let creator: String?
     let nickname: String?
     let instagramId: String?
     let profileImageUrl: String?
@@ -66,13 +70,15 @@ struct GetPopUpDetailCommentResponseDTO: Decodable {
 extension GetPopUpDetailCommentResponseDTO {
     func toDomain() -> GetPopUpDetailCommentResponse {
         return .init(
+            commentId: commentId,
+            creator: creator,
             nickname: nickname,
             instagramId: instagramId,
             profileImageUrl: profileImageUrl,
             content: content,
             likeYn: likeYn,
             likeCount: likeCount,
-            createDateTime: createDateTime,
+            createDateTime: createDateTime.toDate().toPPDateString(),
             commentImageList: commentImageList == nil ? [] : commentImageList!.map { $0.toDomain()}
         )
     }
@@ -87,6 +93,6 @@ struct GetPopUpDetailSimilarResponseDTO: Decodable {
 
 extension GetPopUpDetailSimilarResponseDTO {
     func toDomain() -> GetPopUpDetailSimilarResponse {
-        return .init(id: id, name: name, mainImageUrl: mainImageUrl, endDate: endDate)
+        return .init(id: id, name: name, mainImageUrl: mainImageUrl, endDate: endDate.toDate().toPPDateString())
     }
 }

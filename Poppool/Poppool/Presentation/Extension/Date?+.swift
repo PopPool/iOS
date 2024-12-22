@@ -28,5 +28,13 @@ extension Optional where Wrapped == Date {
         formatter.dateFormat = "MM월 dd일"
         return formatter.string(from: date)
     }
-
+    
+    func toPPTimeeString(defaultString: String = "") -> String {
+        guard let date = self else {
+            return defaultString
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
+    }
 }

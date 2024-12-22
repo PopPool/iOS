@@ -183,4 +183,8 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         headerIsDarkMode.onNext(scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY))
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        reactor?.action.onNext(.collectionViewCellTapped(controller: self, indexPath: indexPath))
+    }
 }

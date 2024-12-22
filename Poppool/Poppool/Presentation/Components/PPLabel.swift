@@ -13,12 +13,12 @@ class PPLabel: UILabel {
         style: UIFont.FontStyle, 
         fontSize: CGFloat,
         text: String = "",
-        lineHeight: CGFloat = 1.12
+        lineHeight: CGFloat = 1.2
     ) {
         super.init(frame: .zero)
         self.font = .KorFont(style: style, size: fontSize)
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.3
+        paragraphStyle.lineHeightMultiple = lineHeight
         self.attributedText = NSMutableAttributedString(
             string: text,
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]

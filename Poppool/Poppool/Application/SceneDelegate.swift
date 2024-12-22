@@ -22,12 +22,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         
-//        let rootViewController = LoginController()
-//        rootViewController.reactor = LoginReactor()
+        let rootViewController = LoginController()
+        rootViewController.reactor = LoginReactor()
         
         
-        let rootViewController = DetailController()
-        rootViewController.reactor = DetailReactor(popUpID: 8)
+//        let rootViewController = DetailController()
+//        rootViewController.reactor = DetailReactor(popUpID: 8)
         
 //        let rootViewController = SearchMainController()
 //        rootViewController.reactor = SearchMainReactor()

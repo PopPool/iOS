@@ -118,6 +118,16 @@
 		086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
 		088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2462D12DB5C0030FA9E /* GoogleMaps */; };
+		088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2492D12F3360030FA9E /* DetailInfoSection.swift */; };
+		088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */; };
+		088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */; };
+		088DE2512D13019E0030FA9E /* DetailCommentTitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2502D13019E0030FA9E /* DetailCommentTitleSectionCell.swift */; };
+		088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2532D144A7E0030FA9E /* DetailCommentSection.swift */; };
+		088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2552D144A830030FA9E /* DetailCommentSectionCell.swift */; };
+		088DE2582D144B0F0030FA9E /* DetailCommentProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2572D144B0F0030FA9E /* DetailCommentProfileView.swift */; };
+		088DE25A2D1458620030FA9E /* DetailCommentImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2592D1458620030FA9E /* DetailCommentImageCell.swift */; };
+		088DE25D2D145E3A0030FA9E /* DetailSimilarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE25C2D145E3A0030FA9E /* DetailSimilarSection.swift */; };
+		088DE25F2D145E3F0030FA9E /* DetailSimilarSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE25E2D145E3F0030FA9E /* DetailSimilarSectionCell.swift */; };
 		089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952412D031E650022AEF9 /* SearchSortedController.swift */; };
 		089952442D031E6D0022AEF9 /* SearchSortedReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952432D031E6D0022AEF9 /* SearchSortedReactor.swift */; };
 		089952462D031E740022AEF9 /* SearchSortedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952452D031E740022AEF9 /* SearchSortedView.swift */; };
@@ -141,6 +151,7 @@
 		0899526E2D0474340022AEF9 /* GetSearchPopUpListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0899526D2D0474340022AEF9 /* GetSearchPopUpListResponse.swift */; };
 		089952732D0475E90022AEF9 /* SearchResultCountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952722D0475E90022AEF9 /* SearchResultCountSection.swift */; };
 		089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952742D0475F20022AEF9 /* SearchResultCountSectionCell.swift */; };
+		08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */; };
 		08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191342CF366670057BC04 /* UICollectionViewCell+.swift */; };
 		08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191352CF366670057BC04 /* UICollectionReusableView+.swift */; };
 		08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191362CF366670057BC04 /* UITableViewCell+.swift */; };
@@ -414,6 +425,16 @@
 		086DD93C2D009A2600B97D3B /* CancelableTagSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTagSectionCell.swift; sourceTree = "<group>"; };
 		086DD93F2D01EEEB00B97D3B /* SearchCountTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCountTitleSection.swift; sourceTree = "<group>"; };
 		086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCountTitleSectionCell.swift; sourceTree = "<group>"; };
+		088DE2492D12F3360030FA9E /* DetailInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSection.swift; sourceTree = "<group>"; };
+		088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSectionCell.swift; sourceTree = "<group>"; };
+		088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentTitleSection.swift; sourceTree = "<group>"; };
+		088DE2502D13019E0030FA9E /* DetailCommentTitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentTitleSectionCell.swift; sourceTree = "<group>"; };
+		088DE2532D144A7E0030FA9E /* DetailCommentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentSection.swift; sourceTree = "<group>"; };
+		088DE2552D144A830030FA9E /* DetailCommentSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentSectionCell.swift; sourceTree = "<group>"; };
+		088DE2572D144B0F0030FA9E /* DetailCommentProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentProfileView.swift; sourceTree = "<group>"; };
+		088DE2592D1458620030FA9E /* DetailCommentImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentImageCell.swift; sourceTree = "<group>"; };
+		088DE25C2D145E3A0030FA9E /* DetailSimilarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSimilarSection.swift; sourceTree = "<group>"; };
+		088DE25E2D145E3F0030FA9E /* DetailSimilarSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSimilarSectionCell.swift; sourceTree = "<group>"; };
 		089952412D031E650022AEF9 /* SearchSortedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSortedController.swift; sourceTree = "<group>"; };
 		089952432D031E6D0022AEF9 /* SearchSortedReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSortedReactor.swift; sourceTree = "<group>"; };
 		089952452D031E740022AEF9 /* SearchSortedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSortedView.swift; sourceTree = "<group>"; };
@@ -437,6 +458,7 @@
 		0899526D2D0474340022AEF9 /* GetSearchPopUpListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetSearchPopUpListResponse.swift; sourceTree = "<group>"; };
 		089952722D0475E90022AEF9 /* SearchResultCountSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCountSection.swift; sourceTree = "<group>"; };
 		089952742D0475F20022AEF9 /* SearchResultCountSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCountSectionCell.swift; sourceTree = "<group>"; };
+		08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLikeRequestDTO.swift; sourceTree = "<group>"; };
 		08B191342CF366670057BC04 /* UICollectionViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+.swift"; sourceTree = "<group>"; };
 		08B191352CF366670057BC04 /* UICollectionReusableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView+.swift"; sourceTree = "<group>"; };
 		08B191362CF366670057BC04 /* UITableViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+.swift"; sourceTree = "<group>"; };
@@ -879,6 +901,10 @@
 		083C86212D087A14003F441C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				088DE25B2D145E1F0030FA9E /* DetailSimilarSection */,
+				088DE2522D144A6E0030FA9E /* DetailCommentSection */,
+				088DE24D2D13018C0030FA9E /* DetailCommentTitleSection */,
+				088DE2482D12F3250030FA9E /* DetailInfoSection */,
 				083C86272D088069003F441C /* DetailContentSection */,
 				083C86222D087A37003F441C /* DetailTitleSection */,
 				083C860A2D073A15003F441C /* DetailView.swift */,
@@ -1156,6 +1182,7 @@
 			children = (
 				086DD8D52CFF182100B97D3B /* UserAPIEndPoint.swift */,
 				086DD8D72CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift */,
+				08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */,
 			);
 			path = UserAPI;
 			sourceTree = "<group>";
@@ -1217,6 +1244,44 @@
 				086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */,
 			);
 			path = SearchCountTitleSection;
+			sourceTree = "<group>";
+		};
+		088DE2482D12F3250030FA9E /* DetailInfoSection */ = {
+			isa = PBXGroup;
+			children = (
+				088DE2492D12F3360030FA9E /* DetailInfoSection.swift */,
+				088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */,
+			);
+			path = DetailInfoSection;
+			sourceTree = "<group>";
+		};
+		088DE24D2D13018C0030FA9E /* DetailCommentTitleSection */ = {
+			isa = PBXGroup;
+			children = (
+				088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */,
+				088DE2502D13019E0030FA9E /* DetailCommentTitleSectionCell.swift */,
+			);
+			path = DetailCommentTitleSection;
+			sourceTree = "<group>";
+		};
+		088DE2522D144A6E0030FA9E /* DetailCommentSection */ = {
+			isa = PBXGroup;
+			children = (
+				088DE2532D144A7E0030FA9E /* DetailCommentSection.swift */,
+				088DE2552D144A830030FA9E /* DetailCommentSectionCell.swift */,
+				088DE2572D144B0F0030FA9E /* DetailCommentProfileView.swift */,
+				088DE2592D1458620030FA9E /* DetailCommentImageCell.swift */,
+			);
+			path = DetailCommentSection;
+			sourceTree = "<group>";
+		};
+		088DE25B2D145E1F0030FA9E /* DetailSimilarSection */ = {
+			isa = PBXGroup;
+			children = (
+				088DE25C2D145E3A0030FA9E /* DetailSimilarSection.swift */,
+				088DE25E2D145E3F0030FA9E /* DetailSimilarSectionCell.swift */,
+			);
+			path = DetailSimilarSection;
 			sourceTree = "<group>";
 		};
 		0899523F2D031E470022AEF9 /* Main */ = {
@@ -1961,6 +2026,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				088DE25A2D1458620030FA9E /* DetailCommentImageCell.swift in Sources */,
 				089952662D046CCD0022AEF9 /* SearchResultController.swift in Sources */,
 				08B191962CF4A0FA0057BC04 /* SignUpStep4Controller.swift in Sources */,
 				0841BABC2CFB59E200049E31 /* String?+.swift in Sources */,
@@ -1988,6 +2054,7 @@
 				0841BAA82CFA354500049E31 /* HomeTitleSection.swift in Sources */,
 				08B191782CF442230057BC04 /* UIImage+.swift in Sources */,
 				0841BA892CF9F62400049E31 /* PreSignedURLResponseDTO.swift in Sources */,
+				088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */,
 				BD9103682CF6149D00BBCCAE /* AuthRepositoryImpl.swift in Sources */,
 				08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */,
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
@@ -2034,6 +2101,7 @@
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,
 				08B191982CF4A1010057BC04 /* SignUpStep4Reactor.swift in Sources */,
 				089952602D0366C40022AEF9 /* SearchMainController.swift in Sources */,
+				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
 				083C860B2D073A15003F441C /* DetailView.swift in Sources */,
 				BD9103862CF614A900BBCCAE /* BannerPopUpStore.swift in Sources */,
@@ -2070,6 +2138,7 @@
 				083C863A2D0C7F0A003F441C /* CommentSelectedReactor.swift in Sources */,
 				0841BAB42CFABED700049E31 /* HomePopularCardSection.swift in Sources */,
 				083C86362D0C7EF4003F441C /* CommentSelectedController.swift in Sources */,
+				088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */,
 				083C86292D088080003F441C /* DetailContentSection.swift in Sources */,
 				08DC61FA2CF7684F002A2F44 /* SignUpCompleteController.swift in Sources */,
 				083C864A2D0DCF96003F441C /* AddCommentDescriptionSection.swift in Sources */,
@@ -2078,12 +2147,14 @@
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
+				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
 				BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
 				0899524D2D033AA70022AEF9 /* GetOpenPopUpListResponseDTO.swift in Sources */,
 				083C86602D0EC496003F441C /* InstaCommentAddView.swift in Sources */,
 				08DC62132CF8B833002A2F44 /* Optional+.swift in Sources */,
+				088DE25D2D145E3A0030FA9E /* DetailSimilarSection.swift in Sources */,
 				083C863D2D0C8BC4003F441C /* NormalCommentAddController.swift in Sources */,
 				08B1916E2CF434CF0057BC04 /* SignUpStep1Reactor.swift in Sources */,
 				08B1918F2CF4A0020057BC04 /* SignUpStep3Controller.swift in Sources */,
@@ -2110,6 +2181,7 @@
 				BD91036D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift in Sources */,
 				0899526A2D046CDE0022AEF9 /* SearchResultView.swift in Sources */,
 				083C86692D0ECB47003F441C /* InstaGuideSection.swift in Sources */,
+				088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */,
 				083C86762D0EE2CF003F441C /* PostCommentRequestDTO.swift in Sources */,
 				083C861E2D08737F003F441C /* GetPopUpDetailResponseDTO.swift in Sources */,
 				08B1916C2CF434C30057BC04 /* SignUpStep1View.swift in Sources */,
@@ -2162,6 +2234,7 @@
 				08B191412CF367FF0057BC04 /* UIFont+.swift in Sources */,
 				0841BA8E2CF9F8A100049E31 /* ImageBannerChildSection.swift in Sources */,
 				083C860D2D073A1C003F441C /* DetailController.swift in Sources */,
+				088DE2582D144B0F0030FA9E /* DetailCommentProfileView.swift in Sources */,
 				086DD8CC2CFDFEA800B97D3B /* HomeListController.swift in Sources */,
 				083A258E2CF361F90099B58E /* ConventionTableViewCell.swift in Sources */,
 				086DD9342D00962500B97D3B /* SearchTitleSectionCell.swift in Sources */,
@@ -2182,6 +2255,7 @@
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
 				BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */,
 				0841BA802CF9F34100049E31 /* ImageBannerChildSectionCell.swift in Sources */,
+				088DE2512D13019E0030FA9E /* DetailCommentTitleSectionCell.swift in Sources */,
 				083C86592D0DEFC3003F441C /* CommentCheckView.swift in Sources */,
 				083C86732D0EE2B1003F441C /* CommentAPIEndPoint.swift in Sources */,
 				08B1913B2CF366A00057BC04 /* UIApplication+.swift in Sources */,
@@ -2193,6 +2267,7 @@
 				089952622D0366D30022AEF9 /* SearchMainView.swift in Sources */,
 				BD9103872CF614A900BBCCAE /* Category.swift in Sources */,
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
+				088DE25F2D145E3F0030FA9E /* DetailSimilarSectionCell.swift in Sources */,
 				BD9103852CF614A900BBCCAE /* TryLoginUseCaseImpl.swift in Sources */,
 				08B191762CF440C40057BC04 /* PPButton.swift in Sources */,
 				083A25CC2CF363CB0099B58E /* LoginView.swift in Sources */,
@@ -2207,6 +2282,7 @@
 				089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */,
 				089952532D033C940022AEF9 /* PopUpAPIRepositoryImpl.swift in Sources */,
 				4E685ED42D12CEB6001EF91C /* FilterCell.swift in Sources */,
+				088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */,
 				08B191A22CF4AE890057BC04 /* ToastMaker.swift in Sources */,
 				083C86512D0DD3AB003F441C /* AddCommentImageSectionCell.swift in Sources */,
 			);

@@ -21,6 +21,12 @@ final class DetailController: BaseViewController, View {
     
     private var mainView = DetailView()
     
+    private let headerView: PPReturnHeaderView = {
+        let view = PPReturnHeaderView()
+        view.backButton.tintColor = .w100
+        return view
+    }()
+    
     private var sections: [any Sectionable] = []
 }
 
@@ -29,6 +35,11 @@ extension DetailController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
     }
 }
 
@@ -44,10 +55,20 @@ private extension DetailController {
         mainView.contentCollectionView.register(SpacingSectionCell.self, forCellWithReuseIdentifier: SpacingSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailTitleSectionCell.self, forCellWithReuseIdentifier: DetailTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailContentSectionCell.self, forCellWithReuseIdentifier: DetailContentSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailInfoSectionCell.self, forCellWithReuseIdentifier: DetailInfoSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailCommentTitleSectionCell.self, forCellWithReuseIdentifier: DetailCommentTitleSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailCommentSectionCell.self, forCellWithReuseIdentifier: DetailCommentSectionCell.identifiers)
+        mainView.contentCollectionView.register(SearchTitleSectionCell.self, forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailSimilarSectionCell.self, forCellWithReuseIdentifier: DetailSimilarSectionCell.identifiers)
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        view.addSubview(headerView)
+        headerView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
@@ -68,6 +89,13 @@ extension DetailController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        headerView.backButton.rx.tap
+            .withUnretained(self)
+            .map { (owner, _) in
+                Reactor.Action.backButtonTapped(controller: owner)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -94,7 +122,101 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
+        
+        if let cell = cell as? DetailTitleSectionCell {
+            cell.bookMarkButton.rx.tap
+                .map { Reactor.Action.bookMarkButtonTapped }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+            
+            cell.sharedButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.sharedButtonTapped(controller: owner)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailInfoSectionCell {
+            cell.copyButton.rx.tap
+                .map { Reactor.Action.copyButtonTapped }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+            
+            cell.mapButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.addressButtonTapped(controller: owner)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        if let cell = cell as? DetailContentSectionCell {
+            cell.dropDownButton.rx.tap
+                .withUnretained(collectionView)
+                .subscribe { (collectionView, _) in
+                    cell.isOpen.toggle()
+                    if cell.isOpen {
+                        cell.buttonTitleLabel.setLineHeightText(text: "닫기")
+                        cell.contentLabel.numberOfLines = 0
+                        cell.buttonImageView.image = UIImage(named: "icon_dropdown_top_gray")
+                    } else {
+                        cell.contentLabel.numberOfLines = 3
+                        cell.buttonTitleLabel.setLineHeightText(text: "더보기")
+                        cell.buttonImageView.image = UIImage(named: "icon_dropdown_bottom_gray")
+                    }
+                    collectionView.reloadData()
+                }
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailCommentTitleSectionCell {
+            cell.totalViewButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.commentTotalViewButtonTapped(controller: owner)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailCommentSectionCell {
+            cell.profileView.button.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.commentMenuButtonTapped(controller: owner, indexPath: indexPath)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+            
+            cell.totalViewButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.commentDetailButtonTapped(controller: owner, indexPath: indexPath)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+            
+            cell.likeButton.rx.tap
+                .map { Reactor.Action.commentLikeButtonTapped(indexPath: indexPath) }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+            
+            cell.loginButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.loginButtonTapped(controller: owner)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 16 {
+            reactor?.action.onNext(.similarSectionTapped(controller: self, indexPath: indexPath))
+        }
+    }
 }
