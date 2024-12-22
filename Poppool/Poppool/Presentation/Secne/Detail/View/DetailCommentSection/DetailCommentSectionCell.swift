@@ -83,7 +83,44 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         return view
     }()
     
+    private let blurBackGroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.isHidden = true
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    private let blurView: UIImageView = {
+        let view = UIImageView()
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+    
     var disposeBag = DisposeBag()
+    
+    private let loginStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.alignment = .center
+        view.spacing = 16
+        return view
+    }()
+    
+    private let loginNoticelabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    let loginButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("로그인하고 후기보기", for: .normal)
+        button.titleLabel?.font = .KorFont(style: .medium, size: 13)
+        button.setTitleColor(.w100, for: .normal)
+        button.layer.cornerRadius = 4
+        button.backgroundColor = .blu500
+        return button
+    }()
     
     private var imagePathList: [String?] = []
     // MARK: - init
@@ -174,24 +211,88 @@ private extension DetailCommentSectionCell {
             make.height.equalTo(1).priority(.high)
             make.bottom.equalToSuperview()
         }
+        
+        contentView.addSubview(blurBackGroundView)
+        blurBackGroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        contentView.addSubview(blurView)
+        blurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        contentView.addSubview(loginStackView)
+        loginStackView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+        }
+        loginButton.snp.makeConstraints { make in
+            make.height.equalTo(32)
+            make.width.equalTo(141)
+        }
+        loginStackView.addArrangedSubview(loginNoticelabel)
+        loginStackView.addArrangedSubview(loginButton)
+    }
+
+    private func blur() {
+        layoutIfNeeded()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let bounds = self.bounds
+            UIGraphicsBeginImageContext(contentView.bounds.size)
+            contentView.layer.render(in: UIGraphicsGetCurrentContext()!)
+            guard let image = UIGraphicsGetImageFromCurrentImageContext(), let blurFilter = CIFilter(name: "CIGaussianBlur") else {
+                UIGraphicsEndImageContext()
+                return
+            }
+            UIGraphicsEndImageContext()
+
+            blurFilter.setDefaults()
+
+            blurFilter.setValue(CIImage(image: image), forKey: kCIInputImageKey)
+            blurFilter.setValue(4, forKey: kCIInputRadiusKey)
+
+            var convertedImage: UIImage?
+            let context = CIContext(options: nil)
+            if let blurOutputImage = blurFilter.outputImage,
+                let cgImage = context.createCGImage(blurOutputImage, from: blurOutputImage.extent) {
+                convertedImage = UIImage(cgImage: cgImage)
+            }
+            blurView.image = convertedImage
+            blurBackGroundView.isHidden = false
+        }
     }
 }
 
 extension DetailCommentSectionCell: Inputable {
     struct Input {
+        var commentID: Int64
         var nickName: String?
         var profileImagePath: String?
         var date: String?
         var comment: String?
         var imageList: [String?]
+        var isLike: Bool
+        var likeCount: Int64
+        var isLogin: Bool
+        var title: String?
     }
     
     func injection(with input: Input) {
+
         let comment = input.comment ?? ""
         profileView.profileImageView.setPPImage(path: input.profileImagePath)
         profileView.nickNameLabel.setLineHeightText(text: input.nickName)
         profileView.dateLabel.setLineHeightText(text: input.date)
         contentLabel.setLineHeightText(text: input.comment)
+        likeButtonTitleLabel.setLineHeightText(text: "도움돼요 \(input.likeCount)")
+        if input.isLike {
+            likeButtonImageView.image = UIImage(named: "icon_like_blue")
+            likeButtonTitleLabel.textColor = .blu500
+        } else {
+            likeButtonImageView.image = UIImage(named: "icon_like_gray")
+            likeButtonTitleLabel.textColor = .g400
+        }
         if comment.count > 78 {
             totalViewButton.isHidden = false
         } else {
@@ -204,6 +305,53 @@ extension DetailCommentSectionCell: Inputable {
             imagePathList = input.imageList
             imageCollectionView.reloadData()
         }
+        
+        if input.isLogin {
+            blurBackGroundView.isHidden = true
+            loginStackView.isHidden = true
+            blurView.isHidden = true
+        } else {
+            loginStackView.isHidden = false
+            blurView.isHidden = false
+            if blurView.image == nil { blur() }
+        }
+        let title = input.title ?? ""
+        let fullText = "\(title)를 다녀온\n팝플인들의 생생한 후기가 궁금하다면?"
+
+        // "팝업스토어명"과 "생생한 후기" 부분의 NSRange 설정
+        let popupStoreRange = (fullText as NSString).range(of: title)
+        let reviewRange = (fullText as NSString).range(of: "생생한 후기")
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 1.4
+        
+        // 기본 스타일 (폰트, 색상 등)
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KorFont(style: .regular, size: 14)!,
+            .foregroundColor: UIColor.g1000,
+            .paragraphStyle: paragraphStyle
+        ]
+
+        // 스타일을 다르게 할 부분 (팝업스토어명, 생생한 후기)
+        let popupStoreAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KorFont(style: .bold, size: 14)!,  // 다른 폰트 스타일
+            .foregroundColor: UIColor.blu500,  // 다른 색상
+            .paragraphStyle: paragraphStyle
+        ]
+
+        let reviewAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.KorFont(style: .bold, size: 14)!,  // 이탤릭체
+            .foregroundColor: UIColor.g1000,  // 다른 색상
+            .paragraphStyle: paragraphStyle
+        ]
+
+        // NSAttributedString 생성
+        let attributedString = NSMutableAttributedString(string: fullText, attributes: normalAttributes)
+        attributedString.addAttributes(popupStoreAttributes, range: popupStoreRange)
+        attributedString.addAttributes(reviewAttributes, range: reviewRange)
+
+        
+        loginNoticelabel.attributedText = attributedString
+        loginNoticelabel.textAlignment = .center
     }
 }
 
@@ -223,5 +371,4 @@ extension DetailCommentSectionCell: UICollectionViewDelegate, UICollectionViewDa
         cell.injection(with: .init(imagePath: imagePathList[indexPath.row]))
         return cell
     }
-
 }

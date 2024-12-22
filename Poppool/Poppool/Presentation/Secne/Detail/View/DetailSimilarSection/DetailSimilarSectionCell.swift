@@ -115,6 +115,7 @@ extension DetailSimilarSectionCell: Inputable {
         var imagePath: String?
         var date: String?
         var title: String?
+        var id: Int64
     }
     
     func injection(with input: Input) {

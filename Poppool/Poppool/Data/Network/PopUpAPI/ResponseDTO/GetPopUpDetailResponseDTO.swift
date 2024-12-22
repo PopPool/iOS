@@ -55,6 +55,8 @@ extension GetPopUpDetailImageResponseDTO {
 }
 
 struct GetPopUpDetailCommentResponseDTO: Decodable {
+    let commentId: Int64
+    let creator: String?
     let nickname: String?
     let instagramId: String?
     let profileImageUrl: String?
@@ -68,6 +70,8 @@ struct GetPopUpDetailCommentResponseDTO: Decodable {
 extension GetPopUpDetailCommentResponseDTO {
     func toDomain() -> GetPopUpDetailCommentResponse {
         return .init(
+            commentId: commentId,
+            creator: creator,
             nickname: nickname,
             instagramId: instagramId,
             profileImageUrl: profileImageUrl,

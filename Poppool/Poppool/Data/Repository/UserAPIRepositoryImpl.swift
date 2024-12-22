@@ -27,4 +27,14 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.deleteBookmarkPopUp(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func postCommentLike(request: CommentLikeRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.postCommentLike(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func deleteCommentLike(request: CommentLikeRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.deleteCommentLike(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

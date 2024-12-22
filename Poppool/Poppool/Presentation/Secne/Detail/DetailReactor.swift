@@ -17,11 +17,31 @@ final class DetailReactor: Reactor {
     enum Action {
         case viewWillAppear
         case commentButtonTapped(controller: BaseViewController)
+        case bookMarkButtonTapped
+        case sharedButtonTapped(controller: BaseViewController)
+        case copyButtonTapped
+        case addressButtonTapped(controller: BaseViewController)
+        case commentTotalViewButtonTapped(controller: BaseViewController)
+        case commentMenuButtonTapped(controller: BaseViewController, indexPath: IndexPath)
+        case commentDetailButtonTapped(controller: BaseViewController, indexPath: IndexPath)
+        case commentLikeButtonTapped(indexPath: IndexPath)
+        case similarSectionTapped(controller: BaseViewController, indexPath: IndexPath)
+        case backButtonTapped(controller: BaseViewController)
+        case loginButtonTapped(controller: BaseViewController)
     }
     
     enum Mutation {
         case loadView
         case moveToCommentTypeSelectedScene(controller: BaseViewController)
+        case showSharedBoard(controller: BaseViewController)
+        case copyAddress
+        case moveToAddressScene(controller: BaseViewController)
+        case moveToCommentTotalScene(controller: BaseViewController)
+        case showCommentMenu(controller: BaseViewController, indexPath: IndexPath)
+        case showCommentDetailScene(controller: BaseViewController, indexPath: IndexPath)
+        case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
+        case moveToRecentScene(controller: BaseViewController)
+        case moveToLoginScene(controller: BaseViewController)
     }
     
     struct State {
@@ -36,6 +56,7 @@ final class DetailReactor: Reactor {
     private var popUpName: String?
     
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -51,7 +72,7 @@ final class DetailReactor: Reactor {
     }()
     
     private var imageBannerSection = ImageBannerSection(inputDataList: [])
-    private var titleSection = DetailTitleSection(inputDataList: [.init(title: "hi", isBookMark: false)])
+    private var titleSection = DetailTitleSection(inputDataList: [])
     private var contentSection = DetailContentSection(inputDataList: [])
     private var infoSection = DetailInfoSection(inputDataList: [])
     private var commentTitleSection = DetailCommentTitleSection(inputDataList: [])
@@ -79,8 +100,36 @@ final class DetailReactor: Reactor {
         switch action {
         case .viewWillAppear:
             return setContent()
+        case .bookMarkButtonTapped:
+            return Observable.concat([
+                bookMark(),
+                setContent()
+            ])
+        case .sharedButtonTapped(let controller):
+            return Observable.just(.showSharedBoard(controller: controller))
+        case .copyButtonTapped:
+            return Observable.just(.copyAddress)
+        case .addressButtonTapped(let controller):
+            return Observable.just(.moveToAddressScene(controller: controller))
+        case .commentTotalViewButtonTapped(let controller):
+            return Observable.just(.moveToCommentTotalScene(controller: controller))
+        case .commentMenuButtonTapped(let controller, let indexPath):
+            return Observable.just(.showCommentMenu(controller: controller, indexPath: indexPath))
+        case .commentDetailButtonTapped(let controller, let indexPath):
+            return Observable.just(.showCommentDetailScene(controller: controller, indexPath: indexPath))
         case .commentButtonTapped(let controller):
             return Observable.just(.moveToCommentTypeSelectedScene(controller: controller))
+        case .commentLikeButtonTapped(let indexPath):
+            return Observable.concat([
+                commentLike(indexPath: indexPath),
+                setContent()
+            ])
+        case .similarSectionTapped(let controller, let indexPath):
+            return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
+        case .backButtonTapped(let controller):
+            return Observable.just(.moveToRecentScene(controller: controller))
+        case .loginButtonTapped(let controller):
+            return Observable.just(.moveToLoginScene(controller: controller))
         }
     }
     
@@ -116,31 +165,77 @@ final class DetailReactor: Reactor {
                     }
                 })
                 .disposed(by: disposeBag)
+        case .showSharedBoard(let controller):
+            showSharedBoard(controller: controller)
+        case .copyAddress:
+            print("Copy Address")
+        case .moveToAddressScene(let controller):
+            let nextController = BaseViewController()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .moveToCommentTotalScene(let controller):
+            let nextController = BaseViewController()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .showCommentMenu(let controller, let indexPath):
+            let nextController = BaseViewController()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .showCommentDetailScene(let controller, let indexPath):
+            let nextController = BaseViewController()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .moveToDetailScene(let controller, let indexPath):
+            let id = similarSection.inputDataList[indexPath.row].id
+            let nextController = DetailController()
+            nextController.reactor = DetailReactor(popUpID: id)
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .moveToRecentScene(let controller):
+            controller.navigationController?.popViewController(animated: true)
+        case .moveToLoginScene(let controller):
+            let nextController = BaseViewController()
+            controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState
     }
     
     func getSection() -> [any Sectionable] {
-        return [
-            imageBannerSection,
-            spacing36Section,
-            titleSection,
-            spacing20Section,
-            contentSection,
-            spacing28Section,
-            infoSection,
-            spacing40Section,
-            spacing16GraySection,
-            spacing36Section,
-            commentTitleSection,
-            spacing16Section,
-            commentSection,
-            spacing40Section,
-            similarTitleSecion,
-            spacing24Section,
-            similarSection,
-            spacing70Section
-        ]
+        if similarSection.inputDataList.isEmpty {
+            return [
+                imageBannerSection,
+                spacing36Section,
+                titleSection,
+                spacing20Section,
+                contentSection,
+                spacing28Section,
+                infoSection,
+                spacing40Section,
+                spacing16GraySection,
+                spacing36Section,
+                commentTitleSection,
+                spacing16Section,
+                commentSection,
+                spacing70Section
+            ]
+        } else {
+            return [
+                imageBannerSection,
+                spacing36Section,
+                titleSection,
+                spacing20Section,
+                contentSection,
+                spacing28Section,
+                infoSection,
+                spacing40Section,
+                spacing16GraySection,
+                spacing36Section,
+                commentTitleSection,
+                spacing16Section,
+                commentSection,
+                spacing40Section,
+                similarTitleSecion,
+                spacing24Section,
+                similarSection,
+                spacing70Section
+            ]
+        }
+
     }
     
     func setContent() -> Observable<Mutation> {
@@ -154,13 +249,11 @@ final class DetailReactor: Reactor {
                 owner.imageBannerSection.inputDataList = [.init(imagePaths: imagePaths, idList: idList, isHiddenPauseButton: true)]
                 
                 // titleSection
-                owner.titleSection.inputDataList = [.init(title: response.name, isBookMark: response.bookmarkYn)]
+                owner.titleSection.inputDataList = [.init(title: response.name, isBookMark: response.bookmarkYn, isLogin: response.loginYn)]
                 owner.popUpName = response.name
                 
                 // contentSection
-                let testText = "1231231231231231232314123413412341234123412341341234123412412341234141341234141234124123412341234123-84901283409182309481209384-01238-94081290384-90182-903849012-9038490182-30948-90182-30948-901238-9048-0921384-098213-9084-09123809481-2093840981-02938409812-3094809128-03948091238-094091238904-812-0938409182-03948091283-0948-0912384-90"
-                //                owner.contentSection.inputDataList = [.init(content: response.desc)]
-                owner.contentSection.inputDataList = [.init(content: testText)]
+                owner.contentSection.inputDataList = [.init(content: response.desc)]
                 owner.infoSection.inputDataList = [.init(
                     startDate: response.startDate,
                     endDate: response.endDate,
@@ -169,21 +262,62 @@ final class DetailReactor: Reactor {
                     address: response.address)
                 ]
                 owner.commentTitleSection.inputDataList = [.init(commentCount: response.commentCount)]
-                owner.commentSection.inputDataList = response.commentList.map({ response in
+                owner.commentSection.inputDataList = response.commentList.map({ commentResponse in
                     return .init(
-                        nickName: response.nickname,
-                        profileImagePath: response.profileImageUrl,
-                        date: response.createDateTime,
-                        comment: response.content,
-                        imageList: response.commentImageList.map { $0.imageUrl }
+                        commentID: commentResponse.commentId,
+                        nickName: commentResponse.nickname,
+                        profileImagePath: commentResponse.profileImageUrl,
+                        date: commentResponse.createDateTime,
+                        comment: commentResponse.content,
+                        imageList: commentResponse.commentImageList.map { $0.imageUrl },
+                        isLike: commentResponse.likeYn,
+                        likeCount: commentResponse.likeCount,
+                        isLogin: response.loginYn,
+                        title: response.name
                     )
                 })
                 
                 owner.similarSection.inputDataList = response.similarPopUpStoreList.map {
-                    return .init(imagePath: $0.mainImageUrl, date: $0.endDate, title: $0.name)
+                    return .init(imagePath: $0.mainImageUrl, date: $0.endDate, title: $0.name, id: $0.id)
                 }
-                print(response)
                 return .loadView
             }
+    }
+    
+    func bookMark() -> Observable<Mutation> {
+        if let isBookMark = titleSection.inputDataList.first?.isBookMark {
+            if isBookMark {
+                return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            } else {
+                return userAPIUseCase.postBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            }
+        } else {
+            return Observable.just(.loadView)
+        }
+    }
+    
+    func showSharedBoard(controller: BaseViewController) {
+        let text = "Some Text"
+        let itemsToShare: [Any] = [text]
+        let activityViewController = UIActivityViewController(
+            activityItems: itemsToShare,
+            applicationActivities: nil
+        )
+        controller.present(activityViewController, animated: true, completion: nil)
+        
+    }
+    
+    func commentLike(indexPath: IndexPath) -> Observable<Mutation> {
+        let isLike = commentSection.inputDataList[indexPath.row].isLike
+        let commentID = commentSection.inputDataList[indexPath.row].commentID
+        if isLike {
+            return userAPIUseCase.deleteCommentLike(commentId: commentID)
+                .andThen(Observable.just(.loadView))
+        } else {
+            return userAPIUseCase.postCommentLike(commentId: commentID)
+                .andThen(Observable.just(.loadView))
+        }
     }
 }

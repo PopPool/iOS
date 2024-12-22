@@ -20,6 +20,7 @@ final class HomeReactor: Reactor {
         case detailButtonTapped(controller: BaseViewController, indexPath: IndexPath)
         case bookMarkButtonTapped(indexPath: IndexPath)
         case searchButtonTapped(controller: BaseViewController)
+        case collectionViewCellTapped(controller: BaseViewController, indexPath: IndexPath)
     }
     
     enum Mutation {
@@ -112,6 +113,9 @@ final class HomeReactor: Reactor {
             }
         case .searchButtonTapped(let controller):
             return Observable.just(.moveToSearchScene(controller: controller))
+        case .collectionViewCellTapped(let controller, let indexPath):
+            print(indexPath)
+            return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         }
     }
     
@@ -129,8 +133,7 @@ final class HomeReactor: Reactor {
         case .setHedaerState(let isDarkMode):
             newState.headerIsDarkMode = isDarkMode
         case .moveToDetailScene(let controller, let indexPath):
-            let nextController = getDetailController(indexPath: indexPath)
-            controller.navigationController?.pushViewController(nextController, animated: true)
+            getDetailController(indexPath: indexPath, currentController: controller)
         case .reloadView(let indexPath):
             if isLoign {
                 switch indexPath.section {
@@ -246,32 +249,53 @@ final class HomeReactor: Reactor {
         })
     }
     
-    func getDetailController(indexPath: IndexPath) -> BaseViewController {
+    func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
         if isLoign {
             switch indexPath.section {
             case 2:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(popUpType: .curation)
-                return controller
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 4:
+                let id = curationSection.inputDataList[indexPath.row].id
+                let controller = DetailController()
+                controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(popUpType: .popular)
-                return controller
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 9:
+                let id = popularSection.inputDataList[indexPath.row].id
+                let controller = DetailController()
+                controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 14:
+                let id = newSection.inputDataList[indexPath.row].id
+                let controller = DetailController()
+                controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
             default:
-                let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .new)
-                return controller
+                break
             }
         } else {
             switch indexPath.section {
             case 2:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(popUpType: .popular)
-                return controller
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 4:
+                let id = popularSection.inputDataList[indexPath.row].id
+                let controller = DetailController()
+                controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 9:
+                let id = newSection.inputDataList[indexPath.row].id
+                let controller = DetailController()
+                controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
             default:
-                let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .new)
-                return controller
+                break
             }
         }
     }

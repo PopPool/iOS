@@ -41,6 +41,7 @@ final class DetailInfoSectionCell: UICollectionViewCell {
     
     private let addressLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 14)
+        label.numberOfLines = 2
         return label
     }()
     
@@ -116,20 +117,6 @@ private extension DetailInfoSectionCell {
         addressTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(timeTitleLabel.snp.bottom).offset(11)
             make.leading.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        contentView.addSubview(addressLabel)
-        addressLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(addressTitleLabel)
-            make.leading.equalTo(addressTitleLabel.snp.trailing).offset(12)
-        }
-        
-        contentView.addSubview(copyButton)
-        copyButton.snp.makeConstraints { make in
-            make.size.equalTo(16)
-            make.centerY.equalTo(addressTitleLabel).offset(1)
-            make.leading.equalTo(addressLabel.snp.trailing).offset(2)
         }
         
         mapButton.addSubview(mapButtonTitle)
@@ -150,6 +137,23 @@ private extension DetailInfoSectionCell {
             make.centerY.equalTo(addressTitleLabel)
             make.trailing.equalToSuperview()
         }
+        
+        contentView.addSubview(addressLabel)
+        addressLabel.snp.makeConstraints { make in
+            make.top.equalTo(addressTitleLabel).offset(-2)
+            make.leading.equalTo(addressTitleLabel.snp.trailing).offset(12)
+            make.width.lessThanOrEqualTo(188)
+            make.bottom.equalToSuperview()
+        }
+        
+        contentView.addSubview(copyButton)
+        copyButton.snp.makeConstraints { make in
+            make.size.equalTo(16)
+            make.top.equalTo(addressLabel).offset(1)
+            make.leading.equalTo(addressLabel.snp.trailing).offset(2)
+        }
+        
+
     }
 }
 
