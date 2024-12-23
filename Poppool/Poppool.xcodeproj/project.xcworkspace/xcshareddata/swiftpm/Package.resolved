@@ -1,5 +1,5 @@
 {
-  "originHash" : "6581914a0ae33c8ddeac743cd3d4d409795f0c167426b7d6cbe6dd7357e4eda2",
+  "originHash" : "9b99ac65e27da46ce9e641d5934eb3a21fc6291d3d56d60320b0483b436991e8",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "floatingpanel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scenee/FloatingPanel.git",
+      "state" : {
+        "revision" : "b6e8928b1a3ad909e6db6a0278d286c33cfd0dc3",
+        "version" : "2.8.6"
       }
     },
     {
