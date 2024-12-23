@@ -2,21 +2,12 @@ import UIKit
 import SnapKit
 
 final class StoreListView: UIView {
-
    // MARK: - Components
-   private let indicatorView: UIView = {
-       let view = UIView()
-       view.backgroundColor = .g300
-       view.layer.cornerRadius = 2
-       return view
-   }()
-
    lazy var collectionView: UICollectionView = {
        let layout = createLayout()
        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
        cv.backgroundColor = .white
        cv.register(StoreListCell.self, forCellWithReuseIdentifier: StoreListCell.identifier)
-       cv.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
        return cv
    }()
 
@@ -33,35 +24,27 @@ final class StoreListView: UIView {
 
 // MARK: - SetUp
 private extension StoreListView {
-   func createLayout() -> UICollectionViewFlowLayout {
-       let layout = UICollectionViewFlowLayout()
-       layout.scrollDirection = .vertical
-       layout.minimumLineSpacing = 24
-       layout.minimumInteritemSpacing = 16
+    func createLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical // 세로 스크롤
+        layout.minimumLineSpacing = 20 // 행 간격
+        layout.minimumInteritemSpacing = 16 // 열 간격
 
-       let width = (UIScreen.main.bounds.width - 48) / 2 
-       layout.itemSize = CGSize(width: width, height: width + 88)
-       return layout
-   }
+        // 화면의 너비에 맞춰 2열 셀 크기 계산
+        let totalWidth = UIScreen.main.bounds.width - 32 // 좌우 여백 16 * 2 제거
+        let itemWidth = (totalWidth - layout.minimumInteritemSpacing) / 2 // 두 열로 나눔
 
-   func setUpConstraints() {
-       backgroundColor = .clear  
-       layer.cornerRadius = 20
-       layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-       clipsToBounds = true
+        layout.itemSize = CGSize(width: floor(itemWidth), height: itemWidth + 100) // 셀 크기 설정
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16) // 섹션 여백
+        return layout
+    }
 
-       addSubview(indicatorView)
-       indicatorView.snp.makeConstraints { make in
-           make.top.equalToSuperview().offset(8)
-           make.centerX.equalToSuperview()
-           make.width.equalTo(40)
-           make.height.equalTo(4)
-       }
+    func setUpConstraints() {
+        backgroundColor = .clear
+        addSubview(collectionView)
 
-       addSubview(collectionView)
-       collectionView.snp.makeConstraints { make in
-           make.top.equalTo(indicatorView.snp.bottom).offset(16)
-           make.leading.trailing.bottom.equalToSuperview()
-       }
-   }
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
 }

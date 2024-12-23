@@ -19,13 +19,13 @@ final class StoreListCell: UICollectionViewCell {
     let bookmarkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "icon_bookmark"), for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 12
         return button
     }()
 
     private let categoryTagLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12, text: "")
+        let label = PPLabel(style: .bold, fontSize: 11, text: "")
         label.textColor = .blu500
         label.text = "#카테고리"
         return label
@@ -39,14 +39,14 @@ final class StoreListCell: UICollectionViewCell {
     }()
 
     private let locationLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12, text: "")
-        label.textColor = .g600
+        let label = PPLabel(style: .medium, fontSize: 11, text: "")
+        label.textColor = .g400
         return label
     }()
 
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 12, text: "")
-        label.textColor = .g600
+        label.textColor = .g400
         return label
     }()
 
@@ -96,7 +96,7 @@ private extension StoreListCell {
             dateLabel
         ])
         labelStack.axis = .vertical
-        labelStack.spacing = 4
+        labelStack.spacing = 6
         labelStack.alignment = .leading
 
         contentView.addSubview(labelStack)
@@ -126,7 +126,7 @@ extension StoreListCell: Inputable {
         locationLabel.text = input.location
         dateLabel.text = input.date
 
-        let bookmarkImage = input.isBookmarked ? "icon_bookmark_filled" : "icon_bookmark"
+        let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
         bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
 }

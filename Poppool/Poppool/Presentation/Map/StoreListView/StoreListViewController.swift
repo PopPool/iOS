@@ -3,7 +3,7 @@ import SnapKit
 import RxCocoa
 import RxSwift
 import ReactorKit
-import PanModal
+import FloatingPanel
 
 final class StoreListViewController: UIViewController, View {
     typealias Reactor = StoreListReactor
@@ -13,7 +13,7 @@ final class StoreListViewController: UIViewController, View {
     let mainView = StoreListView()
 
     // MARK: - Init
-    init(reactor: StoreListReactor) {  // 리액터를 파라미터로 받도록 수정
+    init(reactor: StoreListReactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
@@ -37,7 +37,6 @@ final class StoreListViewController: UIViewController, View {
     }
 
     func bind(reactor: Reactor) {
-        // 기존 바인딩 코드 유지
         rx.viewWillAppear
             .map { _ in Reactor.Action.viewDidLoad }
             .bind(to: reactor.action)
@@ -72,48 +71,26 @@ final class StoreListViewController: UIViewController, View {
     }
 }
 
-// MARK: - PanModalPresentable
-extension StoreListViewController: PanModalPresentable {
-    var panScrollable: UIScrollView? {
-        return mainView.collectionView
-    }
+// MARK: - FloatingPanelControllerDelegate
+extension StoreListViewController: FloatingPanelControllerDelegate {
+   func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
+       switch fpc.state {
+       case .full:
+           fpc.surfaceView.grabberHandle.isHidden = true
+           mainView.backgroundColor = .white
+           mainView.collectionView.backgroundColor = .white
 
-    var shortFormHeight: PanModalHeight {
-        return .contentHeight(UIScreen.main.bounds.height * 0.6)
-    }
+       case .half:
+           fpc.surfaceView.grabberHandle.isHidden = false
+           mainView.backgroundColor = .clear
+           mainView.collectionView.backgroundColor = .white
 
-    var longFormHeight: PanModalHeight {
-        return .maxHeightWithTopInset(90)  // 검색창 + 필터 영역 height
-    }
+       default:
+           break
+       }
+   }
 
-    var cornerRadius: CGFloat {
-        return 20
-    }
-
-    var showDragIndicator: Bool {
-        return false
-    }
-
-    var backgroundAlpha: CGFloat {
-        return 0.0
-    }
-    var isHapticFeedbackEnabled: Bool {
-          return false
-      }
-
-      var isDimEnabled: Bool {
-          return false
-      }
-
-
-    func willTransition(to state: PanModalPresentationController.PresentationState) {
-            switch state {
-            case .longForm:
-                mainView.backgroundColor = .white
-                mainView.collectionView.backgroundColor = .white
-            case .shortForm:
-                mainView.backgroundColor = .clear
-                mainView.collectionView.backgroundColor = .white
-            }
-        }
+   func floatingPanelShouldBeginDragging(_ fpc: FloatingPanelController) -> Bool {
+       return true
+   }
 }

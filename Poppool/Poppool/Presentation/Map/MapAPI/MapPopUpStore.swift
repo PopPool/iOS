@@ -32,14 +32,14 @@ extension MapPopUpStore {
             count: 1  // 클러스터링 구현 시 수정
         )
     }
-
-    func toCardInput() -> MapStoreCard.Input {
-        return .init(
-            image: nil,  
-            category: self.category,
-            title: self.name,
-            location: self.address,
-            date: "\(self.startDate) - \(self.endDate)"
-        )
-    }
+//
+//    func toCardInput() -> MapPopupCarouselView.Input {
+//        return .init(
+//            image: nil,  
+//            category: self.category,
+//            title: self.name,
+//            location: self.address,
+//            date: "\(self.startDate) - \(self.endDate)"
+//        )
+//    }
 }

@@ -1,6 +1,5 @@
 import UIKit
 import SnapKit
-
 final class MapFilterChips: UIView {
    // MARK: - Components
    private let stackView: UIStackView = {
@@ -22,7 +21,6 @@ final class MapFilterChips: UIView {
    init() {
        super.init(frame: .zero)
        setupLayout()
-       configureActions()
    }
 
    required init?(coder: NSCoder) {
@@ -30,11 +28,12 @@ final class MapFilterChips: UIView {
    }
 
    // MARK: - Setup
-   private func setupLayout() {
-       addSubview(stackView)
-       stackView.snp.makeConstraints { make in
-           make.top.bottom.equalToSuperview()
-       }
+    private func setupLayout() {
+        addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+        }
+
 
        stackView.addArrangedSubview(locationChip)
        stackView.addArrangedSubview(categoryChip)
@@ -53,53 +52,23 @@ final class MapFilterChips: UIView {
        return button
    }
 
-   private func configureActions() {
-//       locationChip.addTarget(self, action: #selector(locationChipClearTapped), for: .touchUpInside)
-//       categoryChip.addTarget(self, action: #selector(categoryChipClearTapped), for: .touchUpInside)
-       
-   }
-
-   // MARK: - Actions
-//   @objc private func locationChipTapped() {
-//       onRemoveLocation?()
-//   }
-//
-//   @objc private func categoryChipTapped() {
-//       onRemoveCategory?()
-//   }
-
-   @objc private func locationChipClearTapped() {
-       onRemoveLocation?()
-   }
-
-   @objc private func categoryChipClearTapped() {
-       onRemoveCategory?()
-   }
-
    // MARK: - Update State
    func update(locationText: String?, categoryText: String?) {
-       updateChip(button: locationChip, text: locationText, placeholder: "지역선택")
-       updateChip(button: categoryChip, text: categoryText, placeholder: "카테고리")
+       updateChip(button: locationChip, text: locationText, placeholder: "지역선택", onClear: onRemoveLocation)
+       updateChip(button: categoryChip, text: categoryText, placeholder: "카테고리", onClear: onRemoveCategory)
    }
 
-   private func updateChip(button: UIButton, text: String?, placeholder: String) {
-       // 기존 x 버튼 제거
-       button.subviews.forEach {
-           if $0 is UIButton {
-               $0.removeFromSuperview()
-           }
-       }
+   private func updateChip(button: UIButton, text: String?, placeholder: String, onClear: (() -> Void)?) {
+       button.subviews.forEach { if $0 is UIButton { $0.removeFromSuperview() } }
 
        if let text = text, !text.isEmpty, text != placeholder {
-           // 선택된 상태
            button.setTitle(text, for: .normal)
            button.setTitleColor(.white, for: .normal)
            button.backgroundColor = .blu500
            button.layer.borderWidth = 0
            button.layer.cornerRadius = 24
 
-           // x 버튼 추가
-           let xButton = UIButton()
+           let xButton = UIButton(type: .custom)
            xButton.setImage(UIImage(named: "icon_xmark")?.withRenderingMode(.alwaysTemplate), for: .normal)
            xButton.tintColor = .white
            button.addSubview(xButton)
@@ -110,16 +79,11 @@ final class MapFilterChips: UIView {
                make.size.equalTo(16)
            }
 
-           // x 버튼 터치 이벤트
-           if button === locationChip {
-               xButton.addTarget(self, action: #selector(locationChipClearTapped), for: .touchUpInside)
-           } else {
-               xButton.addTarget(self, action: #selector(categoryChipClearTapped), for: .touchUpInside)
-           }
+           xButton.addTarget(self, action: #selector(handleClearButtonTapped(_:)), for: .touchUpInside)
+           xButton.accessibilityLabel = button === locationChip ? "location" : "category"
 
            button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 36)
        } else {
-           // 기본 상태
            button.setTitle(placeholder, for: .normal)
            button.setTitleColor(.g400, for: .normal)
            button.backgroundColor = .white
@@ -127,6 +91,14 @@ final class MapFilterChips: UIView {
            button.layer.borderColor = UIColor.g200.cgColor
            button.layer.cornerRadius = 16
            button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
+       }
+   }
+
+   @objc private func handleClearButtonTapped(_ sender: UIButton) {
+       if sender.accessibilityLabel == "location" {
+           onRemoveLocation?()
+       } else {
+           onRemoveCategory?()
        }
    }
 }

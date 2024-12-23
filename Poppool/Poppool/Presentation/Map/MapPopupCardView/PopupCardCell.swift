@@ -4,22 +4,31 @@ import SnapKit
 final class PopupCardCell: UICollectionViewCell {
     static let identifier = "PopupCardCell"
 
+    // MARK: - Components
     private let imageView = UIImageView()
     private let categoryLabel = UILabel()
     private let titleLabel = UILabel()
     private let addressLabel = UILabel()
     private let dateLabel = UILabel()
 
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        configureUI()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Setup
     private func setupLayout() {
+        contentView.layer.cornerRadius = 12
+//        contentView.layer.borderWidth = 1
+//        contentView.layer.borderColor = UIColor.lightGray.cgColor
+        contentView.clipsToBounds = true
+
         contentView.addSubview(imageView)
         contentView.addSubview(categoryLabel)
         contentView.addSubview(titleLabel)
@@ -30,49 +39,58 @@ final class PopupCardCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        imageView.backgroundColor = .gray  // Placeholder 색상
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(8)
-            make.width.height.equalTo(80)
+            make.top.leading.equalToSuperview().offset(12)
+            make.width.height.equalTo(97)
         }
 
-        // Category Label
-        categoryLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        categoryLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
         categoryLabel.textColor = .systemBlue
         categoryLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.top.equalToSuperview().offset(12)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Title Label
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2
+//        titleLabel.textColor = g1000
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Address Label
         addressLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        addressLabel.textColor = .gray
-        addressLabel.numberOfLines = 1
+        addressLabel.textColor = .g400
         addressLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Date Label
         dateLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
-        dateLabel.textColor = .gray
+        dateLabel.textColor = .g400
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(addressLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
-            make.bottom.lessThanOrEqualToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.lessThanOrEqualToSuperview().offset(-12)
         }
+    }
+
+    private func configureUI() {
+        // 배경색 설정
+        contentView.backgroundColor = UIColor.white
+
+        // 카테고리 강조 색상
+        categoryLabel.textColor = .systemBlue
+
+        // Placeholder 배경 설정
+        imageView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
     }
 
     // MARK: - Configuration
@@ -82,7 +100,6 @@ final class PopupCardCell: UICollectionViewCell {
         addressLabel.text = store.address
         dateLabel.text = "\(store.startDate) ~ \(store.endDate)"
 
-        // 이미지 로직 (Placeholder 사용)
         imageView.image = UIImage(named: "placeholderImage") // 실제 이미지 로직에 맞게 수정 예정
     }
 }

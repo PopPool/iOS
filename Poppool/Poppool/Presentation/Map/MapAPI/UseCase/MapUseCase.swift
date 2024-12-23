@@ -23,7 +23,7 @@ protocol MapUseCase {
     ) -> Observable<[MapPopUpStore]>
 }
 
-final class DefaultMapUseCase: MapUseCase {
+class DefaultMapUseCase: MapUseCase {
     private let repository: MapRepository
 
     init(repository: MapRepository) {

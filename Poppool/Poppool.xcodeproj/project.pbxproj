@@ -224,23 +224,22 @@
 		08DC620D2CF8AE16002A2F44 /* ImageBannerSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC620C2CF8AE16002A2F44 /* ImageBannerSectionCell.swift */; };
 		08DC62112CF8B446002A2F44 /* SortedRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */; };
 		08DC62132CF8B833002A2F44 /* Optional+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC62122CF8B833002A2F44 /* Optional+.swift */; };
+		4E5825642D19517B00EE83EF /* StoreListPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5825632D19517B00EE83EF /* StoreListPanelLayout.swift */; };
+		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
 		4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */; };
 		4E685ECF2D12CEB6001EF91C /* BalloonChipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */; };
-		4E685ED02D12CEB6001EF91C /* CategoryFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAC2D12CEB6001EF91C /* CategoryFilterView.swift */; };
 		4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */; };
 		4E685ED22D12CEB6001EF91C /* FilterBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAE2D12CEB6001EF91C /* FilterBottomSheetView.swift */; };
 		4E685ED32D12CEB6001EF91C /* FilterBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAF2D12CEB6001EF91C /* FilterBottomSheetViewController.swift */; };
 		4E685ED42D12CEB6001EF91C /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB02D12CEB6001EF91C /* FilterCell.swift */; };
 		4E685ED52D12CEB6001EF91C /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB12D12CEB6001EF91C /* FilterChip.swift */; };
 		4E685ED62D12CEB6001EF91C /* FilterChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB22D12CEB6001EF91C /* FilterChipsView.swift */; };
-		4E685ED72D12CEB6001EF91C /* FilterTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB32D12CEB6001EF91C /* FilterTabsView.swift */; };
-		4E685ED82D12CEB6001EF91C /* LocationFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB42D12CEB6001EF91C /* LocationFilterView.swift */; };
 		4E685ED92D12CEB6001EF91C /* MapRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB62D12CEB6001EF91C /* MapRepository.swift */; };
 		4E685EDA2D12CEB6001EF91C /* MapUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB82D12CEB6001EF91C /* MapUseCase.swift */; };
 		4E685EDB2D12CEB6001EF91C /* MapAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBA2D12CEB6001EF91C /* MapAPIEndpoint.swift */; };
 		4E685EDC2D12CEB6001EF91C /* MapPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */; };
 		4E685EDD2D12CEB6001EF91C /* MapPopUpStoreDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBC2D12CEB6001EF91C /* MapPopUpStoreDTO.swift */; };
-		4E685EDE2D12CEB6001EF91C /* MapPopupCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBE2D12CEB6001EF91C /* MapPopupCardView.swift */; };
+		4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBE2D12CEB6001EF91C /* MapPopupCarouselView.swift */; };
 		4E685EDF2D12CEB6001EF91C /* PopupCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBF2D12CEB6001EF91C /* PopupCardCell.swift */; };
 		4E685EE02D12CEB6001EF91C /* StoreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC12D12CEB6001EF91C /* StoreListCell.swift */; };
 		4E685EE12D12CEB6001EF91C /* StoreListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC22D12CEB6001EF91C /* StoreListReactor.swift */; };
@@ -528,23 +527,21 @@
 		08DC620C2CF8AE16002A2F44 /* ImageBannerSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBannerSectionCell.swift; sourceTree = "<group>"; };
 		08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedRequestDTO.swift; sourceTree = "<group>"; };
 		08DC62122CF8B833002A2F44 /* Optional+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+.swift"; sourceTree = "<group>"; };
+		4E5825632D19517B00EE83EF /* StoreListPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreListPanelLayout.swift; path = ../StoreListPanelLayout.swift; sourceTree = "<group>"; };
 		4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonBackgroundView.swift; sourceTree = "<group>"; };
 		4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonChipCell.swift; sourceTree = "<group>"; };
-		4E685EAC2D12CEB6001EF91C /* CategoryFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryFilterView.swift; sourceTree = "<group>"; };
 		4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetReactor.swift; sourceTree = "<group>"; };
 		4E685EAE2D12CEB6001EF91C /* FilterBottomSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetView.swift; sourceTree = "<group>"; };
 		4E685EAF2D12CEB6001EF91C /* FilterBottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetViewController.swift; sourceTree = "<group>"; };
 		4E685EB02D12CEB6001EF91C /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		4E685EB12D12CEB6001EF91C /* FilterChip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
 		4E685EB22D12CEB6001EF91C /* FilterChipsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterChipsView.swift; sourceTree = "<group>"; };
-		4E685EB32D12CEB6001EF91C /* FilterTabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterTabsView.swift; sourceTree = "<group>"; };
-		4E685EB42D12CEB6001EF91C /* LocationFilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFilterView.swift; sourceTree = "<group>"; };
 		4E685EB62D12CEB6001EF91C /* MapRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapRepository.swift; sourceTree = "<group>"; };
 		4E685EB82D12CEB6001EF91C /* MapUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapUseCase.swift; sourceTree = "<group>"; };
 		4E685EBA2D12CEB6001EF91C /* MapAPIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapAPIEndpoint.swift; sourceTree = "<group>"; };
 		4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPopUpStore.swift; sourceTree = "<group>"; };
 		4E685EBC2D12CEB6001EF91C /* MapPopUpStoreDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPopUpStoreDTO.swift; sourceTree = "<group>"; };
-		4E685EBE2D12CEB6001EF91C /* MapPopupCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPopupCardView.swift; sourceTree = "<group>"; };
+		4E685EBE2D12CEB6001EF91C /* MapPopupCarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPopupCarouselView.swift; sourceTree = "<group>"; };
 		4E685EBF2D12CEB6001EF91C /* PopupCardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupCardCell.swift; sourceTree = "<group>"; };
 		4E685EC12D12CEB6001EF91C /* StoreListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListCell.swift; sourceTree = "<group>"; };
 		4E685EC22D12CEB6001EF91C /* StoreListReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListReactor.swift; sourceTree = "<group>"; };
@@ -617,6 +614,7 @@
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
 				BDCA420A2CF35FB1005EECF6 /* Pageboy in Frameworks */,
 				08B191BE2CF609AE0057BC04 /* RxKakaoSDKUser in Frameworks */,
+				4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */,
 				BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */,
 				088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */,
 			);
@@ -1614,15 +1612,12 @@
 			children = (
 				4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */,
 				4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */,
-				4E685EAC2D12CEB6001EF91C /* CategoryFilterView.swift */,
 				4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */,
 				4E685EAE2D12CEB6001EF91C /* FilterBottomSheetView.swift */,
 				4E685EAF2D12CEB6001EF91C /* FilterBottomSheetViewController.swift */,
 				4E685EB02D12CEB6001EF91C /* FilterCell.swift */,
 				4E685EB12D12CEB6001EF91C /* FilterChip.swift */,
 				4E685EB22D12CEB6001EF91C /* FilterChipsView.swift */,
-				4E685EB32D12CEB6001EF91C /* FilterTabsView.swift */,
-				4E685EB42D12CEB6001EF91C /* LocationFilterView.swift */,
 			);
 			path = FillterSheetView;
 			sourceTree = "<group>";
@@ -1658,7 +1653,7 @@
 		4E685EC02D12CEB6001EF91C /* MapPopupCardView */ = {
 			isa = PBXGroup;
 			children = (
-				4E685EBE2D12CEB6001EF91C /* MapPopupCardView.swift */,
+				4E685EBE2D12CEB6001EF91C /* MapPopupCarouselView.swift */,
 				4E685EBF2D12CEB6001EF91C /* PopupCardCell.swift */,
 			);
 			path = MapPopupCardView;
@@ -1667,6 +1662,7 @@
 		4E685EC52D12CEB6001EF91C /* StoreListView */ = {
 			isa = PBXGroup;
 			children = (
+				4E5825632D19517B00EE83EF /* StoreListPanelLayout.swift */,
 				4E685EC12D12CEB6001EF91C /* StoreListCell.swift */,
 				4E685EC22D12CEB6001EF91C /* StoreListReactor.swift */,
 				4E685EC32D12CEB6001EF91C /* StoreListView.swift */,
@@ -1885,6 +1881,7 @@
 				08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */,
 				088DE2432D104EE70030FA9E /* SwiftSoup */,
 				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
+				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -1973,6 +1970,7 @@
 				083A25CE2CF364B70099B58E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -2100,6 +2098,7 @@
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,
 				08B191982CF4A1010057BC04 /* SignUpStep4Reactor.swift in Sources */,
+				4E5825642D19517B00EE83EF /* StoreListPanelLayout.swift in Sources */,
 				089952602D0366C40022AEF9 /* SearchMainController.swift in Sources */,
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
@@ -2225,7 +2224,6 @@
 				4E685EE02D12CEB6001EF91C /* StoreListCell.swift in Sources */,
 				08B1915D2CF41E6F0057BC04 /* SignUpMainView.swift in Sources */,
 				0841BAA52CFA31A900049E31 /* SpacingSectionCell.swift in Sources */,
-				4E685ED82D12CEB6001EF91C /* LocationFilterView.swift in Sources */,
 				4E685EDF2D12CEB6001EF91C /* PopupCardCell.swift in Sources */,
 				083A25B52CF362670099B58E /* Endpoint.swift in Sources */,
 				BDCA41C32CF35AC0005EECF6 /* SceneDelegate.swift in Sources */,
@@ -2240,7 +2238,7 @@
 				086DD9342D00962500B97D3B /* SearchTitleSectionCell.swift in Sources */,
 				08B191592CF41E610057BC04 /* SignUpMainController.swift in Sources */,
 				0899526C2D0473EC0022AEF9 /* GetSearchPopUpListResponseDTO.swift in Sources */,
-				4E685EDE2D12CEB6001EF91C /* MapPopupCardView.swift in Sources */,
+				4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */,
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
 				0841BAB12CFA38F500049E31 /* HomeCardSectionCell.swift in Sources */,
 				4E685EE32D12CEB6001EF91C /* StoreListViewController.swift in Sources */,
@@ -2249,9 +2247,7 @@
 				0841BAAF2CFA38EA00049E31 /* HomeCardSection.swift in Sources */,
 				08B191842CF48A820057BC04 /* SignUpStep2View.swift in Sources */,
 				0841BA882CF9F62400049E31 /* PresignedURLRequestDTO.swift in Sources */,
-				4E685ED72D12CEB6001EF91C /* FilterTabsView.swift in Sources */,
 				0841BA8C2CF9F67100049E31 /* PreSignedAPIEndPoint.swift in Sources */,
-				4E685ED02D12CEB6001EF91C /* CategoryFilterView.swift in Sources */,
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
 				BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */,
 				0841BA802CF9F34100049E31 /* ImageBannerChildSectionCell.swift in Sources */,
@@ -2659,6 +2655,14 @@
 				minimumVersion = 9.2.0;
 			};
 		};
+		4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scenee/FloatingPanel.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.6;
+			};
+		};
 		BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -2779,6 +2783,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
 			productName = RxKakaoSDKUser;
+		};
+		4E5825662D1951DF00EE83EF /* FloatingPanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */;
+			productName = FloatingPanel;
 		};
 		BDCA41F12CF35D0D005EECF6 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

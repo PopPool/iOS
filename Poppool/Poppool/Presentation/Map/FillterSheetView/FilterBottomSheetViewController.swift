@@ -42,7 +42,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupLayout()
         setupGestures()
         setupCollectionView()
-
     }
 
     // MARK: - Setup
@@ -50,7 +49,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
         view.backgroundColor = .clear
         containerView.layer.cornerRadius = 10
         containerView.clipsToBounds = true
-
 
         view.addSubview(dimmedView)
         dimmedView.snp.makeConstraints { make in
@@ -60,7 +58,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
         view.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(UIScreen.main.bounds.height * 0.75)
+            make.height.equalTo(UIScreen.main.bounds.height * 0.85)
             bottomConstraint = make.bottom.equalToSuperview().offset(UIScreen.main.bounds.height).constraint
         }
     }
@@ -69,6 +67,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
         containerView.categoryCollectionView.dataSource = self
         containerView.categoryCollectionView.delegate = self
     }
+
     // MARK: - Binding
     func bind(reactor: Reactor) {
         // 1. 세그먼트 컨트롤 바인딩
@@ -86,17 +85,28 @@ final class FilterBottomSheetViewController: UIViewController, View {
         // 3. 저장 버튼 바인딩
         containerView.saveButton.rx.tap
             .withUnretained(self)
-            .bind { owner, _ in
-                let selectedOptions = owner.reactor?.currentState.selectedSubRegions ?? []
-                let selectedCategories = owner.reactor?.currentState.selectedCategories ?? []
-                owner.savedLocation = selectedOptions.first
-                owner.savedCategory = selectedCategories.first
-                owner.onSave?(selectedOptions + selectedCategories)
+            .bind { [weak self] (owner: FilterBottomSheetViewController, _) in
+                let activeSegment = owner.containerView.segmentedControl.selectedSegmentIndex
+
+                // 지역 선택일 때
+                if activeSegment == 0 {
+                    let selectedSubRegions = owner.reactor?.currentState.selectedSubRegions ?? []
+                    owner.onSave?(selectedSubRegions)
+                    owner.reactor?.action.onNext(.applyFilters(selectedSubRegions))
+                }
+                // 카테고리 선택일 때
+                else if activeSegment == 1 {
+                    let selectedCategories = owner.reactor?.currentState.selectedCategories ?? []
+                    owner.onSave?(selectedCategories)
+                    owner.reactor?.action.onNext(.applyFilters(selectedCategories))
+                }
+
                 owner.hideBottomSheet()
             }
             .disposed(by: disposeBag)
 
-        // 4. 닫기 버튼 바인딩
+
+
         containerView.closeButton.rx.tap
             .withUnretained(self)
             .bind { owner, _ in
@@ -107,30 +117,22 @@ final class FilterBottomSheetViewController: UIViewController, View {
         // 5. 탭 변경
         reactor.state.map { $0.activeSegment }
             .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
             .bind { [weak self] activeSegment in
                 guard let self = self else { return }
-
-                let isCategoryTab = activeSegment == 1  // Int와 Int 비교는 가능합니다
-
-                UIView.animate(withDuration: 0.3) {
-                    self.containerView.locationScrollView.isHidden = isCategoryTab
-                    self.containerView.categoryCollectionView.isHidden = !isCategoryTab
-
-                    if isCategoryTab {
-                        self.containerView.updateBalloonHeight(isHidden: true)
-                    } else {
-                        let subRegionCount = self.reactor?.currentState.selectedSubRegions.count ?? 0
-                        let dynamicHeight = CGFloat(80 + (subRegionCount / 3) * 40)
-                        self.containerView.updateBalloonHeight(isHidden: false, dynamicHeight: dynamicHeight)
-                    }
-                    self.view.layoutIfNeeded()
+                if activeSegment == 0 {
+                    let dynamicHeight = self.containerView.balloonBackgroundView.calculateHeight()
+                    self.containerView.updateBalloonHeight(isHidden: false, dynamicHeight: dynamicHeight)
+                } else if activeSegment == 1 {
+                    self.containerView.updateBalloonHeight(isHidden: true)
                 }
+                self.containerView.updateContentVisibility(isCategorySelected: activeSegment == 1)
             }
             .disposed(by: disposeBag)
 
+
+
+
         // 6. 위치 데이터 바인딩
-        // 강제업데이트 취소  수정
         let locations = reactor.state
             .map { $0.locations }
             .distinctUntilChanged()
@@ -138,21 +140,24 @@ final class FilterBottomSheetViewController: UIViewController, View {
         locations
             .observe(on: MainScheduler.instance)
             .bind { [weak self] locations in
-                // 컴플리션 핸들러 참고ㅜ
-                self?.containerView.setupLocationScrollView(locations: locations) { index in
-                    // 전체 버튼(index == 0) 클릭 시 처리
+                self?.containerView.setupLocationScrollView(locations: locations) { [weak self] index, button in
+                    guard let self = self else { return }
+
                     if index == 0 {
-                        if let selectedSubRegions = self?.reactor?.currentState.selectedSubRegions,
+                        if let selectedSubRegions = self.reactor?.currentState.selectedSubRegions,
                            !selectedSubRegions.isEmpty {
                             selectedSubRegions.forEach { region in
-                                self?.reactor?.action.onNext(.toggleSubRegion(region))
+                                self.reactor?.action.onNext(.toggleSubRegion(region))
                             }
                         }
                     }
-                    self?.reactor?.action.onNext(.selectLocation(index))
+                    self.reactor?.action.onNext(.selectLocation(index))
+
+                    self.containerView.updateBalloonPosition(for: button)
                 }
             }
             .disposed(by: disposeBag)
+
 
         let locationAndSubRegions = reactor.state
             .map { ($0.selectedLocationIndex, $0.selectedSubRegions) }
@@ -191,26 +196,40 @@ final class FilterBottomSheetViewController: UIViewController, View {
                     self.containerView.updateBalloonPosition(for: button)
                 }
 
+                DispatchQueue.main.async {
+                    let dynamicHeight = self.containerView.balloonBackgroundView.calculateHeight()
+                    self.containerView.updateBalloonHeight(isHidden: false, dynamicHeight: dynamicHeight)
+                }
+
                 self.containerView.balloonBackgroundView.isHidden = false
             }
             .disposed(by: disposeBag)
 
         Observable.combineLatest(
-                  reactor.state.map { $0.categories }.distinctUntilChanged(),
-                  reactor.state.map { $0.selectedCategories }.distinctUntilChanged()
-              )
-              .observe(on: MainScheduler.instance)
-              .bind { [weak self] (categories, selectedCategories) in
-                  self?.tagSection = TagSection(inputDataList: categories.map {
-                      TagSectionCell.Input(
-                          title: $0,
-                          isSelected: selectedCategories.contains($0),
-                          id: nil
-                      )
-                  })
-                  self?.containerView.categoryCollectionView.reloadData()
-              }
-              .disposed(by: disposeBag)
+            reactor.state.map { $0.categories }.distinctUntilChanged(),
+            reactor.state.map { $0.selectedCategories }.distinctUntilChanged()
+        )
+        .observe(on: MainScheduler.instance)
+        .bind { [weak self] (categories, selectedCategories) in
+            self?.tagSection = TagSection(inputDataList: categories.map {
+                TagSectionCell.Input(
+                    title: $0,
+                    isSelected: selectedCategories.contains($0),
+                    id: nil
+                )
+            })
+            self?.containerView.categoryCollectionView.reloadData()
+
+            DispatchQueue.main.async {
+                let contentHeight = self?.containerView.categoryCollectionView.collectionViewLayout.collectionViewContentSize.height ?? 0
+                self?.containerView.categoryCollectionView.snp.updateConstraints { make in
+                    make.height.equalTo(contentHeight + 40)
+                }
+                self?.containerView.layoutIfNeeded()
+            }
+        }
+        .disposed(by: disposeBag)
+
 
         reactor.state.map { $0.selectedSubRegions + $0.selectedCategories }
             .distinctUntilChanged()
@@ -236,22 +255,14 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 }
             }
             .disposed(by: disposeBag)
-        print("Save Button isEnabled: \(self.containerView.saveButton.isEnabled)")
-        print("Save Button Title Color (Normal): \(self.containerView.saveButton.titleColor(for: .normal)?.description ?? "nil")")
-        print("Save Button Title Color (Disabled): \(self.containerView.saveButton.titleColor(for: .disabled)?.description ?? "nil")")
-
     }
 
-    private func updateContentVisibility(_ isCategoryTab: Bool) {
+    private func updateContentVisibility(_ isCategoryTab: Bool, subRegionCount: Int) {
         UIView.animate(withDuration: 0.3) {
-            self.containerView.locationScrollView.isHidden = isCategoryTab
-            self.containerView.categoryCollectionView.isHidden = !isCategoryTab
-            self.containerView.balloonBackgroundView.snp.remakeConstraints { make in
-                make.top.equalTo(self.containerView.locationScrollView.snp.bottom).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-                make.height.equalTo(isCategoryTab ? 0 : 80) // 동적 높이 설정
+            self.containerView.updateContentVisibility(isCategorySelected: isCategoryTab)
+            if !isCategoryTab {
+                self.containerView.updateBalloonHeight(isHidden: false, dynamicHeight: subRegionCount > 0 ? self.containerView.balloonBackgroundView.calculateHeight() : 80)
             }
-
             self.view.layoutIfNeeded()
         }
     }
@@ -267,7 +278,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
 
     func showBottomSheet() {
         containerView.update(locationText: savedLocation, categoryText: savedCategory)
-        // (저장상태 기반 반영)
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.dimmedView.alpha = 1
             self.bottomConstraint?.update(offset: 0)
@@ -314,8 +324,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
             break
         }
     }
-
 }
+
 extension FilterBottomSheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -342,7 +352,7 @@ extension FilterBottomSheetViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegate
-extension FilterBottomSheetViewController: UICollectionViewDelegate {
+extension FilterBottomSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let category = tagSection?.inputDataList[indexPath.item].title else { return }
         reactor?.action.onNext(.toggleCategory(category))

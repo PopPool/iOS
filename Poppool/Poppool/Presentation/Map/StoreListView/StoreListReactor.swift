@@ -88,6 +88,26 @@ final class StoreListReactor: Reactor {
                 dateRange: "2024. 07. 01 ~ 2024. 07. 30",
                 isBookmarked: true
             ),
+            StoreItem(
+                id: 3,
+                thumbnailURL: "",
+                category: "카페",
+                title: "팝업스토어명 최대 22까지",
+                location: "서울 강남구",
+                dateRange: "2024. 06. 30 ~ 2024. 08. 23",
+                isBookmarked: false
+            ),
+            StoreItem(
+                id: 4,
+                thumbnailURL: "",
+                category: "전시",
+                title: "두 번째 팝업스토어",
+                location: "서울 성동구",
+                dateRange: "2024. 07. 01 ~ 2024. 07. 30",
+                isBookmarked: true
+            ),
+
+
             ]
         return .just(.setStores(mockStores))
     }

@@ -16,10 +16,7 @@ final class FilterChip: UIButton {
 
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "icon_xmark_modal"), for: .normal)
-        button.backgroundColor = .blu500
-        button.tintColor = .white
-        button.layer.cornerRadius = 8
+        button.setImage(UIImage(named: "icon_xmark_blu"), for: .normal)
         button.isHidden = true
         button.addTarget(self, action: #selector(handleClose), for: .touchUpInside)
         return button
@@ -30,7 +27,7 @@ final class FilterChip: UIButton {
         super.init(frame: frame)
         layer.cornerRadius = 16
         setupLayout()
-        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+//        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
@@ -42,15 +39,15 @@ final class FilterChip: UIButton {
         addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(8)
-            make.size.equalTo(16)
+            make.trailing.equalToSuperview().inset(14)
+            make.size.equalTo(11)
         }
     }
 
     // MARK: - Configuration
     func setTitle(_ title: String, style: Style) {
         setTitle(title, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
 
         switch style {
         case .inactive:
@@ -75,15 +72,15 @@ final class FilterChip: UIButton {
         }
 
         let rightPadding: CGFloat = closeButton.isHidden ? 12 : 34
-        contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: rightPadding)
+        contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: rightPadding)
     }
 
     // MARK: - Actions
-    @objc private func handleTap() {
-        isChipSelected.toggle()
-        setTitle(currentTitle ?? "", style: isChipSelected ? .active : .inactive)
-        onTap?()
-    }
+//    @objc private func handleTap() {
+//        isChipSelected.toggle()
+//        setTitle(currentTitle ?? "", style: isChipSelected ? .active : .inactive)
+//        onTap?()
+//    }
 
     @objc private func handleClose() {
         onClose?()
