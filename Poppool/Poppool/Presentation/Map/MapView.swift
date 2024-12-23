@@ -4,6 +4,7 @@ import GoogleMaps
 
 final class MapView: UIView {
     // MARK: - Components
+    
     let mapView: GMSMapView = {
         let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 15)
         let view = GMSMapView(frame: .zero, camera: camera)
@@ -40,7 +41,7 @@ final class MapView: UIView {
         return button
     }()
 
-    let storeCard = MapStoreCard()
+//    let storeCard = MapStoreCard()
 
     // MARK: - Init
     init() {

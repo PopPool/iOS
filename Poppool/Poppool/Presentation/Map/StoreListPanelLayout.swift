@@ -10,7 +10,7 @@ class StoreListPanelLayout: FloatingPanelLayout {
         return [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 94, edge: .top, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.6, edge: .bottom, referenceGuide: .safeArea),
-            .tip: FloatingPanelLayoutAnchor(absoluteInset: 140, edge: .bottom, referenceGuide: .safeArea) // `.tip` 상태 추가
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: -100, edge: .bottom, referenceGuide: .safeArea) // 완전히 내림
         ]
     }
 

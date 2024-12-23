@@ -20,6 +20,11 @@ final class PopupCardCell: UICollectionViewCell {
     }
 
     private func setupLayout() {
+        contentView.layer.cornerRadius = 12
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = UIColor.lightGray.cgColor // 카드 테두리
+        contentView.clipsToBounds = true
+
         contentView.addSubview(imageView)
         contentView.addSubview(categoryLabel)
         contentView.addSubview(titleLabel)
@@ -30,28 +35,27 @@ final class PopupCardCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        imageView.backgroundColor = .gray  // Placeholder 색상
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(8)
-            make.width.height.equalTo(80)
+            make.top.leading.equalToSuperview().offset(12)
+            make.width.height.equalTo(60) // 이미지 크기 축소
         }
 
         // Category Label
         categoryLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         categoryLabel.textColor = .systemBlue
         categoryLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.top.equalToSuperview().offset(12)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Title Label
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 2 // 최대 2줄로 제한
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Address Label
@@ -60,8 +64,8 @@ final class PopupCardCell: UICollectionViewCell {
         addressLabel.numberOfLines = 1
         addressLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
         }
 
         // Date Label
@@ -69,9 +73,9 @@ final class PopupCardCell: UICollectionViewCell {
         dateLabel.textColor = .gray
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(addressLabel.snp.bottom).offset(4)
-            make.leading.equalTo(imageView.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-8)
-            make.bottom.lessThanOrEqualToSuperview().offset(-8)
+            make.leading.equalTo(imageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.lessThanOrEqualToSuperview().offset(-12)
         }
     }
 

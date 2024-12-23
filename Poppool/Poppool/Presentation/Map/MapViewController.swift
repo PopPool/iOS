@@ -5,31 +5,33 @@ import RxSwift
 import RxCocoa
 import ReactorKit
 import GoogleMaps
+import CoreLocation
 
 final class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
-    
+
     var disposeBag = DisposeBag()
     let mainView = MapView()
+    let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
-     private var currentMarker: GMSMarker?
+    private var currentMarker: GMSMarker?
 
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
-    
+
     var fpc: FloatingPanelController?
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.async {
             self.view.layoutIfNeeded()
             let frameInView = self.mainView.filterChips.convert(self.mainView.filterChips.bounds, to: self.view)
             self.filterChipsTopY = frameInView.minY
-            
+
             print("[DEBUG] filterChipsTopY after layout: \(self.filterChipsTopY)")
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
@@ -38,16 +40,30 @@ final class MapViewController: BaseViewController, View {
 
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest 
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
 
     }
-    
+
     private func setUp() {
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+
+            view.addSubview(carouselView)
+            carouselView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(20) // 좌우 여백
+                make.height.equalTo(137) // 정확한 높이 설정
+                make.bottom.equalTo(mainView.mapView.snp.bottom).inset(20) // MapView 기준 하단 여백 설정
+            
+
+                carouselView.isHidden = true
+
+                // 마커 클릭 이벤트 바인딩
+                mainView.mapView.delegate = self
+
+            }
         }
-        
+
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: 37.5666, longitude: 126.9784)
         let markerView = MapMarker()
@@ -56,29 +72,29 @@ final class MapViewController: BaseViewController, View {
         marker.map = mainView.mapView
         markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
     }
-    
-    
+
+
     func bind(reactor: Reactor) {
         // 지역 필터 탭 이벤트
         mainView.filterChips.locationChip.rx.tap
             .map { Reactor.Action.filterTapped(.location) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // 카테고리 필터 탭 이벤트
         mainView.filterChips.categoryChip.rx.tap
             .map { Reactor.Action.filterTapped(.category) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // 리스트 버튼 탭 이벤트 - FloatingPanel 표시
         mainView.listButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
-                
+
                 let reactor = StoreListReactor()
                 let listVC = StoreListViewController(reactor: reactor)
-                
+
                 let fpc = FloatingPanelController()
                 self.fpc = fpc
                 // Delegate 설정 (추후 패널 상태 변화 감지 시 사용 가능)
@@ -86,24 +102,24 @@ final class MapViewController: BaseViewController, View {
                 fpc.set(contentViewController: listVC)
                 fpc.layout = StoreListPanelLayout()
                 fpc.surfaceView.grabberHandle.isHidden = true
-                       fpc.surfaceView.layer.shadowColor = UIColor.clear.cgColor
-                       fpc.surfaceView.layer.shadowRadius = 0
-                       fpc.surfaceView.layer.shadowOffset = .zero
-                       fpc.surfaceView.layer.shadowOpacity = 0
+                fpc.surfaceView.layer.shadowColor = UIColor.clear.cgColor
+                fpc.surfaceView.layer.shadowRadius = 0
+                fpc.surfaceView.layer.shadowOffset = .zero
+                fpc.surfaceView.layer.shadowOpacity = 0
                 fpc.addPanel(toParent: self)
 
-                
+
             }
             .disposed(by: disposeBag)
 
         mainView.locationButton.rx.tap
-               .bind { [weak self] _ in
-                   guard let self = self else { return }
+            .bind { [weak self] _ in
+                guard let self = self else { return }
 
-                   // 위치 업데이트 시작
-                   self.locationManager.startUpdatingLocation()
-               }
-               .disposed(by: disposeBag)
+                // 위치 업데이트 시작
+                self.locationManager.startUpdatingLocation()
+            }
+            .disposed(by: disposeBag)
 
         reactor.state.map { $0.selectedLocationFilters }
             .distinctUntilChanged()
@@ -116,27 +132,27 @@ final class MapViewController: BaseViewController, View {
                 self.mainView.filterChips.update(locationText: locationText, categoryText: nil)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map { $0.selectedCategoryFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind { [weak self] categoryFilters in
                 guard let self = self else { return }
                 let categoryText = categoryFilters.isEmpty
-                    ? "카테고리"
-                    : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
+                ? "카테고리"
+                : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
                 self.mainView.filterChips.update(locationText: nil, categoryText: categoryText)
             }
             .disposed(by: disposeBag)
 
-        
+
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
         }
         mainView.filterChips.onRemoveCategory = {
             reactor.action.onNext(.clearFilters(.category))
         }
-        
+
         Observable.combineLatest(
             reactor.state.map { $0.selectedLocationFilters.isEmpty },
             reactor.state.map { $0.selectedCategoryFilters.isEmpty }
@@ -152,7 +168,7 @@ final class MapViewController: BaseViewController, View {
             }
         }
         .disposed(by: disposeBag)
-        
+
         reactor.state.map { $0.activeFilterType }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -166,24 +182,18 @@ final class MapViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
     }
-    private func addMarker(at coordinate: CLLocationCoordinate2D) {
-            // 기존 마커 제거
-            currentMarker?.map = nil
+    func addMarker(for store: MapPopUpStore) {
+        let marker = GMSMarker()
+        marker.position = store.coordinate
+        marker.userData = store
 
-            // 새 마커 추가
-            let marker = GMSMarker()
-            marker.position = coordinate
-            let markerView = MapMarker()
-            markerView.injection(with: .init(title: "현재위치", count: 1))
-            marker.iconView = markerView
-            marker.map = mainView.mapView
-            markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
-
-            currentMarker = marker
-        }
+        let markerView = MapMarker()
+        markerView.injection(with: store.toMarkerInput())
+        marker.iconView = markerView
+        marker.map = mainView.mapView
+    }
 
 
-    
     func presentFilterBottomSheet(for filterType: FilterType) {
         // Create and set up the bottom sheet
         let sheetReactor = FilterBottomSheetReactor()
@@ -272,41 +282,65 @@ extension MapViewController: CLLocationManagerDelegate {
                                               zoom: 15)
         mainView.mapView.animate(to: camera)
 
-        // 현재 위치에 마커 추가
-        addMarker(at: location.coordinate)
+        let currentLocationStore = MapPopUpStore(
+            id: 0,
+            category: "현재 위치",
+            name: "현위치 팝업",
+            address: "현재 위치 기반 주소",
+            startDate: "2024.01.01",
+            endDate: "2024.12.31",
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude,
+            markerId: 0,
+            markerTitle: "현재 위치",
+            markerSnippet: "현재 위치의 팝업스토어"
+        )
+
+        // `MapPopUpStore`를 사용하여 마커 추가
+        addMarker(for: currentLocationStore)
 
         // 위치 업데이트 중지
         locationManager.stopUpdatingLocation()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("위치 업데이트 실패: \(error.localizedDescription)")
     }
 }
 
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        guard marker == currentMarker else { return false }
+        // 디버그 로그
+        print("[DEBUG] Marker tapped")
 
-        let cardInput = MapStoreCard.Input(
-            image: UIImage(named: "default_thumbnail"),
+        // 더미 데이터 생성
+        let dummyStore = MapPopUpStore(
+            id: 1,
             category: "카페",
-            title: "현재위치 기반 팝업스토어",
-            location: "서울특별시",
-            date: "2024.01.01 ~ 2024.01.15"
+            name: "서울 팝업스토어",
+            address: "서울특별시 중구",
+            startDate: "2024.01.01",
+            endDate: "2024.12.31",
+            latitude: 37.5665,
+            longitude: 126.9780,
+            markerId: 1,
+            markerTitle: "서울",
+            markerSnippet: "팝업스토어"
         )
-        presentStoreCard(with: cardInput)
+
+        // MapPopupCarouselView에 데이터 업데이트
+        carouselView.updateCards([dummyStore]) // 여러 개의 데이터가 있으면 배열에 추가
+        carouselView.isHidden = false
 
         return true
     }
-
-    func presentStoreCard(with input: MapStoreCard.Input) {
-        // StoreCard 설정
-        mainView.storeCard.injection(with: input)
-        mainView.storeCard.isHidden = false
-    }
 }
+
+
+//    func presentStoreCard(with input: MapStoreCard.Input) {
+//        // StoreCard 표시
+//        mainView.storeCard.injection(with: input)
+//        mainView.storeCard.isHidden = false
+//    }
+//}
+
 extension MapViewController {
     private func checkLocationAuthorization() {
         let status = CLLocationManager.authorizationStatus()
