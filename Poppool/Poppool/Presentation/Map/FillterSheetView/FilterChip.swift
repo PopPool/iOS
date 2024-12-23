@@ -27,7 +27,7 @@ final class FilterChip: UIButton {
         super.init(frame: frame)
         layer.cornerRadius = 16
         setupLayout()
-        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
+//        addTarget(self, action: #selector(handleTap), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
@@ -39,8 +39,8 @@ final class FilterChip: UIButton {
         addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(8)
-            make.size.equalTo(16)
+            make.trailing.equalToSuperview().inset(14)
+            make.size.equalTo(11)
         }
     }
 
@@ -76,11 +76,11 @@ final class FilterChip: UIButton {
     }
 
     // MARK: - Actions
-    @objc private func handleTap() {
-        isChipSelected.toggle()
-        setTitle(currentTitle ?? "", style: isChipSelected ? .active : .inactive)
-        onTap?()
-    }
+//    @objc private func handleTap() {
+//        isChipSelected.toggle()
+//        setTitle(currentTitle ?? "", style: isChipSelected ? .active : .inactive)
+//        onTap?()
+//    }
 
     @objc private func handleClose() {
         onClose?()

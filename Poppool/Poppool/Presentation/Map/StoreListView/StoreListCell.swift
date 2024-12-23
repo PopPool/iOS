@@ -25,7 +25,7 @@ final class StoreListCell: UICollectionViewCell {
     }()
 
     private let categoryTagLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12, text: "")
+        let label = PPLabel(style: .bold, fontSize: 11, text: "")
         label.textColor = .blu500
         label.text = "#카테고리"
         return label
@@ -39,14 +39,14 @@ final class StoreListCell: UICollectionViewCell {
     }()
 
     private let locationLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12, text: "")
-        label.textColor = .g600
+        let label = PPLabel(style: .medium, fontSize: 11, text: "")
+        label.textColor = .g400
         return label
     }()
 
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 12, text: "")
-        label.textColor = .g600
+        label.textColor = .g400
         return label
     }()
 
@@ -96,7 +96,7 @@ private extension StoreListCell {
             dateLabel
         ])
         labelStack.axis = .vertical
-        labelStack.spacing = 4
+        labelStack.spacing = 6
         labelStack.alignment = .leading
 
         contentView.addSubview(labelStack)

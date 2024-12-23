@@ -11,7 +11,9 @@ final class MapViewController: BaseViewController, View {
     
     var disposeBag = DisposeBag()
     let mainView = MapView()
-    
+    private let locationManager = CLLocationManager()
+     private var currentMarker: GMSMarker?
+
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
     
@@ -31,6 +33,13 @@ final class MapViewController: BaseViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        checkLocationAuthorization()
+
+
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest 
+
     }
     
     private func setUp() {
@@ -86,7 +95,16 @@ final class MapViewController: BaseViewController, View {
                 
             }
             .disposed(by: disposeBag)
-        
+
+        mainView.locationButton.rx.tap
+               .bind { [weak self] _ in
+                   guard let self = self else { return }
+
+                   // 위치 업데이트 시작
+                   self.locationManager.startUpdatingLocation()
+               }
+               .disposed(by: disposeBag)
+
         reactor.state.map { $0.selectedLocationFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -103,15 +121,14 @@ final class MapViewController: BaseViewController, View {
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind { [weak self] categoryFilters in
-                print("[DEBUG] Updated Category Filters: \(categoryFilters)")
-                
                 guard let self = self else { return }
                 let categoryText = categoryFilters.isEmpty
-                ? "카테고리"
-                : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
+                    ? "카테고리"
+                    : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
                 self.mainView.filterChips.update(locationText: nil, categoryText: categoryText)
             }
             .disposed(by: disposeBag)
+
         
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
@@ -149,7 +166,23 @@ final class MapViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
     }
-    
+    private func addMarker(at coordinate: CLLocationCoordinate2D) {
+            // 기존 마커 제거
+            currentMarker?.map = nil
+
+            // 새 마커 추가
+            let marker = GMSMarker()
+            marker.position = coordinate
+            let markerView = MapMarker()
+            markerView.injection(with: .init(title: "현재위치", count: 1))
+            marker.iconView = markerView
+            marker.map = mainView.mapView
+            markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
+
+            currentMarker = marker
+        }
+
+
     
     func presentFilterBottomSheet(for filterType: FilterType) {
         // Create and set up the bottom sheet
@@ -226,6 +259,67 @@ extension MapViewController: FloatingPanelControllerDelegate {
             fpc.surfaceView.layer.zPosition = 0
         } else {
             mainView.topStackView.layer.zPosition = 0
+        }
+    }
+}
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+
+        // 현재 위치로 지도 이동
+        let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
+                                              longitude: location.coordinate.longitude,
+                                              zoom: 15)
+        mainView.mapView.animate(to: camera)
+
+        // 현재 위치에 마커 추가
+        addMarker(at: location.coordinate)
+
+        // 위치 업데이트 중지
+        locationManager.stopUpdatingLocation()
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("위치 업데이트 실패: \(error.localizedDescription)")
+    }
+}
+
+// MARK: - GMSMapViewDelegate
+extension MapViewController: GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        guard marker == currentMarker else { return false }
+
+        let cardInput = MapStoreCard.Input(
+            image: UIImage(named: "default_thumbnail"),
+            category: "카페",
+            title: "현재위치 기반 팝업스토어",
+            location: "서울특별시",
+            date: "2024.01.01 ~ 2024.01.15"
+        )
+        presentStoreCard(with: cardInput)
+
+        return true
+    }
+
+    func presentStoreCard(with input: MapStoreCard.Input) {
+        // StoreCard 설정
+        mainView.storeCard.injection(with: input)
+        mainView.storeCard.isHidden = false
+    }
+}
+extension MapViewController {
+    private func checkLocationAuthorization() {
+        let status = CLLocationManager.authorizationStatus()
+
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.startUpdatingLocation() // 위치 업데이트 시작
+        case .denied, .restricted:
+            print("위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.")
+        @unknown default:
+            break
         }
     }
 }

@@ -61,7 +61,7 @@ final class FilterBottomSheetReactor: Reactor {
                     "명동/을지로/종로", "방이", "복촌/삼정",
                     "상수/대치", "상수/현정/광원"
                 ]),
-                Location(main: "경기", sub: ["수원시", "성남시", "용인시","용인시"]),
+                Location(main: "경기", sub: ["수원시", "성남시", "용인시","용인시용인시","용인시","용인시"]),
                 Location(main: "인천", sub: ["부평", "송도"]),
                 Location(main: "부산", sub: [
                     "해운대", "광안리", "사상구",
@@ -128,17 +128,19 @@ final class FilterBottomSheetReactor: Reactor {
         case .updateSelectedLocation(let index):
             newState.selectedLocationIndex = index
             let location = newState.locations[index]
+
+            // 새로운 지역의 "전체" 키 생성
             let allKey = "\(location.main)전체"
 
-            // 현재 선택된 서브 지역이 전체 또는 이전 Location에 해당하는 경우 초기화
-            if !location.sub.contains(where: { newState.selectedSubRegions.contains($0) }) {
-                newState.selectedSubRegions = []
-            }
+            // 기존 선택한 서브 지역 유지 (다른 지역 포함)
+            let previousSelections = newState.selectedSubRegions
 
-            // 전체가 선택된 경우 "전체" 키만 남김
-            if newState.selectedSubRegions.contains(allKey) {
-                newState.selectedSubRegions = [allKey]
-            }
+            // 새로운 지역 선택 시 기존 선택된 옵션 그대로 유지
+            newState.selectedSubRegions = previousSelections
+
+            // 기존 선택된 옵션에 "전체"가 포함되지 않은 상태 유지
+            newState.selectedSubRegions.removeAll { $0 == allKey }
+
 
 
         case .updateSubRegions(let subRegions):
@@ -158,28 +160,38 @@ final class FilterBottomSheetReactor: Reactor {
                 let allKey = "\(location.main)전체"
 
                 if subRegion == allKey {
-                    // "전체" 선택 토글 처리
+                    // "전체"를 선택한 경우
                     if newState.selectedSubRegions.contains(allKey) {
-                        newState.selectedSubRegions.removeAll()
+                        // "전체"가 이미 선택된 경우: 선택 해제
+                        newState.selectedSubRegions.removeAll { $0 == allKey }
                     } else {
+                        // "전체"를 활성화하고 다른 모든 옵션 제거
                         newState.selectedSubRegions = [allKey]
                     }
                 } else {
-                    // 개별 서브 지역 선택 토글 처리
+                    // 개별 구/동 옵션 토글
                     if newState.selectedSubRegions.contains(subRegion) {
+                        // 이미 선택된 구/동이면 비활성화
                         newState.selectedSubRegions.removeAll { $0 == subRegion }
                     } else {
+                        // 새로운 구/동 추가
                         newState.selectedSubRegions.append(subRegion)
                     }
 
-                    // 모든 서브 지역이 선택되었는지 확인 후 전체로 변경
+                    // "전체" 비활성화
+                    newState.selectedSubRegions.removeAll { $0 == allKey }
+
+                    // 모든 서브 지역이 선택되었으면 "전체" 활성화
                     if Set(newState.selectedSubRegions).count == location.sub.count {
                         newState.selectedSubRegions = [allKey]
-                    } else {
-                        newState.selectedSubRegions.removeAll { $0 == allKey }
                     }
                 }
+
+                print("현재 선택된 옵션: \(newState.selectedSubRegions)")
             }
+
+
+
 
 
 

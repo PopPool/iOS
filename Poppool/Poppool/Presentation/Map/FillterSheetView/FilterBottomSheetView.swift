@@ -8,6 +8,8 @@ final class FilterBottomSheetView: UIView {
         view.backgroundColor = .white
         view.layer.cornerRadius = 20
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.masksToBounds = true
+
         return view
     }()
 
@@ -137,7 +139,7 @@ final class FilterBottomSheetView: UIView {
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            categoryHeightConstraint = make.height.equalTo(0).constraint // 초기 높이 0으로 설정
+            categoryHeightConstraint = make.height.equalTo(160).constraint // 초기 높이 0으로 설정
         }
 
         containerView.addSubview(filterChipsView)
@@ -285,12 +287,11 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateContentVisibility(isCategorySelected: Bool) {
-//        UIView.animate(withDuration: 0.3) {
             self.locationScrollView.isHidden = isCategorySelected
             self.balloonBackgroundView.isHidden = isCategorySelected
             self.categoryCollectionView.isHidden = !isCategorySelected
 
-            self.balloonHeightConstraint?.update(offset: isCategorySelected ? 150 : self.balloonBackgroundView.calculateHeight())
+            self.balloonHeightConstraint?.update(offset: isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight())
             self.layoutIfNeeded()
 //        }
     }
@@ -335,7 +336,7 @@ final class FilterBottomSheetView: UIView {
         }
     }
 
-    func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 80) {
+    func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 160) {
         let targetHeight = isHidden ? 0 : dynamicHeight
         self.balloonHeightConstraint?.update(offset: targetHeight)
         self.balloonBackgroundView.isHidden = isHidden

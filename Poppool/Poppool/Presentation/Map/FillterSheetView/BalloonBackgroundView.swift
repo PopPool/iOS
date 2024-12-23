@@ -78,7 +78,7 @@ final class BalloonBackgroundView: UIView {
         containerView.addSubview(collectionView)
         
         containerView.snp.makeConstraints { make in
-               make.leading.trailing.equalToSuperview() // 
+               make.leading.trailing.equalToSuperview() 
                make.bottom.equalToSuperview()
                make.top.equalToSuperview().offset(11)
            }

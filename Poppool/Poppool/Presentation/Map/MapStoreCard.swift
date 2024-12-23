@@ -24,7 +24,12 @@ final class MapStoreCard: UIView {
    }()
 
    private let categoryLabel = PPLabel(style: .regular, fontSize: 12)
-   private let titleLabel = PPLabel(style: .bold, fontSize: 16)
+   private let titleLabel: PPLabel = {
+       let label = PPLabel(style: .bold, fontSize: 16)
+       label.numberOfLines = 2 // 최대 2줄로 제한
+       return label
+   }()
+
    private let locationLabel = PPLabel(style: .regular, fontSize: 12)
    private let dateLabel = PPLabel(style: .regular, fontSize: 12)
 
@@ -56,12 +61,13 @@ private extension MapStoreCard {
        thumbnailImageView.snp.makeConstraints { make in
            make.leading.equalToSuperview().offset(16)
            make.centerY.equalToSuperview()
-           make.size.equalTo(80)
+           make.size.equalTo(CGSize(width: 80, height: 80)) // 고정 크기
        }
 
        categoryLabel.snp.makeConstraints { make in
            make.leading.equalTo(thumbnailImageView.snp.trailing).offset(12)
-           make.top.equalToSuperview().offset(20)
+           make.top.equalToSuperview().offset(16)
+           make.trailing.lessThanOrEqualToSuperview().inset(16)
        }
 
        titleLabel.snp.makeConstraints { make in
@@ -72,12 +78,13 @@ private extension MapStoreCard {
 
        locationLabel.snp.makeConstraints { make in
            make.leading.equalTo(categoryLabel)
-           make.top.equalTo(titleLabel.snp.bottom).offset(4)
+           make.top.equalTo(titleLabel.snp.bottom).offset(8)
        }
 
        dateLabel.snp.makeConstraints { make in
            make.leading.equalTo(locationLabel.snp.trailing).offset(8)
            make.centerY.equalTo(locationLabel)
+           make.trailing.lessThanOrEqualToSuperview().inset(16)
        }
    }
 

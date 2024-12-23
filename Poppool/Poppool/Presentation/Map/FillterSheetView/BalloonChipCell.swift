@@ -34,7 +34,7 @@ final class BalloonChipCell: UICollectionViewCell {
         if isSelected {
             button.setImage(UIImage(named: "icon_check_fill"), for: .normal)
             button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 16)
-            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: -8)
+            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
             button.setBackgroundColor(.blu500, for: .normal)
             button.setTitleColor(.white, for: .normal)
             button.layer.borderWidth = 0
