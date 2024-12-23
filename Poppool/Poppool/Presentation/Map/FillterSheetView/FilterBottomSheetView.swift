@@ -22,7 +22,6 @@ final class FilterBottomSheetView: UIView {
         return label
     }()
 
-
     let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "icon_xmark"), for: .normal)
@@ -41,61 +40,59 @@ final class FilterBottomSheetView: UIView {
         return scrollView
     }()
     let locationContentView = UIView()
+    var categoryHeightConstraint: Constraint?
+
     let categoryCollectionView: UICollectionView = {
-           let layout = UICollectionViewCompositionalLayout { section, env in
-               let itemSize = NSCollectionLayoutSize(
-                   widthDimension: .estimated(26),
-                   heightDimension: .absolute(36)
-               )
-               let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let layout = UICollectionViewCompositionalLayout { section, env in
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .estimated(26),
+                heightDimension: .absolute(36)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-               let groupSize = NSCollectionLayoutSize(
-                   widthDimension: .fractionalWidth(1.0),
-                   heightDimension: .estimated(1000)
-               )
-               let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-               group.interItemSpacing = .fixed(12)
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(36)
+            )
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [item]
+            )
+            group.interItemSpacing = .fixed(12)
 
-               let section = NSCollectionLayoutSection(group: group)
-               section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
-               section.interGroupSpacing = 16
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = .init(
+                top: 20,
+                leading: 20,
+                bottom: 20,
+                trailing: 20
+            )
+            section.interGroupSpacing = 16
 
-               return section
-           }
-           let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-           collectionView.backgroundColor = .clear
-           collectionView.isScrollEnabled = false
-           collectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
-           return collectionView
-       }()
+            return section
+        }
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
+        collectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
+        return collectionView
+    }()
+
+
     let balloonBackgroundView = BalloonBackgroundView()
-//    let categoryScrollView: UIScrollView = {
-//        let scrollView = UIScrollView()
-//        scrollView.showsHorizontalScrollIndicator = false
-//        scrollView.isHidden = true
-//        return scrollView
-//    }()
-//    let categoryContentView = UIView()
 
     let resetButton: PPButton = {
-        let button = PPButton(
-            style: .secondary,
-            text: "초기화",
-            font: .KorFont(style: .medium, size: 16),
-            cornerRadius: 8
-        )
+        let button = PPButton(style: .secondary, text: "초기화")
         return button
     }()
 
+
     let saveButton: PPButton = {
-        let button = PPButton(
-            style: .primary,
-            text: "옵션저장",
-            font: .KorFont(style: .medium, size: 16),
-            cornerRadius: 8
-        )
+        let button = PPButton(style: .primary, text: "옵션저장", disabledText: "옵션저장")
         return button
     }()
+
 
     private let buttonStack: UIStackView = {
         let stack = UIStackView()
@@ -140,22 +137,19 @@ final class FilterBottomSheetView: UIView {
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(195)
+            categoryHeightConstraint = make.height.equalTo(0).constraint // 초기 높이 0으로 설정
         }
 
-//        containerView.addSubview(categoryScrollView)
-//        categoryScrollView.addSubview(categoryContentView)
         containerView.addSubview(filterChipsView)
         buttonStack.addArrangedSubview(resetButton)
         buttonStack.addArrangedSubview(saveButton)
         containerView.addSubview(buttonStack)
 
         filterChipsView.snp.makeConstraints { make in
-            make.top.equalTo(balloonBackgroundView.snp.bottom).offset(20)
+            make.top.equalTo(balloonBackgroundView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(80)
         }
-
 
         setupConstraints()
     }
@@ -185,7 +179,6 @@ final class FilterBottomSheetView: UIView {
         segmentedControl.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
         }
 
         locationScrollView.snp.makeConstraints { make in
@@ -202,32 +195,18 @@ final class FilterBottomSheetView: UIView {
         balloonBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(locationScrollView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
-//            make.height.equalTo(100)
+            balloonHeightConstraint = make.height.equalTo(150).constraint
         }
 
-
-//        categoryScrollView.snp.makeConstraints { make in
-//            make.top.equalTo(segmentedControl.snp.bottom).offset(16)
-//            make.leading.trailing.equalToSuperview()
-//            make.height.equalTo(200)
-//        }
-//
-//        categoryContentView.snp.makeConstraints { make in
-////            make.edges.equalToSuperview()
-//            make.top.equalTo(segmentedControl.snp.bottom).offset(20)
-//            make.leading.equalToSuperview().inset(20)
-////            make.width.equalToSuperview()
-//        }
-
         buttonStack.snp.makeConstraints { make in
-            make.top.equalTo(filterChipsView.snp.bottom).offset(30)
+            make.top.equalTo(filterChipsView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(40)
-            make.height.equalTo(50)
+            make.height.equalTo(52)
         }
     }
 
-    func setupLocationScrollView(locations: [Location], buttonAction: @escaping (Int) -> Void) {
+    func setupLocationScrollView(locations: [Location], buttonAction: @escaping (Int, UIButton) -> Void) {
         locationContentView.subviews.forEach { $0.removeFromSuperview() }
 
         var lastButton: UIButton?
@@ -237,18 +216,18 @@ final class FilterBottomSheetView: UIView {
             button.tag = index
 
             button.addAction(UIAction { _ in
-                buttonAction(index)
+                buttonAction(index, button)
                 self.updateMainLocationSelection(index)
             }, for: .touchUpInside)
 
             locationContentView.addSubview(button)
 
             button.snp.makeConstraints { make in
-                make.top.bottom.equalToSuperview()  // 상하 제약
+                make.top.bottom.equalToSuperview()
                 if let lastButton = lastButton {
-                    make.leading.equalTo(lastButton.snp.trailing).offset(12) // 버튼 간 간격 12px
+                    make.leading.equalTo(lastButton.snp.trailing).offset(12)
                 } else {
-                    make.leading.equalToSuperview().offset(16) // 첫 버튼 leading 패딩
+                    make.leading.equalToSuperview().offset(16)
                 }
             }
 
@@ -257,47 +236,37 @@ final class FilterBottomSheetView: UIView {
 
         if let lastButton = lastButton {
             lastButton.snp.makeConstraints { make in
-                make.trailing.equalToSuperview().inset(16) // 마지막 버튼 trailing 패딩
+                make.trailing.equalToSuperview().inset(16)
             }
         }
     }
-
-    func setupCategoryButtons(items: [String], selectedItems: [String], buttonAction: @escaping (String) -> Void) {
-        categoryCollectionView.subviews.forEach { $0.removeFromSuperview() }
-
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 16
-
-        let itemsPerRow = 4
-        var rowStack: UIStackView?
-
-        for (index, item) in items.enumerated() {
-            if index % itemsPerRow == 0 {
-                rowStack = UIStackView()
-                rowStack?.axis = .horizontal
-                rowStack?.spacing = 12
-                rowStack?.distribution = .fill
-                stackView.addArrangedSubview(rowStack!)
+    func updateCategoryButtonSelection(_ category: String) {
+        categoryCollectionView.subviews.forEach { subview in
+            if let stackView = subview as? UIStackView {
+                stackView.arrangedSubviews.forEach { view in
+                    if let button = view as? UIButton, button.title(for: .normal) == category {
+                        let isSelected = button.backgroundColor == .blu500
+                        if isSelected {
+                            button.backgroundColor = .white
+                            button.setTitleColor(.g500, for: .normal)
+                            button.layer.borderWidth = 1
+                            button.layer.borderColor = UIColor.g200.cgColor
+                        } else {
+                            button.backgroundColor = .blu500
+                            button.setTitleColor(.white, for: .normal)
+                            button.layer.borderWidth = 0
+                        }
+                    }
+                }
             }
-
-            let button = createCategoryButton(title: item, isSelected: selectedItems.contains(item))
-            rowStack?.addArrangedSubview(button)
-        }
-
-        categoryCollectionView.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
         }
     }
-
-
 
     private func createCategoryButton(title: String, isSelected: Bool) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)
-        button.layer.cornerRadius = 18
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
 
         button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
@@ -315,22 +284,15 @@ final class FilterBottomSheetView: UIView {
         return button
     }
 
-
-
-
     func updateContentVisibility(isCategorySelected: Bool) {
-        UIView.animate(withDuration: 0.3) {
+//        UIView.animate(withDuration: 0.3) {
             self.locationScrollView.isHidden = isCategorySelected
             self.balloonBackgroundView.isHidden = isCategorySelected
             self.categoryCollectionView.isHidden = !isCategorySelected
 
-            self.balloonBackgroundView.snp.remakeConstraints { make in
-                make.top.equalTo(self.locationScrollView.snp.bottom).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-                make.height.equalTo(isCategorySelected ? 0 : 80)
-            }
+            self.balloonHeightConstraint?.update(offset: isCategorySelected ? 150 : self.balloonBackgroundView.calculateHeight())
             self.layoutIfNeeded()
-        }
+//        }
     }
 
 
@@ -338,7 +300,7 @@ final class FilterBottomSheetView: UIView {
         let button = PPButton(
             style: .secondary,
             text: title,
-            font: .KorFont(style: .regular, size: 14),
+            font: .KorFont(style: .medium, size: 13),
             cornerRadius: 22
         )
         button.setBackgroundColor(.w100, for: .normal)
@@ -352,7 +314,7 @@ final class FilterBottomSheetView: UIView {
             button.layer.borderWidth = 0
         }
 
-        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
 
         return button
     }
@@ -371,26 +333,27 @@ final class FilterBottomSheetView: UIView {
                 button.layer.borderWidth = 1
             }
         }
-
     }
 
     func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 80) {
-        UIView.animate(withDuration: 0.3) {
-            let targetHeight = isHidden ? 0 : dynamicHeight
-            self.balloonHeightConstraint?.update(offset: targetHeight)
-            self.balloonBackgroundView.isHidden = isHidden
-            self.layoutIfNeeded()
-        }
+        let targetHeight = isHidden ? 0 : dynamicHeight
+        self.balloonHeightConstraint?.update(offset: targetHeight)
+        self.balloonBackgroundView.isHidden = isHidden
+        self.layoutIfNeeded()
     }
+
+
 
     func updateBalloonPosition(for button: UIButton) {
         let buttonFrame = button.convert(button.bounds, to: self)
         let buttonCenterX = buttonFrame.midX
         let totalWidth = bounds.width
-        balloonBackgroundView.arrowPosition = buttonCenterX / totalWidth
-    }
 
+        balloonBackgroundView.arrowPosition = buttonCenterX / totalWidth
+        self.layoutIfNeeded()
+    }
 }
+
 extension FilterBottomSheetView {
     func update(locationText: String?, categoryText: String?) {
         var filters: [String] = []
@@ -404,4 +367,4 @@ extension FilterBottomSheetView {
 
         filterChipsView.updateChips(with: filters)
     }
-}
+} 

@@ -2,15 +2,7 @@ import UIKit
 import SnapKit
 
 final class StoreListView: UIView {
-
    // MARK: - Components
-   private let indicatorView: UIView = {
-       let view = UIView()
-       view.backgroundColor = .g300
-       view.layer.cornerRadius = 2
-       return view
-   }()
-
    lazy var collectionView: UICollectionView = {
        let layout = createLayout()
        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -33,35 +25,32 @@ final class StoreListView: UIView {
 
 // MARK: - SetUp
 private extension StoreListView {
-   func createLayout() -> UICollectionViewFlowLayout {
-       let layout = UICollectionViewFlowLayout()
-       layout.scrollDirection = .vertical
-       layout.minimumLineSpacing = 24
-       layout.minimumInteritemSpacing = 16
+    func createLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 20
+        layout.minimumInteritemSpacing = 14  
 
-       let width = (UIScreen.main.bounds.width - 48) / 2 
-       layout.itemSize = CGSize(width: width, height: width + 88)
-       return layout
-   }
+        let totalWidth = UIScreen.main.bounds.width - (20 * 2) - 14
+        let itemWidth = totalWidth / 2
+
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth + 88)
+
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+
+        return layout
+    }
+
 
    func setUpConstraints() {
-       backgroundColor = .clear  
+       backgroundColor = .clear
        layer.cornerRadius = 20
        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
        clipsToBounds = true
 
-       addSubview(indicatorView)
-       indicatorView.snp.makeConstraints { make in
-           make.top.equalToSuperview().offset(8)
-           make.centerX.equalToSuperview()
-           make.width.equalTo(40)
-           make.height.equalTo(4)
-       }
-
        addSubview(collectionView)
        collectionView.snp.makeConstraints { make in
-           make.top.equalTo(indicatorView.snp.bottom).offset(16)
-           make.leading.trailing.bottom.equalToSuperview()
+           make.edges.equalToSuperview()
        }
    }
 }

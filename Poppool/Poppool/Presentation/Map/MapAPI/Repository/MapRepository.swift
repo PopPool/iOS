@@ -23,7 +23,7 @@ protocol MapRepository {
     ) -> Observable<[MapPopUpStoreDTO]>
 }
 
-final class DefaultMapRepository: MapRepository {
+class DefaultMapRepository: MapRepository {
     private let provider: Provider
 
     init(provider: Provider) {

@@ -19,7 +19,7 @@ final class StoreListCell: UICollectionViewCell {
     let bookmarkButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "icon_bookmark"), for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 12
         return button
     }()
@@ -126,7 +126,7 @@ extension StoreListCell: Inputable {
         locationLabel.text = input.location
         dateLabel.text = input.date
 
-        let bookmarkImage = input.isBookmarked ? "icon_bookmark_filled" : "icon_bookmark"
+        let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
         bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
 }
