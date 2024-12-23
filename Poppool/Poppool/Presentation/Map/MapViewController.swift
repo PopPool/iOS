@@ -51,10 +51,11 @@ final class MapViewController: BaseViewController, View {
 
             view.addSubview(carouselView)
             carouselView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(20) // 좌우 여백
-                make.height.equalTo(137) // 정확한 높이 설정
-                make.bottom.equalTo(mainView.mapView.snp.bottom).inset(20) // MapView 기준 하단 여백 설정
-            
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(140) // Carousel 높이 설정
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16) 
+
+
 
                 carouselView.isHidden = true
 
@@ -311,10 +312,10 @@ extension MapViewController: GMSMapViewDelegate {
         print("[DEBUG] Marker tapped")
 
         // 더미 데이터 생성
-        let dummyStore = MapPopUpStore(
+        let dummyStore1 = MapPopUpStore(
             id: 1,
             category: "카페",
-            name: "서울 팝업스토어",
+            name: "팝업스토어명 팝업스토어명 최대 2줄 말줄임...",
             address: "서울특별시 중구",
             startDate: "2024.01.01",
             endDate: "2024.12.31",
@@ -324,9 +325,22 @@ extension MapViewController: GMSMapViewDelegate {
             markerTitle: "서울",
             markerSnippet: "팝업스토어"
         )
+        let dummyStore2 = MapPopUpStore(
+            id: 2,
+            category: "전시/예술",
+            name: "전시 팝업스토어 팝업스토어명 최대 2줄 말줄임...",
+            address: "서울특별시 강남구",
+            startDate: "2024.06.01",
+            endDate: "2024.12.31",
+            latitude: 37.4980,
+            longitude: 127.0276,
+            markerId: 2,
+            markerTitle: "강남",
+            markerSnippet: "전시 팝업스토어"
+        )
 
         // MapPopupCarouselView에 데이터 업데이트
-        carouselView.updateCards([dummyStore]) // 여러 개의 데이터가 있으면 배열에 추가
+        carouselView.updateCards([dummyStore1, dummyStore2])
         carouselView.isHidden = false
 
         return true

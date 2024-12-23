@@ -6,13 +6,15 @@ final class MapPopupCarouselView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 120)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 64, height: 120) // 여백 고려한 크기
         layout.minimumLineSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         return collectionView
     }()
+
 
     var popupCards: [MapPopUpStore] = [] {
         didSet {
@@ -38,6 +40,8 @@ final class MapPopupCarouselView: UIView {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            make.bottom.equalToSuperview().inset(16) 
+
         }
     }
 

@@ -41,7 +41,7 @@ final class MapView: UIView {
         return button
     }()
 
-//    let storeCard = MapStoreCard()
+    let storeCard = MapPopupCarouselView()
 
     // MARK: - Init
     init() {
@@ -108,13 +108,13 @@ private extension MapView {
 
         locationButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(storeCard.snp.top).offset(-16)
+            make.bottom.equalTo(storeCard.snp.top).offset(-30)
             make.size.equalTo(44)
         }
 
         storeCard.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(120)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(137)
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
