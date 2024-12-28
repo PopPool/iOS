@@ -41,4 +41,9 @@ struct PopUpAPIRepositoryImpl {
         let endPoint = PopUpAPIEndPoint.getPopUpDetail(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getPopUpComment(request: GetPopUpCommentRequestDTO) -> Observable<GetPopUpCommentResponseDTO> {
+        let endPoint = PopUpAPIEndPoint.getPopUpComment(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

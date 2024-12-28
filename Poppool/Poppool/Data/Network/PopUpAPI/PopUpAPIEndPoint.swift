@@ -46,4 +46,13 @@ struct PopUpAPIEndPoint {
             queryParameters: request
         )
     }
+    
+    static func getPopUpComment(request: GetPopUpCommentRequestDTO) -> Endpoint<GetPopUpCommentResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/popup/\(request.popUpStoreId)/comments",
+            method: .get,
+            queryParameters: request
+        )
+    }
 }

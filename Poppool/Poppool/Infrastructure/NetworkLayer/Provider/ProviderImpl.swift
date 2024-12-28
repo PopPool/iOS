@@ -25,15 +25,15 @@ final class ProviderImpl: Provider {
             do {
                 let urlRequest = try endpoint.getUrlRequest()
                 Logger.log(message: "\(urlRequest) 요청 시간 :\(Date.now)", category: .network)
-                self?.timeoutTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-                    IndicatorMaker.showIndicator()
-                }
+//                self?.timeoutTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
+//                    IndicatorMaker.showIndicator()
+//                }
                 
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in
-                        self?.timeoutTimer?.invalidate()
-                        IndicatorMaker.hideIndicator()
+//                        self?.timeoutTimer?.invalidate()
+//                        IndicatorMaker.hideIndicator()
                         Logger.log(message: "\(urlRequest) 응답 시간 :\(Date.now)", category: .network)
                         switch response.result {
                         case .success(let data):

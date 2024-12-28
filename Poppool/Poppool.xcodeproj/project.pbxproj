@@ -116,6 +116,24 @@
 		086DD93D2D009A2600B97D3B /* CancelableTagSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DD93C2D009A2600B97D3B /* CancelableTagSectionCell.swift */; };
 		086DD9402D01EEEB00B97D3B /* SearchCountTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DD93F2D01EEEB00B97D3B /* SearchCountTitleSection.swift */; };
 		086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */; };
+		086F89C32D1E347700CA4FC9 /* CommentUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89C22D1E347700CA4FC9 /* CommentUserInfoView.swift */; };
+		086F89C52D1E347E00CA4FC9 /* CommentUserInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89C42D1E347E00CA4FC9 /* CommentUserInfoController.swift */; };
+		086F89C72D1E348400CA4FC9 /* CommentUserInfoReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89C62D1E348400CA4FC9 /* CommentUserInfoReactor.swift */; };
+		086F89CA2D1E42A700CA4FC9 /* CommentUserBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89C92D1E42A700CA4FC9 /* CommentUserBlockView.swift */; };
+		086F89CC2D1E42B000CA4FC9 /* CommentUserBlockController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89CB2D1E42B000CA4FC9 /* CommentUserBlockController.swift */; };
+		086F89CE2D1E42B500CA4FC9 /* CommentUserBlockReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89CD2D1E42B500CA4FC9 /* CommentUserBlockReactor.swift */; };
+		086F89D02D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89CF2D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift */; };
+		086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D22D1E6DA600CA4FC9 /* OtherUserCommentView.swift */; };
+		086F89D52D1E6DB100CA4FC9 /* OtherUserCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D42D1E6DB100CA4FC9 /* OtherUserCommentController.swift */; };
+		086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D62D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift */; };
+		086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */; };
+		086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */; };
+		086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */; };
+		086F89E42D1FE91300CA4FC9 /* OtherUserCommentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E32D1FE91300CA4FC9 /* OtherUserCommentSection.swift */; };
+		086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E52D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift */; };
+		086F89EA2D2009E300CA4FC9 /* SubLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E92D2009E300CA4FC9 /* SubLoginView.swift */; };
+		086F89EC2D2009EB00CA4FC9 /* SubLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89EB2D2009EB00CA4FC9 /* SubLoginController.swift */; };
+		086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
 		088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2462D12DB5C0030FA9E /* GoogleMaps */; };
 		088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2492D12F3360030FA9E /* DetailInfoSection.swift */; };
@@ -152,6 +170,23 @@
 		089952732D0475E90022AEF9 /* SearchResultCountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952722D0475E90022AEF9 /* SearchResultCountSection.swift */; };
 		089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089952742D0475F20022AEF9 /* SearchResultCountSectionCell.swift */; };
 		08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */; };
+		08A2E4792D1B06A300102313 /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4782D1B06A300102313 /* ImageDetailView.swift */; };
+		08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E47A2D1B06AA00102313 /* ImageDetailController.swift */; };
+		08A2E47D2D1B06B000102313 /* ImageDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E47C2D1B06B000102313 /* ImageDetailReactor.swift */; };
+		08A2E4802D1BCDE300102313 /* CommentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E47F2D1BCDE300102313 /* CommentDetailView.swift */; };
+		08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4812D1BCDEA00102313 /* CommentDetailController.swift */; };
+		08A2E4842D1BCDEF00102313 /* CommentDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4832D1BCDEF00102313 /* CommentDetailReactor.swift */; };
+		08A2E4862D1BD85C00102313 /* CommentDetailImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4852D1BD85C00102313 /* CommentDetailImageSection.swift */; };
+		08A2E48A2D1BDA8400102313 /* CommentDetailContentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4892D1BDA8400102313 /* CommentDetailContentSection.swift */; };
+		08A2E48C2D1BDA8A00102313 /* CommentDetailContentSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E48B2D1BDA8A00102313 /* CommentDetailContentSectionCell.swift */; };
+		08A2E48F2D1BF6E500102313 /* CommentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E48E2D1BF6E500102313 /* CommentListView.swift */; };
+		08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4902D1BF6EA00102313 /* CommentListController.swift */; };
+		08A2E4932D1BF6EF00102313 /* CommentListReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4922D1BF6EF00102313 /* CommentListReactor.swift */; };
+		08A2E4952D1C078300102313 /* GetPopUpCommentRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4942D1C078300102313 /* GetPopUpCommentRequestDTO.swift */; };
+		08A2E4972D1C07F500102313 /* GetPopUpCommentResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4962D1C07F500102313 /* GetPopUpCommentResponseDTO.swift */; };
+		08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E4982D1C08D600102313 /* GetPopUpCommentResponse.swift */; };
+		08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E49C2D1C416800102313 /* CommentListTitleSection.swift */; };
+		08A2E49F2D1C417000102313 /* CommentListTitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A2E49E2D1C417000102313 /* CommentListTitleSectionCell.swift */; };
 		08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191342CF366670057BC04 /* UICollectionViewCell+.swift */; };
 		08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191352CF366670057BC04 /* UICollectionReusableView+.swift */; };
 		08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191362CF366670057BC04 /* UITableViewCell+.swift */; };
@@ -424,6 +459,24 @@
 		086DD93C2D009A2600B97D3B /* CancelableTagSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTagSectionCell.swift; sourceTree = "<group>"; };
 		086DD93F2D01EEEB00B97D3B /* SearchCountTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCountTitleSection.swift; sourceTree = "<group>"; };
 		086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCountTitleSectionCell.swift; sourceTree = "<group>"; };
+		086F89C22D1E347700CA4FC9 /* CommentUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserInfoView.swift; sourceTree = "<group>"; };
+		086F89C42D1E347E00CA4FC9 /* CommentUserInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserInfoController.swift; sourceTree = "<group>"; };
+		086F89C62D1E348400CA4FC9 /* CommentUserInfoReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserInfoReactor.swift; sourceTree = "<group>"; };
+		086F89C92D1E42A700CA4FC9 /* CommentUserBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserBlockView.swift; sourceTree = "<group>"; };
+		086F89CB2D1E42B000CA4FC9 /* CommentUserBlockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserBlockController.swift; sourceTree = "<group>"; };
+		086F89CD2D1E42B500CA4FC9 /* CommentUserBlockReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentUserBlockReactor.swift; sourceTree = "<group>"; };
+		086F89CF2D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostUserBlockRequestDTO.swift; sourceTree = "<group>"; };
+		086F89D22D1E6DA600CA4FC9 /* OtherUserCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentView.swift; sourceTree = "<group>"; };
+		086F89D42D1E6DB100CA4FC9 /* OtherUserCommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentController.swift; sourceTree = "<group>"; };
+		086F89D62D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentReactor.swift; sourceTree = "<group>"; };
+		086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListRequestDTO.swift; sourceTree = "<group>"; };
+		086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListResponseDTO.swift; sourceTree = "<group>"; };
+		086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListResponse.swift; sourceTree = "<group>"; };
+		086F89E32D1FE91300CA4FC9 /* OtherUserCommentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentSection.swift; sourceTree = "<group>"; };
+		086F89E52D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentSectionCell.swift; sourceTree = "<group>"; };
+		086F89E92D2009E300CA4FC9 /* SubLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginView.swift; sourceTree = "<group>"; };
+		086F89EB2D2009EB00CA4FC9 /* SubLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginController.swift; sourceTree = "<group>"; };
+		086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginReactor.swift; sourceTree = "<group>"; };
 		088DE2492D12F3360030FA9E /* DetailInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSection.swift; sourceTree = "<group>"; };
 		088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSectionCell.swift; sourceTree = "<group>"; };
 		088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentTitleSection.swift; sourceTree = "<group>"; };
@@ -458,6 +511,23 @@
 		089952722D0475E90022AEF9 /* SearchResultCountSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCountSection.swift; sourceTree = "<group>"; };
 		089952742D0475F20022AEF9 /* SearchResultCountSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCountSectionCell.swift; sourceTree = "<group>"; };
 		08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLikeRequestDTO.swift; sourceTree = "<group>"; };
+		08A2E4782D1B06A300102313 /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
+		08A2E47A2D1B06AA00102313 /* ImageDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailController.swift; sourceTree = "<group>"; };
+		08A2E47C2D1B06B000102313 /* ImageDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailReactor.swift; sourceTree = "<group>"; };
+		08A2E47F2D1BCDE300102313 /* CommentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailView.swift; sourceTree = "<group>"; };
+		08A2E4812D1BCDEA00102313 /* CommentDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailController.swift; sourceTree = "<group>"; };
+		08A2E4832D1BCDEF00102313 /* CommentDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailReactor.swift; sourceTree = "<group>"; };
+		08A2E4852D1BD85C00102313 /* CommentDetailImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailImageSection.swift; sourceTree = "<group>"; };
+		08A2E4892D1BDA8400102313 /* CommentDetailContentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailContentSection.swift; sourceTree = "<group>"; };
+		08A2E48B2D1BDA8A00102313 /* CommentDetailContentSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDetailContentSectionCell.swift; sourceTree = "<group>"; };
+		08A2E48E2D1BF6E500102313 /* CommentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListView.swift; sourceTree = "<group>"; };
+		08A2E4902D1BF6EA00102313 /* CommentListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListController.swift; sourceTree = "<group>"; };
+		08A2E4922D1BF6EF00102313 /* CommentListReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListReactor.swift; sourceTree = "<group>"; };
+		08A2E4942D1C078300102313 /* GetPopUpCommentRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpCommentRequestDTO.swift; sourceTree = "<group>"; };
+		08A2E4962D1C07F500102313 /* GetPopUpCommentResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpCommentResponseDTO.swift; sourceTree = "<group>"; };
+		08A2E4982D1C08D600102313 /* GetPopUpCommentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpCommentResponse.swift; sourceTree = "<group>"; };
+		08A2E49C2D1C416800102313 /* CommentListTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListTitleSection.swift; sourceTree = "<group>"; };
+		08A2E49E2D1C417000102313 /* CommentListTitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListTitleSectionCell.swift; sourceTree = "<group>"; };
 		08B191342CF366670057BC04 /* UICollectionViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+.swift"; sourceTree = "<group>"; };
 		08B191352CF366670057BC04 /* UICollectionReusableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView+.swift"; sourceTree = "<group>"; };
 		08B191362CF366670057BC04 /* UITableViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+.swift"; sourceTree = "<group>"; };
@@ -667,7 +737,7 @@
 				4E685ECD2D12CEB6001EF91C /* Map */,
 				083A258B2CF361F90099B58E /* Convention */,
 				08B1915F2CF430D40057BC04 /* Components */,
-				083A25C22CF3635B0099B58E /* Secne */,
+				083A25C22CF3635B0099B58E /* Scene */,
 				083A259D2CF3620B0099B58E /* Utills */,
 				08B191332CF366500057BC04 /* Extension */,
 			);
@@ -827,9 +897,10 @@
 			path = Logger;
 			sourceTree = "<group>";
 		};
-		083A25C22CF3635B0099B58E /* Secne */ = {
+		083A25C22CF3635B0099B58E /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				08A2E4772D1B069300102313 /* ImageDetail */,
 				0841BABF2CFB5EC700049E31 /* TabbarController */,
 				08DC62012CF8ABDA002A2F44 /* Home */,
 				086DD9282D00869D00B97D3B /* Search */,
@@ -839,15 +910,14 @@
 				083C86092D073A08003F441C /* Detail */,
 				083C86332D0C7EDB003F441C /* Comment */,
 			);
-			path = Secne;
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		083A25C32CF363650099B58E /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				083A25CB2CF363CB0099B58E /* LoginView.swift */,
-				083A25C72CF363C00099B58E /* LoginController.swift */,
-				083A25C92CF363C60099B58E /* LoginReactor.swift */,
+				086F89E72D2009CF00CA4FC9 /* Main */,
+				086F89E82D2009D700CA4FC9 /* Sub */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -881,6 +951,7 @@
 			children = (
 				0899524E2D033B5A0022AEF9 /* GetSearchPopUpListRequestDTO.swift */,
 				083C861B2D087337003F441C /* GetPopUpDetailRequestDTO.swift */,
+				08A2E4942D1C078300102313 /* GetPopUpCommentRequestDTO.swift */,
 			);
 			path = RequestDTO;
 			sourceTree = "<group>";
@@ -892,6 +963,7 @@
 				0899524A2D033A9C0022AEF9 /* GetClosePopUpListResponseDTO.swift */,
 				0899524C2D033AA70022AEF9 /* GetOpenPopUpListResponseDTO.swift */,
 				083C861D2D08737F003F441C /* GetPopUpDetailResponseDTO.swift */,
+				08A2E4962D1C07F500102313 /* GetPopUpCommentResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -931,6 +1003,11 @@
 		083C86332D0C7EDB003F441C /* Comment */ = {
 			isa = PBXGroup;
 			children = (
+				086F89D12D1E6D9100CA4FC9 /* OtherUserComment */,
+				086F89C82D1E429400CA4FC9 /* CommentUserBlock */,
+				086F89C12D1E345D00CA4FC9 /* CommentUserInfo */,
+				08A2E48D2D1BF6D900102313 /* CommentList */,
+				08A2E47E2D1BCDB800102313 /* CommentDetail */,
 				083C86572D0DEFB1003F441C /* CommentCheck */,
 				083C86342D0C7EE3003F441C /* CommentSelected */,
 				083C863B2D0C8BAF003F441C /* NormalCommentAdd */,
@@ -1179,8 +1256,8 @@
 			isa = PBXGroup;
 			children = (
 				086DD8D52CFF182100B97D3B /* UserAPIEndPoint.swift */,
-				086DD8D72CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift */,
-				08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */,
+				086F89DD2D1E7A7A00CA4FC9 /* ResponseDTO */,
+				086F89DC2D1E7A7100CA4FC9 /* RequesetDTO */,
 			);
 			path = UserAPI;
 			sourceTree = "<group>";
@@ -1242,6 +1319,101 @@
 				086DD9412D01EEF700B97D3B /* SearchCountTitleSectionCell.swift */,
 			);
 			path = SearchCountTitleSection;
+			sourceTree = "<group>";
+		};
+		086F89C12D1E345D00CA4FC9 /* CommentUserInfo */ = {
+			isa = PBXGroup;
+			children = (
+				086F89C22D1E347700CA4FC9 /* CommentUserInfoView.swift */,
+				086F89C42D1E347E00CA4FC9 /* CommentUserInfoController.swift */,
+				086F89C62D1E348400CA4FC9 /* CommentUserInfoReactor.swift */,
+			);
+			path = CommentUserInfo;
+			sourceTree = "<group>";
+		};
+		086F89C82D1E429400CA4FC9 /* CommentUserBlock */ = {
+			isa = PBXGroup;
+			children = (
+				086F89C92D1E42A700CA4FC9 /* CommentUserBlockView.swift */,
+				086F89CB2D1E42B000CA4FC9 /* CommentUserBlockController.swift */,
+				086F89CD2D1E42B500CA4FC9 /* CommentUserBlockReactor.swift */,
+			);
+			path = CommentUserBlock;
+			sourceTree = "<group>";
+		};
+		086F89D12D1E6D9100CA4FC9 /* OtherUserComment */ = {
+			isa = PBXGroup;
+			children = (
+				086F89E12D1FE8F200CA4FC9 /* View */,
+				086F89D42D1E6DB100CA4FC9 /* OtherUserCommentController.swift */,
+				086F89D62D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift */,
+			);
+			path = OtherUserComment;
+			sourceTree = "<group>";
+		};
+		086F89DC2D1E7A7100CA4FC9 /* RequesetDTO */ = {
+			isa = PBXGroup;
+			children = (
+				086DD8D72CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift */,
+				08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */,
+				086F89CF2D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift */,
+				086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */,
+			);
+			path = RequesetDTO;
+			sourceTree = "<group>";
+		};
+		086F89DD2D1E7A7A00CA4FC9 /* ResponseDTO */ = {
+			isa = PBXGroup;
+			children = (
+				086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */,
+			);
+			path = ResponseDTO;
+			sourceTree = "<group>";
+		};
+		086F89DE2D1E7CBE00CA4FC9 /* UserAPI */ = {
+			isa = PBXGroup;
+			children = (
+				086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */,
+			);
+			name = UserAPI;
+			sourceTree = "<group>";
+		};
+		086F89E12D1FE8F200CA4FC9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				086F89E22D1FE8F800CA4FC9 /* OtherUserCommentSection */,
+				086F89D22D1E6DA600CA4FC9 /* OtherUserCommentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		086F89E22D1FE8F800CA4FC9 /* OtherUserCommentSection */ = {
+			isa = PBXGroup;
+			children = (
+				086F89E32D1FE91300CA4FC9 /* OtherUserCommentSection.swift */,
+				086F89E52D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift */,
+			);
+			path = OtherUserCommentSection;
+			sourceTree = "<group>";
+		};
+		086F89E72D2009CF00CA4FC9 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				083A25CB2CF363CB0099B58E /* LoginView.swift */,
+				083A25C72CF363C00099B58E /* LoginController.swift */,
+				083A25C92CF363C60099B58E /* LoginReactor.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		086F89E82D2009D700CA4FC9 /* Sub */ = {
+			isa = PBXGroup;
+			children = (
+				086F89E92D2009E300CA4FC9 /* SubLoginView.swift */,
+				086F89EB2D2009EB00CA4FC9 /* SubLoginController.swift */,
+				086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */,
+			);
+			path = Sub;
 			sourceTree = "<group>";
 		};
 		088DE2482D12F3250030FA9E /* DetailInfoSection */ = {
@@ -1348,6 +1520,7 @@
 				089952502D033C410022AEF9 /* GetSearchBottomPopUpListResponse.swift */,
 				0899526D2D0474340022AEF9 /* GetSearchPopUpListResponse.swift */,
 				083C861F2D087445003F441C /* GetPopUpDetailResponse.swift */,
+				08A2E4982D1C08D600102313 /* GetPopUpCommentResponse.swift */,
 			);
 			path = PopUpAPI;
 			sourceTree = "<group>";
@@ -1368,6 +1541,73 @@
 				089952692D046CDE0022AEF9 /* SearchResultView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		08A2E4772D1B069300102313 /* ImageDetail */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E4782D1B06A300102313 /* ImageDetailView.swift */,
+				08A2E47A2D1B06AA00102313 /* ImageDetailController.swift */,
+				08A2E47C2D1B06B000102313 /* ImageDetailReactor.swift */,
+			);
+			path = ImageDetail;
+			sourceTree = "<group>";
+		};
+		08A2E47E2D1BCDB800102313 /* CommentDetail */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E4872D1BD86600102313 /* View */,
+				08A2E4812D1BCDEA00102313 /* CommentDetailController.swift */,
+				08A2E4832D1BCDEF00102313 /* CommentDetailReactor.swift */,
+			);
+			path = CommentDetail;
+			sourceTree = "<group>";
+		};
+		08A2E4872D1BD86600102313 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E4882D1BDA7500102313 /* CommentDetailContentSection */,
+				08A2E4852D1BD85C00102313 /* CommentDetailImageSection.swift */,
+				08A2E47F2D1BCDE300102313 /* CommentDetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		08A2E4882D1BDA7500102313 /* CommentDetailContentSection */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E4892D1BDA8400102313 /* CommentDetailContentSection.swift */,
+				08A2E48B2D1BDA8A00102313 /* CommentDetailContentSectionCell.swift */,
+			);
+			path = CommentDetailContentSection;
+			sourceTree = "<group>";
+		};
+		08A2E48D2D1BF6D900102313 /* CommentList */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E49A2D1C414C00102313 /* View */,
+				08A2E4902D1BF6EA00102313 /* CommentListController.swift */,
+				08A2E4922D1BF6EF00102313 /* CommentListReactor.swift */,
+			);
+			path = CommentList;
+			sourceTree = "<group>";
+		};
+		08A2E49A2D1C414C00102313 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E49B2D1C415500102313 /* CommentListTitleSection */,
+				08A2E48E2D1BF6E500102313 /* CommentListView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		08A2E49B2D1C415500102313 /* CommentListTitleSection */ = {
+			isa = PBXGroup;
+			children = (
+				08A2E49C2D1C416800102313 /* CommentListTitleSection.swift */,
+				08A2E49E2D1C417000102313 /* CommentListTitleSectionCell.swift */,
+			);
+			path = CommentListTitleSection;
 			sourceTree = "<group>";
 		};
 		08B191332CF366500057BC04 /* Extension */ = {
@@ -1762,6 +2002,7 @@
 		BD91037B2CF614A900BBCCAE /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				086F89DE2D1E7CBE00CA4FC9 /* UserAPI */,
 				BD9103762CF614A900BBCCAE /* BannerPopUpStore.swift */,
 				BD9103772CF614A900BBCCAE /* Category.swift */,
 				BD9103782CF614A900BBCCAE /* GetHomeInfoResponse.swift */,
@@ -2030,13 +2271,17 @@
 				0841BABC2CFB59E200049E31 /* String?+.swift in Sources */,
 				0841BA872CF9F62400049E31 /* PreSignedURLDTO.swift in Sources */,
 				4E685EE82D12CEB6001EF91C /* MapStoreCard.swift in Sources */,
+				086F89EC2D2009EB00CA4FC9 /* SubLoginController.swift in Sources */,
 				083C86262D087A4E003F441C /* DetailTitleSectionCell.swift in Sources */,
 				086DD8DE2CFF19C400B97D3B /* UserAPIUseCaseImpl.swift in Sources */,
+				08A2E4802D1BCDE300102313 /* CommentDetailView.swift in Sources */,
 				089952492D033A1C0022AEF9 /* PopUpAPIEndPoint.swift in Sources */,
 				083A25C82CF363C00099B58E /* LoginController.swift in Sources */,
 				08B1913D2CF367EB0057BC04 /* Constants.swift in Sources */,
 				083A25B72CF362670099B58E /* RequestEndpoint.swift in Sources */,
+				08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */,
 				083A25B82CF362670099B58E /* IndicatorMaker.swift in Sources */,
+				086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */,
 				08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */,
 				083C866B2D0ECB4F003F441C /* InstaGuideSectionCell.swift in Sources */,
 				083C86202D087445003F441C /* GetPopUpDetailResponse.swift in Sources */,
@@ -2046,6 +2291,7 @@
 				089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */,
 				086DD9362D00963900B97D3B /* SearchTitleSection.swift in Sources */,
 				083A25922CF361F90099B58E /* ViewConvention.swift in Sources */,
+				086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */,
 				083C864F2D0DD3A6003F441C /* AddCommentImageSection.swift in Sources */,
 				08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */,
 				083A25B42CF362670099B58E /* Responsable.swift in Sources */,
@@ -2061,6 +2307,7 @@
 				089952582D0347AC0022AEF9 /* SearchCategoryController.swift in Sources */,
 				0841BAAA2CFA354C00049E31 /* HomeTitleSectionCell.swift in Sources */,
 				08B191612CF430E70057BC04 /* PPProgressView.swift in Sources */,
+				086F89EA2D2009E300CA4FC9 /* SubLoginView.swift in Sources */,
 				083A25B32CF362670099B58E /* Requestable.swift in Sources */,
 				BD9103932CF6166800BBCCAE /* SplashController.swift in Sources */,
 				08B1916A2CF434B80057BC04 /* SignUpStep1Controller.swift in Sources */,
@@ -2068,12 +2315,14 @@
 				083C861C2D087337003F441C /* GetPopUpDetailRequestDTO.swift in Sources */,
 				BD9103882CF614A900BBCCAE /* GetHomeInfoResponse.swift in Sources */,
 				4E685EDB2D12CEB6001EF91C /* MapAPIEndpoint.swift in Sources */,
+				086F89CC2D1E42B000CA4FC9 /* CommentUserBlockController.swift in Sources */,
 				08DC62032CF8AC06002A2F44 /* HomeView.swift in Sources */,
 				BD9103622CF6149D00BBCCAE /* LoginResponseDTO.swift in Sources */,
 				083C86642D0EC4A5003F441C /* InstaCommentAddReactor.swift in Sources */,
 				BD9103922CF6166800BBCCAE /* SplashView.swift in Sources */,
 				0899526E2D0474340022AEF9 /* GetSearchPopUpListResponse.swift in Sources */,
 				08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */,
+				08A2E48F2D1BF6E500102313 /* CommentListView.swift in Sources */,
 				083A25992CF362090099B58E /* Sectionable.swift in Sources */,
 				086DD8E02CFF2C3700B97D3B /* UIImageView+.swift in Sources */,
 				08B191AC2CF5BF9D0057BC04 /* AgeSelectedController.swift in Sources */,
@@ -2083,6 +2332,8 @@
 				083A25902CF361F90099B58E /* TestDynamicCell.swift in Sources */,
 				08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */,
 				086DD93B2D009A1C00B97D3B /* CancelableTagSection.swift in Sources */,
+				08A2E49F2D1C417000102313 /* CommentListTitleSectionCell.swift in Sources */,
+				086F89D52D1E6DB100CA4FC9 /* OtherUserCommentController.swift in Sources */,
 				083C866E2D0ECB87003F441C /* InstaGuideChildSection.swift in Sources */,
 				08B1917A2CF452B30057BC04 /* SignUpTermsView.swift in Sources */,
 				4E685EDC2D12CEB6001EF91C /* MapPopUpStore.swift in Sources */,
@@ -2096,6 +2347,7 @@
 				08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */,
 				083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */,
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
+				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,
 				08B191982CF4A1010057BC04 /* SignUpStep4Reactor.swift in Sources */,
 				4E5825642D19517B00EE83EF /* StoreListPanelLayout.swift in Sources */,
@@ -2103,10 +2355,12 @@
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
 				083C860B2D073A15003F441C /* DetailView.swift in Sources */,
+				086F89C52D1E347E00CA4FC9 /* CommentUserInfoController.swift in Sources */,
 				BD9103862CF614A900BBCCAE /* BannerPopUpStore.swift in Sources */,
 				08B191862CF48A8B0057BC04 /* SignUpStep2Reactor.swift in Sources */,
 				08DC62052CF8AC0E002A2F44 /* HomeController.swift in Sources */,
 				083C86702D0ECB8E003F441C /* InstaGuideChildSectionCell.swift in Sources */,
+				086F89D02D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift in Sources */,
 				083C865D2D0DEFD5003F441C /* CommentCheckReactor.swift in Sources */,
 				BD9103632CF6149D00BBCCAE /* BannerPopUpStoreDTO.swift in Sources */,
 				086DD92A2D0086AA00B97D3B /* SearchController.swift in Sources */,
@@ -2119,24 +2373,33 @@
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
 				083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */,
+				086F89C72D1E348400CA4FC9 /* CommentUserInfoReactor.swift in Sources */,
 				086DD8C82CFDEA9200B97D3B /* UIView+.swift in Sources */,
+				08A2E4842D1BCDEF00102313 /* CommentDetailReactor.swift in Sources */,
 				4E685ED92D12CEB6001EF91C /* MapRepository.swift in Sources */,
 				083A25B62CF362670099B58E /* MultipartEndPoint.swift in Sources */,
 				089952462D031E740022AEF9 /* SearchSortedView.swift in Sources */,
 				08DC620B2CF8AE0F002A2F44 /* ImageBannerSection.swift in Sources */,
 				086DD9302D0090E900B97D3B /* UITextField+.swift in Sources */,
+				086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */,
 				083C867A2D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift in Sources */,
+				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */,
+				086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */,
 				4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */,
 				086DD8D62CFF182100B97D3B /* UserAPIEndPoint.swift in Sources */,
 				4E685EE22D12CEB6001EF91C /* StoreListView.swift in Sources */,
+				086F89C32D1E347700CA4FC9 /* CommentUserInfoView.swift in Sources */,
 				08B191942CF4A0F00057BC04 /* SignUpStep4View.swift in Sources */,
 				08B1918D2CF49FF70057BC04 /* SignUpStep3View.swift in Sources */,
+				086F89CE2D1E42B500CA4FC9 /* CommentUserBlockReactor.swift in Sources */,
 				BD9103642CF6149D00BBCCAE /* GetHomeInfoResponseDTO.swift in Sources */,
+				08A2E47D2D1B06B000102313 /* ImageDetailReactor.swift in Sources */,
 				08B191B42CF609260057BC04 /* KakaoLoginService.swift in Sources */,
 				BDCA41C12CF35AC0005EECF6 /* AppDelegate.swift in Sources */,
 				083C863A2D0C7F0A003F441C /* CommentSelectedReactor.swift in Sources */,
 				0841BAB42CFABED700049E31 /* HomePopularCardSection.swift in Sources */,
 				083C86362D0C7EF4003F441C /* CommentSelectedController.swift in Sources */,
+				08A2E4792D1B06A300102313 /* ImageDetailView.swift in Sources */,
 				088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */,
 				083C86292D088080003F441C /* DetailContentSection.swift in Sources */,
 				08DC61FA2CF7684F002A2F44 /* SignUpCompleteController.swift in Sources */,
@@ -2145,11 +2408,13 @@
 				0899525C2D0347BD0022AEF9 /* SearchCategoryView.swift in Sources */,
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
+				086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */,
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
 				BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
+				08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */,
 				0899524D2D033AA70022AEF9 /* GetOpenPopUpListResponseDTO.swift in Sources */,
 				083C86602D0EC496003F441C /* InstaCommentAddView.swift in Sources */,
 				08DC62132CF8B833002A2F44 /* Optional+.swift in Sources */,
@@ -2157,9 +2422,11 @@
 				083C863D2D0C8BC4003F441C /* NormalCommentAddController.swift in Sources */,
 				08B1916E2CF434CF0057BC04 /* SignUpStep1Reactor.swift in Sources */,
 				08B1918F2CF4A0020057BC04 /* SignUpStep3Controller.swift in Sources */,
+				08A2E4952D1C078300102313 /* GetPopUpCommentRequestDTO.swift in Sources */,
 				08B191912CF4A00E0057BC04 /* SignUpStep3Reactor.swift in Sources */,
 				083A259C2CF362090099B58E /* InOutputable.swift in Sources */,
 				089952642D0366DA0022AEF9 /* SearchMainReactor.swift in Sources */,
+				086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift in Sources */,
 				BD9103652CF6149D00BBCCAE /* HomeAPIEndpoint.swift in Sources */,
 				086DD8E32CFF356300B97D3B /* HomeCardGridSection.swift in Sources */,
 				0841BABE2CFB5AA600049E31 /* Date?+.swift in Sources */,
@@ -2170,14 +2437,17 @@
 				08B1915B2CF41E690057BC04 /* SignUpMainReactor.swift in Sources */,
 				4E685ED62D12CEB6001EF91C /* FilterChipsView.swift in Sources */,
 				08B191882CF48FAE0057BC04 /* NickNameState.swift in Sources */,
+				08A2E48C2D1BDA8A00102313 /* CommentDetailContentSectionCell.swift in Sources */,
 				083C86562D0DD7EE003F441C /* AddCommentSectionCell.swift in Sources */,
 				08B191B22CF5C0A60057BC04 /* PPPicker.swift in Sources */,
 				086DD92E2D0086B900B97D3B /* SearchView.swift in Sources */,
 				0841BA822CF9F5DF00049E31 /* PreSignedService.swift in Sources */,
 				086DD92C2D0086B100B97D3B /* SearchReactor.swift in Sources */,
+				08A2E4972D1C07F500102313 /* GetPopUpCommentResponseDTO.swift in Sources */,
 				BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */,
 				08B1913F2CF367FA0057BC04 /* UIColor+.swift in Sources */,
 				BD91036D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift in Sources */,
+				08A2E4862D1BD85C00102313 /* CommentDetailImageSection.swift in Sources */,
 				0899526A2D046CDE0022AEF9 /* SearchResultView.swift in Sources */,
 				083C86692D0ECB47003F441C /* InstaGuideSection.swift in Sources */,
 				088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */,
@@ -2192,6 +2462,7 @@
 				083A25BA2CF362670099B58E /* TokenInterceptor.swift in Sources */,
 				0841BAC32CFB600800049E31 /* TabbarController.swift in Sources */,
 				089952442D031E6D0022AEF9 /* SearchSortedReactor.swift in Sources */,
+				086F89E42D1FE91300CA4FC9 /* OtherUserCommentSection.swift in Sources */,
 				083C86782D0EE382003F441C /* CommentAPIRepository.swift in Sources */,
 				08B191B02CF5BFAE0057BC04 /* AgeSelectedReactor.swift in Sources */,
 				4E685EDA2D12CEB6001EF91C /* MapUseCase.swift in Sources */,
@@ -2232,12 +2503,14 @@
 				08B191412CF367FF0057BC04 /* UIFont+.swift in Sources */,
 				0841BA8E2CF9F8A100049E31 /* ImageBannerChildSection.swift in Sources */,
 				083C860D2D073A1C003F441C /* DetailController.swift in Sources */,
+				08A2E4932D1BF6EF00102313 /* CommentListReactor.swift in Sources */,
 				088DE2582D144B0F0030FA9E /* DetailCommentProfileView.swift in Sources */,
 				086DD8CC2CFDFEA800B97D3B /* HomeListController.swift in Sources */,
 				083A258E2CF361F90099B58E /* ConventionTableViewCell.swift in Sources */,
 				086DD9342D00962500B97D3B /* SearchTitleSectionCell.swift in Sources */,
 				08B191592CF41E610057BC04 /* SignUpMainController.swift in Sources */,
 				0899526C2D0473EC0022AEF9 /* GetSearchPopUpListResponseDTO.swift in Sources */,
+				08A2E48A2D1BDA8400102313 /* CommentDetailContentSection.swift in Sources */,
 				4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */,
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
 				0841BAB12CFA38F500049E31 /* HomeCardSectionCell.swift in Sources */,
@@ -2248,6 +2521,7 @@
 				08B191842CF48A820057BC04 /* SignUpStep2View.swift in Sources */,
 				0841BA882CF9F62400049E31 /* PresignedURLRequestDTO.swift in Sources */,
 				0841BA8C2CF9F67100049E31 /* PreSignedAPIEndPoint.swift in Sources */,
+				08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */,
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
 				BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */,
 				0841BA802CF9F34100049E31 /* ImageBannerChildSectionCell.swift in Sources */,
@@ -2268,11 +2542,13 @@
 				08B191762CF440C40057BC04 /* PPButton.swift in Sources */,
 				083A25CC2CF363CB0099B58E /* LoginView.swift in Sources */,
 				083A259B2CF362090099B58E /* SectionSupplementaryItem.swift in Sources */,
+				086F89CA2D1E42A700CA4FC9 /* CommentUserBlockView.swift in Sources */,
 				086DD8D02CFDFEB900B97D3B /* HomeListReactor.swift in Sources */,
 				083C86472D0DCDFB003F441C /* AddCommentTitleSection.swift in Sources */,
 				0841BAB62CFABEDC00049E31 /* HomePopularCardSectionCell.swift in Sources */,
 				08B191822CF48A7B0057BC04 /* SignUpStep2Controller.swift in Sources */,
 				4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */,
+				08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */,
 				083A25912CF361F90099B58E /* TestDynamicSection.swift in Sources */,
 				086DD8D82CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift in Sources */,
 				089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */,
