@@ -37,4 +37,19 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.deleteCommentLike(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func postUserBlock(request: PostUserBlockRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.postUserBlock(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func deleteUserBlock(request: PostUserBlockRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.deleteUserBlock(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Observable<GetOtherUserCommentListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getOtherUserCommentList(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

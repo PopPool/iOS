@@ -46,4 +46,31 @@ struct UserAPIEndPoint {
             queryParameters: request
         )
     }
+    
+    static func postUserBlock(request: PostUserBlockRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/block",
+            method: .post,
+            queryParameters: request
+        )
+    }
+    
+    static func deleteUserBlock(request: PostUserBlockRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/block",
+            method: .delete,
+            queryParameters: request
+        )
+    }
+    
+    static func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Endpoint<GetOtherUserCommentListResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/\(request.commenterId ?? "")/comments",
+            method: .get,
+            queryParameters: request
+        )
+    }
 }
