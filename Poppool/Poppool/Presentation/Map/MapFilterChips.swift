@@ -1,6 +1,8 @@
 import UIKit
 import SnapKit
-final class MapFilterChips: UIView {
+
+
+class MapFilterChips: UIView {
    // MARK: - Components
    private let stackView: UIStackView = {
        let stack = UIStackView()
@@ -66,7 +68,7 @@ final class MapFilterChips: UIView {
            button.setTitleColor(.white, for: .normal)
            button.backgroundColor = .blu500
            button.layer.borderWidth = 0
-           button.layer.cornerRadius = 24
+           button.layer.cornerRadius = 16
 
            let xButton = UIButton(type: .custom)
            xButton.setImage(UIImage(named: "icon_xmark")?.withRenderingMode(.alwaysTemplate), for: .normal)

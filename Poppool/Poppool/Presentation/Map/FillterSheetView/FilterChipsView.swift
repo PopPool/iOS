@@ -3,7 +3,7 @@ import UIKit
 final class FilterChipsView: UIView {
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 14)
+        let label = PPLabel(style: .regular, fontSize: 13)
         label.text = "선택한 옵션"
         label.textColor = .g200
         return label

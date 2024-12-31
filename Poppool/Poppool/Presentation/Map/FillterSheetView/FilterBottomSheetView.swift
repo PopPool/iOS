@@ -139,7 +139,7 @@ final class FilterBottomSheetView: UIView {
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            categoryHeightConstraint = make.height.equalTo(160).constraint // 초기 높이 0으로 설정
+            categoryHeightConstraint = make.height.equalTo(160).constraint
         }
 
         containerView.addSubview(filterChipsView)

@@ -284,9 +284,12 @@
 		4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC72D12CEB6001EF91C /* MapMarker.swift */; };
 		4E685EE62D12CEB6001EF91C /* MapReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC82D12CEB6001EF91C /* MapReactor.swift */; };
 		4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */; };
-		4E685EE82D12CEB6001EF91C /* MapStoreCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECA2D12CEB6001EF91C /* MapStoreCard.swift */; };
 		4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECB2D12CEB6001EF91C /* MapView.swift */; };
 		4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
+		4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */; };
+		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
+		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
+		4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9BAB2D22730400B288E7 /* FilterType.swift */; };
 		BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */; };
 		BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */; };
 		BD9103622CF6149D00BBCCAE /* LoginResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91034F2CF6149D00BBCCAE /* LoginResponseDTO.swift */; };
@@ -621,9 +624,11 @@
 		4E685EC72D12CEB6001EF91C /* MapMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		4E685EC82D12CEB6001EF91C /* MapReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapReactor.swift; sourceTree = "<group>"; };
 		4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSearchInput.swift; sourceTree = "<group>"; };
-		4E685ECA2D12CEB6001EF91C /* MapStoreCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapStoreCard.swift; sourceTree = "<group>"; };
 		4E685ECB2D12CEB6001EF91C /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		4E685ECC2D12CEB6001EF91C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListHeaderView.swift; sourceTree = "<group>"; };
+		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
+		4EED9BAB2D22730400B288E7 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPReturnHeaderView.swift; sourceTree = "<group>"; };
 		BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthAPIEndPoint.swift; sourceTree = "<group>"; };
 		BD91034F2CF6149D00BBCCAE /* LoginResponseDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginResponseDTO.swift; sourceTree = "<group>"; };
@@ -685,6 +690,7 @@
 				BDCA420A2CF35FB1005EECF6 /* Pageboy in Frameworks */,
 				08B191BE2CF609AE0057BC04 /* RxKakaoSDKUser in Frameworks */,
 				4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */,
+				4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */,
 				BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */,
 				088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */,
 			);
@@ -1906,7 +1912,9 @@
 				4E685EC12D12CEB6001EF91C /* StoreListCell.swift */,
 				4E685EC22D12CEB6001EF91C /* StoreListReactor.swift */,
 				4E685EC32D12CEB6001EF91C /* StoreListView.swift */,
+				4EA998992D21C2FC009DC30B /* StoreListSection.swift */,
 				4E685EC42D12CEB6001EF91C /* StoreListViewController.swift */,
+				4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */,
 			);
 			path = StoreListView;
 			sourceTree = "<group>";
@@ -1914,6 +1922,7 @@
 		4E685ECD2D12CEB6001EF91C /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				4EED9BAA2D2272F500B288E7 /* Common */,
 				4E685EB52D12CEB6001EF91C /* FillterSheetView */,
 				4E685EBD2D12CEB6001EF91C /* MapAPI */,
 				4E685EC02D12CEB6001EF91C /* MapPopupCardView */,
@@ -1922,11 +1931,18 @@
 				4E685EC72D12CEB6001EF91C /* MapMarker.swift */,
 				4E685EC82D12CEB6001EF91C /* MapReactor.swift */,
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
-				4E685ECA2D12CEB6001EF91C /* MapStoreCard.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		4EED9BAA2D2272F500B288E7 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4EED9BAB2D22730400B288E7 /* FilterType.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		BD9103502CF6149D00BBCCAE /* AuthAPI */ = {
@@ -2123,6 +2139,7 @@
 				088DE2432D104EE70030FA9E /* SwiftSoup */,
 				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
+				4EA9989C2D21C404009DC30B /* RxDataSources */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -2212,6 +2229,7 @@
 				088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -2467,9 +2485,11 @@
 				08B191B02CF5BFAE0057BC04 /* AgeSelectedReactor.swift in Sources */,
 				4E685EDA2D12CEB6001EF91C /* MapUseCase.swift in Sources */,
 				083C863F2D0C8BCE003F441C /* NormalCommentAddView.swift in Sources */,
+				4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */,
 				083C86452D0DCDE9003F441C /* AddCommentTitleSectionCell.swift in Sources */,
 				083C86412D0C8BD8003F441C /* NormalCommentAddReactor.swift in Sources */,
 				089952732D0475E90022AEF9 /* SearchResultCountSection.swift in Sources */,
+				4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */,
 				08B191A02CF4AA0E0057BC04 /* Reactive+.swift in Sources */,
 				4E685ED32D12CEB6001EF91C /* FilterBottomSheetViewController.swift in Sources */,
 				089952512D033C410022AEF9 /* GetSearchBottomPopUpListResponse.swift in Sources */,
@@ -2488,6 +2508,7 @@
 				4E685EE42D12CEB6001EF91C /* MapFilterChips.swift in Sources */,
 				BD91036E2CF6149D00BBCCAE /* SignUpRequestDTO.swift in Sources */,
 				08B191632CF430F30057BC04 /* PPProgressIndicator.swift in Sources */,
+				4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */,
 				08B191742CF43DF40057BC04 /* SignUpCheckBoxButton.swift in Sources */,
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
 				4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */,
@@ -2939,6 +2960,14 @@
 				minimumVersion = 2.8.6;
 			};
 		};
+		4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -3064,6 +3093,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
+		};
+		4EA9989C2D21C404009DC30B /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 		BDCA41F12CF35D0D005EECF6 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

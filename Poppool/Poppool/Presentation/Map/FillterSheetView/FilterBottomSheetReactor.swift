@@ -17,6 +17,7 @@ final class FilterBottomSheetReactor: Reactor {
         case toggleAllSubRegions
         
 
+
     }
     enum Mutation {
         case setActiveSegment(Int)

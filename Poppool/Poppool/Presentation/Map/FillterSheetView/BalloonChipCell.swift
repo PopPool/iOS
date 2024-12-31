@@ -33,8 +33,12 @@ final class BalloonChipCell: UICollectionViewCell {
     func configure(with title: String, isSelected: Bool) {
         if isSelected {
             button.setImage(UIImage(named: "icon_check_fill"), for: .normal)
-            button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 16)
-            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
+            button.imageView?.snp.updateConstraints { make in
+                make.size.equalTo(16)
+            }
+
+            button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 12)
+            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 0)
             button.setBackgroundColor(.blu500, for: .normal)
             button.setTitleColor(.white, for: .normal)
             button.layer.borderWidth = 0
@@ -42,7 +46,7 @@ final class BalloonChipCell: UICollectionViewCell {
             button.setImage(nil, for: .normal)
             button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 10)
             button.setBackgroundColor(.white, for: .normal)
-            button.setTitleColor(.g200, for: .normal)
+            button.setTitleColor(.g400, for: .normal)
             button.layer.borderColor = UIColor.g200.cgColor
             button.layer.borderWidth = 1
         }

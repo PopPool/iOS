@@ -1,7 +1,9 @@
 import UIKit
-import SnapKit
+import ReactorKit
+import RxCocoa
+import RxSwift
 
-final class MapSearchInput: UIView {
+final class MapSearchInput: UIView, View {
     // MARK: - Components
     private let containerView: UIView = {
         let view = UIView()
@@ -16,19 +18,23 @@ final class MapSearchInput: UIView {
 
     private let searchIcon: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "icon_search")?.withRenderingMode(.alwaysTemplate)
-        iv.tintColor = .g900
+        iv.image = UIImage(named: "icon_search_gray")?.withRenderingMode(.alwaysTemplate)
+        iv.tintColor = .g400
         return iv
     }()
 
-    private let placeholderLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 14)
-        label.text = "팝업스토어명, 지역을 입력해보세요"
-        label.textColor = .g400
-        return label
+    private let searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "팝업스토어명, 지역을 입력해보세요"
+        textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        textField.clearButtonMode = .whileEditing
+        textField.textColor = .g400  
+        return textField
     }()
 
     private let tapButton = UIButton()
+
+    var disposeBag = DisposeBag()
 
     // MARK: - Init
     init() {
@@ -39,6 +45,36 @@ final class MapSearchInput: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func setBackgroundColorForList() {
+        containerView.backgroundColor = .g50
+    }
+
+    func bind(reactor: MapReactor) {
+        searchTextField.rx.text.orEmpty
+            .distinctUntilChanged()
+            .bind { query in
+                reactor.action.onNext(.filterUpdated(.location, [query]))
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .map { $0.selectedLocationFilters }
+            .distinctUntilChanged()
+            .bind { [weak self] filters in
+                self?.searchTextField.text = filters.first // 필터에 맞는 텍스트를 UI에 표시
+            }
+            .disposed(by: disposeBag)
+
+        // 검색 버튼을 눌렀을 때
+        tapButton.rx.tap
+            .bind { [weak self] in
+                guard let self = self else { return }
+                // searchTapped 액션 호출
+                reactor.action.onNext(.searchTapped)
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
 // MARK: - Setup
@@ -46,13 +82,12 @@ private extension MapSearchInput {
     func setupLayout() {
         addSubview(containerView)
         containerView.addSubview(searchIcon)
-        containerView.addSubview(placeholderLabel)
+        containerView.addSubview(searchTextField)
         containerView.addSubview(tapButton)
 
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             // 높이 제약 조건 제거하여 부모 뷰의 높이에 맞춤
-            // make.height.equalTo(48) // 제거
         }
 
         searchIcon.snp.makeConstraints { make in
@@ -61,9 +96,10 @@ private extension MapSearchInput {
             make.size.equalTo(20)
         }
 
-        placeholderLabel.snp.makeConstraints { make in
+        searchTextField.snp.makeConstraints { make in
             make.leading.equalTo(searchIcon.snp.trailing).offset(8)
             make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-16) // 우측 여백을 추가해 텍스트가 오른쪽에 붙지 않도록
         }
 
         tapButton.snp.makeConstraints { make in

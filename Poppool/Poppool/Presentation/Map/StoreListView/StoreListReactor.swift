@@ -1,52 +1,88 @@
 import ReactorKit
 import RxSwift
-import RxCocoa
-import UIKit
 
 final class StoreListReactor: Reactor {
-
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
         case didSelectItem(Int)
         case toggleBookmark(Int)
-        case didDragSheet(CGFloat)
+
+        // 필터칩 탭 시 (location / category)
+        case filterTapped(FilterType?)
+        // 바텀시트에서 필터 선택 후 save 시
+        case filterUpdated(FilterType, [String])
+        // 필터 제거(초기화)
+        case clearFilters(FilterType)
     }
 
     enum Mutation {
+        // 기존
         case setStores([StoreItem])
         case updateBookmark(Int)
-        case updateSheetHeight(CGFloat)
+
+        // 필터 관련
+        case setActiveFilter(FilterType?)
+        case setLocationFilters([String])
+        case setCategoryFilters([String])
+        case clearLocationFilters
+        case clearCategoryFilters
     }
 
     struct State {
+        // 기존
         var stores: [StoreItem] = []
-        var sheetHeight: CGFloat = UIScreen.main.bounds.height * 0.75
+
+        // 필터 관련 상태
+        var activeFilterType: FilterType?
+        var selectedLocationFilters: [String] = []
+        var selectedCategoryFilters: [String] = []
     }
 
     // MARK: - Properties
-    let initialState: State
+    var initialState: State
+    var disposeBag = DisposeBag()
 
     // MARK: - Init
     init() {
         self.initialState = State()
     }
 
-    // MARK: - Methods
+    // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        // 1) 리스트 데이터 fetch
         case .viewDidLoad:
             return fetchStores()
 
-        case .didSelectItem(let index):
-            // TODO: 아이템 선택 처리
+        case let .didSelectItem(index):
+            // TODO: item 선택 시 로직
             return .empty()
 
-        case .toggleBookmark(let index):
+        case let .toggleBookmark(index):
             return .just(.updateBookmark(index))
 
-        case .didDragSheet(let height):
-            return .just(.updateSheetHeight(height))
+        // 2) 필터칩 탭: filterTapped(.location/.category or nil)
+        case let .filterTapped(filterType):
+            return .just(.setActiveFilter(filterType))
+
+        // 3) 바텀시트에서 선택된 필터 값 적용
+        case let .filterUpdated(type, values):
+            switch type {
+            case .location:
+                return .just(.setLocationFilters(values))
+            case .category:
+                return .just(.setCategoryFilters(values))
+            }
+
+        // 4) 필터 제거(초기화)
+        case let .clearFilters(type):
+            switch type {
+            case .location:
+                return .just(.clearLocationFilters)
+            case .category:
+                return .just(.clearCategoryFilters)
+            }
         }
     }
 
@@ -54,66 +90,53 @@ final class StoreListReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case .setStores(let stores):
+
+        // 기존
+        case let .setStores(stores):
             newState.stores = stores
 
-        case .updateBookmark(let index):
-            // TODO: 북마크 상태 업데이트
-            break
+        case let .updateBookmark(index):
+            if index < newState.stores.count {
+                var item = newState.stores[index]
+                item.isBookmarked.toggle()
+                newState.stores[index] = item
+            }
 
-        case .updateSheetHeight(let height):
-            newState.sheetHeight = height
+        // 필터관련
+        case let .setActiveFilter(filterType):
+            newState.activeFilterType = filterType
+
+        case let .setLocationFilters(filters):
+            newState.selectedLocationFilters = filters
+
+        case let .setCategoryFilters(filters):
+            newState.selectedCategoryFilters = filters
+
+        case .clearLocationFilters:
+            newState.selectedLocationFilters = []
+
+        case .clearCategoryFilters:
+            newState.selectedCategoryFilters = []
         }
 
         return newState
     }
 
+    // MARK: - Private
     private func fetchStores() -> Observable<Mutation> {
-        let mockStores: [StoreItem] = [
-            StoreItem(
-                id: 1,
-                thumbnailURL: "",
-                category: "카페",
-                title: "팝업스토어명 최대 22까지",
-                location: "서울 강남구",
-                dateRange: "2024. 06. 30 ~ 2024. 08. 23",
-                isBookmarked: false
-            ),
-            StoreItem(
-                id: 2,
-                thumbnailURL: "",
-                category: "전시",
-                title: "두 번째 팝업스토어",
-                location: "서울 성동구",
-                dateRange: "2024. 07. 01 ~ 2024. 07. 30",
-                isBookmarked: true
-            ),
-            StoreItem(
-                id: 3,
-                thumbnailURL: "",
-                category: "카페",
-                title: "팝업스토어명 최대 22까지",
-                location: "서울 강남구",
-                dateRange: "2024. 06. 30 ~ 2024. 08. 23",
-                isBookmarked: false
-            ),
-            StoreItem(
-                id: 4,
-                thumbnailURL: "",
-                category: "전시",
-                title: "두 번째 팝업스토어",
-                location: "서울 성동구",
-                dateRange: "2024. 07. 01 ~ 2024. 07. 30",
-                isBookmarked: true
-            ),
-
-
-            ]
+        let mockStores = [
+            StoreItem(id: 1, thumbnailURL: "", category: "카페",  title: "팝업스토어1",
+                      location: "서울 강남구",   dateRange: "2024.06.30 ~ 08.23",
+                      isBookmarked: false),
+            StoreItem(id: 2, thumbnailURL: "", category: "전시",  title: "팝업스토어2",
+                      location: "서울 성동구", dateRange: "2024.07.01 ~ 07.30",
+                      isBookmarked: true)
+        ]
         return .just(.setStores(mockStores))
     }
 }
 
-// 데이터 모델
+// MARK: - Model
 struct StoreItem {
     let id: Int
     let thumbnailURL: String

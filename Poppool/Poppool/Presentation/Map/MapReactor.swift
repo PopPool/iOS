@@ -3,22 +3,23 @@ import RxSwift
 import CoreLocation
 
 final class MapReactor: Reactor {
+    // MARK: - Reactor
     enum Action {
         case viewDidLoad
         case searchTapped
         case locationButtonTapped
         case listButtonTapped
-        case filterTapped(FilterType?)
+        case filterTapped(FilterType?)    // 여기서 FilterType은 공통 파일에서 가져옴
         case filterUpdated(FilterType, [String])
-        case clearFilters(FilterType) // 추가
+        case clearFilters(FilterType)
     }
 
     enum Mutation {
         case setActiveFilter(FilterType?)
         case setLocationFilters([String])
         case setCategoryFilters([String])
-        case clearLocationFilters // 추가
-        case clearCategoryFilters // 추가
+        case clearLocationFilters
+        case clearCategoryFilters
     }
 
     struct State {
@@ -39,6 +40,7 @@ final class MapReactor: Reactor {
         switch action {
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
+
         case let .filterUpdated(type, values):
             switch type {
             case .location:
@@ -46,14 +48,15 @@ final class MapReactor: Reactor {
             case .category:
                 return .just(.setCategoryFilters(values))
             }
+
         case let .clearFilters(type):
-            // 필터 초기화
             switch type {
             case .location:
                 return .just(.clearLocationFilters)
             case .category:
                 return .just(.clearCategoryFilters)
             }
+
         default:
             return .empty()
         }
@@ -79,8 +82,3 @@ final class MapReactor: Reactor {
     }
 }
 
-
-enum FilterType {
-    case location
-    case category
-}
