@@ -14,7 +14,7 @@ final class BalloonBackgroundView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout { section, env in
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .estimated(200),
+                widthDimension: .estimated(30),
                 heightDimension: .absolute(30)
             )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -130,12 +130,10 @@ final class BalloonBackgroundView: UIView {
             }
         )
 
-        // reload
+        // UICollectionView 데이터 갱신
         collectionView.reloadData()
-        // layoutIfNeeded
         collectionView.layoutIfNeeded()
 
-        // manual height calc
         let dynamicHeight = calculateHeight()
         self.snp.updateConstraints { make in
             make.height.equalTo(dynamicHeight)
@@ -147,50 +145,70 @@ final class BalloonBackgroundView: UIView {
     func calculateHeight() -> CGFloat {
         guard let inputDataList = tagSection?.inputDataList else { return 0 }
 
-        let screenWidth = UIScreen.main.bounds.width
-        let horizontalSpacing: CGFloat = 8
-        let totalInsets: CGFloat = 40 // left(20) + right(20)
-        let availableWidth = screenWidth - totalInsets
+        let balloonWidth = self.bounds.width
+        let horizontalSpacing: CGFloat = 8 // 버튼 간 간격
+        let leftPadding: CGFloat = 20 // 왼쪽 패딩
+        let rightPadding: CGFloat = 20 // 오른쪽 패딩
+        let availableWidth = balloonWidth - leftPadding - rightPadding - horizontalSpacing
 
         var currentRowWidth: CGFloat = 0
         var numberOfRows: Int = 1
 
         for input in inputDataList {
-            let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12),            isSelected: input.isSelected ?? false
-)
-
+            // 버튼 너비 계산
+            let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12), isSelected: input.isSelected ?? false)
+//            print("DEBUG - Calculated Button Width: \(buttonWidth)")
 
             if currentRowWidth + buttonWidth + horizontalSpacing > availableWidth {
+//                print("""
+//                DEBUG - 줄바꿈 발생:
+//                    버튼 길이: \(buttonWidth),
+//                    버튼 간 패딩: \(horizontalSpacing),
+//                    현재 줄 누적 너비: \(currentRowWidth),
+//                    가용 너비: \(availableWidth),
+//                    새로운 줄 시작.
+//                """)
                 numberOfRows += 1
                 currentRowWidth = buttonWidth
             } else {
                 currentRowWidth += buttonWidth + horizontalSpacing
+//                print("""
+//                DEBUG - 현재 줄에 추가:
+//                    버튼 길이: \(buttonWidth),
+//                    버튼 간 패딩: \(horizontalSpacing),
+//                    현재 줄 누적 너비: \(currentRowWidth),
+//                    가용 너비: \(availableWidth).
+//                """)
             }
         }
 
+        // 높이 계산
         let itemHeight: CGFloat = 36
         let interGroupSpacing: CGFloat = 8
-        let verticalInset: CGFloat = 20 + 19 // top/bottom in CompositionalLayout
+        let verticalInset: CGFloat = 20 + 19
+        let totalHeight = max(
+            (itemHeight * CGFloat(numberOfRows)) +
+            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
+            verticalInset,
+            36
+        )
 
-        return (itemHeight * CGFloat(numberOfRows))
-             + (interGroupSpacing * CGFloat(numberOfRows - 1))
-             + verticalInset
+//        print("DEBUG - Total Calculated Height: \(totalHeight)")
+        return totalHeight
     }
-
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width
-
-        // iconWidth는 선택된 상태에서만 16, 아니면 0
         let iconWidth: CGFloat = isSelected ? 16 : 0
         let iconGap: CGFloat = isSelected ? 4 : 0
 
-        // contentEdgeInsets (왼+오른)
-        // ex: isSelected(왼10+오른12=22), else(왼12+오른10=22)
-        // 실제로 합치면 22
-        let horizontalInsets: CGFloat = 22
+        let horizontalPadding: CGFloat = 24
 
-        // 최종 너비
-        return textWidth + iconWidth + iconGap + horizontalInsets
+        let calculatedWidth = textWidth + iconWidth + iconGap + horizontalPadding
+
+        // 디버깅 출력
+//        print("DEBUG - 텍스트: \(text), 선택 상태: \(isSelected), 최종 버튼 너비: \(calculatedWidth)")
+
+        return calculatedWidth
     }
 }
 

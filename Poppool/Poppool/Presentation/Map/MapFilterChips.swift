@@ -36,7 +36,6 @@ class MapFilterChips: UIView {
             make.top.bottom.equalToSuperview()
         }
 
-
        stackView.addArrangedSubview(locationChip)
        stackView.addArrangedSubview(categoryChip)
    }
@@ -44,18 +43,20 @@ class MapFilterChips: UIView {
    private func createChipButton(title: String, isSelected: Bool = false) -> UIButton {
        let button = UIButton(type: .system)
        button.setTitle(title, for: .normal)
-       button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+       button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)
        button.setTitleColor(isSelected ? .white : .g400, for: .normal)
        button.backgroundColor = isSelected ? .blu500 : .white
-       button.layer.cornerRadius = 24
+       button.layer.cornerRadius = 18
        button.layer.borderWidth = isSelected ? 0 : 1
        button.layer.borderColor = isSelected ? UIColor.blu500.cgColor : UIColor.g200.cgColor
-       button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
+       button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
        return button
    }
 
    // MARK: - Update State
    func update(locationText: String?, categoryText: String?) {
+       print("Updating chips - locationText: \(String(describing: locationText)), categoryText: \(String(describing: categoryText))")
+
        updateChip(button: locationChip, text: locationText, placeholder: "지역선택", onClear: onRemoveLocation)
        updateChip(button: categoryChip, text: categoryText, placeholder: "카테고리", onClear: onRemoveCategory)
    }
@@ -65,10 +66,11 @@ class MapFilterChips: UIView {
 
        if let text = text, !text.isEmpty, text != placeholder {
            button.setTitle(text, for: .normal)
+
            button.setTitleColor(.white, for: .normal)
            button.backgroundColor = .blu500
            button.layer.borderWidth = 0
-           button.layer.cornerRadius = 16
+           button.layer.cornerRadius = 18
 
            let xButton = UIButton(type: .custom)
            xButton.setImage(UIImage(named: "icon_xmark")?.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -92,7 +94,7 @@ class MapFilterChips: UIView {
            button.layer.borderWidth = 1
            button.layer.borderColor = UIColor.g200.cgColor
            button.layer.cornerRadius = 16
-           button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
+           button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
        }
    }
 

@@ -45,17 +45,14 @@ final class StoreListViewController: UIViewController, View {
     }
 
     private func setupCollectionView() {
-//        mainView.collectionView.dataSource = self
-//        mainView.collectionView.delegate = self
         mainView.collectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        mainView.collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
 
 
     }
     func bind(reactor: Reactor) {
-           // 1) RxDataSources 객체
            let dataSource = RxCollectionViewSectionedReloadDataSource<StoreListSection>(
-               // 셀 설정
                configureCell: { [weak self] ds, cv, indexPath, item in
                    guard let self = self else { return UICollectionViewCell() }
                    let cell = cv.dequeueReusableCell(

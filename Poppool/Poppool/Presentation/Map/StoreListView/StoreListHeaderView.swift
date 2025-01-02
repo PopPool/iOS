@@ -13,7 +13,7 @@ class StoreListHeaderView: UICollectionReusableView {
     var disposeBag = DisposeBag()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("[DEBUG] StoreListHeaderView 초기화 - frame: \(frame)")
+//        print("[DEBUG] StoreListHeaderView 초기화 - frame: \(frame)")
         setupLayout()
         searchInput.setBackgroundColorForList()
 
@@ -41,8 +41,8 @@ class StoreListHeaderView: UICollectionReusableView {
 
         filterChips.snp.makeConstraints { make in
             make.top.equalTo(searchInput.snp.bottom).offset(11)
-            make.left.right.equalToSuperview().inset(16)
-            make.height.equalTo(32)
+            make.left.right.equalToSuperview().inset(20)
+            make.height.equalTo(36)
             make.bottom.equalToSuperview().offset(-20)
         }
 

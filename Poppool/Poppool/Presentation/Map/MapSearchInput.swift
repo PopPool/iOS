@@ -29,6 +29,7 @@ final class MapSearchInput: UIView, View {
         textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         textField.clearButtonMode = .whileEditing
         textField.textColor = .g400  
+        textField.isUserInteractionEnabled = true 
         return textField
     }()
 

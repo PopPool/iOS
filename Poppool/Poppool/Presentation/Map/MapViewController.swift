@@ -93,7 +93,14 @@ final class MapViewController: BaseViewController, View {
                 fpc.delegate = self
                 fpc.set(contentViewController: listVC)
                 fpc.layout = StoreListPanelLayout()
-                fpc.surfaceView.grabberHandle.isHidden = true
+//                fpc.surfaceView.grabberHandle.isHidden = true
+                fpc.surfaceView.grabberHandle.snp.makeConstraints { make in
+                    make.top.equalToSuperview().offset(14) 
+                            make.centerX.equalToSuperview()
+                            make.width.equalTo(36)
+                            make.height.equalTo(5)
+                        }
+
                 fpc.surfaceView.layer.shadowColor = UIColor.clear.cgColor
                 fpc.surfaceView.layer.shadowRadius = 0
                 fpc.surfaceView.layer.shadowOffset = .zero
@@ -112,27 +119,24 @@ final class MapViewController: BaseViewController, View {
         reactor.state.map { $0.selectedLocationFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] locationFilters in
-                guard let self = self else { return }
-                let locationText = locationFilters.isEmpty
-                ? "지역선택"
-                : (locationFilters.count > 1 ? "\(locationFilters[0]) 외 \(locationFilters.count - 1)개" : locationFilters[0])
-                self.mainView.filterChips.update(locationText: locationText, categoryText: nil)
+            .bind { [weak self] filters in
+                self?.mainView.filterChips.update(
+                    locationText: filters.first ?? "지역선택",
+                    categoryText: nil
+                )
             }
             .disposed(by: disposeBag)
 
         reactor.state.map { $0.selectedCategoryFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] categoryFilters in
-                guard let self = self else { return }
-                let categoryText = categoryFilters.isEmpty
-                ? "카테고리"
-                : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
-                self.mainView.filterChips.update(locationText: nil, categoryText: categoryText)
+            .bind { [weak self] filters in
+                self?.mainView.filterChips.update(
+                    locationText: nil,
+                    categoryText: filters.first ?? "카테고리"
+                )
             }
             .disposed(by: disposeBag)
-
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
         }
@@ -191,6 +195,8 @@ final class MapViewController: BaseViewController, View {
 
         viewController.onSave = { [weak self] (selectedOptions: [String]) in
             guard let self = self else { return }
+            print("MapVC onSave - filterType: \(filterType), options: \(selectedOptions)") 
+
             self.reactor?.action.onNext(.filterUpdated(filterType, selectedOptions))
             self.reactor?.action.onNext(.filterTapped(nil))
         }

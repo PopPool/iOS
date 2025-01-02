@@ -122,6 +122,8 @@ final class FilterBottomSheetReactor: Reactor {
             newState.selectedLocationIndex = nil
             newState.selectedSubRegions = []
             newState.selectedCategories = []
+            
+            print("Reset filters - selectedLocationIndex: \(newState.selectedLocationIndex)")
 
         case .applyFilters(let selectedOptions):
             print("필터 적용: \(newState.selectedSubRegions + newState.selectedCategories)")

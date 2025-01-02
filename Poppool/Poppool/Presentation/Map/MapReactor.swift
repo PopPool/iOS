@@ -42,6 +42,7 @@ final class MapReactor: Reactor {
             return .just(.setActiveFilter(filterType))
 
         case let .filterUpdated(type, values):
+            print("MapReactor filterUpdated - type: \(type), values: \(values)")
             switch type {
             case .location:
                 return .just(.setLocationFilters(values))
@@ -71,9 +72,10 @@ final class MapReactor: Reactor {
             newState.activeFilterType = filterType
         case let .setLocationFilters(filters):
             newState.selectedLocationFilters = filters
+            print("Updating selectedLocationFilters to: \(filters)")
         case let .setCategoryFilters(filters):
             newState.selectedCategoryFilters = filters
-        case .clearLocationFilters: // 지역 필터 초기화
+        case .clearLocationFilters:
             newState.selectedLocationFilters = []
         case .clearCategoryFilters: // 카테고리 필터 초기화
             newState.selectedCategoryFilters = []
