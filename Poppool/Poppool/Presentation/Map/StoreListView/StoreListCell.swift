@@ -72,7 +72,7 @@ final class StoreListCell: UICollectionViewCell {
 // MARK: - SetUp
 private extension StoreListCell {
     func configureUI() {
-        backgroundColor = .white
+        //        backgroundColor = .white
     }
 
     func setUpConstraints() {

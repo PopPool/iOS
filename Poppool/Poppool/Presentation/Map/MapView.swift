@@ -70,11 +70,11 @@ private extension MapView {
         }
 
         searchInput.snp.makeConstraints { make in
-            make.height.equalTo(40)
+            make.height.equalTo(37)
         }
 
         filterChips.snp.makeConstraints { make in
-            make.height.equalTo(32)
+            make.height.equalTo(36)
         }
 
         let searchContainer = UIView()

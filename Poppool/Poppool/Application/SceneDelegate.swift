@@ -22,8 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
 
-        let rootViewController = LoginController()
-        rootViewController.reactor = LoginReactor()
+//        let rootViewController = LoginController()
+//        rootViewController.reactor = LoginReactor()
+
+        let rootVC = WaveTabBarController()
 
 
 //        let rootViewController = DetailController()
@@ -32,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let rootViewController = SearchMainController()
 //        rootViewController.reactor = SearchMainReactor()
 
-        let navigationController = UINavigationController(rootViewController: rootViewController)
+        let navigationController = UINavigationController(rootViewController: rootVC)
 //        let navigationController = WaveTabBarController()
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

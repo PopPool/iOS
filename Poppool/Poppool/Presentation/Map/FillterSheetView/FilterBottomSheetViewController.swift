@@ -78,33 +78,40 @@ final class FilterBottomSheetViewController: UIViewController, View {
 
         // 2. 리셋 버튼 바인딩
         containerView.resetButton.rx.tap
-            .map { Reactor.Action.resetFilters }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+           .do(onNext: { [weak self] _ in
+               // 선택된 location이 있으면 해당 location의 버튼들 초기화
+               if let selectedIndex = self?.reactor?.currentState.selectedLocationIndex,
+                  let location = self?.reactor?.currentState.locations[selectedIndex] {
+                   self?.containerView.balloonBackgroundView.configure(
+                       with: location.sub,
+                       selectedRegions: [], // 빈 배열로 모든 버튼 선택 해제
+                       mainRegionTitle: location.main,
+                       selectionHandler: { [weak self] subRegion in
+                           self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
+                       },
+                       allSelectionHandler: { [weak self] in
+                           self?.reactor?.action.onNext(.toggleAllSubRegions)
+                       }
+                   )
+               }
+           })
+           .map { Reactor.Action.resetFilters }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
 
-        // 3. 저장 버튼 바인딩
+        
         containerView.saveButton.rx.tap
-            .withUnretained(self)
-            .bind { [weak self] (owner: FilterBottomSheetViewController, _) in
-                let activeSegment = owner.containerView.segmentedControl.selectedSegmentIndex
+            .bind { [weak self] _ in
+                guard let self = self, let reactor = self.reactor else { return }
 
-                // 지역 선택일 때
-                if activeSegment == 0 {
-                    let selectedSubRegions = owner.reactor?.currentState.selectedSubRegions ?? []
-                    owner.onSave?(selectedSubRegions)
-                    owner.reactor?.action.onNext(.applyFilters(selectedSubRegions))
-                }
-                // 카테고리 선택일 때
-                else if activeSegment == 1 {
-                    let selectedCategories = owner.reactor?.currentState.selectedCategories ?? []
-                    owner.onSave?(selectedCategories)
-                    owner.reactor?.action.onNext(.applyFilters(selectedCategories))
-                }
+                let filters = reactor.currentState.activeSegment == 0
+                    ? reactor.currentState.selectedSubRegions
+                    : reactor.currentState.selectedCategories
 
-                owner.hideBottomSheet()
+                self.onSave?(filters)
+                self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
-
 
 
         containerView.closeButton.rx.tap
@@ -128,9 +135,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 self.containerView.updateContentVisibility(isCategorySelected: activeSegment == 1)
             }
             .disposed(by: disposeBag)
-
-
-
 
         // 6. 위치 데이터 바인딩
         let locations = reactor.state
@@ -174,6 +178,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 guard let self = self, let reactor = self.reactor else { return }
                 let (selectedIndexOptional, selectedSubRegions) = data
 
+                
                 guard let selectedIndex = selectedIndexOptional,
                       selectedIndex >= 0,
                       selectedIndex < reactor.currentState.locations.count else { return }
@@ -181,16 +186,16 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 let location = reactor.currentState.locations[selectedIndex]
 
                 self.containerView.balloonBackgroundView.configure(
-                    with: location.sub,
-                    selectedRegions: selectedSubRegions,
-                    mainRegionTitle: location.main,
-                    selectionHandler: { [weak self] subRegion in
-                        self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
-                    },
-                    allSelectionHandler: { [weak self] in
-                        self?.reactor?.action.onNext(.toggleAllSubRegions)
-                    }
-                )
+                           with: location.sub,
+                           selectedRegions: selectedSubRegions,  // selectedSubRegions가 빈 배열이면 모두 선택 해제 상태가 됨
+                           mainRegionTitle: location.main,
+                           selectionHandler: { [weak self] subRegion in
+                               self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
+                           },
+                           allSelectionHandler: { [weak self] in
+                               self?.reactor?.action.onNext(.toggleAllSubRegions)
+                           }
+                       )
 
                 if let button = self.containerView.locationContentView.subviews[selectedIndex] as? UIButton {
                     self.containerView.updateBalloonPosition(for: button)

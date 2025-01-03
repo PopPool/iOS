@@ -53,8 +53,8 @@ private extension MapMarker {
 
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-            make.height.equalTo(28) // 고정 높이
-            make.width.equalTo(80) // 고정 너비 (필요 시 조정)
+            make.height.equalTo(28)
+            make.width.equalTo(80) 
         }
 
         markerStackView.snp.makeConstraints { make in
