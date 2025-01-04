@@ -56,4 +56,8 @@ final class UserAPIUseCaseImpl {
         )
         .map { $0.toDomain() }
     }
+    
+    func getMyPage() -> Observable<GetMyPageResponse> {
+        return repository.getMyPage().map { $0.toDomain() }
+    }
 }

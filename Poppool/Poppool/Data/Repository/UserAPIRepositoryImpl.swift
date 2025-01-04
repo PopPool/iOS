@@ -52,4 +52,9 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.getOtherUserCommentList(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getMyPage() -> Observable<GetMyPageResponseDTO> {
+        let endPoint = UserAPIEndPoint.getMyPage()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

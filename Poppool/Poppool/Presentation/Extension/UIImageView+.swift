@@ -28,4 +28,25 @@ extension UIImageView {
             }
         }
     }
+    
+    func setPPImage(path: String?, completion: @escaping () -> Void) {
+        guard let path = path else {
+            self.image = UIImage(named: "image_profileImage")
+            completion()
+            return
+        }
+        let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
+        if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            let imageURL = URL(string: cenvertimageURL)
+            self.kf.setImage(with: imageURL) { result in
+                completion()
+                switch result {
+                case .failure(let error):
+                    Logger.log(message: "\(path) image Load Fail: \(error.localizedDescription)", category: .error)
+                default:
+                    break
+                }
+            }
+        }
+    }
 }

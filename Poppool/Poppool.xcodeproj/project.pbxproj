@@ -134,6 +134,19 @@
 		086F89EA2D2009E300CA4FC9 /* SubLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E92D2009E300CA4FC9 /* SubLoginView.swift */; };
 		086F89EC2D2009EB00CA4FC9 /* SubLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89EB2D2009EB00CA4FC9 /* SubLoginController.swift */; };
 		086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */; };
+		086F89F12D2269D800CA4FC9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89F02D2269D800CA4FC9 /* MyPageView.swift */; };
+		086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89F22D2269DE00CA4FC9 /* MyPageController.swift */; };
+		086F89F52D2269E300CA4FC9 /* MyPageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89F42D2269E300CA4FC9 /* MyPageReactor.swift */; };
+		086F89F72D226DF600CA4FC9 /* GetMyPageResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */; };
+		086F89F92D226EEB00CA4FC9 /* GetMyPageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89F82D226EEB00CA4FC9 /* GetMyPageResponse.swift */; };
+		086F8A052D23CB3300CA4FC9 /* MyPageProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A042D23CB3300CA4FC9 /* MyPageProfileSection.swift */; };
+		086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A062D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift */; };
+		086F8A0A2D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A092D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift */; };
+		086F8A0C2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A0B2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift */; };
+		086F8A0F2D26297900CA4FC9 /* MyPageCommentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A0E2D26297900CA4FC9 /* MyPageCommentSection.swift */; };
+		086F8A112D26297D00CA4FC9 /* MyPageCommentSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A102D26297D00CA4FC9 /* MyPageCommentSectionCell.swift */; };
+		086F8A182D265C5F00CA4FC9 /* MyPageListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A172D265C5F00CA4FC9 /* MyPageListSection.swift */; };
+		086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A192D265C6300CA4FC9 /* MyPageListSectionCell.swift */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
 		088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2462D12DB5C0030FA9E /* GoogleMaps */; };
 		088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2492D12F3360030FA9E /* DetailInfoSection.swift */; };
@@ -477,6 +490,19 @@
 		086F89E92D2009E300CA4FC9 /* SubLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginView.swift; sourceTree = "<group>"; };
 		086F89EB2D2009EB00CA4FC9 /* SubLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginController.swift; sourceTree = "<group>"; };
 		086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginReactor.swift; sourceTree = "<group>"; };
+		086F89F02D2269D800CA4FC9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		086F89F22D2269DE00CA4FC9 /* MyPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageController.swift; sourceTree = "<group>"; };
+		086F89F42D2269E300CA4FC9 /* MyPageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageReactor.swift; sourceTree = "<group>"; };
+		086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyPageResponseDTO.swift; sourceTree = "<group>"; };
+		086F89F82D226EEB00CA4FC9 /* GetMyPageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyPageResponse.swift; sourceTree = "<group>"; };
+		086F8A042D23CB3300CA4FC9 /* MyPageProfileSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileSection.swift; sourceTree = "<group>"; };
+		086F8A062D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageProfileSectionCell.swift; sourceTree = "<group>"; };
+		086F8A092D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageMyCommentTitleSection.swift; sourceTree = "<group>"; };
+		086F8A0B2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageMyCommentTitleSectionCell.swift; sourceTree = "<group>"; };
+		086F8A0E2D26297900CA4FC9 /* MyPageCommentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCommentSection.swift; sourceTree = "<group>"; };
+		086F8A102D26297D00CA4FC9 /* MyPageCommentSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCommentSectionCell.swift; sourceTree = "<group>"; };
+		086F8A172D265C5F00CA4FC9 /* MyPageListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageListSection.swift; sourceTree = "<group>"; };
+		086F8A192D265C6300CA4FC9 /* MyPageListSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageListSectionCell.swift; sourceTree = "<group>"; };
 		088DE2492D12F3360030FA9E /* DetailInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSection.swift; sourceTree = "<group>"; };
 		088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoSectionCell.swift; sourceTree = "<group>"; };
 		088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCommentTitleSection.swift; sourceTree = "<group>"; };
@@ -900,6 +926,7 @@
 		083A25C22CF3635B0099B58E /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				086F89EF2D2269CD00CA4FC9 /* MyPage */,
 				08A2E4772D1B069300102313 /* ImageDetail */,
 				0841BABF2CFB5EC700049E31 /* TabbarController */,
 				08DC62012CF8ABDA002A2F44 /* Home */,
@@ -1366,6 +1393,7 @@
 			isa = PBXGroup;
 			children = (
 				086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */,
+				086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -1374,6 +1402,7 @@
 			isa = PBXGroup;
 			children = (
 				086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */,
+				086F89F82D226EEB00CA4FC9 /* GetMyPageResponse.swift */,
 			);
 			name = UserAPI;
 			sourceTree = "<group>";
@@ -1414,6 +1443,64 @@
 				086F89ED2D2009F100CA4FC9 /* SubLoginReactor.swift */,
 			);
 			path = Sub;
+			sourceTree = "<group>";
+		};
+		086F89EF2D2269CD00CA4FC9 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				086F89FA2D23B84900CA4FC9 /* View */,
+				086F89F22D2269DE00CA4FC9 /* MyPageController.swift */,
+				086F89F42D2269E300CA4FC9 /* MyPageReactor.swift */,
+			);
+			path = MyPage;
+			sourceTree = "<group>";
+		};
+		086F89FA2D23B84900CA4FC9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				086F8A162D265C5200CA4FC9 /* MyPageListSection */,
+				086F8A0D2D26296600CA4FC9 /* MyPageCommentSection */,
+				086F8A082D2621DB00CA4FC9 /* MyPageMyCommentTitleSection */,
+				086F8A032D23CB2400CA4FC9 /* MyPageProfileSection */,
+				086F89F02D2269D800CA4FC9 /* MyPageView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		086F8A032D23CB2400CA4FC9 /* MyPageProfileSection */ = {
+			isa = PBXGroup;
+			children = (
+				086F8A042D23CB3300CA4FC9 /* MyPageProfileSection.swift */,
+				086F8A062D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift */,
+			);
+			path = MyPageProfileSection;
+			sourceTree = "<group>";
+		};
+		086F8A082D2621DB00CA4FC9 /* MyPageMyCommentTitleSection */ = {
+			isa = PBXGroup;
+			children = (
+				086F8A092D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift */,
+				086F8A0B2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift */,
+			);
+			path = MyPageMyCommentTitleSection;
+			sourceTree = "<group>";
+		};
+		086F8A0D2D26296600CA4FC9 /* MyPageCommentSection */ = {
+			isa = PBXGroup;
+			children = (
+				086F8A0E2D26297900CA4FC9 /* MyPageCommentSection.swift */,
+				086F8A102D26297D00CA4FC9 /* MyPageCommentSectionCell.swift */,
+			);
+			path = MyPageCommentSection;
+			sourceTree = "<group>";
+		};
+		086F8A162D265C5200CA4FC9 /* MyPageListSection */ = {
+			isa = PBXGroup;
+			children = (
+				086F8A172D265C5F00CA4FC9 /* MyPageListSection.swift */,
+				086F8A192D265C6300CA4FC9 /* MyPageListSectionCell.swift */,
+			);
+			path = MyPageListSection;
 			sourceTree = "<group>";
 		};
 		088DE2482D12F3250030FA9E /* DetailInfoSection */ = {
@@ -2339,6 +2426,7 @@
 				4E685EDC2D12CEB6001EF91C /* MapPopUpStore.swift in Sources */,
 				08B191B82CF6092F0057BC04 /* AuthServiceable.swift in Sources */,
 				0841BAB82CFAC41300049E31 /* SectionBackGroundDecorationView.swift in Sources */,
+				086F89F52D2269E300CA4FC9 /* MyPageReactor.swift in Sources */,
 				089952682D046CD80022AEF9 /* SearchResultReactor.swift in Sources */,
 				BDCA41C52CF35AC0005EECF6 /* TestViewController.swift in Sources */,
 				086DD9402D01EEEB00B97D3B /* SearchCountTitleSection.swift in Sources */,
@@ -2350,6 +2438,7 @@
 				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,
 				08B191982CF4A1010057BC04 /* SignUpStep4Reactor.swift in Sources */,
+				086F8A0A2D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift in Sources */,
 				4E5825642D19517B00EE83EF /* StoreListPanelLayout.swift in Sources */,
 				089952602D0366C40022AEF9 /* SearchMainController.swift in Sources */,
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
@@ -2366,6 +2455,7 @@
 				086DD92A2D0086AA00B97D3B /* SearchController.swift in Sources */,
 				083C860F2D073A23003F441C /* DetailReactor.swift in Sources */,
 				BD91038A2CF614A900BBCCAE /* LoginResponse.swift in Sources */,
+				086F89F92D226EEB00CA4FC9 /* GetMyPageResponse.swift in Sources */,
 				083A25BF2CF362770099B58E /* Logger.swift in Sources */,
 				08DC61FC2CF76862002A2F44 /* SignUpCompleteReactor.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
@@ -2408,9 +2498,11 @@
 				0899525C2D0347BD0022AEF9 /* SearchCategoryView.swift in Sources */,
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
+				086F8A052D23CB3300CA4FC9 /* MyPageProfileSection.swift in Sources */,
 				086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */,
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
+				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
 				BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
@@ -2446,6 +2538,7 @@
 				08A2E4972D1C07F500102313 /* GetPopUpCommentResponseDTO.swift in Sources */,
 				BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */,
 				08B1913F2CF367FA0057BC04 /* UIColor+.swift in Sources */,
+				086F8A0C2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift in Sources */,
 				BD91036D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift in Sources */,
 				08A2E4862D1BD85C00102313 /* CommentDetailImageSection.swift in Sources */,
 				0899526A2D046CDE0022AEF9 /* SearchResultView.swift in Sources */,
@@ -2453,6 +2546,7 @@
 				088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */,
 				083C86762D0EE2CF003F441C /* PostCommentRequestDTO.swift in Sources */,
 				083C861E2D08737F003F441C /* GetPopUpDetailResponseDTO.swift in Sources */,
+				086F8A0F2D26297900CA4FC9 /* MyPageCommentSection.swift in Sources */,
 				08B1916C2CF434C30057BC04 /* SignUpStep1View.swift in Sources */,
 				083A25BC2CF362670099B58E /* ProviderImpl.swift in Sources */,
 				086DD93D2D009A2600B97D3B /* CancelableTagSectionCell.swift in Sources */,
@@ -2475,8 +2569,11 @@
 				089952512D033C410022AEF9 /* GetSearchBottomPopUpListResponse.swift in Sources */,
 				0841BABA2CFAE5BE00049E31 /* HomeHeaderView.swift in Sources */,
 				0841BAAC2CFA35F300049E31 /* UILabel+.swift in Sources */,
+				086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */,
 				BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */,
 				BD91036C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift in Sources */,
+				086F8A182D265C5F00CA4FC9 /* MyPageListSection.swift in Sources */,
+				086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */,
 				08B191672CF432220057BC04 /* PPCancelHeaderView.swift in Sources */,
 				BD9103812CF614A900BBCCAE /* HomeUseCaseImpl.swift in Sources */,
 				08DC62112CF8B446002A2F44 /* SortedRequestDTO.swift in Sources */,
@@ -2510,6 +2607,7 @@
 				086DD9342D00962500B97D3B /* SearchTitleSectionCell.swift in Sources */,
 				08B191592CF41E610057BC04 /* SignUpMainController.swift in Sources */,
 				0899526C2D0473EC0022AEF9 /* GetSearchPopUpListResponseDTO.swift in Sources */,
+				086F89F12D2269D800CA4FC9 /* MyPageView.swift in Sources */,
 				08A2E48A2D1BDA8400102313 /* CommentDetailContentSection.swift in Sources */,
 				4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */,
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
@@ -2547,6 +2645,7 @@
 				083C86472D0DCDFB003F441C /* AddCommentTitleSection.swift in Sources */,
 				0841BAB62CFABEDC00049E31 /* HomePopularCardSectionCell.swift in Sources */,
 				08B191822CF48A7B0057BC04 /* SignUpStep2Controller.swift in Sources */,
+				086F8A112D26297D00CA4FC9 /* MyPageCommentSectionCell.swift in Sources */,
 				4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */,
 				08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */,
 				083A25912CF361F90099B58E /* TestDynamicSection.swift in Sources */,
@@ -2556,6 +2655,7 @@
 				4E685ED42D12CEB6001EF91C /* FilterCell.swift in Sources */,
 				088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */,
 				08B191A22CF4AE890057BC04 /* ToastMaker.swift in Sources */,
+				086F89F72D226DF600CA4FC9 /* GetMyPageResponseDTO.swift in Sources */,
 				083C86512D0DD3AB003F441C /* AddCommentImageSectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2743,7 +2843,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2776,7 +2876,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
