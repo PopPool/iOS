@@ -1,5 +1,7 @@
 import UIKit
 import SnapKit
+import FloatingPanel
+
 
 final class MapPopupCarouselView: UIView {
     // MARK: - Components
@@ -14,7 +16,6 @@ final class MapPopupCarouselView: UIView {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-
 
     var popupCards: [MapPopUpStore] = [] {
         didSet {
@@ -40,8 +41,7 @@ final class MapPopupCarouselView: UIView {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16) 
-
+            make.bottom.equalToSuperview().inset(16)
         }
     }
 
@@ -54,6 +54,12 @@ final class MapPopupCarouselView: UIView {
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
         self.popupCards = cards
+    }
+
+    // MARK: - Visibility Control
+    func updateVisibility(for state: FloatingPanelState) {
+        // 리스트뷰 상태와 연계하여 숨김 처리
+        self.isHidden = (state == .full) // `full` 상태에서 캐러셀 뷰 숨김
     }
 }
 

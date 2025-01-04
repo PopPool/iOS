@@ -10,6 +10,7 @@ import CoreLocation
 final class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
 
+    // MARK: - Properties
     var disposeBag = DisposeBag()
     let mainView = MapView()
     let carouselView = MapPopupCarouselView()
@@ -21,6 +22,7 @@ final class MapViewController: BaseViewController, View {
 
     var fpc: FloatingPanelController?
 
+    // MARK: - Lifecycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.async {
@@ -37,13 +39,12 @@ final class MapViewController: BaseViewController, View {
         setUp()
         checkLocationAuthorization()
 
-
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-
     }
 
+    // MARK: - Setup
     private func setUp() {
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
@@ -52,17 +53,12 @@ final class MapViewController: BaseViewController, View {
             view.addSubview(carouselView)
             carouselView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(140) // Carousel 높이 설정
-                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16) 
-
-
-
-                carouselView.isHidden = true
-
-                // 마커 클릭 이벤트 바인딩
-                mainView.mapView.delegate = self
-
+                make.height.equalTo(140)
+                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
             }
+
+            carouselView.isHidden = true
+            mainView.mapView.delegate = self
         }
 
         let marker = GMSMarker()
@@ -74,21 +70,17 @@ final class MapViewController: BaseViewController, View {
         markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
     }
 
-
     func bind(reactor: Reactor) {
-        // 지역 필터 탭 이벤트
         mainView.filterChips.locationChip.rx.tap
             .map { Reactor.Action.filterTapped(.location) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        // 카테고리 필터 탭 이벤트
         mainView.filterChips.categoryChip.rx.tap
             .map { Reactor.Action.filterTapped(.category) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        // 리스트 버튼 탭 이벤트 - FloatingPanel 표시
         mainView.listButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
@@ -98,26 +90,28 @@ final class MapViewController: BaseViewController, View {
 
                 let fpc = FloatingPanelController()
                 self.fpc = fpc
-                // Delegate 설정 (추후 패널 상태 변화 감지 시 사용 가능)
                 fpc.delegate = self
                 fpc.set(contentViewController: listVC)
                 fpc.layout = StoreListPanelLayout()
-                fpc.surfaceView.grabberHandle.isHidden = true
+//                fpc.surfaceView.grabberHandle.isHidden = true
+                fpc.surfaceView.grabberHandle.snp.makeConstraints { make in
+                    make.top.equalToSuperview().offset(14) 
+                            make.centerX.equalToSuperview()
+                            make.width.equalTo(36)
+                            make.height.equalTo(5)
+                        }
+
                 fpc.surfaceView.layer.shadowColor = UIColor.clear.cgColor
                 fpc.surfaceView.layer.shadowRadius = 0
                 fpc.surfaceView.layer.shadowOffset = .zero
                 fpc.surfaceView.layer.shadowOpacity = 0
                 fpc.addPanel(toParent: self)
-
-
             }
             .disposed(by: disposeBag)
 
         mainView.locationButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
-
-                // 위치 업데이트 시작
                 self.locationManager.startUpdatingLocation()
             }
             .disposed(by: disposeBag)
@@ -125,28 +119,24 @@ final class MapViewController: BaseViewController, View {
         reactor.state.map { $0.selectedLocationFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] locationFilters in
-                guard let self = self else { return }
-                let locationText = locationFilters.isEmpty
-                ? "지역선택"
-                : (locationFilters.count > 1 ? "\(locationFilters[0]) 외 \(locationFilters.count - 1)개" : locationFilters[0])
-                self.mainView.filterChips.update(locationText: locationText, categoryText: nil)
+            .bind { [weak self] filters in
+                self?.mainView.filterChips.update(
+                    locationText: filters.first ?? "지역선택",
+                    categoryText: nil
+                )
             }
             .disposed(by: disposeBag)
 
         reactor.state.map { $0.selectedCategoryFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] categoryFilters in
-                guard let self = self else { return }
-                let categoryText = categoryFilters.isEmpty
-                ? "카테고리"
-                : (categoryFilters.count > 1 ? "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개" : categoryFilters[0])
-                self.mainView.filterChips.update(locationText: nil, categoryText: categoryText)
+            .bind { [weak self] filters in
+                self?.mainView.filterChips.update(
+                    locationText: nil,
+                    categoryText: filters.first ?? "카테고리"
+                )
             }
             .disposed(by: disposeBag)
-
-
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
         }
@@ -183,6 +173,7 @@ final class MapViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
     }
+
     func addMarker(for store: MapPopUpStore) {
         let marker = GMSMarker()
         marker.position = store.coordinate
@@ -194,9 +185,7 @@ final class MapViewController: BaseViewController, View {
         marker.map = mainView.mapView
     }
 
-
     func presentFilterBottomSheet(for filterType: FilterType) {
-        // Create and set up the bottom sheet
         let sheetReactor = FilterBottomSheetReactor()
         let viewController = FilterBottomSheetViewController(reactor: sheetReactor)
 
@@ -204,11 +193,10 @@ final class MapViewController: BaseViewController, View {
         viewController.containerView.segmentedControl.selectedSegmentIndex = initialIndex
         sheetReactor.action.onNext(FilterBottomSheetReactor.Action.segmentChanged(initialIndex))
 
-        // Update the onSave closure to maintain both filter types
         viewController.onSave = { [weak self] (selectedOptions: [String]) in
             guard let self = self else { return }
+            print("MapVC onSave - filterType: \(filterType), options: \(selectedOptions)") 
 
-            // Update only the specific filter type while preserving the other
             self.reactor?.action.onNext(.filterUpdated(filterType, selectedOptions))
             self.reactor?.action.onNext(.filterTapped(nil))
         }
@@ -235,49 +223,79 @@ final class MapViewController: BaseViewController, View {
 
 // MARK: - FloatingPanelControllerDelegate
 extension MapViewController: FloatingPanelControllerDelegate {
+    func floatingPanelDidMove(_ fpc: FloatingPanelController) {
+        let panelY = fpc.surfaceView.frame.minY
+//        print("[DEBUG] panelY: \(panelY), filterChipsTopY: \(filterChipsTopY)")
+
+        let threshold: CGFloat = 40.0
+
+        if abs(panelY - filterChipsTopY) <= threshold {
+            transitionToFullScreen(fpc: fpc)
+        } else if panelY > filterChipsTopY + threshold {
+            restoreMapView(fpc: fpc)
+        }
+    }
+
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
         switch fpc.state {
         case .full:
-            let panelY = fpc.surfaceView.frame.minY
-            let stackY = mainView.topStackView.frame.maxY
-
-            if panelY <= stackY {
-                mainView.topStackView.layer.zPosition = 1
-                fpc.surfaceView.layer.zPosition = 0
-            }
-
-            mainView.mapView.isHidden = true
-            fpc.surfaceView.grabberHandle.isHidden = true
-
+            transitionToFullScreen(fpc: fpc)
         case .half, .tip:
-            // 원래 상태로 복구
-            mainView.topStackView.layer.zPosition = 0
-            mainView.mapView.isHidden = false
-            fpc.surfaceView.grabberHandle.isHidden = false
-
+            restoreMapView(fpc: fpc)
         default:
             break
         }
     }
 
-    func floatingPanelDidMove(_ fpc: FloatingPanelController) {
-        let panelY = fpc.surfaceView.frame.minY
-        let stackY = mainView.topStackView.frame.maxY
+    private func transitionToFullScreen(fpc: FloatingPanelController) {
+        if let listVC = fpc.contentViewController as? StoreListViewController {
+            // 상태 변경 전에 레이아웃 준비
+            listVC.view.layoutIfNeeded()
+            listVC.mainView.collectionView.layoutIfNeeded()
 
-        // 패널이 스택뷰에 닿았을 때만 zPosition 변경
-        if panelY <= stackY {
-            mainView.topStackView.layer.zPosition = 1
-            fpc.surfaceView.layer.zPosition = 0
-        } else {
-            mainView.topStackView.layer.zPosition = 0
+            UIView.animate(withDuration: 0.3) {
+                self.mainView.alpha = 0
+                self.mainView.isHidden = true
+                listVC.view.backgroundColor = .white
+
+                // 상태 변경
+                listVC.updateHeaderVisibility(true)
+                listVC.view.layoutIfNeeded()
+            }
+        }
+    }
+
+
+    private func restoreMapView(fpc: FloatingPanelController) {
+        UIView.animate(withDuration: 0.3) {
+            self.mainView.alpha = 1
+            self.mainView.isHidden = false
+
+            if let listVC = fpc.contentViewController as? StoreListViewController {
+                listVC.view.backgroundColor = .clear
+                listVC.updateHeaderVisibility(false)
+            }
         }
     }
 }
+
+// MARK: - UIScrollViewDelegate
+extension MapViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let fpc = self.fpc else { return }
+
+        if scrollView.contentOffset.y < 0 {
+            scrollView.contentOffset = .zero
+            fpc.move(to: .half, animated: true)
+        }
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
 
-        // 현재 위치로 지도 이동
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
                                               longitude: location.coordinate.longitude,
                                               zoom: 15)
@@ -297,10 +315,7 @@ extension MapViewController: CLLocationManagerDelegate {
             markerSnippet: "현재 위치의 팝업스토어"
         )
 
-        // `MapPopUpStore`를 사용하여 마커 추가
         addMarker(for: currentLocationStore)
-
-        // 위치 업데이트 중지
         locationManager.stopUpdatingLocation()
     }
 }
@@ -308,10 +323,8 @@ extension MapViewController: CLLocationManagerDelegate {
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        // 디버그 로그
         print("[DEBUG] Marker tapped")
 
-        // 더미 데이터 생성
         let dummyStore1 = MapPopUpStore(
             id: 1,
             category: "카페",
@@ -339,21 +352,12 @@ extension MapViewController: GMSMapViewDelegate {
             markerSnippet: "전시 팝업스토어"
         )
 
-        // MapPopupCarouselView에 데이터 업데이트
         carouselView.updateCards([dummyStore1, dummyStore2])
         carouselView.isHidden = false
 
         return true
     }
 }
-
-
-//    func presentStoreCard(with input: MapStoreCard.Input) {
-//        // StoreCard 표시
-//        mainView.storeCard.injection(with: input)
-//        mainView.storeCard.isHidden = false
-//    }
-//}
 
 extension MapViewController {
     private func checkLocationAuthorization() {
@@ -363,7 +367,7 @@ extension MapViewController {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.startUpdatingLocation() // 위치 업데이트 시작
+            locationManager.startUpdatingLocation()
         case .denied, .restricted:
             print("위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.")
         @unknown default:
