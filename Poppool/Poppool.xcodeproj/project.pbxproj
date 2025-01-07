@@ -385,9 +385,24 @@
 		4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */; };
 		4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECB2D12CEB6001EF91C /* MapView.swift */; };
 		4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
+		4E755B1D2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */; };
+		4E755B1F2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */; };
+		4E755B212D2B9BAB00ADFB21 /* AdminResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */; };
+		4E755B232D2B9C5D00ADFB21 /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B222D2B9C5D00ADFB21 /* AdminViewController.swift */; };
+		4E755B252D2B9C6C00ADFB21 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B242D2B9C6C00ADFB21 /* AdminView.swift */; };
+		4E755B272D2B9C7C00ADFB21 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
+		4E755B292D2BA65A00ADFB21 /* AdminReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */; };
+		4E755B2B2D2BA76E00ADFB21 /* AdminUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */; };
+		4E755B2F2D2BA7FB00ADFB21 /* AdminRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */; };
+		4E755B322D2BA81800ADFB21 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 4E755B312D2BA81800ADFB21 /* Then */; };
 		4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */; };
+		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
+		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
+		4E9C12812D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
 		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
 		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
+		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
+		4EDDEFB62D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */; };
 		4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9BAB2D22730400B288E7 /* FilterType.swift */; };
 		BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */; };
 		BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */; };
@@ -823,8 +838,22 @@
 		4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSearchInput.swift; sourceTree = "<group>"; };
 		4E685ECB2D12CEB6001EF91C /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		4E685ECC2D12CEB6001EF91C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminPopUpStoreListResponseDTO.swift; sourceTree = "<group>"; };
+		4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminAPIEndpoint.swift; sourceTree = "<group>"; };
+		4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminResponseDTO.swift; sourceTree = "<group>"; };
+		4E755B222D2B9C5D00ADFB21 /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
+		4E755B242D2B9C6C00ADFB21 /* AdminView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminView.swift; sourceTree = "<group>"; };
+		4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminStoreCell.swift; sourceTree = "<group>"; };
+		4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminReactor.swift; sourceTree = "<group>"; };
+		4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUseCase.swift; sourceTree = "<group>"; };
+		4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRepository.swift; sourceTree = "<group>"; };
 		4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListHeaderView.swift; sourceTree = "<group>"; };
+		4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetView.swift; sourceTree = "<group>"; };
+		4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetViewController.swift; sourceTree = "<group>"; };
+		4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterViewController.swift; sourceTree = "<group>"; };
 		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
+		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
+		4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterReactor.swift; sourceTree = "<group>"; };
 		4EED9BAB2D22730400B288E7 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPReturnHeaderView.swift; sourceTree = "<group>"; };
 		BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthAPIEndPoint.swift; sourceTree = "<group>"; };
@@ -876,6 +905,7 @@
 				BDCA41F52CF35D33005EECF6 /* Kingfisher in Frameworks */,
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
+				4E755B322D2BA81800ADFB21 /* Then in Frameworks */,
 				08B191BA2CF609AE0057BC04 /* RxKakaoSDK in Frameworks */,
 				08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
@@ -1278,6 +1308,7 @@
 		083A256D2CF3613C0099B58E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				4E755B1B2D2B9ABF00ADFB21 /* Admin */,
 				4E685ECD2D12CEB6001EF91C /* Map */,
 				083A258B2CF361F90099B58E /* Convention */,
 				08B1915F2CF430D40057BC04 /* Components */,
@@ -2592,6 +2623,75 @@
 			path = Map;
 			sourceTree = "<group>";
 		};
+		4E755B1B2D2B9ABF00ADFB21 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				4E9C127F2D2BD01F006744D6 /* Domain */,
+				4E9C127B2D2BCFE4006744D6 /* Data */,
+				4E755B222D2B9C5D00ADFB21 /* AdminViewController.swift */,
+				4E755B242D2B9C6C00ADFB21 /* AdminView.swift */,
+				4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */,
+				4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */,
+				4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */,
+				4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */,
+				4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */,
+				4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */,
+				4EDDEFB22D2D284B00CFAFA5 /* Common */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		4E9C127B2D2BCFE4006744D6 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				4E9C127E2D2BD012006744D6 /* Remote */,
+				4E9C127D2D2BD007006744D6 /* Repository */,
+				4E9C127C2D2BCFF1006744D6 /* DTO */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		4E9C127C2D2BCFF1006744D6 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */,
+				4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		4E9C127D2D2BD007006744D6 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		4E9C127E2D2BD012006744D6 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		4E9C127F2D2BD01F006744D6 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		4EDDEFB22D2D284B00CFAFA5 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		4EED9BAA2D2272F500B288E7 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -2794,6 +2894,7 @@
 				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 				4EA9989C2D21C404009DC30B /* RxDataSources */,
+				4E755B312D2BA81800ADFB21 /* Then */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -2884,6 +2985,7 @@
 				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -2967,6 +3069,7 @@
 				BD9103692CF6149D00BBCCAE /* HomeAPIRepository.swift in Sources */,
 				083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */,
 				089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */,
+				4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */,
 				086DD9362D00963900B97D3B /* SearchTitleSection.swift in Sources */,
 				083A25922CF361F90099B58E /* ViewConvention.swift in Sources */,
 				086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */,
@@ -3014,16 +3117,19 @@
 				0899526E2D0474340022AEF9 /* GetSearchPopUpListResponse.swift in Sources */,
 				08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */,
 				08A2E48F2D1BF6E500102313 /* CommentListView.swift in Sources */,
+				4E755B1D2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift in Sources */,
 				083A25992CF362090099B58E /* Sectionable.swift in Sources */,
 				086DD8E02CFF2C3700B97D3B /* UIImageView+.swift in Sources */,
 				081898DA2D32559B0067BF01 /* PutUserProfileRequestDTO.swift in Sources */,
 				08B191AC2CF5BF9D0057BC04 /* AgeSelectedController.swift in Sources */,
+				4E755B1F2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift in Sources */,
 				083C86622D0EC49E003F441C /* InstaCommentAddController.swift in Sources */,
 				08B1919C2CF4A77C0057BC04 /* TagSection.swift in Sources */,
 				BD91038B2CF614A900BBCCAE /* AuthRepository.swift in Sources */,
 				083A25902CF361F90099B58E /* TestDynamicCell.swift in Sources */,
 				08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */,
 				086DD93B2D009A1C00B97D3B /* CancelableTagSection.swift in Sources */,
+				4E755B232D2B9C5D00ADFB21 /* AdminViewController.swift in Sources */,
 				08A2E49F2D1C417000102313 /* CommentListTitleSectionCell.swift in Sources */,
 				086F89D52D1E6DB100CA4FC9 /* OtherUserCommentController.swift in Sources */,
 				083C866E2D0ECB87003F441C /* InstaGuideChildSection.swift in Sources */,
@@ -3039,6 +3145,7 @@
 				083C864C2D0DCF9B003F441C /* AddCommentDescriptionSectionCell.swift in Sources */,
 				086DD8CE2CFDFEB000B97D3B /* HomeListView.swift in Sources */,
 				08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */,
+				4EDDEFB62D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift in Sources */,
 				083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */,
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
 				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
@@ -3095,6 +3202,7 @@
 				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */,
 				086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */,
 				4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */,
+				4E755B292D2BA65A00ADFB21 /* AdminReactor.swift in Sources */,
 				086DD8D62CFF182100B97D3B /* UserAPIEndPoint.swift in Sources */,
 				081899372D35F1140067BF01 /* MyPageBookmarkReactor.swift in Sources */,
 				4E685EE22D12CEB6001EF91C /* StoreListView.swift in Sources */,
@@ -3113,6 +3221,7 @@
 				083C86362D0C7EF4003F441C /* CommentSelectedController.swift in Sources */,
 				08A2E4792D1B06A300102313 /* ImageDetailView.swift in Sources */,
 				088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */,
+				4E755B2B2D2BA76E00ADFB21 /* AdminUseCase.swift in Sources */,
 				083C86292D088080003F441C /* DetailContentSection.swift in Sources */,
 				08DC61FA2CF7684F002A2F44 /* SignUpCompleteController.swift in Sources */,
 				083C864A2D0DCF96003F441C /* AddCommentDescriptionSection.swift in Sources */,
@@ -3184,6 +3293,7 @@
 				08B1916C2CF434C30057BC04 /* SignUpStep1View.swift in Sources */,
 				083A25BC2CF362670099B58E /* ProviderImpl.swift in Sources */,
 				086DD93D2D009A2600B97D3B /* CancelableTagSectionCell.swift in Sources */,
+				4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */,
 				086DD8DA2CFF194700B97D3B /* UserAPIRepositoryImpl.swift in Sources */,
 				4E685ECF2D12CEB6001EF91C /* BalloonChipCell.swift in Sources */,
 				083A25CA2CF363C60099B58E /* LoginReactor.swift in Sources */,
@@ -3235,8 +3345,10 @@
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
 				081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */,
 				4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */,
+				4E755B212D2B9BAB00ADFB21 /* AdminResponseDTO.swift in Sources */,
 				08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */,
 				4E685EE02D12CEB6001EF91C /* StoreListCell.swift in Sources */,
+				4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */,
 				08B1915D2CF41E6F0057BC04 /* SignUpMainView.swift in Sources */,
 				0841BAA52CFA31A900049E31 /* SpacingSectionCell.swift in Sources */,
 				4E685EDF2D12CEB6001EF91C /* PopupCardCell.swift in Sources */,
@@ -3323,6 +3435,7 @@
 				086DD8D82CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift in Sources */,
 				089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */,
 				089952532D033C940022AEF9 /* PopUpAPIRepositoryImpl.swift in Sources */,
+				4E755B252D2B9C6C00ADFB21 /* AdminView.swift in Sources */,
 				4E685ED42D12CEB6001EF91C /* FilterCell.swift in Sources */,
 				088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */,
 				081898B72D2D23A90067BF01 /* UINavigationController+.swift in Sources */,
@@ -3715,6 +3828,14 @@
 				minimumVersion = 2.8.6;
 			};
 		};
+		4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
@@ -3848,6 +3969,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
+		};
+		4E755B312D2BA81800ADFB21 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 		4EA9989C2D21C404009DC30B /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;

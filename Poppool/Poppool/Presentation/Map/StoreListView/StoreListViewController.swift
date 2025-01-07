@@ -146,7 +146,6 @@ final class StoreListViewController: UIViewController, View {
     }
 
     private func presentFilterBottomSheet(for filterType: FilterType) {
-        // FilterBottomSheetReactor (ex)
         let sheetReactor = FilterBottomSheetReactor()
         let viewController = FilterBottomSheetViewController(reactor: sheetReactor)
 

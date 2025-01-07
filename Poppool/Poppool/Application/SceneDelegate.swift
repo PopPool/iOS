@@ -6,14 +6,14 @@
 //
 
 import UIKit
-
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import RxSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-    var window: UIWindow?
+   var window: UIWindow?
+   static let appDidBecomeActive = PublishSubject<Void>()
 
     static let appDidBecomeActive = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
@@ -25,28 +25,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-    }
+   func sceneDidDisconnect(_ scene: UIScene) {
+   }
 
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        SceneDelegate.appDidBecomeActive.onNext(())
-    }
+   func sceneDidBecomeActive(_ scene: UIScene) {
+       SceneDelegate.appDidBecomeActive.onNext(())
+   }
 
-    func sceneWillResignActive(_ scene: UIScene) {
-    }
+   func sceneWillResignActive(_ scene: UIScene) {
+   }
 
-    func sceneWillEnterForeground(_ scene: UIScene) {
-    }
+   func sceneWillEnterForeground(_ scene: UIScene) {
+   }
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
-    }
+   func sceneDidEnterBackground(_ scene: UIScene) {
+   }
 
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        if let url = URLContexts.first?.url {
-            if AuthApi.isKakaoTalkLoginUrl(url) {
-                _ = AuthController.rx.handleOpenUrl(url: url)
-            }
-        }
-    }
+   func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+       if let url = URLContexts.first?.url {
+           if AuthApi.isKakaoTalkLoginUrl(url) {
+               _ = AuthController.rx.handleOpenUrl(url: url)
+           }
+       }
+   }
 }
-
