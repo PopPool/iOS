@@ -163,7 +163,7 @@ final class DetailReactor: Reactor {
         case .showSharedBoard(let controller):
             showSharedBoard(controller: controller)
         case .copyAddress:
-            print("Copy Address")
+            ToastMaker.createToast(message: "주소를 복사했어요")
         case .moveToAddressScene(let controller):
             let nextController = BaseViewController()
             controller.navigationController?.pushViewController(nextController, animated: true)

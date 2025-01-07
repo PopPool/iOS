@@ -199,7 +199,8 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         let homeController = HomeController()
         homeController.reactor = HomeReactor()
         
-        let myPageController = BaseViewController()
+        let myPageController = MyPageController()
+        myPageController.reactor = MyPageReactor()
         
         let iconSize = CGSize(width: 32, height: 32)
         // 탭바 아이템 생성

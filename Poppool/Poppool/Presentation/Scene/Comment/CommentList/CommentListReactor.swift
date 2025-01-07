@@ -108,7 +108,7 @@ final class CommentListReactor: Reactor {
             if appendDataIsEmpty {
                 return Observable.just(.none)
             }
-            return popUpAPIUseCase.getPopUpComment(commentType: "NORMAL", page: page, size: 5, sort: nil, popUpStoreId: popUpID)
+            return popUpAPIUseCase.getPopUpComment(commentType: "NORMAL", page: page, size: 10, sort: nil, popUpStoreId: popUpID)
                 .withUnretained(self)
                 .map { (owner, response) in
                     owner.appendDataIsEmpty = response.commentList.isEmpty

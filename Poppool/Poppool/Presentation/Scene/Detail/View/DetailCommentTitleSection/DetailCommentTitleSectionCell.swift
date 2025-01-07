@@ -14,7 +14,7 @@ final class DetailCommentTitleSectionCell: UICollectionViewCell {
     
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 16, text: "팝업에 달린 코멘트")
+        let label = PPLabel(style: .bold, fontSize: 16, text: "이 팝업에 대한 코멘트")
         return label
     }()
     
