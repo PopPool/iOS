@@ -60,4 +60,8 @@ final class UserAPIUseCaseImpl {
     func getMyPage() -> Observable<GetMyPageResponse> {
         return repository.getMyPage().map { $0.toDomain() }
     }
+    
+    func postLogout() -> Completable {
+        return repository.postLogout()
+    }
 }

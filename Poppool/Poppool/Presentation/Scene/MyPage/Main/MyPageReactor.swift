@@ -21,10 +21,14 @@ final class MyPageReactor: Reactor {
         case commentCellTapped(controller: BaseViewController, row: Int)
         case commentButtonTapped(controller: BaseViewController)
         case listCellTapped(controller: BaseViewController, title: String?)
+        case logoutButtonTapped
     }
     
     enum Mutation {
         case loadView
+        case moveToProfileEditScene(controller: BaseViewController)
+        case logout
+        case moveToDetailScene(controller: BaseViewController, title: String?)
     }
     
     struct State {
@@ -78,6 +82,8 @@ final class MyPageReactor: Reactor {
         .init(title: "관리자 메뉴 바로가기")
     ])
     
+    private var logoutSection = MyPageLogoutSection(inputDataList: [.init()])
+    
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
@@ -119,8 +125,7 @@ final class MyPageReactor: Reactor {
                     return .loadView
                 }
         case .settingButtonTapped(let controller):
-            print("settingButtonTapped")
-            return Observable.just(.loadView)
+            return Observable.just(.moveToProfileEditScene(controller: controller))
         case .commentButtonTapped(let controller):
             print("commentButtonTapped")
             return Observable.just(.loadView)
@@ -131,8 +136,10 @@ final class MyPageReactor: Reactor {
             print("loginButtonTapped")
             return Observable.just(.loadView)
         case .listCellTapped(let controller, let title):
-            print("listCellTapped")
-            return Observable.just(.loadView)
+            return Observable.just(.moveToDetailScene(controller: controller, title: title))
+        case .logoutButtonTapped:
+            return userAPIUseCase.postLogout()
+                .andThen(Observable.just(.logout))
         }
     }
     
@@ -142,6 +149,29 @@ final class MyPageReactor: Reactor {
         case .loadView:
             newState.sections = getSection()
             newState.isLogin = isLogin
+        case .moveToProfileEditScene(let controller):
+            let nextController = ProfileEditController()
+            nextController.reactor = ProfileEditReactor()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .logout:
+            let service = KeyChainService()
+            let _ = service.deleteToken(type: .accessToken)
+            let _ = service.deleteToken(type: .refreshToken)
+            ToastMaker.createToast(message: "로그아웃 되었어요")
+            DispatchQueue.main.async { [weak self] in
+                self?.action.onNext(.viewWillAppear)
+            }
+        case .moveToDetailScene(let controller, let title):
+            guard let title = title else { break }
+            switch title {
+            case "회원탈퇴":
+                let nickName = profileSection.inputDataList.first?.nickName
+                let nextController = WithdrawlCheckModalController(nickName: nickName)
+                nextController.reactor = WithdrawlCheckModalReactor()
+                controller.presentPanModal(nextController)
+            default:
+                print(title)
+            }
         }
         return newState
     }
@@ -208,6 +238,8 @@ final class MyPageReactor: Reactor {
                     spacing16GraySection,
                     spacing28Section,
                     adminEtcSection,
+                    spacing28Section,
+                    logoutSection,
                     spacing100Section
                 ]
             } else {
@@ -215,6 +247,8 @@ final class MyPageReactor: Reactor {
                     spacing16GraySection,
                     spacing28Section,
                     etcSection,
+                    spacing28Section,
+                    logoutSection,
                     spacing100Section
                 ]
             }

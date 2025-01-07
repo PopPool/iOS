@@ -46,6 +46,11 @@ extension MyPageController {
         super.viewDidLoad()
         setUp()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
 }
 
 // MARK: - SetUp
@@ -76,6 +81,10 @@ private extension MyPageController {
         mainView.contentCollectionView.register(
             MyPageListSectionCell.self,
             forCellWithReuseIdentifier: MyPageListSectionCell.identifiers
+        )        
+        mainView.contentCollectionView.register(
+            MyPageLogoutSectionCell.self,
+            forCellWithReuseIdentifier: MyPageLogoutSectionCell.identifiers
         )
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
@@ -117,6 +126,14 @@ extension MyPageController {
             .withUnretained(self)
             .map { (owner, title) in
                 Reactor.Action.listCellTapped(controller: owner, title: title)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        settingButton.rx.tap
+            .withUnretained(self)
+            .map { (owner, _) in
+                Reactor.Action.settingButtonTapped(controller: owner)
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -168,6 +185,13 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
                 .map { (owner, _) in
                     Reactor.Action.commentButtonTapped(controller: owner)
                 }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? MyPageLogoutSectionCell {
+            cell.logoutButton.rx.tap
+                .map { Reactor.Action.logoutButtonTapped }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }

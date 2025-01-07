@@ -57,4 +57,9 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.getMyPage()
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func postLogout() -> Completable {
+        let endPoint = UserAPIEndPoint.postLogout()
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

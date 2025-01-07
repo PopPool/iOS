@@ -81,4 +81,12 @@ struct UserAPIEndPoint {
             method: .get
         )
     }
+    
+    static func postLogout() -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/logout",
+            method: .post
+        )
+    }
 }
