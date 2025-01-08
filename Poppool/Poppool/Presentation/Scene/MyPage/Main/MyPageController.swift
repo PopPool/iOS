@@ -38,6 +38,9 @@ final class MyPageController: BaseViewController, View {
     private var sections: [any Sectionable] = []
     private var commentCellTapped: PublishSubject<Int> = .init()
     private var listCellTapped: PublishSubject<String?> = .init()
+    
+    private var isBrightImage: Bool = false
+    
 }
 
 // MARK: - Life Cycle
@@ -144,6 +147,27 @@ extension MyPageController {
                 owner.settingButton.isHidden = !state.isLogin
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
+                
+
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .withUnretained(self)
+            .take(2)
+            .subscribe { (owner, state) in
+                state.backgroundImageViewPath.isBrightImagePath { isBright in
+                    guard let isBright = isBright else { return }
+                    owner.isBrightImage = isBright
+                    owner.statusBarIsDarkMode = isBright
+                    UIView.animate(withDuration: 0.3) {
+                        if isBright {
+                            owner.settingButton.tintColor = .g1000
+                        } else {
+                            owner.settingButton.tintColor = .w100
+                        }
+                    }
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -219,6 +243,22 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
                 cell.updateContentTopInset(inset: originHeight)
             }
             cell.updateAlpha(alpha: alpha)
+            if alpha < 0.5 {
+                if isBrightImage { statusBarIsDarkMode = true } else { statusBarIsDarkMode = false }
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    guard let self = self else { return }
+                    if statusBarIsDarkMode {
+                        self.settingButton.tintColor = .g1000
+                    } else {
+                        self.settingButton.tintColor = .w100
+                    }
+                }
+            } else {
+                statusBarIsDarkMode = true
+                UIView.animate(withDuration: 0.3) { [weak self] in
+                    self?.settingButton.tintColor = .g1000
+                }
+            }
             headerView.alpha = alpha
         }
     }

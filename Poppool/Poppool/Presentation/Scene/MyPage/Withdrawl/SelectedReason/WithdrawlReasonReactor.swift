@@ -56,6 +56,7 @@ final class WithdrawlReasonReactor: Reactor {
     }()
     
     private var reasonSection = WithdrawlCheckSection(inputDataList: [])
+    private var spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     
@@ -130,6 +131,9 @@ final class WithdrawlReasonReactor: Reactor {
     }
     
     func getSection() -> [any Sectionable] {
-        return [reasonSection]
+        return [
+            reasonSection,
+            spacing156Section
+        ]
     }
 }

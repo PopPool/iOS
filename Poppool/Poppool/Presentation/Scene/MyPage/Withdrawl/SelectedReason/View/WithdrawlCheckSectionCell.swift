@@ -45,6 +45,9 @@ final class WithdrawlCheckSectionCell: UICollectionViewCell {
         view.layer.cornerRadius = 4
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.g100.cgColor
+        view.backgroundColor = .w100
+        view.clipsToBounds = true
+        
         return view
     }()
     

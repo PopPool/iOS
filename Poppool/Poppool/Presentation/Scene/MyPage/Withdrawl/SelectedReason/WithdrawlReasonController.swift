@@ -50,6 +50,10 @@ private extension WithdrawlReasonController {
         mainView.contentCollectionView.register(
             WithdrawlCheckSectionCell.self,
             forCellWithReuseIdentifier: WithdrawlCheckSectionCell.identifiers
+        )        
+        mainView.contentCollectionView.register(
+            SpacingSectionCell.self,
+            forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
         
         view.backgroundColor = .g50

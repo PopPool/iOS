@@ -28,6 +28,8 @@ final class DetailController: BaseViewController, View {
     }()
     
     private var sections: [any Sectionable] = []
+    
+    private var isBrightImage: Bool = false
 }
 
 // MARK: - Life Cycle
@@ -101,6 +103,12 @@ extension DetailController {
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
+                state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
+                    if let isBright = isBright {
+                        owner?.statusBarIsDarkMode = isBright
+                        owner?.isBrightImage = isBright
+                    }
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -225,6 +233,18 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 16 {
             reactor?.action.onNext(.similarSectionTapped(controller: self, indexPath: indexPath))
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 285 {
+            if isBrightImage {
+                statusBarIsDarkMode = true
+            } else {
+                statusBarIsDarkMode = false
+            }
+        } else {
+            statusBarIsDarkMode = true
         }
     }
 }

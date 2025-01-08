@@ -101,7 +101,6 @@ private extension WithdrawlCheckModalView {
         trailingView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(203)
         }
         
         self.addSubview(cancelButton)
@@ -122,7 +121,8 @@ private extension WithdrawlCheckModalView {
         
         trailingView.addSubview(textStackView)
         textStackView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(20)
+//            make.top.leading.trailing.equalToSuperview().inset(20)
+            make.edges.equalToSuperview().inset(20)
         }
         
         textStackView.addArrangedSubview(firstLabel)

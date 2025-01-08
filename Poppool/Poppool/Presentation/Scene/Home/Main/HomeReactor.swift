@@ -21,6 +21,7 @@ final class HomeReactor: Reactor {
         case bookMarkButtonTapped(indexPath: IndexPath)
         case searchButtonTapped(controller: BaseViewController)
         case collectionViewCellTapped(controller: BaseViewController, indexPath: IndexPath)
+        case bannerCellTapped(controller: BaseViewController, row: Int)
     }
     
     enum Mutation {
@@ -115,6 +116,8 @@ final class HomeReactor: Reactor {
             return Observable.just(.moveToSearchScene(controller: controller))
         case .collectionViewCellTapped(let controller, let indexPath):
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
+        case .bannerCellTapped(let controller, let row):
+            return Observable.just(.moveToDetailScene(controller: controller, indexPath: IndexPath(row: row, section: 0)))
         }
     }
     
@@ -251,6 +254,12 @@ final class HomeReactor: Reactor {
     func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
         if isLoign {
             switch indexPath.section {
+            case 0:
+                if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row] {
+                    let controller = DetailController()
+                    controller.reactor = DetailReactor(popUpID: id)
+                    currentController.navigationController?.pushViewController(controller, animated: true)
+                }
             case 2:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(popUpType: .curation)

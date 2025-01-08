@@ -36,6 +36,7 @@ final class MyPageReactor: Reactor {
     struct State {
         var sections: [any Sectionable] = []
         var isLogin: Bool = false
+        var backgroundImageViewPath: String?
     }
     
     // MARK: - properties
@@ -86,11 +87,12 @@ final class MyPageReactor: Reactor {
     
     private var logoutSection = MyPageLogoutSection(inputDataList: [.init()])
     
+    private let spacing8Section = SpacingSection(inputDataList: [.init(spacing: 8)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     private let spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
-    private let spacing100Section = SpacingSection(inputDataList: [.init(spacing: 100)])
+    private let spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     
     var isLogin: Bool = false
     var isAdmin: Bool = false
@@ -196,6 +198,9 @@ final class MyPageReactor: Reactor {
             nextController.reactor = MyCommentReactor()
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
+        if !profileSection.isEmpty {
+            newState.backgroundImageViewPath = profileSection.inputDataList.first?.profileImagePath
+        }
         return newState
     }
     
@@ -229,7 +234,8 @@ final class MyPageReactor: Reactor {
             return [
                 normalTitleSection,
                 spacing16Section,
-                normalSection
+                normalSection,
+                spacing8Section
             ]
         } else {
             return []
@@ -244,12 +250,14 @@ final class MyPageReactor: Reactor {
                 infoTitleSection,
                 spacing16Section,
                 infoSection,
+                spacing8Section
             ]
         } else {
             return [
                 infoTitleSection,
                 spacing16Section,
                 infoSection,
+                spacing8Section
             ]
         }
     }
@@ -263,7 +271,7 @@ final class MyPageReactor: Reactor {
                     adminEtcSection,
                     spacing28Section,
                     logoutSection,
-                    spacing100Section
+                    spacing156Section
                 ]
             } else {
                 return [
@@ -272,11 +280,11 @@ final class MyPageReactor: Reactor {
                     etcSection,
                     spacing28Section,
                     logoutSection,
-                    spacing100Section
+                    spacing156Section
                 ]
             }
         } else {
-            return [spacing100Section]
+            return [spacing156Section]
         }
     }
 }

@@ -14,13 +14,17 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
     
     // MARK: - Components
 
+    private let backGroundTrailingView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     private let backGroundImageView: UIImageView = {
         let view = UIImageView()
         return view
     }()
     
-    
-    lazy var blurView: UIVisualEffectView  = {
+    lazy var blurView: UIVisualEffectView = {
         let blurEffect = UIBlurEffect(style: .regular)
         let view = UIVisualEffectView(effect: blurEffect)
         return view
@@ -33,6 +37,9 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
     
     private let profileImageView: UIImageView = {
         let view = UIImageView()
+        view.layer.cornerRadius = 32
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     
@@ -109,31 +116,37 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
 private extension MyPageProfileSectionCell {
     func setUpConstraints() {
         contentView.clipsToBounds = true
-        contentView.addSubview(backGroundImageView)
-        backGroundImageView.snp.makeConstraints { make in
+        contentView.addSubview(backGroundTrailingView)
+        backGroundTrailingView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             cellHeight = make.height.equalTo(162 + 49 + 44).priority(.high).constraint
         }
         
-        backGroundImageView.addSubview(blurView)
+        backGroundTrailingView.addSubview(backGroundImageView)
+        backGroundImageView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.size.equalTo(UIScreen.main.bounds.width)
+        }
+        
+        backGroundTrailingView.addSubview(blurView)
         blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        backGroundImageView.addSubview(profileView)
+        backGroundTrailingView.addSubview(profileView)
         profileView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(162)
             containerTopInset = make.top.equalToSuperview().constraint
         }
     
-        backGroundImageView.addSubview(bottomView)
+        backGroundTrailingView.addSubview(bottomView)
         bottomView.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalToSuperview()
             make.height.equalTo(49)
         }
         
-        backGroundImageView.addSubview(loginView)
+        backGroundTrailingView.addSubview(loginView)
         loginView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(162)
@@ -219,6 +232,7 @@ extension MyPageProfileSectionCell: Inputable {
             blurView.isHidden = false
             nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 16))
             descriptionLabel.setLineHeightText(text: input.description, font: .KorFont(style: .light, size: 11))
+            backGroundImageView.image = nil
             backGroundImageView.setPPImage(path: input.profileImagePath)
             profileImageView.setPPImage(path: input.profileImagePath) { [weak self] in
                 guard let self = self,

@@ -29,6 +29,7 @@ final class WithdrawlCompleteView: UIView {
     private let descriptionLabel: PPLabel = {
         let text = "고객님이 만족하실 수 있는\n팝풀이 되도록 앞으로도 노력할게요 :)"
         let label = PPLabel(style: .regular, fontSize: 15, text: text)
+        label.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 15), lineHeight: 1.5)
         label.numberOfLines = 2
         label.textAlignment = .center
         label.textColor = .g600
