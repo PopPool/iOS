@@ -1,34 +1,24 @@
 //
-//  WithdrawlCheckModalReactor.swift
+//  MyCommentReactor.swift
 //  Poppool
 //
-//  Created by SeoJunYoung on 1/6/25.
+//  Created by SeoJunYoung on 1/8/25.
 //
 
 import ReactorKit
 import RxSwift
 import RxCocoa
 
-final class WithdrawlCheckModalReactor: Reactor {
-    
-    enum ModalState {
-        case none
-        case cancel
-        case apply
-    }
+final class MyCommentReactor: Reactor {
     
     // MARK: - Reactor
     enum Action {
-        case cancelButtonTapped
-        case appleyButtonTapped
     }
     
     enum Mutation {
-        case setModalState(state: ModalState)
     }
     
     struct State {
-        var state: ModalState = .none
     }
     
     // MARK: - properties
@@ -44,18 +34,12 @@ final class WithdrawlCheckModalReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .appleyButtonTapped:
-            return Observable.just(.setModalState(state: .apply))
-        case .cancelButtonTapped:
-            return Observable.just(.setModalState(state: .cancel))
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setModalState(let state):
-            newState.state = state
         }
         return newState
     }

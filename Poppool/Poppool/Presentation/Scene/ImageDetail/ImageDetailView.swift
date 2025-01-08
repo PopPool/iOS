@@ -14,7 +14,7 @@ final class ImageDetailView: UIView {
     // MARK: - Components
     let imageView: UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = .pb60
+        view.backgroundColor = .pb70
         view.contentMode = .scaleAspectFit
         return view
     }()

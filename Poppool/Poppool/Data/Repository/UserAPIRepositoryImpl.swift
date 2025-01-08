@@ -62,4 +62,15 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.postLogout()
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getWithdrawlList() -> Observable<GetWithdrawlListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getWithdrawlList()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func postWithdrawl(request: PostWithdrawlListRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.postWithdrawl(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+
 }

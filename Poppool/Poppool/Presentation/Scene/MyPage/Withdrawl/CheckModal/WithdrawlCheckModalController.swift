@@ -24,7 +24,7 @@ final class WithdrawlCheckModalController: BaseViewController, View {
     init(nickName: String?) {
         super.init()
         let title = "\(nickName ?? "")님, 팝풀 서비스를\n정말 탈퇴하시겠어요?"
-        mainView.titleLabel.setLineHeightText(text: title, font: .KorFont(style: .bold, size: 18))
+        mainView.titleLabel.setLineHeightText(text: title, font: .KorFont(style: .bold, size: 18), lineHeight: 1.312)
         mainView.titleLabel.numberOfLines = 2
     }
     
@@ -54,6 +54,15 @@ private extension WithdrawlCheckModalController {
 // MARK: - Methods
 extension WithdrawlCheckModalController {
     func bind(reactor: Reactor) {
+        mainView.cancelButton.rx.tap
+            .map { Reactor.Action.cancelButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        mainView.agreeButton.rx.tap
+            .map { Reactor.Action.appleyButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

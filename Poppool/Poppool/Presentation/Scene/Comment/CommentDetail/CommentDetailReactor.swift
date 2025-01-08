@@ -85,7 +85,7 @@ final class CommentDetailReactor: Reactor {
             let imagePath = imageSection.inputDataList[row].imagePath
             let nextController = ImageDetailController()
             nextController.reactor = ImageDetailReactor(imagePath: imagePath)
-            nextController.modalPresentationStyle = .overFullScreen
+            nextController.modalPresentationStyle = .overCurrentContext
             controller.present(nextController, animated: true)
         case .likeChange:
 

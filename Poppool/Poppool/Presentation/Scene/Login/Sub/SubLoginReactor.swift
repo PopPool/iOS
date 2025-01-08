@@ -59,10 +59,10 @@ final class SubLoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor()
+            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: false)
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .dismissScene(let controller):
-            controller.navigationController?.dismiss(animated: true)
+            controller.dismiss(animated: true)
         case .loadView:
             print(#function)
         }

@@ -247,7 +247,7 @@ final class DetailReactor: Reactor {
             let imagePath = commentSection.inputDataList[cellRow].imageList[ImageRow]
             let nextController = ImageDetailController()
             nextController.reactor = ImageDetailReactor(imagePath: imagePath)
-            nextController.modalPresentationStyle = .fullScreen
+            nextController.modalPresentationStyle = .overCurrentContext
             controller.present(nextController, animated: true)
         }
         return newState

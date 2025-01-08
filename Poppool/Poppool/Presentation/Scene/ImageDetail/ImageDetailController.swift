@@ -39,6 +39,7 @@ extension ImageDetailController {
 // MARK: - SetUp
 private extension ImageDetailController {
     func setUp() {
+        view.backgroundColor = .clear
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

@@ -8,11 +8,11 @@
 import UIKit
 
 extension UILabel {
-    func setLineHeightText(text: String?, font: UIFont?) {
+    func setLineHeightText(text: String?, font: UIFont?, lineHeight: CGFloat = 1.3) {
         guard let text = text, let font = font else { return }
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingTail
-        paragraphStyle.lineHeightMultiple = 1.3
+        paragraphStyle.lineHeightMultiple = lineHeight
         self.attributedText = NSMutableAttributedString(
             string: text,
             attributes: [

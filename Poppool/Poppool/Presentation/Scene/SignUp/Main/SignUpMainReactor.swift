@@ -59,10 +59,12 @@ final class SignUpMainReactor: Reactor {
     var disposeBag = DisposeBag()
     private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
+    var isFirstResponderCase: Bool
     
     // MARK: - init
-    init() {
+    init(isFirstResponderCase: Bool) {
         self.initialState = State()
+        self.isFirstResponderCase = isFirstResponderCase
     }
     
     // MARK: - Reactor Methods
@@ -115,6 +117,7 @@ final class SignUpMainReactor: Reactor {
             guard let socialType = userDefaultService.fetch(key: "socialType"),
                   let nickName = newState.nickName,
                   let gender = newState.gender else { return newState }
+            
             signUpAPIUseCase.trySignUp(
                 nickName: nickName,
                 gender: gender,
@@ -123,14 +126,20 @@ final class SignUpMainReactor: Reactor {
                 socialType: socialType,
                 interests: newState.categorys
             )
-            .subscribe {
+            .subscribe { [weak self, weak controller] in
+                guard let self = self else { return }
                 let completeController = SignUpCompleteController()
-                completeController.reactor = SignUpCompleteReactor(nickName: nickName, categoryTitles: newState.categoryTitles)
-                controller.navigationController?.pushViewController(completeController, animated: true)
+                completeController.reactor = SignUpCompleteReactor(
+                    nickName: nickName,
+                    categoryTitles: newState.categoryTitles,
+                    isFirstResponderCase: self.isFirstResponderCase
+                )
+                controller?.navigationController?.pushViewController(completeController, animated: true)
             } onError: { error in
                 ToastMaker.createToast(message: "회원가입 실패:\(error.localizedDescription)")
             }
             .disposed(by: disposeBag)
+            
         case .skipStep3(let controller, let currentIndex):
             if newState.categoryIDList.count >= 5 {
                 newState.categorys = Array(newState.categoryIDList.shuffled().prefix(5))

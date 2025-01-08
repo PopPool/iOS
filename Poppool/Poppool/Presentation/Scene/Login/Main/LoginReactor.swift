@@ -61,7 +61,7 @@ final class LoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor()
+            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: true)
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .moveToHomeScene(let controller):
             let homeTabbar = WaveTabBarController()

@@ -19,8 +19,12 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
         return view
     }()
     
-    let blurEffect = UIBlurEffect(style: .regular)
-    lazy var blurView = UIVisualEffectView(effect: blurEffect)
+    
+    lazy var blurView: UIVisualEffectView  = {
+        let blurEffect = UIBlurEffect(style: .regular)
+        let view = UIVisualEffectView(effect: blurEffect)
+        return view
+    }()
     
     private let profileView: UIView = {
         let view = UIView()
@@ -76,6 +80,7 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
         button.layer.cornerRadius = 4
         return button
     }()
+    
     var disposeBag = DisposeBag()
     // MARK: - init
     
@@ -159,15 +164,15 @@ private extension MyPageProfileSectionCell {
             make.edges.equalTo(bottomView)
         }
         
-        loginView.addSubview(loginButton)
+        contentView.addSubview(loginButton)
         loginButton.snp.makeConstraints { make in
             make.width.equalTo(120)
             make.height.equalTo(32)
-            make.bottom.equalToSuperview().inset(48)
+            make.bottom.equalToSuperview().inset(97)
             make.leading.equalToSuperview().inset(20)
         }
         
-        loginView.addSubview(loginLabel)
+        contentView.addSubview(loginLabel)
         loginLabel.snp.makeConstraints { make in
             make.bottom.equalTo(loginButton.snp.top).offset(-16)
             make.leading.equalToSuperview().inset(20)
@@ -209,6 +214,8 @@ extension MyPageProfileSectionCell: Inputable {
         if input.isLogin {
             profileView.isHidden = false
             loginView.isHidden = true
+            loginLabel.isHidden = true
+            loginButton.isHidden = true
             blurView.isHidden = false
             nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 16))
             descriptionLabel.setLineHeightText(text: input.description, font: .KorFont(style: .light, size: 11))
@@ -231,7 +238,10 @@ extension MyPageProfileSectionCell: Inputable {
             backGroundImageView.backgroundColor = .g1000
             profileView.isHidden = true
             loginView.isHidden = false
+            loginLabel.isHidden = false
+            loginButton.isHidden = false
             blurView.isHidden = true
+            
         }
     }
     
