@@ -164,17 +164,17 @@ final class FilterBottomSheetView: UIView {
 
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(60)
+            make.height.equalTo(70)
         }
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
-            make.centerY.equalToSuperview()
+            make.top.equalToSuperview().offset(30)
         }
 
         closeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalToSuperview()
+            make.centerY.equalTo(titleLabel)
             make.size.equalTo(24)
         }
 
@@ -305,7 +305,7 @@ final class FilterBottomSheetView: UIView {
             cornerRadius: 22
         )
         button.setBackgroundColor(.w100, for: .normal)
-        button.setTitleColor(.g700, for: .normal)
+        button.setTitleColor(.g400, for: .normal)
         button.layer.borderColor = UIColor.g400.cgColor
         button.layer.borderWidth = 1
 

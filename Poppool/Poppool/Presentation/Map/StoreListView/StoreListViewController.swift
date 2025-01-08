@@ -75,36 +75,9 @@ final class StoreListViewController: UIViewController, View {
                        .disposed(by: cell.disposeBag)
 
                    return cell
-               },
-               // 헤더 설정
-               configureSupplementaryView: { ds, cv, kind, indexPath in
-                   guard kind == UICollectionView.elementKindSectionHeader else {
-                       return UICollectionReusableView()
-                   }
-                   let headerView = cv.dequeueReusableSupplementaryView(
-                       ofKind: kind,
-                       withReuseIdentifier: StoreListHeaderView.identifier,
-                       for: indexPath
-                   ) as! StoreListHeaderView
-
-                   headerView.isHidden = false
-                   headerView.searchInput.isHidden = !self.isHeaderVisible
-                   headerView.filterChips.isHidden = !self.isHeaderVisible
-                   headerView.filterChips.locationChip.rx.tap
-                                       .map { Reactor.Action.filterTapped(.location) }
-                                       .bind(to: reactor.action)
-                                       .disposed(by: headerView.disposeBag)
-
-                                   headerView.filterChips.categoryChip.rx.tap
-                                       .map { Reactor.Action.filterTapped(.category) }
-                                       .bind(to: reactor.action)
-                                       .disposed(by: headerView.disposeBag)
-
-
-                   let sectionModel = ds.sectionModels[indexPath.section]
-
-                   return headerView
                }
+               // 헤더 설정
+
            )
 
         reactor.state
@@ -180,35 +153,6 @@ final class StoreListViewController: UIViewController, View {
             sheet.hideBottomSheet()
         }
     }
-
-       // MARK: - updateHeaderVisibility
-       func updateHeaderVisibility(_ visible: Bool) {
-           guard isHeaderVisible != visible else { return }
-           isHeaderVisible = visible
-
-           if let layout = mainView.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-               UIView.animate(withDuration: 0.3) {
-                   layout.headerReferenceSize = visible
-                       ? CGSize(width: self.view.bounds.width, height: 120)
-                       : .zero
-
-                   // 이미 표시 중인 HeaderView 있으면 동기화
-                   if let headerView = self.mainView.collectionView.supplementaryView(
-                       forElementKind: UICollectionView.elementKindSectionHeader,
-                       at: IndexPath(item: 0, section: 0)
-                   ) as? StoreListHeaderView {
-                       headerView.isHidden = false
-                       headerView.searchInput.isHidden = !visible
-                       headerView.filterChips.isHidden = !visible
-                       headerView.layoutIfNeeded()
-                   }
-
-                   layout.invalidateLayout()
-               } completion: { _ in
-                   self.mainView.collectionView.reloadData()
-               }
-           }
-       }
    }
 
    // MARK: - UICollectionViewDelegateFlowLayout
@@ -224,3 +168,9 @@ final class StoreListViewController: UIViewController, View {
                : .zero
        }
    }
+extension StoreListViewController {
+    func setGrabberHandleVisible(_ visible: Bool) {
+        mainView.grabberHandle.isHidden = !visible
+    }
+}
+

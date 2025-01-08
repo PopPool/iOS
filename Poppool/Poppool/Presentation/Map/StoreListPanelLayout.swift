@@ -8,7 +8,7 @@ class StoreListPanelLayout: FloatingPanelLayout {
 
     var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
         return [
-            .full: FloatingPanelLayoutAnchor(absoluteInset: 0, edge: .top, referenceGuide: .superview),
+            .full: FloatingPanelLayoutAnchor(absoluteInset: 120, edge: .top, referenceGuide: .superview),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.6, edge: .bottom, referenceGuide: .safeArea),
             .tip: FloatingPanelLayoutAnchor(absoluteInset: -100, edge: .bottom, referenceGuide: .safeArea) // 완전히 내림
         ]

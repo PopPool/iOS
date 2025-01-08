@@ -16,11 +16,18 @@ final class MapViewController: BaseViewController, View {
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     private var currentMarker: GMSMarker?
-
+    private let storeListViewController = StoreListViewController(reactor: StoreListReactor())
+    private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
 
-    var fpc: FloatingPanelController?
+    enum ModalState {
+        case top
+        case middle
+        case bottom
+    }
+
+    private var modalState: ModalState = .bottom
 
     // MARK: - Lifecycle
     override func viewDidAppear(_ animated: Bool) {
@@ -29,8 +36,6 @@ final class MapViewController: BaseViewController, View {
             self.view.layoutIfNeeded()
             let frameInView = self.mainView.filterChips.convert(self.mainView.filterChips.bounds, to: self.view)
             self.filterChipsTopY = frameInView.minY
-
-            print("[DEBUG] filterChipsTopY after layout: \(self.filterChipsTopY)")
         }
     }
 
@@ -38,7 +43,6 @@ final class MapViewController: BaseViewController, View {
         super.viewDidLoad()
         setUp()
         checkLocationAuthorization()
-
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -49,18 +53,38 @@ final class MapViewController: BaseViewController, View {
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-
-            view.addSubview(carouselView)
-            carouselView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(140)
-                make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
-            }
-
-            carouselView.isHidden = true
-            mainView.mapView.delegate = self
         }
 
+        view.addSubview(carouselView)
+        carouselView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(140)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+        }
+        carouselView.isHidden = true
+        mainView.mapView.delegate = self
+
+        // 리스트뷰 설정
+        addChild(storeListViewController)
+        view.addSubview(storeListViewController.view)
+        storeListViewController.didMove(toParent: self)
+
+        storeListViewController.view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            listViewTopConstraint = make.top.equalTo(view.snp.bottom).constraint // 초기 숨김 상태
+            make.height.equalTo(view.frame.height)
+        }
+
+        // 제스처 설정
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+//        storeListViewController.mainView.grabberHandle.addGestureRecognizer(panGesture)
+        storeListViewController.mainView.addGestureRecognizer(panGesture)
+
+
+        setupMarker()
+    }
+
+    private func setupMarker() {
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: 37.5666, longitude: 126.9784)
         let markerView = MapMarker()
@@ -70,7 +94,34 @@ final class MapViewController: BaseViewController, View {
         markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
     }
 
+    private func setupPanAndSwipeGestures() {
+        storeListViewController.mainView.grabberHandle.rx.swipeGesture(.up)
+            .withUnretained(self)
+            .subscribe { owner, _ in
+                print("[DEBUG] Swipe Up Gesture Detected")
+                owner.animateToState(.top)
+            }
+            .disposed(by: disposeBag)
+
+        storeListViewController.mainView.grabberHandle.rx.swipeGesture(.down)
+            .withUnretained(self)
+            .subscribe { owner, _ in
+                print("[DEBUG] Swipe Down Gesture Detected")
+                switch owner.modalState {
+                case .top:
+                    owner.animateToState(.middle)
+                case .middle:
+                    owner.animateToState(.bottom)
+                case .bottom:
+                    break
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: - Bind
     func bind(reactor: Reactor) {
+        // 필터 관련 바인딩
         mainView.filterChips.locationChip.rx.tap
             .map { Reactor.Action.filterTapped(.location) }
             .bind(to: reactor.action)
@@ -81,34 +132,19 @@ final class MapViewController: BaseViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        // 리스트 버튼 탭
         mainView.listButton.rx.tap
-            .bind { [weak self] _ in
-                guard let self = self else { return }
-
-                let reactor = StoreListReactor()
-                let listVC = StoreListViewController(reactor: reactor)
-
-                let fpc = FloatingPanelController()
-                self.fpc = fpc
-                fpc.delegate = self
-                fpc.set(contentViewController: listVC)
-                fpc.layout = StoreListPanelLayout()
-//                fpc.surfaceView.grabberHandle.isHidden = true
-                fpc.surfaceView.grabberHandle.snp.makeConstraints { make in
-                    make.top.equalToSuperview().offset(14) 
-                            make.centerX.equalToSuperview()
-                            make.width.equalTo(36)
-                            make.height.equalTo(5)
-                        }
-
-                fpc.surfaceView.layer.shadowColor = UIColor.clear.cgColor
-                fpc.surfaceView.layer.shadowRadius = 0
-                fpc.surfaceView.layer.shadowOffset = .zero
-                fpc.surfaceView.layer.shadowOpacity = 0
-                fpc.addPanel(toParent: self)
+            .withUnretained(self)
+            .subscribe { owner, _ in
+                print("[DEBUG] List Button Tapped")
+                owner.animateToState(.middle) // 버튼 눌렀을 때 상태를 middle로 변경
             }
             .disposed(by: disposeBag)
 
+
+
+
+        // 위치 버튼
         mainView.locationButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
@@ -116,6 +152,7 @@ final class MapViewController: BaseViewController, View {
             }
             .disposed(by: disposeBag)
 
+        // 필터 상태 업데이트
         reactor.state.map { $0.selectedLocationFilters }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -137,6 +174,7 @@ final class MapViewController: BaseViewController, View {
                 )
             }
             .disposed(by: disposeBag)
+
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
         }
@@ -173,18 +211,155 @@ final class MapViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
     }
+    
 
-    func addMarker(for store: MapPopUpStore) {
-        let marker = GMSMarker()
-        marker.position = store.coordinate
-        marker.userData = store
+    // MARK: - List View Control
+    private func toggleListView() {
+        print("[DEBUG] Current Modal State: \(modalState)")
+        print("[DEBUG] Current listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
 
-        let markerView = MapMarker()
-        markerView.injection(with: store.toMarkerInput())
-        marker.iconView = markerView
-        marker.map = mainView.mapView
+        UIView.animate(withDuration: 0.3) {
+            let middleOffset = -self.view.frame.height * 0.7 
+            self.listViewTopConstraint?.update(offset: middleOffset)
+            self.modalState = .middle
+            self.mainView.searchFilterContainer.backgroundColor = .clear
+            print("[DEBUG] Changing state to Middle")
+            print("[DEBUG] Updated offset: \(middleOffset)")
+            self.view.layoutIfNeeded()
+        }
+
+        // 상태 변경 후 로그
+        print("[DEBUG] New Modal State: \(modalState)")
+        print("[DEBUG] New listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
     }
 
+    func addMarker(for store: MapPopUpStore) {
+          let marker = GMSMarker()
+          marker.position = store.coordinate
+          marker.userData = store
+
+          let markerView = MapMarker()
+          markerView.injection(with: store.toMarkerInput())
+          marker.iconView = markerView
+          marker.map = mainView.mapView
+      }
+
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        let velocity = gesture.velocity(in: view)
+
+        switch gesture.state {
+        case .changed:
+            if let constraint = listViewTopConstraint {
+                let searchFilterFrame = self.mainView.searchFilterContainer.convert(
+                    self.mainView.searchFilterContainer.bounds,
+                    to: self.view
+                )
+                let filterChipsFrame = self.mainView.filterChips.convert(
+                    self.mainView.filterChips.bounds,
+                    to: self.view
+                )
+                let minOffset = searchFilterFrame.minY + filterChipsFrame.maxY + 12
+                let maxOffset = view.frame.height
+
+                let newOffset = constraint.layoutConstraints.first?.constant ?? 0 + translation.y
+                let clampedOffset = min(max(newOffset, minOffset), maxOffset)
+
+                constraint.update(offset: clampedOffset)
+                gesture.setTranslation(.zero, in: view)
+
+                let progress = (maxOffset - clampedOffset) / (maxOffset - minOffset)
+                mainView.searchFilterContainer.alpha = progress
+            }
+
+        case .ended:
+            let currentOffset = listViewTopConstraint?.layoutConstraints.first?.constant ?? 0
+            let targetState: ModalState
+
+            if velocity.y > 500 {
+                targetState = .bottom
+            } else if velocity.y < -500 {
+                targetState = .top
+            } else {
+                let middleY = view.frame.height * 0.4
+                if currentOffset < middleY * 0.7 {
+                    targetState = .top
+                } else if currentOffset < view.frame.height * 0.7 {
+                    targetState = .middle
+                } else {
+                    targetState = .bottom
+                }
+            }
+
+            print("[DEBUG] Pan Ended - Current Offset: \(currentOffset), Velocity Y: \(velocity.y)")
+            modalState = targetState
+            animateToState(targetState)
+
+        default:
+            break
+        }
+    }
+
+
+    private func animateToState(_ state: ModalState) {
+        self.view.layoutIfNeeded()
+
+        UIView.animate(withDuration: 0.3, animations: {
+            switch state {
+            case .top:
+
+                let filterChipsFrame = self.mainView.filterChips.convert(
+                    self.mainView.filterChips.bounds,
+                    to: self.view
+                )
+                self.mainView.mapView.isHidden = true
+                self.storeListViewController.setGrabberHandleVisible(false)
+                self.storeListViewController.mainView.layer.cornerRadius = 0
+                self.storeListViewController.view.snp.remakeConstraints { make in
+                    make.leading.trailing.equalToSuperview()
+                    make.top.equalToSuperview().offset(filterChipsFrame.maxY)
+                    make.bottom.equalToSuperview()
+                }
+
+                self.mainView.searchFilterContainer.backgroundColor = .white
+                self.mainView.searchFilterContainer.alpha = 1
+
+            case .middle:
+                self.storeListViewController.setGrabberHandleVisible(true)
+                self.storeListViewController.view.snp.remakeConstraints { make in
+                    make.leading.trailing.equalToSuperview()
+                    make.top.equalToSuperview().offset(self.view.frame.height * 0.3) // 70% 가려짐
+                    make.height.equalTo(self.view.frame.height)
+                    self.storeListViewController.mainView.layer.cornerRadius = 20
+                    self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                    self.mainView.mapView.isHidden = false
+
+                }
+                self.mainView.searchFilterContainer.backgroundColor = .clear
+
+            case .bottom:
+                self.storeListViewController.setGrabberHandleVisible(true)
+                self.storeListViewController.view.snp.remakeConstraints { make in
+                    make.leading.trailing.equalToSuperview()
+                    make.top.equalTo(self.view.snp.bottom)
+                    make.height.equalTo(self.view.frame.height)
+                    self.mainView.mapView.isHidden = false
+
+                }
+                self.mainView.searchFilterContainer.backgroundColor = .clear
+                self.mainView.searchFilterContainer.alpha = 1
+            }
+
+            self.view.layoutIfNeeded()
+        }) { _ in
+            self.modalState = state
+        }
+    }
+
+
+
+
+    // MARK: - Filter Bottom Sheet
     func presentFilterBottomSheet(for filterType: FilterType) {
         let sheetReactor = FilterBottomSheetReactor()
         let viewController = FilterBottomSheetViewController(reactor: sheetReactor)
@@ -195,8 +370,6 @@ final class MapViewController: BaseViewController, View {
 
         viewController.onSave = { [weak self] (selectedOptions: [String]) in
             guard let self = self else { return }
-            print("MapVC onSave - filterType: \(filterType), options: \(selectedOptions)") 
-
             self.reactor?.action.onNext(.filterUpdated(filterType, selectedOptions))
             self.reactor?.action.onNext(.filterTapped(nil))
         }
@@ -212,6 +385,7 @@ final class MapViewController: BaseViewController, View {
 
         currentFilterBottomSheet = viewController
     }
+    
 
     private func dismissFilterBottomSheet() {
         if let bottomSheet = currentFilterBottomSheet {
@@ -219,74 +393,19 @@ final class MapViewController: BaseViewController, View {
         }
         currentFilterBottomSheet = nil
     }
-}
 
-// MARK: - FloatingPanelControllerDelegate
-extension MapViewController: FloatingPanelControllerDelegate {
-    func floatingPanelDidMove(_ fpc: FloatingPanelController) {
-        let panelY = fpc.surfaceView.frame.minY
-//        print("[DEBUG] panelY: \(panelY), filterChipsTopY: \(filterChipsTopY)")
-
-        let threshold: CGFloat = 40.0
-
-        if abs(panelY - filterChipsTopY) <= threshold {
-            transitionToFullScreen(fpc: fpc)
-        } else if panelY > filterChipsTopY + threshold {
-            restoreMapView(fpc: fpc)
-        }
-    }
-
-    func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-        switch fpc.state {
-        case .full:
-            transitionToFullScreen(fpc: fpc)
-        case .half, .tip:
-            restoreMapView(fpc: fpc)
-        default:
+    // MARK: - Location
+    private func checkLocationAuthorization() {
+        let status = CLLocationManager.authorizationStatus()
+        switch status {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.startUpdatingLocation()
+        case .denied, .restricted:
+            print("위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.")
+        @unknown default:
             break
-        }
-    }
-
-    private func transitionToFullScreen(fpc: FloatingPanelController) {
-        if let listVC = fpc.contentViewController as? StoreListViewController {
-            // 상태 변경 전에 레이아웃 준비
-            listVC.view.layoutIfNeeded()
-            listVC.mainView.collectionView.layoutIfNeeded()
-
-            UIView.animate(withDuration: 0.3) {
-                self.mainView.alpha = 0
-                self.mainView.isHidden = true
-                listVC.view.backgroundColor = .white
-
-                // 상태 변경
-                listVC.updateHeaderVisibility(true)
-                listVC.view.layoutIfNeeded()
-            }
-        }
-    }
-
-
-    private func restoreMapView(fpc: FloatingPanelController) {
-        UIView.animate(withDuration: 0.3) {
-            self.mainView.alpha = 1
-            self.mainView.isHidden = false
-
-            if let listVC = fpc.contentViewController as? StoreListViewController {
-                listVC.view.backgroundColor = .clear
-                listVC.updateHeaderVisibility(false)
-            }
-        }
-    }
-}
-
-// MARK: - UIScrollViewDelegate
-extension MapViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let fpc = self.fpc else { return }
-
-        if scrollView.contentOffset.y < 0 {
-            scrollView.contentOffset = .zero
-            fpc.move(to: .half, animated: true)
         }
     }
 }
@@ -297,8 +416,8 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
 
         let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
-                                              longitude: location.coordinate.longitude,
-                                              zoom: 15)
+                                            longitude: location.coordinate.longitude,
+                                            zoom: 15)
         mainView.mapView.animate(to: camera)
 
         let currentLocationStore = MapPopUpStore(
@@ -323,8 +442,6 @@ extension MapViewController: CLLocationManagerDelegate {
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        print("[DEBUG] Marker tapped")
-
         let dummyStore1 = MapPopUpStore(
             id: 1,
             category: "카페",
@@ -356,22 +473,5 @@ extension MapViewController: GMSMapViewDelegate {
         carouselView.isHidden = false
 
         return true
-    }
-}
-
-extension MapViewController {
-    private func checkLocationAuthorization() {
-        let status = CLLocationManager.authorizationStatus()
-
-        switch status {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.startUpdatingLocation()
-        case .denied, .restricted:
-            print("위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.")
-        @unknown default:
-            break
-        }
     }
 }
