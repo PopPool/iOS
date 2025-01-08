@@ -114,7 +114,6 @@ final class HomeReactor: Reactor {
         case .searchButtonTapped(let controller):
             return Observable.just(.moveToSearchScene(controller: controller))
         case .collectionViewCellTapped(let controller, let indexPath):
-            print(indexPath)
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         }
     }

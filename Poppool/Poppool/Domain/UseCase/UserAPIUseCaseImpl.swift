@@ -64,4 +64,12 @@ final class UserAPIUseCaseImpl {
     func postLogout() -> Completable {
         return repository.postLogout()
     }
+    
+    func getWithdrawlList() -> Observable<GetWithdrawlListResponse> {
+        return repository.getWithdrawlList().map { $0.toDomain() }
+    }
+    
+    func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
+        return repository.postWithdrawl(request: .init(checkedSurveyList: surveyList.map { .init(id: $0.id, survey: $0.survey)}))
+    }
 }

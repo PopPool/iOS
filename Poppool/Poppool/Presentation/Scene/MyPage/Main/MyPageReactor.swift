@@ -29,6 +29,8 @@ final class MyPageReactor: Reactor {
         case moveToProfileEditScene(controller: BaseViewController)
         case logout
         case moveToDetailScene(controller: BaseViewController, title: String?)
+        case moveToLoginScene(controller: BaseViewController)
+        case moveToMyCommentScene(controller: BaseViewController)
     }
     
     struct State {
@@ -106,17 +108,14 @@ final class MyPageReactor: Reactor {
                 .withUnretained(self)
                 .map { (owner, response) in
                     owner.isLogin = response.loginYn
-//                    owner.isLogin = false
                     owner.isAdmin = response.adminYn
                     
                     owner.profileSection.inputDataList = [
                         .init(
                             isLogin: response.loginYn,
-//                            isLogin: false,
                             profileImagePath: response.profileImageUrl,
                             nickName: response.nickname,
-//                            description: response.intro
-                            description: "Test Intro"
+                            description: response.intro
                         )
                     ]
                     owner.commentSection.inputDataList = response.myCommentedPopUpList.map  {
@@ -127,14 +126,11 @@ final class MyPageReactor: Reactor {
         case .settingButtonTapped(let controller):
             return Observable.just(.moveToProfileEditScene(controller: controller))
         case .commentButtonTapped(let controller):
-            print("commentButtonTapped")
-            return Observable.just(.loadView)
+            return Observable.just(.moveToMyCommentScene(controller: controller))
         case .commentCellTapped(let controller, let row):
-            print("commentCellTapped")
             return Observable.just(.loadView)
         case .loginButtonTapped(let controller):
-            print("loginButtonTapped")
-            return Observable.just(.loadView)
+            return Observable.just(.moveToLoginScene(controller: controller))
         case .listCellTapped(let controller, let title):
             return Observable.just(.moveToDetailScene(controller: controller, title: title))
         case .logoutButtonTapped:
@@ -169,9 +165,36 @@ final class MyPageReactor: Reactor {
                 let nextController = WithdrawlCheckModalController(nickName: nickName)
                 nextController.reactor = WithdrawlCheckModalReactor()
                 controller.presentPanModal(nextController)
+                nextController.reactor?.state
+                    .withUnretained(nextController)
+                    .subscribe(onNext: { [weak controller] (nextController, state) in
+                        switch state.state {
+                        case .apply:
+                            nextController.dismiss(animated: true) {
+                                let reasonController = WithdrawlReasonController()
+                                reasonController.reactor = WithdrawlReasonReactor()
+                                controller?.navigationController?.pushViewController(reasonController, animated: true)
+                            }
+                        case .cancel:
+                            nextController.dismiss(animated: true)
+                        default:
+                            break
+                        }
+                    })
+                    .disposed(by: nextController.disposeBag)
             default:
-                print(title)
+                break
             }
+        case.moveToLoginScene(let controller):
+            let nextController = SubLoginController()
+            nextController.reactor = SubLoginReactor()
+            let navigationController = UINavigationController(rootViewController: nextController)
+            navigationController.modalPresentationStyle = .fullScreen
+            controller.present(navigationController, animated: true)
+        case .moveToMyCommentScene(let controller):
+            let nextController = MyCommentController()
+            nextController.reactor = MyCommentReactor()
+            controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState
     }
@@ -194,6 +217,8 @@ final class MyPageReactor: Reactor {
                 commentTitleSection,
                 spacing24Section,
                 commentSection,
+                spacing24Section,
+                spacing16GraySection,
                 spacing24Section
             ]
         }
@@ -202,8 +227,6 @@ final class MyPageReactor: Reactor {
     func getNormalSection() -> [any Sectionable] {
         if isLogin {
             return [
-                spacing16GraySection,
-                spacing24Section,
                 normalTitleSection,
                 spacing16Section,
                 normalSection

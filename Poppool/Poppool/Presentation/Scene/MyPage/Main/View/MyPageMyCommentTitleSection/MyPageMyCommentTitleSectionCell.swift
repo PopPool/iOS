@@ -75,6 +75,7 @@ extension MyPageMyCommentTitleSectionCell: Inputable {
                 ]
             )
             button.setAttributedTitle(buttonTitle, for: .normal)
+            button.isHidden = false
         } else {
             button.isHidden = true
         }

@@ -184,7 +184,7 @@ final class CommentListReactor: Reactor {
             let imagePath = commentSection.inputDataList[commentRow].imageList[imageRow]
             let nextController = ImageDetailController()
             nextController.reactor = ImageDetailReactor(imagePath: imagePath)
-            nextController.modalPresentationStyle = .fullScreen
+            nextController.modalPresentationStyle = .overCurrentContext
             controller.present(nextController, animated: true)
         case .presentCommentMenuScene(let controller, let row):
             let comment = commentSection.inputDataList[row]

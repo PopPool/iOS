@@ -29,10 +29,11 @@ final class SignUpCompleteReactor: Reactor {
     
     var initialState: State
     var disposeBag = DisposeBag()
-    
+    var isFirstResponderCase: Bool
     // MARK: - init
-    init(nickName: String, categoryTitles: [String]) {
+    init(nickName: String, categoryTitles: [String], isFirstResponderCase: Bool) {
         self.initialState = State(nickName: nickName, categoryTitles: categoryTitles)
+        self.isFirstResponderCase = isFirstResponderCase
     }
     
     // MARK: - Reactor Methods
@@ -46,8 +47,12 @@ final class SignUpCompleteReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToHomeScene(let controller):
-            let homeTabbar = WaveTabBarController()
-            controller.view.window?.rootViewController = homeTabbar
+            if isFirstResponderCase {
+                let homeTabbar = WaveTabBarController()
+                controller.view.window?.rootViewController = homeTabbar
+            } else {
+                controller.dismiss(animated: true)
+            }
         }
         return state
     }

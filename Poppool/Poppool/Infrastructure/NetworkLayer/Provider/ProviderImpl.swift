@@ -37,6 +37,7 @@ final class ProviderImpl: Provider {
                         Logger.log(message: "\(urlRequest) 응답 시간 :\(Date.now)", category: .network)
                         switch response.result {
                         case .success(let data):
+                            
 //                            Logger.log(message: "응답 데이터: \(String(data: data, encoding: .utf8) ?? "데이터가 없습니다.")", category: .network)
                             do {
                                 let decodedData = try JSONDecoder().decode(R.self, from: data)
@@ -78,6 +79,17 @@ final class ProviderImpl: Provider {
                 let urlRequest = try request.getUrlRequest()
                 self.executeRequest(urlRequest, interceptor: interceptor) { response in
                     Logger.log( message: "응답 시간 :\(Date.now)", category: .network)
+                    
+                        if var accessToken = response.response?.allHeaderFields["Authorization"] as? String,
+                           var refreshToken = response.response?.allHeaderFields["Authorization-refresh"] as? String {
+                            accessToken = accessToken.replacingOccurrences(of: "Bearer ", with: "")
+                            refreshToken = refreshToken.replacingOccurrences(of: "Bearer ", with: "")
+                            
+                            let keyChainService = KeyChainService()
+                            keyChainService.saveToken(type: .accessToken, value: accessToken)
+                            keyChainService.saveToken(type: .refreshToken, value: refreshToken)
+                        }
+                    
                     switch response.result {
                     case .success:
                         observer(.completed)

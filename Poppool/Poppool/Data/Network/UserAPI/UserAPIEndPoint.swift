@@ -89,4 +89,21 @@ struct UserAPIEndPoint {
             method: .post
         )
     }
+    
+    static func getWithdrawlList() -> Endpoint<GetWithdrawlListResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/withdrawl/surveys",
+            method: .get
+        )
+    }
+    
+    static func postWithdrawl(request: PostWithdrawlListRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/delete",
+            method: .post,
+            bodyParameters: request
+        )
+    }
 }
