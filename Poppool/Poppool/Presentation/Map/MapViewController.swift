@@ -272,6 +272,7 @@ final class MapViewController: BaseViewController, View {
         print("[DEBUG] New Modal State: \(modalState)")
         print("[DEBUG] New listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
     }
+    
 
     func addMarker(for store: MapPopUpStore) {
           let marker = GMSMarker()
