@@ -88,6 +88,14 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         autoScrollTimer?.invalidate()
         autoScrollTimer = nil
     }
+    
+    func startAutoScroll(interval: TimeInterval = 3.0) {
+        stopAutoScroll() // 기존 타이머를 중지
+        isAutoBannerPlay = true
+        autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            self?.scrollToNextItem()
+        }
+    }
 }
 
 // MARK: - SetUp
@@ -131,16 +139,6 @@ private extension ImageBannerSectionCell {
     func getSection() -> [any Sectionable] {
         return [imageSection]
     }
-    
-    func startAutoScroll(interval: TimeInterval = 3.0) {
-        stopAutoScroll() // 기존 타이머를 중지
-        isAutoBannerPlay = true
-        autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            self?.scrollToNextItem()
-        }
-    }
-
-
 
     // 다음 배너로 스크롤
     private func scrollToNextItem() {

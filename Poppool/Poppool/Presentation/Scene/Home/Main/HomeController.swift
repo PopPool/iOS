@@ -200,6 +200,15 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         headerIsDarkMode.onNext(scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY))
+        if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
+
+            if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
+                cell.startAutoScroll()
+            } else {
+                cell.stopAutoScroll()
+                statusBarIsDarkMode = true
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
