@@ -1281,6 +1281,45 @@
 			path = ViewTypeModal;
 			sourceTree = "<group>";
 		};
+		081898C12D2FBD170067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081898952D2965C90067BF01 /* ProfileEditView.swift */,
+				081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081898C62D30D5940067BF01 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				081898C12D2FBD170067BF01 /* View */,
+				081898932D2965C20067BF01 /* ProfileEditController.swift */,
+				081898972D2965D20067BF01 /* ProfileEditReactor.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		081898C72D30D5A10067BF01 /* InfoEditModal */ = {
+			isa = PBXGroup;
+			children = (
+				081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */,
+				081898CB2D30D5BF0067BF01 /* InfoEditModalController.swift */,
+				081898CD2D30D5C60067BF01 /* InfoEditModalReactor.swift */,
+			);
+			path = InfoEditModal;
+			sourceTree = "<group>";
+		};
+		081898C82D30D5AC0067BF01 /* CategoryEditModal */ = {
+			isa = PBXGroup;
+			children = (
+				081898D12D30F57D0067BF01 /* CategoryEditModalView.swift */,
+				081898D32D30F5840067BF01 /* CategoryEditModalController.swift */,
+				081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */,
+			);
+			path = CategoryEditModal;
+			sourceTree = "<group>";
+		};
 		083A256B2CF361190099B58E /* Application */ = {
 			isa = PBXGroup;
 			children = (
