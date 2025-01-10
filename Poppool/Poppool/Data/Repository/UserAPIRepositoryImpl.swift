@@ -73,4 +73,18 @@ final class UserAPIRepositoryImpl {
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
+    func getMyProfile() -> Observable<GetMyProfileResponseDTO> {
+        let endPoint = UserAPIEndPoint.getMyProfile()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func putUserTailoredInfo(request: PutUserTailoredInfoRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserTailoredInfo(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func putUserCategory(request: PutUserCategoryRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserCategory(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

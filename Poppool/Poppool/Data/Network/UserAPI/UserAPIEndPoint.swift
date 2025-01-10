@@ -106,4 +106,30 @@ struct UserAPIEndPoint {
             bodyParameters: request
         )
     }
+    
+    static func getMyProfile() -> Endpoint<GetMyProfileResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/profiles",
+            method: .get
+        )
+    }
+    
+    static func putUserTailoredInfo(request: PutUserTailoredInfoRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/tailored-info",
+            method: .put,
+            bodyParameters: request
+        )
+    }    
+    
+    static func putUserCategory(request: PutUserCategoryRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/interests",
+            method: .put,
+            bodyParameters: request
+        )
+    }
 }

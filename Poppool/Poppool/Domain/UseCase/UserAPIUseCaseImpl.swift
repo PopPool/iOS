@@ -72,4 +72,26 @@ final class UserAPIUseCaseImpl {
     func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
         return repository.postWithdrawl(request: .init(checkedSurveyList: surveyList.map { .init(id: $0.id, survey: $0.survey)}))
     }
+    
+    func getMyProfile() -> Observable<GetMyProfileResponse> {
+        return repository.getMyProfile().map { $0.toDomain() }
+    }
+    
+    func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
+        return repository.putUserTailoredInfo(request: .init(gender: gender, age: age))
+    }
+    
+    func putUserCategory(
+        interestCategoriesToAdd: [Int64],
+        interestCategoriesToDelete: [Int64],
+        interestCategoriesToKeep: [Int64]
+    ) -> Completable {
+        return repository.putUserCategory(
+            request: .init(
+                interestCategoriesToAdd: interestCategoriesToAdd,
+                interestCategoriesToDelete: interestCategoriesToDelete,
+                interestCategoriesToKeep: interestCategoriesToKeep
+            )
+        )
+    }
 }

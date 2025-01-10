@@ -28,14 +28,14 @@ extension Optional where Wrapped == String {
         return dateFormatter.date(from: self)
     }
     
-    func isBrightImagePath(completion: @escaping (Bool?) -> Void) {
+    func isBrightImagePath(completion: @escaping (Bool) -> Void) {
         if let self = self {
             let imageView = UIImageView()
             imageView.setPPImage(path: self) {
-                completion(imageView.image?.isBright())
+                completion(imageView.image?.isBright() ?? true)
             }
         } else {
-            completion(nil)
+            completion(true)
         }
     }
 }

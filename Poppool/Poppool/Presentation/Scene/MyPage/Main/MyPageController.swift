@@ -157,9 +157,9 @@ extension MyPageController {
             .take(2)
             .subscribe { (owner, state) in
                 state.backgroundImageViewPath.isBrightImagePath { isBright in
-                    guard let isBright = isBright else { return }
                     owner.isBrightImage = isBright
                     owner.statusBarIsDarkMode = isBright
+                    print(isBright)
                     UIView.animate(withDuration: 0.3) {
                         if isBright {
                             owner.settingButton.tintColor = .g1000
@@ -247,7 +247,7 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
                 if isBrightImage { statusBarIsDarkMode = true } else { statusBarIsDarkMode = false }
                 UIView.animate(withDuration: 0.3) { [weak self] in
                     guard let self = self else { return }
-                    if statusBarIsDarkMode {
+                    if isBrightImage {
                         self.settingButton.tintColor = .g1000
                     } else {
                         self.settingButton.tintColor = .w100

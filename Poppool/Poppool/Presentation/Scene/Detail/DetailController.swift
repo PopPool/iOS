@@ -104,10 +104,8 @@ extension DetailController {
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
                 state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
-                    if let isBright = isBright {
-                        owner?.statusBarIsDarkMode = isBright
-                        owner?.isBrightImage = isBright
-                    }
+                    owner?.statusBarIsDarkMode = isBright
+                    owner?.isBrightImage = isBright
                 }
             }
             .disposed(by: disposeBag)

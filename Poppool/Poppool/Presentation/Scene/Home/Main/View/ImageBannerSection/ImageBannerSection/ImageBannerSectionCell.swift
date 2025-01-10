@@ -151,9 +151,7 @@ private extension ImageBannerSectionCell {
             section: currentIndex.section
         )
         imageSection.inputDataList[nextIndex.row].imagePath.isBrightImagePath { [weak self] isBright in
-            if let isBright = isBright {
-                self?.findViewController()?.statusBarIsDarkMode = isBright
-            }
+            self?.findViewController()?.statusBarIsDarkMode = isBright
         }
         contentCollectionView.scrollToItem(at: nextIndex, at: .centeredHorizontally, animated: true)
         pageControl.currentPage = nextIndex.item
@@ -196,9 +194,7 @@ extension ImageBannerSectionCell: Inputable {
         let datas = zip(input.imagePaths, input.idList)
         imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
         imageSection.inputDataList.first?.imagePath.isBrightImagePath(completion: { [weak self] isBright in
-            if let isBright = isBright {
-                self?.findViewController()?.statusBarIsDarkMode = isBright
-            }
+            self?.findViewController()?.statusBarIsDarkMode = isBright
         })
         
         contentCollectionView.reloadData()

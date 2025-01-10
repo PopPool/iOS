@@ -116,6 +116,7 @@ final class MyPageReactor: Reactor {
                         .init(
                             isLogin: response.loginYn,
                             profileImagePath: response.profileImageUrl,
+//                            profileImagePath: "PopUpComment/뉴뉴/067ADF21-0BFA-4780-9FC2-66BC52D0E391/0.jpg",
                             nickName: response.nickname,
                             description: response.intro
                         )

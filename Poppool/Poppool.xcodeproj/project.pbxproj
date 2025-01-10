@@ -28,6 +28,17 @@
 		081898BA2D2E5F4C0067BF01 /* MyCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898B92D2E5F4C0067BF01 /* MyCommentView.swift */; };
 		081898BC2D2E5F510067BF01 /* MyCommentReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BB2D2E5F510067BF01 /* MyCommentReactor.swift */; };
 		081898BE2D2E5F590067BF01 /* MyCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BD2D2E5F590067BF01 /* MyCommentController.swift */; };
+		081898C02D2FBD130067BF01 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
+		081898C32D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */; };
+		081898C52D30AEF40067BF01 /* GetMyProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */; };
+		081898CA2D30D5BA0067BF01 /* InfoEditModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */; };
+		081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898CB2D30D5BF0067BF01 /* InfoEditModalController.swift */; };
+		081898CE2D30D5C60067BF01 /* InfoEditModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898CD2D30D5C60067BF01 /* InfoEditModalReactor.swift */; };
+		081898D02D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898CF2D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift */; };
+		081898D22D30F57D0067BF01 /* CategoryEditModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D12D30F57D0067BF01 /* CategoryEditModalView.swift */; };
+		081898D42D30F5840067BF01 /* CategoryEditModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D32D30F5840067BF01 /* CategoryEditModalController.swift */; };
+		081898D62D30F58A0067BF01 /* CategoryEditModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */; };
+		081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -409,6 +420,17 @@
 		081898B92D2E5F4C0067BF01 /* MyCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentView.swift; sourceTree = "<group>"; };
 		081898BB2D2E5F510067BF01 /* MyCommentReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentReactor.swift; sourceTree = "<group>"; };
 		081898BD2D2E5F590067BF01 /* MyCommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentController.swift; sourceTree = "<group>"; };
+		081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditListButton.swift; sourceTree = "<group>"; };
+		081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyProfileResponseDTO.swift; sourceTree = "<group>"; };
+		081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyProfileResponse.swift; sourceTree = "<group>"; };
+		081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoEditModalView.swift; sourceTree = "<group>"; };
+		081898CB2D30D5BF0067BF01 /* InfoEditModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoEditModalController.swift; sourceTree = "<group>"; };
+		081898CD2D30D5C60067BF01 /* InfoEditModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoEditModalReactor.swift; sourceTree = "<group>"; };
+		081898CF2D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUserTailoredInfoRequestDTO.swift; sourceTree = "<group>"; };
+		081898D12D30F57D0067BF01 /* CategoryEditModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditModalView.swift; sourceTree = "<group>"; };
+		081898D32D30F5840067BF01 /* CategoryEditModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditModalController.swift; sourceTree = "<group>"; };
+		081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditModalReactor.swift; sourceTree = "<group>"; };
+		081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUserCategoryRequestDTO.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -803,9 +825,9 @@
 		081898922D2965B10067BF01 /* ProfileEdit */ = {
 			isa = PBXGroup;
 			children = (
-				081898952D2965C90067BF01 /* ProfileEditView.swift */,
-				081898932D2965C20067BF01 /* ProfileEditController.swift */,
-				081898972D2965D20067BF01 /* ProfileEditReactor.swift */,
+				081898C82D30D5AC0067BF01 /* CategoryEditModal */,
+				081898C72D30D5A10067BF01 /* InfoEditModal */,
+				081898C62D30D5940067BF01 /* Main */,
 			);
 			path = ProfileEdit;
 			sourceTree = "<group>";
@@ -867,6 +889,45 @@
 				081898BB2D2E5F510067BF01 /* MyCommentReactor.swift */,
 			);
 			path = MyComment;
+			sourceTree = "<group>";
+		};
+		081898C12D2FBD170067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081898952D2965C90067BF01 /* ProfileEditView.swift */,
+				081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081898C62D30D5940067BF01 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				081898C12D2FBD170067BF01 /* View */,
+				081898932D2965C20067BF01 /* ProfileEditController.swift */,
+				081898972D2965D20067BF01 /* ProfileEditReactor.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		081898C72D30D5A10067BF01 /* InfoEditModal */ = {
+			isa = PBXGroup;
+			children = (
+				081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */,
+				081898CB2D30D5BF0067BF01 /* InfoEditModalController.swift */,
+				081898CD2D30D5C60067BF01 /* InfoEditModalReactor.swift */,
+			);
+			path = InfoEditModal;
+			sourceTree = "<group>";
+		};
+		081898C82D30D5AC0067BF01 /* CategoryEditModal */ = {
+			isa = PBXGroup;
+			children = (
+				081898D12D30F57D0067BF01 /* CategoryEditModalView.swift */,
+				081898D32D30F5840067BF01 /* CategoryEditModalController.swift */,
+				081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */,
+			);
+			path = CategoryEditModal;
 			sourceTree = "<group>";
 		};
 		083A256B2CF361190099B58E /* Application */ = {
@@ -1521,6 +1582,8 @@
 				08A2E46B2D15BC5000102313 /* CommentLikeRequestDTO.swift */,
 				086F89CF2D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift */,
 				086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */,
+				081898CF2D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift */,
+				081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */,
 			);
 			path = RequesetDTO;
 			sourceTree = "<group>";
@@ -1529,6 +1592,7 @@
 			isa = PBXGroup;
 			children = (
 				086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */,
+				081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */,
 				086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */,
 				081898AD2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift */,
 			);
@@ -1541,6 +1605,7 @@
 				086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */,
 				086F89F82D226EEB00CA4FC9 /* GetMyPageResponse.swift */,
 				081898AF2D2CFCA40067BF01 /* GetWithdrawlListResponse.swift */,
+				081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */,
 			);
 			name = UserAPI;
 			sourceTree = "<group>";
@@ -2514,6 +2579,7 @@
 				086F89EC2D2009EB00CA4FC9 /* SubLoginController.swift in Sources */,
 				083C86262D087A4E003F441C /* DetailTitleSectionCell.swift in Sources */,
 				086DD8DE2CFF19C400B97D3B /* UserAPIUseCaseImpl.swift in Sources */,
+				081898C32D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift in Sources */,
 				08A2E4802D1BCDE300102313 /* CommentDetailView.swift in Sources */,
 				081898BA2D2E5F4C0067BF01 /* MyCommentView.swift in Sources */,
 				089952492D033A1C0022AEF9 /* PopUpAPIEndPoint.swift in Sources */,
@@ -2541,6 +2607,7 @@
 				081898BC2D2E5F510067BF01 /* MyCommentReactor.swift in Sources */,
 				0841BA892CF9F62400049E31 /* PreSignedURLResponseDTO.swift in Sources */,
 				088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */,
+				081898D02D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift in Sources */,
 				BD9103682CF6149D00BBCCAE /* AuthRepositoryImpl.swift in Sources */,
 				08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */,
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
@@ -2562,6 +2629,7 @@
 				08DC62032CF8AC06002A2F44 /* HomeView.swift in Sources */,
 				BD9103622CF6149D00BBCCAE /* LoginResponseDTO.swift in Sources */,
 				083C86642D0EC4A5003F441C /* InstaCommentAddReactor.swift in Sources */,
+				081898C52D30AEF40067BF01 /* GetMyProfileResponse.swift in Sources */,
 				BD9103922CF6166800BBCCAE /* SplashView.swift in Sources */,
 				0899526E2D0474340022AEF9 /* GetSearchPopUpListResponse.swift in Sources */,
 				08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */,
@@ -2598,8 +2666,10 @@
 				086F8A0A2D2621EE00CA4FC9 /* MyPageMyCommentTitleSection.swift in Sources */,
 				4E5825642D19517B00EE83EF /* StoreListPanelLayout.swift in Sources */,
 				089952602D0366C40022AEF9 /* SearchMainController.swift in Sources */,
+				081898D42D30F5840067BF01 /* CategoryEditModalController.swift in Sources */,
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
+				081898D22D30F57D0067BF01 /* CategoryEditModalView.swift in Sources */,
 				083C860B2D073A15003F441C /* DetailView.swift in Sources */,
 				086F89C52D1E347E00CA4FC9 /* CommentUserInfoController.swift in Sources */,
 				BD9103862CF614A900BBCCAE /* BannerPopUpStore.swift in Sources */,
@@ -2607,8 +2677,10 @@
 				08DC62052CF8AC0E002A2F44 /* HomeController.swift in Sources */,
 				083C86702D0ECB8E003F441C /* InstaGuideChildSectionCell.swift in Sources */,
 				086F89D02D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift in Sources */,
+				081898CE2D30D5C60067BF01 /* InfoEditModalReactor.swift in Sources */,
 				083C865D2D0DEFD5003F441C /* CommentCheckReactor.swift in Sources */,
 				BD9103632CF6149D00BBCCAE /* BannerPopUpStoreDTO.swift in Sources */,
+				081898D62D30F58A0067BF01 /* CategoryEditModalReactor.swift in Sources */,
 				081898B32D2D20D70067BF01 /* WithdrawlCompleteView.swift in Sources */,
 				086DD92A2D0086AA00B97D3B /* SearchController.swift in Sources */,
 				083C860F2D073A23003F441C /* DetailReactor.swift in Sources */,
@@ -2662,6 +2734,7 @@
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
+				081898C02D2FBD130067BF01 /* ProfileEditListButton.swift in Sources */,
 				BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
 				08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */,
@@ -2753,6 +2826,7 @@
 				081898942D2965C20067BF01 /* ProfileEditController.swift in Sources */,
 				08B191742CF43DF40057BC04 /* SignUpCheckBoxButton.swift in Sources */,
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
+				081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */,
 				4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */,
 				08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */,
 				4E685EE02D12CEB6001EF91C /* StoreListCell.swift in Sources */,
@@ -2791,6 +2865,7 @@
 				08B191842CF48A820057BC04 /* SignUpStep2View.swift in Sources */,
 				0841BA882CF9F62400049E31 /* PresignedURLRequestDTO.swift in Sources */,
 				0841BA8C2CF9F67100049E31 /* PreSignedAPIEndPoint.swift in Sources */,
+				081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */,
 				08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */,
 				0818988E2D295DC30067BF01 /* MyPageLogoutSection.swift in Sources */,
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
@@ -2806,6 +2881,7 @@
 				083A25BB2CF362670099B58E /* Provider.swift in Sources */,
 				0899524B2D033A9C0022AEF9 /* GetClosePopUpListResponseDTO.swift in Sources */,
 				08B191A72CF5A9430057BC04 /* AgeSelectedButton.swift in Sources */,
+				081898CA2D30D5BA0067BF01 /* InfoEditModalView.swift in Sources */,
 				089952622D0366D30022AEF9 /* SearchMainView.swift in Sources */,
 				BD9103872CF614A900BBCCAE /* Category.swift in Sources */,
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
