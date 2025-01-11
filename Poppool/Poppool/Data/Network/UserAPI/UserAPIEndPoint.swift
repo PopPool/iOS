@@ -131,5 +131,14 @@ struct UserAPIEndPoint {
             method: .put,
             bodyParameters: request
         )
+    }  
+    
+    static func putUserProfile(request: PutUserProfileRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/profiles",
+            method: .put,
+            bodyParameters: request
+        )
     }
 }

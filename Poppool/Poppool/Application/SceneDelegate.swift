@@ -34,8 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let rootViewController = SearchMainController()
 //        rootViewController.reactor = SearchMainReactor()
 
-        let navigationController = UINavigationController(rootViewController: rootViewController)
-//        let navigationController = WaveTabBarController()
+//        let navigationController = UINavigationController(rootViewController: rootViewController)
+        let navigationController = WaveTabBarController()
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }

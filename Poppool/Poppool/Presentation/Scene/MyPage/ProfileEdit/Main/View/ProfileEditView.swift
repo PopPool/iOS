@@ -33,7 +33,7 @@ final class ProfileEditView: UIView {
         view.clipsToBounds = true
         return view
     }()
-    private let profileImageButton: UIButton = {
+    let profileImageButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
@@ -121,7 +121,7 @@ final class ProfileEditView: UIView {
         let label = PPLabel(style: .regular, fontSize: 13, text: "자기소개")
         return label
     }()
-    private let introTextTrailingView: UIView = {
+    let introTextTrailingView: UIView = {
         let view = UIView()
         view.backgroundColor = .w100
         view.layer.cornerRadius = 4
@@ -133,6 +133,7 @@ final class ProfileEditView: UIView {
         let view = UITextView()
         view.textContainerInset = .zero
         view.contentInset = .zero
+        view.font = .KorFont(style: .medium, size: 14)
         return view
     }()
     let introTextCountLabel: PPLabel = {
@@ -141,7 +142,15 @@ final class ProfileEditView: UIView {
         label.textColor = .g500
         return label
     }()
-    
+    let introDescriptionLabel: PPLabel = {
+        let label = PPLabel(style: .medium, fontSize: 12)
+        return label
+    }()
+    let introPlaceHolderLabel: PPLabel = {
+        let label = PPLabel(style: .medium, fontSize: 14, text: "자기소개를 입력해주세요")
+        label.textColor = .g200
+        return label
+    }()
     
     private let customInfoTitlelabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 16, text: "맞춤정보")
@@ -227,10 +236,7 @@ private extension ProfileEditView {
             make.leading.equalToSuperview().inset(20)
         }
         nickNameClearButton.snp.makeConstraints { make in
-            make.size.equalTo(20)
-        }
-        nickNameTextField.snp.makeConstraints { make in
-            make.width.equalTo(245)
+            make.size.equalTo(16)
         }
         contentView.addSubview(nickNameTextFieldTrailingView)
         nickNameTextFieldTrailingView.addArrangedSubview(nickNameTextField)
@@ -273,6 +279,16 @@ private extension ProfileEditView {
         introTextTrailingView.addSubview(introTextCountLabel)
         introTextCountLabel.snp.makeConstraints { make in
             make.trailing.bottom.equalToSuperview().inset(16)
+        }
+        introTextTrailingView.addSubview(introDescriptionLabel)
+        introDescriptionLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(introTextCountLabel)
+            make.leading.equalToSuperview().inset(20)
+        }
+        introTextTrailingView.addSubview(introPlaceHolderLabel)
+        introPlaceHolderLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(20)
         }
     }
     

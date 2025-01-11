@@ -94,4 +94,8 @@ final class UserAPIUseCaseImpl {
             )
         )
     }
+    
+    func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
+        return repository.putUserProfile(request: .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro))
+    }
 }

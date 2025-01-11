@@ -86,5 +86,10 @@ final class UserAPIRepositoryImpl {
     func putUserCategory(request: PutUserCategoryRequestDTO) -> Completable {
         let endPoint = UserAPIEndPoint.putUserCategory(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }    
+    
+    func putUserProfile(request: PutUserProfileRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserProfile(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 }

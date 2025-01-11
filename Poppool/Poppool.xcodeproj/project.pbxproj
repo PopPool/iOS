@@ -39,6 +39,8 @@
 		081898D42D30F5840067BF01 /* CategoryEditModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D32D30F5840067BF01 /* CategoryEditModalController.swift */; };
 		081898D62D30F58A0067BF01 /* CategoryEditModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */; };
 		081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */; };
+		081898DA2D32559B0067BF01 /* PutUserProfileRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898D92D32559B0067BF01 /* PutUserProfileRequestDTO.swift */; };
+		081898DC2D326DC10067BF01 /* IntroState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898DB2D326DC10067BF01 /* IntroState.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -431,6 +433,8 @@
 		081898D32D30F5840067BF01 /* CategoryEditModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditModalController.swift; sourceTree = "<group>"; };
 		081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEditModalReactor.swift; sourceTree = "<group>"; };
 		081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUserCategoryRequestDTO.swift; sourceTree = "<group>"; };
+		081898D92D32559B0067BF01 /* PutUserProfileRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUserProfileRequestDTO.swift; sourceTree = "<group>"; };
+		081898DB2D326DC10067BF01 /* IntroState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroState.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -1584,6 +1588,7 @@
 				086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */,
 				081898CF2D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift */,
 				081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */,
+				081898D92D32559B0067BF01 /* PutUserProfileRequestDTO.swift */,
 			);
 			path = RequesetDTO;
 			sourceTree = "<group>";
@@ -2017,6 +2022,7 @@
 				08B191812CF48A7B0057BC04 /* SignUpStep2Controller.swift */,
 				08B191852CF48A8B0057BC04 /* SignUpStep2Reactor.swift */,
 				08B191872CF48FAE0057BC04 /* NickNameState.swift */,
+				081898DB2D326DC10067BF01 /* IntroState.swift */,
 			);
 			path = Step2;
 			sourceTree = "<group>";
@@ -2636,6 +2642,7 @@
 				08A2E48F2D1BF6E500102313 /* CommentListView.swift in Sources */,
 				083A25992CF362090099B58E /* Sectionable.swift in Sources */,
 				086DD8E02CFF2C3700B97D3B /* UIImageView+.swift in Sources */,
+				081898DA2D32559B0067BF01 /* PutUserProfileRequestDTO.swift in Sources */,
 				08B191AC2CF5BF9D0057BC04 /* AgeSelectedController.swift in Sources */,
 				083C86622D0EC49E003F441C /* InstaCommentAddController.swift in Sources */,
 				08B1919C2CF4A77C0057BC04 /* TagSection.swift in Sources */,
@@ -2725,6 +2732,7 @@
 				08DC61FA2CF7684F002A2F44 /* SignUpCompleteController.swift in Sources */,
 				083C864A2D0DCF96003F441C /* AddCommentDescriptionSection.swift in Sources */,
 				08B191A42CF5A7030057BC04 /* PPSegmentedControl.swift in Sources */,
+				081898DC2D326DC10067BF01 /* IntroState.swift in Sources */,
 				0899525C2D0347BD0022AEF9 /* SearchCategoryView.swift in Sources */,
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
