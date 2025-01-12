@@ -104,6 +104,13 @@ extension DetailController {
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .withUnretained(self)
+            .take(2)
+            .subscribe { (owner, state) in
                 state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
                     owner?.statusBarIsDarkMode = isBright
                     owner?.isBrightImage = isBright
