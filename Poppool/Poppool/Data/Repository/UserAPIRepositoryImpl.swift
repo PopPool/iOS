@@ -92,4 +92,9 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.putUserProfile(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getMyComment(request: GetMyCommentRequestDTO) -> Observable<GetMyCommentResponseDTO> {
+        let endPoint = UserAPIEndPoint.getMyComment(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

@@ -141,4 +141,13 @@ struct UserAPIEndPoint {
             bodyParameters: request
         )
     }
+    
+    static func getMyComment(request: GetMyCommentRequestDTO) -> Endpoint<GetMyCommentResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/comments",
+            method: .get,
+            queryParameters: request
+        )
+    }
 }

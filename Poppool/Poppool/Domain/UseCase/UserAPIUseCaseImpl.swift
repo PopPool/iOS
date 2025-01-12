@@ -98,4 +98,13 @@ final class UserAPIUseCaseImpl {
     func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
         return repository.putUserProfile(request: .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro))
     }
+    
+    func getMyComment(
+        commentType: String?,
+        sortCode: String?,
+        page: Int32?, size:
+        Int32?, sort: String?
+    ) -> Observable<GetMyCommentResponse> {
+        return repository.getMyComment(request: .init(commentType: commentType, sortCode: sortCode, page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
 }

@@ -98,6 +98,7 @@ extension DetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -106,6 +107,11 @@ extension DetailController {
                 state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
                     owner?.statusBarIsDarkMode = isBright
                     owner?.isBrightImage = isBright
+                    if isBright {
+                        owner?.headerView.backButton.tintColor = .g1000
+                    } else {
+                        owner?.headerView.backButton.tintColor = .w100
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -238,11 +244,14 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
         if scrollView.contentOffset.y < 285 {
             if isBrightImage {
                 statusBarIsDarkMode = true
+                headerView.backButton.tintColor = .g1000
             } else {
                 statusBarIsDarkMode = false
+                headerView.backButton.tintColor = .w100
             }
         } else {
             statusBarIsDarkMode = true
+            headerView.backButton.tintColor = .g1000
         }
     }
 }
