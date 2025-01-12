@@ -107,4 +107,8 @@ final class UserAPIUseCaseImpl {
     ) -> Observable<GetMyCommentResponse> {
         return repository.getMyComment(request: .init(commentType: commentType, sortCode: sortCode, page: page, size: size, sort: sort)).map { $0.toDomain() }
     }
+    
+    func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
+        return repository.getBlockUserList(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
 }

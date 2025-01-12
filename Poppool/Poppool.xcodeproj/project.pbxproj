@@ -49,6 +49,14 @@
 		081898EC2D33A3960067BF01 /* MyCommentSortedModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898EB2D33A3960067BF01 /* MyCommentSortedModalView.swift */; };
 		081898EE2D33A39D0067BF01 /* MyCommentSortedModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898ED2D33A39D0067BF01 /* MyCommentSortedModalController.swift */; };
 		081898F02D33A3A30067BF01 /* MyCommentSortedModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898EF2D33A3A30067BF01 /* MyCommentSortedModalReactor.swift */; };
+		081898F32D33D6AC0067BF01 /* BlockUserManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898F22D33D6AC0067BF01 /* BlockUserManageView.swift */; };
+		081898F52D33D6B10067BF01 /* BlockUserManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898F42D33D6B10067BF01 /* BlockUserManageController.swift */; };
+		081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898F62D33D6B70067BF01 /* BlockUserManageReactor.swift */; };
+		081898FB2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */; };
+		081898FD2D33D9ED0067BF01 /* GetBlockUserListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898FC2D33D9ED0067BF01 /* GetBlockUserListResponse.swift */; };
+		081898FF2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898FE2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift */; };
+		081899022D3407F50067BF01 /* BlockUserListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899012D3407F50067BF01 /* BlockUserListSection.swift */; };
+		081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -451,6 +459,14 @@
 		081898EB2D33A3960067BF01 /* MyCommentSortedModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentSortedModalView.swift; sourceTree = "<group>"; };
 		081898ED2D33A39D0067BF01 /* MyCommentSortedModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentSortedModalController.swift; sourceTree = "<group>"; };
 		081898EF2D33A3A30067BF01 /* MyCommentSortedModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentSortedModalReactor.swift; sourceTree = "<group>"; };
+		081898F22D33D6AC0067BF01 /* BlockUserManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserManageView.swift; sourceTree = "<group>"; };
+		081898F42D33D6B10067BF01 /* BlockUserManageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserManageController.swift; sourceTree = "<group>"; };
+		081898F62D33D6B70067BF01 /* BlockUserManageReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserManageReactor.swift; sourceTree = "<group>"; };
+		081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockUserListResponseDTO.swift; sourceTree = "<group>"; };
+		081898FC2D33D9ED0067BF01 /* GetBlockUserListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockUserListResponse.swift; sourceTree = "<group>"; };
+		081898FE2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockUserListRequestDTO.swift; sourceTree = "<group>"; };
+		081899012D3407F50067BF01 /* BlockUserListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListSection.swift; sourceTree = "<group>"; };
+		081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListSectionCell.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -985,6 +1001,34 @@
 				081898EF2D33A3A30067BF01 /* MyCommentSortedModalReactor.swift */,
 			);
 			path = SortedModal;
+			sourceTree = "<group>";
+		};
+		081898F12D33D6930067BF01 /* Block */ = {
+			isa = PBXGroup;
+			children = (
+				081899002D3407DC0067BF01 /* View */,
+				081898F42D33D6B10067BF01 /* BlockUserManageController.swift */,
+				081898F62D33D6B70067BF01 /* BlockUserManageReactor.swift */,
+			);
+			path = Block;
+			sourceTree = "<group>";
+		};
+		081899002D3407DC0067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081899032D3407F80067BF01 /* BlockUserListSection */,
+				081898F22D33D6AC0067BF01 /* BlockUserManageView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081899032D3407F80067BF01 /* BlockUserListSection */ = {
+			isa = PBXGroup;
+			children = (
+				081899012D3407F50067BF01 /* BlockUserListSection.swift */,
+				081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */,
+			);
+			path = BlockUserListSection;
 			sourceTree = "<group>";
 		};
 		083A256B2CF361190099B58E /* Application */ = {
@@ -1643,6 +1687,7 @@
 				081898D72D310C160067BF01 /* PutUserCategoryRequestDTO.swift */,
 				081898D92D32559B0067BF01 /* PutUserProfileRequestDTO.swift */,
 				081898E72D3392480067BF01 /* GetMyCommentRequestDTO.swift */,
+				081898FE2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift */,
 			);
 			path = RequesetDTO;
 			sourceTree = "<group>";
@@ -1655,6 +1700,7 @@
 				086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */,
 				081898AD2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift */,
 				081898E32D3391550067BF01 /* GetMyCommentResponseDTO.swift */,
+				081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -1667,6 +1713,7 @@
 				081898AF2D2CFCA40067BF01 /* GetWithdrawlListResponse.swift */,
 				081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */,
 				081898E52D3391CB0067BF01 /* GetMyCommentResponse.swift */,
+				081898FC2D33D9ED0067BF01 /* GetBlockUserListResponse.swift */,
 			);
 			name = UserAPI;
 			sourceTree = "<group>";
@@ -1712,6 +1759,7 @@
 		086F89EF2D2269CD00CA4FC9 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				081898F12D33D6930067BF01 /* Block */,
 				081898B82D2E5F420067BF01 /* MyComment */,
 				081898992D2BAA200067BF01 /* Withdrawl */,
 				081898922D2965B10067BF01 /* ProfileEdit */,
@@ -2654,6 +2702,7 @@
 				08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */,
 				083C866B2D0ECB4F003F441C /* InstaGuideSectionCell.swift in Sources */,
 				083C86202D087445003F441C /* GetPopUpDetailResponse.swift in Sources */,
+				081898FD2D33D9ED0067BF01 /* GetBlockUserListResponse.swift in Sources */,
 				083A25B22CF362670099B58E /* NetworkError.swift in Sources */,
 				BD9103692CF6149D00BBCCAE /* HomeAPIRepository.swift in Sources */,
 				083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */,
@@ -2676,6 +2725,7 @@
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
 				086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */,
 				081898A72D2CC01D0067BF01 /* WithdrawlReasonReactor.swift in Sources */,
+				081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */,
 				4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */,
 				089952582D0347AC0022AEF9 /* SearchCategoryController.swift in Sources */,
 				0841BAAA2CFA354C00049E31 /* HomeTitleSectionCell.swift in Sources */,
@@ -2687,6 +2737,7 @@
 				4E685ED52D12CEB6001EF91C /* FilterChip.swift in Sources */,
 				083C861C2D087337003F441C /* GetPopUpDetailRequestDTO.swift in Sources */,
 				BD9103882CF614A900BBCCAE /* GetHomeInfoResponse.swift in Sources */,
+				081899022D3407F50067BF01 /* BlockUserListSection.swift in Sources */,
 				4E685EDB2D12CEB6001EF91C /* MapAPIEndpoint.swift in Sources */,
 				086F89CC2D1E42B000CA4FC9 /* CommentUserBlockController.swift in Sources */,
 				08DC62032CF8AC06002A2F44 /* HomeView.swift in Sources */,
@@ -2754,6 +2805,7 @@
 				08DC61FC2CF76862002A2F44 /* SignUpCompleteReactor.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
+				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
 				083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */,
@@ -2825,6 +2877,7 @@
 				083A258D2CF361F90099B58E /* ConventionCollectionViewCell.swift in Sources */,
 				4E685EE12D12CEB6001EF91C /* StoreListReactor.swift in Sources */,
 				4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */,
+				081898FB2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift in Sources */,
 				08DC620D2CF8AE16002A2F44 /* ImageBannerSectionCell.swift in Sources */,
 				08B1915B2CF41E690057BC04 /* SignUpMainReactor.swift in Sources */,
 				4E685ED62D12CEB6001EF91C /* FilterChipsView.swift in Sources */,
@@ -2875,6 +2928,7 @@
 				0841BABA2CFAE5BE00049E31 /* HomeHeaderView.swift in Sources */,
 				081898E82D3392480067BF01 /* GetMyCommentRequestDTO.swift in Sources */,
 				0841BAAC2CFA35F300049E31 /* UILabel+.swift in Sources */,
+				081898F52D33D6B10067BF01 /* BlockUserManageController.swift in Sources */,
 				086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */,
 				BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */,
 				081898EC2D33A3960067BF01 /* MyCommentSortedModalView.swift in Sources */,
@@ -2924,6 +2978,7 @@
 				0899526C2D0473EC0022AEF9 /* GetSearchPopUpListResponseDTO.swift in Sources */,
 				081898B52D2D20E30067BF01 /* WithdrawlCompleteController.swift in Sources */,
 				086F89F12D2269D800CA4FC9 /* MyPageView.swift in Sources */,
+				081898F32D33D6AC0067BF01 /* BlockUserManageView.swift in Sources */,
 				08A2E48A2D1BDA8400102313 /* CommentDetailContentSection.swift in Sources */,
 				4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */,
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
@@ -2958,6 +3013,7 @@
 				BD9103872CF614A900BBCCAE /* Category.swift in Sources */,
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
 				088DE25F2D145E3F0030FA9E /* DetailSimilarSectionCell.swift in Sources */,
+				081898FF2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift in Sources */,
 				BD9103852CF614A900BBCCAE /* TryLoginUseCaseImpl.swift in Sources */,
 				08B191762CF440C40057BC04 /* PPButton.swift in Sources */,
 				083A25CC2CF363CB0099B58E /* LoginView.swift in Sources */,

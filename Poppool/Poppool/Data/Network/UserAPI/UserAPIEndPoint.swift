@@ -59,7 +59,7 @@ struct UserAPIEndPoint {
     static func deleteUserBlock(request: PostUserBlockRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
-            path: "/users/block",
+            path: "/users/unblock",
             method: .delete,
             queryParameters: request
         )
@@ -146,6 +146,15 @@ struct UserAPIEndPoint {
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
             path: "/users/comments",
+            method: .get,
+            queryParameters: request
+        )
+    }
+    
+    static func getBlockUserList(request: GetBlockUserListRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/blocked",
             method: .get,
             queryParameters: request
         )

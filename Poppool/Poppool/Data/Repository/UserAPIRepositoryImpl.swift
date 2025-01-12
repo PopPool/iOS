@@ -97,4 +97,9 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.getMyComment(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getBlockUserList(request: GetBlockUserListRequestDTO) -> Observable<GetBlockUserListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getBlockUserList(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

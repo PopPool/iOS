@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
 
-        let rootViewController = ProfileEditController()
-        rootViewController.reactor = ProfileEditReactor()
+//        let rootViewController = BlockUserManageController()
+//        rootViewController.reactor = BlockUserManageReactor()
 
 //        let rootVC = WaveTabBarController()
 

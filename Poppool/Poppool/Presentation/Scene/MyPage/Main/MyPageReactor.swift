@@ -185,6 +185,10 @@ final class MyPageReactor: Reactor {
                         }
                     })
                     .disposed(by: nextController.disposeBag)
+            case "차단한 사용자 관리":
+                let nextController = BlockUserManageController()
+                nextController.reactor = BlockUserManageReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }
