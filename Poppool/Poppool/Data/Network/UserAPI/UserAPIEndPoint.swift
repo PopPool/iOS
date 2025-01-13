@@ -159,4 +159,20 @@ struct UserAPIEndPoint {
             queryParameters: request
         )
     }
+    
+    static func getNoticeList() -> Endpoint<GetNoticeListResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/notice/list",
+            method: .get
+        )
+    }
+    
+    static func getNoticeDetail(noticeID: Int64) -> Endpoint<GetNoticeDetailResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/notice/\(noticeID)",
+            method: .get
+        )
+    }
 }

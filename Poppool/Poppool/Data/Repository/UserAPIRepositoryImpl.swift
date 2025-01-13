@@ -102,4 +102,14 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.getBlockUserList(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getNoticeList() -> Observable<GetNoticeListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getNoticeList()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponseDTO> {
+        let endPoint = UserAPIEndPoint.getNoticeDetail(noticeID: noticeID)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

@@ -111,4 +111,12 @@ final class UserAPIUseCaseImpl {
     func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
         return repository.getBlockUserList(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
     }
+    
+    func getNoticeList() -> Observable<GetNoticeListResponse> {
+        return repository.getNoticeList().map { $0.toDomain() }
+    }
+    
+    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
+        return repository.getNoticeDetail(noticeID: noticeID).map { $0.toDomain() }
+    }
 }

@@ -189,6 +189,14 @@ final class MyPageReactor: Reactor {
                 let nextController = BlockUserManageController()
                 nextController.reactor = BlockUserManageReactor()
                 controller.navigationController?.pushViewController(nextController, animated: true)
+            case "공지사항":
+                let nextController = MyPageNoticeController()
+                nextController.reactor = MyPageNoticeReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "고객문의":
+                let nextController = FAQController()
+                nextController.reactor = FAQReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }

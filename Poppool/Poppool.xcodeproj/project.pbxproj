@@ -57,6 +57,23 @@
 		081898FF2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898FE2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift */; };
 		081899022D3407F50067BF01 /* BlockUserListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899012D3407F50067BF01 /* BlockUserListSection.swift */; };
 		081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */; };
+		081899082D34B35A0067BF01 /* MyPageNoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899072D34B35A0067BF01 /* MyPageNoticeView.swift */; };
+		0818990A2D34B3620067BF01 /* MyPageNoticeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899092D34B3620067BF01 /* MyPageNoticeController.swift */; };
+		0818990C2D34B3670067BF01 /* MyPageNoticeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818990B2D34B3670067BF01 /* MyPageNoticeReactor.swift */; };
+		0818990E2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818990D2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift */; };
+		081899102D34B7240067BF01 /* GetNoticeListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818990F2D34B7240067BF01 /* GetNoticeListResponse.swift */; };
+		081899122D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899112D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift */; };
+		081899142D34CAEA0067BF01 /* GetNoticeDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899132D34CAEA0067BF01 /* GetNoticeDetailResponse.swift */; };
+		081899182D34D63E0067BF01 /* NoticeListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899172D34D63E0067BF01 /* NoticeListSection.swift */; };
+		0818991A2D34D6430067BF01 /* NoticeListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899192D34D6430067BF01 /* NoticeListSectionCell.swift */; };
+		0818991E2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818991D2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift */; };
+		081899202D34DF880067BF01 /* MyPageNoticeDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818991F2D34DF880067BF01 /* MyPageNoticeDetailController.swift */; };
+		081899222D34DF8E0067BF01 /* MyPageNoticeDetailReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899212D34DF8E0067BF01 /* MyPageNoticeDetailReactor.swift */; };
+		081899252D3500B80067BF01 /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899242D3500B80067BF01 /* FAQView.swift */; };
+		081899272D3500BF0067BF01 /* FAQController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899262D3500BF0067BF01 /* FAQController.swift */; };
+		081899292D3500C50067BF01 /* FAQReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899282D3500C50067BF01 /* FAQReactor.swift */; };
+		0818992D2D3506240067BF01 /* FAQDropdownSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818992C2D3506240067BF01 /* FAQDropdownSectionCell.swift */; };
+		0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818992E2D3506290067BF01 /* FAQDropdownSection.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -467,6 +484,23 @@
 		081898FE2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockUserListRequestDTO.swift; sourceTree = "<group>"; };
 		081899012D3407F50067BF01 /* BlockUserListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListSection.swift; sourceTree = "<group>"; };
 		081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserListSectionCell.swift; sourceTree = "<group>"; };
+		081899072D34B35A0067BF01 /* MyPageNoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeView.swift; sourceTree = "<group>"; };
+		081899092D34B3620067BF01 /* MyPageNoticeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeController.swift; sourceTree = "<group>"; };
+		0818990B2D34B3670067BF01 /* MyPageNoticeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeReactor.swift; sourceTree = "<group>"; };
+		0818990D2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNoticeListResponseDTO.swift; sourceTree = "<group>"; };
+		0818990F2D34B7240067BF01 /* GetNoticeListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNoticeListResponse.swift; sourceTree = "<group>"; };
+		081899112D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNoticeDetailResponseDTO.swift; sourceTree = "<group>"; };
+		081899132D34CAEA0067BF01 /* GetNoticeDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNoticeDetailResponse.swift; sourceTree = "<group>"; };
+		081899172D34D63E0067BF01 /* NoticeListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListSection.swift; sourceTree = "<group>"; };
+		081899192D34D6430067BF01 /* NoticeListSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListSectionCell.swift; sourceTree = "<group>"; };
+		0818991D2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeDetailView.swift; sourceTree = "<group>"; };
+		0818991F2D34DF880067BF01 /* MyPageNoticeDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeDetailController.swift; sourceTree = "<group>"; };
+		081899212D34DF8E0067BF01 /* MyPageNoticeDetailReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageNoticeDetailReactor.swift; sourceTree = "<group>"; };
+		081899242D3500B80067BF01 /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
+		081899262D3500BF0067BF01 /* FAQController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQController.swift; sourceTree = "<group>"; };
+		081899282D3500C50067BF01 /* FAQReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQReactor.swift; sourceTree = "<group>"; };
+		0818992C2D3506240067BF01 /* FAQDropdownSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQDropdownSectionCell.swift; sourceTree = "<group>"; };
+		0818992E2D3506290067BF01 /* FAQDropdownSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQDropdownSection.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -1029,6 +1063,81 @@
 				081899042D34080B0067BF01 /* BlockUserListSectionCell.swift */,
 			);
 			path = BlockUserListSection;
+			sourceTree = "<group>";
+		};
+		081899062D34B3470067BF01 /* Notice */ = {
+			isa = PBXGroup;
+			children = (
+				0818991C2D34DF5B0067BF01 /* Detail */,
+				0818991B2D34DF530067BF01 /* List */,
+			);
+			path = Notice;
+			sourceTree = "<group>";
+		};
+		081899152D34D6060067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081899162D34D62F0067BF01 /* NoticeListSection */,
+				081899072D34B35A0067BF01 /* MyPageNoticeView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081899162D34D62F0067BF01 /* NoticeListSection */ = {
+			isa = PBXGroup;
+			children = (
+				081899172D34D63E0067BF01 /* NoticeListSection.swift */,
+				081899192D34D6430067BF01 /* NoticeListSectionCell.swift */,
+			);
+			path = NoticeListSection;
+			sourceTree = "<group>";
+		};
+		0818991B2D34DF530067BF01 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				081899152D34D6060067BF01 /* View */,
+				081899092D34B3620067BF01 /* MyPageNoticeController.swift */,
+				0818990B2D34B3670067BF01 /* MyPageNoticeReactor.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		0818991C2D34DF5B0067BF01 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				0818991D2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift */,
+				0818991F2D34DF880067BF01 /* MyPageNoticeDetailController.swift */,
+				081899212D34DF8E0067BF01 /* MyPageNoticeDetailReactor.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		081899232D3500A90067BF01 /* FAQ */ = {
+			isa = PBXGroup;
+			children = (
+				0818992A2D3506100067BF01 /* View */,
+				081899262D3500BF0067BF01 /* FAQController.swift */,
+				081899282D3500C50067BF01 /* FAQReactor.swift */,
+			);
+			path = FAQ;
+			sourceTree = "<group>";
+		};
+		0818992A2D3506100067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0818992B2D3506160067BF01 /* FAQDropdownSection */,
+				081899242D3500B80067BF01 /* FAQView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		0818992B2D3506160067BF01 /* FAQDropdownSection */ = {
+			isa = PBXGroup;
+			children = (
+				0818992C2D3506240067BF01 /* FAQDropdownSectionCell.swift */,
+				0818992E2D3506290067BF01 /* FAQDropdownSection.swift */,
+			);
+			path = FAQDropdownSection;
 			sourceTree = "<group>";
 		};
 		083A256B2CF361190099B58E /* Application */ = {
@@ -1701,6 +1810,8 @@
 				081898AD2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift */,
 				081898E32D3391550067BF01 /* GetMyCommentResponseDTO.swift */,
 				081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */,
+				0818990D2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift */,
+				081899112D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -1714,6 +1825,8 @@
 				081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */,
 				081898E52D3391CB0067BF01 /* GetMyCommentResponse.swift */,
 				081898FC2D33D9ED0067BF01 /* GetBlockUserListResponse.swift */,
+				0818990F2D34B7240067BF01 /* GetNoticeListResponse.swift */,
+				081899132D34CAEA0067BF01 /* GetNoticeDetailResponse.swift */,
 			);
 			name = UserAPI;
 			sourceTree = "<group>";
@@ -1759,6 +1872,8 @@
 		086F89EF2D2269CD00CA4FC9 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				081899232D3500A90067BF01 /* FAQ */,
+				081899062D34B3470067BF01 /* Notice */,
 				081898F12D33D6930067BF01 /* Block */,
 				081898B82D2E5F420067BF01 /* MyComment */,
 				081898992D2BAA200067BF01 /* Withdrawl */,
@@ -2695,6 +2810,7 @@
 				089952492D033A1C0022AEF9 /* PopUpAPIEndPoint.swift in Sources */,
 				083A25C82CF363C00099B58E /* LoginController.swift in Sources */,
 				08B1913D2CF367EB0057BC04 /* Constants.swift in Sources */,
+				081899292D3500C50067BF01 /* FAQReactor.swift in Sources */,
 				083A25B72CF362670099B58E /* RequestEndpoint.swift in Sources */,
 				08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */,
 				083A25B82CF362670099B58E /* IndicatorMaker.swift in Sources */,
@@ -2720,6 +2836,7 @@
 				088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */,
 				081898D02D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift in Sources */,
 				081898E62D3391CB0067BF01 /* GetMyCommentResponse.swift in Sources */,
+				0818991E2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift in Sources */,
 				BD9103682CF6149D00BBCCAE /* AuthRepositoryImpl.swift in Sources */,
 				08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */,
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
@@ -2738,6 +2855,7 @@
 				083C861C2D087337003F441C /* GetPopUpDetailRequestDTO.swift in Sources */,
 				BD9103882CF614A900BBCCAE /* GetHomeInfoResponse.swift in Sources */,
 				081899022D3407F50067BF01 /* BlockUserListSection.swift in Sources */,
+				081899222D34DF8E0067BF01 /* MyPageNoticeDetailReactor.swift in Sources */,
 				4E685EDB2D12CEB6001EF91C /* MapAPIEndpoint.swift in Sources */,
 				086F89CC2D1E42B000CA4FC9 /* CommentUserBlockController.swift in Sources */,
 				08DC62032CF8AC06002A2F44 /* HomeView.swift in Sources */,
@@ -2784,6 +2902,7 @@
 				081898D42D30F5840067BF01 /* CategoryEditModalController.swift in Sources */,
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
+				081899142D34CAEA0067BF01 /* GetNoticeDetailResponse.swift in Sources */,
 				081898D22D30F57D0067BF01 /* CategoryEditModalView.swift in Sources */,
 				083C860B2D073A15003F441C /* DetailView.swift in Sources */,
 				086F89C52D1E347E00CA4FC9 /* CommentUserInfoController.swift in Sources */,
@@ -2803,6 +2922,7 @@
 				086F89F92D226EEB00CA4FC9 /* GetMyPageResponse.swift in Sources */,
 				083A25BF2CF362770099B58E /* Logger.swift in Sources */,
 				08DC61FC2CF76862002A2F44 /* SignUpCompleteReactor.swift in Sources */,
+				0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
 				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
@@ -2810,6 +2930,7 @@
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
 				083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */,
 				086F89C72D1E348400CA4FC9 /* CommentUserInfoReactor.swift in Sources */,
+				0818990E2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift in Sources */,
 				086DD8C82CFDEA9200B97D3B /* UIView+.swift in Sources */,
 				08A2E4842D1BCDEF00102313 /* CommentDetailReactor.swift in Sources */,
 				4E685ED92D12CEB6001EF91C /* MapRepository.swift in Sources */,
@@ -2817,6 +2938,7 @@
 				089952462D031E740022AEF9 /* SearchSortedView.swift in Sources */,
 				08DC620B2CF8AE0F002A2F44 /* ImageBannerSection.swift in Sources */,
 				086DD9302D0090E900B97D3B /* UITextField+.swift in Sources */,
+				0818991A2D34D6430067BF01 /* NoticeListSectionCell.swift in Sources */,
 				086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */,
 				083C867A2D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift in Sources */,
 				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */,
@@ -2835,6 +2957,7 @@
 				BDCA41C12CF35AC0005EECF6 /* AppDelegate.swift in Sources */,
 				083C863A2D0C7F0A003F441C /* CommentSelectedReactor.swift in Sources */,
 				0841BAB42CFABED700049E31 /* HomePopularCardSection.swift in Sources */,
+				081899182D34D63E0067BF01 /* NoticeListSection.swift in Sources */,
 				083C86362D0C7EF4003F441C /* CommentSelectedController.swift in Sources */,
 				08A2E4792D1B06A300102313 /* ImageDetailView.swift in Sources */,
 				088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */,
@@ -2847,6 +2970,7 @@
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
 				086F8A052D23CB3300CA4FC9 /* MyPageProfileSection.swift in Sources */,
+				081899252D3500B80067BF01 /* FAQView.swift in Sources */,
 				086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */,
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
@@ -2935,6 +3059,7 @@
 				BD91036C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift in Sources */,
 				086F8A182D265C5F00CA4FC9 /* MyPageListSection.swift in Sources */,
 				086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */,
+				081899272D3500BF0067BF01 /* FAQController.swift in Sources */,
 				08B191672CF432220057BC04 /* PPCancelHeaderView.swift in Sources */,
 				BD9103812CF614A900BBCCAE /* HomeUseCaseImpl.swift in Sources */,
 				08DC62112CF8B446002A2F44 /* SortedRequestDTO.swift in Sources */,
@@ -2948,6 +3073,7 @@
 				08B191632CF430F30057BC04 /* PPProgressIndicator.swift in Sources */,
 				4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */,
 				081898942D2965C20067BF01 /* ProfileEditController.swift in Sources */,
+				0818992D2D3506240067BF01 /* FAQDropdownSectionCell.swift in Sources */,
 				08B191742CF43DF40057BC04 /* SignUpCheckBoxButton.swift in Sources */,
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
 				081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */,
@@ -2984,6 +3110,7 @@
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
 				0841BAB12CFA38F500049E31 /* HomeCardSectionCell.swift in Sources */,
 				4E685EE32D12CEB6001EF91C /* StoreListViewController.swift in Sources */,
+				0818990A2D34B3620067BF01 /* MyPageNoticeController.swift in Sources */,
 				083C862B2D08808C003F441C /* DetailContentSectionCell.swift in Sources */,
 				BD91036B2CF6149D00BBCCAE /* CheckNickNameRequestDTO.swift in Sources */,
 				0841BAAF2CFA38EA00049E31 /* HomeCardSection.swift in Sources */,
@@ -2991,6 +3118,7 @@
 				08B191842CF48A820057BC04 /* SignUpStep2View.swift in Sources */,
 				0841BA882CF9F62400049E31 /* PresignedURLRequestDTO.swift in Sources */,
 				0841BA8C2CF9F67100049E31 /* PreSignedAPIEndPoint.swift in Sources */,
+				081899082D34B35A0067BF01 /* MyPageNoticeView.swift in Sources */,
 				081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */,
 				08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */,
 				0818988E2D295DC30067BF01 /* MyPageLogoutSection.swift in Sources */,
@@ -3007,8 +3135,10 @@
 				4E685EE62D12CEB6001EF91C /* MapReactor.swift in Sources */,
 				083A25BB2CF362670099B58E /* Provider.swift in Sources */,
 				0899524B2D033A9C0022AEF9 /* GetClosePopUpListResponseDTO.swift in Sources */,
+				0818990C2D34B3670067BF01 /* MyPageNoticeReactor.swift in Sources */,
 				08B191A72CF5A9430057BC04 /* AgeSelectedButton.swift in Sources */,
 				081898CA2D30D5BA0067BF01 /* InfoEditModalView.swift in Sources */,
+				081899102D34B7240067BF01 /* GetNoticeListResponse.swift in Sources */,
 				089952622D0366D30022AEF9 /* SearchMainView.swift in Sources */,
 				BD9103872CF614A900BBCCAE /* Category.swift in Sources */,
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
@@ -3020,6 +3150,7 @@
 				083A259B2CF362090099B58E /* SectionSupplementaryItem.swift in Sources */,
 				086F89CA2D1E42A700CA4FC9 /* CommentUserBlockView.swift in Sources */,
 				086DD8D02CFDFEB900B97D3B /* HomeListReactor.swift in Sources */,
+				081899202D34DF880067BF01 /* MyPageNoticeDetailController.swift in Sources */,
 				083C86472D0DCDFB003F441C /* AddCommentTitleSection.swift in Sources */,
 				0841BAB62CFABEDC00049E31 /* HomePopularCardSectionCell.swift in Sources */,
 				08B191822CF48A7B0057BC04 /* SignUpStep2Controller.swift in Sources */,
@@ -3027,6 +3158,7 @@
 				4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */,
 				08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */,
 				0818989C2D2BAA570067BF01 /* WithdrawlCheckModalView.swift in Sources */,
+				081899122D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift in Sources */,
 				083A25912CF361F90099B58E /* TestDynamicSection.swift in Sources */,
 				086DD8D82CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift in Sources */,
 				089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */,
