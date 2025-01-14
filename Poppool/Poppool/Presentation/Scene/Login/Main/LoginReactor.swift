@@ -67,7 +67,7 @@ final class LoginReactor: Reactor {
             let homeTabbar = WaveTabBarController()
             controller.view.window?.rootViewController = homeTabbar
         case .loadView:
-            print(#function)
+            break
         }
         return state
     }

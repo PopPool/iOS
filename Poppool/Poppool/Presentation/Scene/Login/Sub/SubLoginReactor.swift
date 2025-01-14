@@ -64,7 +64,7 @@ final class SubLoginReactor: Reactor {
         case .dismissScene(let controller):
             controller.dismiss(animated: true)
         case .loadView:
-            print(#function)
+            break
         }
         return state
     }

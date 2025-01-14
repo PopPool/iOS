@@ -159,7 +159,6 @@ extension MyPageController {
                 state.backgroundImageViewPath.isBrightImagePath { isBright in
                     owner.isBrightImage = isBright
                     owner.statusBarIsDarkMode = isBright
-                    print(isBright)
                     UIView.animate(withDuration: 0.3) {
                         if isBright {
                             owner.settingButton.tintColor = .g1000
