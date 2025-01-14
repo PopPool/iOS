@@ -63,7 +63,7 @@ final class ProfileEditView: UIView {
         view.alignment = .center
         view.distribution = .equalSpacing
         view.layer.cornerRadius = 4
-        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.borderColor = UIColor.g200.cgColor
         view.layer.borderWidth = 1
         view.backgroundColor = .w100
         return view
