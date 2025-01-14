@@ -73,4 +73,53 @@ final class UserAPIRepositoryImpl {
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
+    func getMyProfile() -> Observable<GetMyProfileResponseDTO> {
+        let endPoint = UserAPIEndPoint.getMyProfile()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func putUserTailoredInfo(request: PutUserTailoredInfoRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserTailoredInfo(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func putUserCategory(request: PutUserCategoryRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserCategory(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }    
+    
+    func putUserProfile(request: PutUserProfileRequestDTO) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserProfile(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getMyComment(request: GetMyCommentRequestDTO) -> Observable<GetMyCommentResponseDTO> {
+        let endPoint = UserAPIEndPoint.getMyComment(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getBlockUserList(request: GetBlockUserListRequestDTO) -> Observable<GetBlockUserListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getBlockUserList(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getNoticeList() -> Observable<GetNoticeListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getNoticeList()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponseDTO> {
+        let endPoint = UserAPIEndPoint.getNoticeDetail(noticeID: noticeID)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getRecentPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+        let endPoint = UserAPIEndPoint.getRecentPopUp(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getBookmarkPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+        let endPoint = UserAPIEndPoint.getBookmarkPopUp(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

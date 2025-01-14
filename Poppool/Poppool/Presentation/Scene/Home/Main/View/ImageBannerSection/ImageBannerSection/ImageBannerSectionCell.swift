@@ -14,7 +14,7 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     // MARK: - Components
 
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     private var autoScrollTimer: Timer?
     
@@ -57,6 +57,8 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         }
     }()
     
+    let bannerTapped: PublishSubject<Int> = .init()
+    
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -73,10 +75,26 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         stopAutoScroll()
+        disposeBag = DisposeBag()
     }
     
     deinit {
         stopAutoScroll()
+    }
+    
+    // 자동 스크롤 중지 함수
+    func stopAutoScroll() {
+        isAutoBannerPlay = false
+        autoScrollTimer?.invalidate()
+        autoScrollTimer = nil
+    }
+    
+    func startAutoScroll(interval: TimeInterval = 3.0) {
+        stopAutoScroll() // 기존 타이머를 중지
+        isAutoBannerPlay = true
+        autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+            self?.scrollToNextItem()
+        }
     }
 }
 
@@ -121,21 +139,6 @@ private extension ImageBannerSectionCell {
     func getSection() -> [any Sectionable] {
         return [imageSection]
     }
-    
-    func startAutoScroll(interval: TimeInterval = 3.0) {
-        stopAutoScroll() // 기존 타이머를 중지
-        isAutoBannerPlay = true
-        autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            self?.scrollToNextItem()
-        }
-    }
-
-    // 자동 스크롤 중지 함수
-    func stopAutoScroll() {
-        isAutoBannerPlay = false
-        autoScrollTimer?.invalidate()
-        autoScrollTimer = nil
-    }
 
     // 다음 배너로 스크롤
     private func scrollToNextItem() {
@@ -147,9 +150,22 @@ private extension ImageBannerSectionCell {
             item: (currentIndex.item + 1) % imageSection.dataCount,
             section: currentIndex.section
         )
-
+        imageSection.inputDataList[nextIndex.row].imagePath.isBrightImagePath { [weak self] isBright in
+            self?.findViewController()?.statusBarIsDarkMode = isBright
+        }
         contentCollectionView.scrollToItem(at: nextIndex, at: .centeredHorizontally, animated: true)
         pageControl.currentPage = nextIndex.item
+    }
+    
+    private func findViewController() -> BaseViewController? {
+        var nextResponder = self.next
+        while nextResponder != nil {
+            if let vc = nextResponder as? BaseViewController {
+                return vc
+            }
+            nextResponder = nextResponder?.next
+        }
+        return nil
     }
     
     func bind() {
@@ -177,6 +193,10 @@ extension ImageBannerSectionCell: Inputable {
         pageControl.numberOfPages = input.imagePaths.count
         let datas = zip(input.imagePaths, input.idList)
         imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
+        imageSection.inputDataList.first?.imagePath.isBrightImagePath(completion: { [weak self] isBright in
+            self?.findViewController()?.statusBarIsDarkMode = isBright
+        })
+        
         contentCollectionView.reloadData()
         startAutoScroll()
         if input.isHiddenPauseButton {
@@ -202,5 +222,9 @@ extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewData
     ) -> UICollectionViewCell {
         let cell = getSection()[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        bannerTapped.onNext(indexPath.row)
     }
 }

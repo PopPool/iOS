@@ -9,7 +9,16 @@ import UIKit
 
 class BaseViewController: UIViewController {
     
+    var statusBarIsDarkMode: Bool {
+        didSet {
+            if oldValue != statusBarIsDarkMode {
+                setStatusBarColor()
+            }
+        }
+    }
+    
     init() {
+        statusBarIsDarkMode = true
         super.init(nibName: nil, bundle: nil)
         Logger.log(
             message: "\(self) init",
@@ -29,6 +38,11 @@ class BaseViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setStatusBarColor()
+    }
+    
     deinit {
         Logger.log(
             message: "\(self) deinit",
@@ -36,5 +50,16 @@ class BaseViewController: UIViewController {
             fileName: #file,
             line: #line
         )
+    }
+    
+    func setStatusBarColor() {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            if statusBarIsDarkMode {
+                navigationController?.navigationBar.barStyle = .default
+            } else {
+                navigationController?.navigationBar.barStyle = .black
+            }
+        }
     }
 }

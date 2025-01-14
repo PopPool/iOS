@@ -81,7 +81,7 @@ private extension HomeCardSectionCell {
         
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(158)
+            make.size.equalTo(contentView.bounds.width)
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
         }

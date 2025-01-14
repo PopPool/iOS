@@ -12,7 +12,7 @@ import Kingfisher
 extension UIImageView {
     func setPPImage(path: String?) {
         guard let path = path else {
-            self.image = UIImage(named: "image_profileImage")
+            self.image = UIImage(named: "image_default")
             return
         }
         let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
@@ -31,7 +31,7 @@ extension UIImageView {
     
     func setPPImage(path: String?, completion: @escaping () -> Void) {
         guard let path = path else {
-            self.image = UIImage(named: "image_profileImage")
+            self.image = UIImage(named: "image_default")
             completion()
             return
         }

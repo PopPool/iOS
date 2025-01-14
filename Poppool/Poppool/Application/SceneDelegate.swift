@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
 
-        let rootViewController = LoginController()
-        rootViewController.reactor = LoginReactor()
+//        let rootViewController = BlockUserManageController()
+//        rootViewController.reactor = BlockUserManageReactor()
 
 //        let rootVC = WaveTabBarController()
 

@@ -23,7 +23,7 @@ struct HomeCardGridSection: Sectionable {
     
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(158),
+            widthDimension: .absolute((UIScreen.main.bounds.width - 40 - 16) / 2),
             heightDimension: .estimated(249)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -33,7 +33,7 @@ struct HomeCardGridSection: Sectionable {
             heightDimension: .estimated(249)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .flexible(16)
+        group.interItemSpacing = .fixed(16)
         // 섹션 생성
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)

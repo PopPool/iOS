@@ -28,6 +28,8 @@ final class DetailController: BaseViewController, View {
     }()
     
     private var sections: [any Sectionable] = []
+    
+    private var isBrightImage: Bool = false
 }
 
 // MARK: - Life Cycle
@@ -96,11 +98,28 @@ extension DetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .withUnretained(self)
+            .take(2)
+            .subscribe { (owner, state) in
+                state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
+                    owner?.statusBarIsDarkMode = isBright
+                    owner?.isBrightImage = isBright
+                    if isBright {
+                        owner?.headerView.backButton.tintColor = .g1000
+                    } else {
+                        owner?.headerView.backButton.tintColor = .w100
+                    }
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -225,6 +244,21 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 16 {
             reactor?.action.onNext(.similarSectionTapped(controller: self, indexPath: indexPath))
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < 285 {
+            if isBrightImage {
+                statusBarIsDarkMode = true
+                headerView.backButton.tintColor = .g1000
+            } else {
+                statusBarIsDarkMode = false
+                headerView.backButton.tintColor = .w100
+            }
+        } else {
+            statusBarIsDarkMode = true
+            headerView.backButton.tintColor = .g1000
         }
     }
 }

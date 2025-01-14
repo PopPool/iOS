@@ -50,6 +50,10 @@ private extension WithdrawlReasonController {
         mainView.contentCollectionView.register(
             WithdrawlCheckSectionCell.self,
             forCellWithReuseIdentifier: WithdrawlCheckSectionCell.identifiers
+        )        
+        mainView.contentCollectionView.register(
+            SpacingSectionCell.self,
+            forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
         
         view.backgroundColor = .g50
@@ -117,10 +121,10 @@ extension WithdrawlReasonController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
+                owner.mainView.checkButton.isEnabled = state.buttonIsEnabled
                 if state.isReloadView {
                     owner.sections = state.sections
                     owner.mainView.contentCollectionView.reloadData()
-                    owner.mainView.checkButton.isEnabled = state.buttonIsEnabled
                 }
             }
             .disposed(by: disposeBag)

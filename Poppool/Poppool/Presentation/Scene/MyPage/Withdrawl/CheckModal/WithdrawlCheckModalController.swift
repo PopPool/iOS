@@ -73,10 +73,10 @@ extension WithdrawlCheckModalController: PanModalPresentable {
     }
     
     var longFormHeight: PanModalHeight {
-        return .contentHeight(385)
+        return .contentHeight(370)
     }
     var shortFormHeight: PanModalHeight {
-        return .contentHeight(385)
+        return .contentHeight(370)
     }
     var showDragIndicator: Bool {
         return false

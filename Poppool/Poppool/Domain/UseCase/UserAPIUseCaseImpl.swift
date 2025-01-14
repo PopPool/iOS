@@ -72,4 +72,59 @@ final class UserAPIUseCaseImpl {
     func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
         return repository.postWithdrawl(request: .init(checkedSurveyList: surveyList.map { .init(id: $0.id, survey: $0.survey)}))
     }
+    
+    func getMyProfile() -> Observable<GetMyProfileResponse> {
+        return repository.getMyProfile().map { $0.toDomain() }
+    }
+    
+    func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
+        return repository.putUserTailoredInfo(request: .init(gender: gender, age: age))
+    }
+    
+    func putUserCategory(
+        interestCategoriesToAdd: [Int64],
+        interestCategoriesToDelete: [Int64],
+        interestCategoriesToKeep: [Int64]
+    ) -> Completable {
+        return repository.putUserCategory(
+            request: .init(
+                interestCategoriesToAdd: interestCategoriesToAdd,
+                interestCategoriesToDelete: interestCategoriesToDelete,
+                interestCategoriesToKeep: interestCategoriesToKeep
+            )
+        )
+    }
+    
+    func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
+        return repository.putUserProfile(request: .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro))
+    }
+    
+    func getMyComment(
+        commentType: String?,
+        sortCode: String?,
+        page: Int32?, size:
+        Int32?, sort: String?
+    ) -> Observable<GetMyCommentResponse> {
+        return repository.getMyComment(request: .init(commentType: commentType, sortCode: sortCode, page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
+    
+    func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
+        return repository.getBlockUserList(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
+    
+    func getNoticeList() -> Observable<GetNoticeListResponse> {
+        return repository.getNoticeList().map { $0.toDomain() }
+    }
+    
+    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
+        return repository.getNoticeDetail(noticeID: noticeID).map { $0.toDomain() }
+    }
+    
+    func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        return repository.getRecentPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }    
+    
+    func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        return repository.getBookmarkPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
 }

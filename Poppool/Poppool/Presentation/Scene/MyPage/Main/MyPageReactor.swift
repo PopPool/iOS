@@ -36,6 +36,7 @@ final class MyPageReactor: Reactor {
     struct State {
         var sections: [any Sectionable] = []
         var isLogin: Bool = false
+        var backgroundImageViewPath: String?
     }
     
     // MARK: - properties
@@ -86,11 +87,12 @@ final class MyPageReactor: Reactor {
     
     private var logoutSection = MyPageLogoutSection(inputDataList: [.init()])
     
+    private let spacing8Section = SpacingSection(inputDataList: [.init(spacing: 8)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     private let spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
-    private let spacing100Section = SpacingSection(inputDataList: [.init(spacing: 100)])
+    private let spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     
     var isLogin: Bool = false
     var isAdmin: Bool = false
@@ -114,6 +116,7 @@ final class MyPageReactor: Reactor {
                         .init(
                             isLogin: response.loginYn,
                             profileImagePath: response.profileImageUrl,
+//                            profileImagePath: "PopUpComment/뉴뉴/067ADF21-0BFA-4780-9FC2-66BC52D0E391/0.jpg",
                             nickName: response.nickname,
                             description: response.intro
                         )
@@ -182,6 +185,26 @@ final class MyPageReactor: Reactor {
                         }
                     })
                     .disposed(by: nextController.disposeBag)
+            case "차단한 사용자 관리":
+                let nextController = BlockUserManageController()
+                nextController.reactor = BlockUserManageReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "공지사항":
+                let nextController = MyPageNoticeController()
+                nextController.reactor = MyPageNoticeReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "고객문의":
+                let nextController = FAQController()
+                nextController.reactor = FAQReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "찜한 팝업":
+                let nextController = MyPageBookmarkController()
+                nextController.reactor = MyPageBookmarkReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "최근 본 팝업":
+                let nextController = MyPageRecentController()
+                nextController.reactor = MyPageRecentReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }
@@ -195,6 +218,9 @@ final class MyPageReactor: Reactor {
             let nextController = MyCommentController()
             nextController.reactor = MyCommentReactor()
             controller.navigationController?.pushViewController(nextController, animated: true)
+        }
+        if !profileSection.isEmpty {
+            newState.backgroundImageViewPath = profileSection.inputDataList.first?.profileImagePath
         }
         return newState
     }
@@ -229,7 +255,8 @@ final class MyPageReactor: Reactor {
             return [
                 normalTitleSection,
                 spacing16Section,
-                normalSection
+                normalSection,
+                spacing8Section
             ]
         } else {
             return []
@@ -244,12 +271,14 @@ final class MyPageReactor: Reactor {
                 infoTitleSection,
                 spacing16Section,
                 infoSection,
+                spacing8Section
             ]
         } else {
             return [
                 infoTitleSection,
                 spacing16Section,
                 infoSection,
+                spacing8Section
             ]
         }
     }
@@ -263,7 +292,7 @@ final class MyPageReactor: Reactor {
                     adminEtcSection,
                     spacing28Section,
                     logoutSection,
-                    spacing100Section
+                    spacing156Section
                 ]
             } else {
                 return [
@@ -272,11 +301,11 @@ final class MyPageReactor: Reactor {
                     etcSection,
                     spacing28Section,
                     logoutSection,
-                    spacing100Section
+                    spacing156Section
                 ]
             }
         } else {
-            return [spacing100Section]
+            return [spacing156Section]
         }
     }
 }

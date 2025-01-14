@@ -25,10 +25,11 @@ class PreSignedService {
     
     let tokenInterceptor = TokenInterceptor()
     
+    let provider = ProviderImpl()
+    
     let disposeBag = DisposeBag()
     
     func tryDelete(targetPaths: PresignedURLRequestDTO) -> Completable {
-        let provider = ProviderImpl()
         let endPoint = PreSignedAPIEndPoint.presigned_delete(request: targetPaths)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }

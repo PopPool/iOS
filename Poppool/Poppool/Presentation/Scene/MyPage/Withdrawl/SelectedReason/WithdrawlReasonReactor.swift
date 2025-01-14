@@ -56,6 +56,7 @@ final class WithdrawlReasonReactor: Reactor {
     }()
     
     private var reasonSection = WithdrawlCheckSection(inputDataList: [])
+    private var spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     
@@ -125,11 +126,27 @@ final class WithdrawlReasonReactor: Reactor {
         }
         
         let isEmpty = reasonSection.inputDataList.filter { $0.isSelected == true }.isEmpty
-        newState.buttonIsEnabled = !isEmpty
+        
+        if let etc = reasonSection.inputDataList.filter({ $0.title == "기타" }).first {
+            if etc.isSelected {
+                if etc.text?.isEmpty ?? true {
+                    newState.buttonIsEnabled = false
+                } else {
+                    newState.buttonIsEnabled = true
+                }
+            } else {
+                newState.buttonIsEnabled = !isEmpty
+            }
+        } else {
+            newState.buttonIsEnabled = !isEmpty
+        }
         return newState
     }
     
     func getSection() -> [any Sectionable] {
-        return [reasonSection]
+        return [
+            reasonSection,
+            spacing156Section
+        ]
     }
 }

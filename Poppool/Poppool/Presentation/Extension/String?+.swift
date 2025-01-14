@@ -5,7 +5,9 @@
 //  Created by SeoJunYoung on 11/30/24.
 //
 
-import Foundation
+import UIKit
+
+import Kingfisher
 
 extension Optional where Wrapped == String {
     /// ISO 8601 형식의 문자열을 `Date`로 변환하는 메서드
@@ -25,4 +27,16 @@ extension Optional where Wrapped == String {
         
         return dateFormatter.date(from: self)
     }
+    
+    func isBrightImagePath(completion: @escaping (Bool) -> Void) {
+        if let self = self {
+            let imageView = UIImageView()
+            imageView.setPPImage(path: self) {
+                completion(imageView.image?.isBright() ?? true)
+            }
+        } else {
+            completion(true)
+        }
+    }
 }
+

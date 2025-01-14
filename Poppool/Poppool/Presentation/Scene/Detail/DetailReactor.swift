@@ -48,6 +48,7 @@ final class DetailReactor: Reactor {
     
     struct State {
         var sections: [any Sectionable] = []
+        var barkGroundImagePath: String?
     }
     
     // MARK: - properties
@@ -102,11 +103,6 @@ final class DetailReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppear:
-            print("viewWillAppear@@@@@@")
-            print("viewWillAppear@@@@@@")
-            print("viewWillAppear@@@@@@")
-            print("viewWillAppear@@@@@@")
-            print("viewWillAppear@@@@@@")
             return setContent()
         case .bookMarkButtonTapped:
             return Observable.concat([
@@ -148,6 +144,9 @@ final class DetailReactor: Reactor {
         switch mutation {
         case .loadView:
             newState.sections = getSection()
+            if let path = imageBannerSection.inputDataList.first?.imagePaths.first {
+                newState.barkGroundImagePath = path
+            }
         case .moveToCommentTypeSelectedScene(let controller):
             if isLogin {
                 let commentController = NormalCommentAddController()

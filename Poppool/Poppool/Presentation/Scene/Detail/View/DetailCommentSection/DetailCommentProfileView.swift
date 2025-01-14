@@ -14,8 +14,9 @@ final class DetailCommentProfileView: UIStackView {
     // MARK: - Components
     let profileImageView: UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = .red
         view.layer.cornerRadius = 16
+        view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

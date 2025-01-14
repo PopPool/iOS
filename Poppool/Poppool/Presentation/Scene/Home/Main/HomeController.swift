@@ -45,6 +45,14 @@ extension HomeController {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
+            cell.stopAutoScroll()
+        }
+    }
 }
 
 // MARK: - SetUp
@@ -160,6 +168,16 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
+        
+        if let cell = cell as? ImageBannerSectionCell {
+            cell.bannerTapped
+                .withUnretained(self)
+                .map({ (owner, row) in
+                    Reactor.Action.bannerCellTapped(controller: owner, row: row)
+                })
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
         if let cell = cell as? HomeTitleSectionCell {
             cell.detailButton.rx.tap
                 .withUnretained(self)
@@ -182,6 +200,15 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         headerIsDarkMode.onNext(scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY))
+        if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
+
+            if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
+                cell.startAutoScroll()
+            } else {
+                cell.stopAutoScroll()
+                statusBarIsDarkMode = true
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
