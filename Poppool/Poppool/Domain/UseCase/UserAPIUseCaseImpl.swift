@@ -119,4 +119,12 @@ final class UserAPIUseCaseImpl {
     func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
         return repository.getNoticeDetail(noticeID: noticeID).map { $0.toDomain() }
     }
+    
+    func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        return repository.getRecentPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }    
+    
+    func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        return repository.getBookmarkPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+    }
 }

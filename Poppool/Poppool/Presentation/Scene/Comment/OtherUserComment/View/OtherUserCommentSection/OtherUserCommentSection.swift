@@ -23,7 +23,7 @@ struct OtherUserCommentSection: Sectionable {
     
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(163.5),
+            widthDimension: .absolute((UIScreen.main.bounds.width - 40 - 8) / 2),
             heightDimension: .absolute(278.5)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -33,7 +33,7 @@ struct OtherUserCommentSection: Sectionable {
             heightDimension: .absolute(278.5)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .flexible(8)
+        group.interItemSpacing = .fixed(8)
 
         // 섹션 생성
         let section = NSCollectionLayoutSection(group: group)

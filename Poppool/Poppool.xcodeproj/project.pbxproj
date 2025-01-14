@@ -74,6 +74,20 @@
 		081899292D3500C50067BF01 /* FAQReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899282D3500C50067BF01 /* FAQReactor.swift */; };
 		0818992D2D3506240067BF01 /* FAQDropdownSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818992C2D3506240067BF01 /* FAQDropdownSectionCell.swift */; };
 		0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818992E2D3506290067BF01 /* FAQDropdownSection.swift */; };
+		081899332D35F1090067BF01 /* MyPageBookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899322D35F1090067BF01 /* MyPageBookmarkView.swift */; };
+		081899352D35F10F0067BF01 /* MyPageBookmarkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899342D35F10F0067BF01 /* MyPageBookmarkController.swift */; };
+		081899372D35F1140067BF01 /* MyPageBookmarkReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899362D35F1140067BF01 /* MyPageBookmarkReactor.swift */; };
+		081899392D35F11F0067BF01 /* MyPageRecentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899382D35F11F0067BF01 /* MyPageRecentView.swift */; };
+		0818993B2D35F1250067BF01 /* MyPageRecentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818993A2D35F1250067BF01 /* MyPageRecentController.swift */; };
+		0818993D2D35F12A0067BF01 /* MyPageRecentReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818993C2D35F12A0067BF01 /* MyPageRecentReactor.swift */; };
+		0818993F2D35FBE00067BF01 /* GetRecentPopUpResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818993E2D35FBE00067BF01 /* GetRecentPopUpResponseDTO.swift */; };
+		081899412D35FDA10067BF01 /* GetRecentPopUpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899402D35FDA10067BF01 /* GetRecentPopUpResponse.swift */; };
+		081899452D35FEA10067BF01 /* RecentPopUpSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899442D35FEA10067BF01 /* RecentPopUpSection.swift */; };
+		0818994A2D36322B0067BF01 /* PopUpCardSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899492D36322B0067BF01 /* PopUpCardSection.swift */; };
+		0818994C2D3632320067BF01 /* PopUpCardSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818994B2D3632320067BF01 /* PopUpCardSectionCell.swift */; };
+		081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818994F2D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift */; };
+		081899522D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */; };
+		081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -501,6 +515,20 @@
 		081899282D3500C50067BF01 /* FAQReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQReactor.swift; sourceTree = "<group>"; };
 		0818992C2D3506240067BF01 /* FAQDropdownSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQDropdownSectionCell.swift; sourceTree = "<group>"; };
 		0818992E2D3506290067BF01 /* FAQDropdownSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQDropdownSection.swift; sourceTree = "<group>"; };
+		081899322D35F1090067BF01 /* MyPageBookmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageBookmarkView.swift; sourceTree = "<group>"; };
+		081899342D35F10F0067BF01 /* MyPageBookmarkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageBookmarkController.swift; sourceTree = "<group>"; };
+		081899362D35F1140067BF01 /* MyPageBookmarkReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageBookmarkReactor.swift; sourceTree = "<group>"; };
+		081899382D35F11F0067BF01 /* MyPageRecentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageRecentView.swift; sourceTree = "<group>"; };
+		0818993A2D35F1250067BF01 /* MyPageRecentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageRecentController.swift; sourceTree = "<group>"; };
+		0818993C2D35F12A0067BF01 /* MyPageRecentReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageRecentReactor.swift; sourceTree = "<group>"; };
+		0818993E2D35FBE00067BF01 /* GetRecentPopUpResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecentPopUpResponseDTO.swift; sourceTree = "<group>"; };
+		081899402D35FDA10067BF01 /* GetRecentPopUpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecentPopUpResponse.swift; sourceTree = "<group>"; };
+		081899442D35FEA10067BF01 /* RecentPopUpSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentPopUpSection.swift; sourceTree = "<group>"; };
+		081899492D36322B0067BF01 /* PopUpCardSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpCardSection.swift; sourceTree = "<group>"; };
+		0818994B2D3632320067BF01 /* PopUpCardSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpCardSectionCell.swift; sourceTree = "<group>"; };
+		0818994F2D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalView.swift; sourceTree = "<group>"; };
+		081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalController.swift; sourceTree = "<group>"; };
+		081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalReactor.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -1138,6 +1166,80 @@
 				0818992E2D3506290067BF01 /* FAQDropdownSection.swift */,
 			);
 			path = FAQDropdownSection;
+			sourceTree = "<group>";
+		};
+		081899302D35F0C40067BF01 /* Bookmark */ = {
+			isa = PBXGroup;
+			children = (
+				0818994E2D363E3D0067BF01 /* ViewTypeModal */,
+				0818994D2D363E340067BF01 /* Main */,
+			);
+			path = Bookmark;
+			sourceTree = "<group>";
+		};
+		081899312D35F0D40067BF01 /* Recent */ = {
+			isa = PBXGroup;
+			children = (
+				081899422D35FE870067BF01 /* View */,
+				0818993A2D35F1250067BF01 /* MyPageRecentController.swift */,
+				0818993C2D35F12A0067BF01 /* MyPageRecentReactor.swift */,
+			);
+			path = Recent;
+			sourceTree = "<group>";
+		};
+		081899422D35FE870067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081899432D35FE8D0067BF01 /* RecentPopUpSection */,
+				081899382D35F11F0067BF01 /* MyPageRecentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081899432D35FE8D0067BF01 /* RecentPopUpSection */ = {
+			isa = PBXGroup;
+			children = (
+				081899442D35FEA10067BF01 /* RecentPopUpSection.swift */,
+			);
+			path = RecentPopUpSection;
+			sourceTree = "<group>";
+		};
+		081899462D3632030067BF01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				081899472D3632070067BF01 /* PopUpCardSection */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		081899472D3632070067BF01 /* PopUpCardSection */ = {
+			isa = PBXGroup;
+			children = (
+				081899492D36322B0067BF01 /* PopUpCardSection.swift */,
+				0818994B2D3632320067BF01 /* PopUpCardSectionCell.swift */,
+			);
+			path = PopUpCardSection;
+			sourceTree = "<group>";
+		};
+		0818994D2D363E340067BF01 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				081899462D3632030067BF01 /* View */,
+				081899322D35F1090067BF01 /* MyPageBookmarkView.swift */,
+				081899342D35F10F0067BF01 /* MyPageBookmarkController.swift */,
+				081899362D35F1140067BF01 /* MyPageBookmarkReactor.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		0818994E2D363E3D0067BF01 /* ViewTypeModal */ = {
+			isa = PBXGroup;
+			children = (
+				0818994F2D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift */,
+				081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */,
+				081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */,
+			);
+			path = ViewTypeModal;
 			sourceTree = "<group>";
 		};
 		083A256B2CF361190099B58E /* Application */ = {
@@ -1812,6 +1914,7 @@
 				081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */,
 				0818990D2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift */,
 				081899112D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift */,
+				0818993E2D35FBE00067BF01 /* GetRecentPopUpResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -1827,6 +1930,7 @@
 				081898FC2D33D9ED0067BF01 /* GetBlockUserListResponse.swift */,
 				0818990F2D34B7240067BF01 /* GetNoticeListResponse.swift */,
 				081899132D34CAEA0067BF01 /* GetNoticeDetailResponse.swift */,
+				081899402D35FDA10067BF01 /* GetRecentPopUpResponse.swift */,
 			);
 			name = UserAPI;
 			sourceTree = "<group>";
@@ -1872,6 +1976,8 @@
 		086F89EF2D2269CD00CA4FC9 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				081899312D35F0D40067BF01 /* Recent */,
+				081899302D35F0C40067BF01 /* Bookmark */,
 				081899232D3500A90067BF01 /* FAQ */,
 				081899062D34B3470067BF01 /* Notice */,
 				081898F12D33D6930067BF01 /* Block */,
@@ -2502,8 +2608,8 @@
 		BD9103602CF6149D00BBCCAE /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				083C86712D0EE2A3003F441C /* CommentAPI */,
 				08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */,
+				083C86712D0EE2A3003F441C /* CommentAPI */,
 				089952472D033A0E0022AEF9 /* PopUpAPI */,
 				086DD8D42CFF181500B97D3B /* UserAPI */,
 				BD9103502CF6149D00BBCCAE /* AuthAPI */,
@@ -2798,6 +2904,7 @@
 				081898AE2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift in Sources */,
 				088DE25A2D1458620030FA9E /* DetailCommentImageCell.swift in Sources */,
 				089952662D046CCD0022AEF9 /* SearchResultController.swift in Sources */,
+				0818993F2D35FBE00067BF01 /* GetRecentPopUpResponseDTO.swift in Sources */,
 				08B191962CF4A0FA0057BC04 /* SignUpStep4Controller.swift in Sources */,
 				0841BABC2CFB59E200049E31 /* String?+.swift in Sources */,
 				0841BA872CF9F62400049E31 /* PreSignedURLDTO.swift in Sources */,
@@ -2816,10 +2923,12 @@
 				083A25B82CF362670099B58E /* IndicatorMaker.swift in Sources */,
 				086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */,
 				08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */,
+				081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */,
 				083C866B2D0ECB4F003F441C /* InstaGuideSectionCell.swift in Sources */,
 				083C86202D087445003F441C /* GetPopUpDetailResponse.swift in Sources */,
 				081898FD2D33D9ED0067BF01 /* GetBlockUserListResponse.swift in Sources */,
 				083A25B22CF362670099B58E /* NetworkError.swift in Sources */,
+				081899522D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift in Sources */,
 				BD9103692CF6149D00BBCCAE /* HomeAPIRepository.swift in Sources */,
 				083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */,
 				089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */,
@@ -2842,12 +2951,14 @@
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
 				086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */,
 				081898A72D2CC01D0067BF01 /* WithdrawlReasonReactor.swift in Sources */,
+				081899332D35F1090067BF01 /* MyPageBookmarkView.swift in Sources */,
 				081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */,
 				4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */,
 				089952582D0347AC0022AEF9 /* SearchCategoryController.swift in Sources */,
 				0841BAAA2CFA354C00049E31 /* HomeTitleSectionCell.swift in Sources */,
 				08B191612CF430E70057BC04 /* PPProgressView.swift in Sources */,
 				086F89EA2D2009E300CA4FC9 /* SubLoginView.swift in Sources */,
+				081899352D35F10F0067BF01 /* MyPageBookmarkController.swift in Sources */,
 				083A25B32CF362670099B58E /* Requestable.swift in Sources */,
 				BD9103932CF6166800BBCCAE /* SplashController.swift in Sources */,
 				08B1916A2CF434B80057BC04 /* SignUpStep1Controller.swift in Sources */,
@@ -2926,6 +3037,8 @@
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
 				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
+				081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */,
+				081899452D35FEA10067BF01 /* RecentPopUpSection.swift in Sources */,
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
 				083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */,
@@ -2935,6 +3048,7 @@
 				08A2E4842D1BCDEF00102313 /* CommentDetailReactor.swift in Sources */,
 				4E685ED92D12CEB6001EF91C /* MapRepository.swift in Sources */,
 				083A25B62CF362670099B58E /* MultipartEndPoint.swift in Sources */,
+				0818993B2D35F1250067BF01 /* MyPageRecentController.swift in Sources */,
 				089952462D031E740022AEF9 /* SearchSortedView.swift in Sources */,
 				08DC620B2CF8AE0F002A2F44 /* ImageBannerSection.swift in Sources */,
 				086DD9302D0090E900B97D3B /* UITextField+.swift in Sources */,
@@ -2945,6 +3059,7 @@
 				086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */,
 				4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */,
 				086DD8D62CFF182100B97D3B /* UserAPIEndPoint.swift in Sources */,
+				081899372D35F1140067BF01 /* MyPageBookmarkReactor.swift in Sources */,
 				4E685EE22D12CEB6001EF91C /* StoreListView.swift in Sources */,
 				086F89C32D1E347700CA4FC9 /* CommentUserInfoView.swift in Sources */,
 				08B191942CF4A0F00057BC04 /* SignUpStep4View.swift in Sources */,
@@ -2969,6 +3084,7 @@
 				0899525C2D0347BD0022AEF9 /* SearchCategoryView.swift in Sources */,
 				083C865B2D0DEFCF003F441C /* CommentCheckController.swift in Sources */,
 				083C86382D0C7EFC003F441C /* CommentSelectedView.swift in Sources */,
+				0818994A2D36322B0067BF01 /* PopUpCardSection.swift in Sources */,
 				086F8A052D23CB3300CA4FC9 /* MyPageProfileSection.swift in Sources */,
 				081899252D3500B80067BF01 /* FAQView.swift in Sources */,
 				086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */,
@@ -3003,6 +3119,7 @@
 				4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */,
 				081898FB2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift in Sources */,
 				08DC620D2CF8AE16002A2F44 /* ImageBannerSectionCell.swift in Sources */,
+				081899412D35FDA10067BF01 /* GetRecentPopUpResponse.swift in Sources */,
 				08B1915B2CF41E690057BC04 /* SignUpMainReactor.swift in Sources */,
 				4E685ED62D12CEB6001EF91C /* FilterChipsView.swift in Sources */,
 				08B191882CF48FAE0057BC04 /* NickNameState.swift in Sources */,
@@ -3019,9 +3136,11 @@
 				086F8A0C2D2621F400CA4FC9 /* MyPageMyCommentTitleSectionCell.swift in Sources */,
 				BD91036D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift in Sources */,
 				08A2E4862D1BD85C00102313 /* CommentDetailImageSection.swift in Sources */,
+				0818993D2D35F12A0067BF01 /* MyPageRecentReactor.swift in Sources */,
 				0899526A2D046CDE0022AEF9 /* SearchResultView.swift in Sources */,
 				081898B02D2CFCA40067BF01 /* GetWithdrawlListResponse.swift in Sources */,
 				083C86692D0ECB47003F441C /* InstaGuideSection.swift in Sources */,
+				081899392D35F11F0067BF01 /* MyPageRecentView.swift in Sources */,
 				088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */,
 				083C86762D0EE2CF003F441C /* PostCommentRequestDTO.swift in Sources */,
 				083C861E2D08737F003F441C /* GetPopUpDetailResponseDTO.swift in Sources */,
@@ -3054,6 +3173,7 @@
 				0841BAAC2CFA35F300049E31 /* UILabel+.swift in Sources */,
 				081898F52D33D6B10067BF01 /* BlockUserManageController.swift in Sources */,
 				086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */,
+				0818994C2D3632320067BF01 /* PopUpCardSectionCell.swift in Sources */,
 				BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */,
 				081898EC2D33A3960067BF01 /* MyCommentSortedModalView.swift in Sources */,
 				BD91036C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift in Sources */,

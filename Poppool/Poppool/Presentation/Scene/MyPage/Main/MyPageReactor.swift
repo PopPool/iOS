@@ -197,6 +197,14 @@ final class MyPageReactor: Reactor {
                 let nextController = FAQController()
                 nextController.reactor = FAQReactor()
                 controller.navigationController?.pushViewController(nextController, animated: true)
+            case "찜한 팝업":
+                let nextController = MyPageBookmarkController()
+                nextController.reactor = MyPageBookmarkReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
+            case "최근 본 팝업":
+                let nextController = MyPageRecentController()
+                nextController.reactor = MyPageRecentReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }

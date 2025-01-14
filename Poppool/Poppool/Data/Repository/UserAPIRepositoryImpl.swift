@@ -112,4 +112,14 @@ final class UserAPIRepositoryImpl {
         let endPoint = UserAPIEndPoint.getNoticeDetail(noticeID: noticeID)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func getRecentPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+        let endPoint = UserAPIEndPoint.getRecentPopUp(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
+    
+    func getBookmarkPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+        let endPoint = UserAPIEndPoint.getBookmarkPopUp(request: request)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

@@ -174,5 +174,23 @@ struct UserAPIEndPoint {
             path: "/notice/\(noticeID)",
             method: .get
         )
+    }    
+    
+    static func getRecentPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/recent-popupstores",
+            method: .get,
+            queryParameters: request
+        )
+    }
+    
+    static func getBookmarkPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/users/bookmark-popupstores",
+            method: .get,
+            queryParameters: request
+        )
     }
 }
