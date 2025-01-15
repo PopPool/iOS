@@ -90,6 +90,7 @@ class PreSignedService {
                  return Disposables.create()
              }
 
+             // 순서를 유지하기 위한 매핑 구조
              var imageMap: [String: UIImage] = [:]
              var uncachedFilePaths: [String] = []
 

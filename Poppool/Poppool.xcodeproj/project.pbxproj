@@ -385,24 +385,27 @@
 		4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */; };
 		4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECB2D12CEB6001EF91C /* MapView.swift */; };
 		4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
+		4E6CA4852D34D6ED0034D09A /* AdminBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6CA4842D34D6ED0034D09A /* AdminBottomSheetReactor.swift */; };
 		4E755B1D2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */; };
 		4E755B1F2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */; };
 		4E755B212D2B9BAB00ADFB21 /* AdminResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */; };
 		4E755B232D2B9C5D00ADFB21 /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B222D2B9C5D00ADFB21 /* AdminViewController.swift */; };
 		4E755B252D2B9C6C00ADFB21 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B242D2B9C6C00ADFB21 /* AdminView.swift */; };
-		4E755B272D2B9C7C00ADFB21 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
 		4E755B292D2BA65A00ADFB21 /* AdminReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */; };
 		4E755B2B2D2BA76E00ADFB21 /* AdminUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */; };
-		4E755B2F2D2BA7FB00ADFB21 /* AdminRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */; };
 		4E755B322D2BA81800ADFB21 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 4E755B312D2BA81800ADFB21 /* Then */; };
+		4E7823A82D2E84E800AC5110 /* AdminRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */; };
+		4E7823A92D2E84FB00AC5110 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
 		4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */; };
 		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
 		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
-		4E9C12812D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
 		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
 		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
-		4EDDEFB62D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */; };
+		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
+		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
+		4EEA1D932D358839003E7DE9 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D922D358839003E7DE9 /* PopUpStoreRegisterReactor.swift */; };
+		4EEA1D952D358B23003E7DE9 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */; };
 		4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9BAB2D22730400B288E7 /* FilterType.swift */; };
 		BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */; };
 		BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */; };
@@ -838,6 +841,7 @@
 		4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSearchInput.swift; sourceTree = "<group>"; };
 		4E685ECB2D12CEB6001EF91C /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		4E685ECC2D12CEB6001EF91C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		4E6CA4842D34D6ED0034D09A /* AdminBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetReactor.swift; sourceTree = "<group>"; };
 		4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminPopUpStoreListResponseDTO.swift; sourceTree = "<group>"; };
 		4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminAPIEndpoint.swift; sourceTree = "<group>"; };
 		4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminResponseDTO.swift; sourceTree = "<group>"; };
@@ -853,7 +857,10 @@
 		4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterViewController.swift; sourceTree = "<group>"; };
 		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
-		4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterReactor.swift; sourceTree = "<group>"; };
+		4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
+		4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedImage.swift; sourceTree = "<group>"; };
+		4EEA1D922D358839003E7DE9 /* PopUpStoreRegisterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterReactor.swift; sourceTree = "<group>"; };
+		4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterView.swift; sourceTree = "<group>"; };
 		4EED9BAB2D22730400B288E7 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPReturnHeaderView.swift; sourceTree = "<group>"; };
 		BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthAPIEndPoint.swift; sourceTree = "<group>"; };
@@ -2673,8 +2680,11 @@
 				4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */,
 				4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */,
 				4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */,
+				4E6CA4842D34D6ED0034D09A /* AdminBottomSheetReactor.swift */,
 				4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */,
-				4EDDEFB52D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift */,
+				4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */,
+				4EEA1D922D358839003E7DE9 /* PopUpStoreRegisterReactor.swift */,
+				4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */,
 				4EDDEFB22D2D284B00CFAFA5 /* Common */,
 			);
 			path = Admin;
@@ -2727,6 +2737,7 @@
 			isa = PBXGroup;
 			children = (
 				4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */,
+				4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -3178,13 +3189,13 @@
 				08B191B82CF6092F0057BC04 /* AuthServiceable.swift in Sources */,
 				0841BAB82CFAC41300049E31 /* SectionBackGroundDecorationView.swift in Sources */,
 				086F89F52D2269E300CA4FC9 /* MyPageReactor.swift in Sources */,
+				4EEA1D952D358B23003E7DE9 /* PopUpStoreRegisterView.swift in Sources */,
 				089952682D046CD80022AEF9 /* SearchResultReactor.swift in Sources */,
 				BDCA41C52CF35AC0005EECF6 /* TestViewController.swift in Sources */,
 				086DD9402D01EEEB00B97D3B /* SearchCountTitleSection.swift in Sources */,
 				083C864C2D0DCF9B003F441C /* AddCommentDescriptionSectionCell.swift in Sources */,
 				086DD8CE2CFDFEB000B97D3B /* HomeListView.swift in Sources */,
 				08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */,
-				4EDDEFB62D2D2A9100CFAFA5 /* PopUpStoreRegisterReactor.swift in Sources */,
 				083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */,
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
 				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
@@ -3218,6 +3229,7 @@
 				08DC61FC2CF76862002A2F44 /* SignUpCompleteReactor.swift in Sources */,
 				0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
+				4E6CA4852D34D6ED0034D09A /* AdminBottomSheetReactor.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
 				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
 				081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */,
@@ -3238,6 +3250,7 @@
 				0818991A2D34D6430067BF01 /* NoticeListSectionCell.swift in Sources */,
 				086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */,
 				083C867A2D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift in Sources */,
+				4E7823A82D2E84E800AC5110 /* AdminRepository.swift in Sources */,
 				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */,
 				086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */,
 				4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */,
@@ -3259,6 +3272,7 @@
 				081899182D34D63E0067BF01 /* NoticeListSection.swift in Sources */,
 				083C86362D0C7EF4003F441C /* CommentSelectedController.swift in Sources */,
 				08A2E4792D1B06A300102313 /* ImageDetailView.swift in Sources */,
+				4E7823A92D2E84FB00AC5110 /* AdminStoreCell.swift in Sources */,
 				088DE2542D144A7E0030FA9E /* DetailCommentSection.swift in Sources */,
 				4E755B2B2D2BA76E00ADFB21 /* AdminUseCase.swift in Sources */,
 				083C86292D088080003F441C /* DetailContentSection.swift in Sources */,
@@ -3287,6 +3301,7 @@
 				081898F02D33A3A30067BF01 /* MyCommentSortedModalReactor.swift in Sources */,
 				081898E42D3391550067BF01 /* GetMyCommentResponseDTO.swift in Sources */,
 				088DE25D2D145E3A0030FA9E /* DetailSimilarSection.swift in Sources */,
+				4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */,
 				083C863D2D0C8BC4003F441C /* NormalCommentAddController.swift in Sources */,
 				08B1916E2CF434CF0057BC04 /* SignUpStep1Reactor.swift in Sources */,
 				08B1918F2CF4A0020057BC04 /* SignUpStep3Controller.swift in Sources */,
@@ -3331,6 +3346,7 @@
 				086F8A0F2D26297900CA4FC9 /* MyPageCommentSection.swift in Sources */,
 				08B1916C2CF434C30057BC04 /* SignUpStep1View.swift in Sources */,
 				083A25BC2CF362670099B58E /* ProviderImpl.swift in Sources */,
+				4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */,
 				086DD93D2D009A2600B97D3B /* CancelableTagSectionCell.swift in Sources */,
 				4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */,
 				086DD8DA2CFF194700B97D3B /* UserAPIRepositoryImpl.swift in Sources */,
