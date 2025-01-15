@@ -24,7 +24,7 @@ struct CreatePopUpStoreRequestDTO: Encodable {
     let endDate: String
     let mainImageUrl: String
     let bannerYn: Bool
-    let imageUrlList: [String]
+    let imageUrlList: [String?]
     let latitude: Double
     let longitude: Double
     let markerTitle: String

@@ -31,6 +31,12 @@ final class MapSearchInput: UIView, View {
         textField.textColor = .g400  
         textField.isUserInteractionEnabled = true 
         return textField
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "팝업스토어명, 지역을 입력해보세요",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.g400]
+        )
+        return textField
+    
     }()
 
     private let tapButton = UIButton()
@@ -69,12 +75,13 @@ final class MapSearchInput: UIView, View {
 
         // 검색 버튼을 눌렀을 때
         tapButton.rx.tap
-            .bind { [weak self] in
+            .withLatestFrom(searchTextField.rx.text.orEmpty)
+            .bind { [weak self] query in
                 guard let self = self else { return }
-                // searchTapped 액션 호출
-                reactor.action.onNext(.searchTapped)
+                self.reactor?.action.onNext(.searchTapped(query))
             }
             .disposed(by: disposeBag)
+
     }
 }
 
@@ -84,7 +91,7 @@ private extension MapSearchInput {
         addSubview(containerView)
         containerView.addSubview(searchIcon)
         containerView.addSubview(searchTextField)
-        containerView.addSubview(tapButton)
+//        containerView.addSubview(tapButton)
 
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -103,8 +110,8 @@ private extension MapSearchInput {
             make.trailing.equalToSuperview().offset(-16) // 우측 여백을 추가해 텍스트가 오른쪽에 붙지 않도록
         }
 
-        tapButton.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+//        tapButton.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
     }
 }

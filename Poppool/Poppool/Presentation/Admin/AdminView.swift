@@ -16,10 +16,10 @@ final class AdminView: UIView {
     }
 
     let usernameLabel = PPLabel(
-        style: .bold,
-        fontSize: 14,
-        text: "김채연님"
-    )
+           style: .bold,
+           fontSize: 14,
+           text: "" 
+       )
 
     let menuButton = UIButton(type: .system).then {
         $0.setImage(UIImage(named: "adminlist"), for: .normal)
@@ -81,7 +81,6 @@ final class AdminView: UIView {
     }
 
     let popupCountLabel = UILabel().then {
-        $0.text = "총 52건"
         $0.textColor = .lightGray
         $0.font = UIFont.systemFont(ofSize: 14)
     }

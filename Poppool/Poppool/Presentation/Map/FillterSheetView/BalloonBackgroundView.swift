@@ -2,10 +2,12 @@ import UIKit
 import SnapKit
 
 final class BalloonBackgroundView: UIView {
+
     // MARK: - UI Components
+
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .g50
+//        view.backgroundColor = .g200
         view.layer.cornerRadius = 8
         return view
     }()
@@ -40,6 +42,7 @@ final class BalloonBackgroundView: UIView {
     }()
 
     // MARK: - Properties
+
     var arrowPosition: CGFloat = 0.6 {
         didSet {
             setNeedsLayout()
@@ -55,6 +58,7 @@ final class BalloonBackgroundView: UIView {
     private var tagSection: TagSection?
 
     // MARK: - Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -65,6 +69,7 @@ final class BalloonBackgroundView: UIView {
     required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - Setup
+
     private func setupLayout() {
         addSubview(containerView)
         containerView.addSubview(collectionView)
@@ -85,24 +90,45 @@ final class BalloonBackgroundView: UIView {
     }
 
     // MARK: - Draw arrow
+
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
+           super.draw(rect)
 
-        let arrowWidth: CGFloat = 16
-        let arrowHeight: CGFloat = 10
-        let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
+           let arrowWidth: CGFloat = 16
+           let arrowHeight: CGFloat = 10
+           let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
 
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: arrowX, y: 8))
-        path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: 8))
-        path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))
-        path.close()
+           // 통합된 하나의 패스로 그리기
+           let path = UIBezierPath()
 
-        UIColor.g50.set()
-        path.fill()
-    }
+           // 화살표 시작점부터 그리기 시작
+           path.move(to: CGPoint(x: arrowX, y: arrowHeight))
+           path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))  // 화살표 꼭지점
+           path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: arrowHeight))
+
+           // 말풍선 본체 그리기
+           let containerRect = CGRect(x: 0, y: arrowHeight,
+                                    width: bounds.width,
+                                    height: bounds.height - arrowHeight)
+           path.addLine(to: CGPoint(x: containerRect.maxX, y: containerRect.minY))
+           path.addLine(to: CGPoint(x: containerRect.maxX, y: containerRect.maxY))
+           path.addLine(to: CGPoint(x: containerRect.minX, y: containerRect.maxY))
+           path.addLine(to: CGPoint(x: containerRect.minX, y: containerRect.minY))
+           path.close()
+
+           // 전체를 하나의 색으로 채우기
+           UIColor.g50.setFill()
+           path.fill()
+
+           // 필요한 경우 그림자 추가
+           self.layer.shadowColor = UIColor.black.cgColor
+           self.layer.shadowOpacity = 0.1
+           self.layer.shadowOffset = CGSize(width: 0, height: 2)
+           self.layer.shadowRadius = 4
+       }
 
     // MARK: - Public
+
     func configure(
         with subRegions: [String],
         selectedRegions: [String] = [],
@@ -116,21 +142,28 @@ final class BalloonBackgroundView: UIView {
         self.selectionHandler = selectionHandler
         self.allSelectionHandler = allSelectionHandler
 
-        var inputDataList = ["\(mainRegionTitle)전체"]
-        inputDataList.append(contentsOf: subRegions)
+        let allKey = "\(mainRegionTitle)전체"
+        var inputDataList = [allKey]
+
+        // 선택된 항목들을 앞쪽에 배치
+        let selectedSubRegions = selectedRegions.filter { $0 != allKey }
+        let unselectedSubRegions = subRegions.filter { !selectedRegions.contains($0) }
+
+        inputDataList.append(contentsOf: selectedSubRegions)
+        inputDataList.append(contentsOf: unselectedSubRegions)
 
         self.tagSection = TagSection(
-            inputDataList: inputDataList.map { subRegion in
-                TagSectionCell.Input(
-                    title: subRegion,
-                    isSelected: subRegion == "\(mainRegionTitle)전체"
-                        ? selectedRegions.count == subRegions.count
+            inputDataList: inputDataList
+                .map { subRegion in
+                    TagSectionCell.Input(
+                        title: subRegion,
+                        isSelected: subRegion == allKey
+                        ? selectedRegions.count == subRegions.count || selectedRegions.contains(allKey)
                         : selectedRegions.contains(subRegion)
-                )
-            }
+                    )
+                }
         )
 
-        // UICollectionView 데이터 갱신
         collectionView.reloadData()
         collectionView.layoutIfNeeded()
 
@@ -141,6 +174,7 @@ final class BalloonBackgroundView: UIView {
 
         self.layoutIfNeeded()
     }
+
 
     func calculateHeight() -> CGFloat {
         guard let inputDataList = tagSection?.inputDataList else { return 0 }
@@ -157,28 +191,12 @@ final class BalloonBackgroundView: UIView {
         for input in inputDataList {
             // 버튼 너비 계산
             let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12), isSelected: input.isSelected ?? false)
-//            print("DEBUG - Calculated Button Width: \(buttonWidth)")
 
             if currentRowWidth + buttonWidth + horizontalSpacing > availableWidth {
-//                print("""
-//                DEBUG - 줄바꿈 발생:
-//                    버튼 길이: \(buttonWidth),
-//                    버튼 간 패딩: \(horizontalSpacing),
-//                    현재 줄 누적 너비: \(currentRowWidth),
-//                    가용 너비: \(availableWidth),
-//                    새로운 줄 시작.
-//                """)
                 numberOfRows += 1
                 currentRowWidth = buttonWidth
             } else {
                 currentRowWidth += buttonWidth + horizontalSpacing
-//                print("""
-//                DEBUG - 현재 줄에 추가:
-//                    버튼 길이: \(buttonWidth),
-//                    버튼 간 패딩: \(horizontalSpacing),
-//                    현재 줄 누적 너비: \(currentRowWidth),
-//                    가용 너비: \(availableWidth).
-//                """)
             }
         }
 
@@ -193,9 +211,9 @@ final class BalloonBackgroundView: UIView {
             36
         )
 
-//        print("DEBUG - Total Calculated Height: \(totalHeight)")
         return totalHeight
     }
+
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width
         let iconWidth: CGFloat = isSelected ? 16 : 0
@@ -205,22 +223,18 @@ final class BalloonBackgroundView: UIView {
 
         let calculatedWidth = textWidth + iconWidth + iconGap + horizontalPadding
 
-        // 디버깅 출력
-//        print("DEBUG - 텍스트: \(text), 선택 상태: \(isSelected), 최종 버튼 너비: \(calculatedWidth)")
-
         return calculatedWidth
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension BalloonBackgroundView: UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tagSection?.inputDataList.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: BalloonChipCell.identifier,

@@ -6,10 +6,11 @@ import ReactorKit
 
 final class FilterBottomSheetViewController: UIViewController, View {
     typealias Reactor = FilterBottomSheetReactor
+    typealias FilterData = (locations: [String], categories: [String])
 
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    var onSave: (([String]) -> Void)?
+    var onSave: ((FilterData) -> Void)?
     var onDismiss: (() -> Void)?
     private var bottomConstraint: Constraint?
     let containerView = FilterBottomSheetView()
@@ -79,21 +80,24 @@ final class FilterBottomSheetViewController: UIViewController, View {
         // 2. 리셋 버튼 바인딩
         containerView.resetButton.rx.tap
            .do(onNext: { [weak self] _ in
-               // 선택된 location이 있으면 해당 location의 버튼들 초기화
-               if let selectedIndex = self?.reactor?.currentState.selectedLocationIndex,
-                  let location = self?.reactor?.currentState.locations[selectedIndex] {
-                   self?.containerView.balloonBackgroundView.configure(
-                       with: location.sub,
-                       selectedRegions: [], // 빈 배열로 모든 버튼 선택 해제
-                       mainRegionTitle: location.main,
-                       selectionHandler: { [weak self] subRegion in
-                           self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
-                       },
-                       allSelectionHandler: { [weak self] in
-                           self?.reactor?.action.onNext(.toggleAllSubRegions)
-                       }
-                   )
-               }
+               guard let self = self,
+                     let reactor = self.reactor,
+                     let selectedIndex = reactor.currentState.selectedLocationIndex else { return }
+
+               let location = reactor.currentState.locations[selectedIndex]  // Optional 체크 필요 없음
+
+               // 현재 location에 대한 configure 재설정
+               self.containerView.balloonBackgroundView.configure(
+                   with: location.sub,
+                   selectedRegions: [], // 빈 배열로 초기화
+                   mainRegionTitle: location.main,
+                   selectionHandler: { [weak self] subRegion in
+                       self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
+                   },
+                   allSelectionHandler: { [weak self] in
+                       self?.reactor?.action.onNext(.toggleAllSubRegions)
+                   }
+               )
            })
            .map { Reactor.Action.resetFilters }
            .bind(to: reactor.action)
@@ -104,11 +108,12 @@ final class FilterBottomSheetViewController: UIViewController, View {
             .bind { [weak self] _ in
                 guard let self = self, let reactor = self.reactor else { return }
 
-                let filters = reactor.currentState.activeSegment == 0
-                    ? reactor.currentState.selectedSubRegions
-                    : reactor.currentState.selectedCategories
+                let filterData: FilterData = (
+                    locations: reactor.currentState.selectedSubRegions,
+                    categories: reactor.currentState.selectedCategories
+                )
 
-                self.onSave?(filters)
+                self.onSave?(filterData)
                 self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
@@ -360,6 +365,10 @@ extension FilterBottomSheetViewController: UICollectionViewDataSource {
 extension FilterBottomSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let category = tagSection?.inputDataList[indexPath.item].title else { return }
+        print("[DEBUG] 👆 Category Option Selected: \(category)")
+        print("[DEBUG] 💾 Current Saved Filters:")
+        print("[DEBUG] 📍 Location: \(reactor?.currentState.selectedSubRegions ?? [])")
+        print("[DEBUG] 🏷️ Category: \(reactor?.currentState.selectedCategories ?? [])")
         reactor?.action.onNext(.toggleCategory(category))
     }
 }

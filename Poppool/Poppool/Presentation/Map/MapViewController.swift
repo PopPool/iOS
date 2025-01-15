@@ -6,6 +6,8 @@ import RxCocoa
 import ReactorKit
 import GoogleMaps
 import CoreLocation
+import RxGesture
+
 
 final class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
@@ -20,6 +22,10 @@ final class MapViewController: BaseViewController, View {
     private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
+    private var filterContainerBottomY: CGFloat {
+        let frameInView = mainView.filterChips.convert(mainView.filterChips.bounds, to: view)
+        return frameInView.maxY // 필터 컨테이너의 바닥 높이
+    }
 
     enum ModalState {
         case top
@@ -48,6 +54,7 @@ final class MapViewController: BaseViewController, View {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
+
     // MARK: - Setup
     private func setUp() {
         view.addSubview(mainView)
@@ -71,14 +78,15 @@ final class MapViewController: BaseViewController, View {
 
         storeListViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            listViewTopConstraint = make.top.equalTo(view.snp.bottom).constraint // 초기 숨김 상태
-            make.height.equalTo(view.frame.height)
+            make.bottom.equalToSuperview()
+            listViewTopConstraint = make.top.equalToSuperview().offset(view.frame.height).constraint // 초기 숨김 상태
         }
 
         // 제스처 설정
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-//        storeListViewController.mainView.grabberHandle.addGestureRecognizer(panGesture)
+        storeListViewController.mainView.grabberHandle.addGestureRecognizer(panGesture)
         storeListViewController.mainView.addGestureRecognizer(panGesture)
+        setupPanAndSwipeGestures()
 
 
         setupMarker()
@@ -95,18 +103,28 @@ final class MapViewController: BaseViewController, View {
     }
 
     private func setupPanAndSwipeGestures() {
+        // grabberHandle에 스와이프 제스처 추가
         storeListViewController.mainView.grabberHandle.rx.swipeGesture(.up)
+            .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                print("[DEBUG] Swipe Up Gesture Detected")
-                owner.animateToState(.top)
+                print("[DEBUG] ⬆️ Swipe Up Detected")
+                switch owner.modalState {
+                case .bottom:
+                    owner.animateToState(.middle)
+                case .middle:
+                    owner.animateToState(.top)
+                case .top:
+                    break
+                }
             }
             .disposed(by: disposeBag)
 
         storeListViewController.mainView.grabberHandle.rx.swipeGesture(.down)
+            .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                print("[DEBUG] Swipe Down Gesture Detected")
+                print("[DEBUG] ⬇️ Swipe Down Detected")
                 switch owner.modalState {
                 case .top:
                     owner.animateToState(.middle)
@@ -141,9 +159,6 @@ final class MapViewController: BaseViewController, View {
             }
             .disposed(by: disposeBag)
 
-
-
-
         // 위치 버튼
         mainView.locationButton.rx.tap
             .bind { [weak self] _ in
@@ -152,28 +167,7 @@ final class MapViewController: BaseViewController, View {
             }
             .disposed(by: disposeBag)
 
-        // 필터 상태 업데이트
-        reactor.state.map { $0.selectedLocationFilters }
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .bind { [weak self] filters in
-                self?.mainView.filterChips.update(
-                    locationText: filters.first ?? "지역선택",
-                    categoryText: nil
-                )
-            }
-            .disposed(by: disposeBag)
 
-        reactor.state.map { $0.selectedCategoryFilters }
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .bind { [weak self] filters in
-                self?.mainView.filterChips.update(
-                    locationText: nil,
-                    categoryText: filters.first ?? "카테고리"
-                )
-            }
-            .disposed(by: disposeBag)
 
         mainView.filterChips.onRemoveLocation = {
             reactor.action.onNext(.clearFilters(.location))
@@ -183,18 +177,39 @@ final class MapViewController: BaseViewController, View {
         }
 
         Observable.combineLatest(
-            reactor.state.map { $0.selectedLocationFilters.isEmpty },
-            reactor.state.map { $0.selectedCategoryFilters.isEmpty }
-        )
+            reactor.state.map { $0.selectedLocationFilters }.distinctUntilChanged(),
+            reactor.state.map { $0.selectedCategoryFilters }.distinctUntilChanged()
+        ) { locationFilters, categoryFilters -> (String, String) in
+            // 지역 필터 텍스트 포맷팅
+            let locationText: String
+            if locationFilters.isEmpty {
+                locationText = "지역선택"
+            } else if locationFilters.count > 1 {
+                locationText = "\(locationFilters[0]) 외 \(locationFilters.count - 1)개"
+            } else {
+                locationText = locationFilters[0]
+            }
+
+            // 카테고리 필터 텍스트 포맷팅
+            let categoryText: String
+            if categoryFilters.isEmpty {
+                categoryText = "카테고리"
+            } else if categoryFilters.count > 1 {
+                categoryText = "\(categoryFilters[0]) 외 \(categoryFilters.count - 1)개"
+            } else {
+                categoryText = categoryFilters[0]
+            }
+            return (locationText, categoryText)
+        }
         .observe(on: MainScheduler.instance)
-        .bind { [weak self] isLocationEmpty, isCategoryEmpty in
-            guard let self = self else { return }
-            if isLocationEmpty {
-                self.mainView.filterChips.update(locationText: "지역선택", categoryText: nil)
-            }
-            if isCategoryEmpty {
-                self.mainView.filterChips.update(locationText: nil, categoryText: "카테고리")
-            }
+        .bind { [weak self] locationText, categoryText in
+            print("[DEBUG] 📍 Updating filters - Location: \(locationText)")
+            print("[DEBUG] 🏷️ Updating filters - Category: \(categoryText)")
+
+            self?.mainView.filterChips.update(
+                locationText: locationText,
+                categoryText: categoryText
+            )
         }
         .disposed(by: disposeBag)
 
@@ -210,6 +225,31 @@ final class MapViewController: BaseViewController, View {
                 }
             })
             .disposed(by: disposeBag)
+        reactor.state.map { $0.searchResult }
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] store in
+                guard let self = self else { return }
+                let camera = GMSCameraPosition.camera(
+                    withLatitude: store.latitude,
+                    longitude: store.longitude,
+                    zoom: 15
+                )
+                self.mainView.mapView.animate(to: camera)
+                self.addMarker(for: store)
+            }
+            .disposed(by: disposeBag)
+
+//        reactor.state.map { $0.toastMessage }
+//            .compactMap { $0 }
+//            .observe(on: MainScheduler.instance)
+//            .bind { message in
+////                let toast = Toast(message: message)
+//                toast.show()
+//            }
+//            .disposed(by: disposeBag)
+
     }
     
 
@@ -251,126 +291,146 @@ final class MapViewController: BaseViewController, View {
         switch gesture.state {
         case .changed:
             if let constraint = listViewTopConstraint {
-                let searchFilterFrame = self.mainView.searchFilterContainer.convert(
-                    self.mainView.searchFilterContainer.bounds,
-                    to: self.view
-                )
-                let filterChipsFrame = self.mainView.filterChips.convert(
-                    self.mainView.filterChips.bounds,
-                    to: self.view
-                )
-                let minOffset = searchFilterFrame.minY + filterChipsFrame.maxY + 12
-                let maxOffset = view.frame.height
+                let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
+                let newOffset = currentOffset + translation.y
 
-                let newOffset = constraint.layoutConstraints.first?.constant ?? 0 + translation.y
+                // 오프셋 제한 범위 설정
+                let minOffset: CGFloat = filterContainerBottomY // 필터 컨테이너 바닥 제한
+                let maxOffset: CGFloat = view.frame.height // 최하단 제한
                 let clampedOffset = min(max(newOffset, minOffset), maxOffset)
 
                 constraint.update(offset: clampedOffset)
                 gesture.setTranslation(.zero, in: view)
 
-                let progress = (maxOffset - clampedOffset) / (maxOffset - minOffset)
-                mainView.searchFilterContainer.alpha = progress
+                // 알파값 조절: 탑 상태에서만 적용
+                if modalState == .top {
+                    adjustMapViewAlpha(for: clampedOffset, minOffset: minOffset, maxOffset: maxOffset)
+                }
             }
 
         case .ended:
-            let currentOffset = listViewTopConstraint?.layoutConstraints.first?.constant ?? 0
-            let targetState: ModalState
+            if let constraint = listViewTopConstraint {
+                let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
+                let middleY = view.frame.height * 0.3 // 중간 지점 기준 높이
+                let targetState: ModalState
 
-            if velocity.y > 500 {
-                targetState = .bottom
-            } else if velocity.y < -500 {
-                targetState = .top
-            } else {
-                let middleY = view.frame.height * 0.4
-                if currentOffset < middleY * 0.7 {
+                // 속도와 위치를 기반으로 상태 결정
+                if velocity.y > 500 { // 아래로 빠르게 드래그
+                    targetState = .bottom
+                } else if velocity.y < -500 { // 위로 빠르게 드래그
+                    targetState = .top
+                } else if currentOffset < middleY * 0.7 {
                     targetState = .top
                 } else if currentOffset < view.frame.height * 0.7 {
                     targetState = .middle
                 } else {
                     targetState = .bottom
                 }
-            }
 
-            print("[DEBUG] Pan Ended - Current Offset: \(currentOffset), Velocity Y: \(velocity.y)")
-            modalState = targetState
-            animateToState(targetState)
+                // 최종 상태에 따라 애니메이션 적용
+                animateToState(targetState)
+            }
 
         default:
             break
         }
     }
 
+    private func adjustMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
+        let middleOffset = view.frame.height * 0.3 // 미들 상태 기준 높이
 
+        if offset <= minOffset {
+            mainView.mapView.alpha = 0 // 탑에서는 완전히 숨김
+        } else if offset >= maxOffset {
+            mainView.mapView.alpha = 1 // 바텀에서는 완전히 보임
+        } else if offset <= middleOffset {
+            // 탑 ~ 미들 사이에서는 알파값 점진적 증가
+            let progress = (offset - minOffset) / (middleOffset - minOffset)
+            mainView.mapView.alpha = progress
+        } else {
+            // 미들 ~ 바텀 사이에서는 항상 보임
+            mainView.mapView.alpha = 1
+        }
+    }
+
+    private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
+        let progress = (maxOffset - offset) / (maxOffset - minOffset) // 0(탑) ~ 1(바텀)
+        mainView.mapView.alpha = max(0, min(progress, 1)) // 0(완전히 가림) ~ 1(완전히 보임)
+    }
     private func animateToState(_ state: ModalState) {
+        guard modalState != state else { return }
         self.view.layoutIfNeeded()
 
         UIView.animate(withDuration: 0.3, animations: {
             switch state {
             case .top:
-
                 let filterChipsFrame = self.mainView.filterChips.convert(
                     self.mainView.filterChips.bounds,
                     to: self.view
                 )
-                self.mainView.mapView.isHidden = true
+                self.mainView.mapView.alpha = 0 // 탑 상태에서는 숨김
                 self.storeListViewController.setGrabberHandleVisible(false)
-                self.storeListViewController.mainView.layer.cornerRadius = 0
-                self.storeListViewController.view.snp.remakeConstraints { make in
-                    make.leading.trailing.equalToSuperview()
-                    make.top.equalToSuperview().offset(filterChipsFrame.maxY)
-                    make.bottom.equalToSuperview()
-                }
+                self.listViewTopConstraint?.update(offset: filterChipsFrame.maxY)
+                self.mainView.searchInput.backgroundColor = .g50
 
-                self.mainView.searchFilterContainer.backgroundColor = .white
-                self.mainView.searchFilterContainer.alpha = 1
 
             case .middle:
                 self.storeListViewController.setGrabberHandleVisible(true)
-                self.storeListViewController.view.snp.remakeConstraints { make in
-                    make.leading.trailing.equalToSuperview()
-                    make.top.equalToSuperview().offset(self.view.frame.height * 0.3) // 70% 가려짐
-                    make.height.equalTo(self.view.frame.height)
-                    self.storeListViewController.mainView.layer.cornerRadius = 20
-                    self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                    self.mainView.mapView.isHidden = false
+                // 필터 컨테이너 바닥 높이를 최소값으로 사용
+                let offset = max(self.view.frame.height * 0.3, self.filterContainerBottomY)
+                self.listViewTopConstraint?.update(offset: offset)
+                self.storeListViewController.mainView.layer.cornerRadius = 20
+                self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                self.mainView.mapView.alpha = 1 // 미들 상태에서는 항상 보임
+                self.mainView.mapView.isHidden = false
+                self.mainView.searchInput.backgroundColor = .white
 
-                }
-                self.mainView.searchFilterContainer.backgroundColor = .clear
 
             case .bottom:
                 self.storeListViewController.setGrabberHandleVisible(true)
-                self.storeListViewController.view.snp.remakeConstraints { make in
-                    make.leading.trailing.equalToSuperview()
-                    make.top.equalTo(self.view.snp.bottom)
-                    make.height.equalTo(self.view.frame.height)
-                    self.mainView.mapView.isHidden = false
+                self.listViewTopConstraint?.update(offset: self.view.frame.height) // 화면 아래로 숨김
+                self.mainView.mapView.alpha = 1 // 바텀 상태에서는 항상 보임
+                self.mainView.mapView.isHidden = false
+                self.mainView.searchInput.backgroundColor = .white
 
-                }
-                self.mainView.searchFilterContainer.backgroundColor = .clear
-                self.mainView.searchFilterContainer.alpha = 1
             }
 
             self.view.layoutIfNeeded()
         }) { _ in
             self.modalState = state
+            print("Completed animation to state: \(state)")
         }
     }
 
 
-
-
-    // MARK: - Filter Bottom Sheet
     func presentFilterBottomSheet(for filterType: FilterType) {
         let sheetReactor = FilterBottomSheetReactor()
         let viewController = FilterBottomSheetViewController(reactor: sheetReactor)
 
         let initialIndex = (filterType == .location) ? 0 : 1
         viewController.containerView.segmentedControl.selectedSegmentIndex = initialIndex
-        sheetReactor.action.onNext(FilterBottomSheetReactor.Action.segmentChanged(initialIndex))
+        sheetReactor.action.onNext(.segmentChanged(initialIndex))
 
-        viewController.onSave = { [weak self] (selectedOptions: [String]) in
+        viewController.onSave = { [weak self] filterData in
+              guard let self = self else { return }
+
+              print("[DEBUG] 💾 Save triggered with:")
+              print("[DEBUG] 📍 Locations: \(filterData.locations)")
+              print("[DEBUG] 🏷️ Categories: \(filterData.categories)")
+
+              self.reactor?.action.onNext(.updateBothFilters(
+                  locations: filterData.locations,
+                  categories: filterData.categories
+              ))
+              self.reactor?.action.onNext(.filterTapped(nil))
+          }
+
+        viewController.onSave = { [weak self] filterData in
             guard let self = self else { return }
-            self.reactor?.action.onNext(.filterUpdated(filterType, selectedOptions))
+            self.reactor?.action.onNext(.updateBothFilters(
+                locations: filterData.locations,
+                categories: filterData.categories
+            ))
             self.reactor?.action.onNext(.filterTapped(nil))
         }
 
@@ -385,8 +445,6 @@ final class MapViewController: BaseViewController, View {
 
         currentFilterBottomSheet = viewController
     }
-    
-
     private func dismissFilterBottomSheet() {
         if let bottomSheet = currentFilterBottomSheet {
             bottomSheet.hideBottomSheet()

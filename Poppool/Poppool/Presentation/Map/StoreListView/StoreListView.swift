@@ -15,6 +15,13 @@ final class StoreListView: UIView {
         let view = UIView()
         view.backgroundColor = .g200
         view.layer.cornerRadius = 2.5
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+
+    private let paddingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear // 간격만 추가하므로 투명
         return view
     }()
 
@@ -51,22 +58,27 @@ private extension StoreListView {
         backgroundColor = .white
         addSubview(collectionView)
         addSubview(grabberHandle)
+        addSubview(paddingView)
 
         grabberHandle.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(14)
-            make.width.equalTo(36)
-            make.height.equalTo(5)
+                 make.top.equalToSuperview().offset(14)
+                 make.centerX.equalToSuperview()
+                 make.width.equalTo(36)
+                 make.height.equalTo(5)  // priority 조정
+                 make.height.equalTo(5).priority(.high)  // 우선순위 지정
+             }
+        paddingView.snp.makeConstraints { make in
+            make.top.equalTo(grabberHandle.snp.bottom)
+            make.leading.trailing.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(grabberHandle.snp.bottom).offset(20)
+            make.top.equalTo(grabberHandle.snp.bottom).offset(14)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
 
     func configureLayer() {
-        // 최상단 레이어에 cornerRadius 설정
         layer.cornerRadius = 16
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 좌우 코너만 적용
         layer.masksToBounds = true

@@ -2,6 +2,7 @@ import UIKit
 import SnapKit
 import RxSwift
 final class AdminStoreCell: UITableViewCell {
+    private let disposeBag = DisposeBag()
 
     // MARK: - Identifier
     static let identifier = "AdminStoreCell"
@@ -75,8 +76,12 @@ final class AdminStoreCell: UITableViewCell {
 
     // MARK: - Configure
     func configure(with store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+        Logger.log(message: "셀 데이터 바인딩: \(store)", category: .debug)
+
         titleLabel.text = store.name
         categoryLabel.text = store.categoryName
-        statusChip.text = "운영" // 상태에 따라 동적 변경
+        statusChip.text = "운영"
+        Logger.log(message: "이미지 경로: \(store.mainImageUrl ?? "nil")", category: .debug)
+        storeImageView.setPPImage(path: store.mainImageUrl)
     }
 }

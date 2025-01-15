@@ -22,6 +22,8 @@ final class MyPageReactor: Reactor {
         case commentButtonTapped(controller: BaseViewController)
         case listCellTapped(controller: BaseViewController, title: String?)
         case logoutButtonTapped
+        case adminMenuTapped(controller: BaseViewController)
+
     }
     
     enum Mutation {
@@ -32,6 +34,8 @@ final class MyPageReactor: Reactor {
         case moveToPopUpDetailScene(controller: BaseViewController, row: Int)
         case moveToLoginScene(controller: BaseViewController)
         case moveToMyCommentScene(controller: BaseViewController)
+        case moveToAdminScene(controller: BaseViewController) // 추가
+
     }
     
     struct State {
@@ -112,7 +116,7 @@ final class MyPageReactor: Reactor {
                 .map { (owner, response) in
                     owner.isLogin = response.loginYn
                     owner.isAdmin = response.adminYn
-                    
+
                     owner.profileSection.inputDataList = [
                         .init(
                             isLogin: response.loginYn,
@@ -121,7 +125,7 @@ final class MyPageReactor: Reactor {
                             description: response.intro
                         )
                     ]
-                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map  {
+                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map {
                         .init(popUpImagePath: $0.mainImageUrl, title: $0.popUpStoreName, popUpID: $0.popUpStoreId)
                     }
                     return .loadView
@@ -135,12 +139,19 @@ final class MyPageReactor: Reactor {
         case .loginButtonTapped(let controller):
             return Observable.just(.moveToLoginScene(controller: controller))
         case .listCellTapped(let controller, let title):
-            return Observable.just(.moveToDetailScene(controller: controller, title: title))
+            if title == "관리자 메뉴 바로가기" {
+                return Observable.just(.moveToAdminScene(controller: controller))
+            } else {
+                return Observable.just(.moveToDetailScene(controller: controller, title: title))
+            }
         case .logoutButtonTapped:
             return userAPIUseCase.postLogout()
                 .andThen(Observable.just(.logout))
+        default:
+            return .empty()
         }
     }
+
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -154,16 +165,15 @@ final class MyPageReactor: Reactor {
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .logout:
             let service = KeyChainService()
-            let _ = service.deleteToken(type: .accessToken)
-            let _ = service.deleteToken(type: .refreshToken)
+            _ = service.deleteToken(type: .accessToken)
+            _ = service.deleteToken(type: .refreshToken)
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)
             }
         case .moveToDetailScene(let controller, let title):
             guard let title = title else { break }
-            switch title {
-            case "회원탈퇴":
+            if title == "회원탈퇴" {
                 let nickName = profileSection.inputDataList.first?.nickName
                 let nextController = WithdrawlCheckModalController(nickName: nickName)
                 nextController.reactor = WithdrawlCheckModalReactor()
@@ -208,7 +218,7 @@ final class MyPageReactor: Reactor {
             default:
                 break
             }
-        case.moveToLoginScene(let controller):
+        case .moveToLoginScene(let controller):
             let nextController = SubLoginController()
             nextController.reactor = SubLoginReactor()
             let navigationController = UINavigationController(rootViewController: nextController)
@@ -218,6 +228,16 @@ final class MyPageReactor: Reactor {
             let nextController = MyCommentController()
             nextController.reactor = MyCommentReactor()
             controller.navigationController?.pushViewController(nextController, animated: true)
+        case .moveToAdminScene(let controller):
+             let nickname = profileSection.inputDataList.first?.nickName ?? ""
+            let adminVC = AdminViewController(nickname: nickname)
+             adminVC.reactor = AdminReactor(useCase: DefaultAdminUseCase(repository: DefaultAdminRepository(provider: ProviderImpl())))
+             controller.navigationController?.pushViewController(adminVC, animated: true)
+         default:
+             break
+         }
+         return newState
+     }
         case .moveToPopUpDetailScene(let controller, let row):
             let nextController = DetailController()
             nextController.reactor = DetailReactor(popUpID: commentSection.inputDataList[row].popUpID)

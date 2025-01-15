@@ -4,25 +4,83 @@ import RxSwift
 import RxCocoa
 
 final class AdminViewController: BaseViewController, View {
-
+    
     typealias Reactor = AdminReactor
-
+    
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    private var mainView = AdminView()
-    private var adminBottomSheetVC: AdminBottomSheetViewController?
-    private var selectedFilterOption: String = "전체"
+      private let mainView: AdminView
+      private var adminBottomSheetVC: AdminBottomSheetViewController?
+      private var selectedFilterOption: String = "전체"
+      private let nickname: String
+    private let adminUseCase: AdminUseCase
 
-}
 
-// MARK: - Life Cycle
-extension AdminViewController {
+    init(nickname: String, adminUseCase: AdminUseCase = DefaultAdminUseCase(repository: DefaultAdminRepository(provider: ProviderImpl()))) {
+        self.nickname = nickname
+        self.adminUseCase = adminUseCase
+        self.mainView = AdminView(frame: .zero)
+        super.init()
+        mainView.usernameLabel.text = nickname + "님"
+    }
+
+
+      required init?(coder: NSCoder) {
+          fatalError("init(coder:) has not been implemented")
+      }
+
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        
+        // 로고 이미지에 탭 제스처 추가
+        let logoTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLogo))
+        mainView.logoImageView.isUserInteractionEnabled = true
+        mainView.logoImageView.addGestureRecognizer(logoTapGesture)
+        mainView.tableView.register(AdminStoreCell.self, forCellReuseIdentifier: AdminStoreCell.identifier)
+        
     }
-}
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
+    // MARK: - Actions
+    @objc private func didTapLogo() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func didTapDropdownButton() {
+        let reactor = AdminBottomSheetReactor()
+        let bottomSheetVC = AdminBottomSheetViewController(reactor: reactor)
 
+        bottomSheetVC.onSave = { [weak self] (selectedOptions: [String]) in
+            guard let self = self else { return }
+            self.selectedFilterOption = selectedOptions.joined(separator: ", ")
+            self.mainView.dropdownButton.setTitle(self.selectedFilterOption, for: .normal)
+        }
+
+        bottomSheetVC.onDismiss = { [weak self] in
+            guard let self = self else { return }
+            self.adminBottomSheetVC = nil
+        }
+
+        bottomSheetVC.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+
+        present(bottomSheetVC, animated: false) {
+            bottomSheetVC.showBottomSheet()
+        }
+        self.adminBottomSheetVC = bottomSheetVC
+    }
+
+}
 // MARK: - SetUp
 private extension AdminViewController {
     func setUp() {
@@ -31,26 +89,11 @@ private extension AdminViewController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         navigationItem.title = "팝업스토어 관리"
-        
+
         mainView.dropdownButton.addTarget(self, action: #selector(didTapDropdownButton), for: .touchUpInside)
     }
-    
-    @objc private func didTapDropdownButton() {
-        let bottomSheetVC = AdminBottomSheetViewController()
-
-        bottomSheetVC.onSave = { [weak self] selectedOptions in
-            guard let self = self else { return }
-            self.selectedFilterOption = selectedOptions.joined(separator: ", ")
-            self.mainView.dropdownButton.setTitle(self.selectedFilterOption, for: .normal)
-        }
-
-        // BottomSheet 스타일 적용
-        bottomSheetVC.modalPresentationStyle = .custom
-
-        present(bottomSheetVC, animated: true)
-        self.adminBottomSheetVC = bottomSheetVC
-    }
 }
+
 // MARK: - ReactorKit Bindings
 extension AdminViewController {
     func bind(reactor: Reactor) {
@@ -71,6 +114,11 @@ extension AdminViewController {
 
         // 3) 테이블 바인딩
         reactor.state.map { $0.storeList }
+            .map { "총 \($0.count)건" }
+            .bind(to: mainView.popupCountLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        reactor.state.map { $0.storeList }
             .bind(to: mainView.tableView.rx.items(
                 cellIdentifier: AdminStoreCell.identifier,
                 cellType: AdminStoreCell.self
@@ -85,7 +133,8 @@ extension AdminViewController {
             .filter { $0 == true }
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let registerVC = PopUpStoreRegisterViewController()
+                
+                let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname, adminUseCase: self.adminUseCase)
                 self.navigationController?.pushViewController(registerVC, animated: true)
 
                 // 이동 직후, 다시 false로

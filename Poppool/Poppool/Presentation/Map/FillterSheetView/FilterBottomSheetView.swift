@@ -210,6 +210,7 @@ final class FilterBottomSheetView: UIView {
 
     func setupLocationScrollView(locations: [Location], buttonAction: @escaping (Int, UIButton) -> Void) {
         locationContentView.subviews.forEach { $0.removeFromSuperview() }
+        locationScrollView.delegate = self  // 여기에 추가
 
         var lastButton: UIButton?
 
@@ -315,7 +316,7 @@ final class FilterBottomSheetView: UIView {
             button.layer.borderWidth = 0
         }
 
-        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
+        button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 16, bottom: 7, right: 16)
 
         return button
     }
@@ -329,7 +330,7 @@ final class FilterBottomSheetView: UIView {
                 button.layer.borderWidth = 0
             } else {
                 button.setBackgroundColor(.w100, for: .normal)
-                button.setTitleColor(.g700, for: .normal)
+                button.setTitleColor(.g400, for: .normal)
                 button.layer.borderColor = UIColor.g200.cgColor
                 button.layer.borderWidth = 1
             }
@@ -353,6 +354,12 @@ final class FilterBottomSheetView: UIView {
         balloonBackgroundView.arrowPosition = buttonCenterX / totalWidth
         self.layoutIfNeeded()
     }
+    private func updateBalloonPositionAccurately(for button: PPButton) {
+        let buttonFrameInBalloon = button.convert(button.bounds, to: balloonBackgroundView)
+        let arrowPosition = buttonFrameInBalloon.midX / balloonBackgroundView.bounds.width
+        balloonBackgroundView.arrowPosition = arrowPosition
+        balloonBackgroundView.setNeedsDisplay()
+    }
 }
 
 extension FilterBottomSheetView {
@@ -369,3 +376,26 @@ extension FilterBottomSheetView {
         filterChipsView.updateChips(with: filters)
     }
 } 
+extension FilterBottomSheetView: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("Scrolling - contentOffset: \(scrollView.contentOffset.x)")
+
+        guard let selectedButton = locationContentView.subviews.first(where: { view in
+            guard let button = view as? PPButton else { return false }
+            return button.backgroundColor == .blu500
+        }) as? PPButton else {
+            print("No selected button found")
+            return
+        }
+
+        // 선택된 버튼의 현재 위치 확인
+        let buttonFrame = selectedButton.convert(selectedButton.bounds, to: balloonBackgroundView)
+        print("Button center: \(buttonFrame.midX)")
+
+        let arrowPosition = buttonFrame.midX / balloonBackgroundView.bounds.width
+        print("Arrow position: \(arrowPosition)")
+
+        balloonBackgroundView.arrowPosition = arrowPosition
+        balloonBackgroundView.setNeedsDisplay()
+    }
+}

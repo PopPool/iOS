@@ -1,161 +1,122 @@
+//
+//  PopUpStoreRegisterReactor.swift
+//  Poppool
+//
+//  Created by 김기현 on 1/14/25.
+//
 
-
+import Foundation
 import ReactorKit
 import RxSwift
-import Foundation
 import UIKit
 
-/// 팝업스토어 등록/수정/삭제 화면의 Reactor
 final class PopUpStoreRegisterReactor: Reactor {
 
     // MARK: - Action
     enum Action {
-        // 기본 UI 이벤트
-        case tapBack
-        case tapMore          // "더보기" 버튼 → BottomSheet
-        case tapDelete        // BottomSheet "삭제하기" 터치
-        case tapSave          // 저장 버튼
+        /// 화면 최초 로드
+        case viewDidLoad
 
-        // 필드 입력
+        /// 사용자 입력값 갱신
         case updateName(String)
+        case updateDesc(String)
         case updateCategory(String)
         case updateAddress(String)
-        case updateLatitude(String)
+        case updateLatitude(String)   // 문자열 -> Double 변환
         case updateLongitude(String)
-        case updateMarkerName(String)
+        case updateMarkerTitle(String)
         case updateMarkerSnippet(String)
-        case updateDescription(String)
+        case updateStartDate(Date)
+        case updateEndDate(Date)
+        case updateStartTime(Date)
+        case updateEndTime(Date)
 
-        // 이미지 관련 (간단 예시)
-        case addImage         // 새 이미지 추가
-        case removeImage(Int) // 인덱스로 삭제
-        case removeAllImages
-        case checkRepresentativeImage(Int) // 대표이미지 체크
+        /// 이미지 관련
+        case addImage(ExtendedImage)      // 개별 이미지 추가
+        case removeImage(Int)             // 특정 인덱스 이미지 삭제
+        case toggleMainImage(Int)         // 대표이미지 토글
 
-        // 날짜/시간 Picker 완료
-        case pickedPeriod(Date, Date)
-        case pickedTime(Date, Date)
+        /// "저장/등록" 버튼 탭
+        case tapRegister
     }
 
     // MARK: - Mutation
     enum Mutation {
-        case setBack          // 뒤로가기
-        case setShowMore      // 더보기 시트 표시
-        case setDelete        // 삭제 실행
-        case setSaved         // 저장 완료
-
-        // 필드 업데이트
+        /// 폼 데이터 갱신
         case setName(String)
+        case setDesc(String)
         case setCategory(String)
         case setAddress(String)
-        case setLatitude(String)
-        case setLongitude(String)
-        case setMarkerName(String)
+        case setLatitude(Double)
+        case setLongitude(Double)
+        case setMarkerTitle(String)
         case setMarkerSnippet(String)
-        case setDescription(String)
+        case setStartDate(Date?)
+        case setEndDate(Date?)
+        case setStartTime(Date?)
+        case setEndTime(Date?)
 
-        // 이미지 업데이트
-        case addImage(UIImage)
-        case removeImage(Int)
-        case removeAllImages
-        case checkRepresentativeImage(Int)
+        /// 이미지 변경
+        case addImage(ExtendedImage)
+        case removeImageAt(Int)
+        case toggleMain(Int)
 
-        // 날짜/시간
-        case setPeriod(Date, Date)
-        case setTime(Date, Date)
+        /// 등록 성공 여부
+        case setRegistered(Bool)
     }
 
     // MARK: - State
     struct State {
-        // (0) 계정ID → View단에서 그냥 표시
-        // (3) 팝업스토어 이미지 (대표이미지)
-        var selectedImages: [UIImage] = [] // 간단히 UIImage 배열로 예시
-        var repImageIndex: Int? = nil      // 대표이미지 인덱스 (3-1)
-
-        // (4) 이름
+        // 폼 입력값
         var name: String = ""
-        // (5) 이미지 >= 1 필수
-        // (6) 카테고리
-        var category: String = "게임" // 디폴트
-        // (7) 위치
+        var desc: String = ""
+        var category: String = "게임"
         var address: String = ""
-        // (7-1) 위도/경도
-        var latitude: String = ""
-        var longitude: String = ""
-        // (8) 마커명
-        var markerName: String = ""
-        // (9) 스니펫
+        var latitude: Double = 0
+        var longitude: Double = 0
+        var markerTitle: String = ""
         var markerSnippet: String = ""
-        // (10) 기간
         var startDate: Date?
         var endDate: Date?
-        // (11) 시간
         var startTime: Date?
         var endTime: Date?
-        // (12) 작성자
-        var writerId: String = "김채연님" // 수정 시 변경될 수도
-        // (13) 작성시간
-        var writtenTime: String = "" // "2025-01-08 12:30"
-        // (14) 상태값
-        var status: String = "진행"  // chip
-        // (15) 설명
-        var desc: String = ""
-        // (16) 저장버튼 활성/비활성
-        var canSave: Bool = false
+        
 
-        // 플래그/이벤트
-        var showMoreSheet: Bool = false   // 2-1. 더보기 시트
-        var needToPop: Bool = false       // setBack
-        var didDelete: Bool = false       // 삭제 완료 → 토스트
-        var didSave: Bool = false         // 저장 완료 → 토스트
+        // 이미지 목록
+        var images: [ExtendedImage] = []
+
+        // 최종 등록 여부
+        var isRegistered: Bool = false
     }
 
-    // MARK: - Properties
-    let initialState: State
+    // ReactorKit 필수
+    let initialState: State = State()
 
-    private let useCase: AdminUseCase // or something
-    private let popUpStoreId: Int64?  // nil이면 "등록", 값 있으면 "수정"
+    // 주입받는 의존성
+    private let adminUseCase: AdminUseCase
+
+    // disposeBag (mutate 안에서는 ReactorKit이 관리)
+    private let disposeBagInternal = DisposeBag()
 
     // MARK: - Init
-    init(useCase: AdminUseCase, popUpStoreId: Int64? = nil) {
-        self.useCase = useCase
-        self.popUpStoreId = popUpStoreId
-        // 수정 모드면 useCase.fetchStoreDetail(...) 해서 initialState 만들어도 됨
-        self.initialState = State(writerId: "김채연님", writtenTime: "2025-01-08 14:30")
+    init(adminUseCase: AdminUseCase) {
+        self.adminUseCase = adminUseCase
     }
 
     // MARK: - mutate
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
 
-        case .tapBack:
-            return .just(.setBack)
+        case .viewDidLoad:
+            // 화면 초기화 시점에 별도 로직이 필요없다면 .empty()
+            return .empty()
 
-        case .tapMore:
-            return .just(.setShowMore)
-
-        case .tapDelete:
-            // 실제 useCase.deleteStore(...) 후 성공 시 Mutation.setDelete
-            // 간단 예시
-            return .just(.setDelete)
-
-        case .tapSave:
-            // 필수값 체크 → [이미지≥1, 이름, 카테고리, 주소, desc 등]
-            let st = currentState
-            guard st.selectedImages.count >= 1,
-                  !st.name.isEmpty,
-                  !st.address.isEmpty,
-                  !st.desc.isEmpty
-            else {
-                // 유효성 실패 → 저장불가
-                return .empty()
-            }
-            // 실제 UseCase.createStore or updateStore
-            // ...
-            return .just(.setSaved)
-
+        // 텍스트 입력 업데이트
         case let .updateName(name):
             return .just(.setName(name))
+
+        case let .updateDesc(desc):
+            return .just(.setDesc(desc))
 
         case let .updateCategory(cat):
             return .just(.setCategory(cat))
@@ -163,70 +124,59 @@ final class PopUpStoreRegisterReactor: Reactor {
         case let .updateAddress(addr):
             return .just(.setAddress(addr))
 
-        case let .updateLatitude(lat):
+        case let .updateLatitude(latString):
+            // 문자 -> Double 변환
+            let lat = Double(latString) ?? 0
             return .just(.setLatitude(lat))
 
-        case let .updateLongitude(lon):
+        case let .updateLongitude(lonString):
+            let lon = Double(lonString) ?? 0
             return .just(.setLongitude(lon))
 
-        case let .updateMarkerName(mn):
-            return .just(.setMarkerName(mn))
+        case let .updateMarkerTitle(title):
+            return .just(.setMarkerTitle(title))
 
-        case let .updateMarkerSnippet(ms):
-            return .just(.setMarkerSnippet(ms))
+        case let .updateMarkerSnippet(snippet):
+            return .just(.setMarkerSnippet(snippet))
 
-        case let .updateDescription(d):
-            return .just(.setDescription(d))
+        case let .updateStartDate(date):
+            return .just(.setStartDate(date))
 
-        // 이미지
-        case .addImage:
-            // 임시로 UIImage(named: "dummy") 추가
-            if let dummy = UIImage(named: "dummyImage") {
-                return .just(.addImage(dummy))
-            } else {
-                return .empty()
-            }
+        case let .updateEndDate(date):
+            return .just(.setEndDate(date))
 
-        case let .removeImage(idx):
-            return .just(.removeImage(idx))
+        case let .updateStartTime(time):
+            return .just(.setStartTime(time))
 
-        case .removeAllImages:
-            return .just(.removeAllImages)
+        case let .updateEndTime(time):
+            return .just(.setEndTime(time))
 
-        case let .checkRepresentativeImage(idx):
-            return .just(.checkRepresentativeImage(idx))
+        // 이미지 관련
+        case let .addImage(img):
+            return .just(.addImage(img))
 
-        // 기간/시간
-        case let .pickedPeriod(s, e):
-            return .just(.setPeriod(s, e))
+        case let .removeImage(index):
+            return .just(.removeImageAt(index))
 
-        case let .pickedTime(st, et):
-            return .just(.setTime(st, et))
+        case let .toggleMainImage(index):
+            return .just(.toggleMain(index))
+
+        // "저장" 액션
+        case .tapRegister:
+            return doRegister()
         }
     }
 
     // MARK: - reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+
         switch mutation {
-
-        case .setBack:
-            newState.needToPop = true
-
-        case .setShowMore:
-            newState.showMoreSheet = true
-
-        case .setDelete:
-            // 삭제 완료
-            newState.didDelete = true
-            newState.needToPop = true
-
-        case .setSaved:
-            newState.didSave = true
-            newState.needToPop = true
-
         case let .setName(name):
             newState.name = name
+
+        case let .setDesc(desc):
+            newState.desc = desc
 
         case let .setCategory(cat):
             newState.category = cat
@@ -240,47 +190,118 @@ final class PopUpStoreRegisterReactor: Reactor {
         case let .setLongitude(lon):
             newState.longitude = lon
 
-        case let .setMarkerName(mn):
-            newState.markerName = mn
+        case let .setMarkerTitle(title):
+            newState.markerTitle = title
 
-        case let .setMarkerSnippet(ms):
-            newState.markerSnippet = ms
+        case let .setMarkerSnippet(snippet):
+            newState.markerSnippet = snippet
 
-        case let .setDescription(desc):
-            newState.desc = desc
+        case let .setStartDate(date):
+            newState.startDate = date
+
+        case let .setEndDate(date):
+            newState.endDate = date
+
+        case let .setStartTime(time):
+            newState.startTime = time
+
+        case let .setEndTime(time):
+            newState.endTime = time
 
         // 이미지
         case let .addImage(img):
-            newState.selectedImages.append(img)
-        case let .removeImage(idx):
-            guard idx < newState.selectedImages.count else { break }
-            newState.selectedImages.remove(at: idx)
-            if let rep = newState.repImageIndex, rep == idx {
-                newState.repImageIndex = nil
-            } else if let rep = newState.repImageIndex, rep > idx {
-                newState.repImageIndex = rep - 1
+            newState.images.append(img)
+
+        case let .removeImageAt(index):
+            if index >= 0 && index < newState.images.count {
+                newState.images.remove(at: index)
             }
-        case .removeAllImages:
-            newState.selectedImages.removeAll()
-            newState.repImageIndex = nil
-        case let .checkRepresentativeImage(idx):
-            guard idx < newState.selectedImages.count else { break }
-            newState.repImageIndex = idx
 
-        case let .setPeriod(start, end):
-            newState.startDate = start
-            newState.endDate = end
+        case let .toggleMain(idx):
+            // 모든 이미지 isMain=false 후 idx만 true
+            for i in 0..<newState.images.count {
+                newState.images[i].isMain = (i == idx)
+            }
 
-        case let .setTime(st, et):
-            newState.startTime = st
-            newState.endTime = et
+        // 등록 성공
+        case let .setRegistered(success):
+            newState.isRegistered = success
         }
 
-        // 필수값 체크(이미지≥1, name, address, desc, ...)
-        newState.canSave = ( !newState.name.isEmpty &&
-                             !newState.address.isEmpty &&
-                             !newState.desc.isEmpty &&
-                             newState.selectedImages.count >= 1 )
         return newState
+    }
+
+    // MARK: - Custom Method: doRegister
+    /// 실제 등록 로직
+    private func doRegister() -> Observable<Mutation> {
+        // 1) 폼 유효성 검사
+        guard validateForm() else {
+            // 유효성 실패시엔 Mutation 없이 .empty() (혹은 에러 Mutation)
+            return .empty()
+        }
+
+        // 2) 대표 vs 서브 이미지
+        let mainImg = currentState.images.first(where: { $0.isMain })
+            ?? currentState.images.first!
+        let mainUrl = mainImg.filePath
+        let subImages = currentState.images
+            .filter { $0.filePath != mainUrl }
+            .map { $0.filePath }
+
+        // 3) 날짜/시간 -> 문자열 변환
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let startDateStr = currentState.startDate.map { dateFormatter.string(from: $0) } ?? "2025-01-01"
+        let endDateStr   = currentState.endDate.map { dateFormatter.string(from: $0) } ?? "2025-12-31"
+
+        // 4) DTO
+        let request = CreatePopUpStoreRequestDTO(
+            name: currentState.name,
+            categoryId: convertCategoryToId(currentState.category),
+            desc: currentState.desc,
+            address: currentState.address,
+            startDate: startDateStr,
+            endDate: endDateStr,
+            mainImageUrl: mainUrl,
+            bannerYn: false,
+            imageUrlList: subImages,
+            latitude: currentState.latitude,
+            longitude: currentState.longitude,
+            markerTitle: currentState.markerTitle,
+            markerSnippet: currentState.markerSnippet,
+            startDateBeforeEndDate: true
+        )
+
+        // 5) 서버 호출 -> 결과에 따라 Mutation
+        return adminUseCase.createStore(request: request)
+            .map { _ in Mutation.setRegistered(true) }
+            .catch { error in
+                // 에러 시 로깅/별도 처리
+                return .empty()
+            }
+            .asObservable()
+    }
+
+    // MARK: - validateForm()
+    private func validateForm() -> Bool {
+        // 간단 예시
+        if currentState.name.isEmpty { return false }
+        if currentState.desc.isEmpty { return false }
+        if currentState.address.isEmpty { return false }
+        if currentState.latitude == 0 && currentState.longitude == 0 { return false }
+        if currentState.markerTitle.isEmpty || currentState.markerSnippet.isEmpty { return false }
+        // 이미지 >=1, 대표 1장
+        if currentState.images.isEmpty { return false }
+        if !currentState.images.contains(where: { $0.isMain }) { return false }
+        return true
+    }
+
+    /// 예시: 카테고리 문자열 -> ID 변환 (임의 로직)
+    private func convertCategoryToId(_ cat: String) -> Int64 {
+        switch cat {
+        case "게임": return 101
+        case "라이프스타일": return 102
+        default: return 100
+        }
     }
 }

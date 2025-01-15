@@ -2,269 +2,228 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import ReactorKit
 
-final class AdminBottomSheetViewController: BaseViewController {
 
-    // MARK: - Properties
-    private let mainView = AdminBottomSheetView()
-    private let dimmedView = UIView()
-    var disposeBag = DisposeBag()
+final class AdminBottomSheetViewController: BaseViewController, View {
 
-    private var selectedStatusOptions: Set<String> = []
-    private var selectedCategoryOptions: Set<String> = []
-    private var tagSection: TagSection?
+   typealias Reactor = AdminBottomSheetReactor
 
-    var onSave: (([String]) -> Void)?
-    var onDismiss: (() -> Void)?
+   // MARK: - Properties
+   private let mainView = AdminBottomSheetView()
+   private let dimmedView = UIView()
+   var disposeBag = DisposeBag()
+   private var containerViewBottomConstraint: Constraint?
+   private var tagSection: TagSection?
 
-    // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .clear
-        setupViews()
-        setupCollectionView()
-        bind()
+   var onSave: (([String]) -> Void)?
+   var onDismiss: (() -> Void)?
+
+   // MARK: - Initialization
+    init(reactor: AdminBottomSheetReactor) {
+        super.init() // BaseViewController의 init() 호출
+        self.reactor = reactor
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        showBottomSheet()
-    }
 
-    // MARK: - Setup
+
+   // MARK: - Life Cycle
+   override func viewDidLoad() {
+       super.viewDidLoad()
+       view.backgroundColor = .clear
+       setupViews()
+       setupCollectionView()
+   }
+
+   // MARK: - Setup
     private func setupViews() {
-        view.addSubview(dimmedView)
+        view.backgroundColor = .clear
+
+        Logger.log(message: "초기 뷰 계층:", category: .debug)
+        print(view.value(forKey: "recursiveDescription") ?? "")
+
+        // mainView 설정 및 추가
+        view.addSubview(mainView)
+        mainView.isUserInteractionEnabled = true
+        mainView.containerView.isUserInteractionEnabled = true
+        mainView.closeButton.isUserInteractionEnabled = true
+        mainView.segmentedControl.isUserInteractionEnabled = true
+        mainView.headerView.isUserInteractionEnabled = true
+
+        mainView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(view.bounds.height * 0.45)
+            containerViewBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+        }
+
+        Logger.log(message: "mainView 추가 후 계층:", category: .debug)
+        print(view.value(forKey: "recursiveDescription") ?? "")
+
+        // dimmedView 설정 및 추가
         dimmedView.backgroundColor = .black.withAlphaComponent(0.4)
         dimmedView.alpha = 0
+        dimmedView.isUserInteractionEnabled = true
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped))
+        dimmedView.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false // 터치 이벤트가 다른 뷰로 전달되도록 설정
+        view.insertSubview(dimmedView, belowSubview: mainView)
 
         dimmedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped))
-        dimmedView.addGestureRecognizer(tapGesture)
-        dimmedView.isUserInteractionEnabled = true
-
-        view.addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(view.bounds.height * 0.45)  // 높이 조정
-            make.bottom.equalTo(view.snp.bottom)
-        }
-
-//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
-//        panGesture.delegate = self
-//        mainView.addGestureRecognizer(panGesture)
+        Logger.log(message: "최종 뷰 계층:", category: .debug)
+        print(view.value(forKey: "recursiveDescription") ?? "")
     }
+    
+   private func setupCollectionView() {
+       mainView.contentCollectionView.register(
+           TagSectionCell.self,
+           forCellWithReuseIdentifier: TagSectionCell.identifiers
+       )
+   }
 
-    private func setupCollectionView() {
-        mainView.contentCollectionView.dataSource = self
-        mainView.contentCollectionView.delegate = self
-        mainView.contentCollectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
-    }
+   // MARK: - Binding
+   func bind(reactor: Reactor) {
+       // Action
+       mainView.segmentedControl.rx.selectedSegmentIndex
+                 .do(onNext: { index in
+                     Logger.log(message: "세그먼트 변경 시도: \(index)", category: .event)
+                     Logger.log(message: "View 상태: \(self.view.window != nil)", category: .debug)
+                     Logger.log(message: "MainView 상태: \(self.mainView.window != nil)", category: .debug)
+                 })
+                 .map { Reactor.Action.segmentChanged($0) }
+                 .bind(to: reactor.action)
+                 .disposed(by: disposeBag)
 
-    private func bind() {
-        // Close Button
-        mainView.closeButton.rx.tap
-            .bind { [weak self] in
-                self?.hideBottomSheet()
-            }
-            .disposed(by: disposeBag)
+       mainView.resetButton.rx.tap
+           .map { Reactor.Action.resetFilters }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
 
-        // Save Button
-        mainView.saveButton.rx.tap
-            .bind { [weak self] in
-                guard let self = self else { return }
-                let selectedOptions = self.mainView.segmentedControl.selectedSegmentIndex == 0 ?
-                Array(self.selectedStatusOptions) : Array(self.selectedCategoryOptions)
-                self.onSave?(selectedOptions)
-                self.hideBottomSheet()
-            }
-            .disposed(by: disposeBag)
+       mainView.contentCollectionView.rx.itemSelected
+                  .withLatestFrom(reactor.state) { indexPath, state -> Reactor.Action in
+                      let title = state.activeSegment == 0 ?
+                          state.statusOptions[indexPath.item] :
+                          state.categoryOptions[indexPath.item]
 
-        // Reset Button
-        mainView.resetButton.rx.tap
-            .bind { [weak self] in
-                self?.selectedStatusOptions.removeAll()
-                self?.selectedCategoryOptions.removeAll()
-                self?.updateButtonStates()
-                self?.updateCollectionView()
-            }
-            .disposed(by: disposeBag)
+                      return state.activeSegment == 0 ?
+                          .toggleStatusOption(title) :
+                          .toggleCategoryOption(title)
+                  }
+                  .bind(to: reactor.action)
+                  .disposed(by: disposeBag)
 
-        // Segment Control
-        mainView.segmentedControl.rx.selectedSegmentIndex
-            .bind { [weak self] index in
-                self?.mainView.updateContentVisibility(isCategorySelected: index == 1)
-                self?.updateCollectionView()
-            }
-            .disposed(by: disposeBag)
-    }
+       // State
+       reactor.state.map { state in
+           let items = state.activeSegment == 0 ?
+               state.statusOptions :
+               state.categoryOptions
+           let selectedItems = state.activeSegment == 0 ?
+               state.selectedStatusOptions :
+               state.selectedCategoryOptions
 
-    private func updateCollectionView() {
-        let isStatusTab = mainView.segmentedControl.selectedSegmentIndex == 0
-        let items = isStatusTab ?
-            ["전체", "운영", "종료"] :
-            ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션",
-             "엔터테이먼트", "여행", "예술", "음식/요리", "키즈", "패션"]
+           return items.map {
+               TagSectionCell.Input(
+                   title: $0,
+                   isSelected: selectedItems.contains($0),
+                   id: nil
+               )
+           }
+       }
+       .bind(to: mainView.contentCollectionView.rx.items(
+           cellIdentifier: TagSectionCell.identifiers,
+           cellType: TagSectionCell.self
+       )) { _, item, cell in
+           cell.injection(with: item)
+       }
+       .disposed(by: disposeBag)
 
-        let selectedItems = isStatusTab ? selectedStatusOptions : selectedCategoryOptions
+       reactor.state.map { $0.activeSegment }
+           .distinctUntilChanged()
+           .bind { [weak self] index in
+               self?.mainView.updateContentVisibility(isCategorySelected: index == 1)
+           }
+           .disposed(by: disposeBag)
 
-        tagSection = TagSection(inputDataList: items.map {
-            TagSectionCell.Input(
-                title: $0,
-                isSelected: selectedItems.contains($0),
-                id: nil
-            )
-        })
+       reactor.state.map { state -> [String] in
+           state.activeSegment == 0 ?
+               Array(state.selectedStatusOptions) :
+               Array(state.selectedCategoryOptions)
+       }
+       .distinctUntilChanged()
+       .bind { [weak self] selectedOptions in
+           self?.mainView.filterChipsView.updateChips(with: selectedOptions)
+       }
+       .disposed(by: disposeBag)
 
-        mainView.contentCollectionView.reloadData()
-        mainView.filterChipsView.updateChips(with: Array(selectedItems))
+       reactor.state.map { $0.isSaveEnabled }
+           .distinctUntilChanged()
+           .bind { [weak self] isEnabled in
+               guard let self = self else { return }
 
-    }
-    private func toggleStatusOption(_ option: String) {
-        if selectedStatusOptions.contains(option) {
-            selectedStatusOptions.remove(option)
-        } else {
-            if option == "전체" {
-                selectedStatusOptions = ["전체"]
-            } else {
-                selectedStatusOptions.remove("전체")
-                selectedStatusOptions.insert(option)
-            }
-        }
-    }
+               self.mainView.saveButton.isEnabled = isEnabled
+               self.mainView.saveButton.backgroundColor = isEnabled ? .blu500 : .g100
+               self.mainView.saveButton.setTitleColor(
+                   isEnabled ? .white : .g400,
+                   for: isEnabled ? .normal : .disabled
+               )
+               self.mainView.resetButton.isEnabled = isEnabled
+           }
+           .disposed(by: disposeBag)
 
-    private func toggleCategoryOption(_ option: String) {
-        if selectedCategoryOptions.contains(option) {
-            selectedCategoryOptions.remove(option)
-        } else {
-            selectedCategoryOptions.insert(option)
-        }
-    }
-    private func updateButtonStates() {
-        let hasSelectedOptions = !selectedStatusOptions.isEmpty || !selectedCategoryOptions.isEmpty
-        mainView.saveButton.isEnabled = hasSelectedOptions
-        mainView.resetButton.isEnabled = hasSelectedOptions
+       // View Events
+       mainView.closeButton.rx.tap
+           .bind { [weak self] in
+               self?.hideBottomSheet()
+           }
+           .disposed(by: disposeBag)
 
-        if hasSelectedOptions {
-            mainView.saveButton.backgroundColor = .blu500
-            mainView.saveButton.setTitleColor(.white, for: .normal)
-        } else {
-            mainView.saveButton.backgroundColor = .g100
-            mainView.saveButton.setTitleColor(.g400, for: .disabled)
-        }
-        let selectedOptions = mainView.segmentedControl.selectedSegmentIndex == 0 ?
-                Array(selectedStatusOptions) : Array(selectedCategoryOptions)
-            mainView.filterChipsView.updateChips(with: selectedOptions)
-        
-    }
+       mainView.saveButton.rx.tap
+           .withLatestFrom(reactor.state)
+           .bind { [weak self] state in
+               guard let self = self else { return }
 
+               let selectedOptions = state.activeSegment == 0 ?
+                   Array(state.selectedStatusOptions) :
+                   Array(state.selectedCategoryOptions)
 
-//    private func updateButtonStates() {
-//        let hasSelectedOptions = !selectedStatusOptions.isEmpty || !selectedCategoryOptions.isEmpty
-//        mainView.updateButtonStates(isEnabled: hasSelectedOptions)
-//    }
+               self.onSave?(selectedOptions)
+               self.hideBottomSheet()
+           }
+           .disposed(by: disposeBag)
+   }
 
-    // MARK: - Gestures
-    @objc private func dimmedViewTapped() {
-        hideBottomSheet()
-    }
+   // MARK: - Actions
+   @objc private func dimmedViewTapped() {
+       hideBottomSheet()
+   }
 
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
+   // MARK: - Show/Hide
+   func showBottomSheet() {
+       UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+           self.dimmedView.alpha = 1
+           self.containerViewBottomConstraint?.update(offset: 0)
+           self.view.layoutIfNeeded()
+       }
+   }
 
-        switch gesture.state {
-        case .changed:
-            guard translation.y >= 0 else { return }
-            mainView.transform = CGAffineTransform(translationX: 0, y: translation.y)
-            dimmedView.alpha = 1 - (translation.y / 500)
+   func hideBottomSheet() {
+       UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
+           self.dimmedView.alpha = 0
+           self.containerViewBottomConstraint?.update(offset: self.view.bounds.height)
+           self.view.layoutIfNeeded()
+       } completion: { _ in
+           self.dismiss(animated: false)
+           self.onDismiss?()
+       }
+   }
 
-        case .ended:
-            let velocity = gesture.velocity(in: view)
-            if translation.y > 150 || velocity.y > 1000 {
-                hideBottomSheet()
-            } else {
-                UIView.animate(withDuration: 0.25) {
-                    self.mainView.transform = .identity
-                    self.dimmedView.alpha = 1
-                }
-            }
-
-        default:
-            break
-        }
-    }
-
-    // MARK: - Animation Methods
-    func showBottomSheet() {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-            self.dimmedView.alpha = 1
-            self.view.layoutIfNeeded()
-        }
-    }
-
-    func hideBottomSheet() {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
-            self.dimmedView.alpha = 0
-            self.mainView.transform = CGAffineTransform(translationX: 0, y: self.view.bounds.height)
-        } completion: { _ in
-            self.dismiss(animated: false)
-            self.onDismiss?()
-        }
-    }
-}
-extension AdminBottomSheetViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tagSection?.inputDataList.count ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: TagSectionCell.identifiers,
-            for: indexPath
-        ) as? TagSectionCell else {
-            return UICollectionViewCell()
-        }
-
-        if let input = tagSection?.inputDataList[indexPath.item] {
-            cell.injection(with: input)
-        }
-
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-extension AdminBottomSheetViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let title = tagSection?.inputDataList[indexPath.item].title else { return }
-
-        if mainView.segmentedControl.selectedSegmentIndex == 0 {
-            toggleStatusOption(title)
-        } else {
-            toggleCategoryOption(title)
-        }
-
-        updateCollectionView()
-        updateButtonStates()
-    }
-}
-extension AdminBottomSheetViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        // 세그먼트 컨트롤이나 컬렉션뷰를 터치했을 때는 pan gesture 무시
-        if let touchView = touch.view {
-            if touchView == mainView.segmentedControl ||
-               touchView.isDescendant(of: mainView.segmentedControl) ||
-               touchView == mainView.contentCollectionView ||
-               touchView.isDescendant(of: mainView.contentCollectionView) {
-                return false
-            }
-        }
-        return true
-    }
+   deinit {
+       Logger.log(message: "BottomSheet deinit", category: .debug)
+   }
 }
