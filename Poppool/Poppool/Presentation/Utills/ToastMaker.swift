@@ -46,8 +46,8 @@ extension ToastMaker {
         }
         
         UIView.animate(
-            withDuration: 1,
-            delay: 1,
+            withDuration: 0.3,
+            delay: 4,
             options: .curveEaseOut
         ) {
             toastMSG.alpha = 0

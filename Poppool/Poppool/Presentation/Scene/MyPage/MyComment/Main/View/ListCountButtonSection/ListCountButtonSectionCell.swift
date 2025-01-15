@@ -72,7 +72,7 @@ private extension ListCountButtonSectionCell {
         dropdownButton.addSubview(buttonTitleLabel)
         buttonTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.trailing.equalTo(dropDownImageView.snp.leading)
+            make.trailing.equalTo(dropDownImageView.snp.leading).offset(-6)
             make.centerY.equalToSuperview()
         }
         

@@ -172,6 +172,7 @@ final class MyPageBookmarkReactor: Reactor {
                     if state.isSave {
                         owner.viewType = state.currentSortedCode ?? ""
                         owner.countSection.inputDataList[0].buttonTitle = state.currentSortedCode ?? ""
+                        ToastMaker.createToast(message: "보기 옵션을 적용했어요")
                     }
                 })
                 .disposed(by: nextController.disposeBag)

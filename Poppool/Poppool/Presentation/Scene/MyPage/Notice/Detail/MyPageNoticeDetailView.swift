@@ -51,6 +51,7 @@ final class MyPageNoticeDetailView: UIView {
 private extension MyPageNoticeDetailView {
     
     func setUpConstraints() {
+        self.backgroundColor = .g50
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
