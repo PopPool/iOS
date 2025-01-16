@@ -22,6 +22,7 @@ final class HomeReactor: Reactor {
         case searchButtonTapped(controller: BaseViewController)
         case collectionViewCellTapped(controller: BaseViewController, indexPath: IndexPath)
         case bannerCellTapped(controller: BaseViewController, row: Int)
+        case changeIndicatorColor(controller: BaseViewController, row: Int)
     }
     
     enum Mutation {
@@ -30,6 +31,7 @@ final class HomeReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case reloadView(indexPath: IndexPath)
         case moveToSearchScene(controller: BaseViewController)
+        case skip
     }
     
     struct State {
@@ -87,6 +89,13 @@ final class HomeReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .changeIndicatorColor(let controller, let row):
+            if !loginImageBannerSection.isEmpty {
+                loginImageBannerSection.inputDataList[0].imagePaths[row].isBrightImagePath { isBright in
+                    controller.statusBarIsDarkMode = isBright
+                }
+            }
+            return Observable.just(.skip)
         case .viewWillAppear:
             return homeApiUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
                 .withUnretained(self)
@@ -152,6 +161,8 @@ final class HomeReactor: Reactor {
             }
             newState.isReloadView = true
             newState.sections = getSection()
+        case .skip:
+            break
         }
         return newState
     }

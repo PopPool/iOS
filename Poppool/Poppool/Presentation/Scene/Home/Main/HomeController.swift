@@ -177,6 +177,15 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
                 })
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
+            
+            cell.imageSection.currentPage
+                .distinctUntilChanged()
+                .withUnretained(self)
+                .map({ (owner, row) in
+                    Reactor.Action.changeIndicatorColor(controller: owner, row: row)
+                })
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
         }
         if let cell = cell as? HomeTitleSectionCell {
             cell.detailButton.rx.tap
