@@ -41,6 +41,8 @@ final class MyPageController: BaseViewController, View {
     
     private var isBrightImage: Bool = false
     
+    private var scrollAlpha: CGFloat = 0
+    
 }
 
 // MARK: - Life Cycle
@@ -157,12 +159,19 @@ extension MyPageController {
             .subscribe { (owner, state) in
                 state.backgroundImageViewPath.isBrightImagePath { isBright in
                     owner.isBrightImage = isBright
-                    owner.statusBarIsDarkMode = isBright
                     UIView.animate(withDuration: 0.3) {
                         if isBright {
                             owner.settingButton.tintColor = .g1000
+                            owner.statusBarIsDarkMode = true
                         } else {
-                            owner.settingButton.tintColor = .w100
+                            if owner.scrollAlpha > 0.5 {
+                                owner.settingButton.tintColor = .g1000
+                                owner.statusBarIsDarkMode = true
+                            } else {
+                                owner.settingButton.tintColor = .w100
+                                owner.statusBarIsDarkMode = false
+                            }
+                            
                         }
                     }
                 }
@@ -241,6 +250,7 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
                 cell.updateContentTopInset(inset: originHeight)
             }
             cell.updateAlpha(alpha: alpha)
+            scrollAlpha = alpha
             if alpha < 0.5 {
                 if isBrightImage { statusBarIsDarkMode = true } else { statusBarIsDarkMode = false }
                 UIView.animate(withDuration: 0.3) { [weak self] in
