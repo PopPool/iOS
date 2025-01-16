@@ -162,14 +162,14 @@ extension MyPageController {
                     UIView.animate(withDuration: 0.3) {
                         if isBright {
                             owner.settingButton.tintColor = .g1000
-                            owner.statusBarIsDarkMode = true
+                            owner.systemStatusBarIsDark.accept(true)
                         } else {
                             if owner.scrollAlpha > 0.5 {
                                 owner.settingButton.tintColor = .g1000
-                                owner.statusBarIsDarkMode = true
+                                owner.systemStatusBarIsDark.accept(true)
                             } else {
                                 owner.settingButton.tintColor = .w100
-                                owner.statusBarIsDarkMode = false
+                                owner.systemStatusBarIsDark.accept(false)
                             }
                             
                         }
@@ -252,7 +252,7 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
             cell.updateAlpha(alpha: alpha)
             scrollAlpha = alpha
             if alpha < 0.5 {
-                if isBrightImage { statusBarIsDarkMode = true } else { statusBarIsDarkMode = false }
+                systemStatusBarIsDark.accept(isBrightImage)
                 UIView.animate(withDuration: 0.3) { [weak self] in
                     guard let self = self else { return }
                     if isBrightImage {
@@ -262,7 +262,7 @@ extension MyPageController: UICollectionViewDelegate, UICollectionViewDataSource
                     }
                 }
             } else {
-                statusBarIsDarkMode = true
+                systemStatusBarIsDark.accept(true)
                 UIView.animate(withDuration: 0.3) { [weak self] in
                     self?.settingButton.tintColor = .g1000
                 }

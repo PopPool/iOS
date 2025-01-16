@@ -131,9 +131,10 @@ extension DetailController {
             .take(2)
             .subscribe { (owner, state) in
                 state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
-                    owner?.statusBarIsDarkMode = isBright
+                    owner?.systemStatusBarIsDark.accept(isBright)
                     owner?.isBrightImage = isBright
                     if isBright {
+                        print(isBright)
                         owner?.headerView.backButton.tintColor = .g1000
                     } else {
                         owner?.headerView.backButton.tintColor = .w100
@@ -268,28 +269,18 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 241 {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.headerBackgroundView.isHidden = true
-            }
-            
+            headerBackgroundView.isHidden = true
             if isBrightImage {
-                UIView.animate(withDuration: 0.3) { [weak self] in
-                    self?.statusBarIsDarkMode = true
-                    self?.headerView.backButton.tintColor = .g1000
-                }
-
+                systemStatusBarIsDark.accept(true)
+                headerView.backButton.tintColor = .g1000
             } else {
-                UIView.animate(withDuration: 0.3) { [weak self] in
-                    self?.statusBarIsDarkMode = false
-                    self?.headerView.backButton.tintColor = .w100
-                }
+                systemStatusBarIsDark.accept(false)
+                headerView.backButton.tintColor = .w100
             }
         } else {
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.statusBarIsDarkMode = true
-                self?.headerView.backButton.tintColor = .g1000
-                self?.headerBackgroundView.isHidden = false
-            }
+            systemStatusBarIsDark.accept(true)
+            headerView.backButton.tintColor = .g1000
+            headerBackgroundView.isHidden = false
         }
     }
 }

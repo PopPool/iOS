@@ -91,8 +91,8 @@ final class HomeReactor: Reactor {
         switch action {
         case .changeIndicatorColor(let controller, let row):
             if !loginImageBannerSection.isEmpty {
-                loginImageBannerSection.inputDataList[0].imagePaths[row].isBrightImagePath { isBright in
-                    controller.statusBarIsDarkMode = isBright
+                loginImageBannerSection.inputDataList[0].imagePaths[row].isBrightImagePath { [weak controller] isBright in
+                    controller?.systemStatusBarIsDark.accept(isBright)
                 }
             }
             return Observable.just(.skip)

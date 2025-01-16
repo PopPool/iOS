@@ -31,7 +31,6 @@ final class HomeController: BaseViewController, View {
     lazy var backGroundblurView = UIVisualEffectView(effect: backGroundblurEffect)
     
     private var sections: [any Sectionable] = []
-    private let headerIsDarkMode: PublishSubject<Bool> = .init()
 }
 
 // MARK: - Life Cycle
@@ -107,6 +106,7 @@ private extension HomeController {
             make.edges.equalToSuperview()
         }
         backGroundblurView.isUserInteractionEnabled = false
+        backGroundblurView.isHidden = true
         
         view.addSubview(headerBackgroundView)
         headerBackgroundView.snp.makeConstraints { make in
@@ -127,12 +127,6 @@ extension HomeController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        headerIsDarkMode
-            .distinctUntilChanged()
-            .map { Reactor.Action.changeHeaderState(isDarkMode: $0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
         homeHeaderView.searchBarButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -146,7 +140,6 @@ extension HomeController {
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
-                owner.backGroundblurView.isHidden = state.headerIsDarkMode
             }
             .disposed(by: disposeBag)
     }
@@ -181,6 +174,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.imageSection.currentPage
                 .distinctUntilChanged()
                 .withUnretained(self)
+                .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
                 .map({ (owner, row) in
                     Reactor.Action.changeIndicatorColor(controller: owner, row: row)
                 })
@@ -208,14 +202,15 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        headerIsDarkMode.onNext(scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY))
         if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
 
             if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
                 cell.startAutoScroll()
+                backGroundblurView.isHidden = true
             } else {
                 cell.stopAutoScroll()
-                statusBarIsDarkMode = true
+                systemStatusBarIsDark.accept(true)
+                backGroundblurView.isHidden = false
             }
         }
     }
