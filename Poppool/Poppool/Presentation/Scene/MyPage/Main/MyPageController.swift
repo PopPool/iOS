@@ -154,7 +154,6 @@ extension MyPageController {
         
         reactor.state
             .withUnretained(self)
-            .take(2)
             .subscribe { (owner, state) in
                 state.backgroundImageViewPath.isBrightImagePath { isBright in
                     owner.isBrightImage = isBright

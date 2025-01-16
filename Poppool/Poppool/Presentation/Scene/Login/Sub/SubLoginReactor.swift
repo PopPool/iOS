@@ -36,7 +36,7 @@ final class SubLoginReactor: Reactor {
     private let appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
-    private let userDefaultService = UserDefaultService()
+    let userDefaultService = UserDefaultService()
     
     // MARK: - init
     init() {
@@ -84,6 +84,7 @@ final class SubLoginReactor: Reactor {
                 let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
                 switch accessTokenResult {
                 case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "kakao")
                     if loginResponse.isRegisteredUser {
                         return .dismissScene(controller: controller)
                     } else {
@@ -110,6 +111,7 @@ final class SubLoginReactor: Reactor {
                 let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
                 switch accessTokenResult {
                 case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "apple")
                     if loginResponse.isRegisteredUser {
                         return .dismissScene(controller: controller)
                     } else {

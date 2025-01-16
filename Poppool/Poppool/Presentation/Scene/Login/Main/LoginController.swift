@@ -28,6 +28,20 @@ extension LoginController {
         super.viewDidLoad()
         setUp()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let lastLogin = reactor?.userDefaultService.fetch(key: "lastLogin") {
+            switch lastLogin {
+            case "kakao":
+                mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown, text: "최근에 이 방법으로 로그인했어요")
+            case "apple":
+                mainView.appleButton.showToolTip(color: .w100, direction: .pointUp, text: "최근에 이 방법으로 로그인했어요")
+            default:
+                break
+            }
+        }
+    }
 }
 
 // MARK: - SetUp

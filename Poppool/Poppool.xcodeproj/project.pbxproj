@@ -342,6 +342,7 @@
 		08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191C12CF615CA0057BC04 /* Secrets.swift */; };
 		08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */; };
 		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
+		08CBEA0B2D38DBD600248007 /* LastLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0A2D38DBD600248007 /* LastLoginView.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -777,6 +778,7 @@
 		08B191C12CF615CA0057BC04 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponseDTO.swift; sourceTree = "<group>"; };
 		08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponse.swift; sourceTree = "<group>"; };
+		08CBEA0A2D38DBD600248007 /* LastLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastLoginView.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -1453,6 +1455,7 @@
 			children = (
 				086F89E72D2009CF00CA4FC9 /* Main */,
 				086F89E82D2009D700CA4FC9 /* Sub */,
+				08CBEA0A2D38DBD600248007 /* LastLoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -3243,6 +3246,7 @@
 				08A2E48A2D1BDA8400102313 /* CommentDetailContentSection.swift in Sources */,
 				4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */,
 				08B1917D2CF46DE30057BC04 /* TermsDetailController.swift in Sources */,
+				08CBEA0B2D38DBD600248007 /* LastLoginView.swift in Sources */,
 				0841BAB12CFA38F500049E31 /* HomeCardSectionCell.swift in Sources */,
 				4E685EE32D12CEB6001EF91C /* StoreListViewController.swift in Sources */,
 				0818990A2D34B3620067BF01 /* MyPageNoticeController.swift in Sources */,

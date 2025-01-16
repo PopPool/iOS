@@ -26,6 +26,8 @@ final class ToastMaker {
             .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
             .first { $0.isKeyWindow }
     }
+    
+    private static var currentToast: ToastView?
 }
 
 extension ToastMaker {
@@ -35,9 +37,14 @@ extension ToastMaker {
     /// 토스트 메시지를 생성하는 메서드
     /// - Parameter message: 토스트 메세지에 담길 String 타입
    static func createToast(message: String) {
+       
+        currentToast?.removeFromSuperview()
+        currentToast = nil
+       
         let toastMSG = ToastView(message: message)
         window?.addSubview(toastMSG)
-        
+        currentToast = toastMSG
+       
         toastMSG.snp.makeConstraints { make in
             if let window = window {
                 make.bottom.equalTo(window.snp.bottom).inset(120)
@@ -53,6 +60,7 @@ extension ToastMaker {
             toastMSG.alpha = 0
         } completion: { _ in
             toastMSG.removeFromSuperview()
+            if currentToast == toastMSG { currentToast = nil }
         }
     }
 }
