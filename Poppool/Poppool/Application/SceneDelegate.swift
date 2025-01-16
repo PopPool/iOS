@@ -16,27 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     static let appDidBecomeActive = PublishSubject<Void>()
-
+    private let disposeBag = DisposeBag()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-
-
-//        let rootViewController = BlockUserManageController()
-//        rootViewController.reactor = BlockUserManageReactor()
-
-//        let rootVC = WaveTabBarController()
-
-
-//        let rootViewController = DetailController()
-//        rootViewController.reactor = DetailReactor(popUpID: 8)
-
-//        let rootViewController = SearchMainController()
-//        rootViewController.reactor = SearchMainReactor()
-
-//        let navigationController = UINavigationController(rootViewController: rootViewController)
-        let navigationController = WaveTabBarController()
-        window?.rootViewController = navigationController
+        window?.rootViewController = SplashController()
         window?.makeKeyAndVisible()
     }
 

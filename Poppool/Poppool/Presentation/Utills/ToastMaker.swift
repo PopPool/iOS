@@ -107,7 +107,7 @@ extension ToastView {
         }
         
         messageLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.spaceGuide.small100)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
     }

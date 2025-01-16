@@ -25,4 +25,12 @@ struct AuthAPIEndPoint {
             headers: ["Content-Type": "application/json"]
         )
     }
+    
+    static func postTokenReissue() -> Endpoint<PostTokenReissueResponseDTO> {
+        return Endpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/auth/token/reissue",
+            method: .post
+        )
+    }
 }

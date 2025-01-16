@@ -19,6 +19,7 @@ final class HomeListReactor: Reactor {
         case backButtonTapped(controller: BaseViewController)
         case bookMarkButtonTapped(indexPath: IndexPath)
         case changePage
+        case cellTapped(controller: BaseViewController, row: Int)
     }
     
     enum Mutation {
@@ -27,6 +28,7 @@ final class HomeListReactor: Reactor {
         case reloadView(indexPath: IndexPath)
         case skipAction
         case appendData
+        case moveToDetailScene(controller: BaseViewController, row: Int)
     }
     
     struct State {
@@ -41,7 +43,7 @@ final class HomeListReactor: Reactor {
     var disposeBag = DisposeBag()
     var popUpType: HomePopUpType
     
-    private let homeAPIUseCase = HomeUseCaseImpl()
+    private let homeAPIUseCase = HomeAPIUseCaseImpl()
     private let userDefaultService = UserDefaultService()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     
@@ -110,6 +112,8 @@ final class HomeListReactor: Reactor {
                 return userAPIUseCase.postBookmarkPopUp(popUpID: popUpData.id)
                     .andThen(Observable.just(.reloadView(indexPath: indexPath)))
             }
+        case .cellTapped(let controller, let row):
+            return Observable.just(.moveToDetailScene(controller: controller, row: row))
         }
     }
     
@@ -132,6 +136,10 @@ final class HomeListReactor: Reactor {
             newState.isReloadView = true
             newState.sections = getSection()
             isLoading = false
+        case .moveToDetailScene(let controller, let row):
+            let nextController = DetailController()
+            nextController.reactor = DetailReactor(popUpID: cardSections.inputDataList[row].id)
+            controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState
     }

@@ -116,7 +116,8 @@ final class SearchResultReactor: Reactor {
         case .emptyView:
             newState.isEmptyResult = true
         case .moveToDetailScene(let controller, let indexPath):
-            let nextController = BaseViewController()
+            let nextController = DetailController()
+            nextController.reactor = DetailReactor(popUpID: searchListSection.inputDataList[indexPath.row].id)
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState

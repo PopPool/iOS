@@ -285,7 +285,6 @@
 		08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191352CF366670057BC04 /* UICollectionReusableView+.swift */; };
 		08B191392CF366680057BC04 /* UITableViewCell+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191362CF366670057BC04 /* UITableViewCell+.swift */; };
 		08B1913B2CF366A00057BC04 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B1913A2CF366A00057BC04 /* UIApplication+.swift */; };
-		08B1913D2CF367EB0057BC04 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B1913C2CF367EB0057BC04 /* Constants.swift */; };
 		08B1913F2CF367FA0057BC04 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B1913E2CF367FA0057BC04 /* UIColor+.swift */; };
 		08B191412CF367FF0057BC04 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191402CF367FF0057BC04 /* UIFont+.swift */; };
 		08B1914B2CF41D690057BC04 /* GothicA1-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08B191422CF41D680057BC04 /* GothicA1-Bold.ttf */; };
@@ -341,6 +340,8 @@
 		08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 08B191BB2CF609AE0057BC04 /* RxKakaoSDKAuth */; };
 		08B191BE2CF609AE0057BC04 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */; };
 		08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191C12CF615CA0057BC04 /* Secrets.swift */; };
+		08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */; };
+		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -391,17 +392,16 @@
 		BD9103642CF6149D00BBCCAE /* GetHomeInfoResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103522CF6149D00BBCCAE /* GetHomeInfoResponseDTO.swift */; };
 		BD9103652CF6149D00BBCCAE /* HomeAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103532CF6149D00BBCCAE /* HomeAPIEndpoint.swift */; };
 		BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103542CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift */; };
-		BD9103682CF6149D00BBCCAE /* AuthRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103572CF6149D00BBCCAE /* AuthRepositoryImpl.swift */; };
+		BD9103682CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103572CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift */; };
 		BD9103692CF6149D00BBCCAE /* HomeAPIRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103582CF6149D00BBCCAE /* HomeAPIRepository.swift */; };
 		BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103592CF6149D00BBCCAE /* SignUpRepositoryImpl.swift */; };
 		BD91036B2CF6149D00BBCCAE /* CheckNickNameRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91035B2CF6149D00BBCCAE /* CheckNickNameRequestDTO.swift */; };
 		BD91036C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91035C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift */; };
 		BD91036D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91035D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift */; };
 		BD91036E2CF6149D00BBCCAE /* SignUpRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91035E2CF6149D00BBCCAE /* SignUpRequestDTO.swift */; };
-		BD9103812CF614A900BBCCAE /* HomeUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103702CF614A900BBCCAE /* HomeUseCaseImpl.swift */; };
+		BD9103812CF614A900BBCCAE /* HomeAPIUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103702CF614A900BBCCAE /* HomeAPIUseCaseImpl.swift */; };
 		BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103722CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift */; };
-		BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103732CF614A900BBCCAE /* TryLoginUseCase.swift */; };
-		BD9103852CF614A900BBCCAE /* TryLoginUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103742CF614A900BBCCAE /* TryLoginUseCaseImpl.swift */; };
+		BD9103852CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103742CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift */; };
 		BD9103862CF614A900BBCCAE /* BannerPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103762CF614A900BBCCAE /* BannerPopUpStore.swift */; };
 		BD9103872CF614A900BBCCAE /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103772CF614A900BBCCAE /* Category.swift */; };
 		BD9103882CF614A900BBCCAE /* GetHomeInfoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103782CF614A900BBCCAE /* GetHomeInfoResponse.swift */; };
@@ -723,7 +723,6 @@
 		08B191352CF366670057BC04 /* UICollectionReusableView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView+.swift"; sourceTree = "<group>"; };
 		08B191362CF366670057BC04 /* UITableViewCell+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+.swift"; sourceTree = "<group>"; };
 		08B1913A2CF366A00057BC04 /* UIApplication+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
-		08B1913C2CF367EB0057BC04 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		08B1913E2CF367FA0057BC04 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		08B191402CF367FF0057BC04 /* UIFont+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		08B191422CF41D680057BC04 /* GothicA1-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GothicA1-Bold.ttf"; sourceTree = "<group>"; };
@@ -776,6 +775,8 @@
 		08B191B52CF6092B0057BC04 /* AppleLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleLoginService.swift; sourceTree = "<group>"; };
 		08B191B72CF6092F0057BC04 /* AuthServiceable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthServiceable.swift; sourceTree = "<group>"; };
 		08B191C12CF615CA0057BC04 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponseDTO.swift; sourceTree = "<group>"; };
+		08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponse.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -824,17 +825,16 @@
 		BD9103522CF6149D00BBCCAE /* GetHomeInfoResponseDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetHomeInfoResponseDTO.swift; sourceTree = "<group>"; };
 		BD9103532CF6149D00BBCCAE /* HomeAPIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeAPIEndpoint.swift; sourceTree = "<group>"; };
 		BD9103542CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpStoreResponseDTO.swift; sourceTree = "<group>"; };
-		BD9103572CF6149D00BBCCAE /* AuthRepositoryImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthRepositoryImpl.swift; sourceTree = "<group>"; };
+		BD9103572CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthAPIRepositoryImpl.swift; sourceTree = "<group>"; };
 		BD9103582CF6149D00BBCCAE /* HomeAPIRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeAPIRepository.swift; sourceTree = "<group>"; };
 		BD9103592CF6149D00BBCCAE /* SignUpRepositoryImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpRepositoryImpl.swift; sourceTree = "<group>"; };
 		BD91035B2CF6149D00BBCCAE /* CheckNickNameRequestDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckNickNameRequestDTO.swift; sourceTree = "<group>"; };
 		BD91035C2CF6149D00BBCCAE /* GetCategoryListResponseDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCategoryListResponseDTO.swift; sourceTree = "<group>"; };
 		BD91035D2CF6149D00BBCCAE /* SignUpAPIEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpAPIEndpoint.swift; sourceTree = "<group>"; };
 		BD91035E2CF6149D00BBCCAE /* SignUpRequestDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpRequestDTO.swift; sourceTree = "<group>"; };
-		BD9103702CF614A900BBCCAE /* HomeUseCaseImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeUseCaseImpl.swift; sourceTree = "<group>"; };
+		BD9103702CF614A900BBCCAE /* HomeAPIUseCaseImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeAPIUseCaseImpl.swift; sourceTree = "<group>"; };
 		BD9103722CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpAPIUseCaseImpl.swift; sourceTree = "<group>"; };
-		BD9103732CF614A900BBCCAE /* TryLoginUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TryLoginUseCase.swift; sourceTree = "<group>"; };
-		BD9103742CF614A900BBCCAE /* TryLoginUseCaseImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TryLoginUseCaseImpl.swift; sourceTree = "<group>"; };
+		BD9103742CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthAPIUseCaseImpl.swift; sourceTree = "<group>"; };
 		BD9103762CF614A900BBCCAE /* BannerPopUpStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerPopUpStore.swift; sourceTree = "<group>"; };
 		BD9103772CF614A900BBCCAE /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		BD9103782CF614A900BBCCAE /* GetHomeInfoResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetHomeInfoResponse.swift; sourceTree = "<group>"; };
@@ -1324,7 +1324,6 @@
 		083A259D2CF3620B0099B58E /* Utills */ = {
 			isa = PBXGroup;
 			children = (
-				08B1913C2CF367EB0057BC04 /* Constants.swift */,
 				083A25982CF362090099B58E /* Interfaces */,
 				083A25812CF361EF0099B58E /* Controllers */,
 				08B191A12CF4AE890057BC04 /* ToastMaker.swift */,
@@ -2418,6 +2417,24 @@
 			path = AgeSelectedModal;
 			sourceTree = "<group>";
 		};
+		08CBE9FF2D38986E00248007 /* ResponseDTO */ = {
+			isa = PBXGroup;
+			children = (
+				BD91034F2CF6149D00BBCCAE /* LoginResponseDTO.swift */,
+				08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */,
+			);
+			path = ResponseDTO;
+			sourceTree = "<group>";
+		};
+		08CBEA042D38990600248007 /* AuthAPI */ = {
+			isa = PBXGroup;
+			children = (
+				BD91037A2CF614A900BBCCAE /* LoginResponse.swift */,
+				08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */,
+			);
+			path = AuthAPI;
+			sourceTree = "<group>";
+		};
 		08DC61F62CF76831002A2F44 /* SignUpComplete */ = {
 			isa = PBXGroup;
 			children = (
@@ -2567,7 +2584,7 @@
 			isa = PBXGroup;
 			children = (
 				BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */,
-				BD91034F2CF6149D00BBCCAE /* LoginResponseDTO.swift */,
+				08CBE9FF2D38986E00248007 /* ResponseDTO */,
 			);
 			path = AuthAPI;
 			sourceTree = "<group>";
@@ -2584,7 +2601,7 @@
 		BD91035A2CF6149D00BBCCAE /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				BD9103572CF6149D00BBCCAE /* AuthRepositoryImpl.swift */,
+				BD9103572CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift */,
 				BD9103582CF6149D00BBCCAE /* HomeAPIRepository.swift */,
 				BD9103592CF6149D00BBCCAE /* SignUpRepositoryImpl.swift */,
 				086DD8D92CFF194700B97D3B /* UserAPIRepositoryImpl.swift */,
@@ -2622,10 +2639,9 @@
 		BD9103752CF614A900BBCCAE /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
-				BD9103702CF614A900BBCCAE /* HomeUseCaseImpl.swift */,
+				BD9103702CF614A900BBCCAE /* HomeAPIUseCaseImpl.swift */,
 				BD9103722CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift */,
-				BD9103732CF614A900BBCCAE /* TryLoginUseCase.swift */,
-				BD9103742CF614A900BBCCAE /* TryLoginUseCaseImpl.swift */,
+				BD9103742CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift */,
 				086DD8DD2CFF19C400B97D3B /* UserAPIUseCaseImpl.swift */,
 				089952542D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift */,
 				083C86792D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift */,
@@ -2636,12 +2652,12 @@
 		BD91037B2CF614A900BBCCAE /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				08CBEA042D38990600248007 /* AuthAPI */,
 				086F89DE2D1E7CBE00CA4FC9 /* UserAPI */,
 				BD9103762CF614A900BBCCAE /* BannerPopUpStore.swift */,
 				BD9103772CF614A900BBCCAE /* Category.swift */,
 				BD9103782CF614A900BBCCAE /* GetHomeInfoResponse.swift */,
 				BD9103792CF614A900BBCCAE /* PopUpStoreResponse.swift */,
-				BD91037A2CF614A900BBCCAE /* LoginResponse.swift */,
 				0899526F2D0474430022AEF9 /* PopUpAPI */,
 			);
 			path = Entities;
@@ -2916,7 +2932,6 @@
 				081898BA2D2E5F4C0067BF01 /* MyCommentView.swift in Sources */,
 				089952492D033A1C0022AEF9 /* PopUpAPIEndPoint.swift in Sources */,
 				083A25C82CF363C00099B58E /* LoginController.swift in Sources */,
-				08B1913D2CF367EB0057BC04 /* Constants.swift in Sources */,
 				081899292D3500C50067BF01 /* FAQReactor.swift in Sources */,
 				083A25B72CF362670099B58E /* RequestEndpoint.swift in Sources */,
 				08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */,
@@ -2946,7 +2961,7 @@
 				081898D02D30EA900067BF01 /* PutUserTailoredInfoRequestDTO.swift in Sources */,
 				081898E62D3391CB0067BF01 /* GetMyCommentResponse.swift in Sources */,
 				0818991E2D34DF7D0067BF01 /* MyPageNoticeDetailView.swift in Sources */,
-				BD9103682CF6149D00BBCCAE /* AuthRepositoryImpl.swift in Sources */,
+				BD9103682CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift in Sources */,
 				08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */,
 				BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */,
 				086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */,
@@ -3093,7 +3108,6 @@
 				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
 				081898C02D2FBD130067BF01 /* ProfileEditListButton.swift in Sources */,
-				BD9103842CF614A900BBCCAE /* TryLoginUseCase.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
 				08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */,
 				0899524D2D033AA70022AEF9 /* GetOpenPopUpListResponseDTO.swift in Sources */,
@@ -3164,6 +3178,7 @@
 				083C86452D0DCDE9003F441C /* AddCommentTitleSectionCell.swift in Sources */,
 				083C86412D0C8BD8003F441C /* NormalCommentAddReactor.swift in Sources */,
 				089952732D0475E90022AEF9 /* SearchResultCountSection.swift in Sources */,
+				08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */,
 				4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */,
 				08B191A02CF4AA0E0057BC04 /* Reactive+.swift in Sources */,
 				4E685ED32D12CEB6001EF91C /* FilterBottomSheetViewController.swift in Sources */,
@@ -3181,7 +3196,7 @@
 				086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */,
 				081899272D3500BF0067BF01 /* FAQController.swift in Sources */,
 				08B191672CF432220057BC04 /* PPCancelHeaderView.swift in Sources */,
-				BD9103812CF614A900BBCCAE /* HomeUseCaseImpl.swift in Sources */,
+				BD9103812CF614A900BBCCAE /* HomeAPIUseCaseImpl.swift in Sources */,
 				08DC62112CF8B446002A2F44 /* SortedRequestDTO.swift in Sources */,
 				08B191712CF4398D0057BC04 /* PPLabel.swift in Sources */,
 				4E685ED22D12CEB6001EF91C /* FilterBottomSheetView.swift in Sources */,
@@ -3264,7 +3279,8 @@
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
 				088DE25F2D145E3F0030FA9E /* DetailSimilarSectionCell.swift in Sources */,
 				081898FF2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift in Sources */,
-				BD9103852CF614A900BBCCAE /* TryLoginUseCaseImpl.swift in Sources */,
+				BD9103852CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift in Sources */,
+				08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */,
 				08B191762CF440C40057BC04 /* PPButton.swift in Sources */,
 				083A25CC2CF363CB0099B58E /* LoginView.swift in Sources */,
 				083A259B2CF362090099B58E /* SectionSupplementaryItem.swift in Sources */,

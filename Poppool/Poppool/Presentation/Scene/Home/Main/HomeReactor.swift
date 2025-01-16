@@ -44,7 +44,7 @@ final class HomeReactor: Reactor {
     
     var disposeBag = DisposeBag()
     
-    private let homeApiUseCase = HomeUseCaseImpl()
+    private let homeApiUseCase = HomeAPIUseCaseImpl()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
     
