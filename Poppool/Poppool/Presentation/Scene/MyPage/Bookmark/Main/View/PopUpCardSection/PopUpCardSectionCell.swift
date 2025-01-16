@@ -13,7 +13,7 @@ import RxSwift
 final class PopUpCardSectionCell: UICollectionViewCell {
     
     // MARK: - Components
-    private let imageView: UIImageView = {
+    let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true

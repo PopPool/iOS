@@ -36,6 +36,8 @@ final class MyPageBookmarkReactor: Reactor {
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
         var isEmptyCase: Bool = false
+        var count: Int32 = 0
+        var buttonTitle: String?
     }
     
     // MARK: - properties
@@ -44,6 +46,7 @@ final class MyPageBookmarkReactor: Reactor {
     var disposeBag = DisposeBag()
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
+    private var totalElement: Int32 = 0
     private var currentPage: Int32 = 0
     private var size: Int32 = 10
     private var viewType: String = "크게보기"
@@ -64,11 +67,10 @@ final class MyPageBookmarkReactor: Reactor {
         }
     }()
     
-    private var countSection = ListCountButtonSection(inputDataList: [])
     private var listSection = RecentPopUpSection(inputDataList: [])
     private var cardListSection = PopUpCardSection(inputDataList: [])
     private var spacing12Section = SpacingSection(inputDataList: [.init(spacing: 12)])
-    private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
+    private var spacing150Section = SpacingSection(inputDataList: [.init(spacing: 150)])
     
     // MARK: - init
     init() {
@@ -83,7 +85,6 @@ final class MyPageBookmarkReactor: Reactor {
             return userAPIUseCase.getBookmarkPopUp(page: currentPage, size: size, sort: nil)
                 .withUnretained(self)
                 .map { (owner, response) in
-                    owner.countSection.inputDataList = [.init(count: Int64(response.totalElements), buttonTitle: owner.viewType)]
                     owner.listSection.inputDataList = response.popUpInfoList.map {
                         .init(imagePath: $0.mainImageUrl,
                               date: $0.endDate,
@@ -101,6 +102,7 @@ final class MyPageBookmarkReactor: Reactor {
                         )
                     }
                     owner.totalPage = response.totalPages
+                    owner.totalElement = response.totalElements
                     return .loadView
                 }
         case .changePage:
@@ -113,7 +115,6 @@ final class MyPageBookmarkReactor: Reactor {
                     return userAPIUseCase.getBookmarkPopUp(page: currentPage, size: size, sort: nil)
                         .withUnretained(self)
                         .map { (owner, response) in
-                            owner.countSection.inputDataList = [.init(count: Int64(response.totalElements), buttonTitle: owner.viewType)]
                             owner.listSection.inputDataList.append(contentsOf: response.popUpInfoList.map {
                                 .init(
                                     imagePath: $0.mainImageUrl,
@@ -171,7 +172,6 @@ final class MyPageBookmarkReactor: Reactor {
                 .subscribe(onNext: { (owner, state) in
                     if state.isSave {
                         owner.viewType = state.currentSortedCode ?? ""
-                        owner.countSection.inputDataList[0].buttonTitle = state.currentSortedCode ?? ""
                         ToastMaker.createToast(message: "보기 옵션을 적용했어요")
                     }
                 })
@@ -183,16 +183,16 @@ final class MyPageBookmarkReactor: Reactor {
         }
         newState.sections = getSection()
         newState.isEmptyCase = listSection.isEmpty
+        newState.count = totalElement
+        newState.buttonTitle = viewType
         return newState
     }
     
     func getSection() -> [any Sectionable] {
         return [
-            spacing16Section,
-            countSection,
-            spacing16Section,
             spacing12Section,
-            viewType == "크게보기" ? cardListSection : listSection
+            viewType == "크게보기" ? cardListSection : listSection,
+            spacing150Section
         ]
     }
 }

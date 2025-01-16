@@ -21,6 +21,7 @@ final class MyPageBookmarkView: UIView {
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
         view.backgroundColor = .g50
+        view.isScrollEnabled = false
         return view
     }()
     
@@ -29,6 +30,11 @@ final class MyPageBookmarkView: UIView {
         label.textColor = .g400
         label.isHidden = true
         return label
+    }()
+    
+    let countButtonView: CountButtonView = {
+        let view = CountButtonView()
+        return view
     }()
     
     let emptyButton: UIButton = {
@@ -64,10 +70,15 @@ private extension MyPageBookmarkView {
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+        self.addSubview(countButtonView)
+        countButtonView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(22)
+        }
         self.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom)
+            make.top.equalTo(countButtonView.snp.bottom).offset(16)
             make.leading.trailing.bottom.equalToSuperview()
         }
         

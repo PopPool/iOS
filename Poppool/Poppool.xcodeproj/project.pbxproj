@@ -343,6 +343,7 @@
 		08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */; };
 		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
 		08CBEA0B2D38DBD600248007 /* LastLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0A2D38DBD600248007 /* LastLoginView.swift */; };
+		08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -779,6 +780,7 @@
 		08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponseDTO.swift; sourceTree = "<group>"; };
 		08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponse.swift; sourceTree = "<group>"; };
 		08CBEA0A2D38DBD600248007 /* LastLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastLoginView.swift; sourceTree = "<group>"; };
+		08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButtonView.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -1210,6 +1212,7 @@
 			isa = PBXGroup;
 			children = (
 				081899472D3632070067BF01 /* PopUpCardSection */,
+				08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2956,6 +2959,7 @@
 				083C864F2D0DD3A6003F441C /* AddCommentImageSection.swift in Sources */,
 				08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */,
 				083A25B42CF362670099B58E /* Responsable.swift in Sources */,
+				08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */,
 				0841BAA82CFA354500049E31 /* HomeTitleSection.swift in Sources */,
 				08B191782CF442230057BC04 /* UIImage+.swift in Sources */,
 				081898BC2D2E5F510067BF01 /* MyCommentReactor.swift in Sources */,
