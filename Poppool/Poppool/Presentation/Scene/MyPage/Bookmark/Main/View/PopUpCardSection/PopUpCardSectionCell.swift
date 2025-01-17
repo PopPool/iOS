@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import RxSwift
+import RxCocoa
 
 final class PopUpCardSectionCell: UICollectionViewCell {
     
@@ -38,7 +39,10 @@ final class PopUpCardSectionCell: UICollectionViewCell {
         return label
     }()
     
-    
+    let bookMarkButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
     var disposeBag = DisposeBag()
     
     // MARK: - init
@@ -54,6 +58,11 @@ final class PopUpCardSectionCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     private func addHolesToCell() {
@@ -97,6 +106,12 @@ private extension PopUpCardSectionCell {
             make.height.equalTo(423)
         }
         
+        contentView.addSubview(bookMarkButton)
+        bookMarkButton.snp.makeConstraints { make in
+            make.size.equalTo(36)
+            make.top.trailing.equalToSuperview().inset(20)
+        }
+        
         contentView.addSubview(dateLabel)
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(24)
@@ -115,6 +130,12 @@ private extension PopUpCardSectionCell {
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(24)
         }
+        
+        bookMarkButton.rx.tap
+            .subscribe { _ in
+                print("Tapped")
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -125,6 +146,7 @@ extension PopUpCardSectionCell: Inputable {
         var title: String?
         var id: Int64
         var address: String?
+        var isBookMark: Bool
     }
     
     func injection(with input: Input) {
@@ -133,5 +155,11 @@ extension PopUpCardSectionCell: Inputable {
         dateLabel.setLineHeightText(text: date, font: .EngFont(style: .regular, size: 13))
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 16))
         addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 14))
+        
+        if input.isBookMark {
+            bookMarkButton.setImage(UIImage(named: "icon_bookmark_fill"), for: .normal)
+        } else {
+            bookMarkButton.setImage(UIImage(named: "icon_bookmark"), for: .normal)
+        }
     }
 }

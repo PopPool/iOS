@@ -21,7 +21,7 @@ final class MyPageBookmarkView: UIView {
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
         view.backgroundColor = .g50
-        view.isScrollEnabled = false
+//        view.isScrollEnabled = false
         return view
     }()
     

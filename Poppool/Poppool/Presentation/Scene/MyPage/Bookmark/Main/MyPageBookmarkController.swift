@@ -205,6 +205,20 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
+        guard let reactor = reactor else { return cell }
+        if let cell = cell as? PopUpCardSectionCell {
+            cell.bookMarkButton.rx.tap
+                .map { Reactor.Action.bookMarkButtonTapped(row: indexPath.row) }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailSimilarSectionCell {
+            cell.bookMarkButton.rx.tap
+                .map { Reactor.Action.bookMarkButtonTapped(row: indexPath.row) }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
         return cell
     }
     

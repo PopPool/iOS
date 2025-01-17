@@ -32,6 +32,11 @@ final class DetailSimilarSectionCell: UICollectionViewCell {
         return label
     }()
     
+    let bookMarkButton: UIButton = {
+        let button = UIButton()
+        return button
+    }()
+    
     var disposeBag = DisposeBag()
     
     // MARK: - init
@@ -49,6 +54,11 @@ final class DetailSimilarSectionCell: UICollectionViewCell {
         fatalError()
     }
     
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     private func addHolesToCell() {
         // 이미지뷰의 frame을 기준으로 위치 계산
         
@@ -107,6 +117,13 @@ private extension DetailSimilarSectionCell {
             make.leading.trailing.equalToSuperview().inset(12)
             make.top.equalTo(dateLabel.snp.bottom).offset(5.5)
         }
+        
+        contentView.addSubview(bookMarkButton)
+        bookMarkButton.snp.makeConstraints { make in
+            make.size.equalTo(20)
+            make.top.trailing.equalToSuperview().inset(12)
+            
+        }
     }
 }
 
@@ -116,6 +133,7 @@ extension DetailSimilarSectionCell: Inputable {
         var date: String?
         var title: String?
         var id: Int64
+        var isBookMark: Bool?
     }
     
     func injection(with input: Input) {
@@ -123,5 +141,15 @@ extension DetailSimilarSectionCell: Inputable {
         imageView.setPPImage(path: input.imagePath)
         dateLabel.setLineHeightText(text: "~" + date, font: .EngFont(style: .regular, size: 11))
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 12))
+        if let isBookMark = input.isBookMark {
+            bookMarkButton.isHidden = false
+            if isBookMark {
+                bookMarkButton.setImage(UIImage(named: "icon_bookmark_fill"), for: .normal)
+            } else {
+                bookMarkButton.setImage(UIImage(named: "icon_bookmark"), for: .normal)
+            }
+        } else {
+            bookMarkButton.isHidden = true
+        }
     }
 }

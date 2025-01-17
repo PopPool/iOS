@@ -21,6 +21,7 @@ final class MyPageBookmarkReactor: Reactor {
         case cellTapped(controller: BaseViewController, row: Int)
         case dropDownButtonTapped(controller: BaseViewController)
         case emptyButtonTapped(controller: BaseViewController)
+        case bookMarkButtonTapped(row: Int)
     }
     
     enum Mutation {
@@ -89,7 +90,8 @@ final class MyPageBookmarkReactor: Reactor {
                         .init(imagePath: $0.mainImageUrl,
                               date: $0.endDate,
                               title: $0.popUpStoreName,
-                              id: $0.popUpStoreId
+                              id: $0.popUpStoreId,
+                              isBookMark: true
                         )
                     }
                     owner.cardListSection.inputDataList = response.popUpInfoList.map {
@@ -98,7 +100,8 @@ final class MyPageBookmarkReactor: Reactor {
                             date: ($0.startDate ?? "") + " - " + ($0.endDate ?? ""),
                             title: $0.popUpStoreName,
                             id: $0.popUpStoreId,
-                            address: $0.address
+                            address: $0.address,
+                            isBookMark: true
                         )
                     }
                     owner.totalPage = response.totalPages
@@ -120,7 +123,8 @@ final class MyPageBookmarkReactor: Reactor {
                                     imagePath: $0.mainImageUrl,
                                     date: $0.endDate,
                                     title: $0.popUpStoreName,
-                                    id: $0.popUpStoreId
+                                    id: $0.popUpStoreId,
+                                    isBookMark: true
                                 )
                             })
                             owner.cardListSection.inputDataList.append(contentsOf: response.popUpInfoList.map {
@@ -129,7 +133,8 @@ final class MyPageBookmarkReactor: Reactor {
                                     date: ($0.startDate ?? "") + " - " + ($0.endDate ?? ""),
                                     title: $0.popUpStoreName,
                                     id: $0.popUpStoreId,
-                                    address: $0.address
+                                    address: $0.address,
+                                    isBookMark: true
                                 )
                             })
                             return .loadView
@@ -146,6 +151,18 @@ final class MyPageBookmarkReactor: Reactor {
             return Observable.just(.presentModal(controller: controller))
         case .emptyButtonTapped(let controller):
             return Observable.just(.moveToSuggestScene(controller: controller))
+        case .bookMarkButtonTapped(let row):
+            let popUpID = cardListSection.inputDataList[row].id
+            cardListSection.inputDataList[row].isBookMark.toggle()
+            listSection.inputDataList[row].isBookMark?.toggle()
+            
+            if cardListSection.inputDataList[row].isBookMark {
+                return userAPIUseCase.postBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            } else {
+                return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            }
         }
     }
     
