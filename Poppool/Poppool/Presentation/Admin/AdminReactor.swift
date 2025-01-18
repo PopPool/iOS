@@ -12,6 +12,8 @@ final class AdminReactor: Reactor {
 
         // 화면 이동 후 상태를 초기화하기 위한 액션
         case resetNavigation
+        case reloadData
+
     }
 
     enum Mutation {
@@ -39,13 +41,13 @@ final class AdminReactor: Reactor {
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
-            return .concat([
-                .just(.setIsLoading(true)),
-                useCase.fetchStoreList(query: nil, page: 0, size: 20)
-                    .map { .setStores($0.popUpStoreList) },
-                .just(.setIsLoading(false))
-            ])
+        case .viewDidLoad, .reloadData:
+                  return .concat([
+                      .just(.setIsLoading(true)),
+                      useCase.fetchStoreList(query: nil, page: 0, size: 20)
+                          .map { .setStores($0.popUpStoreList) },
+                      .just(.setIsLoading(false))
+                  ])
 
         case let .updateSearchQuery(query):
             return .concat([

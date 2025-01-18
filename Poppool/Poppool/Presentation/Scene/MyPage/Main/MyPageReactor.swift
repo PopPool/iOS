@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 final class MyPageReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -22,10 +22,10 @@ final class MyPageReactor: Reactor {
         case commentButtonTapped(controller: BaseViewController)
         case listCellTapped(controller: BaseViewController, title: String?)
         case logoutButtonTapped
-        case adminMenuTapped(controller: BaseViewController)
+        case adminMenuTapped(controller: BaseViewController) // 관리자 메뉴 추가
 
     }
-    
+
     enum Mutation {
         case loadView
         case moveToProfileEditScene(controller: BaseViewController)
@@ -34,23 +34,23 @@ final class MyPageReactor: Reactor {
         case moveToPopUpDetailScene(controller: BaseViewController, row: Int)
         case moveToLoginScene(controller: BaseViewController)
         case moveToMyCommentScene(controller: BaseViewController)
-        case moveToAdminScene(controller: BaseViewController) // 추가
+        case moveToAdminScene(controller: BaseViewController) // 관리자 메뉴 이동 추가
 
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isLogin: Bool = false
         var backgroundImageViewPath: String?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -64,7 +64,7 @@ final class MyPageReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var profileSection = MyPageProfileSection(inputDataList: [])
     private var commentTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "내 코멘트", buttonTitle: "전체보기")])
     private var commentSection = MyPageCommentSection(inputDataList: [])
@@ -84,29 +84,29 @@ final class MyPageReactor: Reactor {
     private var etcSection = MyPageListSection(inputDataList: [
         .init(title: "회원탈퇴")
     ])
-    
+
     private var adminEtcSection = MyPageListSection(inputDataList: [
         .init(title: "회원탈퇴"),
         .init(title: "관리자 메뉴 바로가기")
     ])
-    
+
     private var logoutSection = MyPageLogoutSection(inputDataList: [.init()])
-    
+
     private let spacing8Section = SpacingSection(inputDataList: [.init(spacing: 8)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     private let spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
     private let spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
-    
+
     var isLogin: Bool = false
     var isAdmin: Bool = false
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -125,7 +125,7 @@ final class MyPageReactor: Reactor {
                             description: response.intro
                         )
                     ]
-                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map {
+                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map  {
                         .init(popUpImagePath: $0.mainImageUrl, title: $0.popUpStoreName, popUpID: $0.popUpStoreId)
                     }
                     return .loadView
@@ -144,15 +144,18 @@ final class MyPageReactor: Reactor {
             } else {
                 return Observable.just(.moveToDetailScene(controller: controller, title: title))
             }
+        case .adminMenuTapped(let controller): // 추가된 관리자 메뉴 액션 처리
+            return Observable.just(.moveToAdminScene(controller: controller))
+
         case .logoutButtonTapped:
             return userAPIUseCase.postLogout()
                 .andThen(Observable.just(.logout))
-        default:
-            return .empty()
+        case .adminMenuTapped(let controller):
+            return Observable.just(.moveToAdminScene(controller: controller))
+
         }
     }
 
-    
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -165,15 +168,16 @@ final class MyPageReactor: Reactor {
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .logout:
             let service = KeyChainService()
-            _ = service.deleteToken(type: .accessToken)
-            _ = service.deleteToken(type: .refreshToken)
+            let _ = service.deleteToken(type: .accessToken)
+            let _ = service.deleteToken(type: .refreshToken)
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)
             }
         case .moveToDetailScene(let controller, let title):
             guard let title = title else { break }
-            if title == "회원탈퇴" {
+            switch title {
+            case "회원탈퇴":
                 let nickName = profileSection.inputDataList.first?.nickName
                 let nextController = WithdrawlCheckModalController(nickName: nickName)
                 nextController.reactor = WithdrawlCheckModalReactor()
@@ -218,12 +222,18 @@ final class MyPageReactor: Reactor {
             default:
                 break
             }
-        case .moveToLoginScene(let controller):
+        case.moveToLoginScene(let controller):
             let nextController = SubLoginController()
             nextController.reactor = SubLoginReactor()
             let navigationController = UINavigationController(rootViewController: nextController)
             navigationController.modalPresentationStyle = .fullScreen
             controller.present(navigationController, animated: true)
+        case .moveToAdminScene(let controller): // 관리자 메뉴 이동 처리
+            let nickname = profileSection.inputDataList.first?.nickName ?? ""
+            let adminVC = AdminViewController(nickname: nickname)
+            adminVC.reactor = AdminReactor(useCase: DefaultAdminUseCase(repository: DefaultAdminRepository(provider: ProviderImpl())))
+            controller.navigationController?.pushViewController(adminVC, animated: true)
+        
         case .moveToMyCommentScene(let controller):
             let nextController = MyCommentController()
             nextController.reactor = MyCommentReactor()
@@ -248,16 +258,16 @@ final class MyPageReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return getProfileSection() + getCommentSection() + getNormalSection() + getInfoSection() + getETCSection()
     }
-    
-    
+
+
     func getProfileSection() -> [any Sectionable] {
         return [profileSection]
     }
-    
+
     func getCommentSection() -> [any Sectionable] {
         if !isLogin { return [] }
         if commentSection.isEmpty {
@@ -273,7 +283,7 @@ final class MyPageReactor: Reactor {
             ]
         }
     }
-    
+
     func getNormalSection() -> [any Sectionable] {
         if isLogin {
             return [
@@ -286,7 +296,7 @@ final class MyPageReactor: Reactor {
             return []
         }
     }
-    
+
     func getInfoSection() -> [any Sectionable] {
         if isLogin {
             return [
@@ -306,7 +316,7 @@ final class MyPageReactor: Reactor {
             ]
         }
     }
-    
+
     func getETCSection() -> [any Sectionable] {
         if isLogin {
             if isAdmin {

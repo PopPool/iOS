@@ -28,7 +28,6 @@
 		081898BA2D2E5F4C0067BF01 /* MyCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898B92D2E5F4C0067BF01 /* MyCommentView.swift */; };
 		081898BC2D2E5F510067BF01 /* MyCommentReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BB2D2E5F510067BF01 /* MyCommentReactor.swift */; };
 		081898BE2D2E5F590067BF01 /* MyCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BD2D2E5F590067BF01 /* MyCommentController.swift */; };
-		081898C02D2FBD130067BF01 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
 		081898C32D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */; };
 		081898C52D30AEF40067BF01 /* GetMyProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */; };
 		081898CA2D30D5BA0067BF01 /* InfoEditModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */; };
@@ -396,6 +395,8 @@
 		4E755B322D2BA81800ADFB21 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 4E755B312D2BA81800ADFB21 /* Then */; };
 		4E7823A82D2E84E800AC5110 /* AdminRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */; };
 		4E7823A92D2E84FB00AC5110 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
+		4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
+		4E78706F2D37CB2200465FC9 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
 		4E92F0D52D1BE72F00D00495 /* StoreListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E92F0D42D1BE72E00D00495 /* StoreListHeaderView.swift */; };
 		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
 		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
@@ -1286,45 +1287,6 @@
 				081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */,
 			);
 			path = ViewTypeModal;
-			sourceTree = "<group>";
-		};
-		081898C12D2FBD170067BF01 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				081898952D2965C90067BF01 /* ProfileEditView.swift */,
-				081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		081898C62D30D5940067BF01 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				081898C12D2FBD170067BF01 /* View */,
-				081898932D2965C20067BF01 /* ProfileEditController.swift */,
-				081898972D2965D20067BF01 /* ProfileEditReactor.swift */,
-			);
-			path = Main;
-			sourceTree = "<group>";
-		};
-		081898C72D30D5A10067BF01 /* InfoEditModal */ = {
-			isa = PBXGroup;
-			children = (
-				081898C92D30D5BA0067BF01 /* InfoEditModalView.swift */,
-				081898CB2D30D5BF0067BF01 /* InfoEditModalController.swift */,
-				081898CD2D30D5C60067BF01 /* InfoEditModalReactor.swift */,
-			);
-			path = InfoEditModal;
-			sourceTree = "<group>";
-		};
-		081898C82D30D5AC0067BF01 /* CategoryEditModal */ = {
-			isa = PBXGroup;
-			children = (
-				081898D12D30F57D0067BF01 /* CategoryEditModalView.swift */,
-				081898D32D30F5840067BF01 /* CategoryEditModalController.swift */,
-				081898D52D30F58A0067BF01 /* CategoryEditModalReactor.swift */,
-			);
-			path = CategoryEditModal;
 			sourceTree = "<group>";
 		};
 		083A256B2CF361190099B58E /* Application */ = {
@@ -3443,7 +3405,9 @@
 				08B191842CF48A820057BC04 /* SignUpStep2View.swift in Sources */,
 				0841BA882CF9F62400049E31 /* PresignedURLRequestDTO.swift in Sources */,
 				0841BA8C2CF9F67100049E31 /* PreSignedAPIEndPoint.swift in Sources */,
+				4E78706F2D37CB2200465FC9 /* PopUpStoreRegisterViewController.swift in Sources */,
 				081899082D34B35A0067BF01 /* MyPageNoticeView.swift in Sources */,
+				4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */,
 				081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */,
 				08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */,
 				08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */,

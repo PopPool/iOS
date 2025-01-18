@@ -11,7 +11,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
 
     // MARK: - Navigation/Header
-    
+    var completionHandler: (() -> Void)?
     private var selectedImages: [UIImage] = []
     private var selectedMainImageIndex: Int?
     private var imageFileNames: [String] = []  // S3 업로드 후의 파일명 저장
@@ -26,17 +26,24 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
 
     private let popupName: String = ""
+    private let editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore?
+    let presignedService = PreSignedService()
 
     var disposeBag = DisposeBag()
        private let nickname: String
        private let navContainer = UIView()
 
-    init(nickname: String, adminUseCase: AdminUseCase) {
+    init(nickname: String, adminUseCase: AdminUseCase, editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
+        self.editingStore = editingStore
         super.init()
         self.accountIdLabel.text = nickname + "님"
-    }
+        if editingStore != nil {
+               pageTitleLabel.text = "팝업스토어 수정"
+           }
+       }
+
 
 
        required init?(coder: NSCoder) {
@@ -200,6 +207,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        if let store = editingStore {
+            fillFormWithExistingData(store)
+        }
 
 
         setupNavigation()
@@ -234,6 +244,11 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             updateSaveButtonState()
 
         }
+    }
+    private func fillFormWithExistingData(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+        nameField?.text = store.name
+        categoryButton.setTitle("\(store.categoryName) ▾", for: .normal)
+//        addressField?.text = store.address
     }
 
 
@@ -798,12 +813,10 @@ private extension UITextField {
     }
 }
 extension PopUpStoreRegisterViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    // 몇 개의 셀?
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
     }
 
-    // 셀 구성
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: ImageCell.identifier,
@@ -987,9 +1000,16 @@ private extension PopUpStoreRegisterViewController {
         // 1. 폼 데이터 검증
         guard validateFormData() else { return }
 
-        // 2. 이미지 업로드 실행
-        uploadImages()
+        if let editingStore = editingStore {
+            // 수정 모드
+            updateStore(editingStore)
+        } else {
+            // 새로 등록 모드
+            // 2. 이미지 업로드 실행
+            uploadImages()
+        }
     }
+
 
     // 폼 데이터 검증
     private func validateFormData() -> Bool {
@@ -1005,29 +1025,130 @@ private extension PopUpStoreRegisterViewController {
         Logger.log(message: "폼 데이터 검증 성공", category: .debug)
         return true
     }
+    private func updateStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+        // 이미지가 수정되었다면 먼저 이미지 업로드
+        if !images.isEmpty {
+            uploadImagesForUpdate(store)
+        } else {
+            // 이미지 수정이 없다면 바로 스토어 정보 업데이트
+            updateStoreInfo(store, updatedImagePaths: nil)
+        }
+    }
+    private func uploadImagesForUpdate(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+        let uuid = UUID().uuidString
+        let updatedImages = images.enumerated().map { index, image in
+            let filePath = "PopUpImage/\(nameField?.text ?? "")/\(uuid)/\(index).jpg"
+            return ExtendedImage(
+                filePath: filePath,
+                image: image.image,
+                isMain: image.isMain)
+        }
+
+        presignedService.tryUpload(datas: updatedImages.map {
+            PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
+        })
+        .subscribe(
+            onSuccess: { [weak self] _ in
+                guard let self = self else { return }
+                Logger.log(message: "이미지 업로드 성공", category: .info)
+                let imagePaths = updatedImages.map { $0.filePath }
+                self.updateStoreInfo(store, updatedImagePaths: imagePaths)
+            },
+            onError: { [weak self] error in
+                Logger.log(message: "이미지 업로드 실패: \(error.localizedDescription)", category: .error)
+                self?.showErrorAlert(message: "이미지 업로드 실패: \(error.localizedDescription)")
+            }
+        )
+        .disposed(by: disposeBag)
+    }
+
+    private func updateStoreInfo(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore, updatedImagePaths: [String]?) {
+        guard let name = nameField?.text,
+              let address = addressField?.text,
+              let latitude = Double(latField?.text ?? ""),
+              let longitude = Double(lonField?.text ?? ""),
+              let description = descTV?.text,
+              let categoryTitle = categoryButton.title(for: .normal)?.replacingOccurrences(of: " ▾", with: "") else {
+            return
+        }
+
+        let request = UpdatePopUpStoreRequestDTO(
+            popUpStore: .init(
+                id: store.id,
+                name: name,
+                categoryId: Int64(getCategoryId(from: categoryTitle)),
+                desc: description,
+                address: address,
+                startDate: getFormattedDate(from: selectedStartDate),
+                endDate: getFormattedDate(from: selectedEndDate),
+                mainImageUrl: (updatedImagePaths?.first { _ in true }) ?? store.mainImageUrl,
+                bannerYn: false,
+                imageUrl: updatedImagePaths ?? [store.mainImageUrl],
+                startDateBeforeEndDate: true
+            ),
+            location: .init(
+                latitude: latitude,
+                longitude: longitude,
+                markerTitle: "마커 제목",
+                markerSnippet: "마커 설명"
+            ),
+            imagesToAdd: updatedImagePaths ?? [],
+            imagesToDelete: []  // 기존 이미지 삭제 로직이 필요하다면 추가
+        )
+
+        adminUseCase.updateStore(request: request)
+            .subscribe(
+                onNext: { [weak self] _ in
+                    Logger.log(message: "updateStore API 호출 성공", category: .info)
+                    self?.showSuccessAlert(isUpdate: true)
+                },
+                onError: { [weak self] error in
+                    Logger.log(message: "updateStore API 호출 실패: \(error.localizedDescription)", category: .error)
+                    self?.showErrorAlert(message: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+
+    private func showSuccessAlert(isUpdate: Bool = false) {
+        let message = isUpdate ? "팝업스토어가 성공적으로 수정되었습니다." : "팝업스토어가 성공적으로 등록되었습니다."
+        let alert = UIAlertController(
+            title: isUpdate ? "수정 성공" : "등록 성공",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            self?.completionHandler?()  // 목록 새로고침
+            self?.navigationController?.popViewController(animated: true)
+        })
+        present(alert, animated: true)
+    }
 
     // 이미지 업로드
     private func uploadImages() {
         let uuid = UUID().uuidString
-        let baseS3URL = Secrets.popPoolS3BaseURL.rawValue
+//        let baseS3URL = Secrets.popPoolS3BaseURL.rawValue
         let updatedImages = images.enumerated().map { index, image in
             let filePath = "PopUpImage/\(nameField?.text ?? "")/\(uuid)/\(index).jpg"
-            return ExtendedImage(filePath: filePath, image: image.image, isMain: image.isMain)
+            return ExtendedImage(
+                filePath: filePath,
+                image: image.image,
+                isMain: image.isMain)
         }
 
-        let presignedService = PreSignedService()
+//        let presignedService = PreSignedService()
         presignedService.tryUpload(datas: updatedImages.map {
             PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
         })
-        .observe(on: MainScheduler.instance)
+//        .observe(on: MainScheduler.instance)
         .subscribe(
             onSuccess: { [weak self] _ in
                 guard let self = self else { return }
                 Logger.log(message: "이미지 업로드 성공", category: .info)
 
-                let imagePaths = updatedImages.map { baseS3URL + $0.filePath }
+                let imagePaths = updatedImages.map { $0.filePath }
                 let mainImage = updatedImages.first { $0.isMain }?.filePath ?? ""
-                self.callCreateStoreAPI(mainImage: baseS3URL + mainImage, imagePaths: imagePaths)
+                self.callCreateStoreAPI(mainImage: mainImage, imagePaths: imagePaths)  // baseURL 제거
             },
             onError: { error in
                 Logger.log(message: "이미지 업로드 실패: \(error.localizedDescription)", category: .error)
@@ -1096,10 +1217,13 @@ private extension PopUpStoreRegisterViewController {
             message: "팝업스토어가 성공적으로 등록되었습니다.",
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            // 성공 후 닫기와 핸들러 호출
+            self?.completionHandler?()
+            self?.navigationController?.popViewController(animated: true)
+        }))
         present(alert, animated: true)
     }
-
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(
             title: "등록 실패",

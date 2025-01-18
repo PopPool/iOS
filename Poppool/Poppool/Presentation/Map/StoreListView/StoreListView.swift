@@ -73,7 +73,7 @@ private extension StoreListView {
         }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(grabberHandle.snp.bottom).offset(14)
+            make.top.equalTo(grabberHandle.snp.bottom).offset(1)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }

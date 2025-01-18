@@ -60,7 +60,5 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>앱이 사용자의 현재 위치를 확인하기 위해 위치 권한이 필요합니다</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.poppoolIOS.poppool</string>
 </dict>
 </plist>

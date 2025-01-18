@@ -1,6 +1,7 @@
 import Foundation
 import RxSwift
 import UIKit
+import Alamofire
 
 protocol AdminRepository {
     // 기존 메서드들
@@ -49,7 +50,6 @@ final class DefaultAdminRepository: AdminRepository {
     }
 
     func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
-        
         Logger.log(message: "createStore API 호출 시작", category: .info)
         let endpoint = AdminAPIEndpoint.createStore(request: request)
         Logger.log(message: "Request URL: \(endpoint.baseURL + endpoint.path)", category: .info)
@@ -58,7 +58,17 @@ final class DefaultAdminRepository: AdminRepository {
         return provider.requestData(
             with: endpoint,
             interceptor: tokenInterceptor
-        ).do(
+        )
+        .catch { error -> Observable<EmptyResponse> in
+            if case .responseSerializationFailed(let reason) = error as? AFError,
+               case .inputDataNilOrZeroLength = reason {
+                // 빈 응답 데이터일 경우 성공으로 간주
+                Logger.log(message: "빈 응답 데이터 처리: 성공으로 간주", category: .info)
+                return Observable.just(EmptyResponse())
+            }
+            throw error
+        }
+        .do(
             onNext: { _ in
                 Logger.log(message: "createStore API 호출 성공", category: .info)
             },
@@ -67,6 +77,8 @@ final class DefaultAdminRepository: AdminRepository {
             }
         )
     }
+
+
 
     func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
         let endpoint = AdminAPIEndpoint.updateStore(request: request)
@@ -77,11 +89,18 @@ final class DefaultAdminRepository: AdminRepository {
     }
 
     func deleteStore(id: Int64) -> Observable<EmptyResponse> {
+        Logger.log(message: "deleteStore API 호출 시작", category: .info)
         let endpoint = AdminAPIEndpoint.deleteStore(id: id)
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
-        )
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
+            .andThen(Observable.just(EmptyResponse()))  
+            .do(
+                onNext: { _ in
+                    Logger.log(message: "deleteStore API 호출 성공", category: .info)
+                },
+                onError: { error in
+                    Logger.log(message: "deleteStore API 호출 실패: \(error)", category: .error)
+                }
+            )
     }
 
     // MARK: - Notice Methods

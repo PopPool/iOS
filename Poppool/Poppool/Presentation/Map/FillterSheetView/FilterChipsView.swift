@@ -27,8 +27,8 @@ final class FilterChipsView: UIView {
     private let emptyStateLabel: UILabel = {
         let label = UILabel()
         label.text = "선택한 옵션이 없어요 :)"
-        label.textColor = .g200
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .g300
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .center
         label.isHidden = true // 초기에는 숨김 상태
         return label

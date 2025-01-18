@@ -30,6 +30,9 @@ final class MapSearchInput: UIView, View {
         textField.clearButtonMode = .whileEditing
         textField.textColor = .g400  
         textField.isUserInteractionEnabled = true 
+        textField.returnKeyType = .search // 검색 버튼으로 설정
+        textField.enablesReturnKeyAutomatically = true // 텍스트가 입력되면 활성화
+
         return textField
         textField.attributedPlaceholder = NSAttributedString(
             string: "팝업스토어명, 지역을 입력해보세요",
@@ -54,15 +57,24 @@ final class MapSearchInput: UIView, View {
     }
 
     func setBackgroundColorForList() {
-        containerView.backgroundColor = .g50
+        searchTextField.backgroundColor = .g50
     }
+    
 
     func bind(reactor: MapReactor) {
-        searchTextField.rx.text.orEmpty
-            .distinctUntilChanged()
+        searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .withLatestFrom(searchTextField.rx.text.orEmpty)
             .bind { query in
-                reactor.action.onNext(.filterUpdated(.location, [query]))
+                
+                reactor.action.onNext(.searchTapped(query))
             }
+            .disposed(by: disposeBag)
+
+
+        searchTextField.rx.text.orEmpty
+            .subscribe(onNext: { text in
+                print("[DEBUG] TextField Input: \(text)")
+            })
             .disposed(by: disposeBag)
 
         reactor.state
@@ -83,6 +95,7 @@ final class MapSearchInput: UIView, View {
             .disposed(by: disposeBag)
 
     }
+    
 }
 
 // MARK: - Setup

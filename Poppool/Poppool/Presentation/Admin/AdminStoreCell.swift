@@ -81,7 +81,10 @@ final class AdminStoreCell: UITableViewCell {
         titleLabel.text = store.name
         categoryLabel.text = store.categoryName
         statusChip.text = "운영"
-        Logger.log(message: "이미지 경로: \(store.mainImageUrl ?? "nil")", category: .debug)
-        storeImageView.setPPImage(path: store.mainImageUrl)
+
+        // mainImageUrl에서 baseURL 부분 제거
+        let imagePath = store.mainImageUrl.replacingOccurrences(of: Secrets.popPoolS3BaseURL.rawValue, with: "")
+        Logger.log(message: "이미지 경로: \(imagePath)", category: .debug)
+        storeImageView.setPPImage(path: imagePath)
     }
 }

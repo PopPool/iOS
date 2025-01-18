@@ -45,7 +45,7 @@ final class StoreListViewController: UIViewController, View {
     private func setupCollectionView() {
         mainView.collectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        mainView.collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+        mainView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
     func bind(reactor: Reactor) {
