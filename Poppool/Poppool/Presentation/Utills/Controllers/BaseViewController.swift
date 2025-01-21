@@ -52,7 +52,6 @@ class BaseViewController: UIViewController {
     
     func systemStatusBarIsDarkBind() {
         systemStatusBarIsDark
-            .distinctUntilChanged()
             .withUnretained(self)
             .subscribe { (owner, isDark) in
                 UIView.animate(withDuration: 0.3) { [weak owner] in

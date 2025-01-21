@@ -155,7 +155,7 @@ final class MyPageBookmarkReactor: Reactor {
             let popUpID = cardListSection.inputDataList[row].id
             cardListSection.inputDataList[row].isBookMark.toggle()
             listSection.inputDataList[row].isBookMark?.toggle()
-            
+            ToastMaker.createBookMarkToast(isBookMark: cardListSection.inputDataList[row].isBookMark)
             if cardListSection.inputDataList[row].isBookMark {
                 return userAPIUseCase.postBookmarkPopUp(popUpID: popUpID)
                     .andThen(Observable.just(.loadView))

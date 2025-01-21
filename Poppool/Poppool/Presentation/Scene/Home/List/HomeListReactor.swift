@@ -50,7 +50,7 @@ final class HomeListReactor: Reactor {
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
     private var currentPage: Int32 = 0
-    private var size: Int32 = 8
+    private var size: Int32 = 10
     
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -182,7 +182,7 @@ final class HomeListReactor: Reactor {
             })
             totalPage = response.newPopUpStoreTotalPages
         case .popular:
-            cardSections.inputDataList = response.popularPopUpStoreList.map({ response in
+            cardSections.inputDataList = response.popularPopUpStoreList.enumerated().map({ (index, response) in
                 return .init(
                     imagePath: response.mainImageUrl,
                     id: response.id,
@@ -192,7 +192,9 @@ final class HomeListReactor: Reactor {
                     startDate: response.startDate,
                     endDate: response.endDate,
                     isBookmark: response.bookmarkYn,
-                    isLogin: isLogin
+                    isLogin: isLogin,
+                    isPopular: true,
+                    row: index
                 )
             })
             totalPage = response.popularPopUpStoreTotalPages
@@ -235,7 +237,7 @@ final class HomeListReactor: Reactor {
             cardSections.inputDataList.append(contentsOf: appendData)
             totalPage = response.newPopUpStoreTotalPages
         case .popular:
-            let appendData: [HomeCardSectionCell.Input] = response.popularPopUpStoreList.map({ response in
+            let appendData: [HomeCardSectionCell.Input] = response.popularPopUpStoreList.enumerated().map({ (index, response) in
                 return .init(
                     imagePath: response.mainImageUrl,
                     id: response.id,
@@ -245,7 +247,9 @@ final class HomeListReactor: Reactor {
                     startDate: response.startDate,
                     endDate: response.endDate,
                     isBookmark: response.bookmarkYn,
-                    isLogin: isLogin
+                    isLogin: isLogin,
+                    isPopular: true,
+                    row: index
                 )
             })
             cardSections.inputDataList.append(contentsOf: appendData)

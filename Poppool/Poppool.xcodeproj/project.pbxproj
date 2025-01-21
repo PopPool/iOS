@@ -344,6 +344,8 @@
 		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
 		08CBEA0B2D38DBD600248007 /* LastLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0A2D38DBD600248007 /* LastLoginView.swift */; };
 		08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */; };
+		08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA392D3FABE100248007 /* ToastView.swift */; };
+		08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -781,6 +783,8 @@
 		08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponse.swift; sourceTree = "<group>"; };
 		08CBEA0A2D38DBD600248007 /* LastLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastLoginView.swift; sourceTree = "<group>"; };
 		08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButtonView.swift; sourceTree = "<group>"; };
+		08CBEA392D3FABE100248007 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkToastView.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -1331,7 +1335,7 @@
 			children = (
 				083A25982CF362090099B58E /* Interfaces */,
 				083A25812CF361EF0099B58E /* Controllers */,
-				08B191A12CF4AE890057BC04 /* ToastMaker.swift */,
+				08CBEA382D3FABD300248007 /* ToastMaker */,
 			);
 			path = Utills;
 			sourceTree = "<group>";
@@ -2441,6 +2445,16 @@
 			path = AuthAPI;
 			sourceTree = "<group>";
 		};
+		08CBEA382D3FABD300248007 /* ToastMaker */ = {
+			isa = PBXGroup;
+			children = (
+				08B191A12CF4AE890057BC04 /* ToastMaker.swift */,
+				08CBEA392D3FABE100248007 /* ToastView.swift */,
+				08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */,
+			);
+			path = ToastMaker;
+			sourceTree = "<group>";
+		};
 		08DC61F62CF76831002A2F44 /* SignUpComplete */ = {
 			isa = PBXGroup;
 			children = (
@@ -2974,6 +2988,7 @@
 				086DD9422D01EEF700B97D3B /* SearchCountTitleSectionCell.swift in Sources */,
 				081898A72D2CC01D0067BF01 /* WithdrawlReasonReactor.swift in Sources */,
 				081899332D35F1090067BF01 /* MyPageBookmarkView.swift in Sources */,
+				08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */,
 				081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */,
 				4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */,
 				089952582D0347AC0022AEF9 /* SearchCategoryController.swift in Sources */,
@@ -3264,6 +3279,7 @@
 				081899082D34B35A0067BF01 /* MyPageNoticeView.swift in Sources */,
 				081898D82D310C160067BF01 /* PutUserCategoryRequestDTO.swift in Sources */,
 				08A2E4992D1C08D600102313 /* GetPopUpCommentResponse.swift in Sources */,
+				08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */,
 				0818988E2D295DC30067BF01 /* MyPageLogoutSection.swift in Sources */,
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
 				BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */,

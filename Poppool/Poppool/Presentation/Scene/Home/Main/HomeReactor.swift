@@ -114,6 +114,7 @@ final class HomeReactor: Reactor {
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         case .bookMarkButtonTapped(let indexPath):
             let popUpData = getPopUpData(indexPath: indexPath)
+            ToastMaker.createBookMarkToast(isBookMark: !popUpData.isBookmark)
             if popUpData.isBookmark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpData.id)
                     .andThen(Observable.just(.reloadView(indexPath: indexPath)))
@@ -263,6 +264,7 @@ final class HomeReactor: Reactor {
     }
     
     func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
+        print(indexPath)
         if isLoign {
             switch indexPath.section {
             case 0:
@@ -289,6 +291,10 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(popUpID: id)
                 currentController.navigationController?.pushViewController(controller, animated: true)
+            case 12:
+                let controller = HomeListController()
+                controller.reactor = HomeListReactor(popUpType: .new)
+                currentController.navigationController?.pushViewController(controller, animated: true)
             case 14:
                 let id = newSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
@@ -307,6 +313,10 @@ final class HomeReactor: Reactor {
                 let id = popularSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
                 controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 7:
+                let controller = HomeListController()
+                controller.reactor = HomeListReactor(popUpType: .new)
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:
                 let id = newSection.inputDataList[indexPath.row].id
