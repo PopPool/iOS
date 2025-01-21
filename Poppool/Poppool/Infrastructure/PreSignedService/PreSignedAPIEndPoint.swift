@@ -8,8 +8,8 @@
 import Foundation
 
 struct PreSignedAPIEndPoint {
-    
-    static func presigned_upload(request: PresignedURLRequestDTO) -> Endpoint<PreSignedURLResponseDTO>{
+    static func presigned_upload(request: PresignedURLRequestDTO) -> Endpoint<PreSignedURLResponseDTO> {
+        Logger.log(message: "Presigned URL 생성 - Request: \(request)", category: .debug)
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
             path: "/files/upload-preSignedUrl",
@@ -17,8 +17,9 @@ struct PreSignedAPIEndPoint {
             bodyParameters: request
         )
     }
-    
-    static func presigned_download(request: PresignedURLRequestDTO) -> Endpoint<PreSignedURLResponseDTO>{
+
+    static func presigned_download(request: PresignedURLRequestDTO) -> Endpoint<PreSignedURLResponseDTO> {
+        Logger.log(message: "Presigned Download URL 생성 - Request: \(request)", category: .debug)
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
             path: "/files/download-preSignedUrl",
@@ -26,8 +27,9 @@ struct PreSignedAPIEndPoint {
             bodyParameters: request
         )
     }
-    
-    static func presigned_delete(request: PresignedURLRequestDTO) -> RequestEndpoint{
+
+    static func presigned_delete(request: PresignedURLRequestDTO) -> RequestEndpoint {
+        Logger.log(message: "Presigned Delete 생성 - Request: \(request)", category: .debug)
         return RequestEndpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
             path: "/files/delete",

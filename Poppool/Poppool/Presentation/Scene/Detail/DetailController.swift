@@ -13,24 +13,24 @@ import RxSwift
 import ReactorKit
 
 final class DetailController: BaseViewController, View {
-    
+
     typealias Reactor = DetailReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = DetailView()
-    
+
     private let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
         view.backButton.tintColor = .w100
         return view
     }()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private var isBrightImage: Bool = false
-    
+
     private let headerBackgroundView: UIView = UIView()
     let backGroundblurEffect = UIBlurEffect(style: .regular)
     lazy var backGroundblurView = UIVisualEffectView(effect: backGroundblurEffect)
@@ -42,7 +42,7 @@ extension DetailController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -71,25 +71,25 @@ private extension DetailController {
             make.top.equalToSuperview()
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         view.addSubview(headerView)
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         headerBackgroundView.addSubview(backGroundblurView)
         backGroundblurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         backGroundblurView.isUserInteractionEnabled = false
-        
+
         view.addSubview(headerBackgroundView)
         headerBackgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(headerView.snp.bottom).offset(7)
         }
         headerBackgroundView.isHidden = true
-        
+
         view.bringSubviewToFront(headerView)
     }
 }
@@ -101,7 +101,7 @@ extension DetailController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.commentPostButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -109,7 +109,7 @@ extension DetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -117,7 +117,7 @@ extension DetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -125,7 +125,7 @@ extension DetailController {
                 owner.mainView.contentCollectionView.reloadData()
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .take(2)
@@ -150,24 +150,24 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
-        
+
         if let cell = cell as? DetailTitleSectionCell {
             cell.bookMarkButton.rx.tap
                 .map { Reactor.Action.bookMarkButtonTapped }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.sharedButton.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -176,13 +176,13 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? DetailInfoSectionCell {
             cell.copyButton.rx.tap
                 .map { Reactor.Action.copyButtonTapped }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.mapButton.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -209,7 +209,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 }
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? DetailCommentTitleSectionCell {
             cell.totalViewButton.rx.tap
                 .withUnretained(self)
@@ -219,7 +219,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? DetailCommentSectionCell {
             cell.imageCollectionView.rx.itemSelected
                 .withUnretained(self)
@@ -228,7 +228,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.profileView.button.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -236,7 +236,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.totalViewButton.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -244,12 +244,12 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.likeButton.rx.tap
                 .map { Reactor.Action.commentLikeButtonTapped(indexPath: indexPath) }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.loginButton.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -266,7 +266,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
             reactor?.action.onNext(.similarSectionTapped(controller: self, indexPath: indexPath))
         }
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < 241 {
             headerBackgroundView.isHidden = true

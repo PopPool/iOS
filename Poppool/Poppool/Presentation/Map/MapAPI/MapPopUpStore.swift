@@ -19,6 +19,7 @@ struct MapPopUpStore: Equatable {
     let markerId: Int64
     let markerTitle: String
     let markerSnippet: String
+    let mainImageUrl: String? // 이미지 URL 추가
 
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -32,14 +33,16 @@ extension MapPopUpStore {
             count: 1  // 클러스터링 구현 시 수정
         )
     }
-//
-//    func toCardInput() -> MapPopupCarouselView.Input {
-//        return .init(
-//            image: nil,  
-//            category: self.category,
-//            title: self.name,
-//            location: self.address,
-//            date: "\(self.startDate) - \(self.endDate)"
-//        )
-//    }
+
+    func toStoreItem() -> StoreItem {
+        return StoreItem(
+            id: Int(id),
+            thumbnailURL: mainImageUrl ?? "", // 이미지 URL 매핑
+            category: category,
+            title: name,
+            location: address,
+            dateRange: "\(startDate) ~ \(endDate)",
+            isBookmarked: false // 기본값
+        )
+    }
 }

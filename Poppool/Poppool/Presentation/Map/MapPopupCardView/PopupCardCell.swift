@@ -52,10 +52,8 @@ final class PopupCardCell: UICollectionViewCell {
             make.trailing.equalToSuperview().offset(-12)
         }
 
-        // Title Label
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         titleLabel.numberOfLines = 2
-//        titleLabel.textColor = g1000
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
@@ -66,7 +64,7 @@ final class PopupCardCell: UICollectionViewCell {
         addressLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
         addressLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().offset(-12)
         }

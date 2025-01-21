@@ -40,7 +40,7 @@ final class MapPopupCarouselView: UIView {
     private func setupLayout() {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(16)
         }
     }

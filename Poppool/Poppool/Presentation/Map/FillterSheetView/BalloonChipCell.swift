@@ -51,7 +51,7 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setImage(nil, for: .normal)
            button.semanticContentAttribute = .unspecified
            button.imageEdgeInsets = .zero
-           button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 10)
+           button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12)
            button.setBackgroundColor(.white, for: .normal)
            button.setTitleColor(.g400, for: .normal)
            button.layer.borderWidth = 1
@@ -78,7 +78,6 @@ final class BalloonChipCell: UICollectionViewCell {
    }
 }
 
-// UIImage extension for resizing
 extension UIImage {
    func resize(to size: CGSize) -> UIImage? {
        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
