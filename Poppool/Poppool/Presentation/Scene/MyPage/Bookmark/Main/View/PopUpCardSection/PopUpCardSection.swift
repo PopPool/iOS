@@ -24,15 +24,15 @@ struct PopUpCardSection: Sectionable {
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(1000)
+            heightDimension: .absolute(590)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(1000)
+            heightDimension: .absolute(590)
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         // 섹션 생성
         let section = NSCollectionLayoutSection(group: group)

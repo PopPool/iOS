@@ -55,6 +55,16 @@ final class HomeCardSectionCell: UICollectionViewCell {
         return button
     }()
     
+    private let rankLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .w10
+        label.layer.cornerRadius = 12
+        label.clipsToBounds = true
+        label.isHidden = true
+        label.textColor = .w100
+        return label
+    }()
+    
     private let imageService = PreSignedService()
     // MARK: - init
     
@@ -122,6 +132,13 @@ private extension HomeCardSectionCell {
             make.size.equalTo(24)
             make.top.trailing.equalToSuperview().inset(8)
         }
+        
+        imageView.addSubview(rankLabel)
+        rankLabel.snp.makeConstraints { make in
+            make.height.equalTo(24)
+            make.width.equalTo(37)
+            make.leading.bottom.equalToSuperview().inset(12)
+        }
     }
 }
 
@@ -136,6 +153,8 @@ extension HomeCardSectionCell: Inputable {
         var endDate: String?
         var isBookmark: Bool
         var isLogin: Bool
+        var isPopular: Bool = false
+        var row: Int?
     }
     
     func injection(with input: Input) {
@@ -148,5 +167,13 @@ extension HomeCardSectionCell: Inputable {
         bookmarkButton.setImage(bookmarkImage, for: .normal)
         imageView.setPPImage(path: input.imagePath)
         bookmarkButton.isHidden = !input.isLogin
+        
+        rankLabel.isHidden = !input.isPopular
+        let rank = input.row ?? 0
+        rankLabel.setLineHeightText(text: "\(rank + 1)위", font: .KorFont(style: .medium, size: 11), lineHeight: 1)
+        rankLabel.textAlignment = .center
+        if rank > 2 {
+            rankLabel.isHidden = true
+        }
     }
 }

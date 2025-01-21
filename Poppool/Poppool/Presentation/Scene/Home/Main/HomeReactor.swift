@@ -22,6 +22,7 @@ final class HomeReactor: Reactor {
         case searchButtonTapped(controller: BaseViewController)
         case collectionViewCellTapped(controller: BaseViewController, indexPath: IndexPath)
         case bannerCellTapped(controller: BaseViewController, row: Int)
+        case changeIndicatorColor(controller: BaseViewController, row: Int)
     }
     
     enum Mutation {
@@ -30,6 +31,7 @@ final class HomeReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case reloadView(indexPath: IndexPath)
         case moveToSearchScene(controller: BaseViewController)
+        case skip
     }
     
     struct State {
@@ -44,7 +46,7 @@ final class HomeReactor: Reactor {
     
     var disposeBag = DisposeBag()
     
-    private let homeApiUseCase = HomeUseCaseImpl()
+    private let homeApiUseCase = HomeAPIUseCaseImpl()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
     
@@ -87,6 +89,13 @@ final class HomeReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .changeIndicatorColor(let controller, let row):
+            if !loginImageBannerSection.isEmpty {
+                loginImageBannerSection.inputDataList[0].imagePaths[row].isBrightImagePath { [weak controller] isBright in
+                    controller?.systemStatusBarIsDark.accept(isBright)
+                }
+            }
+            return Observable.just(.skip)
         case .viewWillAppear:
             return homeApiUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
                 .withUnretained(self)
@@ -105,6 +114,7 @@ final class HomeReactor: Reactor {
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         case .bookMarkButtonTapped(let indexPath):
             let popUpData = getPopUpData(indexPath: indexPath)
+            ToastMaker.createBookMarkToast(isBookMark: !popUpData.isBookmark)
             if popUpData.isBookmark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpData.id)
                     .andThen(Observable.just(.reloadView(indexPath: indexPath)))
@@ -152,6 +162,8 @@ final class HomeReactor: Reactor {
             }
             newState.isReloadView = true
             newState.sections = getSection()
+        case .skip:
+            break
         }
         return newState
     }
@@ -252,6 +264,7 @@ final class HomeReactor: Reactor {
     }
     
     func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
+        print(indexPath)
         if isLoign {
             switch indexPath.section {
             case 0:
@@ -278,6 +291,10 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(popUpID: id)
                 currentController.navigationController?.pushViewController(controller, animated: true)
+            case 12:
+                let controller = HomeListController()
+                controller.reactor = HomeListReactor(popUpType: .new)
+                currentController.navigationController?.pushViewController(controller, animated: true)
             case 14:
                 let id = newSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
@@ -296,6 +313,10 @@ final class HomeReactor: Reactor {
                 let id = popularSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
                 controller.reactor = DetailReactor(popUpID: id)
+                currentController.navigationController?.pushViewController(controller, animated: true)
+            case 7:
+                let controller = HomeListController()
+                controller.reactor = HomeListReactor(popUpType: .new)
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:
                 let id = newSection.inputDataList[indexPath.row].id

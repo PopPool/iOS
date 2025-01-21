@@ -21,6 +21,7 @@ final class MyPageBookmarkReactor: Reactor {
         case cellTapped(controller: BaseViewController, row: Int)
         case dropDownButtonTapped(controller: BaseViewController)
         case emptyButtonTapped(controller: BaseViewController)
+        case bookMarkButtonTapped(row: Int)
     }
     
     enum Mutation {
@@ -36,6 +37,8 @@ final class MyPageBookmarkReactor: Reactor {
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
         var isEmptyCase: Bool = false
+        var count: Int32 = 0
+        var buttonTitle: String?
     }
     
     // MARK: - properties
@@ -44,6 +47,7 @@ final class MyPageBookmarkReactor: Reactor {
     var disposeBag = DisposeBag()
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
+    private var totalElement: Int32 = 0
     private var currentPage: Int32 = 0
     private var size: Int32 = 10
     private var viewType: String = "크게보기"
@@ -64,11 +68,10 @@ final class MyPageBookmarkReactor: Reactor {
         }
     }()
     
-    private var countSection = ListCountButtonSection(inputDataList: [])
     private var listSection = RecentPopUpSection(inputDataList: [])
     private var cardListSection = PopUpCardSection(inputDataList: [])
     private var spacing12Section = SpacingSection(inputDataList: [.init(spacing: 12)])
-    private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
+    private var spacing150Section = SpacingSection(inputDataList: [.init(spacing: 150)])
     
     // MARK: - init
     init() {
@@ -83,12 +86,12 @@ final class MyPageBookmarkReactor: Reactor {
             return userAPIUseCase.getBookmarkPopUp(page: currentPage, size: size, sort: nil)
                 .withUnretained(self)
                 .map { (owner, response) in
-                    owner.countSection.inputDataList = [.init(count: Int64(response.totalElements), buttonTitle: owner.viewType)]
                     owner.listSection.inputDataList = response.popUpInfoList.map {
                         .init(imagePath: $0.mainImageUrl,
                               date: $0.endDate,
                               title: $0.popUpStoreName,
-                              id: $0.popUpStoreId
+                              id: $0.popUpStoreId,
+                              isBookMark: true
                         )
                     }
                     owner.cardListSection.inputDataList = response.popUpInfoList.map {
@@ -97,10 +100,12 @@ final class MyPageBookmarkReactor: Reactor {
                             date: ($0.startDate ?? "") + " - " + ($0.endDate ?? ""),
                             title: $0.popUpStoreName,
                             id: $0.popUpStoreId,
-                            address: $0.address
+                            address: $0.address,
+                            isBookMark: true
                         )
                     }
                     owner.totalPage = response.totalPages
+                    owner.totalElement = response.totalElements
                     return .loadView
                 }
         case .changePage:
@@ -113,13 +118,13 @@ final class MyPageBookmarkReactor: Reactor {
                     return userAPIUseCase.getBookmarkPopUp(page: currentPage, size: size, sort: nil)
                         .withUnretained(self)
                         .map { (owner, response) in
-                            owner.countSection.inputDataList = [.init(count: Int64(response.totalElements), buttonTitle: owner.viewType)]
                             owner.listSection.inputDataList.append(contentsOf: response.popUpInfoList.map {
                                 .init(
                                     imagePath: $0.mainImageUrl,
                                     date: $0.endDate,
                                     title: $0.popUpStoreName,
-                                    id: $0.popUpStoreId
+                                    id: $0.popUpStoreId,
+                                    isBookMark: true
                                 )
                             })
                             owner.cardListSection.inputDataList.append(contentsOf: response.popUpInfoList.map {
@@ -128,7 +133,8 @@ final class MyPageBookmarkReactor: Reactor {
                                     date: ($0.startDate ?? "") + " - " + ($0.endDate ?? ""),
                                     title: $0.popUpStoreName,
                                     id: $0.popUpStoreId,
-                                    address: $0.address
+                                    address: $0.address,
+                                    isBookMark: true
                                 )
                             })
                             return .loadView
@@ -145,6 +151,18 @@ final class MyPageBookmarkReactor: Reactor {
             return Observable.just(.presentModal(controller: controller))
         case .emptyButtonTapped(let controller):
             return Observable.just(.moveToSuggestScene(controller: controller))
+        case .bookMarkButtonTapped(let row):
+            let popUpID = cardListSection.inputDataList[row].id
+            cardListSection.inputDataList[row].isBookMark.toggle()
+            listSection.inputDataList[row].isBookMark?.toggle()
+            ToastMaker.createBookMarkToast(isBookMark: cardListSection.inputDataList[row].isBookMark)
+            if cardListSection.inputDataList[row].isBookMark {
+                return userAPIUseCase.postBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            } else {
+                return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpID)
+                    .andThen(Observable.just(.loadView))
+            }
         }
     }
     
@@ -171,7 +189,7 @@ final class MyPageBookmarkReactor: Reactor {
                 .subscribe(onNext: { (owner, state) in
                     if state.isSave {
                         owner.viewType = state.currentSortedCode ?? ""
-                        owner.countSection.inputDataList[0].buttonTitle = state.currentSortedCode ?? ""
+                        ToastMaker.createToast(message: "보기 옵션을 적용했어요")
                     }
                 })
                 .disposed(by: nextController.disposeBag)
@@ -182,16 +200,16 @@ final class MyPageBookmarkReactor: Reactor {
         }
         newState.sections = getSection()
         newState.isEmptyCase = listSection.isEmpty
+        newState.count = totalElement
+        newState.buttonTitle = viewType
         return newState
     }
     
     func getSection() -> [any Sectionable] {
         return [
-            spacing16Section,
-            countSection,
-            spacing16Section,
             spacing12Section,
-            viewType == "크게보기" ? cardListSection : listSection
+            viewType == "크게보기" ? cardListSection : listSection,
+            spacing150Section
         ]
     }
 }

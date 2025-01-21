@@ -38,6 +38,7 @@ final class ProfileEditReactor: Reactor {
         case moveToCategoryEditScene(controller: BaseViewController)
         case isValidateNickName(Bool)
         case moveToRecentScene(controller: BaseViewController)
+        case changeNickNameState
     }
     
     struct State {
@@ -97,13 +98,13 @@ final class ProfileEditReactor: Reactor {
             ])
         case .changeNickName(let nickName):
             currentNickName = nickName
-            return Observable.just(.loadView)
+            return Observable.just(.changeNickNameState)
         case .beginNickName:
             nickNameIsActive = true
-            return Observable.just(.loadView)
+            return Observable.just(.changeNickNameState)
         case .endNickName:
             nickNameIsActive = false
-            return Observable.just(.loadView)
+            return Observable.just(.changeNickNameState)
         case .nickNameCheckButtonTapped:
             return signUpAPIUseCase.checkNickName(nickName: currentNickName ?? "")
                 .map { isValidate in
@@ -128,7 +129,6 @@ final class ProfileEditReactor: Reactor {
         switch mutation {
         case .loadView:
             newState.originProfileData = originProfileData
-            newState.nickNameState = checkNickNameState(text: currentNickName, isActive: nickNameIsActive)
             newState.introState = checkIntroState(text: currentIntro, isActive: introIsActive)
         case .moveToCategoryEditScene(let controller):
             let nextController = CategoryEditModalController()
@@ -146,6 +146,8 @@ final class ProfileEditReactor: Reactor {
             }
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
+        case .changeNickNameState:
+            newState.nickNameState = checkNickNameState(text: currentNickName, isActive: nickNameIsActive)
         }
         
         let originNickName = originProfileData?.nickname ?? ""
@@ -153,6 +155,10 @@ final class ProfileEditReactor: Reactor {
         let originIntro = originProfileData?.intro ?? ""
         let currentIntro = currentIntro ?? ""
         
+        
+        print("isChangeImage:", isChangeImage)
+        print(newState.nickNameState)
+        print(newState.introState)
         if isChangeImage || originNickName != currentNickName || originIntro != currentIntro {
             if newState.nickNameState == .validate || newState.nickNameState == .validateActive || newState.nickNameState == .myNickName || newState.nickNameState == .myNickNameActive {
                 if newState.introState == .validate || newState.introState == .validateActive || newState.introState == .empty || newState.introState == .emptyActive {

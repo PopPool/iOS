@@ -59,6 +59,7 @@ private extension MyPageNoticeController {
             NoticeListSectionCell.self,
             forCellWithReuseIdentifier: NoticeListSectionCell.identifiers
         )
+        view.backgroundColor = .g50
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)

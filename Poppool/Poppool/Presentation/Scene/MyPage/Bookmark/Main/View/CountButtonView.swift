@@ -1,20 +1,18 @@
 //
-//  ListCountButtonSectionCell.swift
+//  CountButtonView.swift
 //  Poppool
 //
-//  Created by SeoJunYoung on 1/12/25.
+//  Created by SeoJunYoung on 1/16/25.
 //
 
 import UIKit
 
 import SnapKit
-import RxSwift
 
-final class ListCountButtonSectionCell: UICollectionViewCell {
+final class CountButtonView: UIView {
     
     // MARK: - Components
-    
-    private let countLabel: PPLabel = {
+    let countLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
         label.textColor = .g400
         return label
@@ -26,7 +24,7 @@ final class ListCountButtonSectionCell: UICollectionViewCell {
         return view
     }()
     
-    private let buttonTitleLabel: UILabel = {
+    let buttonTitleLabel: UILabel = {
         let label = UILabel()
         return label
     }()
@@ -35,27 +33,20 @@ final class ListCountButtonSectionCell: UICollectionViewCell {
         let button = UIButton()
         return button
     }()
-    
-    var disposeBag = DisposeBag()
     // MARK: - init
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: .zero)
         setUpConstraints()
     }
     
     required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        disposeBag = DisposeBag()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 // MARK: - SetUp
-private extension ListCountButtonSectionCell {
+private extension CountButtonView {
+    
     func setUpConstraints() {
         self.addSubview(countLabel)
         countLabel.snp.makeConstraints { make in
@@ -81,17 +72,5 @@ private extension ListCountButtonSectionCell {
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
         }
-    }
-}
-
-extension ListCountButtonSectionCell: Inputable {
-    struct Input {
-        var count: Int64
-        var buttonTitle: String?
-    }
-    
-    func injection(with input: Input) {
-        countLabel.setLineHeightText(text: "총 \(input.count)건", font: .KorFont(style: .regular, size: 13))
-        buttonTitleLabel.setLineHeightText(text: input.buttonTitle, font: .KorFont(style: .regular, size: 13))
     }
 }

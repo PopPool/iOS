@@ -8,9 +8,11 @@
 import Foundation
 import RxSwift
 
-final class AuthRepositoryImpl: AuthRepository {
+final class AuthAPIRepositoryImpl {
     
     var provider: Provider
+    
+    var tokenInterceptor = TokenInterceptor()
     
     init(provider: Provider) {
         self.provider = provider
@@ -23,5 +25,10 @@ final class AuthRepositoryImpl: AuthRepository {
             .map { responseDTO in
                 return responseDTO.toDomain()
             }
+    }
+    
+    func postTokenReissue() -> Observable<PostTokenReissueResponseDTO> {
+        let endPoint = AuthAPIEndPoint.postTokenReissue()
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
 }

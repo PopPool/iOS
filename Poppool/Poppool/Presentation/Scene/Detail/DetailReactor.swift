@@ -162,6 +162,7 @@ final class DetailReactor: Reactor {
         case .showSharedBoard(let controller):
             showSharedBoard(controller: controller)
         case .copyAddress:
+            UIPasteboard.general.string = infoSection.inputDataList.first?.address
             ToastMaker.createToast(message: "주소를 복사했어요")
         case .moveToAddressScene(let controller):
             let nextController = BaseViewController()

@@ -1,5 +1,5 @@
 //
-//  HomeUseCaseImpl.swift
+//  HomeAPIUseCaseImpl.swift
 //  Poppool
 //
 //  Created by Porori on 11/26/24.
@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class HomeUseCaseImpl {
+final class HomeAPIUseCaseImpl {
     var repository = HomeAPIRepository(provider: ProviderImpl())
     
     func fetchHome(

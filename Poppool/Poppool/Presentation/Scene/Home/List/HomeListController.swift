@@ -24,6 +24,8 @@ final class HomeListController: BaseViewController, View {
     private var sections: [any Sectionable] = []
     
     private let pageChange: PublishSubject<Void> = .init()
+    
+    private let cellTapped: PublishSubject<Int> = .init()
 }
 
 // MARK: - Life Cycle
@@ -87,6 +89,14 @@ extension HomeListController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        cellTapped
+            .withUnretained(self)
+            .map { (owner, row) in
+                Reactor.Action.cellTapped(controller: owner, row: row)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -131,5 +141,9 @@ extension HomeListController: UICollectionViewDelegate, UICollectionViewDataSour
         if contentOffsetY + scrollViewHeight >= contentHeight {
             pageChange.onNext(())
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == 1 { cellTapped.onNext(indexPath.row)}
     }
 }

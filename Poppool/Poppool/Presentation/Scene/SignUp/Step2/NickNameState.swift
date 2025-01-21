@@ -56,8 +56,10 @@ enum NickNameState {
             return "사용 가능한 별명이에요"
         case .check, .checkActive:
             return "중복체크를 진행해주세요"
-        case .myNickName, .myNickNameActive:
+        case .myNickNameActive:
             return "이미 설정된 닉네임입니다"
+        case .myNickName:
+            return nil
         }
     }
     

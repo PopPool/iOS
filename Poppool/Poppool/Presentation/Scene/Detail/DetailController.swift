@@ -30,6 +30,10 @@ final class DetailController: BaseViewController, View {
     private var sections: [any Sectionable] = []
     
     private var isBrightImage: Bool = false
+    
+    private let headerBackgroundView: UIView = UIView()
+    let backGroundblurEffect = UIBlurEffect(style: .regular)
+    lazy var backGroundblurView = UIVisualEffectView(effect: backGroundblurEffect)
 }
 
 // MARK: - Life Cycle
@@ -72,6 +76,21 @@ private extension DetailController {
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        headerBackgroundView.addSubview(backGroundblurView)
+        backGroundblurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        backGroundblurView.isUserInteractionEnabled = false
+        
+        view.addSubview(headerBackgroundView)
+        headerBackgroundView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(headerView.snp.bottom).offset(7)
+        }
+        headerBackgroundView.isHidden = true
+        
+        view.bringSubviewToFront(headerView)
     }
 }
 
@@ -112,9 +131,10 @@ extension DetailController {
             .take(2)
             .subscribe { (owner, state) in
                 state.barkGroundImagePath.isBrightImagePath { [weak owner] isBright in
-                    owner?.statusBarIsDarkMode = isBright
+                    owner?.systemStatusBarIsDark.accept(isBright)
                     owner?.isBrightImage = isBright
                     if isBright {
+                        print(isBright)
                         owner?.headerView.backButton.tintColor = .g1000
                     } else {
                         owner?.headerView.backButton.tintColor = .w100
@@ -248,17 +268,19 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < 285 {
+        if scrollView.contentOffset.y < 241 {
+            headerBackgroundView.isHidden = true
             if isBrightImage {
-                statusBarIsDarkMode = true
+                systemStatusBarIsDark.accept(true)
                 headerView.backButton.tintColor = .g1000
             } else {
-                statusBarIsDarkMode = false
+                systemStatusBarIsDark.accept(false)
                 headerView.backButton.tintColor = .w100
             }
         } else {
-            statusBarIsDarkMode = true
+            systemStatusBarIsDark.accept(true)
             headerView.backButton.tintColor = .g1000
+            headerBackgroundView.isHidden = false
         }
     }
 }

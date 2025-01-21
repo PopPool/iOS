@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import SnapKit
 import Lottie
 
@@ -13,13 +14,16 @@ final class SplashView: UIView {
     
     // MARK: - Components
     
-    private let animationView =  LottieAnimationView(name: Constants.lottie.splashAnimation)
+    let animationView: LottieAnimationView = {
+        let view = LottieAnimationView(name: "PP_splash")
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
     
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
-        playAnimation()
     }
     
     required init?(coder: NSCoder) {
@@ -33,19 +37,9 @@ private extension SplashView {
     func setUpConstraints() {
         addSubview(animationView)
         animationView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    func playAnimation() {
-        animationView.play { _ in
-            UIView.animate(withDuration: 0.5, animations: {
-                self.animationView.alpha = 0
-            }, completion: { _ in
-                self.animationView.alpha = 1
-                self.animationView.removeFromSuperview()
-                self.alpha = 1
-            })
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(200)
+            make.centerY.equalToSuperview().offset(-72)
         }
     }
 }

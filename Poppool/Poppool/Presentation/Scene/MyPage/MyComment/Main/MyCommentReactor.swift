@@ -64,6 +64,7 @@ final class MyCommentReactor: Reactor {
     private var listCountSection = ListCountButtonSection(inputDataList: [])
     private var listSection = OtherUserCommentSection(inputDataList: [])
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
+    private var spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     
     // MARK: - init
     init() {
@@ -150,7 +151,7 @@ final class MyCommentReactor: Reactor {
                         owner.listSection.inputDataList = []
                         owner.sortCode = state.currentSortedCode ?? ""
                         owner.currentPage = 0
-                        ToastMaker.createToast(message: "보기 옵션이 변경되었어요")
+                        ToastMaker.createToast(message: "보기 옵션이 반영되었어요")
                     }
                 })
                 .disposed(by: nextController.disposeBag)
@@ -166,7 +167,8 @@ final class MyCommentReactor: Reactor {
             spacing16Section,
             listCountSection,
             spacing16Section,
-            listSection
+            listSection,
+            spacing64Section
         ]
     }
 }

@@ -7,18 +7,15 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 class BaseViewController: UIViewController {
     
-    var statusBarIsDarkMode: Bool {
-        didSet {
-            if oldValue != statusBarIsDarkMode {
-                setStatusBarColor()
-            }
-        }
-    }
+    var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
+    var systemStatusBarDisposeBag = DisposeBag()
     
     init() {
-        statusBarIsDarkMode = true
         super.init(nibName: nil, bundle: nil)
         Logger.log(
             message: "\(self) init",
@@ -36,11 +33,12 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.isHidden = true
+        systemStatusBarIsDarkBind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setStatusBarColor()
+        systemStatusBarIsDark.accept(systemStatusBarIsDark.value)
     }
     
     deinit {
@@ -52,14 +50,19 @@ class BaseViewController: UIViewController {
         )
     }
     
-    func setStatusBarColor() {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            if statusBarIsDarkMode {
-                navigationController?.navigationBar.barStyle = .default
-            } else {
-                navigationController?.navigationBar.barStyle = .black
+    func systemStatusBarIsDarkBind() {
+        systemStatusBarIsDark
+            .withUnretained(self)
+            .subscribe { (owner, isDark) in
+                UIView.animate(withDuration: 0.3) { [weak owner] in
+                    if isDark {
+                        owner?.navigationController?.navigationBar.barStyle = .default
+                    } else {
+                        owner?.navigationController?.navigationBar.barStyle = .black
+                    }
+                }
+
             }
-        }
+            .disposed(by: systemStatusBarDisposeBag)
     }
 }

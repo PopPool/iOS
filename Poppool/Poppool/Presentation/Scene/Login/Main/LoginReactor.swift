@@ -34,9 +34,9 @@ final class LoginReactor: Reactor {
     
     private let kakaoLoginService = KakaoLoginService()
     private let appleLoginService = AppleLoginService()
-    private let authApiUseCase = TryLoginUseCaseImpl(repository: AuthRepositoryImpl(provider: ProviderImpl()))
+    private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
-    private let userDefaultService = UserDefaultService()
+    let userDefaultService = UserDefaultService()
     
     // MARK: - init
     init() {
@@ -76,7 +76,7 @@ final class LoginReactor: Reactor {
         return kakaoLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                owner.authApiUseCase.execute(userCredential: response, socialType: "kakao")
+                owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "kakao")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in
@@ -87,6 +87,7 @@ final class LoginReactor: Reactor {
                 let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
                 switch accessTokenResult {
                 case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "kakao")
                     if loginResponse.isRegisteredUser {
                         return .moveToHomeScene(controller: controller)
                     } else {
@@ -102,7 +103,7 @@ final class LoginReactor: Reactor {
         return appleLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                owner.authApiUseCase.execute(userCredential: response, socialType: "apple")
+                owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in
@@ -113,6 +114,7 @@ final class LoginReactor: Reactor {
                 let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
                 switch accessTokenResult {
                 case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "apple")
                     if loginResponse.isRegisteredUser {
                         return .moveToHomeScene(controller: controller)
                     } else {

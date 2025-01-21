@@ -24,6 +24,12 @@ final class MyPageBookmarkController: BaseViewController, View {
     private var sections: [any Sectionable] = []
     
     private var cellTapped: PublishSubject<Int> = .init()
+    
+    private var currentPageIndex: Int = 0
+    
+    private var maxPageIndex: Int = 0
+    
+    private var viewType: String?
 }
 
 // MARK: - Life Cycle
@@ -103,6 +109,55 @@ extension MyPageBookmarkController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        mainView.countButtonView.dropdownButton.rx.tap
+            .withUnretained(self)
+            .map { (owner, _) in
+                Reactor.Action.dropDownButtonTapped(controller: owner)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        mainView.contentCollectionView.rx.gesture(.swipe(direction: .up))
+            .skip(1)
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                if owner.viewType == "크게보기" {
+                    if owner.maxPageIndex - 1 > owner.currentPageIndex {
+                        if let currentCell = owner.mainView.contentCollectionView.cellForItem(at: .init(row: owner.currentPageIndex, section: 1)) as? PopUpCardSectionCell,
+                           let nextCell = owner.mainView.contentCollectionView.cellForItem(at: .init(row: owner.currentPageIndex + 1, section: 1)) as? PopUpCardSectionCell {
+                            currentCell.layer.zPosition = 0
+                            nextCell.layer.zPosition = 1
+                            UIView.animate(withDuration: 0.3) {
+                                currentCell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8).translatedBy(x: 0, y: 590)
+                                currentCell.contentView.alpha = 0.5
+                            } completion: { _ in
+                                currentCell.transform = .identity
+                                currentCell.layer.zPosition = 0
+                                nextCell.layer.zPosition = 0
+                                currentCell.contentView.alpha = 1
+                            }
+                        }
+                        owner.currentPageIndex += 1
+                        owner.mainView.contentCollectionView.scrollToItem(at: .init(row: owner.currentPageIndex, section: 1), at: .top, animated: true)
+                        
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        mainView.contentCollectionView.rx.gesture(.swipe(direction: .down))
+            .skip(1)
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                if owner.viewType == "크게보기" {
+                    if owner.currentPageIndex > 0 {
+                        owner.currentPageIndex -= 1
+                        owner.mainView.contentCollectionView.scrollToItem(at: .init(row: owner.currentPageIndex, section: 1), at: .top, animated: true)
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -111,6 +166,25 @@ extension MyPageBookmarkController {
                 owner.mainView.contentCollectionView.isHidden = state.isEmptyCase
                 owner.mainView.emptyLabel.isHidden = !state.isEmptyCase
                 owner.mainView.emptyButton.isHidden = !state.isEmptyCase
+                owner.mainView.countButtonView.buttonTitleLabel.setLineHeightText(text: state.buttonTitle, font: .KorFont(style: .regular, size: 13))
+                owner.mainView.countButtonView.countLabel.setLineHeightText(text: "총 \(state.count)건", font: .KorFont(style: .regular, size: 13))
+                
+                if state.buttonTitle != owner.viewType {
+                    owner.mainView.contentCollectionView.scrollsToTop = true
+                }
+                
+                if state.buttonTitle == "크게보기" {
+                    owner.mainView.contentCollectionView.isScrollEnabled = false
+                    if owner.viewType == "모아서보기" {
+                        owner.currentPageIndex = 0
+                        owner.mainView.contentCollectionView.scrollToItem(at: .init(row: owner.currentPageIndex, section: 1), at: .top, animated: false)
+                    }
+                } else {
+                    owner.mainView.contentCollectionView.isScrollEnabled = true
+                }
+                
+                owner.maxPageIndex = Int(state.count)
+                owner.viewType = state.buttonTitle
             }
             .disposed(by: disposeBag)
     }
@@ -132,12 +206,16 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
-        if let cell = cell as? ListCountButtonSectionCell {
-            cell.dropdownButton.rx.tap
-                .withUnretained(self)
-                .map { (owner, _) in
-                    Reactor.Action.dropDownButtonTapped(controller: owner)
-                }
+        if let cell = cell as? PopUpCardSectionCell {
+            cell.bookMarkButton.rx.tap
+                .map { Reactor.Action.bookMarkButtonTapped(row: indexPath.row) }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailSimilarSectionCell {
+            cell.bookMarkButton.rx.tap
+                .map { Reactor.Action.bookMarkButtonTapped(row: indexPath.row) }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
@@ -154,6 +232,7 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 4 { cellTapped.onNext(indexPath.row) }
+        if indexPath.section == 1 { cellTapped.onNext(indexPath.row) }
     }
+
 }

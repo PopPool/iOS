@@ -29,6 +29,7 @@ final class MyPageReactor: Reactor {
         case moveToProfileEditScene(controller: BaseViewController)
         case logout
         case moveToDetailScene(controller: BaseViewController, title: String?)
+        case moveToPopUpDetailScene(controller: BaseViewController, row: Int)
         case moveToLoginScene(controller: BaseViewController)
         case moveToMyCommentScene(controller: BaseViewController)
     }
@@ -116,7 +117,6 @@ final class MyPageReactor: Reactor {
                         .init(
                             isLogin: response.loginYn,
                             profileImagePath: response.profileImageUrl,
-//                            profileImagePath: "PopUpComment/뉴뉴/067ADF21-0BFA-4780-9FC2-66BC52D0E391/0.jpg",
                             nickName: response.nickname,
                             description: response.intro
                         )
@@ -131,7 +131,7 @@ final class MyPageReactor: Reactor {
         case .commentButtonTapped(let controller):
             return Observable.just(.moveToMyCommentScene(controller: controller))
         case .commentCellTapped(let controller, let row):
-            return Observable.just(.loadView)
+            return Observable.just(.moveToPopUpDetailScene(controller: controller, row: row))
         case .loginButtonTapped(let controller):
             return Observable.just(.moveToLoginScene(controller: controller))
         case .listCellTapped(let controller, let title):
@@ -217,6 +217,10 @@ final class MyPageReactor: Reactor {
         case .moveToMyCommentScene(let controller):
             let nextController = MyCommentController()
             nextController.reactor = MyCommentReactor()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        case .moveToPopUpDetailScene(let controller, let row):
+            let nextController = DetailController()
+            nextController.reactor = DetailReactor(popUpID: commentSection.inputDataList[row].popUpID)
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         if !profileSection.isEmpty {

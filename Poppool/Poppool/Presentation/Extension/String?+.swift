@@ -40,3 +40,11 @@ extension Optional where Wrapped == String {
     }
 }
 
+extension String {
+    func isBrightImagePath(completion: @escaping (Bool) -> Void) {
+        let imageView = UIImageView()
+        imageView.setPPImage(path: self) {
+            completion(imageView.image?.isBright() ?? true)
+        }
+    }
+}

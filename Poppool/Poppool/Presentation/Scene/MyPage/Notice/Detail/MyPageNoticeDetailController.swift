@@ -33,6 +33,7 @@ extension MyPageNoticeDetailController {
 // MARK: - SetUp
 private extension MyPageNoticeDetailController {
     func setUp() {
+        view.backgroundColor = .g50
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)

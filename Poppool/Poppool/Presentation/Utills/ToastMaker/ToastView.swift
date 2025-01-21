@@ -1,61 +1,13 @@
 //
-//  ToastMaker.swift
+//  ToastView.swift
 //  Poppool
 //
-//  Created by SeoJunYoung on 11/25/24.
+//  Created by SeoJunYoung on 1/21/25.
 //
 
-import Foundation
 import UIKit
+
 import SnapKit
-
-
-import Foundation
-import UIKit
-import SnapKit
-
-final class ToastMaker {
-    
-    // MARK: - Properties
-    
-    /// 현재 디바이스 최상단 Window를 지정
-    static var window: UIWindow? {
-        return UIApplication
-            .shared
-            .connectedScenes
-            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-            .first { $0.isKeyWindow }
-    }
-}
-
-extension ToastMaker {
-    
-    // MARK: - Method
-    
-    /// 토스트 메시지를 생성하는 메서드
-    /// - Parameter message: 토스트 메세지에 담길 String 타입
-   static func createToast(message: String) {
-        let toastMSG = ToastView(message: message)
-        window?.addSubview(toastMSG)
-        
-        toastMSG.snp.makeConstraints { make in
-            if let window = window {
-                make.bottom.equalTo(window.snp.bottom).inset(120)
-                make.centerX.equalTo(window.snp.centerX)
-            }
-        }
-        
-        UIView.animate(
-            withDuration: 1,
-            delay: 1,
-            options: .curveEaseOut
-        ) {
-            toastMSG.alpha = 0
-        } completion: { _ in
-            toastMSG.removeFromSuperview()
-        }
-    }
-}
 
 /// 토스트 메시지를 담는 view 객체입니다
 final class ToastView: UIView {
@@ -107,7 +59,7 @@ extension ToastView {
         }
         
         messageLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.spaceGuide.small100)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
     }

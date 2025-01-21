@@ -41,7 +41,7 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     private var isAutoBannerPlay: Bool = false
     
-    private var imageSection = ImageBannerChildSection(inputDataList: [])
+    var imageSection = ImageBannerChildSection(inputDataList: [])
     
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -150,9 +150,6 @@ private extension ImageBannerSectionCell {
             item: (currentIndex.item + 1) % imageSection.dataCount,
             section: currentIndex.section
         )
-        imageSection.inputDataList[nextIndex.row].imagePath.isBrightImagePath { [weak self] isBright in
-            self?.findViewController()?.statusBarIsDarkMode = isBright
-        }
         contentCollectionView.scrollToItem(at: nextIndex, at: .centeredHorizontally, animated: true)
         pageControl.currentPage = nextIndex.item
     }
@@ -193,9 +190,6 @@ extension ImageBannerSectionCell: Inputable {
         pageControl.numberOfPages = input.imagePaths.count
         let datas = zip(input.imagePaths, input.idList)
         imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
-        imageSection.inputDataList.first?.imagePath.isBrightImagePath(completion: { [weak self] isBright in
-            self?.findViewController()?.statusBarIsDarkMode = isBright
-        })
         
         contentCollectionView.reloadData()
         startAutoScroll()
