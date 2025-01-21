@@ -36,7 +36,7 @@ struct MapPopUpStoreDTO: Codable {
 }
 
 struct GetViewBoundPopUpStoreListResponse: Decodable {
-    var popUpStoreList: [MapPopUpStoreDTO]
+    let popUpStoreList: [MapPopUpStoreDTO]
 }
 
 struct MapSearchResponseDTO: Codable {

@@ -43,7 +43,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         view.backgroundColor = .clear
 
         Logger.log(message: "초기 뷰 계층:", category: .debug)
-        print(view.value(forKey: "recursiveDescription") ?? "")
+//        print(view.value(forKey: "recursiveDescription") ?? "")
 
         // mainView 설정 및 추가
         view.addSubview(mainView)
@@ -60,7 +60,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         }
 
         Logger.log(message: "mainView 추가 후 계층:", category: .debug)
-        print(view.value(forKey: "recursiveDescription") ?? "")
+//        print(view.value(forKey: "recursiveDescription") ?? "")
 
         // dimmedView 설정 및 추가
         dimmedView.backgroundColor = .black.withAlphaComponent(0.4)
@@ -77,7 +77,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         }
 
         Logger.log(message: "최종 뷰 계층:", category: .debug)
-        print(view.value(forKey: "recursiveDescription") ?? "")
+//        print(view.value(forKey: "recursiveDescription") ?? "")
     }
     
    private func setupCollectionView() {

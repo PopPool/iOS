@@ -365,10 +365,10 @@ extension FilterBottomSheetViewController: UICollectionViewDataSource {
 extension FilterBottomSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let category = tagSection?.inputDataList[indexPath.item].title else { return }
-        print("[DEBUG] 👆 Category Option Selected: \(category)")
-        print("[DEBUG] 💾 Current Saved Filters:")
-        print("[DEBUG] 📍 Location: \(reactor?.currentState.selectedSubRegions ?? [])")
-        print("[DEBUG] 🏷️ Category: \(reactor?.currentState.selectedCategories ?? [])")
+//        print("[DEBUG] 👆 Category Option Selected: \(category)")
+//        print("[DEBUG] 💾 Current Saved Filters:")
+//        print("[DEBUG] 📍 Location: \(reactor?.currentState.selectedSubRegions ?? [])")
+//        print("[DEBUG] 🏷️ Category: \(reactor?.currentState.selectedCategories ?? [])")
         reactor?.action.onNext(.toggleCategory(category))
     }
 }

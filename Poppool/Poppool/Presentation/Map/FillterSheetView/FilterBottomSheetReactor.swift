@@ -62,7 +62,7 @@ final class FilterBottomSheetReactor: Reactor {
             selectedSubRegions: [],
             selectedCategories: [],
             locations: initialLocations, // 초기 locations 설정
-            categories: ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션", "엔터테이먼트", "여행", "예술", "음식/요리", "키즈", "패션"]
+            categories: ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션", "엔터테인먼트", "여행", "예술", "음식/요리", "키즈", "패션"]
         )
     }
 

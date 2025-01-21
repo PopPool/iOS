@@ -416,22 +416,17 @@ extension FilterBottomSheetView {
 } 
 extension FilterBottomSheetView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("Scrolling - contentOffset: \(scrollView.contentOffset.x)")
 
         guard let selectedButton = locationContentView.subviews.first(where: { view in
             guard let button = view as? PPButton else { return false }
             return button.backgroundColor == .blu500
         }) as? PPButton else {
-            print("No selected button found")
             return
         }
 
-        // 선택된 버튼의 현재 위치 확인
         let buttonFrame = selectedButton.convert(selectedButton.bounds, to: balloonBackgroundView)
-        print("Button center: \(buttonFrame.midX)")
 
         let arrowPosition = buttonFrame.midX / balloonBackgroundView.bounds.width
-        print("Arrow position: \(arrowPosition)")
 
         balloonBackgroundView.arrowPosition = arrowPosition
         balloonBackgroundView.setNeedsDisplay()

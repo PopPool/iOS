@@ -44,7 +44,7 @@ final class StoreListReactor: Reactor {
             return fetchStores()
 
         case let .didSelectItem(index):
-            print("[DEBUG] Item Selected at Index: \(index)")
+//            print("[DEBUG] Item Selected at Index: \(index)")
             return .empty()
 
         case let .toggleBookmark(index):

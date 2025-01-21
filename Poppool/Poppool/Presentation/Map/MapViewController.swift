@@ -53,6 +53,15 @@ final class MapViewController: BaseViewController, View {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+
+        if let reactor = self.reactor {
+               bind(reactor: reactor)
+               bindViewport(reactor: reactor)  
+
+            reactor.action.onNext(.fetchCategories)
+
+           }
+
     }
 
 
@@ -115,7 +124,7 @@ final class MapViewController: BaseViewController, View {
             .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                print("[DEBUG] ⬆️ Swipe Up Detected")
+                Logger.log(message: "⬆️ 위로 스와이프 감지", category: .debug)
                 switch owner.modalState {
                 case .bottom:
                     owner.animateToState(.middle)
@@ -131,7 +140,7 @@ final class MapViewController: BaseViewController, View {
             .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                print("[DEBUG] ⬇️ Swipe Down Detected")
+                Logger.log(message: "⬇️ 아래로 스와이프 감지됨", category: .debug)
                 switch owner.modalState {
                 case .top:
                     owner.animateToState(.middle)
@@ -161,7 +170,7 @@ final class MapViewController: BaseViewController, View {
         mainView.listButton.rx.tap
             .withUnretained(self)
             .subscribe { owner, _ in
-                print("[DEBUG] List Button Tapped")
+//                print("[DEBUG] List Button Tapped")
                 owner.animateToState(.middle) // 버튼 눌렀을 때 상태를 middle로 변경
             }
             .disposed(by: disposeBag)
@@ -210,9 +219,14 @@ final class MapViewController: BaseViewController, View {
         }
         .observe(on: MainScheduler.instance)
         .bind { [weak self] locationText, categoryText in
-            print("[DEBUG] 📍 Updating filters - Location: \(locationText)")
-            print("[DEBUG] 🏷️ Updating filters - Category: \(categoryText)")
-
+            Logger.log(
+                message: """
+                필터 업데이트:
+                📍 위치: \(locationText)
+                🏷️ 카테고리: \(categoryText)
+                """,
+                category: .debug
+            )
             self?.mainView.filterChips.update(
                 locationText: locationText,
                 categoryText: categoryText
@@ -220,6 +234,7 @@ final class MapViewController: BaseViewController, View {
         }
         .disposed(by: disposeBag)
 
+        
         reactor.state.map { $0.activeFilterType }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -287,10 +302,10 @@ final class MapViewController: BaseViewController, View {
 
         reactor.state.map { $0.searchResults.isEmpty }
             .distinctUntilChanged()
+            .skip(1)  // 초기값 스킵
             .observe(on: MainScheduler.instance)
             .bind { [weak self] isEmpty in
                 guard let self = self else { return }
-
                 if isEmpty {
                     self.showAlert(
                         title: "검색 결과 없음",
@@ -299,7 +314,6 @@ final class MapViewController: BaseViewController, View {
                 }
             }
             .disposed(by: disposeBag)
-
     }
 
 
@@ -307,24 +321,27 @@ final class MapViewController: BaseViewController, View {
 
     // MARK: - List View Control
     private func toggleListView() {
-        print("[DEBUG] Current Modal State: \(modalState)")
-        print("[DEBUG] Current listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
+//        print("[DEBUG] Current Modal State: \(modalState)")
+//        print("[DEBUG] Current listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
 
         UIView.animate(withDuration: 0.3) {
             let middleOffset = -self.view.frame.height * 0.7 
             self.listViewTopConstraint?.update(offset: middleOffset)
             self.modalState = .middle
             self.mainView.searchFilterContainer.backgroundColor = .clear
-            print("[DEBUG] Changing state to Middle")
-            print("[DEBUG] Updated offset: \(middleOffset)")
             self.view.layoutIfNeeded()
         }
 
         // 상태 변경 후 로그
-        print("[DEBUG] New Modal State: \(modalState)")
-        print("[DEBUG] New listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
-    }
-    
+        Logger.log(
+            message: """
+            리스트뷰 상태 변경:
+            현재 상태: \(modalState)
+            현재 오프셋: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)
+            """,
+            category: .debug
+        )    }
+
 
     func addMarker(for store: MapPopUpStore) {
           let marker = GMSMarker()
@@ -451,7 +468,7 @@ final class MapViewController: BaseViewController, View {
             self.view.layoutIfNeeded()
         }) { _ in
             self.modalState = state
-            print("Completed animation to state: \(state)")
+            Logger.log(message: ". 현재 상태: \(state)", category: .debug)
         }
     }
 
@@ -467,9 +484,14 @@ final class MapViewController: BaseViewController, View {
         viewController.onSave = { [weak self] filterData in
               guard let self = self else { return }
 
-              print("[DEBUG] 💾 Save triggered with:")
-              print("[DEBUG] 📍 Locations: \(filterData.locations)")
-              print("[DEBUG] 🏷️ Categories: \(filterData.categories)")
+            Logger.log(
+                message: """
+                필터 저장:
+                📍 위치: \(filterData.locations)
+                🏷️ 카테고리: \(filterData.categories)
+                """,
+                category: .debug
+            )
 
               self.reactor?.action.onNext(.updateBothFilters(
                   locations: filterData.locations,
@@ -535,7 +557,10 @@ final class MapViewController: BaseViewController, View {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
         case .denied, .restricted:
-            print("위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.")
+            Logger.log(
+                message: "위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.",
+                category: .error
+            )
         @unknown default:
             break
         }
