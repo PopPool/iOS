@@ -157,11 +157,18 @@ final class FilterBottomSheetView: UIView {
     }
 
     private func setupConstraints() {
+        // 1. 먼저 self의 width 설정
+        self.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width)
+        }
+
+        // 2. containerView 설정
         containerView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(headerView.snp.top)
         }
 
+        // 3. headerView 및 내부 요소들
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(70)
@@ -178,11 +185,13 @@ final class FilterBottomSheetView: UIView {
             make.size.equalTo(24)
         }
 
+        // 4. segmentedControl
         segmentedControl.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
         }
 
+        // 5. locationScrollView 및 contentView
         locationScrollView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
@@ -194,12 +203,28 @@ final class FilterBottomSheetView: UIView {
             make.height.equalToSuperview()
         }
 
+        // 6. categoryCollectionView
+        categoryCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(segmentedControl.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview()
+//            categoryHeightConstraint = make.height.equalTo(160).constraint
+        }
+
+        // 7. balloonBackgroundView
         balloonBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(locationScrollView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
-            balloonHeightConstraint = make.height.equalTo(150).constraint
+            balloonHeightConstraint = make.height.equalTo(0).constraint
         }
 
+        // 8. filterChipsView
+        filterChipsView.snp.makeConstraints { make in
+            make.top.equalTo(balloonBackgroundView.snp.bottom).offset(24)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(80)
+        }
+
+        // 9. buttonStack
         buttonStack.snp.makeConstraints { make in
             make.top.equalTo(filterChipsView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -288,14 +313,27 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateContentVisibility(isCategorySelected: Bool) {
+        // 애니메이션과 함께 자연스럽게 처리
+        UIView.animate(withDuration: 0.3) {
+            // 먼저 투명도 조정
+            self.locationScrollView.alpha = isCategorySelected ? 0 : 1
+            self.balloonBackgroundView.alpha = isCategorySelected ? 0 : 1
+            self.categoryCollectionView.alpha = isCategorySelected ? 1 : 0
+
+            // 그 다음 숨김 처리
             self.locationScrollView.isHidden = isCategorySelected
             self.balloonBackgroundView.isHidden = isCategorySelected
             self.categoryCollectionView.isHidden = !isCategorySelected
 
-            self.balloonHeightConstraint?.update(offset: isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight())
+            // 높이 조정
+            let newHeight = isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight()
+            self.balloonHeightConstraint?.update(offset: newHeight)
+
             self.layoutIfNeeded()
-//        }
+        }
     }
+
+
 
 
     private func createStyledButton(title: String, isSelected: Bool = false) -> PPButton {
@@ -338,12 +376,12 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 160) {
-        let targetHeight = isHidden ? 0 : dynamicHeight
-        self.balloonHeightConstraint?.update(offset: targetHeight)
-        self.balloonBackgroundView.isHidden = isHidden
-        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3) {
+            self.balloonBackgroundView.alpha = isHidden ? 0 : 1
+            self.balloonHeightConstraint?.update(offset: isHidden ? 0 : dynamicHeight)
+            self.layoutIfNeeded()
+        }
     }
-
 
 
     func updateBalloonPosition(for button: UIButton) {
@@ -352,7 +390,7 @@ final class FilterBottomSheetView: UIView {
         let totalWidth = bounds.width
 
         balloonBackgroundView.arrowPosition = buttonCenterX / totalWidth
-        self.layoutIfNeeded()
+        balloonBackgroundView.setNeedsDisplay() 
     }
     private func updateBalloonPositionAccurately(for button: PPButton) {
         let buttonFrameInBalloon = button.convert(button.bounds, to: balloonBackgroundView)

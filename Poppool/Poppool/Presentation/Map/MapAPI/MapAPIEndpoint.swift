@@ -49,10 +49,10 @@ struct MapAPIEndpoint {
     static func locations_searchStores(
         query: String,
         categories: [String]
-    ) -> Endpoint<MapSearchPopUpStore> {
+    ) -> Endpoint<MapSearchResponseDTO> {
         let params = SearchQueryDTO(
             query: query,
-            categories: categories
+            categories: categories.isEmpty ? nil : categories
         )
 
         return Endpoint(
@@ -75,5 +75,5 @@ struct BoundQueryDTO: Encodable {
 
 struct SearchQueryDTO: Encodable {
     let query: String
-    let categories: [String]
+    let categories: [String]?
 }

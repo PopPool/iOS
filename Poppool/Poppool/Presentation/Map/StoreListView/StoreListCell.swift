@@ -122,7 +122,7 @@ private extension StoreListCell {
 // MARK: - Inputable
 extension StoreListCell: Inputable {
     struct Input {
-        let thumbnailImage: UIImage?
+        let thumbnailURL: String
         let category: String
         let title: String
         let location: String
@@ -131,7 +131,7 @@ extension StoreListCell: Inputable {
     }
 
     func injection(with input: Input) {
-        thumbnailImageView.image = input.thumbnailImage ?? UIImage(named: "default_thumbnail")
+        thumbnailImageView.setPPImage(path: input.thumbnailURL)
         categoryTagLabel.text = "#\(input.category)"
         titleLabel.text = input.title
         locationLabel.text = input.location

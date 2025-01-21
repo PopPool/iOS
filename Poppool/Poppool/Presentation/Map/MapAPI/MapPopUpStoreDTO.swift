@@ -1,15 +1,8 @@
-//
-//  MapPopUpStoreDTO.swift
-//  Poppool
-//
-//  Created by 김기현 on 12/3/24.
-//
-
 import Foundation
 
 struct MapPopUpStoreDTO: Codable {
     let id: Int64
-    let category: String
+    let categoryName: String
     let name: String
     let address: String
     let startDate: String
@@ -19,11 +12,14 @@ struct MapPopUpStoreDTO: Codable {
     let markerId: Int64
     let markerTitle: String
     let markerSnippet: String
+    let mainImageUrl: String?
+    let bookmarkYn: Bool?
 
+    // toDomain() 메서드 추가
     func toDomain() -> MapPopUpStore {
         return MapPopUpStore(
             id: id,
-            category: category,
+            category: categoryName,
             name: name,
             address: address,
             startDate: startDate,
@@ -32,7 +28,9 @@ struct MapPopUpStoreDTO: Codable {
             longitude: longitude,
             markerId: markerId,
             markerTitle: markerTitle,
-            markerSnippet: markerSnippet
+            markerSnippet: markerSnippet,
+            mainImageUrl: mainImageUrl
+
         )
     }
 }
@@ -41,6 +39,7 @@ struct GetViewBoundPopUpStoreListResponse: Decodable {
     var popUpStoreList: [MapPopUpStoreDTO]
 }
 
-struct MapSearchPopUpStore: Decodable {
+struct MapSearchResponseDTO: Codable {
     let popUpStoreList: [MapPopUpStoreDTO]
+    let loginYn: Bool
 }

@@ -5,9 +5,11 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 import Alamofire
+import GoogleMaps
+import CoreLocation
 
 final class PopUpStoreRegisterViewController: BaseViewController {
-//    typealias Reactor = PopUpStoreRegisterReactor
+    //    typealias Reactor = PopUpStoreRegisterReactor
 
 
     // MARK: - Navigation/Header
@@ -30,8 +32,8 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     let presignedService = PreSignedService()
 
     var disposeBag = DisposeBag()
-       private let nickname: String
-       private let navContainer = UIView()
+    private let nickname: String
+    private let navContainer = UIView()
 
     init(nickname: String, adminUseCase: AdminUseCase, editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil) {
         self.nickname = nickname
@@ -40,15 +42,15 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         super.init()
         self.accountIdLabel.text = nickname + "님"
         if editingStore != nil {
-               pageTitleLabel.text = "팝업스토어 수정"
-           }
-       }
+            pageTitleLabel.text = "팝업스토어 수정"
+        }
+    }
 
 
 
-       required init?(coder: NSCoder) {
-           fatalError("init(coder:) has not been implemented")
-       }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
 
     private lazy var imagesCollectionView: UICollectionView = {
@@ -73,11 +75,11 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     }()
 
     private let accountIdLabel: UILabel = {
-          let lbl = UILabel()
-          lbl.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-          lbl.textColor = .black
-          return lbl
-      }()
+        let lbl = UILabel()
+        lbl.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        lbl.textColor = .black
+        return lbl
+    }()
 
 
     private let menuButton: UIButton = {
@@ -105,12 +107,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     }()
 
     // (3) 메인 이미지
-    private let mainImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
-        iv.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-        return iv
-    }()
+    //    private let mainImageView: UIImageView = {
+    //        let iv = UIImageView()
+    //        iv.contentMode = .scaleAspectFit
+    //        iv.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+    //        return iv
+    //    }()
     private let addImageButton = UIButton(type: .system).then {
         $0.setTitle("이미지 추가", for: .normal)
         $0.setTitleColor(.systemBlue, for: .normal)
@@ -211,13 +213,13 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             fillFormWithExistingData(store)
         }
 
-
         setupNavigation()
         setupLayout()
         setupRows()
         setupImageCollectionUI()
         setupImageCollectionActions()
-        updateSaveButtonState()
+        setupKeyboardHandling()
+        setupAddressField()
 
 
     }
@@ -248,8 +250,66 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private func fillFormWithExistingData(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
         nameField?.text = store.name
         categoryButton.setTitle("\(store.categoryName) ▾", for: .normal)
-//        addressField?.text = store.address
+        //        addressField?.text = store.address
     }
+    private func setupKeyboardHandling() {
+        // 키보드 Notification 등록
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+
+        // 스크롤뷰 키보드 처리 설정
+        scrollView.keyboardDismissMode = .interactive
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+
+        let keyboardHeight = keyboardFrame.height
+        let contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: keyboardHeight,
+            right: 0
+        )
+
+        scrollView.contentInset = contentInset
+        scrollView.scrollIndicatorInsets = contentInset
+
+        // 현재 활성화된 필드가 키보드에 가려지는지 확인
+        if let activeField = view.findFirstResponder() {
+            let activeRect = activeField.convert(activeField.bounds, to: scrollView)
+            let bottomOffset = activeRect.maxY + 20 // 여유 공간
+
+            if bottomOffset > (scrollView.frame.height - keyboardHeight) {
+                let scrollPoint = CGPoint(
+                    x: 0,
+                    y: bottomOffset - (scrollView.frame.height - keyboardHeight)
+                )
+                scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.scrollView.contentInset = .zero
+            self.scrollView.scrollIndicatorInsets = .zero
+        }
+    }
+
 
 
     // MARK: - Layout
@@ -283,6 +343,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             make.width.height.equalTo(32)
         }
 
+        // (2) 타이틀 컨테이너
         view.addSubview(titleContainer)
         titleContainer.snp.makeConstraints { make in
             make.top.equalTo(navContainer.snp.bottom)
@@ -303,35 +364,48 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             make.left.equalTo(backButton.snp.right).offset(4)
         }
 
-        // (3) Scroll
+        // (3) 스크롤뷰
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(titleContainer.snp.bottom)
             make.left.right.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-74)
         }
+
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(scrollView.snp.width)
         }
 
-        // 메인 이미지
-        contentView.addSubview(mainImageView)
-        mainImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.centerX.equalToSuperview()
-            make.width.height.equalTo(80)
+        // (4) 이미지 영역 추가
+        let buttonStack = UIStackView(arrangedSubviews: [addImageButton, removeAllButton])
+        buttonStack.axis = .horizontal
+        buttonStack.distribution = .fillEqually
+        buttonStack.spacing = 16
+
+        contentView.addSubview(buttonStack)
+        buttonStack.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(40)
         }
 
-        // (4) form BG
+        contentView.addSubview(imagesCollectionView)
+        imagesCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(buttonStack.snp.bottom).offset(8)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(130)
+        }
+
+        // (5) 폼 배경
         contentView.addSubview(formBackgroundView)
         formBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(mainImageView.snp.bottom).offset(16)
+            make.top.equalTo(imagesCollectionView.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview()
-
+            make.bottom.equalToSuperview().offset(-16)
         }
+
         formBackgroundView.addSubview(verticalStack)
         verticalStack.axis = .vertical
         verticalStack.spacing = 0
@@ -339,16 +413,14 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             make.edges.equalToSuperview()
         }
 
-        // (5) 저장 버튼
+        // (6) 저장 버튼
         view.addSubview(saveButton)
         saveButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
-            make.top.equalTo(scrollView.snp.bottom).offset(15)
             make.height.equalTo(44)
         }
     }
-
     // MARK: - Setup Rows
     private func setupRows() {
         addRowTextField(leftTitle: "이름", placeholder: "팝업스토어 이름을 입력해 주세요.")
@@ -457,21 +529,21 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let descTV = makeRoundedTextView()
         self.descTV = descTV // 설명 필드 연결
         addRowCustom(leftTitle: "설명", rightView: descTV, rowHeight: nil, totalHeight: 120)
-        
+
     }
 
 
     // MARK: - Row
-    
+
     private func addRowTextField(leftTitle: String, placeholder: String) {
         let tf = makeRoundedTextField(placeholder)
-         if leftTitle == "이름" {
-             nameField = tf // 이름 필드 연결
-         } else if leftTitle == "주소" {
-             addressField = tf // 주소 필드 연결
-         }
-         addRowCustom(leftTitle: leftTitle, rightView: tf)
-     }
+        if leftTitle == "이름" {
+            nameField = tf // 이름 필드 연결
+        } else if leftTitle == "주소" {
+            addressField = tf // 주소 필드 연결
+        }
+        addRowCustom(leftTitle: leftTitle, rightView: tf)
+    }
 
     private func setupImageCollectionUI() {
         // 1) 상단 버튼들 (Add / RemoveAll)
@@ -482,7 +554,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         contentView.addSubview(buttonStack)
         buttonStack.snp.makeConstraints { make in
-            make.top.equalTo(mainImageView.snp.bottom).offset(16)
+            make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview().inset(16)
             make.height.equalTo(40)
         }
@@ -549,7 +621,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     /**
      rowHeight: 기본(41)
      totalHeight: 2줄 필요한 경우(90~100), 3줄 등 필요 시 더 크게
-    */
+     */
     private func addRowCustom(leftTitle: String,
                               rightView: UIView,
                               rowHeight: CGFloat? = 36,
@@ -1127,7 +1199,7 @@ private extension PopUpStoreRegisterViewController {
     // 이미지 업로드
     private func uploadImages() {
         let uuid = UUID().uuidString
-//        let baseS3URL = Secrets.popPoolS3BaseURL.rawValue
+        //        let baseS3URL = Secrets.popPoolS3BaseURL.rawValue
         let updatedImages = images.enumerated().map { index, image in
             let filePath = "PopUpImage/\(nameField?.text ?? "")/\(uuid)/\(index).jpg"
             return ExtendedImage(
@@ -1136,11 +1208,11 @@ private extension PopUpStoreRegisterViewController {
                 isMain: image.isMain)
         }
 
-//        let presignedService = PreSignedService()
+        //        let presignedService = PreSignedService()
         presignedService.tryUpload(datas: updatedImages.map {
             PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
         })
-//        .observe(on: MainScheduler.instance)
+        //        .observe(on: MainScheduler.instance)
         .subscribe(
             onSuccess: { [weak self] _ in
                 guard let self = self else { return }
@@ -1233,4 +1305,89 @@ private extension PopUpStoreRegisterViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .default))
         present(alert, animated: true)
     }
+}
+extension UIView {
+    func findFirstResponder() -> UIView? {
+        if isFirstResponder {
+            return self
+        }
+
+        for subview in subviews {
+            if let firstResponder = subview.findFirstResponder() {
+                return firstResponder
+            }
+        }
+
+        return nil
+    }
+}
+extension PopUpStoreRegisterViewController: UITextFieldDelegate {
+    private func setupAddressField() {
+        // RxCocoa를 사용한 텍스트 필드 바인딩
+        addressField?.rx.text.orEmpty
+            .distinctUntilChanged()
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+            .filter { !$0.isEmpty }
+            .flatMapLatest { [weak self] address -> Observable<CLLocation?> in
+                return Observable.create { observer in
+                    let geocoder = CLGeocoder()
+                    let fullAddress = "\(address), Korea"
+                    
+                    geocoder.geocodeAddressString(
+                        fullAddress,
+                        in: nil,
+                        preferredLocale: Locale(identifier: "ko_KR")
+                    ) { placemarks, error in
+                        if let error = error {
+                            print("Geocoding error: \(error.localizedDescription)")
+                            observer.onNext(nil)
+                            observer.onCompleted()
+                            return
+                        }
+                        
+                        if let location = placemarks?.first?.location {
+                            observer.onNext(location)
+                        } else {
+                            observer.onNext(nil)
+                        }
+                        observer.onCompleted()
+                    }
+                    
+                    return Disposables.create()
+                }
+            }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] location in
+                guard let location = location else { return }
+                self?.latField?.text = String(format: "%.6f", location.coordinate.latitude)
+                self?.lonField?.text = String(format: "%.6f", location.coordinate.longitude)
+                self?.updateSaveButtonState()
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    
+    @objc private func addressFieldDidChange(_ textField: UITextField) {
+        guard let address = textField.text, !address.isEmpty else { return }
+        
+        // 한국 주소임을 명시
+        let geocoder = CLGeocoder()
+        let addressWithCountry = address + ", South Korea"
+        
+        geocoder.geocodeAddressString(addressWithCountry) { [weak self] placemarks, error in
+            if let error = error {
+                print("Geocoding error: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let location = placemarks?.first?.location else { return }
+            
+            DispatchQueue.main.async {
+                self?.latField?.text = String(format: "%.6f", location.coordinate.latitude)
+                self?.lonField?.text = String(format: "%.6f", location.coordinate.longitude)
+                self?.updateSaveButtonState()
+            }
+        }
+    }
+    
 }

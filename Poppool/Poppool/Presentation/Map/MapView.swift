@@ -97,17 +97,6 @@ private extension MapView {
             make.bottom.equalToSuperview()
         }
 
-        
-        // 기존 코드 주석처리
-        // let searchContainer = UIView()
-        // let filterContainer = UIView()
-        // searchContainer.addSubview(searchInput)
-        // filterContainer.addSubview(filterChips)
-        // searchInput.snp.makeConstraints { ... }
-        // filterChips.snp.makeConstraints { ... }
-        // topStackView.addArrangedSubview(searchContainer)
-        // topStackView.addArrangedSubview(filterContainer)
-
         addSubview(locationButton)
         addSubview(listButton)
         addSubview(storeCard)

@@ -58,7 +58,7 @@ final class StoreListViewController: UIViewController, View {
                 ) as! StoreListCell
 
                 cell.injection(with: .init(
-                    thumbnailImage: nil,
+                    thumbnailURL: item.thumbnailURL, 
                     category: item.category,
                     title: item.title,
                     location: item.location,

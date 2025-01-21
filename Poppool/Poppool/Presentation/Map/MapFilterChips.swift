@@ -74,14 +74,14 @@ class MapFilterChips: UIView {
            button.layer.cornerRadius = 18
 
            let xButton = UIButton(type: .custom)
-           xButton.setImage(UIImage(named: "icon_xmark")?.withRenderingMode(.alwaysTemplate), for: .normal)
+           xButton.setImage(UIImage(named: "icon_xmark_white")?.withRenderingMode(.alwaysTemplate), for: .normal)
            xButton.tintColor = .white
            button.addSubview(xButton)
 
            xButton.snp.makeConstraints { make in
                make.centerY.equalToSuperview()
-               make.trailing.equalToSuperview().inset(12)
-               make.size.equalTo(16)
+               make.trailing.equalToSuperview().inset(14)
+               make.size.equalTo(18)
            }
 
            xButton.addTarget(self, action: #selector(handleClearButtonTapped(_:)), for: .touchUpInside)
@@ -95,7 +95,7 @@ class MapFilterChips: UIView {
            button.backgroundColor = .white
            button.layer.borderWidth = 1
            button.layer.borderColor = UIColor.g200.cgColor
-           button.layer.cornerRadius = 16
+           button.layer.cornerRadius = 18
            button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 16, bottom: 7, right: 16)
        }
    }

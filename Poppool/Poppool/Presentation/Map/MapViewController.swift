@@ -18,6 +18,7 @@ final class MapViewController: BaseViewController, View {
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     private var currentMarker: GMSMarker?
+    private let storeListReactor = StoreListReactor()
     private let storeListViewController = StoreListViewController(reactor: StoreListReactor())
     private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
@@ -82,6 +83,10 @@ final class MapViewController: BaseViewController, View {
             listViewTopConstraint = make.top.equalToSuperview().offset(view.frame.height).constraint // 초기 숨김 상태
         }
 
+        if let reactor = self.reactor {
+                bind(reactor: reactor)
+            }
+
         // 제스처 설정
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         storeListViewController.mainView.grabberHandle.addGestureRecognizer(panGesture)
@@ -91,6 +96,8 @@ final class MapViewController: BaseViewController, View {
 
         setupMarker()
     }
+
+    private let defaultZoomLevel: Float = 15.0 // 기본 줌 레벨
 
     private func setupMarker() {
         let marker = GMSMarker()
@@ -240,17 +247,62 @@ final class MapViewController: BaseViewController, View {
                 self.addMarker(for: store)
             }
             .disposed(by: disposeBag)
+        mainView.searchInput.onSearch = { [weak self] query in
+            self?.reactor?.action.onNext(.searchTapped(query))
+        }
 
-//        reactor.state.map { $0.toastMessage }
-//            .compactMap { $0 }
-//            .observe(on: MainScheduler.instance)
-//            .bind { message in
-////                let toast = Toast(message: message)
-//                toast.show()
-//            }
-//            .disposed(by: disposeBag)
+        reactor.state.map { $0.isLoading }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] isLoading in
+                self?.mainView.searchInput.searchTextField.isEnabled = !isLoading
+//                self?.mainView.searchInput.setLoading(isLoading)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map { $0.searchResults }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] results in
+                guard let self = self else { return }
+
+                // 검색 결과를 StoreItem으로 변환
+                let storeItems = results.map { $0.toStoreItem() }
+
+                // 1. StoreListReactor로 변환된 데이터를 전달
+                self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+
+                // 2. 지도에 마커 추가
+                self.addMarkers(for: results)
+
+                // 3. 캐러셀 뷰 업데이트
+                self.carouselView.updateCards(results)
+
+                // 4. 캐러셀 뷰 표시 여부 설정
+                self.carouselView.isHidden = results.isEmpty
+            }
+            .disposed(by: disposeBag)
+
+
+
+        reactor.state.map { $0.searchResults.isEmpty }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] isEmpty in
+                guard let self = self else { return }
+
+                if isEmpty {
+                    self.showAlert(
+                        title: "검색 결과 없음",
+                        message: "검색 결과가 없습니다. 다른 키워드로 검색해보세요."
+                    )
+                }
+            }
+            .disposed(by: disposeBag)
 
     }
+
+
     
 
     // MARK: - List View Control
@@ -452,11 +504,32 @@ final class MapViewController: BaseViewController, View {
         }
         currentFilterBottomSheet = nil
     }
+    private func addMarkers(for stores: [MapPopUpStore]) {
+        for store in stores {
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude)
+            marker.title = store.name
+            marker.snippet = store.address
+            marker.map = mainView.mapView // mainView의 mapView에 추가
+        }
+    }
+    private func updateListView(with results: [MapPopUpStore]) {
+        // MapPopUpStore 배열을 StoreItem 배열로 변환
+        let storeItems = results.map { $0.toStoreItem() }
+        storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+    }
+
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+
+
 
     // MARK: - Location
     private func checkLocationAuthorization() {
-        let status = CLLocationManager.authorizationStatus()
-        switch status {
+        switch locationManager.authorizationStatus {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
@@ -490,7 +563,9 @@ extension MapViewController: CLLocationManagerDelegate {
             longitude: location.coordinate.longitude,
             markerId: 0,
             markerTitle: "현재 위치",
-            markerSnippet: "현재 위치의 팝업스토어"
+            markerSnippet: "현재 위치의 팝업스토어",
+            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+
         )
 
         addMarker(for: currentLocationStore)
@@ -512,7 +587,9 @@ extension MapViewController: GMSMapViewDelegate {
             longitude: 126.9780,
             markerId: 1,
             markerTitle: "서울",
-            markerSnippet: "팝업스토어"
+            markerSnippet: "팝업스토어",
+            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+
         )
         let dummyStore2 = MapPopUpStore(
             id: 2,
@@ -525,7 +602,9 @@ extension MapViewController: GMSMapViewDelegate {
             longitude: 127.0276,
             markerId: 2,
             markerTitle: "강남",
-            markerSnippet: "전시 팝업스토어"
+            markerSnippet: "전시 팝업스토어",
+            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+
         )
 
         carouselView.updateCards([dummyStore1, dummyStore2])
@@ -534,3 +613,72 @@ extension MapViewController: GMSMapViewDelegate {
         return true
     }
 }
+extension MapViewController {
+    func bindViewport(reactor: MapReactor) {
+        // 뷰포트 변경 감지
+        Observable.merge([
+            mainView.mapView.rx.didChangePosition,
+            mainView.mapView.rx.idleAtPosition
+        ])
+        .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+        .map { [weak self] _ -> MapReactor.Action? in
+            guard let self = self else { return nil }
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            return .viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            )
+        }
+        .compactMap { $0 }
+        .bind(to: reactor.action)
+        .disposed(by: disposeBag)
+
+        // 스토어 업데이트
+        reactor.state
+            .map { $0.viewportStores }
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] stores in
+                self?.updateMarkers(with: stores)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func getCurrentViewportBounds() -> (northEast: CLLocationCoordinate2D, southWest: CLLocationCoordinate2D) {
+        let region = mainView.mapView.projection.visibleRegion()
+        return (northEast: region.farRight, southWest: region.nearLeft)
+    }
+    private func updateMarkers(with stores: [MapPopUpStore]) {
+        mainView.mapView.clear()
+        stores.forEach { store in
+            let marker = GMSMarker()
+            marker.position = store.coordinate
+            marker.userData = store
+
+            let markerView = MapMarker()
+            markerView.injection(with: store.toMarkerInput())
+            marker.iconView = markerView
+            marker.map = mainView.mapView
+        }
+    }
+}
+
+// MARK: - Reactive Extensions
+extension Reactive where Base: GMSMapView {
+    var delegate: DelegateProxy<GMSMapView, GMSMapViewDelegate> {
+        return GMSMapViewDelegateProxy.proxy(for: base)
+    }
+
+    var didChangePosition: Observable<Void> {
+        let proxy = GMSMapViewDelegateProxy.proxy(for: base)
+        return proxy.didChangePositionSubject.asObservable()
+    }
+
+    var idleAtPosition: Observable<Void> {
+        let proxy = GMSMapViewDelegateProxy.proxy(for: base)
+        return proxy.idleAtPositionSubject.asObservable()
+    }
+}
+
+

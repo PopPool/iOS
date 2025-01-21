@@ -7,21 +7,15 @@ final class StoreListReactor: Reactor {
         case viewDidLoad
         case didSelectItem(Int)
         case toggleBookmark(Int)
-
-        // 필터칩 탭 시 (location / category)
+        case setStores([StoreItem])
         case filterTapped(FilterType?)
-        // 바텀시트에서 필터 선택 후 save 시
         case filterUpdated(FilterType, [String])
-        // 필터 제거(초기화)
         case clearFilters(FilterType)
     }
 
     enum Mutation {
-        // 기존
-        case setStores([StoreItem])
+        case setStores([StoreItem]) // 변환된 StoreItem 리스트
         case updateBookmark(Int)
-
-        // 필터 관련
         case setActiveFilter(FilterType?)
         case setLocationFilters([String])
         case setCategoryFilters([String])
@@ -30,10 +24,7 @@ final class StoreListReactor: Reactor {
     }
 
     struct State {
-        // 기존
-        var stores: [StoreItem] = []
-
-        // 필터 관련 상태
+        var stores: [StoreItem] = [] // 변환된 리스트
         var activeFilterType: FilterType?
         var selectedLocationFilters: [String] = []
         var selectedCategoryFilters: [String] = []
@@ -41,9 +32,7 @@ final class StoreListReactor: Reactor {
 
     // MARK: - Properties
     var initialState: State
-    var disposeBag = DisposeBag()
 
-    // MARK: - Init
     init() {
         self.initialState = State()
     }
@@ -51,22 +40,23 @@ final class StoreListReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        // 1) 리스트 데이터 fetch
         case .viewDidLoad:
             return fetchStores()
 
         case let .didSelectItem(index):
-            // TODO: item 선택 시 로직
+            print("[DEBUG] Item Selected at Index: \(index)")
             return .empty()
 
         case let .toggleBookmark(index):
             return .just(.updateBookmark(index))
 
-        // 2) 필터칩 탭: filterTapped(.location/.category or nil)
+        case let .setStores(storeItems):
+            return .just(.setStores(storeItems))
+
+            
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
 
-        // 3) 바텀시트에서 선택된 필터 값 적용
         case let .filterUpdated(type, values):
             switch type {
             case .location:
@@ -75,7 +65,6 @@ final class StoreListReactor: Reactor {
                 return .just(.setCategoryFilters(values))
             }
 
-        // 4) 필터 제거(초기화)
         case let .clearFilters(type):
             switch type {
             case .location:
@@ -88,10 +77,7 @@ final class StoreListReactor: Reactor {
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-
         switch mutation {
-
-        // 기존
         case let .setStores(stores):
             newState.stores = stores
 
@@ -102,7 +88,6 @@ final class StoreListReactor: Reactor {
                 newState.stores[index] = item
             }
 
-        // 필터관련
         case let .setActiveFilter(filterType):
             newState.activeFilterType = filterType
 
@@ -118,23 +103,37 @@ final class StoreListReactor: Reactor {
         case .clearCategoryFilters:
             newState.selectedCategoryFilters = []
         }
-
         return newState
     }
 
     // MARK: - Private
     private func fetchStores() -> Observable<Mutation> {
         let mockStores = [
-            StoreItem(id: 1, thumbnailURL: "", category: "카페",  title: "팝업스토어1",
-                      location: "서울 강남구",   dateRange: "2024.06.30 ~ 08.23",
+            StoreItem(id: 1, thumbnailURL: "", category: "카페", title: "팝업스토어1",
+                      location: "서울 강남구", dateRange: "2024.06.30 ~ 08.23",
                       isBookmarked: false),
-            StoreItem(id: 2, thumbnailURL: "", category: "전시",  title: "팝업스토어2",
+            StoreItem(id: 2, thumbnailURL: "", category: "전시", title: "팝업스토어2",
                       location: "서울 성동구", dateRange: "2024.07.01 ~ 07.30",
                       isBookmarked: true)
         ]
         return .just(.setStores(mockStores))
     }
 }
+//
+//extension MapPopUpStore {
+//    func toStoreItem() -> StoreItem {
+//        return StoreItem(
+//            id: Int(id),
+//            thumbnailURL: mainImageUrl ?? "", // 이미지 URL 매핑
+//            category: category,
+//            title: name,
+//            location: address,
+//            dateRange: "\(startDate) ~ \(endDate)",
+//            isBookmarked: false // 기본값
+//        )
+//    }
+//}
+
 
 // MARK: - Model
 struct StoreItem {

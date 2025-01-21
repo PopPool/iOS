@@ -37,6 +37,11 @@ class DefaultMapRepository: MapRepository {
         southWestLon: Double,
         categories: [String]
     ) -> Observable<[MapPopUpStoreDTO]> {
+        Logger.log(
+            message: "지도의 범위 내 스토어 정보를 가져옵니다. 카테고리: \(categories)",
+            category: .network
+        )
+
         return provider.requestData(
             with: MapAPIEndpoint.locations_fetchStoresInBounds(
                 northEastLat: northEastLat,
@@ -47,6 +52,20 @@ class DefaultMapRepository: MapRepository {
             ),
             interceptor: nil
         )
+        .do(
+            onNext: { response in
+                Logger.log(
+                    message: "스토어 조회 성공! 응답: \(response)",
+                    category: .network
+                )
+            },
+            onError: { error in
+                Logger.log(
+                    message: "스토어 조회 중 오류 발생: \(error.localizedDescription)",
+                    category: .error
+                )
+            }
+        )
         .map { $0.popUpStoreList }
     }
 
@@ -54,12 +73,31 @@ class DefaultMapRepository: MapRepository {
         query: String,
         categories: [String]
     ) -> Observable<[MapPopUpStoreDTO]> {
+        Logger.log(
+            message: "스토어 검색을 시작합니다. 검색어: '\(query)', 카테고리: \(categories)",
+            category: .network
+        )
+
         return provider.requestData(
             with: MapAPIEndpoint.locations_searchStores(
                 query: query,
                 categories: categories
             ),
             interceptor: nil
+        )
+        .do(
+            onNext: { response in
+                Logger.log(
+                    message: "스토어 검색 성공! 응답: \(response)",
+                    category: .network
+                )
+            },
+            onError: { error in
+                Logger.log(
+                    message: "스토어 검색 중 오류 발생: \(error.localizedDescription)",
+                    category: .error
+                )
+            }
         )
         .map { $0.popUpStoreList }
     }

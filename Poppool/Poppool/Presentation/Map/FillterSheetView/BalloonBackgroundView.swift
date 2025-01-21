@@ -75,9 +75,11 @@ final class BalloonBackgroundView: UIView {
         containerView.addSubview(collectionView)
 
         containerView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(11)
+//            make.leading.trailing.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.top.equalToSuperview().offset(11)
+            make.edges.equalToSuperview()  // 단순화
+
         }
 
         collectionView.snp.makeConstraints { make in
@@ -98,7 +100,6 @@ final class BalloonBackgroundView: UIView {
            let arrowHeight: CGFloat = 10
            let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
 
-           // 통합된 하나의 패스로 그리기
            let path = UIBezierPath()
 
            // 화살표 시작점부터 그리기 시작
@@ -116,11 +117,9 @@ final class BalloonBackgroundView: UIView {
            path.addLine(to: CGPoint(x: containerRect.minX, y: containerRect.minY))
            path.close()
 
-           // 전체를 하나의 색으로 채우기
            UIColor.g50.setFill()
            path.fill()
 
-           // 필요한 경우 그림자 추가
            self.layer.shadowColor = UIColor.black.cgColor
            self.layer.shadowOpacity = 0.1
            self.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -203,7 +202,7 @@ final class BalloonBackgroundView: UIView {
         // 높이 계산
         let itemHeight: CGFloat = 36
         let interGroupSpacing: CGFloat = 8
-        let verticalInset: CGFloat = 20 + 19
+        let verticalInset: CGFloat = 20 + 10
         let totalHeight = max(
             (itemHeight * CGFloat(numberOfRows)) +
             (interGroupSpacing * CGFloat(numberOfRows - 1)) +

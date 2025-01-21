@@ -58,23 +58,23 @@ private extension StoreListView {
         backgroundColor = .white
         addSubview(collectionView)
         addSubview(grabberHandle)
-        addSubview(paddingView)
 
         grabberHandle.snp.makeConstraints { make in
-                 make.top.equalToSuperview().offset(14)
+            make.top.equalToSuperview().offset(14).priority(.high)
                  make.centerX.equalToSuperview()
                  make.width.equalTo(36)
-                 make.height.equalTo(5)  // priority 조정
-                 make.height.equalTo(5).priority(.high)  // 우선순위 지정
+                 make.height.equalTo(5)
              }
-        paddingView.snp.makeConstraints { make in
-            make.top.equalTo(grabberHandle.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-        }
+//        paddingView.snp.makeConstraints { make in
+//            make.top.equalTo(grabberHandle.snp.bottom)
+//            make.leading.trailing.equalToSuperview()
+//            
+//        }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(grabberHandle.snp.bottom).offset(1)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(grabberHandle.snp.bottom).offset(8).priority(.medium)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()  // bottom 제약 다시 추가
         }
     }
 
