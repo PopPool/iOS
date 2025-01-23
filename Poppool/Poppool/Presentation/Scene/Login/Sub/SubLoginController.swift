@@ -58,6 +58,11 @@ private extension SubLoginController {
 // MARK: - Methods
 extension SubLoginController {
     func bind(reactor: Reactor) {
+        rx.viewWillAppear
+            .map { Reactor.Action.viewWillAppear}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         mainView.xmarkButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in

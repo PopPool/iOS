@@ -87,6 +87,7 @@
 		081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0818994F2D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift */; };
 		081899522D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */; };
 		081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */; };
+		082197A12D426DCB0054094A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 082197A02D426DCB0054094A /* Then */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -345,6 +346,7 @@
 		08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */; };
 		08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA392D3FABE100248007 /* ToastView.swift */; };
 		08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */; };
+		08CBEA3E2D3FF6A100248007 /* PopUpCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -391,7 +393,6 @@
 		4E755B252D2B9C6C00ADFB21 /* AdminView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B242D2B9C6C00ADFB21 /* AdminView.swift */; };
 		4E755B292D2BA65A00ADFB21 /* AdminReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */; };
 		4E755B2B2D2BA76E00ADFB21 /* AdminUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */; };
-		4E755B322D2BA81800ADFB21 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 4E755B312D2BA81800ADFB21 /* Then */; };
 		4E7823A82D2E84E800AC5110 /* AdminRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */; };
 		4E7823A92D2E84FB00AC5110 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
 		4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
@@ -405,7 +406,6 @@
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
-		4EEA1D932D358839003E7DE9 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D922D358839003E7DE9 /* PopUpStoreRegisterReactor.swift */; };
 		4EEA1D952D358B23003E7DE9 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */; };
 		4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9BAB2D22730400B288E7 /* FilterType.swift */; };
 		BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */; };
@@ -804,6 +804,7 @@
 		08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButtonView.swift; sourceTree = "<group>"; };
 		08CBEA392D3FABE100248007 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkToastView.swift; sourceTree = "<group>"; };
+		08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpCardView.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -913,7 +914,7 @@
 				BDCA41F52CF35D33005EECF6 /* Kingfisher in Frameworks */,
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
-				4E755B322D2BA81800ADFB21 /* Then in Frameworks */,
+				082197A12D426DCB0054094A /* Then in Frameworks */,
 				08B191BA2CF609AE0057BC04 /* RxKakaoSDK in Frameworks */,
 				08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
@@ -1264,6 +1265,7 @@
 			children = (
 				081899492D36322B0067BF01 /* PopUpCardSection.swift */,
 				0818994B2D3632320067BF01 /* PopUpCardSectionCell.swift */,
+				08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */,
 			);
 			path = PopUpCardSection;
 			sourceTree = "<group>";
@@ -2906,7 +2908,7 @@
 				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 				4EA9989C2D21C404009DC30B /* RxDataSources */,
-				4E755B312D2BA81800ADFB21 /* Then */,
+				082197A02D426DCB0054094A /* Then */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -2997,7 +2999,7 @@
 				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */,
+				0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -3252,7 +3254,6 @@
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
-				081898C02D2FBD130067BF01 /* ProfileEditListButton.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
 				08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */,
 				0899524D2D033AA70022AEF9 /* GetOpenPopUpListResponseDTO.swift in Sources */,
@@ -3335,6 +3336,7 @@
 				081898E82D3392480067BF01 /* GetMyCommentRequestDTO.swift in Sources */,
 				0841BAAC2CFA35F300049E31 /* UILabel+.swift in Sources */,
 				081898F52D33D6B10067BF01 /* BlockUserManageController.swift in Sources */,
+				08CBEA3E2D3FF6A100248007 /* PopUpCardView.swift in Sources */,
 				086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */,
 				0818994C2D3632320067BF01 /* PopUpCardSectionCell.swift in Sources */,
 				BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */,
@@ -3649,7 +3651,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3684,7 +3686,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3815,6 +3817,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		083A25CE2CF364B70099B58E /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -3845,14 +3855,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.8.6;
-			};
-		};
-		4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devxoul/Then.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
 			};
 		};
 		4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
@@ -3954,6 +3956,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		082197A02D426DCB0054094A /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
 		083A25CF2CF364B70099B58E /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 083A25CE2CF364B70099B58E /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -3988,11 +3995,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
-		};
-		4E755B312D2BA81800ADFB21 /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E755B302D2BA81700ADFB21 /* XCRemoteSwiftPackageReference "Then" */;
-			productName = Then;
 		};
 		4EA9989C2D21C404009DC30B /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;

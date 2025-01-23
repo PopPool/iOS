@@ -15,6 +15,15 @@ final class ToastMaker {
     
     // MARK: - Properties
     
+    /// 현재 디바이스 최상단 Window를 지정
+    static var window: UIWindow? {
+        return UIApplication
+            .shared
+            .connectedScenes
+            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+            .first { $0.isKeyWindow }
+    }
+    
     /// 최상단의 ViewController를 가져오는 메서드
     private static func topViewController(
         _ rootViewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
@@ -46,14 +55,14 @@ extension ToastMaker {
         
         currentToast?.removeFromSuperview()
         currentToast = nil
-        guard let currentVC = topViewController() else { return }
         let toastMSG = ToastView(message: message)
-        topViewController()?.view.addSubview(toastMSG)
+        guard let window = window else { return }
+        window.addSubview(toastMSG)
         currentToast = toastMSG
         
         toastMSG.snp.makeConstraints { make in
-            make.bottom.equalTo(currentVC.view.snp.bottom).inset(120)
-            make.centerX.equalTo(currentVC.view.snp.centerX)
+            make.bottom.equalTo(window.snp.bottom).inset(120)
+            make.centerX.equalTo(window.snp.centerX)
         }
         
         UIView.animate(

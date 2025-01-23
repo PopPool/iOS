@@ -65,7 +65,6 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         super.init(frame: frame)
         setUp()
         setUpConstraints()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -109,12 +108,6 @@ private extension ImageBannerSectionCell {
             forCellWithReuseIdentifier: ImageBannerChildSectionCell.identifiers
         )
         pageControl.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-        imageSection.currentPage
-            .withUnretained(self)
-            .subscribe { (owner, page) in
-                owner.pageControl.currentPage = page
-            }
-            .disposed(by: disposeBag)
     }
     
     func setUpConstraints() {
@@ -176,6 +169,14 @@ private extension ImageBannerSectionCell {
                 }
             }
             .disposed(by: disposeBag)
+        
+        imageSection.currentPage
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .subscribe { (owner, index) in
+                owner.pageControl.currentPage = index
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -197,6 +198,7 @@ extension ImageBannerSectionCell: Inputable {
             stopButton.isHidden = true
             stopAutoScroll()
         }
+        bind()
     }
 }
 
