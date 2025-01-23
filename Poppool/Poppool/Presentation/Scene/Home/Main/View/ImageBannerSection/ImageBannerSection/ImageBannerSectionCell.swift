@@ -176,6 +176,13 @@ private extension ImageBannerSectionCell {
                 }
             }
             .disposed(by: disposeBag)
+        
+        imageSection.currentPage
+            .withUnretained(self)
+            .subscribe { (owner, index) in
+                owner.pageControl.currentPage = index
+            }
+            .disposed(by: disposeBag)
     }
 }
 
