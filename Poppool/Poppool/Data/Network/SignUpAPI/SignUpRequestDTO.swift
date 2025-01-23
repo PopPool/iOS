@@ -14,4 +14,5 @@ struct SignUpRequestDTO: Encodable {
     var socialEmail: String
     var socialType: String
     var interestCategories: [Int64]
+    var appleAuthorizationCode: String?
 }

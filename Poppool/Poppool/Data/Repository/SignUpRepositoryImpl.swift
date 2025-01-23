@@ -34,7 +34,8 @@ final class SignUpRepositoryImpl {
         age: Int32,
         socialEmail: String,
         socialType: String,
-        interests: [Int64]
+        interests: [Int64],
+        appleAuthorizationCode: String?
     ) -> Completable {
         let endPoint = SignUpAPIEndpoint.signUp_trySignUp(with: .init(
             nickname: nickName,
@@ -42,8 +43,10 @@ final class SignUpRepositoryImpl {
             age: age,
             socialEmail: socialEmail,
             socialType: socialType,
-            interestCategories: interests)
+            interestCategories: interests,
+            appleAuthorizationCode: appleAuthorizationCode)
         )
+        print(endPoint)
         return provider.request(with: endPoint, interceptor: TokenInterceptor())
     }
 }

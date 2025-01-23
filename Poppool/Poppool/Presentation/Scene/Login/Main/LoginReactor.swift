@@ -34,6 +34,8 @@ final class LoginReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
     
+    private var authrizationCode: String?
+    
     private let kakaoLoginService = KakaoLoginService()
     private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
@@ -65,7 +67,7 @@ final class LoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: true)
+            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: true, authrizationCode: authrizationCode)
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .moveToHomeScene(let controller):
             let homeTabbar = WaveTabBarController()
@@ -73,6 +75,7 @@ final class LoginReactor: Reactor {
         case .loadView:
             break
         case .resetService:
+            authrizationCode = nil
             appleLoginService = AppleLoginService()
         }
         return state
@@ -82,7 +85,7 @@ final class LoginReactor: Reactor {
         return kakaoLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "kakao")
+                return owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "kakao")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in
@@ -109,7 +112,8 @@ final class LoginReactor: Reactor {
         return appleLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
+                owner.authrizationCode = response.authorizationCode
+                return owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in

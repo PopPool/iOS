@@ -20,7 +20,8 @@ final class SignUpAPIUseCaseImpl {
         age: Int32,
         socialEmail: String,
         socialType: String,
-        interests: [Int64]
+        interests: [Int64],
+        appleAuthorizationCode: String?
     ) -> Completable {
         return repository.trySignUp(
             nickName: nickName,
@@ -28,7 +29,8 @@ final class SignUpAPIUseCaseImpl {
             age: age,
             socialEmail: socialEmail,
             socialType: socialType,
-            interests: interests
+            interests: interests,
+            appleAuthorizationCode: appleAuthorizationCode
         )
     }
     func checkNickName(nickName: String) -> Observable<Bool> {

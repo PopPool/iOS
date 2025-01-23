@@ -16,12 +16,14 @@ final class SubLoginReactor: Reactor {
         case kakaoButtonTapped(controller: BaseViewController)
         case appleButtonTapped(controller: BaseViewController)
         case xmarkButtonTapped(controller: BaseViewController)
+        case viewWillAppear
     }
     
     enum Mutation {
         case moveToSignUpScene(controller: BaseViewController)
         case dismissScene(controller: BaseViewController)
         case loadView
+        case resetService
     }
     
     struct State {
@@ -32,8 +34,10 @@ final class SubLoginReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
     
+    private var authrizationCode: String?
+    
     private let kakaoLoginService = KakaoLoginService()
-    private let appleLoginService = AppleLoginService()
+    private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     let userDefaultService = UserDefaultService()
@@ -52,6 +56,8 @@ final class SubLoginReactor: Reactor {
             return loginWithApple(controller: controller)
         case .xmarkButtonTapped(let controller):
             return Observable.just(.dismissScene(controller: controller))
+        case .viewWillAppear:
+            return Observable.just(.resetService)
         }
     }
     
@@ -59,12 +65,15 @@ final class SubLoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: false)
+            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: false, authrizationCode: authrizationCode)
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .dismissScene(let controller):
             controller.dismiss(animated: true)
         case .loadView:
             break
+        case .resetService:
+            authrizationCode = nil
+            appleLoginService = AppleLoginService()
         }
         return state
     }
@@ -100,7 +109,8 @@ final class SubLoginReactor: Reactor {
         return appleLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
+                owner.authrizationCode = response.authorizationCode
+                return owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in
