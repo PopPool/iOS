@@ -57,6 +57,12 @@ private extension LoginController {
 // MARK: - Methods
 extension LoginController {
     func bind(reactor: Reactor) {
+        
+        rx.viewWillAppear
+            .map { Reactor.Action.viewWillAppear }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         mainView.guestButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in

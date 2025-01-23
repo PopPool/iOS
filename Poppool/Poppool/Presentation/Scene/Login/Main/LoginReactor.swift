@@ -16,12 +16,14 @@ final class LoginReactor: Reactor {
         case kakaoButtonTapped(controller: BaseViewController)
         case appleButtonTapped(controller: BaseViewController)
         case guestButtonTapped(controller: BaseViewController)
+        case viewWillAppear
     }
     
     enum Mutation {
         case moveToSignUpScene(controller: BaseViewController)
         case moveToHomeScene(controller: BaseViewController)
         case loadView
+        case resetService
     }
     
     struct State {
@@ -33,7 +35,7 @@ final class LoginReactor: Reactor {
     var disposeBag = DisposeBag()
     
     private let kakaoLoginService = KakaoLoginService()
-    private let appleLoginService = AppleLoginService()
+    private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     let userDefaultService = UserDefaultService()
@@ -54,6 +56,8 @@ final class LoginReactor: Reactor {
             let _ = keyChainService.deleteToken(type: .accessToken)
             let _ = keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene(controller: controller))
+        case .viewWillAppear:
+            return Observable.just(.resetService)
         }
     }
     
@@ -68,6 +72,8 @@ final class LoginReactor: Reactor {
             controller.view.window?.rootViewController = homeTabbar
         case .loadView:
             break
+        case .resetService:
+            appleLoginService = AppleLoginService()
         }
         return state
     }
