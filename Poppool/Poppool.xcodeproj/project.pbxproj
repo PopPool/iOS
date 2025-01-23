@@ -346,6 +346,7 @@
 		08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */; };
 		08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA392D3FABE100248007 /* ToastView.swift */; };
 		08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */; };
+		08CBEA3E2D3FF6A100248007 /* PopUpCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -785,6 +786,7 @@
 		08CBEA0C2D38ED0D00248007 /* CountButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountButtonView.swift; sourceTree = "<group>"; };
 		08CBEA392D3FABE100248007 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkToastView.swift; sourceTree = "<group>"; };
+		08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpCardView.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -1226,6 +1228,7 @@
 			children = (
 				081899492D36322B0067BF01 /* PopUpCardSection.swift */,
 				0818994B2D3632320067BF01 /* PopUpCardSectionCell.swift */,
+				08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */,
 			);
 			path = PopUpCardSection;
 			sourceTree = "<group>";
@@ -3209,6 +3212,7 @@
 				081898E82D3392480067BF01 /* GetMyCommentRequestDTO.swift in Sources */,
 				0841BAAC2CFA35F300049E31 /* UILabel+.swift in Sources */,
 				081898F52D33D6B10067BF01 /* BlockUserManageController.swift in Sources */,
+				08CBEA3E2D3FF6A100248007 /* PopUpCardView.swift in Sources */,
 				086F89F32D2269DE00CA4FC9 /* MyPageController.swift in Sources */,
 				0818994C2D3632320067BF01 /* PopUpCardSectionCell.swift in Sources */,
 				BD91036A2CF6149D00BBCCAE /* SignUpRepositoryImpl.swift in Sources */,
