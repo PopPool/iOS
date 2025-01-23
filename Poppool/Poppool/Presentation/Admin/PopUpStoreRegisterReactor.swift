@@ -108,7 +108,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         switch action {
 
         case .viewDidLoad:
-            // 화면 초기화 시점에 별도 로직이 필요없다면 .empty()
             return .empty()
 
         // 텍스트 입력 업데이트

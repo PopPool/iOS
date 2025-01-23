@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 struct MapAPIEndpoint {
     /// 뷰 바운즈 내에 있는 팝업 스토어 정보를 조회
@@ -29,9 +30,9 @@ struct MapAPIEndpoint {
             path: "/locations/popup-stores",
             method: .get,
             queryParameters: params
+
         )
     }
-
     /// 지도에서 검색합니다.
     static func locations_searchStores(
         query: String,
@@ -66,11 +67,11 @@ struct BoundQueryDTO: Encodable {
         try container.encode(southWestLat, forKey: .southWestLat)
         try container.encode(southWestLon, forKey: .southWestLon)
 
-        // 카테고리를 개별 쿼리 파라미터로 인코딩
-        for categoryId in categories {
-            try container.encode(categoryId, forKey: .categories)
-        }
-    }
+        var categoriesContainer = container.nestedUnkeyedContainer(forKey: .categories)
+               for category in categories {
+                   try categoriesContainer.encode(category)
+               }
+           }
 
     private enum CodingKeys: String, CodingKey {
         case northEastLat

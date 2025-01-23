@@ -1242,6 +1242,24 @@ private extension PopUpStoreRegisterViewController {
             return
         }
 
+        let categoryId = getCategoryId(from: categoryTitle)
+
+        Logger.log(
+            message: """
+            팝업스토어 등록 요청:
+            - 이름: \(name)
+            - 카테고리: \(categoryTitle) (ID: \(categoryId))
+            - 주소: \(address)
+            - 위도/경도: (\(latitude), \(longitude))
+            - 설명: \(description)
+            - 시작일: \(getFormattedDate(from: selectedStartDate))
+            - 종료일: \(getFormattedDate(from: selectedEndDate))
+            - 메인이미지: \(mainImage)
+            - 전체이미지: \(imagePaths)
+            """,
+            category: .network
+        )
+
         let request = CreatePopUpStoreRequestDTO(
             name: name,
             categoryId: Int64(getCategoryId(from: categoryTitle)),
@@ -1274,8 +1292,33 @@ private extension PopUpStoreRegisterViewController {
     }
 
     private func getCategoryId(from title: String) -> Int {
-        return categories.firstIndex(of: title) ?? 1
+        Logger.log(message: "카테고리 매핑 시작 - 타이틀: \(title)", category: .debug)
+
+        let categoryMap: [String: Int64] = [
+            "패션": 1,
+            "라이프스타일": 2,
+            "뷰티": 3,
+            "음식/요리": 4,
+            "예술": 5,
+            "반려동물": 6,
+            "여행": 7,
+            "엔터테인먼트": 8,
+            "애니메이션": 9,
+            "키즈": 10,
+            "스포츠": 11,
+            "게임": 12
+        ]
+
+        if let id = categoryMap[title] {
+            Logger.log(message: "카테고리 매핑 성공: \(title) -> \(id)", category: .debug)
+            return Int(id)
+        } else {
+            Logger.log(message: "카테고리 매핑 실패: \(title)에 해당하는 ID를 찾을 수 없음", category: .error)
+            return 1 // 기본값
+        }
     }
+
+
 
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "2025-01-14T09:00:00.000Z" }

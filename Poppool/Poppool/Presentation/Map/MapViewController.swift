@@ -9,9 +9,11 @@ import CoreLocation
 import RxGesture
 
 
-final class MapViewController: BaseViewController, View {
+class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
 
+
+    
     // MARK: - Properties
     var disposeBag = DisposeBag()
     let mainView = MapView()
@@ -155,6 +157,7 @@ final class MapViewController: BaseViewController, View {
 
     // MARK: - Bind
     func bind(reactor: Reactor) {
+        
         // 필터 관련 바인딩
         mainView.filterChips.locationChip.rx.tap
             .map { Reactor.Action.filterTapped(.location) }

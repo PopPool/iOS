@@ -111,18 +111,19 @@ final class MapReactor: Reactor {
             ])
 
         case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
-            // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
-            let categoryIDs = currentState.selectedCategoryFilters
-                .compactMap { currentState.categoryMapping[$0] }
+                    // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
+                    let categoryIDs = currentState.selectedCategoryFilters
+                        .compactMap { currentState.categoryMapping[$0] }
 
-            Logger.log(
-                message: """
-                Viewport Changed:
-                - Category Names: \(currentState.selectedCategoryFilters)
-                - Category IDs: \(categoryIDs)
-                """,
-                category: .debug
-            )
+                    Logger.log(
+                        message: """
+                        지도 영역이 변경되었습니다:
+                        📍 선택된 카테고리: \(currentState.selectedCategoryFilters)
+                        🔢 변환된 카테고리 ID: \(categoryIDs)
+                        🗺️ 전체 카테고리 매핑: \(currentState.categoryMapping)
+                        """,
+                        category: .debug
+                    )
 
             return .concat([
                 .just(.setLoading(true)),
