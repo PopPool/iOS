@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 final class FilterChipsView: UIView {
     // MARK: - Components
@@ -23,6 +24,16 @@ final class FilterChipsView: UIView {
         return collectionView
     }()
 
+    private let emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "선택한 옵션이 없어요 :)"
+        label.textColor = .g300
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .center
+        label.isHidden = true // 초기에는 숨김 상태
+        return label
+    }()
+
     private var filters: [String] = []
 
     // MARK: - Initializer
@@ -40,6 +51,7 @@ final class FilterChipsView: UIView {
     private func setupLayout() {
         addSubview(titleLabel)
         addSubview(collectionView)
+        addSubview(emptyStateLabel)
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -52,30 +64,41 @@ final class FilterChipsView: UIView {
             make.bottom.equalToSuperview().offset(-8)
             make.height.equalTo(44)
         }
+
+        emptyStateLabel.snp.makeConstraints { make in
+            make.center.equalTo(collectionView)
+        }
     }
 
     private func setupCollectionView() {
         collectionView.dataSource = self
     }
-    
 
     // MARK: - Configuration
     func configure(with filters: [String]) {
         self.filters = filters
+        updateUI()
+    }
+
+    func updateChips(with filters: [String]) {
+        self.filters = filters
+        updateUI()
+    }
+
+    private func updateUI() {
+        let isEmpty = filters.isEmpty
+        collectionView.isHidden = isEmpty
+        emptyStateLabel.isHidden = !isEmpty
         collectionView.reloadData()
     }
-    func updateChips(with filters: [String]) {
-           self.filters = filters
-           collectionView.reloadData()
-       }
-   
 
     private func removeFilter(at index: Int) {
         filters.remove(at: index)
-        collectionView.reloadData()
+        updateUI()
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension FilterChipsView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filters.count

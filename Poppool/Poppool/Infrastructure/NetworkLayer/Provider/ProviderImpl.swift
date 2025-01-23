@@ -20,25 +20,25 @@ final class ProviderImpl: Provider {
         with endpoint: E,
         interceptor: RequestInterceptor? = nil
     ) -> Observable<R> where R == E.Response {
-        
+
         return Observable.create { [weak self] observer in
             do {
                 let urlRequest = try endpoint.getUrlRequest()
                 Logger.log(message: "\(urlRequest) 요청 시간 :\(Date.now)", category: .network)
-//                self?.timeoutTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-//                    IndicatorMaker.showIndicator()
-//                }
-                
+
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in
-//                        self?.timeoutTimer?.invalidate()
-//                        IndicatorMaker.hideIndicator()
                         Logger.log(message: "\(urlRequest) 응답 시간 :\(Date.now)", category: .network)
                         switch response.result {
                         case .success(let data):
-                            
-//                            Logger.log(message: "응답 데이터: \(String(data: data, encoding: .utf8) ?? "데이터가 없습니다.")", category: .network)
+                            // EmptyResponse 타입이고 데이터가 비어있는 경우 성공으로 처리
+                            if R.self == EmptyResponse.self && (data.isEmpty || data.count == 0) {
+                                observer.onNext(EmptyResponse() as! R)
+                                observer.onCompleted()
+                                return
+                            }
+
                             do {
                                 let decodedData = try JSONDecoder().decode(R.self, from: data)
                                 observer.onNext(decodedData)
@@ -52,7 +52,7 @@ final class ProviderImpl: Provider {
                             observer.onError(error)
                         }
                     }
-                
+
                 return Disposables.create {
                     request.cancel()
                 }
@@ -63,6 +63,7 @@ final class ProviderImpl: Provider {
             }
         }
     }
+
     
     func request<E: Requestable>(
         with request: E,

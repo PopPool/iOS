@@ -6,26 +6,62 @@ final class MapReactor: Reactor {
     // MARK: - Reactor
     enum Action {
         case viewDidLoad
-        case searchTapped
+        case searchTapped(String)
         case locationButtonTapped
         case listButtonTapped
-        case filterTapped(FilterType?)    // 여기서 FilterType은 공통 파일에서 가져옴
+        case filterTapped(FilterType?)
         case filterUpdated(FilterType, [String])
         case clearFilters(FilterType)
+        case fetchCategories
+        case updateBothFilters(locations: [String], categories: [String])  // 새로 추가
+        case didSelectItem(MapPopUpStore)
+        case viewportChanged(
+            northEastLat: Double,
+            northEastLon: Double,
+            southWestLat: Double,
+            southWestLon: Double
+        )
+
     }
 
     enum Mutation {
         case setActiveFilter(FilterType?)
         case setLocationFilters([String])
         case setCategoryFilters([String])
+        case updateLocationDisplay(String)
+        case updateCategoryDisplay(String)
         case clearLocationFilters
         case clearCategoryFilters
+        case updateBothFilters(locations: [String], categories: [String])  // 새로 추가
+        case setToastMessage(String)
+        case setLoading(Bool) // 검색시 로딩
+        case setSearchResults([MapPopUpStore])
+        case setSelectedStore(MapPopUpStore) // 선택된 스토어 상태
+        case setViewportStores([MapPopUpStore])
+        case setError(Error?)
+        case setCategoryMapping([String: Int64])
+
+
+
     }
 
     struct State {
+        var isLoading: Bool = false
+        var searchResults: [MapPopUpStore] = []
+        var searchResult: MapPopUpStore? = nil
+        var toastMessage: String? = nil
         var activeFilterType: FilterType?
         var selectedLocationFilters: [String] = []
         var selectedCategoryFilters: [String] = []
+        var locationDisplayText: String = "지역선택"
+        var categoryDisplayText: String = "카테고리"
+        var selectedStore: MapPopUpStore? // 선택된 스토어
+        var viewportStores: [MapPopUpStore] = []
+        var error: Error? = nil
+        var categoryMapping: [String: Int64] = [:]
+
+
+
     }
 
     let initialState: State
@@ -38,49 +74,227 @@ final class MapReactor: Reactor {
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .fetchCategories:
+            Logger.log(message: "카테고리 매핑", category: .debug)
+
+            return useCase.fetchCategories()
+                .map { categories in
+                    let mapping = categories.reduce(into: [String: Int64]()) { dict, category in
+                        dict[category.category] = category.categoryId
+                    }
+                    Logger.log(message: "생성된 카테고리 매핑: \(mapping)", category: .debug)
+                    return .setCategoryMapping(mapping)
+                }
+                .catch { error in
+                    Logger.log(message: "카테고리 매핑 생성 중 오류: \(error.localizedDescription)", category: .error)
+                    return .just(.setError(error))
+                }
+
+
+        case let .searchTapped(query):
+            // 1) categoryName -> categoryId 변환
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }  // [Int64]
+
+            return .concat([
+                .just(.setLoading(true)),
+                // 2) 수정: [Int64]를 UseCase에 넘김
+                useCase.searchStores(query: query, categories: categoryIDs)
+                    .flatMap { results -> Observable<Mutation> in
+                        if results.isEmpty {
+                            return .just(.setToastMessage("검색 결과가 없습니다."))
+                        } else {
+                            return .just(.setSearchResults(results))
+                        }
+                    },
+                .just(.setLoading(false))
+            ])
+
+        case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
+            // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }
+
+            Logger.log(
+                message: """
+                Viewport Changed:
+                - Category Names: \(currentState.selectedCategoryFilters)
+                - Category IDs: \(categoryIDs)
+                """,
+                category: .debug
+            )
+
+            return .concat([
+                .just(.setLoading(true)),
+                useCase.fetchStoresInBounds(
+                    northEastLat: northEastLat,
+                    northEastLon: northEastLon,
+                    southWestLat: southWestLat,
+                    southWestLon: southWestLon,
+                    categories: categoryIDs   // ← 숫자 배열로 수정
+                )
+                .map(Mutation.setViewportStores)
+                .catch { error in .just(.setError(error)) },
+                .just(.setLoading(false))
+            ])
+
+        case let .updateBothFilters(locations, categories):
+            return .concat([
+                .just(.setLocationFilters(locations)),
+                .just(.setCategoryFilters(categories))
+            ])
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
 
         case let .filterUpdated(type, values):
-            print("MapReactor filterUpdated - type: \(type), values: \(values)")
             switch type {
             case .location:
-                return .just(.setLocationFilters(values))
+                let displayText = formatDisplayText(values, defaultText: "지역선택")
+                return .concat([
+                    .just(.setLocationFilters(values)),
+                    .just(.updateLocationDisplay(displayText))
+                ])
             case .category:
-                return .just(.setCategoryFilters(values))
+                let displayText = formatDisplayText(values, defaultText: "카테고리")
+                return .concat([
+                    .just(.setCategoryFilters(values)),
+                    .just(.updateCategoryDisplay(displayText))
+                ])
             }
+        case let .updateBothFilters(locations, categories):
+            Logger.log(
+                message: """
+                Updating both filters:
+                - Locations: \(locations)
+                - Categories: \(categories)
+                """,
+                category: .debug
+            )
+            return .concat([
+                .just(.setLocationFilters(locations)),
+                .just(.setCategoryFilters(categories))
+            ])
 
         case let .clearFilters(type):
             switch type {
             case .location:
-                return .just(.clearLocationFilters)
+                return .concat([
+                    .just(.clearLocationFilters),
+                    .just(.updateLocationDisplay("지역선택"))
+                ])
             case .category:
-                return .just(.clearCategoryFilters)
+                return .concat([
+                    .just(.clearCategoryFilters),
+                    .just(.updateCategoryDisplay("카테고리"))
+                ])
             }
-
+        case let .didSelectItem(store):
+            return .just(.setSelectedStore(store))
         default:
             return .empty()
         }
     }
 
+    private func formatDisplayText(_ values: [String], defaultText: String) -> String {
+        guard !values.isEmpty else { return defaultText }
+        return values.count > 1 ? "\(values[0]) 외 \(values.count - 1)개" : values[0]
+    }
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
         switch mutation {
+        case let .setLoading(isLoading):
+            newState.isLoading = isLoading
+
+        case let .setSearchResults(results):
+            newState.searchResults = results
+
+        case let .setToastMessage(message):
+            newState.toastMessage = message
+
         case let .setActiveFilter(filterType):
             newState.activeFilterType = filterType
+            Logger.log(message: "🎯 Active Filter Changed: \(String(describing: filterType))", category: .debug)
+
         case let .setLocationFilters(filters):
             newState.selectedLocationFilters = filters
-            print("Updating selectedLocationFilters to: \(filters)")
+            Logger.log(message: "선택된 위치 필터가 업데이트: \(filters)", category: .debug)
+
         case let .setCategoryFilters(filters):
             newState.selectedCategoryFilters = filters
+//            print("[DEBUG] 🔄 Category Filters Updated: \(filters)")
+
+        case let .updateLocationDisplay(text):
+            newState.locationDisplayText = text
+
+        case let .updateCategoryDisplay(text):
+            newState.categoryDisplayText = text
+
         case .clearLocationFilters:
             newState.selectedLocationFilters = []
-        case .clearCategoryFilters: // 카테고리 필터 초기화
+
+        case .clearCategoryFilters:
             newState.selectedCategoryFilters = []
+
+        case let .updateBothFilters(locations, categories):
+            Logger.log(
+                message: """
+                💾 필터 상태 업데이트
+                📍 이전 위치 필터: \(newState.selectedLocationFilters)
+                🏷️ 이전 카테고리 필터: \(newState.selectedCategoryFilters)
+                """,
+                category: .debug
+            )
+
+
+            newState.selectedLocationFilters = locations
+            newState.selectedCategoryFilters = categories
+
+            print("[DEBUG] ✅ Updated state - Locations: \(newState.selectedLocationFilters)")
+            print("[DEBUG] ✅ Updated state - Categories: \(newState.selectedCategoryFilters)")
+
+        case let .setViewportStores(stores):
+            Logger.log(
+                message: """
+                Updated viewport stores:
+                - Total: \(stores.count)
+                - Categories in view: \(stores.map { $0.category }.unique())
+                - Current filter: \(newState.selectedCategoryFilters)
+                """,
+                category: .debug
+            )
+            newState.viewportStores = stores
+        case let .setSelectedStore(store):
+            newState.selectedStore = store
+            print("[DEBUG] 📍 Selected Store: \(store.name)")
+        case let .setError(error):
+            newState.error = error
+            if let error = error {
+                Logger.log(
+                    message: """
+                    Error occurred in MapReactor:
+                    - Description: \(error.localizedDescription)
+                    - Domain: \(String(describing: (error as NSError).domain))
+                    - Code: \((error as NSError).code)
+                    """,
+                    category: .error
+                )
+            }
+
+        case let .setCategoryMapping(mapping):
+            Logger.log(
+                message: "카테고리 매핑 업데이트 완료: \(mapping)",
+                category: .debug
+            )
+            newState.categoryMapping = mapping
         }
         return newState
+
     }
 }
-
+extension Array where Element: Hashable {
+    func unique() -> [Element] {
+        return Array(Set(self))
+    }
+}

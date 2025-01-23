@@ -89,29 +89,40 @@ private extension StoreListCell {
             make.size.equalTo(24)
         }
 
-        let labelStack = UIStackView(arrangedSubviews: [
-            categoryTagLabel,
-            titleLabel,
-            locationLabel,
-            dateLabel
-        ])
-        labelStack.axis = .vertical
-        labelStack.spacing = 6
-        labelStack.alignment = .leading
+        contentView.addSubview(categoryTagLabel)
+           contentView.addSubview(titleLabel)
+           contentView.addSubview(locationLabel)
+           contentView.addSubview(dateLabel)
 
-        contentView.addSubview(labelStack)
-        labelStack.snp.makeConstraints { make in
-            make.top.equalTo(thumbnailImageView.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
-        }
-    }
+           // 각 라벨의 위치 설정
+           categoryTagLabel.snp.makeConstraints { make in
+               make.top.equalTo(thumbnailImageView.snp.bottom).offset(10)
+               make.leading.trailing.equalToSuperview()
+               make.height.equalTo(16)
+           }
+
+           titleLabel.snp.makeConstraints { make in
+               make.top.equalTo(categoryTagLabel.snp.bottom).offset(6)
+               make.leading.trailing.equalToSuperview()
+           }
+
+           locationLabel.snp.makeConstraints { make in
+               make.top.equalTo(titleLabel.snp.bottom).offset(12)
+               make.leading.trailing.equalToSuperview()
+           }
+
+           dateLabel.snp.makeConstraints { make in
+               make.top.equalTo(locationLabel.snp.bottom).offset(6)
+               make.leading.trailing.equalToSuperview()
+               make.bottom.lessThanOrEqualToSuperview()
+           }
+       }
 }
 
 // MARK: - Inputable
 extension StoreListCell: Inputable {
     struct Input {
-        let thumbnailImage: UIImage?
+        let thumbnailURL: String
         let category: String
         let title: String
         let location: String
@@ -120,7 +131,7 @@ extension StoreListCell: Inputable {
     }
 
     func injection(with input: Input) {
-        thumbnailImageView.image = input.thumbnailImage ?? UIImage(named: "default_thumbnail")
+        thumbnailImageView.setPPImage(path: input.thumbnailURL)
         categoryTagLabel.text = "#\(input.category)"
         titleLabel.text = input.title
         locationLabel.text = input.location

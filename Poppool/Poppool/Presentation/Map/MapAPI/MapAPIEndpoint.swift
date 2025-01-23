@@ -8,21 +8,13 @@
 import Foundation
 
 struct MapAPIEndpoint {
-
     /// 뷰 바운즈 내에 있는 팝업 스토어 정보를 조회
-    /// - Parameters:
-    ///   - northEastLat: 북동쪽 위도
-    ///   - northEastLon: 북동쪽 경도
-    ///   - southWestLat: 남서쪽 위도
-    ///   - southWestLon: 남서쪽 경도
-    ///   - categories: 카테고리 필터 배열
-    /// - Returns: Endpoint<GetViewBoundPopUpStoreListResponse>
     static func locations_fetchStoresInBounds(
         northEastLat: Double,
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [String]
+        categories: [Int64]
     ) -> Endpoint<GetViewBoundPopUpStoreListResponse> {
         let params = BoundQueryDTO(
             northEastLat: northEastLat,
@@ -31,7 +23,6 @@ struct MapAPIEndpoint {
             southWestLon: southWestLon,
             categories: categories
         )
-        //
 
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
@@ -42,17 +33,13 @@ struct MapAPIEndpoint {
     }
 
     /// 지도에서 검색합니다.
-    /// - Parameters:
-    ///   - query: 검색어
-    ///   - categories: 카테고리 필터 배열
-    /// - Returns: Endpoint<MapSearchPopUpStore>
     static func locations_searchStores(
         query: String,
-        categories: [String]
-    ) -> Endpoint<MapSearchPopUpStore> {
+        categories: [Int64]
+    ) -> Endpoint<MapSearchResponseDTO> {
         let params = SearchQueryDTO(
             query: query,
-            categories: categories
+            categories: categories.isEmpty ? nil : categories
         )
 
         return Endpoint(
@@ -70,10 +57,33 @@ struct BoundQueryDTO: Encodable {
     let northEastLon: Double
     let southWestLat: Double
     let southWestLon: Double
-    let categories: [String]
+    let categories: [Int64]
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(northEastLat, forKey: .northEastLat)
+        try container.encode(northEastLon, forKey: .northEastLon)
+        try container.encode(southWestLat, forKey: .southWestLat)
+        try container.encode(southWestLon, forKey: .southWestLon)
+
+        // 카테고리를 개별 쿼리 파라미터로 인코딩
+        for categoryId in categories {
+            try container.encode(categoryId, forKey: .categories)
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case northEastLat
+        case northEastLon
+        case southWestLat
+        case southWestLon
+        case categories
+    }
 }
+
 
 struct SearchQueryDTO: Encodable {
     let query: String
-    let categories: [String]
+    let categories: [Int64]?
 }
+

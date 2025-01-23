@@ -4,22 +4,32 @@ import GoogleMaps
 
 final class MapView: UIView {
     // MARK: - Components
-    
     let mapView: GMSMapView = {
         let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 15)
         let view = GMSMapView(frame: .zero, camera: camera)
         view.settings.myLocationButton = false
-        
         return view
     }()
 
-    let topStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 12
-//        stack.backgroundColor = .white
-        return stack
+    // 기존 topStackView
+    // let topStackView: UIStackView = {
+    //     let stack = UIStackView()
+    //     stack.axis = .vertical
+    //     stack.spacing = 12
+    //     return stack
+    // }()
+
+    let backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
     }()
+    let searchFilterContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+
 
     let searchInput = MapSearchInput()
     let filterChips = MapFilterChips()
@@ -62,39 +72,30 @@ private extension MapView {
         mapView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
-        addSubview(topStackView)
-        topStackView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).offset(10)
+        
+        addSubview(searchFilterContainer)
+        searchFilterContainer.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(80)
             make.leading.trailing.equalToSuperview()
+            
         }
 
+        // searchInput, filterChips 제약조건 수정
+        searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(37)
         }
 
+
+        searchFilterContainer.addSubview(filterChips)
         filterChips.snp.makeConstraints { make in
+            make.top.equalTo(searchInput.snp.bottom).offset(12)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(36)
+            make.bottom.equalToSuperview()
         }
-
-        let searchContainer = UIView()
-        let filterContainer = UIView()
-
-        searchContainer.addSubview(searchInput)
-        filterContainer.addSubview(filterChips)
-
-        searchInput.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.top.bottom.equalToSuperview()
-        }
-
-        filterChips.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.top.bottom.equalToSuperview()
-        }
-
-        topStackView.addArrangedSubview(searchContainer)
-        topStackView.addArrangedSubview(filterContainer)
 
         addSubview(locationButton)
         addSubview(listButton)
@@ -124,6 +125,7 @@ private extension MapView {
         storeCard.isHidden = true
     }
 }
+
 private extension CALayer {
     func applyMapButtonShadow() {
         shadowColor = UIColor.black.cgColor

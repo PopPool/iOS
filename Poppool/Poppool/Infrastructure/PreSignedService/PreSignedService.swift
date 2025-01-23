@@ -17,59 +17,74 @@ class ImageCache {
 }
 
 class PreSignedService {
-    
+
     struct PresignedURLRequest {
         var filePath: String
         var image: UIImage
     }
-    
+
     let tokenInterceptor = TokenInterceptor()
     
     let provider = ProviderImpl()
     
     let disposeBag = DisposeBag()
-    
+
     func tryDelete(targetPaths: PresignedURLRequestDTO) -> Completable {
         let endPoint = PreSignedAPIEndPoint.presigned_delete(request: targetPaths)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
-    
+
     func tryUpload(datas: [PresignedURLRequest]) -> Single<Void> {
-        
+        Logger.log(message: "tryUpload 호출됨 - 요청 데이터 수: \(datas.count)", category: .debug)
+
         return Single.create { [weak self] observer in
+            Logger.log(message: "tryUpload 내부 흐름 시작", category: .debug)
+
             guard let self = self else {
+                Logger.log(message: "self가 nil입니다. 작업을 중단합니다.", category: .error)
                 return Disposables.create()
             }
-            
-            getUploadLinks(request: .init(objectKeyList: datas.map { $0.filePath } ))
+
+            // 1. 업로드 링크 요청
+            self.getUploadLinks(request: .init(objectKeyList: datas.map { $0.filePath }))
                 .subscribe { response in
+                    Logger.log(message: "getUploadLinks 성공: \(response.preSignedUrlList)", category: .debug)
+
                     let responseList = response.preSignedUrlList
                     let inputList = datas
+
+                    // 2. 업로드 준비
                     let requestList = zip(responseList, inputList).compactMap { zipResponse in
                         let urlResponse = zipResponse.0
                         let inputResponse = zipResponse.1
+                        Logger.log(message: "업로드 준비 - URL: \(urlResponse.preSignedUrl)", category: .debug)
                         return self.uploadFromS3(url: urlResponse.preSignedUrl, image: inputResponse.image)
                     }
+
+                    // 3. 병렬 업로드 실행
                     Single.zip(requestList)
                         .subscribe(onSuccess: { _ in
-                            print("All images uploaded successfully")
+                            Logger.log(message: "모든 이미지 업로드 성공", category: .info)
                             observer(.success(()))
                         }, onFailure: { error in
-                            print("Image upload failed: \(error.localizedDescription)")
+                            Logger.log(message: "이미지 업로드 실패: \(error.localizedDescription)", category: .error)
                             observer(.failure(error))
                         })
                         .disposed(by: self.disposeBag)
+
                 } onError: { error in
-                    print("getUploadLinks Fail: \(error.localizedDescription)")
+                    Logger.log(message: "getUploadLinks 실패: \(error.localizedDescription)", category: .error)
                     observer(.failure(error))
                 }
-                .disposed(by: disposeBag)
+                .disposed(by: self.disposeBag)
+
             return Disposables.create()
         }
     }
-    
+
+
     func tryDownload(filePaths: [String]) -> Single<[UIImage]> {
-        
+
         return Single.create { [weak self] observer in
              guard let self = self else {
                  return Disposables.create()
@@ -136,36 +151,38 @@ class PreSignedService {
 
 
 private extension PreSignedService {
-    
+
     func uploadFromS3(url: String, image: UIImage) -> Single<Void> {
         return Single.create { single in
             if let imageData = image.jpegData(compressionQuality: 0),
-               let url = URL(string: url)
-            {
-                // Content-Type 헤더 설정
+               let url = URL(string: url) {
+                Logger.log(message: "S3 업로드 요청 URL: \(url.absoluteString)", category: .debug)
+
                 let headers: HTTPHeaders = [
                     "Content-Type": "image/jpeg"
                 ]
 
                 AF.upload(imageData, to: url, method: .put, headers: headers)
                     .response { response in
+                        Logger.log(message: "S3 업로드 응답 상태: \(response.response?.statusCode ?? -1)", category: .debug)
                         switch response.result {
                         case .success:
-                            print("success")
+                            Logger.log(message: "S3 업로드 성공 - URL: \(url.absoluteString)", category: .info)
                             single(.success(()))
                         case .failure(let error):
-                            print("failure")
+                            Logger.log(message: "S3 업로드 실패: \(error.localizedDescription)", category: .error)
                             single(.failure(error))
                         }
                     }
                 return Disposables.create()
             } else {
+                Logger.log(message: "S3 업로드 실패 - 잘못된 URL 또는 데이터", category: .error)
                 single(.failure(NSError(domain: "InvalidDataOrURL", code: -1, userInfo: nil)))
                 return Disposables.create()
             }
         }
     }
-    
+
     func downloadFromS3(url: String) -> Single<Data> {
         return Single.create { single in
             if let url = URL(string: url) {
@@ -177,7 +194,7 @@ private extension PreSignedService {
                         single(.failure(error))
                     }
                 }
-                
+
                 return Disposables.create {
                     request.cancel()
                 }
@@ -187,13 +204,20 @@ private extension PreSignedService {
             }
         }
     }
-    
+
+   
     func getUploadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
+        Logger.log(message: "Presigned URL 생성 요청 데이터: \(request)", category: .debug)
         let provider = ProviderImpl()
         let endPoint = PreSignedAPIEndPoint.presigned_upload(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+            .do(onNext: { response in
+                Logger.log(message: "Presigned URL 응답 데이터: \(response.preSignedUrlList)", category: .debug)
+            }, onError: { error in
+                Logger.log(message: "Presigned URL 요청 실패: \(error.localizedDescription)", category: .error)
+            })
     }
-    
+
     func getDownloadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
         let provider = ProviderImpl()
         let endPoint = PreSignedAPIEndPoint.presigned_download(request: request)

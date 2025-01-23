@@ -4,21 +4,31 @@ import SnapKit
 final class StoreListView: UIView {
     // MARK: - Components
     lazy var collectionView: UICollectionView = {
-            let layout = createLayout()
-            let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            cv.backgroundColor = .white
-            cv.register(StoreListCell.self, forCellWithReuseIdentifier: StoreListCell.identifier)
-            cv.register(
-                StoreListHeaderView.self,
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: StoreListHeaderView.identifier
-            )
-            return cv
-        }()
+        let layout = createLayout()
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .white
+        cv.register(StoreListCell.self, forCellWithReuseIdentifier: StoreListCell.identifier)
+        return cv
+    }()
+
+    let grabberHandle: UIView = {
+        let view = UIView()
+        view.backgroundColor = .g200
+        view.layer.cornerRadius = 2.5
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+
+    private let paddingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear // 간격만 추가하므로 투명
+        return view
+    }()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureLayer() // 최상단 레이어 설정
         setUpConstraints()
     }
 
@@ -45,11 +55,32 @@ private extension StoreListView {
     }
 
     func setUpConstraints() {
-        backgroundColor = .clear
+        backgroundColor = .white
         addSubview(collectionView)
+        addSubview(grabberHandle)
+
+        grabberHandle.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(14).priority(.high)
+                 make.centerX.equalToSuperview()
+                 make.width.equalTo(36)
+                 make.height.equalTo(5)
+             }
+//        paddingView.snp.makeConstraints { make in
+//            make.top.equalTo(grabberHandle.snp.bottom)
+//            make.leading.trailing.equalToSuperview()
+//            
+//        }
 
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(grabberHandle.snp.bottom).offset(8).priority(.medium)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()  // bottom 제약 다시 추가
         }
+    }
+
+    func configureLayer() {
+        layer.cornerRadius = 16
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 좌우 코너만 적용
+        layer.masksToBounds = true
     }
 }
