@@ -179,7 +179,9 @@ final class NormalCommentAddReactor: Reactor {
             spacing5Section,
             commentDescriptionSection,
             spacing16Section,
-            commentSection
+            commentSection,
+            spacing32Section,
+            spacing32Section
         ]
     }
 }

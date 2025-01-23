@@ -20,6 +20,8 @@ final class NormalCommentAddController: BaseViewController, View {
     // MARK: - Properties
     var disposeBag = DisposeBag()
     
+    private var keyBoardDisposeBag = DisposeBag()
+    
     private var mainView = NormalCommentAddView()
     
     private var sections: [any Sectionable] = []
@@ -91,22 +93,19 @@ extension NormalCommentAddController {
             .skip(1)
             .drive(onNext: { [weak self] keyboardHeight in
                 guard let self = self else { return }
-                
-                // 키보드 높이만큼 뷰를 이동
                 if keyboardHeight == 0 {
+                    self.mainView.contentCollectionView.setContentOffset(.init(x: 0, y: 0), animated: true)
                     UIView.animate(withDuration: 0.3) {
-                        self.view.transform = .identity
+                        self.mainView.transform = .identity
                     }
-                    self.mainView.contentCollectionView.isScrollEnabled = false
+                    
                 } else {
-                    self.mainView.contentCollectionView.isScrollEnabled = true
                     UIView.animate(withDuration: 0.3) {
-                        self.view.transform = CGAffineTransform(translationX: 0, y: -(keyboardHeight / 4))
+                        self.mainView.transform = .init(translationX: 0, y: -100)
                     }
                 }
-
             })
-            .disposed(by: disposeBag)
+            .disposed(by: keyBoardDisposeBag)
         
         mainView.saveButton.rx.tap
             .withUnretained(self)
@@ -177,10 +176,6 @@ extension NormalCommentAddController: UICollectionViewDelegate, UICollectionView
         if indexPath.section == 5 && indexPath.row == 0 {
             reactor?.action.onNext(.photoAddButtonTapped(controller: self))
         }
-        view.endEditing(true)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         view.endEditing(true)
     }
 }

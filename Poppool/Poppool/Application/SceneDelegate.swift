@@ -89,6 +89,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     static let appDidBecomeActive = PublishSubject<Void>()
+    static let appDidDisconnect = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -99,6 +100,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
+        SceneDelegate.appDidDisconnect.onNext(())
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
