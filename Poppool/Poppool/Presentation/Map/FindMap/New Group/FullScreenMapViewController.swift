@@ -53,7 +53,6 @@ final class FullScreenMapViewController: MapViewController {
                )
                self.mainView.mapView.animate(to: camera)
 
-               // 캐러셀 업데이트
                self.carouselView.updateCards([data.store])
                self.carouselView.isHidden = false
            }

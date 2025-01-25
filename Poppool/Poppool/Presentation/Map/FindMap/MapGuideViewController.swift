@@ -236,7 +236,6 @@ final class MapGuideViewController: UIViewController, View {
 
         }
 
-        // Expandable 버튼
         mapView.addSubview(expandButton)
         expandButton.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(10)
@@ -244,24 +243,21 @@ final class MapGuideViewController: UIViewController, View {
             make.width.height.equalTo(32)
         }
 
-        // 하단 컨테이너 (프롬프트 + 버튼)
         let bottomContainer = UIView()
         modalCardView.addSubview(bottomContainer)
         bottomContainer.snp.makeConstraints { make in
             make.top.equalTo(mapView.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(44)
-            make.bottom.equalTo(modalCardView.snp.bottom).inset(20)
+            make.bottom.equalTo(modalCardView.snp.bottom).inset(60)
         }
 
-        // 프롬프트 라벨
         bottomContainer.addSubview(promptLabel)
         promptLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
         }
 
-        // 지도 앱 버튼 스택
         let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, tmapButton])
         appStack.axis = .horizontal
         appStack.alignment = .center
@@ -272,7 +268,6 @@ final class MapGuideViewController: UIViewController, View {
         appStack.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-//            make.height.equalTo(40)
             [naverButton, kakaoButton, tmapButton].forEach { button in
                 button.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 48, height: 48))

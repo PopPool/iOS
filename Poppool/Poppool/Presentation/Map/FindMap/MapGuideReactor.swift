@@ -62,52 +62,66 @@ final class MapGuideReactor: Reactor {
             return Observable.just(.navigateBack)
 
         case .viewDidLoad:
-            return directionRepository.getPopUpDirection(popUpStoreId: self.popUpStoreId)
-                .do(
-                    onNext: { response in
-                        print("✅ [응답]: 요청 성공 - popUpStoreId: \(self.popUpStoreId)")
-                        print("   - 위도: \(response.latitude)")
-                        print("   - 경도: \(response.longitude)")
-                        print("   - 주소: \(response.address)")
-                    },
-                    onError: { error in
-                        print("❌ [에러]: 요청 실패 - \(error.localizedDescription)")
-                    },
-                    onSubscribe: {
-                        print("🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(self.popUpStoreId)")
-                    }
-                )
-                .map { response in
-                    let coordinate = CLLocationCoordinate2D(
-                        latitude: response.latitude,
-                        longitude: response.longitude
-                    )
-                    return .setMap(coordinate)
-                }
-        }
-    }
+                   return directionRepository.getPopUpDirection(popUpStoreId: self.popUpStoreId)
+                       .do(
+                           onNext: { response in
+                               Logger.log(
+                                   message: """
+                                   ✅ [응답]: 요청 성공 - popUpStoreId: \(self.popUpStoreId)
+                                   - 위도: \(response.latitude)
+                                   - 경도: \(response.longitude)
+                                   - 주소: \(response.address)
+                                   """,
+                                   category: .network
+                               )
+                           },
+                           onError: { error in
+                               Logger.log(
+                                   message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
+                                   category: .error
+                               )
+                           },
+                           onSubscribe: {
+                               Logger.log(
+                                   message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(self.popUpStoreId)",
+                                   category: .network
+                               )
+                           }
+                       )
+                       .map { response in
+                           let coordinate = CLLocationCoordinate2D(
+                               latitude: response.latitude,
+                               longitude: response.longitude
+                           )
+                           return .setMap(coordinate)
+                       }
+               }
+           }
 
     private func openMapApp(_ appType: String) -> Observable<Mutation> {
-        // 현재 State에서 좌표 가져오기
         guard let coordinate = currentState.destinationCoordinate else {
             return Observable.just(.showToast("위치 정보를 가져올 수 없습니다."))
         }
 
         // 각 맵 앱별 URL 스키마와 앱스토어 URL
-        let appSchemes: [String: (urlScheme: String, appStoreId: String)] = [
+        let appInfo: [String: (urlScheme: String, appStoreUrl: String)] = [
             "naver": (
-                urlScheme: "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)",
-                appStoreId: "id311867728"
+                "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)",
+                "https://apps.apple.com/kr/app/id311867728"
             ),
             "kakao": (
-                urlScheme: "kakaomap://look?p=\(coordinate.latitude),\(coordinate.longitude)",
-                appStoreId: "id304608425"
+                "kakaomap://look?p=\(coordinate.latitude),\(coordinate.longitude)",
+                "https://apps.apple.com/kr/app/id304608425"
             ),
             "tmap": (
-                urlScheme: "tmap://route?goalname=목적지&goaly=\(coordinate.latitude)&goalx=\(coordinate.longitude)",
-                appStoreId: "id431589174"
+                "tmap://route?goalname=목적지&goaly=\(coordinate.latitude)&goalx=\(coordinate.longitude)",
+                "https://apps.apple.com/kr/app/id431589174"
             )
         ]
+
+        guard let (urlScheme, appStoreUrl) = appInfo[appType] else {
+            return Observable.just(.showToast("지원하지 않는 맵 앱입니다."))
+        }
 
         Logger.log(message: "🗺 맵 앱 열기 시도: \(urlScheme)", category: .debug)
 
@@ -128,7 +142,6 @@ final class MapGuideReactor: Reactor {
 
         return Observable.just(.showToast("앱을 열 수 없습니다."))
     }
-
     // MARK: - Reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
