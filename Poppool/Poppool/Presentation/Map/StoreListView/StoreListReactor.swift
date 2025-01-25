@@ -108,16 +108,8 @@ final class StoreListReactor: Reactor {
 
     // MARK: - Private
     private func fetchStores() -> Observable<Mutation> {
-        let mockStores = [
-            StoreItem(id: 1, thumbnailURL: "", category: "카페", title: "팝업스토어1",
-                      location: "서울 강남구", dateRange: "2024.06.30 ~ 08.23",
-                      isBookmarked: false),
-            StoreItem(id: 2, thumbnailURL: "", category: "전시", title: "팝업스토어2",
-                      location: "서울 성동구", dateRange: "2024.07.01 ~ 07.30",
-                      isBookmarked: true)
-        ]
-        return .just(.setStores(mockStores))
-    }
+        return .empty() // 더미 데이터 반환하지 않음
+
 }
 //
 //extension MapPopUpStore {
@@ -132,7 +124,7 @@ final class StoreListReactor: Reactor {
 //            isBookmarked: false // 기본값
 //        )
 //    }
-//}
+}
 
 
 // MARK: - Model

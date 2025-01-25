@@ -154,23 +154,24 @@ final class MapGuideViewController: UIViewController, View {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
 
+                Logger.log(message: "📍   버튼 탭: popUpStoreId = \(self.popUpStoreId)", category: .debug)
                 let provider = ProviderImpl()
-                let repository = DefaultMapRepository(provider: provider)
-                let useCase = DefaultMapUseCase(repository: repository)
-                let reactor = MapReactor(useCase: useCase)
+                let useCase = DefaultMapUseCase(repository: DefaultMapRepository(provider: provider))
+                let directionRepository = DefaultMapDirectionRepository(provider: provider)
+                let reactor = MapReactor(useCase: useCase, directionRepository: directionRepository)
 
                 let fullScreenMapVC = FullScreenMapViewController()
                 fullScreenMapVC.reactor = reactor
+                Logger.log(message: "🚀 viewDidLoad Action 발생: popUpStoreId = \(self.popUpStoreId)", category: .debug)
+                reactor.action.onNext(.viewDidLoad(self.popUpStoreId))
                 
 
-                let navigationController = UINavigationController(rootViewController: fullScreenMapVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                self.present(navigationController, animated: true)
+                let nav = UINavigationController(rootViewController: fullScreenMapVC)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
             })
             .disposed(by: disposeBag)
 
-
-        // 좌표 → 마커
         reactor.state.map { $0.destinationCoordinate }
             .compactMap { $0 }
             .subscribe(onNext: { [weak self] coordinate in
@@ -271,6 +272,7 @@ final class MapGuideViewController: UIViewController, View {
         appStack.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
+//            make.height.equalTo(40)
             [naverButton, kakaoButton, tmapButton].forEach { button in
                 button.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 48, height: 48))

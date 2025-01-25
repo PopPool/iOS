@@ -5,7 +5,7 @@ import CoreLocation
 final class MapReactor: Reactor {
     // MARK: - Reactor
     enum Action {
-        case viewDidLoad
+        case viewDidLoad(Int64)
         case searchTapped(String)
         case locationButtonTapped
         case listButtonTapped
@@ -36,6 +36,7 @@ final class MapReactor: Reactor {
         case setToastMessage(String)
         case setLoading(Bool) // 검색시 로딩
         case setSearchResults([MapPopUpStore])
+        case setSearchResult(MapPopUpStore)
         case setSelectedStore(MapPopUpStore) // 선택된 스토어 상태
         case setViewportStores([MapPopUpStore])
         case setError(Error?)
@@ -66,17 +67,20 @@ final class MapReactor: Reactor {
 
     let initialState: State
     private let useCase: MapUseCase
+    private let directionRepository: MapDirectionRepository
 
-    init(useCase: MapUseCase) {
+    init(useCase: MapUseCase, directionRepository: MapDirectionRepository) {
         self.useCase = useCase
+        self.directionRepository = directionRepository
         self.initialState = State()
     }
+
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .fetchCategories:
             Logger.log(message: "카테고리 매핑", category: .debug)
-
+            
             return useCase.fetchCategories()
                 .map { categories in
                     let mapping = categories.reduce(into: [String: Int64]()) { dict, category in
@@ -89,14 +93,15 @@ final class MapReactor: Reactor {
                     Logger.log(message: "카테고리 매핑 생성 중 오류: \(error.localizedDescription)", category: .error)
                     return .just(.setError(error))
                 }
-
-
+            
+            
         case let .searchTapped(query):
             // 1) categoryName -> categoryId 변환
             let categoryIDs = currentState.selectedCategoryFilters
                 .compactMap { currentState.categoryMapping[$0] }  // [Int64]
-
+            
             return .concat([
+                .just(.setSearchResults([])), 
                 .just(.setLoading(true)),
                 // 2) 수정: [Int64]를 UseCase에 넘김
                 useCase.searchStores(query: query, categories: categoryIDs)
@@ -109,22 +114,22 @@ final class MapReactor: Reactor {
                     },
                 .just(.setLoading(false))
             ])
-
+            
         case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
-                    // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
-                    let categoryIDs = currentState.selectedCategoryFilters
-                        .compactMap { currentState.categoryMapping[$0] }
-
-                    Logger.log(
-                        message: """
+            // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }
+            
+            Logger.log(
+                message: """
                         지도 영역이 변경되었습니다:
                         📍 선택된 카테고리: \(currentState.selectedCategoryFilters)
                         🔢 변환된 카테고리 ID: \(categoryIDs)
                         🗺️ 전체 카테고리 매핑: \(currentState.categoryMapping)
                         """,
-                        category: .debug
-                    )
-
+                category: .debug
+            )
+            
             return .concat([
                 .just(.setLoading(true)),
                 useCase.fetchStoresInBounds(
@@ -138,7 +143,7 @@ final class MapReactor: Reactor {
                 .catch { error in .just(.setError(error)) },
                 .just(.setLoading(false))
             ])
-
+            
         case let .updateBothFilters(locations, categories):
             return .concat([
                 .just(.setLocationFilters(locations)),
@@ -146,7 +151,7 @@ final class MapReactor: Reactor {
             ])
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
-
+            
         case let .filterUpdated(type, values):
             switch type {
             case .location:
@@ -175,7 +180,7 @@ final class MapReactor: Reactor {
                 .just(.setLocationFilters(locations)),
                 .just(.setCategoryFilters(categories))
             ])
-
+            
         case let .clearFilters(type):
             switch type {
             case .location:
@@ -189,6 +194,65 @@ final class MapReactor: Reactor {
                     .just(.updateCategoryDisplay("카테고리"))
                 ])
             }
+        case .viewDidLoad(let id):
+           return directionRepository.getPopUpDirection(popUpStoreId: id)
+               .do(
+                   onNext: { response in
+                       Logger.log(
+                           message: """
+                           ✅ [응답]: 요청 성공 - popUpStoreId: \(id)
+                           - ID: \(response.id)
+                           - 이름: \(response.name)
+                           - 카테고리: \(response.categoryName)
+                           - 위도: \(response.latitude), 경도: \(response.longitude)
+                           - 주소: \(response.address)
+                           """,
+                           category: .network
+                       )
+                   },
+                   onError: { error in
+                       Logger.log(
+                           message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
+                           category: .error
+                       )
+                   },
+                   onSubscribe: {
+                       Logger.log(
+                           message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(id)",
+                           category: .network
+                       )
+                   }
+               )
+               .map { dto in
+                   let response = dto.toDomain()
+                   Logger.log(
+                       message: "🛠️ [도메인 매핑]: \(response)",
+                       category: .debug
+                   )
+                   return MapPopUpStore(
+                       id: response.id,
+                       category: response.categoryName,
+                       name: response.name,
+                       address: response.address,
+                       startDate: response.startDate,
+                       endDate: response.endDate,
+                       latitude: response.latitude,
+                       longitude: response.longitude,
+                       markerId: response.markerId,
+                       markerTitle: response.markerTitle,
+                       markerSnippet: response.markerSnippet,
+                       mainImageUrl: ""
+                   )
+               }
+               .map { store in
+                   Logger.log(
+                       message: "📌 [최종 데이터]: \(store)",
+                       category: .debug
+                   )
+                   return .setSearchResult(store)  // .setSelectedStore를 .setSearchResult로 수정
+               }
+
+
         case let .didSelectItem(store):
             return .just(.setSelectedStore(store))
         default:
@@ -210,6 +274,11 @@ final class MapReactor: Reactor {
 
         case let .setSearchResults(results):
             newState.searchResults = results
+            
+        case let .setSearchResult(store):
+            newState.searchResult = store
+            Logger.log(message: "🎯 단일 검색 결과 설정: \(store)", category: .debug)
+
 
         case let .setToastMessage(message):
             newState.toastMessage = message

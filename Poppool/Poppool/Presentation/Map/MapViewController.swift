@@ -105,20 +105,20 @@ class MapViewController: BaseViewController, View {
         setupPanAndSwipeGestures()
 
 
-        setupMarker()
+//        setupMarker()
     }
 
     private let defaultZoomLevel: Float = 15.0 // 기본 줌 레벨
 
-    private func setupMarker() {
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: 37.5666, longitude: 126.9784)
-        let markerView = MapMarker()
-        markerView.injection(with: .init(title: "서울", count: 3))
-        marker.iconView = markerView
-        marker.map = mainView.mapView
-        markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
-    }
+//    private func setupMarker() {
+//        let marker = GMSMarker()
+//        marker.position = CLLocationCoordinate2D(latitude: 37.5666, longitude: 126.9784)
+//        let markerView = MapMarker()
+//        markerView.injection(with: .init(title: "서울", count: 3))
+//        marker.iconView = markerView
+//        marker.map = mainView.mapView
+//        markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 28)
+//    }
 
     private func setupPanAndSwipeGestures() {
         // grabberHandle에 스와이프 제스처 추가
@@ -284,22 +284,37 @@ class MapViewController: BaseViewController, View {
             .bind { [weak self] results in
                 guard let self = self else { return }
 
-                // 검색 결과를 StoreItem으로 변환
-                let storeItems = results.map { $0.toStoreItem() }
+                // 기존 데이터를 초기화
+                self.mainView.mapView.clear()  // 기존 마커 제거
+                self.storeListViewController.reactor?.action.onNext(.setStores([])) // 리스트 뷰 초기화
+                self.carouselView.updateCards([]) // 캐러셀 초기화
+                self.carouselView.isHidden = true // 캐러셀 숨기기
 
-                // 1. StoreListReactor로 변환된 데이터를 전달
+                guard !results.isEmpty else { return }
+
+                // 1. 리스트 뷰 업데이트
+                let storeItems = results.map { $0.toStoreItem() }
                 self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
 
-                // 2. 지도에 마커 추가
+                // 2. 마커 추가
                 self.addMarkers(for: results)
 
                 // 3. 캐러셀 뷰 업데이트
                 self.carouselView.updateCards(results)
+                self.carouselView.isHidden = false
 
-                // 4. 캐러셀 뷰 표시 여부 설정
-                self.carouselView.isHidden = results.isEmpty
+                // 4. 첫 번째 검색 결과로 지도 이동
+                if let firstStore = results.first {
+                    let camera = GMSCameraPosition.camera(
+                        withLatitude: firstStore.latitude,
+                        longitude: firstStore.longitude,
+                        zoom: 15
+                    )
+                    self.mainView.mapView.animate(to: camera)
+                }
             }
             .disposed(by: disposeBag)
+
 
 
 
@@ -530,6 +545,8 @@ class MapViewController: BaseViewController, View {
         currentFilterBottomSheet = nil
     }
     private func addMarkers(for stores: [MapPopUpStore]) {
+        mainView.mapView.clear() // 기존 마커 제거
+
         for store in stores {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude)
@@ -575,71 +592,59 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
 
-        let camera = GMSCameraPosition.camera(withLatitude: location.coordinate.latitude,
-                                            longitude: location.coordinate.longitude,
-                                            zoom: 15)
+        let camera = GMSCameraPosition.camera(
+            withLatitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude,
+            zoom: 15
+        )
         mainView.mapView.animate(to: camera)
 
-        let currentLocationStore = MapPopUpStore(
-            id: 0,
-            category: "현재 위치",
-            name: "현위치 팝업",
-            address: "현재 위치 기반 주소",
-            startDate: "2024.01.01",
-            endDate: "2024.12.31",
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude,
-            markerId: 0,
-            markerTitle: "현재 위치",
-            markerSnippet: "현재 위치의 팝업스토어",
-            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
-
-        )
-
-        addMarker(for: currentLocationStore)
+        // 현재 위치 마커 추가 코드 제거
         locationManager.stopUpdatingLocation()
     }
+
 }
 
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        let dummyStore1 = MapPopUpStore(
-            id: 1,
-            category: "카페",
-            name: "팝업스토어명 팝업스토어명 최대 2줄 말줄임...",
-            address: "서울특별시 중구",
-            startDate: "2024.01.01",
-            endDate: "2024.12.31",
-            latitude: 37.5665,
-            longitude: 126.9780,
-            markerId: 1,
-            markerTitle: "서울",
-            markerSnippet: "팝업스토어",
-            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+//        let dummyStore1 = MapPopUpStore(
+//            id: 1,
+//            category: "카페",
+//            name: "팝업스토어명 팝업스토어명 최대 2줄 말줄임...",
+//            address: "서울특별시 중구",
+//            startDate: "2024.01.01",
+//            endDate: "2024.12.31",
+//            latitude: 37.5665,
+//            longitude: 126.9780,
+//            markerId: 1,
+//            markerTitle: "서울",
+//            markerSnippet: "팝업스토어",
+//            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+//
+//        )
+//        let dummyStore2 = MapPopUpStore(
+//            id: 2,
+//            category: "전시/예술",
+//            name: "전시 팝업스토어 팝업스토어명 최대 2줄 말줄임...",
+//            address: "서울특별시 강남구",
+//            startDate: "2024.06.01",
+//            endDate: "2024.12.31",
+//            latitude: 37.4980,
+//            longitude: 127.0276,
+//            markerId: 2,
+//            markerTitle: "강남",
+//            markerSnippet: "전시 팝업스토어",
+//            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
+//
+//        )
 
-        )
-        let dummyStore2 = MapPopUpStore(
-            id: 2,
-            category: "전시/예술",
-            name: "전시 팝업스토어 팝업스토어명 최대 2줄 말줄임...",
-            address: "서울특별시 강남구",
-            startDate: "2024.06.01",
-            endDate: "2024.12.31",
-            latitude: 37.4980,
-            longitude: 127.0276,
-            markerId: 2,
-            markerTitle: "강남",
-            markerSnippet: "전시 팝업스토어",
-            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
-
-        )
-
-        carouselView.updateCards([dummyStore1, dummyStore2])
+//        carouselView.updateCards([dummyStore1, dummyStore2])
         carouselView.isHidden = false
 
         return true
     }
+    
 }
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {

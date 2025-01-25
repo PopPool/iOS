@@ -3,6 +3,7 @@ import SnapKit
 
 final class FilterChipsView: UIView {
     // MARK: - Components
+    var onRemoveChip: ((String) -> Void)?
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
         label.text = "선택한 옵션"
@@ -93,8 +94,12 @@ final class FilterChipsView: UIView {
     }
 
     private func removeFilter(at index: Int) {
+        let removedFilter = filters[index]
         filters.remove(at: index)
         updateUI()
+        
+        // 콜백 호출
+        onRemoveChip?(removedFilter)
     }
 }
 

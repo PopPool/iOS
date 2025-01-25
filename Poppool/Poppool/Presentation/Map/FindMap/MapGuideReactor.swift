@@ -88,19 +88,45 @@ final class MapGuideReactor: Reactor {
     }
 
     private func openMapApp(_ appType: String) -> Observable<Mutation> {
-        let appURLs: [String: String] = [
-            "naver": "nmap://search?query=서울특별시 강남구",
-            "kakao": "kakaomap://route?sp=37.5665,126.9780&ep=37.5665,126.9780&by=CAR",
-            "tmap": "tmap://search?name=서울특별시 강남구"
-        ]
-
-        guard let url = URL(string: appURLs[appType] ?? ""),
-              UIApplication.shared.canOpenURL(url) else {
-            return Observable.just(.showToast("\(appType) 앱이 설치되지 않았습니다."))
+        // 현재 State에서 좌표 가져오기
+        guard let coordinate = currentState.destinationCoordinate else {
+            return Observable.just(.showToast("위치 정보를 가져올 수 없습니다."))
         }
 
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        return Observable.empty()
+        // 각 맵 앱별 URL 스키마와 앱스토어 URL
+        let appSchemes: [String: (urlScheme: String, appStoreId: String)] = [
+            "naver": (
+                urlScheme: "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)",
+                appStoreId: "id311867728"
+            ),
+            "kakao": (
+                urlScheme: "kakaomap://look?p=\(coordinate.latitude),\(coordinate.longitude)",
+                appStoreId: "id304608425"
+            ),
+            "tmap": (
+                urlScheme: "tmap://route?goalname=목적지&goaly=\(coordinate.latitude)&goalx=\(coordinate.longitude)",
+                appStoreId: "id431589174"
+            )
+        ]
+
+        Logger.log(message: "🗺 맵 앱 열기 시도: \(urlScheme)", category: .debug)
+
+        if let url = URL(string: urlScheme) {
+            // 앱 설치 여부 확인
+            if UIApplication.shared.canOpenURL(url) {
+                Logger.log(message: "✅ \(appType) 앱 실행", category: .debug)
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                return Observable.empty()
+            } else {
+                Logger.log(message: "❌ \(appType) 앱 미설치 - 앱스토어로 이동", category: .debug)
+                if let appStoreURL = URL(string: appStoreUrl) {
+                    UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
+                }
+                return Observable.just(.showToast("\(appType) 앱이 설치되어 있지 않아 앱스토어로 이동합니다."))
+            }
+        }
+
+        return Observable.just(.showToast("앱을 열 수 없습니다."))
     }
 
     // MARK: - Reduce

@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class PopupCardCell: UICollectionViewCell {
     static let identifier = "PopupCardCell"
@@ -25,8 +26,6 @@ final class PopupCardCell: UICollectionViewCell {
     // MARK: - Setup
     private func setupLayout() {
         contentView.layer.cornerRadius = 12
-//        contentView.layer.borderWidth = 1
-//        contentView.layer.borderColor = UIColor.lightGray.cgColor
         contentView.clipsToBounds = true
 
         contentView.addSubview(imageView)
@@ -35,19 +34,19 @@ final class PopupCardCell: UICollectionViewCell {
         contentView.addSubview(addressLabel)
         contentView.addSubview(dateLabel)
 
-        // Image View
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(12)
+            make.top.leading.equalToSuperview().offset(20)
+            make.bottom.equalToSuperview().offset(20)
             make.width.height.equalTo(97)
         }
 
         categoryLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
         categoryLabel.textColor = .systemBlue
         categoryLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
+            make.top.equalToSuperview().offset(20)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
             make.trailing.equalToSuperview().offset(-12)
         }
@@ -81,13 +80,8 @@ final class PopupCardCell: UICollectionViewCell {
     }
 
     private func configureUI() {
-        // 배경색 설정
         contentView.backgroundColor = UIColor.white
-
-        // 카테고리 강조 색상
         categoryLabel.textColor = .systemBlue
-
-        // Placeholder 배경 설정
         imageView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
     }
 
@@ -96,8 +90,16 @@ final class PopupCardCell: UICollectionViewCell {
         titleLabel.text = store.name
         categoryLabel.text = "#\(store.category)"
         addressLabel.text = store.address
-        dateLabel.text = "\(store.startDate) ~ \(store.endDate)"
 
-        imageView.image = UIImage(named: "placeholderImage") // 실제 이미지 로직에 맞게 수정 예정
+        // Date label formatting
+        let startDate = store.startDate.split(separator: "T").first ?? ""
+        let endDate = store.endDate.split(separator: "T").first ?? ""
+        dateLabel.text = "\(startDate) ~ \(endDate)"
+
+        if let imageUrl = store.mainImageUrl {
+            imageView.setPPImage(path: imageUrl)
+        } else {
+            imageView.image = UIImage(named: "placeholderImage")
+        }
     }
 }

@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GMSServices.provideAPIKey(Secrets.popPoolApiKey.rawValue)
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization() // 권한 요청 초기화
+        GMSServices.provideAPIKey(Secrets.popPoolApiKey.rawValue)
 
             return true
         }

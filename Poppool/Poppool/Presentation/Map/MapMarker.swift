@@ -68,11 +68,11 @@ private extension MapMarker {
 extension MapMarker: Inputable {
     struct Input {
         let title: String
-        let count: Int
+//        let count: Int
     }
 
     func injection(with input: Input) {
         titleLabel.text = input.title
-        countLabel.text = "외 \(input.count)개"
+//        countLabel.text = "외 \(input.count)개"
     }
 }

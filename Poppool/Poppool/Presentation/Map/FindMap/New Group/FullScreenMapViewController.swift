@@ -1,62 +1,96 @@
-//
-//  FullScreenMapViewController.swift
-//  Poppool
-//
-//  Created by 김기현 on 1/24/25.
-//
-
 import Foundation
 import UIKit
 import RxSwift
 import ReactorKit
+import CoreLocation
+import GoogleMaps
 
 final class FullScreenMapViewController: MapViewController {
 
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+   override func viewDidLoad() {
+       super.viewDidLoad()
 
-        self.navigationController?.navigationBar.isHidden = false
-        setupNavigation()
+       self.navigationController?.navigationBar.isHidden = false
+       setupNavigation()
 
-        mainView.searchFilterContainer.isHidden = true
-        mainView.filterChips.isHidden = true
-        mainView.listButton.isHidden = true
-        carouselView.isHidden = false
-    }
+       mainView.searchFilterContainer.isHidden = true
+       mainView.filterChips.isHidden = true
+       mainView.listButton.isHidden = true
+       carouselView.isHidden = false
+   }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
-    }
+   override func bind(reactor: Reactor) {
+       super.bind(reactor: reactor)
 
-    private func setupNavigation() {
-        navigationItem.title = "찾아가는 길"
+       reactor.state
+           .map { $0.searchResult }
+           .distinctUntilChanged()
+           .compactMap { store -> (store: MapPopUpStore, coordinate: CLLocationCoordinate2D)? in
+               guard let store = store else { return nil }
+               return (store, CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude))
+           }
+           .observe(on: MainScheduler.instance)
+           .bind { [weak self] data in
+               guard let self = self else { return }
 
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.shadowColor = .clear
-        appearance.backgroundColor = .white
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.black,
-            .font: UIFont.systemFont(ofSize: 15, weight: .regular)
-        ]
+               // 기존 마커 제거
+               self.mainView.mapView.clear()
 
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+               // 새 마커 추가
+               let marker = GMSMarker()
+               marker.position = data.coordinate
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "bakcbutton")?.withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(backButtonTapped)
-        )
-        navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+               let markerView = MapMarker()
+               markerView.injection(with: data.store.toMarkerInput())
+               marker.iconView = markerView
+               marker.map = self.mainView.mapView
 
-    }
-    
+               // 카메라 이동
+               let camera = GMSCameraPosition.camera(
+                   withLatitude: data.coordinate.latitude,
+                   longitude: data.coordinate.longitude,
+                   zoom: 16
+               )
+               self.mainView.mapView.animate(to: camera)
 
-    @objc private func backButtonTapped() {
-        dismiss(animated: true)
-    }
+               // 캐러셀 업데이트
+               self.carouselView.updateCards([data.store])
+               self.carouselView.isHidden = false
+           }
+           .disposed(by: disposeBag)
+   }
+
+
+   override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+       self.navigationController?.navigationBar.isHidden = false
+   }
+
+   private func setupNavigation() {
+       navigationItem.title = "찾아가는 길"
+
+       let appearance = UINavigationBarAppearance()
+       appearance.configureWithOpaqueBackground()
+       appearance.shadowColor = .clear
+       appearance.backgroundColor = .white
+       appearance.titleTextAttributes = [
+           .foregroundColor: UIColor.black,
+           .font: UIFont.systemFont(ofSize: 15, weight: .regular)
+       ]
+
+       navigationController?.navigationBar.standardAppearance = appearance
+       navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+       navigationItem.leftBarButtonItem = UIBarButtonItem(
+           image: UIImage(named: "bakcbutton")?.withRenderingMode(.alwaysOriginal),
+           style: .plain,
+           target: self,
+           action: #selector(backButtonTapped)
+       )
+       navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+   }
+
+   @objc private func backButtonTapped() {
+       dismiss(animated: true)
+   }
 }

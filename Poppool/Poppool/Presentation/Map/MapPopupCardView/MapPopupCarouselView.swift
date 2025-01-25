@@ -8,8 +8,8 @@ final class MapPopupCarouselView: UIView {
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 64, height: 120) // 여백 고려한 크기
-        layout.minimumLineSpacing = 16
+        layout.itemSize = CGSize(width: 335, height: 120)  // 셀 크기를 335로 수정
+        layout.minimumLineSpacing = 8  
         layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false

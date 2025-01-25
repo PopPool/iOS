@@ -28,11 +28,10 @@ struct MapPopUpStore: Equatable {
 
 extension MapPopUpStore {
     func toMarkerInput() -> MapMarker.Input {
-        return .init(
-            title: self.markerTitle,
-            count: 1  // 클러스터링 구현 시 수정
-        )
+        return .init(title: self.markerSnippet) 
     }
+
+
 
     func toStoreItem() -> StoreItem {
         return StoreItem(

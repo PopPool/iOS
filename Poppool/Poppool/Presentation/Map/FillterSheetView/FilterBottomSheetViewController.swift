@@ -43,6 +43,17 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupLayout()
         setupGestures()
         setupCollectionView()
+        containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
+            guard let self = self, let reactor = self.reactor else { return }
+
+            // Reactor에 액션 전달
+            if reactor.currentState.selectedCategories.contains(removedOption) {
+                reactor.action.onNext(.toggleCategory(removedOption))
+            } else if reactor.currentState.selectedSubRegions.contains(removedOption) {
+                reactor.action.onNext(.toggleSubRegion(removedOption))
+            }
+        }
+    
     }
 
     // MARK: - Setup
