@@ -115,6 +115,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
            .disposed(by: disposeBag)
 
         
+
         containerView.saveButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self, let reactor = self.reactor else { return }
@@ -125,6 +126,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 )
 
                 self.onSave?(filterData)
+                reactor.action.onNext(.applyFilters(filterData.locations + filterData.categories))
+
                 self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
@@ -262,6 +265,16 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
+        reactor.state.map { $0.savedSubRegions + $0.savedCategories }
+            .distinctUntilChanged()
+            .bind { [weak self] selectedOptions in
+                UIView.performWithoutAnimation {
+                    self?.containerView.filterChipsView.updateChips(with: selectedOptions)
+                    self?.containerView.layoutIfNeeded()
+                }
+            }
+            .disposed(by: disposeBag)
+
 
         reactor.state.map { $0.isSaveEnabled }
             .distinctUntilChanged()
@@ -301,13 +314,20 @@ final class FilterBottomSheetViewController: UIViewController, View {
     }
 
     func showBottomSheet() {
-        containerView.update(locationText: savedLocation, categoryText: savedCategory)
+        guard let reactor = reactor else { return }
+
+        containerView.update(
+            locationText: reactor.currentState.savedSubRegions.joined(separator: ", "),
+            categoryText: reactor.currentState.savedCategories.joined(separator: ", ")
+        )
+
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.dimmedView.alpha = 1
             self.bottomConstraint?.update(offset: 0)
             self.view.layoutIfNeeded()
         }
     }
+
 
     func hideBottomSheet() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {

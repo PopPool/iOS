@@ -3,6 +3,11 @@ import RxSwift
 
 final class StoreListReactor: Reactor {
     // MARK: - Reactor
+
+    private var currentPage = 0
+    private let pageSize = 10
+    private var hasMorePages = true
+
     enum Action {
         case viewDidLoad
         case didSelectItem(Int)
@@ -14,24 +19,29 @@ final class StoreListReactor: Reactor {
     }
 
     enum Mutation {
-        case setStores([StoreItem]) // 변환된 StoreItem 리스트
-        case updateBookmark(Int)
+        case setStores([StoreItem])
+        case updateBookmark(Int, Bool)
         case setActiveFilter(FilterType?)
         case setLocationFilters([String])
         case setCategoryFilters([String])
         case clearLocationFilters
         case clearCategoryFilters
+        case showBookmarkToast(Bool)
     }
 
     struct State {
-        var stores: [StoreItem] = [] // 변환된 리스트
+        var stores: [StoreItem] = []
         var activeFilterType: FilterType?
         var selectedLocationFilters: [String] = []
         var selectedCategoryFilters: [String] = []
+        var shouldShowBookmarkToast: Bool = false
     }
 
     // MARK: - Properties
     var initialState: State
+    private let userAPIUseCase: UserAPIUseCaseImpl = UserAPIUseCaseImpl(
+        repository: UserAPIRepositoryImpl(provider: ProviderImpl())
+    )
 
     init() {
         self.initialState = State()
@@ -44,16 +54,28 @@ final class StoreListReactor: Reactor {
             return fetchStores()
 
         case let .didSelectItem(index):
-//            print("[DEBUG] Item Selected at Index: \(index)")
+            // 아이템 선택 시 처리 (필요 시 구현)
             return .empty()
 
-        case let .toggleBookmark(index):
-            return .just(.updateBookmark(index))
+        case .toggleBookmark(let index):
+            guard index < currentState.stores.count else { return .empty() }
+            let store = currentState.stores[index]
+            let isBookmarking = !store.isBookmarked
+
+            // Completable을 Observable<Void>로 변환
+            let bookmarkRequest = isBookmarking
+                ? userAPIUseCase.postBookmarkPopUp(popUpID: Int64(store.id)).andThen(Observable.just(()))
+                : userAPIUseCase.deleteBookmarkPopUp(popUpID: Int64(store.id)).andThen(Observable.just(()))
+
+            return Observable.concat([
+                bookmarkRequest.map { Mutation.updateBookmark(index, isBookmarking) },
+                .just(.showBookmarkToast(isBookmarking))
+            ])
+
 
         case let .setStores(storeItems):
             return .just(.setStores(storeItems))
 
-            
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
 
@@ -81,12 +103,28 @@ final class StoreListReactor: Reactor {
         case let .setStores(stores):
             newState.stores = stores
 
-        case let .updateBookmark(index):
+        case let .updateBookmark(index, isBookmarked):
+            // 북마크 상태 업데이트
             if index < newState.stores.count {
-                var item = newState.stores[index]
-                item.isBookmarked.toggle()
-                newState.stores[index] = item
+                newState.stores[index].isBookmarked = isBookmarked
+
+                Logger.log(
+                    message: """
+                    북마크 상태 업데이트:
+                    - 인덱스: \(index)
+                    - 북마크 상태: \(isBookmarked)
+                    """,
+                    category: .debug
+                )
             }
+
+
+        case let .showBookmarkToast(isBookmarked):
+            if currentState.stores.isEmpty {
+                break 
+            }
+
+            newState.shouldShowBookmarkToast = isBookmarked
 
         case let .setActiveFilter(filterType):
             newState.activeFilterType = filterType
@@ -108,32 +146,31 @@ final class StoreListReactor: Reactor {
 
     // MARK: - Private
     private func fetchStores() -> Observable<Mutation> {
-        return .empty() // 더미 데이터 반환하지 않음
-
-}
-//
-//extension MapPopUpStore {
-//    func toStoreItem() -> StoreItem {
-//        return StoreItem(
-//            id: Int(id),
-//            thumbnailURL: mainImageUrl ?? "", // 이미지 URL 매핑
-//            category: category,
-//            title: name,
-//            location: address,
-//            dateRange: "\(startDate) ~ \(endDate)",
-//            isBookmarked: false // 기본값
-//        )
-//    }
+        return userAPIUseCase.getRecentPopUp(page: 0, size: 10, sort: nil)
+            .map { response in
+                let stores = response.popUpInfoList.map { $0.toStoreItem() }
+                return Mutation.setStores(stores)
+            }
+            .catchAndReturn(.setStores([]))
+    }
 }
 
 
-// MARK: - Model
+    // MARK: - Model
 struct StoreItem {
     let id: Int
     let thumbnailURL: String
     let category: String
     let title: String
     let location: String
-    let dateRange: String
+    let dateRange: String?
     var isBookmarked: Bool
+
+    var formattedDateRange: String {
+        guard let dateRange = dateRange else { return "" }
+        let dates = dateRange.split(separator: "~").map {
+            String($0).trimmingCharacters(in: .whitespacesAndNewlines).toDate()?.formatted() ?? String($0)
+        }
+        return dates.joined(separator: " ~ ")
+    }
 }

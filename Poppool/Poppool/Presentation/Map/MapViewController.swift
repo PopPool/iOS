@@ -544,6 +544,7 @@ class MapViewController: BaseViewController, View {
         }
         currentFilterBottomSheet = nil
     }
+    //기본 마커
     private func addMarkers(for stores: [MapPopUpStore]) {
         mainView.mapView.clear() // 기존 마커 제거
 
@@ -682,6 +683,7 @@ extension MapViewController {
         let region = mainView.mapView.projection.visibleRegion()
         return (northEast: region.farRight, southWest: region.nearLeft)
     }
+    // 커스텀 마커
     private func updateMarkers(with stores: [MapPopUpStore]) {
         mainView.mapView.clear()
         stores.forEach { store in

@@ -83,7 +83,7 @@ private extension StoreListCell {
             make.height.equalTo(thumbnailImageView.snp.width)
         }
 
-        thumbnailImageView.addSubview(bookmarkButton)
+        contentView.addSubview(bookmarkButton)
         bookmarkButton.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(8)
             make.size.equalTo(24)

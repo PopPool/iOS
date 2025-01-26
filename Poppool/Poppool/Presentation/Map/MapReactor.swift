@@ -116,7 +116,6 @@ final class MapReactor: Reactor {
             ])
             
         case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
-            // 🔒 1) 여기서 미리 categoryName(문자열) → categoryId(숫자)로 변환
             let categoryIDs = currentState.selectedCategoryFilters
                 .compactMap { currentState.categoryMapping[$0] }
             
@@ -249,7 +248,7 @@ final class MapReactor: Reactor {
                        message: "📌 [최종 데이터]: \(store)",
                        category: .debug
                    )
-                   return .setSearchResult(store)  // .setSelectedStore를 .setSearchResult로 수정
+                   return .setSearchResult(store)
                }
 
 

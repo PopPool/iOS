@@ -67,11 +67,9 @@ struct BoundQueryDTO: Encodable {
         try container.encode(southWestLat, forKey: .southWestLat)
         try container.encode(southWestLon, forKey: .southWestLon)
 
-        var categoriesContainer = container.nestedUnkeyedContainer(forKey: .categories)
-               for category in categories {
-                   try categoriesContainer.encode(category)
-               }
-           }
+        let categoriesString = categories.map(String.init).joined(separator: ",")
+        try container.encode(categoriesString, forKey: .categories)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case northEastLat
@@ -81,7 +79,6 @@ struct BoundQueryDTO: Encodable {
         case categories
     }
 }
-
 
 struct SearchQueryDTO: Encodable {
     let query: String
