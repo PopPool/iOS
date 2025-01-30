@@ -10,6 +10,7 @@ import UIKit
 import ReactorKit
 import RxSwift
 import RxCocoa
+import LinkPresentation
 
 final class DetailReactor: Reactor {
     
@@ -293,7 +294,7 @@ final class DetailReactor: Reactor {
                 spacing70Section
             ]
         }
-
+        
     }
     
     func setContent() -> Observable<Mutation> {
@@ -359,14 +360,41 @@ final class DetailReactor: Reactor {
     }
     
     func showSharedBoard(controller: BaseViewController) {
-        let text = "Some Text"
-        let itemsToShare: [Any] = [text]
-        let activityViewController = UIActivityViewController(
-            activityItems: itemsToShare,
-            applicationActivities: nil
-        )
-        controller.present(activityViewController, animated: true, completion: nil)
+        let storeName = titleSection.inputDataList.first?.title ?? ""
+        let imagePath = Secrets.popPoolS3BaseURL.rawValue + (imageBannerSection.inputDataList.first?.imagePaths.first ?? "")
         
+        // URL 인코딩 후 생성
+        guard let encodedPath = imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedPath) else {
+            Logger.log(message: "URL 생성 실패", category: .error)
+            return
+        }
+        
+        // 🔹 비동기적으로 이미지 다운로드
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                Logger.log(message: "다운로드 실패", category: .error)
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                Logger.log(message: "이미지 변환 실패", category: .error)
+                return
+            }
+            
+            Logger.log(message: "이미지 다운로드 성공", category: .info)
+            
+            // UI 업데이트는 메인 스레드에서 실행
+            DispatchQueue.main.async {
+                let imageItem = ItemDetailSource(name: storeName, image: image)
+                let activityViewController = UIActivityViewController(
+                    activityItems: [imageItem, storeName],
+                    applicationActivities: nil
+                )
+                controller.present(activityViewController, animated: true, completion: nil)
+            }
+            
+        }.resume()
     }
     
     func commentLike(indexPath: IndexPath) -> Observable<Mutation> {
@@ -379,5 +407,32 @@ final class DetailReactor: Reactor {
             return userAPIUseCase.postCommentLike(commentId: commentID)
                 .andThen(Observable.just(.loadView))
         }
+    }
+}
+
+class ItemDetailSource: NSObject {
+    let name: String
+    let image: UIImage
+    
+    init(name: String, image: UIImage) {
+        self.name = name
+        self.image = image
+    }
+}
+
+extension ItemDetailSource: UIActivityItemSource {
+    
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        image
+    }
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        image
+    }
+    
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        let metaData = LPLinkMetadata()
+        metaData.title = name
+        metaData.imageProvider = NSItemProvider(object: image)
+        return metaData
     }
 }
