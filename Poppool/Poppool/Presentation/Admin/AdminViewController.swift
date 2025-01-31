@@ -227,7 +227,7 @@ final class AdminViewController: BaseViewController, View {
 
         // Store list binding
         reactor.state.map { $0.storeList }
-            .map { "총 \($0.count)건" }
+            .map { "총 \($0.count)개" }
             .bind(to: mainView.popupCountLabel.rx.text)
             .disposed(by: disposeBag)
 

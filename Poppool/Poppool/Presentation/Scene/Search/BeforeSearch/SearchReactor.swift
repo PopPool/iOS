@@ -88,6 +88,7 @@ final class SearchReactor: Reactor {
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing18Section = SpacingSection(inputDataList: [.init(spacing: 18)])
     private let spacing48Section = SpacingSection(inputDataList: [.init(spacing: 48)])
+    private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     
     // MARK: - init
     init() {
@@ -210,7 +211,10 @@ final class SearchReactor: Reactor {
             nextController.reactor?.state
                 .withUnretained(self)
                 .subscribe(onNext: { (owner, state) in
-                    if state.isSave { owner.action.onNext(.changeSortedFilterIndex(filterIndex: state.filterIndex, sortedIndex: state.sortedIndex))}
+                    if state.isSave {
+                        ToastMaker.createToast(message: "선택하신 옵션을 저장했어요")
+                        owner.action.onNext(.changeSortedFilterIndex(filterIndex: state.filterIndex, sortedIndex: state.sortedIndex))
+                    }
                 })
                 .disposed(by: nextController.disposeBag)
         case .moveToDetailScene(let controller, let indexPath):
@@ -237,7 +241,8 @@ final class SearchReactor: Reactor {
                 spacing18Section,
                 searchSortedSection,
                 spacing16Section,
-                searchListSection
+                searchListSection,
+                spacing64Section
             ]
         } else {
             return [
@@ -252,7 +257,8 @@ final class SearchReactor: Reactor {
                 spacing18Section,
                 searchSortedSection,
                 spacing16Section,
-                searchListSection
+                searchListSection,
+                spacing64Section
             ]
         }
     }
@@ -292,7 +298,7 @@ final class SearchReactor: Reactor {
     func setBottomSearchList(sort: String?) -> Observable<Mutation> {
         let isOpen = filterIndex == 0 ? true : false
         let categorys = searchCategorySection.inputDataList.compactMap { $0.id }
-        return popUpAPIUseCase.getSearchBottomPopUpList(isOpen: isOpen, categories: categorys, page: currentPage, size: 6, sort: sort)
+        return popUpAPIUseCase.getSearchBottomPopUpList(isOpen: isOpen, categories: categorys, page: currentPage, size: 50, sort: sort)
             .withUnretained(self)
             .map { (owner, response) in
                 let isLogin = response.loginYn

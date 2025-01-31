@@ -31,6 +31,7 @@ final class MyPageCommentSectionCell: UICollectionViewCell {
         let view = UIImageView()
         view.layer.cornerRadius = 28
         view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

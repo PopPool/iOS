@@ -167,7 +167,7 @@ extension MyPageBookmarkController {
                 owner.mainView.emptyLabel.isHidden = !state.isEmptyCase
                 owner.mainView.emptyButton.isHidden = !state.isEmptyCase
                 owner.mainView.countButtonView.buttonTitleLabel.setLineHeightText(text: state.buttonTitle, font: .KorFont(style: .regular, size: 13))
-                owner.mainView.countButtonView.countLabel.setLineHeightText(text: "총 \(state.count)건", font: .KorFont(style: .regular, size: 13))
+                owner.mainView.countButtonView.countLabel.setLineHeightText(text: "총 \(state.count)개", font: .KorFont(style: .regular, size: 13))
                 
                 if state.buttonTitle != owner.viewType {
                     owner.mainView.contentCollectionView.scrollsToTop = true

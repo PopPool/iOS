@@ -67,7 +67,7 @@ private extension CancelableTagSectionCell {
         contentStackView.addArrangedSubview(cancelButton)
         
         titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(17)
+            make.height.equalTo(18)
         }
         cancelButton.snp.makeConstraints { make in
             make.size.equalTo(16)
@@ -86,15 +86,14 @@ extension CancelableTagSectionCell: Inputable {
     func injection(with input: Input) {
         let xmarkImage = input.isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")
         cancelButton.setImage(xmarkImage, for: .normal)
-        titleLabel.text = input.title
         if input.isSelected {
             contentView.backgroundColor = .blu500
-            titleLabel.font = .KorFont(style: .bold, size: 11)
+            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .w100
             contentView.layer.borderColor = UIColor.blu500.cgColor
         } else {
             contentView.backgroundColor = .clear
-            titleLabel.font = .KorFont(style: .medium, size: 11)
+            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .g400
             contentView.layer.borderColor = UIColor.g200.cgColor
         }

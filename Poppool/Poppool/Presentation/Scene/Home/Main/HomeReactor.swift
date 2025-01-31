@@ -264,7 +264,6 @@ final class HomeReactor: Reactor {
     }
     
     func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
-        print(indexPath)
         if isLoign {
             switch indexPath.section {
             case 0:

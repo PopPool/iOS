@@ -29,8 +29,8 @@ final class BookMarkToastView: UIView {
     }()
     
     private let unbookMarkLabel: UILabel = {
-        let label = PPLabel(style: .regular, fontSize: 15, text: "찜한 팝업을 헤제했어요")
-        label.setLineHeightText(text: "찜한 팝업을 헤제했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
+        let label = PPLabel(style: .regular, fontSize: 15, text: "찜한 팝업을 해제했어요")
+        label.setLineHeightText(text: "찜한 팝업을 해제했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
         label.textColor = .w100
         return label
     }()

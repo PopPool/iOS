@@ -9,11 +9,12 @@ import UIKit
 
 import SnapKit
 import RxSwift
+import RxCocoa
 
 final class AddCommentSectionCell: UICollectionViewCell {
     
     // MARK: - Components
-
+    
     var disposeBag = DisposeBag()
     
     let commentTextView: UITextView = {
@@ -43,6 +44,10 @@ final class AddCommentSectionCell: UICollectionViewCell {
         return label
     }()
     
+    private var isActiveComment: Bool = false
+    
+    private var commentState: BehaviorRelay<CommentState> = .init(value: .empty)
+    
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -65,38 +70,45 @@ final class AddCommentSectionCell: UICollectionViewCell {
 // MARK: - SetUp
 private extension AddCommentSectionCell {
     func bind() {
+        
+        commentTextView.rx.didBeginEditing
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                owner.isActiveComment = true
+                owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
+            }
+            .disposed(by: disposeBag)
+        
+        commentTextView.rx.didEndEditing
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                owner.isActiveComment = false
+                owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
+            }
+            .disposed(by: disposeBag)
+        
         commentTextView.rx.didChange
             .debounce(.milliseconds(5), scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe { (owner, _) in
-                let text = owner.commentTextView.text ?? ""
-                switch text.count {
-                case 0:
-                    owner.countLabel.text = "0 / 500자"
-                    owner.placeHolderLabel.isHidden = false
-                    owner.noticeLabel.isHidden = true
-                    owner.contentView.layer.borderColor = UIColor.g100.cgColor
-                    owner.countLabel.textColor = .g500
-                    owner.commentTextView.textColor = .g1000
-                case 1...500:
-                    owner.countLabel.text = "\(text.count) / 500자"
-                    owner.placeHolderLabel.isHidden = true
-                    owner.noticeLabel.isHidden = true
-                    owner.contentView.layer.borderColor = UIColor.g100.cgColor
-                    owner.countLabel.textColor = .g500
-                    owner.commentTextView.textColor = .g1000
-                default:
-                    owner.countLabel.text = "\(text.count) / 500자"
-                    owner.placeHolderLabel.isHidden = true
-                    owner.noticeLabel.isHidden = false
-                    owner.contentView.layer.borderColor = UIColor.re500.cgColor
-                    owner.countLabel.textColor = .re500
-                    owner.commentTextView.textColor = .re500
-                }
+                owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
             }
             .disposed(by: disposeBag)
-            
+        
+        commentState
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                let text = owner.commentTextView.text ?? ""
+                owner.countLabel.text = "\(text.count) / 500자"
+                owner.placeHolderLabel.isHidden = state.isHiddenPlaceHolder
+                owner.noticeLabel.isHidden = state.isHiddenNoticeLabel
+                owner.contentView.layer.borderColor = state.borderColor?.cgColor
+                owner.countLabel.textColor = state.countLabelColor
+                owner.commentTextView.textColor = state.textColor
+            }
+            .disposed(by: disposeBag)
     }
+    
     func setUpConstraints() {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
@@ -123,6 +135,22 @@ private extension AddCommentSectionCell {
             make.bottom.equalToSuperview().inset(16)
         }
     }
+    
+    func checkValidation(text: String?) -> CommentState {
+        guard let text = text else { return .empty }
+        if text.isEmpty {
+            return isActiveComment ? .emptyActive : .empty
+        }
+        
+        switch text.count {
+        case 1...9:
+            return isActiveComment ? .shortLengthActive : .shortLength
+        case 10...500:
+            return isActiveComment ? .normalActive : .normal
+        default:
+            return isActiveComment ? .longLengthActive : .longLength
+        }
+    }
 }
 
 extension AddCommentSectionCell: Inputable {
@@ -130,5 +158,72 @@ extension AddCommentSectionCell: Inputable {
     }
     
     func injection(with input: Input) {
+    }
+}
+
+enum CommentState {
+    case empty
+    case emptyActive
+    case shortLength
+    case shortLengthActive
+    case longLength
+    case longLengthActive
+    case normal
+    case normalActive
+    
+    var borderColor: UIColor? {
+        switch self {
+        case .shortLength, .longLength, .longLengthActive:
+            return .re500
+        default:
+            return .g100
+        }
+    }
+    
+    var countLabelColor: UIColor? {
+        switch self {
+        case .shortLength, .longLength, .longLengthActive:
+            return .re500
+        default:
+            return .g500
+        }
+    }
+    
+    var textColor: UIColor? {
+        switch self {
+        case .shortLength, .longLength, .longLengthActive:
+            return .re500
+        default:
+            return .g1000
+        }
+    }
+    
+    var description: String? {
+        switch self {
+        case .longLength, .longLengthActive:
+            return "최대 500자까지 입력해주세요"
+        case .shortLength:
+            return "최소 10자 이상 입력해주세요"
+        default:
+            return nil
+        }
+    }
+    
+    var isHiddenNoticeLabel: Bool {
+        switch self {
+        case .longLength, .longLengthActive, .shortLength:
+            return false
+        default:
+            return true
+        }
+    }
+    
+    var isHiddenPlaceHolder: Bool {
+        switch self {
+        case .empty, .emptyActive:
+            return false
+        default:
+            return true
+        }
     }
 }

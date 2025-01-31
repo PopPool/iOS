@@ -155,10 +155,6 @@ final class ProfileEditReactor: Reactor {
         let originIntro = originProfileData?.intro ?? ""
         let currentIntro = currentIntro ?? ""
         
-        
-        print("isChangeImage:", isChangeImage)
-        print(newState.nickNameState)
-        print(newState.introState)
         if isChangeImage || originNickName != currentNickName || originIntro != currentIntro {
             if newState.nickNameState == .validate || newState.nickNameState == .validateActive || newState.nickNameState == .myNickName || newState.nickNameState == .myNickNameActive {
                 if newState.introState == .validate || newState.introState == .validateActive || newState.introState == .empty || newState.introState == .emptyActive {

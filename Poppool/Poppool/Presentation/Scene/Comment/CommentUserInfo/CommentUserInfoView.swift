@@ -93,7 +93,7 @@ private extension CommentUserInfoView {
         instaCommentButton.snp.makeConstraints { make in
             make.top.equalTo(lineView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().inset(32)
         }
     }
 }

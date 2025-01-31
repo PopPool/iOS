@@ -18,11 +18,13 @@ final class FAQReactor: Reactor {
         case viewWillAppear
         case dropButtonTapped(row: Int)
         case backButtonTapped(controller: BaseViewController)
+        case mailInquiryCellTapped(controller: BaseViewController)
     }
     
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
+        case moveToMailApp(controller: BaseViewController)
     }
     
     struct State {
@@ -55,7 +57,6 @@ final class FAQReactor: Reactor {
     ])
     private let qnaTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "직접 문의하기")])
     private var qnaSection = MyPageListSection(inputDataList: [
-        .init(title: "메일로 문의"),
         .init(title: "메일로 문의")
     ])
     let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
@@ -76,6 +77,8 @@ final class FAQReactor: Reactor {
             return Observable.just(.loadView)
         case .backButtonTapped(let controller):
             return Observable.just(.moveToRecentScene(controller: controller))
+        case .mailInquiryCellTapped(let controller):
+            return Observable.just(.moveToMailApp(controller: controller))
         }
     }
     
@@ -86,8 +89,36 @@ final class FAQReactor: Reactor {
             newState.sections = getSection()
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
+        case .moveToMailApp(let controller):
+            let email = "service.poppool@gmail.com"
+            let mailtoURLString = "mailto:\(email)"
+            if let emailURL = URL(string: mailtoURLString), UIApplication.shared.canOpenURL(emailURL) {
+                UIApplication.shared.open(emailURL, options: [:], completionHandler: nil)
+            } else {
+                showMailAppRecoveryAlert(controller: controller)
+            }
         }
         return newState
+    }
+    
+    func showMailAppRecoveryAlert(controller: BaseViewController) {
+        
+        let alert = UIAlertController(
+            title: "'Mail' 앱을 복원하겠습니까?",
+            message: "계속하려면 App Store에서 'Mail' 앱을\n다운로드하십시오",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "App Store로 이동", style: .default, handler: { _ in
+            // 📌 App Store의 메일 앱 복구 페이지 열기
+            if let mailAppURL = URL(string: "itms-apps://itunes.apple.com/app/id1108187098") {
+                UIApplication.shared.open(mailAppURL, options: [:], completionHandler: nil)
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        
+        controller.present(alert, animated: true, completion: nil)
     }
     
     func getSection() -> [any Sectionable] {

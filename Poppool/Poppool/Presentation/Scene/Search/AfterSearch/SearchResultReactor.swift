@@ -56,6 +56,7 @@ final class SearchResultReactor: Reactor {
     private var searchListSection = HomeCardGridSection(inputDataList: [])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
+    private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     
     // MARK: - init
     init() {
@@ -68,7 +69,11 @@ final class SearchResultReactor: Reactor {
         case .cellTapped(let controller, let indexPath):
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         case .returnSearch(let text):
-            titleSection.inputDataList = [.init(title: "\(text)이/가 포함된 팝업")]
+            if hasFinalConsonant(text) {
+                titleSection.inputDataList = [.init(title: "\(text)이 포함된 팝업")]
+            } else {
+                titleSection.inputDataList = [.init(title: "\(text)가 포함된 팝업")]
+            }
             return popUpAPIUseCase.getSearchPopUpList(query: text)
                 .withUnretained(self)
                 .map { (owner, response) in
@@ -130,7 +135,22 @@ final class SearchResultReactor: Reactor {
             titleSection,
             searchCountSection,
             spacing16Section,
-            searchListSection
+            searchListSection,
+            spacing64Section
         ]
+    }
+    func hasFinalConsonant(_ text: String) -> Bool {
+        guard let lastCharacter = text.last else { return false }
+        
+        let unicodeValue = Int(lastCharacter.unicodeScalars.first!.value)
+        
+        // 한글 유니코드 범위 체크
+        let base = 0xAC00
+        let last = 0xD7A3
+        guard base...last ~= unicodeValue else { return false }
+        
+        // 종성 인덱스 계산 (받침이 있으면 1 이상)
+        let finalConsonantIndex = (unicodeValue - base) % 28
+        return finalConsonantIndex != 0
     }
 }

@@ -82,6 +82,6 @@ extension DetailCommentTitleSectionCell: Inputable {
     }
     
     func injection(with input: Input) {
-        countLabel.setLineHeightText(text: "총 \(input.commentCount)건", font: .KorFont(style: .regular, size: 13))
+        countLabel.setLineHeightText(text: "총 \(input.commentCount)개", font: .KorFont(style: .regular, size: 13))
     }
 }

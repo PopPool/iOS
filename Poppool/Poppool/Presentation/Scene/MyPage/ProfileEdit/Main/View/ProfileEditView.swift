@@ -61,7 +61,7 @@ final class ProfileEditView: UIView {
         view.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 20)
         view.isLayoutMarginsRelativeArrangement = true
         view.alignment = .center
-        view.distribution = .equalSpacing
+        view.distribution = .fill
         view.layer.cornerRadius = 4
         view.layer.borderColor = UIColor.g200.cgColor
         view.layer.borderWidth = 1
@@ -237,6 +237,9 @@ private extension ProfileEditView {
         }
         nickNameClearButton.snp.makeConstraints { make in
             make.size.equalTo(16)
+        }
+        nickNameTextField.snp.makeConstraints { make in
+            make.height.equalTo(52)
         }
         contentView.addSubview(nickNameTextFieldTrailingView)
         nickNameTextFieldTrailingView.addArrangedSubview(nickNameTextField)

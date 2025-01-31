@@ -64,10 +64,10 @@ final class NormalCommentAddReactor: Reactor {
         }
     }()
     private let photoTitleSection = AddCommentTitleSection(inputDataList: [.init(title: "사진 선택")])
-    private let photoDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "과 관련있는 사진을 업로드해보세요.")])
+    private lazy var photoDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "\(self.popUpName)과 관련있는 사진을 업로드해보세요.")])
     private var imageSection = AddCommentImageSection(inputDataList: [.init(isFirstCell: true)])
     private let commentTitleSection = AddCommentTitleSection(inputDataList: [.init(title: "코멘트 작성")])
-    private let commentDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "방문했던 에 대한 감상평을 작성해주세요.")])
+    private lazy var commentDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "방문했던 \(self.popUpName)에 대한 감상평을 작성해주세요.")])
     private let commentSection = AddCommentSection(inputDataList: [.init()])
     private let spacing25Section = SpacingSection(inputDataList: [.init(spacing: 25)])
     private let spacing5Section = SpacingSection(inputDataList: [.init(spacing: 5)])
@@ -179,7 +179,9 @@ final class NormalCommentAddReactor: Reactor {
             spacing5Section,
             commentDescriptionSection,
             spacing16Section,
-            commentSection
+            commentSection,
+            spacing32Section,
+            spacing32Section
         ]
     }
 }

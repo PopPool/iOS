@@ -174,7 +174,7 @@ extension DetailInfoSectionCell: Inputable {
         
         dateLabel.setLineHeightText(text: startDate + " ~ " + endDate, font: .KorFont(style: .regular, size: 14))
         timeLabel.setLineHeightText(text: startTime + " ~ " + endTime, font: .KorFont(style: .regular, size: 14))
-        addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 14))
+        addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 13))
     }
 }
     
