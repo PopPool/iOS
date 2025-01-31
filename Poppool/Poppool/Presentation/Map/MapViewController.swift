@@ -16,7 +16,8 @@ class MapViewController: BaseViewController, View {
     
     // MARK: - Properties
     var currentCarouselStores: [MapPopUpStore] = []
-    
+    private var markerDictionary: [Int64: GMSMarker] = [:]
+
     private let clusteringManager = ClusteringManager()
     private var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
@@ -59,6 +60,33 @@ class MapViewController: BaseViewController, View {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+
+        carouselView.onCardScrolled = { [weak self] pageIndex in
+            guard let self = self else { return }
+            // 1) 현재 캐러셀 목록 중 index
+            guard pageIndex >= 0, pageIndex < self.currentCarouselStores.count else { return }
+
+            let store = self.currentCarouselStores[pageIndex]
+
+            // 2) 지도 이동
+            let camera = GMSCameraPosition(target: store.coordinate, zoom: 15)
+            self.mainView.mapView.animate(to: camera)
+
+            // 3) 이전 마커 해제
+            if let currentMarker = self.currentMarker {
+                let markerView = MapMarker()
+                markerView.injection(with: .init(isSelected: false, isCluster: false))
+                currentMarker.iconView = markerView
+            }
+
+            // 4) 새 마커 찾아 강조
+            if let marker = self.findMarker(for: store) {
+                let markerView = MapMarker()
+                markerView.injection(with: .init(isSelected: true, isCluster: false))
+                marker.iconView = markerView
+                self.currentMarker = marker
+            }
+        }
 
         if let reactor = self.reactor {
                bind(reactor: reactor)
@@ -710,26 +738,37 @@ extension MapViewController: GMSMapViewDelegate {
         // (2) 단일 마커
         // 이전 마커 해제
         if let previousMarker = currentMarker {
-            let markerView = MapMarker()
-            markerView.injection(with: .init(isSelected: false, isCluster: false))
-            previousMarker.iconView = markerView
-        }
+                       let markerView = MapMarker()
+                       markerView.injection(with: .init(isSelected: false, isCluster: false))
+                       previousMarker.iconView = markerView
+                   }
 
-        // 현재 마커 강조
-        let markerView = MapMarker()
-        markerView.injection(with: .init(isSelected: true, isCluster: false))
-        marker.iconView = markerView
-        currentMarker = marker
+                   // 2-2) 새 마커 강조
+                   let markerView = MapMarker()
+                   markerView.injection(with: .init(isSelected: true, isCluster: false))
+                   marker.iconView = markerView
+                   currentMarker = marker
 
-        // 캐러셀 카드 1개
-        if let store = marker.userData as? MapPopUpStore {
-            carouselView.updateCards([store])
-            carouselView.isHidden = false
-            self.currentCarouselStores = [store]
-        }
+                   if let store = marker.userData as? MapPopUpStore {
+                       // --- OLD CODE ---
+                       // carouselView.updateCards([store])
+                       // carouselView.isHidden = false
+                       // self.currentCarouselStores = [store]
 
-        return true
-    }
+                       // --- NEW CODE ---
+                       // (A) 캐러셀에 “뷰포트 내 스토어들” 전체를 표시
+                       carouselView.updateCards(currentStores)
+                       carouselView.isHidden = currentStores.isEmpty
+                       self.currentCarouselStores = currentStores
+
+                       // (B) 탭한 마커에 해당하는 스토어 찾아 scroll
+                       if let idx = currentStores.firstIndex(where: { $0.id == store.id }) {
+                           carouselView.scrollToCard(index: idx)
+                       }
+                   }
+                   return true
+               }
+
 
     // 지도 움직임
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
@@ -806,6 +845,9 @@ extension MapViewController {
 //            }
 
 
+    private func findMarker(for store: MapPopUpStore) -> GMSMarker? {
+        return markerDictionary[store.id]
+    }
 
 
     private func getCurrentViewportBounds() -> (northEast: CLLocationCoordinate2D, southWest: CLLocationCoordinate2D) {

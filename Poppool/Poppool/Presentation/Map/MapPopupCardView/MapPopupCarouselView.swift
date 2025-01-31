@@ -2,28 +2,25 @@ import UIKit
 import SnapKit
 import FloatingPanel
 
-
 final class MapPopupCarouselView: UIView {
     // MARK: - Components
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 335, height: 137)  // 높이를 137px로 수정
+        layout.itemSize = CGSize(width: 335, height: 137)
         layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)  // 상하 여백 제거
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         return collectionView
     }()
 
-    var popupCards: [MapPopUpStore] = [] {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
-
+    // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
     var onCardScrolled: ((Int) -> Void)?
+
+    // 예: private로 유지
+    private var popupCards: [MapPopUpStore] = []
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -54,29 +51,46 @@ final class MapPopupCarouselView: UIView {
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
         self.popupCards = cards
+        collectionView.reloadData()
     }
 
-    // MARK: - Visibility Control
     func updateVisibility(for state: FloatingPanelState) {
-        // 리스트뷰 상태와 연계하여 숨김 처리
-        self.isHidden = (state == .full) // `full` 상태에서 캐러셀 뷰 숨김
+        // 예: FloatingPanel 상태에 따라 숨김
+        self.isHidden = (state == .full)
+    }
+
+    // **새롭게 추가**: 인덱스로 스크롤
+    func scrollToCard(index: Int) {
+        guard index >= 0, index < popupCards.count else { return }
+        let indexPath = IndexPath(item: index, section: 0)
+        // 타입을 명시해주면 추론 오류가 사라질 수 있음
+        collectionView.scrollToItem(
+            at: indexPath,
+            at: UICollectionView.ScrollPosition.centeredHorizontally,
+            animated: true
+        )
     }
 }
 
 // MARK: - UICollectionView DataSource & Delegate
-extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDelegate {
+extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return popupCards.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PopupCardCell.identifier, for: indexPath) as! PopupCardCell
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: PopupCardCell.identifier,
+            for: indexPath
+        ) as! PopupCardCell
         cell.configure(with: popupCards[indexPath.item])
         return cell
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageIndex = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        let pageWidth = scrollView.bounds.width
+        let pageIndex = Int(scrollView.contentOffset.x / pageWidth)
         onCardScrolled?(pageIndex)
     }
 }
