@@ -26,14 +26,13 @@ struct GetRecentPopUpDataResponse {
 extension GetRecentPopUpDataResponse {
     func toStoreItem() -> StoreItem {
         return StoreItem(
-            id: Int(self.popUpStoreId), // Int로 변환
-            thumbnailURL: self.mainImageUrl ?? "", // URL이 없으면 빈 문자열
-            category: "카테고리", // 서버 응답에 category가 없으면 기본값
-            title: self.popUpStoreName ?? "제목 없음", // Optional 처리
-            location: self.address ?? "주소 없음", // Optional 처리
-            dateRange: "\(self.startDate ?? "") ~ \(self.endDate ?? "")", // Optional 처리
-            isBookmarked: self.closeYn // Boolean 값
+            id: self.popUpStoreId,
+            thumbnailURL: self.mainImageUrl ?? "",
+            category: "카테고리",
+            title: self.popUpStoreName ?? "제목 없음",
+            location: self.address ?? "주소 없음",
+            dateRange: "\(self.startDate ?? "") ~ \(self.endDate ?? "")",
+            isBookmarked: self.closeYn
         )
     }
-
 }

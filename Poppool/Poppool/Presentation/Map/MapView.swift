@@ -11,13 +11,7 @@ final class MapView: UIView {
         return view
     }()
 
-    // 기존 topStackView
-    // let topStackView: UIStackView = {
-    //     let stack = UIStackView()
-    //     stack.axis = .vertical
-    //     stack.spacing = 12
-    //     return stack
-    // }()
+
 
     let backgroundView: UIView = {
         let view = UIView()

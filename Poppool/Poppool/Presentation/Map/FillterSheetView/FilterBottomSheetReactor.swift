@@ -48,7 +48,7 @@ final class FilterBottomSheetReactor: Reactor {
 
     init() {
         let initialLocations: [Location] = [
-            Location(main: "서울", sub: ["강남/역삼/선릉", "건대/군자/구의", "강북/목동/신촌", "명동/을지로/종로", "방이", "복촌/삼정", "상수/대치", "상수/현정/광원"]),
+            Location(main: "서울", sub: ["강남/역삼/선릉", "건대/군자/구의", "금호/옥수/신당", "명동/을지로/종로", "방이", "복촌/삼청", "삼성/대치", "상수/합정/망원"]),
             Location(main: "경기", sub: ["수원시", "성남시", "용인시", "용인시용인시", "용인시", "용인시"]),
             Location(main: "인천", sub: ["부평", "송도"]),
             Location(main: "부산", sub: ["해운대", "광안리", "사상구", "사하구", "북구", "남구"]),

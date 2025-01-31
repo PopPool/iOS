@@ -15,6 +15,10 @@ class MapViewController: BaseViewController, View {
 
     
     // MARK: - Properties
+    var currentCarouselStores: [MapPopUpStore] = []
+    
+    private let clusteringManager = ClusteringManager()
+    private var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
     let mainView = MapView()
     let carouselView = MapPopupCarouselView()
@@ -441,6 +445,7 @@ class MapViewController: BaseViewController, View {
         }
     }
 
+
     private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
         let progress = (maxOffset - offset) / (maxOffset - minOffset) // 0(탑) ~ 1(바텀)
         mainView.mapView.alpha = max(0, min(progress, 1)) // 0(완전히 가림) ~ 1(완전히 보임)
@@ -459,7 +464,8 @@ class MapViewController: BaseViewController, View {
                 self.mainView.mapView.alpha = 0 // 탑 상태에서는 숨김
                 self.storeListViewController.setGrabberHandleVisible(false)
                 self.listViewTopConstraint?.update(offset: filterChipsFrame.maxY)
-                self.mainView.searchInput.backgroundColor = .g50
+                self.mainView.searchInput.setBackgroundColor(.g50)
+
 
 
             case .middle:
@@ -471,7 +477,7 @@ class MapViewController: BaseViewController, View {
                 self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.mainView.mapView.alpha = 1 // 미들 상태에서는 항상 보임
                 self.mainView.mapView.isHidden = false
-                self.mainView.searchInput.backgroundColor = .white
+                self.mainView.searchInput.setBackgroundColor(.white)
 
 
             case .bottom:
@@ -479,7 +485,7 @@ class MapViewController: BaseViewController, View {
                 self.listViewTopConstraint?.update(offset: self.view.frame.height) // 화면 아래로 숨김
                 self.mainView.mapView.alpha = 1 // 바텀 상태에서는 항상 보임
                 self.mainView.mapView.isHidden = false
-                self.mainView.searchInput.backgroundColor = .white
+                self.mainView.searchInput.setBackgroundColor(.white)
 
             }
 
@@ -490,6 +496,70 @@ class MapViewController: BaseViewController, View {
         }
     }
 
+
+    // MARK: - Clustering
+    private func updateMapWithClustering() {
+        let currentZoom = mainView.mapView.camera.zoom
+        Logger.log(message: "현재 줌 레벨: \(currentZoom)", category: .debug)
+
+        if currentZoom >= 12 {
+            // 줌 레벨 12 이상은 개별 마커 모드로 전환
+            Logger.log(message: "개별 마커 모드 활성화", category: .debug)
+            updateIndividualMarkers(currentStores)
+        } else {
+            Logger.log(message: "클러스터 마커 모드 활성화", category: .debug)
+            let clusters = clusteringManager.clusterStores(currentStores, at: currentZoom)
+            updateClusterMarkers(clusters)
+        }
+    }
+
+
+
+        private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
+            mainView.mapView.clear()
+            Logger.log(message: "📍 개별 마커 업데이트 (총 \(stores.count)개)", category: .debug)
+
+            for store in stores {
+                let marker = GMSMarker()
+                marker.position = store.coordinate
+                marker.userData = store
+
+                let markerView = MapMarker()
+                markerView.injection(with: .init(
+                    isSelected: false,
+                    isCluster: false
+                ))
+                marker.iconView = markerView
+                marker.map = mainView.mapView
+                Logger.log(message: "🟢 마커 추가: \(store.name), 위치: (\(store.latitude), \(store.longitude))", category: .debug)
+
+            }
+        }
+
+        private func updateClusterMarkers(_ clusters: [ClusterMarkerData]) {
+            mainView.mapView.clear()
+            Logger.log(message: "🔴 클러스터 마커 업데이트 (총 \(clusters.count)개)", category: .debug)
+
+            for cluster in clusters {
+                let marker = GMSMarker()
+                marker.position = cluster.cluster.coordinate
+                marker.userData = cluster
+
+                let markerView = MapMarker()
+                markerView.injection(with: .init(
+                    isSelected: false,
+                    isCluster: true,
+                    regionName: cluster.cluster.name,
+                    count: cluster.storeCount
+                ))
+                marker.iconView = markerView
+                marker.map = mainView.mapView
+                Logger.log(
+                    message: "🔴 클러스터 추가: \(cluster.cluster.name), 위치: (\(cluster.cluster.coordinate.latitude), \(cluster.cluster.coordinate.longitude)), 포함된 마커 수: \(cluster.storeCount)",
+                    category: .debug
+                )
+            }
+        }
 
     func presentFilterBottomSheet(for filterType: FilterType) {
         let sheetReactor = FilterBottomSheetReactor()
@@ -546,14 +616,19 @@ class MapViewController: BaseViewController, View {
     }
     //기본 마커
     private func addMarkers(for stores: [MapPopUpStore]) {
-        mainView.mapView.clear() // 기존 마커 제거
-
+        mainView.mapView.clear()
         for store in stores {
             let marker = GMSMarker()
-            marker.position = CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude)
-            marker.title = store.name
-            marker.snippet = store.address
-            marker.map = mainView.mapView // mainView의 mapView에 추가
+            marker.position = store.coordinate
+            marker.userData = store
+
+            let markerView = MapMarker()
+            markerView.injection(with: .init(
+                isSelected: false,
+                isCluster: false
+            ))
+            marker.iconView = markerView
+            marker.map = mainView.mapView
         }
     }
     private func updateListView(with results: [MapPopUpStore]) {
@@ -609,44 +684,73 @@ extension MapViewController: CLLocationManagerDelegate {
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-//        let dummyStore1 = MapPopUpStore(
-//            id: 1,
-//            category: "카페",
-//            name: "팝업스토어명 팝업스토어명 최대 2줄 말줄임...",
-//            address: "서울특별시 중구",
-//            startDate: "2024.01.01",
-//            endDate: "2024.12.31",
-//            latitude: 37.5665,
-//            longitude: 126.9780,
-//            markerId: 1,
-//            markerTitle: "서울",
-//            markerSnippet: "팝업스토어",
-//            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
-//
-//        )
-//        let dummyStore2 = MapPopUpStore(
-//            id: 2,
-//            category: "전시/예술",
-//            name: "전시 팝업스토어 팝업스토어명 최대 2줄 말줄임...",
-//            address: "서울특별시 강남구",
-//            startDate: "2024.06.01",
-//            endDate: "2024.12.31",
-//            latitude: 37.4980,
-//            longitude: 127.0276,
-//            markerId: 2,
-//            markerTitle: "강남",
-//            markerSnippet: "전시 팝업스토어",
-//            mainImageUrl: "https://example.com/image1.jpg" // 이미지 URL 추가
-//
-//        )
+        // (1) 클러스터 마커
+        if let clusterData = marker.userData as? ClusterMarkerData {
+            // 줌 레벨 조정
+            let clusterToIndividualZoom: Float = 14.0
+            let currentZoom = mapView.camera.zoom
+            let newZoom: Float = (currentZoom < clusterToIndividualZoom)
+                ? clusterToIndividualZoom
+                : min(mapView.maxZoom, currentZoom + 1)
 
-//        carouselView.updateCards([dummyStore1, dummyStore2])
-        carouselView.isHidden = false
+            let camera = GMSCameraPosition(target: marker.position, zoom: newZoom)
+            mapView.animate(to: camera)
+
+            // 여러 스토어를 캐러셀에
+            let multiStores = clusterData.cluster.stores
+            carouselView.updateCards(multiStores)
+            carouselView.isHidden = multiStores.isEmpty
+            self.currentCarouselStores = multiStores
+
+            // 만약 클러스터 자체 마커를 강조하고 싶으면
+            // marker.iconView = ...
+            return true
+        }
+
+        // (2) 단일 마커
+        // 이전 마커 해제
+        if let previousMarker = currentMarker {
+            let markerView = MapMarker()
+            markerView.injection(with: .init(isSelected: false, isCluster: false))
+            previousMarker.iconView = markerView
+        }
+
+        // 현재 마커 강조
+        let markerView = MapMarker()
+        markerView.injection(with: .init(isSelected: true, isCluster: false))
+        marker.iconView = markerView
+        currentMarker = marker
+
+        // 캐러셀 카드 1개
+        if let store = marker.userData as? MapPopUpStore {
+            carouselView.updateCards([store])
+            carouselView.isHidden = false
+            self.currentCarouselStores = [store]
+        }
 
         return true
     }
-    
+
+    // 지도 움직임
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        updateMapWithClustering()
+    }
+
+    // 지도 빈 공간 탭 → 해제
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        if let currentMarker = currentMarker {
+            let markerView = MapMarker()
+            markerView.injection(with: .init(isSelected: false, isCluster: false))
+            currentMarker.iconView = markerView
+        }
+        currentMarker = nil
+        carouselView.isHidden = true
+        carouselView.updateCards([])
+        self.currentCarouselStores = []
+    }
 }
+
+
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {
         // 뷰포트 변경 감지
@@ -668,16 +772,41 @@ extension MapViewController {
         .compactMap { $0 }
         .bind(to: reactor.action)
         .disposed(by: disposeBag)
-
-        // 스토어 업데이트
         reactor.state
             .map { $0.viewportStores }
             .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] stores in
-                self?.updateMarkers(with: stores)
-            })
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] stores in
+                guard let self = self else { return }
+                self.currentStores = stores
+                self.updateMapWithClustering()
+            }
             .disposed(by: disposeBag)
+
     }
+        // 스토어 업데이트
+//        reactor.state
+//            .map { $0.viewportStores }
+//            .distinctUntilChanged()
+//            .subscribe(onNext: { [weak self] stores in
+//                self?.updateMarkers(with: stores)
+//            })
+//            .disposed(by: disposeBag)
+//
+//        reactor.state
+//                    .map { $0.searchResults }
+//                    .distinctUntilChanged()
+//                    .observe(on: MainScheduler.instance)
+//                    .bind { [weak self] stores in
+//                        guard let self = self else { return }
+//                        self.currentStores = stores
+//                        self.updateMapWithClustering()
+//                    }
+//                    .disposed(by: disposeBag)
+//            }
+
+
+
 
     private func getCurrentViewportBounds() -> (northEast: CLLocationCoordinate2D, southWest: CLLocationCoordinate2D) {
         let region = mainView.mapView.projection.visibleRegion()

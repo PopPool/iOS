@@ -33,6 +33,11 @@ final class StoreListViewController: UIViewController, View {
         setupLayout()
         setupCollectionView()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor?.action.onNext(.viewDidLoad) // 데이터 재로드
+    }
+
 
     private func setupLayout() {
         view.backgroundColor = .clear

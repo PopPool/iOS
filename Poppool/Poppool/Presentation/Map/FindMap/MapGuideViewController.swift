@@ -105,7 +105,7 @@ final class MapGuideViewController: UIViewController, View {
 
     private let tmapButton: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "Tmap"), for: .normal)
+        btn.setImage(UIImage(named: "TMap"), for: .normal)
         btn.layer.cornerRadius = 24
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.g100.cgColor

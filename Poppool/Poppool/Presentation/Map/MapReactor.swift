@@ -124,7 +124,7 @@ final class MapReactor: Reactor {
                         지도 영역이 변경되었습니다:
                         📍 선택된 카테고리: \(currentState.selectedCategoryFilters)
                         🔢 변환된 카테고리 ID: \(categoryIDs)
-                        🗺️ 전체 카테고리 매핑: \(currentState.categoryMapping)
+                        
                         """,
                 category: .debug
             )

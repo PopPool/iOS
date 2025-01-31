@@ -19,46 +19,51 @@ final class FullScreenMapViewController: MapViewController {
        carouselView.isHidden = false
    }
 
-   override func bind(reactor: Reactor) {
-       super.bind(reactor: reactor)
+    override func bind(reactor: Reactor) {
+        super.bind(reactor: reactor)
 
-       reactor.state
-           .map { $0.searchResult }
-           .distinctUntilChanged()
-           .compactMap { store -> (store: MapPopUpStore, coordinate: CLLocationCoordinate2D)? in
-               guard let store = store else { return nil }
-               return (store, CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude))
-           }
-           .observe(on: MainScheduler.instance)
-           .bind { [weak self] data in
-               guard let self = self else { return }
+        reactor.state
+            .map { $0.searchResult }
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .map { store -> (store: MapPopUpStore, coordinate: CLLocationCoordinate2D) in
+                return (
+                    store: store,
+                    coordinate: CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude)
+                )
+            }
+            .observe(on: MainScheduler.instance)
+            .bind { [weak self] data in
+                guard let self = self else { return }
 
-               // 기존 마커 제거
-               self.mainView.mapView.clear()
+                // 기존 마커 제거
+                self.mainView.mapView.clear()
 
-               // 새 마커 추가
-               let marker = GMSMarker()
-               marker.position = data.coordinate
+                // 새 마커 추가
+                let marker = GMSMarker()
+                marker.position = data.coordinate
+                marker.userData = data.store
 
-               let markerView = MapMarker()
-               markerView.injection(with: data.store.toMarkerInput())
-               marker.iconView = markerView
-               marker.map = self.mainView.mapView
+                // 마커 뷰 설정
+                let markerView = MapMarker()
+                markerView.injection(with: .init(isSelected: true))
+                marker.iconView = markerView
+                marker.map = self.mainView.mapView
 
-               // 카메라 이동
-               let camera = GMSCameraPosition.camera(
-                   withLatitude: data.coordinate.latitude,
-                   longitude: data.coordinate.longitude,
-                   zoom: 16
-               )
-               self.mainView.mapView.animate(to: camera)
+                // 카메라 이동
+                let camera = GMSCameraPosition.camera(
+                    withLatitude: data.coordinate.latitude,
+                    longitude: data.coordinate.longitude,
+                    zoom: 16
+                )
+                self.mainView.mapView.animate(to: camera)
 
-               self.carouselView.updateCards([data.store])
-               self.carouselView.isHidden = false
-           }
-           .disposed(by: disposeBag)
-   }
-
+                // 캐러셀 업데이트
+                self.carouselView.updateCards([data.store])
+                self.carouselView.isHidden = false
+            }
+            .disposed(by: disposeBag)
+    }
 
    override func viewWillAppear(_ animated: Bool) {
        super.viewWillAppear(animated)

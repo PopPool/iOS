@@ -98,6 +98,9 @@ final class MapSearchInput: UIView, View {
             .bind(to: searchTextField.rx.text)
             .disposed(by: disposeBag)
     }
+    func setBackgroundColor(_ color: UIColor) {
+        containerView.backgroundColor = color
+    }
 }
 
 // MARK: - Setup
