@@ -118,4 +118,10 @@ extension FAQController: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? MyPageListSectionCell {
+            reactor?.action.onNext(.mailInquiryCellTapped(controller: self))
+        }
+    }
 }
