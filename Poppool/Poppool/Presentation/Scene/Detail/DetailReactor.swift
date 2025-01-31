@@ -347,6 +347,7 @@ final class DetailReactor: Reactor {
     
     func bookMark() -> Observable<Mutation> {
         if let isBookMark = titleSection.inputDataList.first?.isBookMark {
+            ToastMaker.createBookMarkToast(isBookMark: !isBookMark)
             if isBookMark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpID)
                     .andThen(Observable.just(.loadView))

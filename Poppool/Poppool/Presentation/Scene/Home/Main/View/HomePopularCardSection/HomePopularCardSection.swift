@@ -36,7 +36,7 @@ struct HomePopularCardSection: Sectionable {
         
         // 섹션 생성
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 0)
+        section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
         section.interGroupSpacing = 16
         section.orthogonalScrollingBehavior = .continuous
         
