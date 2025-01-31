@@ -39,7 +39,14 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         return button
     }()
     
+    let playButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "icon_banner_playButton"), for: .normal)
+        return button
+    }()
+    
     private var isAutoBannerPlay: Bool = false
+    private var isFirstResponseAutoScroll: Bool = true
     
     var imageSection = ImageBannerChildSection(inputDataList: [])
     
@@ -59,6 +66,9 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     let bannerTapped: PublishSubject<Int> = .init()
     
+    private var stopButtonLeadingConstraints: Constraint?
+    private var playButtonLeadingConstraints: Constraint?
+    
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -73,16 +83,14 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        stopAutoScroll()
         disposeBag = DisposeBag()
-    }
-    
-    deinit {
-        stopAutoScroll()
+        isFirstResponseAutoScroll = false
     }
     
     // 자동 스크롤 중지 함수
     func stopAutoScroll() {
+        stopButton.isHidden = true
+        playButton.isHidden = false
         isAutoBannerPlay = false
         autoScrollTimer?.invalidate()
         autoScrollTimer = nil
@@ -90,6 +98,8 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     func startAutoScroll(interval: TimeInterval = 3.0) {
         stopAutoScroll() // 기존 타이머를 중지
+        stopButton.isHidden = false
+        playButton.isHidden = true
         isAutoBannerPlay = true
         autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             self?.scrollToNextItem()
@@ -125,7 +135,14 @@ private extension ImageBannerSectionCell {
         stopButton.snp.makeConstraints { make in
             make.size.equalTo(6)
             make.centerY.equalTo(pageControl)
-            make.leading.equalTo(pageControl.snp.trailing).offset(-40)
+            stopButtonLeadingConstraints =  make.leading.equalTo(pageControl.snp.trailing).offset(-40).constraint
+        }
+        
+        contentView.addSubview(playButton)
+        playButton.snp.makeConstraints { make in
+            make.size.equalTo(6)
+            make.centerY.equalTo(pageControl)
+            playButtonLeadingConstraints =  make.leading.equalTo(pageControl.snp.trailing).offset(-40).constraint
         }
     }
     
@@ -170,6 +187,17 @@ private extension ImageBannerSectionCell {
             }
             .disposed(by: disposeBag)
         
+        playButton.rx.tap
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                if owner.isAutoBannerPlay {
+                    owner.stopAutoScroll()
+                } else {
+                    owner.startAutoScroll()
+                }
+            }
+            .disposed(by: disposeBag)
+        
         imageSection.currentPage
             .distinctUntilChanged()
             .withUnretained(self)
@@ -189,16 +217,31 @@ extension ImageBannerSectionCell: Inputable {
     
     func injection(with input: Input) {
         pageControl.numberOfPages = input.imagePaths.count
+        let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
+        stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+        playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
         let datas = zip(input.imagePaths, input.idList)
         imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
         
         contentCollectionView.reloadData()
-        startAutoScroll()
+        
+        if isFirstResponseAutoScroll {
+            startAutoScroll()
+            isFirstResponseAutoScroll = false
+        }
+        
         if input.isHiddenPauseButton {
             stopButton.isHidden = true
             stopAutoScroll()
         }
+        
         bind()
+        
+        if input.imagePaths.count == 1 {
+            playButton.isHidden = true
+            stopButton.isHidden = true
+            pageControl.isHidden = true
+        }
     }
 }
 

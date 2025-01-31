@@ -44,14 +44,6 @@ extension HomeController {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
-            cell.stopAutoScroll()
-        }
-    }
 }
 
 // MARK: - SetUp
@@ -202,16 +194,11 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if let cell = mainView.contentCollectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageBannerSectionCell {
-
-            if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
-                cell.startAutoScroll()
-                backGroundblurView.isHidden = true
-            } else {
-                cell.stopAutoScroll()
-                systemStatusBarIsDark.accept(true)
-                backGroundblurView.isHidden = false
-            }
+        if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
+            backGroundblurView.isHidden = true
+        } else {
+            systemStatusBarIsDark.accept(true)
+            backGroundblurView.isHidden = false
         }
     }
     
