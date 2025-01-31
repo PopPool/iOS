@@ -39,6 +39,8 @@ final class SearchMainController: BaseTabmanController, View {
         beforeController,
         afterController
     ]
+    
+    var isResponseTextField: Bool = false
 }
 
 // MARK: - Life Cycle
@@ -50,7 +52,10 @@ extension SearchMainController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        mainView.searchTextField.becomeFirstResponder()
+        if !isResponseTextField {
+            mainView.searchTextField.becomeFirstResponder()
+            isResponseTextField = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

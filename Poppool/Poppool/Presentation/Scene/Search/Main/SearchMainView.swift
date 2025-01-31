@@ -84,7 +84,7 @@ private extension SearchMainView {
         headerStackView.addArrangedSubview(cancelButton)
         self.addSubview(headerStackView)
         headerStackView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(7)
             make.leading.equalToSuperview().inset(20)
             make.trailing.equalToSuperview().inset(16)
         }

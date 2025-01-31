@@ -66,6 +66,7 @@ final class HomeListReactor: Reactor {
         }
     }()
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
+    private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     private var cardSections = HomeCardGridSection(inputDataList: [])
     
     // MARK: - init
@@ -145,7 +146,7 @@ final class HomeListReactor: Reactor {
     }
     
     func getSection() -> [any Sectionable] {
-        return [spacing24Section,cardSections]
+        return [spacing24Section,cardSections,spacing64Section]
     }
     
     func setSection(response: GetHomeInfoResponse) {
