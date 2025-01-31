@@ -104,8 +104,8 @@ final class FAQReactor: Reactor {
     func showMailAppRecoveryAlert(controller: BaseViewController) {
         
         let alert = UIAlertController(
-            title: "메일 앱이 필요합니다",
-            message: "메일을 보내려면 기본 Mail 앱이 필요합니다. App Store에서 복구하시겠습니까?",
+            title: "'Mail' 앱을 복원하겠습니까?",
+            message: "계속하려면 App Store에서 'Mail' 앱을\n다운로드하십시오",
             preferredStyle: .alert
         )
         
