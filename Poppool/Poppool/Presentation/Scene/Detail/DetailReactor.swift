@@ -384,11 +384,12 @@ final class DetailReactor: Reactor {
             
             Logger.log(message: "이미지 다운로드 성공", category: .info)
             
+            let sharedText = "[팝풀] \(storeName) 팝업 어때요?\n지금 바로 팝풀에서 확인해보세요!"
             // UI 업데이트는 메인 스레드에서 실행
             DispatchQueue.main.async {
                 let imageItem = ItemDetailSource(name: storeName, image: image)
                 let activityViewController = UIActivityViewController(
-                    activityItems: [imageItem, storeName],
+                    activityItems: [imageItem, sharedText],
                     applicationActivities: nil
                 )
                 controller.present(activityViewController, animated: true, completion: nil)
