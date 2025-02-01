@@ -14,29 +14,66 @@ class ClusteringManager {
             self.stores = []
             self.storeCount = 0
         }
+        func centerCoordinate() -> CLLocationCoordinate2D {
+            let totalLat = stores.reduce(0.0) { $0 + $1.latitude }
+            let totalLon = stores.reduce(0.0) { $0 + $1.longitude }
+            return CLLocationCoordinate2D(latitude: totalLat / Double(storeCount),
+                                          longitude: totalLon / Double(storeCount))
+        }
 
         func toMarkerData() -> ClusterMarkerData {
-            return ClusterMarkerData(
-                cluster: base,
-                storeCount: storeCount
-            )
-        }
-    }
+               let adjustedCluster = RegionCluster(
+                   name: base.name,
+                   subRegions: base.subRegions,
+                   coordinate: self.centerCoordinate(),
+                   type: base.type
+               )
+               return ClusterMarkerData(
+                   cluster: adjustedCluster,
+                   storeCount: storeCount
+               )
+           }
+       }
 
     func clusterStores(_ stores: [MapPopUpStore], at zoomLevel: Float) -> [ClusterMarkerData] {
         let level = MapZoomLevel.getLevel(from: zoomLevel)
         switch level {
         case .country:
             return clusterByProvince(stores)
-        case .region:
-            return clusterByRegion(stores)
-        case .city, .district:
+        case .city:
+            return clusterByCityLevel(stores)  // 시단위 클러스터링
+        case .district:
             return clusterByCity(stores)
         case .detailed:
             return []
         }
     }
 
+
+    private func clusterByCityLevel(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
+        // 시단위 클러스터링: 서울, 경기, 광역시만 사용
+        var seoulClusters = initializeClusters(type: .seoul)
+        var gyeonggiClusters = initializeClusters(type: .gyeonggi)
+        var metroClusters = initializeClusters(type: .metropolitan)
+
+        for store in stores {
+            if let cluster = findClusterForStore(store, in: seoulClusters) {
+                cluster.stores.append(store)
+                cluster.storeCount += 1
+            } else if let cluster = findClusterForStore(store, in: gyeonggiClusters) {
+                cluster.stores.append(store)
+                cluster.storeCount += 1
+            } else if let cluster = findClusterForStore(store, in: metroClusters) {
+                cluster.stores.append(store)
+                cluster.storeCount += 1
+            }
+        }
+
+        let allClusters = seoulClusters + gyeonggiClusters + metroClusters
+        return allClusters
+            .filter { $0.storeCount > 0 }
+            .map { $0.toMarkerData() }
+    }
 
     private func clusterByProvince(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
         var clusteredStores = initializeClusters(type: .province)

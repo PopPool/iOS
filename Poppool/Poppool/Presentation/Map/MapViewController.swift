@@ -17,7 +17,11 @@ class MapViewController: BaseViewController, View {
     // MARK: - Properties
     var currentCarouselStores: [MapPopUpStore] = []
     private var markerDictionary: [Int64: GMSMarker] = [:]
-
+    // 개별 마커와 클러스터 마커를 각각 관리하는 딕셔너리
+    private var individualMarkerDictionary: [Int64: GMSMarker] = [:]
+    private var clusterMarkerDictionary: [String: GMSMarker] = [:]
+    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(
+        repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let clusteringManager = ClusteringManager()
     private var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
@@ -521,11 +525,20 @@ class MapViewController: BaseViewController, View {
         Logger.log(message: "현재 줌 레벨: \(currentZoom)", category: .debug)
 
         if currentZoom >= 12 {
-            // 줌 레벨 12 이상은 개별 마커 모드로 전환
-//            Logger.log(message: "개별 마커 모드 활성화", category: .debug)
+            // 클러스터 모드에서 개별 모드로 전환:
+            // 기존 클러스터 마커 제거
+            for marker in clusterMarkerDictionary.values {
+                marker.map = nil
+            }
+            clusterMarkerDictionary.removeAll()
             updateIndividualMarkers(currentStores)
         } else {
-//            Logger.log(message: "클러스터 마커 모드 활성화", category: .debug)
+            // 개별 모드에서 클러스터 모드로 전환:
+            // 기존 개별 마커 제거
+            for marker in individualMarkerDictionary.values {
+                marker.map = nil
+            }
+            individualMarkerDictionary.removeAll()
             let clusters = clusteringManager.clusterStores(currentStores, at: currentZoom)
             updateClusterMarkers(clusters)
         }
@@ -533,56 +546,82 @@ class MapViewController: BaseViewController, View {
 
 
 
-        private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
-            mainView.mapView.clear()
-            Logger.log(message: "📍 개별 마커 업데이트 (총 \(stores.count)개)", category: .debug)
+    private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
+        // 새 스토어 ID 집합 생성
+        var newMarkerIDs = Set<Int64>()
 
-            for store in stores {
-                let marker = GMSMarker()
-                marker.position = store.coordinate
+        // 각 스토어에 대해 증분 업데이트
+        for store in stores {
+            newMarkerIDs.insert(store.id)
+            if let marker = individualMarkerDictionary[store.id] {
+                // 기존 마커의 위치 업데이트 (변화가 있을 때만)
+                if marker.position.latitude != store.latitude || marker.position.longitude != store.longitude {
+                    marker.position = store.coordinate
+                }
+                // 추가 상태 업데이트가 필요한 경우 이곳에서 처리 (예: 선택 상태 등)
+            } else {
+                // 새 마커 생성 및 추가
+                let marker = GMSMarker(position: store.coordinate)
                 marker.userData = store
 
                 let markerView = MapMarker()
-                markerView.injection(with: .init(
-                    isSelected: false,
-                    isCluster: false
-                ))
+                markerView.injection(with: store.toMarkerInput())
                 marker.iconView = markerView
                 marker.map = mainView.mapView
-                Logger.log(message: "🟢 마커 추가: \(store.name), 위치: (\(store.latitude), \(store.longitude))", category: .debug)
 
+                individualMarkerDictionary[store.id] = marker
             }
         }
 
-    private func updateClusterMarkers(_ clusters: [ClusterMarkerData]) {
-        var newClusterIDs = Set<String>()
-
-        // 클러스터 식별값(예: 클러스터 이름)을 기준으로 새 클러스터 마커 업데이트
-        for clusterData in clusters {
-            newClusterIDs.insert(clusterData.cluster.name)
-            // 클러스터 마커도 마찬가지로 markerDictionary를 별도로 관리하거나,
-            // 현재 모든 클러스터 마커를 재생성할 수 있습니다.
-            // 여기서는 간단히 새로 추가하는 예시를 보입니다.
-            let marker = GMSMarker()
-            marker.position = clusterData.cluster.coordinate
-            marker.userData = clusterData
-            let markerView = MapMarker()
-            // 클러스터 마커 디자인 수정: 보더컬러 제거, 백그라운드 컬러 blu500 사용
-            markerView.injection(with: .init(
-                isSelected: false,
-                isCluster: true,
-                regionName: clusterData.cluster.name,
-                count: clusterData.storeCount
-            ))
-            // 만약 MapMarker 내부에서 클러스터 디자인을 다음과 같이 처리하도록 수정했다면:
-            // - 클러스터 컨테이너의 layer.borderWidth = 0
-            // - 클러스터 컨테이너의 backgroundColor = .blu500
-            marker.iconView = markerView
-            marker.map = mainView.mapView
-
-            // 클러스터 마커는 markerDictionary에 별도 관리할 수도 있고, 필요에 따라 매번 재생성할 수 있습니다.
+        // 기존 마커 중 더 이상 보이지 않는 마커 제거
+        for (id, marker) in individualMarkerDictionary {
+            if !newMarkerIDs.contains(id) {
+                marker.map = nil
+                individualMarkerDictionary.removeValue(forKey: id)
+            }
         }
     }
+        private func updateClusterMarkers(_ clusters: [ClusterMarkerData]) {
+            // 새 클러스터 키 집합 생성
+            var newClusterKeys = Set<String>()
+
+            for clusterData in clusters {
+                let clusterKey = clusterData.cluster.name  // 클러스터 고유 식별값
+                newClusterKeys.insert(clusterKey)
+
+                if let marker = clusterMarkerDictionary[clusterKey] {
+                    // 기존 클러스터 마커 업데이트 (필요하다면 위치 등)
+                    if marker.position.latitude != clusterData.cluster.coordinate.latitude ||
+                        marker.position.longitude != clusterData.cluster.coordinate.longitude {
+                        marker.position = clusterData.cluster.coordinate
+                    }
+                } else {
+                    // 새 클러스터 마커 생성
+                    let marker = GMSMarker()
+                    marker.position = clusterData.cluster.coordinate
+                    marker.userData = clusterData
+
+                    let markerView = MapMarker()
+                    markerView.injection(with: .init(isSelected: false,
+                                                     isCluster: true,
+                                                     regionName: clusterData.cluster.name,
+                                                     count: clusterData.storeCount))
+                    marker.iconView = markerView
+                    marker.map = mainView.mapView
+
+                    clusterMarkerDictionary[clusterKey] = marker
+                }
+            }
+
+            // 기존 클러스터 마커 중 새로 전달받은 클러스터에 없는 것 제거
+            for (key, marker) in clusterMarkerDictionary {
+                if !newClusterKeys.contains(key) {
+                    marker.map = nil
+                    clusterMarkerDictionary.removeValue(forKey: key)
+                }
+            }
+        }
+        
 
     func presentFilterBottomSheet(for filterType: FilterType) {
         let sheetReactor = FilterBottomSheetReactor()
@@ -786,12 +825,12 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {
         mainView.mapView.rx.idleAtPosition
-            // idleAtPosition 이벤트가 발생한 후 500ms debounce (미세한 움직임 무시)
+        // idleAtPosition 이벤트가 발생한 후 500ms debounce (미세한 움직임 무시)
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
-            // 현재 카메라(중심, 줌) 정보를 반환
+        // 현재 카메라(중심, 줌) 정보를 반환
             .map { [weak self] in self?.mainView.mapView.camera }
             .compactMap { $0 }
-            // 미세한 변화(예: 위도/경도 0.05, 줌 0.5 미만 변화)는 업데이트하지 않음
+        // 미세한 변화(예: 위도/경도 0.05, 줌 0.5 미만 변화)는 업데이트하지 않음
             .distinctUntilChanged { (cam1, cam2) -> Bool in
                 let latDiff = abs(cam1.target.latitude - cam2.target.latitude)
                 let lonDiff = abs(cam1.target.longitude - cam2.target.longitude)
@@ -811,7 +850,7 @@ extension MapViewController {
             .compactMap { $0 }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
+        
         reactor.state
             .map { $0.viewportStores }
             .distinctUntilChanged()
@@ -822,8 +861,48 @@ extension MapViewController {
                 self.updateMapWithClustering()
             }
             .disposed(by: disposeBag)
+        reactor.state
+            .map { $0.viewportStores }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .flatMapLatest { [weak self] stores -> Observable<[StoreItem]> in
+                guard let self = self else { return .just([]) }
+                
+                return Observable.from(stores)
+                    .flatMap { store -> Observable<StoreItem> in
+                        return self.popUpAPIUseCase.getPopUpDetail(
+                            commentType: "NORMAL",
+                            popUpStoredId: store.id
+                        )
+                        .map { detail in
+                            StoreItem(
+                                id: store.id,
+                                thumbnailURL: store.mainImageUrl ?? "",
+                                category: store.category,
+                                title: store.name,
+                                location: store.address,
+                                dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                                isBookmarked: detail.bookmarkYn
+                            )
+                        }
+                        .catchAndReturn(StoreItem(
+                            id: store.id,
+                            thumbnailURL: store.mainImageUrl ?? "",
+                            category: store.category,
+                            title: store.name,
+                            location: store.address,
+                            dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                            isBookmarked: false
+                        ))
+                    }
+                    .toArray()
+                    .asObservable() // Single을 Observable로 변환
+            }
+            .bind { [weak self] storeItems in
+                self?.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+            }
+            .disposed(by: disposeBag)
     }
-
 
 
 
@@ -888,22 +967,24 @@ extension MapViewController {
         return (northEast: region.farRight, southWest: region.nearLeft)
     }
     // 커스텀 마커
-    private func updateMarkers(with stores: [MapPopUpStore]) {
+    func updateMarkers(with stores: [MapPopUpStore]) {
         var newMarkerIDs = Set<Int64>()
 
-        // 새 스토어 목록을 순회하며 기존 마커 업데이트 또는 신규 마커 추가
+        // 각 스토어에 대해 마커 업데이트 혹은 생성
         for store in stores {
             newMarkerIDs.insert(store.id)
             if let marker = markerDictionary[store.id] {
-                // 좌표가 달라졌을 경우에만 업데이트 (필요한 경우 애니메이션 적용 가능)
+                // 기존 마커의 위치나 상태가 변경되었는지 확인
                 if marker.position.latitude != store.latitude || marker.position.longitude != store.longitude {
                     marker.position = store.coordinate
                 }
+                // 마커 상태(예: 선택 여부) 등도 업데이트 필요하면 여기서 처리
             } else {
-                // 신규 마커 생성
-                let marker = GMSMarker()
-                marker.position = store.coordinate
+                // 새 마커 생성
+                let marker = GMSMarker(position: store.coordinate)
                 marker.userData = store
+
+                // 캐싱 또는 재사용 가능한 markerView를 사용하도록 개선 가능
                 let markerView = MapMarker()
                 markerView.injection(with: store.toMarkerInput())
                 marker.iconView = markerView
@@ -912,7 +993,7 @@ extension MapViewController {
             }
         }
 
-        // 기존 markerDictionary에서 새 스토어 목록에 없는 마커 삭제
+        // 기존에 있던 마커 중 새로 전달된 스토어 목록에 없는 마커 제거
         for (id, marker) in markerDictionary {
             if !newMarkerIDs.contains(id) {
                 marker.map = nil
@@ -921,7 +1002,6 @@ extension MapViewController {
         }
     }
 }
-
 // MARK: - Reactive Extensions
 extension Reactive where Base: GMSMapView {
     var delegate: DelegateProxy<GMSMapView, GMSMapViewDelegate> {

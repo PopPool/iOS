@@ -1,24 +1,29 @@
 import ReactorKit
 import RxSwift
+import Foundation
+import RxCocoa
+
 
 final class StoreListReactor: Reactor {
     // MARK: - Reactor
     private let userAPIUseCase: UserAPIUseCaseImpl
     private let popUpAPIUseCase: PopUpAPIUseCaseImpl
+    private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
     
-    private var currentPage = 0
-    private let pageSize = 10
-    private var hasMorePages = true
+//    private var currentPage = 0
+//    private let pageSize = 10
+//    private var hasMorePages = true
 
     enum Action {
-        case viewDidLoad
+        case syncBookmarkStatus(storeId: Int64, isBookmarked: Bool)
         case didSelectItem(Int)
         case toggleBookmark(Int)
         case setStores([StoreItem])
         case filterTapped(FilterType?)
         case filterUpdated(FilterType, [String])
         case clearFilters(FilterType)
+        
     }
 
     enum Mutation {
@@ -56,9 +61,12 @@ final class StoreListReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
-            return fetchStores()
 
+                case let .syncBookmarkStatus(storeId, isBookmarked):
+                    if let index = currentState.stores.firstIndex(where: { $0.id == storeId }) {
+                        return .just(.updateBookmark(index, isBookmarked))
+                    }
+                    return .empty()
         case let .didSelectItem(index):
             // 아이템 선택 시 처리 (필요 시 구현)
             return .empty()
@@ -98,7 +106,23 @@ final class StoreListReactor: Reactor {
 
 
         case let .setStores(storeItems):
-            return .just(.setStores(storeItems))
+            return Observable.from(storeItems)
+                .flatMap { [weak self] store -> Observable<StoreItem> in
+                    guard let self = self else { return .empty() }
+                    return self.popUpAPIUseCase.getPopUpDetail(
+                        commentType: "NORMAL",
+                        popUpStoredId: store.id
+                    )
+                    .map { detail in
+                        var updatedStore = store
+                        updatedStore.isBookmarked = detail.bookmarkYn
+                        return updatedStore
+                    }
+                    .asObservable()
+                }
+                .toArray()
+                .map { updatedStores in .setStores(updatedStores) }
+                .asObservable()
 
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
@@ -171,18 +195,8 @@ final class StoreListReactor: Reactor {
         return newState
     }
 
-    // MARK: - Private
-    private func fetchStores() -> Observable<Mutation> {
-        return userAPIUseCase.getRecentPopUp(
-            page: Int32(currentPage), // Int → Int32 변환
-            size: Int32(pageSize),    // Int → Int32 변환
-            sort: nil
-        )
-        .map { response in
-            let stores = response.popUpInfoList.map { $0.toStoreItem() }
-            return Mutation.setStores(stores)
-        }
-        .catchAndReturn(.setStores([]))
+    func updateBookmarkState(storeId: Int64, isBookmarked: Bool) {
+        bookmarkStateRelay.accept((storeId, isBookmarked))
     }
 
 
@@ -202,9 +216,16 @@ struct StoreItem {
 
     var formattedDateRange: String {
         guard let dateRange = dateRange else { return "" }
-        let dates = dateRange.split(separator: "~").map {
-            String($0).trimmingCharacters(in: .whitespacesAndNewlines).toDate()?.formatted() ?? String($0)
+        let dates = dateRange.split(separator: "~").map { dateStr -> String in
+            let trimmed = String(dateStr).trimmingCharacters(in: .whitespacesAndNewlines)
+            if let date = trimmed.toDate() {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy. MM. dd"
+                return formatter.string(from: date)
+            }
+            return trimmed
         }
         return dates.joined(separator: " ~ ")
     }
+
 }

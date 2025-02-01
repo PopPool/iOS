@@ -13,7 +13,7 @@ final class MapMarker: UIView {
 
     private let clusterContainer: UIView = {
           let view = UIView()
-          view.backgroundColor = .blu500
+          view.backgroundColor = .blu400
           view.layer.cornerRadius = 12
           view.layer.borderWidth = 0
           return view
@@ -76,7 +76,7 @@ private extension MapMarker {
        clusterContainer.snp.makeConstraints { make in
            make.center.equalToSuperview()
            make.height.equalTo(24)
-           make.width.equalTo(200)
+           make.width.equalTo(80)
        }
 
        labelStackView.snp.makeConstraints { make in
@@ -117,22 +117,21 @@ extension MapMarker: Inputable {
             regionLabel.textColor = .w100
             countLabel.text = "\(input.count)"
 
-            // 텍스트 크기에 따른 너비 계산을 위해 우선 레이아웃 업데이트
-            layoutIfNeeded()
-
-            // 스택뷰의 실제 콘텐츠 크기 계산
-            let contentWidth = labelStackView.systemLayoutSizeFitting(
-                CGSize(width: UIView.layoutFittingCompressedSize.width, height: 24)
-            ).width
-
-            // 좌우 패딩 16 추가
-            let totalWidth = contentWidth + 16
-
-            Logger.log(message: "클러스터 마커 크기 계산: contentWidth: \(contentWidth), totalWidth: \(totalWidth)", category: .debug)
-
-            // 컨테이너 너비 업데이트
-            clusterContainer.snp.updateConstraints { make in
-                make.width.equalTo(totalWidth)
+            // 만약 regionName과 count가 이전과 동일하다면 너비 계산 생략
+            if let previousText = regionLabel.text,
+               previousText == input.regionName {
+                // 이미 설정된 제약 조건이 있다면 그대로 사용
+            } else {
+                // 레이아웃 업데이트 및 너비 계산은 한 번만 수행
+                self.layoutIfNeeded()
+                let contentWidth = labelStackView.systemLayoutSizeFitting(
+                    CGSize(width: UIView.layoutFittingCompressedSize.width, height: 24)
+                ).width
+                let totalWidth = contentWidth + 16
+                Logger.log(message: "클러스터 마커 크기 계산: contentWidth: \(contentWidth), totalWidth: \(totalWidth)", category: .debug)
+                clusterContainer.snp.updateConstraints { make in
+                    make.width.equalTo(totalWidth)
+                }
             }
         } else {
             markerImageView.isHidden = false
@@ -140,5 +139,4 @@ extension MapMarker: Inputable {
             updateMarkerImage(isSelected: input.isSelected)
         }
     }
-
 }
