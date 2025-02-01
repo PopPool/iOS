@@ -82,30 +82,29 @@ final class StoreListViewController: UIViewController, View {
 
         reactor.state
             .map { state -> [StoreListSection] in
-                // 단일 섹션 예시
-                return [
-                    StoreListSection(items: state.stores)
-                ]
+                return [ StoreListSection(items: state.stores) ]
             }
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
+        // 찜한 팝업 토스트 처리 체인
         reactor.state
-            .map { $0.shouldShowBookmarkToast } // 기본값이 false로 설정됨
+            .map { $0.shouldShowBookmarkToast }
             .distinctUntilChanged()
+            .filter { $0 == true }
+            .observe(on: MainScheduler.instance)
             .bind { isBookmarking in
                 let toastView = BookMarkToastView(isBookMark: isBookmarking)
                 if isBookmarking {
                     toastView.moveButton.rx.tap
                         .subscribe(onNext: { [weak self] in
-                            // 이동 처리
+                            // 이동 처리 (예: 찜한 팝업 리스트 페이지로 이동)
                         })
                         .disposed(by: self.disposeBag)
                 }
                 ToastMaker.createBookMarkToast(isBookMark: isBookmarking)
             }
             .disposed(by: disposeBag)
-
 
         // 3) 아이템 선택
         mainView.collectionView.rx.itemSelected

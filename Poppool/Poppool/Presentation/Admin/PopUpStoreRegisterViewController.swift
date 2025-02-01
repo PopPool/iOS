@@ -1144,6 +1144,9 @@ private extension PopUpStoreRegisterViewController {
             return
         }
 
+        // 업데이트할 이미지가 있다면 첫 번째 값을 대표 이미지로, 없으면 기존 스토어의 mainImageUrl 사용
+        let mainImage = updatedImagePaths?.first ?? store.mainImageUrl
+
         let request = UpdatePopUpStoreRequestDTO(
             popUpStore: .init(
                 id: store.id,
@@ -1153,8 +1156,8 @@ private extension PopUpStoreRegisterViewController {
                 address: address,
                 startDate: getFormattedDate(from: selectedStartDate),
                 endDate: getFormattedDate(from: selectedEndDate),
-                mainImageUrl: (updatedImagePaths?.first { _ in true }) ?? store.mainImageUrl,
-                bannerYn: false,
+                mainImageUrl: mainImage,
+                bannerYn: !mainImage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                 imageUrl: updatedImagePaths ?? [store.mainImageUrl],
                 startDateBeforeEndDate: true
             ),
@@ -1165,7 +1168,7 @@ private extension PopUpStoreRegisterViewController {
                 markerSnippet: "마커 설명"
             ),
             imagesToAdd: updatedImagePaths ?? [],
-            imagesToDelete: []  // 기존 이미지 삭제 로직이 필요하다면 추가
+            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
         )
 
         adminUseCase.updateStore(request: request)
@@ -1260,15 +1263,15 @@ private extension PopUpStoreRegisterViewController {
             category: .network
         )
 
+        // CreatePopUpStoreRequestDTO 생성자 내부에서 bannerYn을 자동 계산하므로 bannerYn 인자는 전달하지 않습니다.
         let request = CreatePopUpStoreRequestDTO(
             name: name,
-            categoryId: Int64(getCategoryId(from: categoryTitle)),
+            categoryId: Int64(categoryId),
             desc: description,
             address: address,
             startDate: getFormattedDate(from: selectedStartDate),
             endDate: getFormattedDate(from: selectedEndDate),
             mainImageUrl: mainImage,
-            bannerYn: false,
             imageUrlList: imagePaths,
             latitude: latitude,
             longitude: longitude,
@@ -1290,6 +1293,7 @@ private extension PopUpStoreRegisterViewController {
             )
             .disposed(by: disposeBag)
     }
+
 
     private func getCategoryId(from title: String) -> Int {
         Logger.log(message: "카테고리 매핑 시작 - 타이틀: \(title)", category: .debug)
@@ -1323,8 +1327,12 @@ private extension PopUpStoreRegisterViewController {
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "2025-01-14T09:00:00.000Z" }
         let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }
+
+
 
     private func showSuccessAlert() {
         let alert = UIAlertController(

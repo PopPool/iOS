@@ -110,9 +110,16 @@ class ClusteringManager {
 
     private func findClusterForStore(_ store: MapPopUpStore, in clusters: [MutableCluster]) -> MutableCluster? {
         return clusters.first { cluster in
-            let address = store.address
+            // 좌표 비교: 위도/경도 차이가 아주 작으면 동일한 위치로 간주
+            let latDiff = abs(store.coordinate.latitude - cluster.base.coordinate.latitude)
+            let lonDiff = abs(store.coordinate.longitude - cluster.base.coordinate.longitude)
+            // 예시 임계값: 0.0001 이하 → 동일한 위치
+            if latDiff < 0.0001 && lonDiff < 0.0001 {
+                return true
+            }
+            // 기존: 주소에 특정 키워드가 포함되어 있는지 검사하는 방식
             return cluster.base.subRegions.contains { region in
-                address.contains(region)
+                store.address.contains(region)
             }
         }
     }
