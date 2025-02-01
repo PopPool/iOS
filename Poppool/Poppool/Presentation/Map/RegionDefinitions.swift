@@ -24,6 +24,7 @@ enum RegionType {
     case gyeonggi
     case metropolitan
     case province
+
 }
 
 struct RegionDefinitions {

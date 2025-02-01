@@ -8,6 +8,8 @@ final class MapView: UIView {
         let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 15)
         let view = GMSMapView(frame: .zero, camera: camera)
         view.settings.myLocationButton = false
+        view.setMinZoom(7.5, maxZoom: 20)  // 올바른 방법
+
         return view
     }()
 

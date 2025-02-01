@@ -11,14 +11,13 @@ final class MapMarker: UIView {
        return imageView
    }()
 
-   private let clusterContainer: UIView = {
-       let view = UIView()
-       view.backgroundColor = .white
-       view.layer.cornerRadius = 12
-       view.layer.borderWidth = 1
-       view.layer.borderColor = UIColor.black.cgColor
-       return view
-   }()
+    private let clusterContainer: UIView = {
+          let view = UIView()
+          view.backgroundColor = .blu500
+          view.layer.cornerRadius = 12
+          view.layer.borderWidth = 0
+          return view
+      }()
 
    private let labelStackView: UIStackView = {
        let stack = UIStackView()
@@ -115,6 +114,7 @@ extension MapMarker: Inputable {
             markerImageView.isHidden = true
             clusterContainer.isHidden = false
             regionLabel.text = input.regionName
+            regionLabel.textColor = .w100
             countLabel.text = "\(input.count)"
 
             // 텍스트 크기에 따른 너비 계산을 위해 우선 레이아웃 업데이트
