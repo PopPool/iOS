@@ -79,9 +79,11 @@ private extension DetailCommentTitleSectionCell {
 extension DetailCommentTitleSectionCell: Inputable {
     struct Input {
         var commentCount: Int64
+        var buttonIsHidden: Bool = false
     }
     
     func injection(with input: Input) {
         countLabel.setLineHeightText(text: "총 \(input.commentCount)개", font: .KorFont(style: .regular, size: 13))
+        totalViewButton.isHidden = input.buttonIsHidden
     }
 }

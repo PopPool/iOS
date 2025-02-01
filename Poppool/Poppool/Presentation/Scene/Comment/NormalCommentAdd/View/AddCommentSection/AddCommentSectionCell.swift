@@ -105,6 +105,7 @@ private extension AddCommentSectionCell {
                 owner.contentView.layer.borderColor = state.borderColor?.cgColor
                 owner.countLabel.textColor = state.countLabelColor
                 owner.commentTextView.textColor = state.textColor
+                owner.noticeLabel.text = state.description
             }
             .disposed(by: disposeBag)
     }

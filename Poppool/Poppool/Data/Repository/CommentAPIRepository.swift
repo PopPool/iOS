@@ -22,4 +22,9 @@ final class CommentAPIRepository {
         let endPoint = CommentAPIEndPoint.postCommentAdd(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
+    
+    func deleteComment(request: DeleteCommentRequestDTO) -> Completable {
+        let endPoint = CommentAPIEndPoint.deleteComment(request: request)
+        return provider.request(with: endPoint, interceptor: tokenInterceptor)
+    }
 }

@@ -95,7 +95,8 @@ final class CommentListReactor: Reactor {
                             likeCount: commentResponse.likeCount,
                             isLogin: true,
                             title: nil,
-                            creator: commentResponse.creator
+                            creator: commentResponse.creator,
+                            isMyComment: commentResponse.myCommentYn
                         )
                     })
                     owner.commentTitleSection.inputDataList = [.init(count: response.commentList.count)]
@@ -125,7 +126,8 @@ final class CommentListReactor: Reactor {
                             likeCount: commentResponse.likeCount,
                             isLogin: true,
                             title: nil,
-                            creator: commentResponse.creator
+                            creator: commentResponse.creator,
+                            isMyComment: commentResponse.myCommentYn
                         )
                     }))
                     owner.commentTitleSection.inputDataList = [.init(count: owner.commentSection.dataCount)]

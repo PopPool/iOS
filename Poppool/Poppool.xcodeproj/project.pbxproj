@@ -88,6 +88,13 @@
 		081899522D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */; };
 		081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */; };
 		082197A12D426DCB0054094A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 082197A02D426DCB0054094A /* Then */; };
+		082197A72D4E3EE00054094A /* CommentMyMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197A62D4E3EE00054094A /* CommentMyMenuView.swift */; };
+		082197A92D4E3EE90054094A /* CommentMyMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197A82D4E3EE90054094A /* CommentMyMenuController.swift */; };
+		082197AB2D4E3EEF0054094A /* CommentMyMenuReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197AA2D4E3EEF0054094A /* CommentMyMenuReactor.swift */; };
+		082197AD2D4E49370054094A /* DeleteCommentRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197AC2D4E49370054094A /* DeleteCommentRequestDTO.swift */; };
+		082197B02D4E4E190054094A /* NormalCommentEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197AF2D4E4E190054094A /* NormalCommentEditView.swift */; };
+		082197B22D4E4E200054094A /* NormalCommentEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197B12D4E4E200054094A /* NormalCommentEditController.swift */; };
+		082197B42D4E4E280054094A /* NormalCommentEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197B32D4E4E280054094A /* NormalCommentEditReactor.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
 		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
@@ -562,6 +569,13 @@
 		0818994F2D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalView.swift; sourceTree = "<group>"; };
 		081899512D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalController.swift; sourceTree = "<group>"; };
 		081899532D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkPopUpViewTypeModalReactor.swift; sourceTree = "<group>"; };
+		082197A62D4E3EE00054094A /* CommentMyMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentMyMenuView.swift; sourceTree = "<group>"; };
+		082197A82D4E3EE90054094A /* CommentMyMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentMyMenuController.swift; sourceTree = "<group>"; };
+		082197AA2D4E3EEF0054094A /* CommentMyMenuReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentMyMenuReactor.swift; sourceTree = "<group>"; };
+		082197AC2D4E49370054094A /* DeleteCommentRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteCommentRequestDTO.swift; sourceTree = "<group>"; };
+		082197AF2D4E4E190054094A /* NormalCommentEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalCommentEditView.swift; sourceTree = "<group>"; };
+		082197B12D4E4E200054094A /* NormalCommentEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalCommentEditController.swift; sourceTree = "<group>"; };
+		082197B32D4E4E280054094A /* NormalCommentEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalCommentEditReactor.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
@@ -1311,6 +1325,35 @@
 			path = ViewTypeModal;
 			sourceTree = "<group>";
 		};
+		082197A42D4E3E9B0054094A /* CommentMyMenu */ = {
+			isa = PBXGroup;
+			children = (
+				082197A62D4E3EE00054094A /* CommentMyMenuView.swift */,
+				082197A82D4E3EE90054094A /* CommentMyMenuController.swift */,
+				082197AA2D4E3EEF0054094A /* CommentMyMenuReactor.swift */,
+			);
+			path = CommentMyMenu;
+			sourceTree = "<group>";
+		};
+		082197A52D4E3EAC0054094A /* CommentInfoMenu */ = {
+			isa = PBXGroup;
+			children = (
+				086F89C12D1E345D00CA4FC9 /* CommentUserInfo */,
+				082197A42D4E3E9B0054094A /* CommentMyMenu */,
+			);
+			path = CommentInfoMenu;
+			sourceTree = "<group>";
+		};
+		082197AE2D4E4E040054094A /* NormalCommentEdit */ = {
+			isa = PBXGroup;
+			children = (
+				082197AF2D4E4E190054094A /* NormalCommentEditView.swift */,
+				082197B12D4E4E200054094A /* NormalCommentEditController.swift */,
+				082197B32D4E4E280054094A /* NormalCommentEditReactor.swift */,
+			);
+			path = NormalCommentEdit;
+			sourceTree = "<group>";
+		};
 		083A256B2CF361190099B58E /* Application */ = {
 			isa = PBXGroup;
 			children = (
@@ -1609,9 +1652,10 @@
 		083C86332D0C7EDB003F441C /* Comment */ = {
 			isa = PBXGroup;
 			children = (
+				082197AE2D4E4E040054094A /* NormalCommentEdit */,
+				082197A52D4E3EAC0054094A /* CommentInfoMenu */,
 				086F89D12D1E6D9100CA4FC9 /* OtherUserComment */,
 				086F89C82D1E429400CA4FC9 /* CommentUserBlock */,
-				086F89C12D1E345D00CA4FC9 /* CommentUserInfo */,
 				08A2E48D2D1BF6D900102313 /* CommentList */,
 				08A2E47E2D1BCDB800102313 /* CommentDetail */,
 				083C86572D0DEFB1003F441C /* CommentCheck */,
@@ -1759,6 +1803,7 @@
 			isa = PBXGroup;
 			children = (
 				083C86752D0EE2CF003F441C /* PostCommentRequestDTO.swift */,
+				082197AC2D4E49370054094A /* DeleteCommentRequestDTO.swift */,
 			);
 			path = RequestDTO;
 			sourceTree = "<group>";
@@ -3228,6 +3273,7 @@
 				08DC62052CF8AC0E002A2F44 /* HomeController.swift in Sources */,
 				4EA2C93D2D424D3300F4D97C /* MapDirectionRepository.swift in Sources */,
 				083C86702D0ECB8E003F441C /* InstaGuideChildSectionCell.swift in Sources */,
+				082197B02D4E4E190054094A /* NormalCommentEditView.swift in Sources */,
 				086F89D02D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift in Sources */,
 				081898CE2D30D5C60067BF01 /* InfoEditModalReactor.swift in Sources */,
 				083C865D2D0DEFD5003F441C /* CommentCheckReactor.swift in Sources */,
@@ -3246,6 +3292,7 @@
 				4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
 				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
+				082197B22D4E4E200054094A /* NormalCommentEditController.swift in Sources */,
 				081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */,
 				081899452D35FEA10067BF01 /* RecentPopUpSection.swift in Sources */,
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
@@ -3472,6 +3519,7 @@
 				4EA2C93F2D424D7400F4D97C /* MapDirectionUseCase.swift in Sources */,
 				088DE2512D13019E0030FA9E /* DetailCommentTitleSectionCell.swift in Sources */,
 				083C86592D0DEFC3003F441C /* CommentCheckView.swift in Sources */,
+				082197AB2D4E3EEF0054094A /* CommentMyMenuReactor.swift in Sources */,
 				083C86732D0EE2B1003F441C /* CommentAPIEndPoint.swift in Sources */,
 				081898AC2D2CEA940067BF01 /* WithdrawlCheckSection.swift in Sources */,
 				08B1913B2CF366A00057BC04 /* UIApplication+.swift in Sources */,
@@ -3488,6 +3536,8 @@
 				BD9103872CF614A900BBCCAE /* Category.swift in Sources */,
 				083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */,
 				088DE25F2D145E3F0030FA9E /* DetailSimilarSectionCell.swift in Sources */,
+				082197AD2D4E49370054094A /* DeleteCommentRequestDTO.swift in Sources */,
+				082197B42D4E4E280054094A /* NormalCommentEditReactor.swift in Sources */,
 				081898FF2D33DA440067BF01 /* GetBlockUserListRequestDTO.swift in Sources */,
 				BD9103852CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift in Sources */,
 				08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */,
@@ -3501,6 +3551,7 @@
 				4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */,
 				083C86472D0DCDFB003F441C /* AddCommentTitleSection.swift in Sources */,
 				0841BAB62CFABEDC00049E31 /* HomePopularCardSectionCell.swift in Sources */,
+				082197A92D4E3EE90054094A /* CommentMyMenuController.swift in Sources */,
 				08B191822CF48A7B0057BC04 /* SignUpStep2Controller.swift in Sources */,
 				086F8A112D26297D00CA4FC9 /* MyPageCommentSectionCell.swift in Sources */,
 				4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */,
@@ -3517,6 +3568,7 @@
 				088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */,
 				081898B72D2D23A90067BF01 /* UINavigationController+.swift in Sources */,
 				08B191A22CF4AE890057BC04 /* ToastMaker.swift in Sources */,
+				082197A72D4E3EE00054094A /* CommentMyMenuView.swift in Sources */,
 				086F89F72D226DF600CA4FC9 /* GetMyPageResponseDTO.swift in Sources */,
 				083C86512D0DD3AB003F441C /* AddCommentImageSectionCell.swift in Sources */,
 			);

@@ -277,6 +277,7 @@ extension DetailCommentSectionCell: Inputable {
         var isLogin: Bool
         var title: String?
         var creator: String?
+        var isMyComment: Bool
     }
     
     func injection(with input: Input) {

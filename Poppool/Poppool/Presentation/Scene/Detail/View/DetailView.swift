@@ -19,7 +19,7 @@ final class DetailView: UIView {
     }()
     
     let commentPostButton: PPButton = {
-        let button = PPButton(style: .primary, text: "코멘트 작성하기")
+        let button = PPButton(style: .primary, text: "코멘트 작성하기", disabledText: "코멘트 작성하기")
         return button
     }()
     

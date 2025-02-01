@@ -127,6 +127,7 @@ extension DetailController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
+                owner.mainView.commentPostButton.isEnabled = state.commentButtonIsEnable
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
             }
