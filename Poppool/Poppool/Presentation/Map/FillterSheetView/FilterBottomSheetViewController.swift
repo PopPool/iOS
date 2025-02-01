@@ -43,6 +43,17 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupLayout()
         setupGestures()
         setupCollectionView()
+        containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
+            guard let self = self, let reactor = self.reactor else { return }
+
+            // Reactor에 액션 전달
+            if reactor.currentState.selectedCategories.contains(removedOption) {
+                reactor.action.onNext(.toggleCategory(removedOption))
+            } else if reactor.currentState.selectedSubRegions.contains(removedOption) {
+                reactor.action.onNext(.toggleSubRegion(removedOption))
+            }
+        }
+    
     }
 
     // MARK: - Setup
@@ -104,6 +115,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
            .disposed(by: disposeBag)
 
         
+
         containerView.saveButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self, let reactor = self.reactor else { return }
@@ -114,6 +126,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 )
 
                 self.onSave?(filterData)
+                reactor.action.onNext(.applyFilters(filterData.locations + filterData.categories))
+
                 self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
@@ -192,7 +206,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
 
                 self.containerView.balloonBackgroundView.configure(
                            with: location.sub,
-                           selectedRegions: selectedSubRegions,  // selectedSubRegions가 빈 배열이면 모두 선택 해제 상태가 됨
+                           selectedRegions: selectedSubRegions,
                            mainRegionTitle: location.main,
                            selectionHandler: { [weak self] subRegion in
                                self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
@@ -243,11 +257,24 @@ final class FilterBottomSheetViewController: UIViewController, View {
 
         reactor.state.map { $0.selectedSubRegions + $0.selectedCategories }
             .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
             .bind { [weak self] selectedOptions in
-                self?.containerView.filterChipsView.updateChips(with: selectedOptions)
+                UIView.performWithoutAnimation {
+                    self?.containerView.filterChipsView.updateChips(with: selectedOptions)
+                    self?.containerView.layoutIfNeeded()
+                }
             }
             .disposed(by: disposeBag)
+
+        reactor.state.map { $0.savedSubRegions + $0.savedCategories }
+            .distinctUntilChanged()
+            .bind { [weak self] selectedOptions in
+                UIView.performWithoutAnimation {
+                    self?.containerView.filterChipsView.updateChips(with: selectedOptions)
+                    self?.containerView.layoutIfNeeded()
+                }
+            }
+            .disposed(by: disposeBag)
+
 
         reactor.state.map { $0.isSaveEnabled }
             .distinctUntilChanged()
@@ -287,13 +314,20 @@ final class FilterBottomSheetViewController: UIViewController, View {
     }
 
     func showBottomSheet() {
-        containerView.update(locationText: savedLocation, categoryText: savedCategory)
+        guard let reactor = reactor else { return }
+
+        containerView.update(
+            locationText: reactor.currentState.savedSubRegions.joined(separator: ", "),
+            categoryText: reactor.currentState.savedCategories.joined(separator: ", ")
+        )
+
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.dimmedView.alpha = 1
             self.bottomConstraint?.update(offset: 0)
             self.view.layoutIfNeeded()
         }
     }
+
 
     func hideBottomSheet() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {

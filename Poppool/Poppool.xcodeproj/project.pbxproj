@@ -385,6 +385,10 @@
 		4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */; };
 		4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECB2D12CEB6001EF91C /* MapView.swift */; };
 		4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
+		4E6A06702D42A96100B2A658 /* FullScreenMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6A066F2D42A96100B2A658 /* FullScreenMapViewController.swift */; };
+		4E6C07062D4B6E56008A962A /* RegionDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */; };
+		4E6C07082D4B6E74008A962A /* ClusteringModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6C07072D4B6E74008A962A /* ClusteringModels.swift */; };
+		4E6C070A2D4B6E81008A962A /* ClusteringManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6C07092D4B6E81008A962A /* ClusteringManager.swift */; };
 		4E6CA4852D34D6ED0034D09A /* AdminBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6CA4842D34D6ED0034D09A /* AdminBottomSheetReactor.swift */; };
 		4E755B1D2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */; };
 		4E755B1F2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */; };
@@ -397,13 +401,19 @@
 		4E7823A92D2E84FB00AC5110 /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
 		4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
 		4E78706F2D37CB2200465FC9 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
+		4E9790C52D40E13500210499 /* MapGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9790C42D40E13500210499 /* MapGuideViewController.swift */; };
 		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
 		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
+		4EA2C93D2D424D3300F4D97C /* MapDirectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */; };
+		4EA2C93F2D424D7400F4D97C /* MapDirectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */; };
+		4EA2C9412D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */; };
+		4EA2C9432D424DF900F4D97C /* FindDirectionEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */; };
 		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
 		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
 		4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */; };
 		4EAB809F2D3F8EF50041AF30 /* ViewportBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */; };
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
+		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
 		4EEA1D952D358B23003E7DE9 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */; };
@@ -842,6 +852,10 @@
 		4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSearchInput.swift; sourceTree = "<group>"; };
 		4E685ECB2D12CEB6001EF91C /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		4E685ECC2D12CEB6001EF91C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		4E6A066F2D42A96100B2A658 /* FullScreenMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenMapViewController.swift; sourceTree = "<group>"; };
+		4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionDefinitions.swift; sourceTree = "<group>"; };
+		4E6C07072D4B6E74008A962A /* ClusteringModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusteringModels.swift; sourceTree = "<group>"; };
+		4E6C07092D4B6E81008A962A /* ClusteringManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusteringManager.swift; sourceTree = "<group>"; };
 		4E6CA4842D34D6ED0034D09A /* AdminBottomSheetReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetReactor.swift; sourceTree = "<group>"; };
 		4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAdminPopUpStoreListResponseDTO.swift; sourceTree = "<group>"; };
 		4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminAPIEndpoint.swift; sourceTree = "<group>"; };
@@ -852,13 +866,19 @@
 		4E755B282D2BA65A00ADFB21 /* AdminReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminReactor.swift; sourceTree = "<group>"; };
 		4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUseCase.swift; sourceTree = "<group>"; };
 		4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRepository.swift; sourceTree = "<group>"; };
+		4E9790C42D40E13500210499 /* MapGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideViewController.swift; sourceTree = "<group>"; };
 		4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetView.swift; sourceTree = "<group>"; };
 		4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetViewController.swift; sourceTree = "<group>"; };
 		4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterViewController.swift; sourceTree = "<group>"; };
+		4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionRepository.swift; sourceTree = "<group>"; };
+		4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionUseCase.swift; sourceTree = "<group>"; };
+		4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpDirectionResponseDTO.swift; sourceTree = "<group>"; };
+		4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindDirectionEndPoint.swift; sourceTree = "<group>"; };
 		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
 		4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSMapViewDelegateProxy.swift; sourceTree = "<group>"; };
 		4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewportBounds.swift; sourceTree = "<group>"; };
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
+		4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideReactor.swift; sourceTree = "<group>"; };
 		4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedImage.swift; sourceTree = "<group>"; };
 		4EEA1D922D358839003E7DE9 /* PopUpStoreRegisterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterReactor.swift; sourceTree = "<group>"; };
@@ -2627,6 +2647,10 @@
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
+				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
+				4E6C07072D4B6E74008A962A /* ClusteringModels.swift */,
+				4E6C07092D4B6E81008A962A /* ClusteringManager.swift */,
+				4EE5A3D12D40E3B100A2469A /* FindMap */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -2695,6 +2719,18 @@
 			path = Domain;
 			sourceTree = "<group>";
 		};
+		4EA2C93B2D424D2600F4D97C /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				4E6A066F2D42A96100B2A658 /* FullScreenMapViewController.swift */,
+				4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */,
+				4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */,
+				4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */,
+				4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		4EDDEFB22D2D284B00CFAFA5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -2702,6 +2738,16 @@
 				4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		4EE5A3D12D40E3B100A2469A /* FindMap */ = {
+			isa = PBXGroup;
+			children = (
+				4EA2C93B2D424D2600F4D97C /* New Group */,
+				4E9790C42D40E13500210499 /* MapGuideViewController.swift */,
+				4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */,
+			);
+			path = FindMap;
 			sourceTree = "<group>";
 		};
 		4EED9BAA2D2272F500B288E7 /* Common */ = {
@@ -3070,6 +3116,7 @@
 				083A25C82CF363C00099B58E /* LoginController.swift in Sources */,
 				081899292D3500C50067BF01 /* FAQReactor.swift in Sources */,
 				083A25B72CF362670099B58E /* RequestEndpoint.swift in Sources */,
+				4E6C070A2D4B6E81008A962A /* ClusteringManager.swift in Sources */,
 				08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */,
 				083A25B82CF362670099B58E /* IndicatorMaker.swift in Sources */,
 				086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */,
@@ -3077,6 +3124,7 @@
 				081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */,
 				083C866B2D0ECB4F003F441C /* InstaGuideSectionCell.swift in Sources */,
 				083C86202D087445003F441C /* GetPopUpDetailResponse.swift in Sources */,
+				4EA2C9432D424DF900F4D97C /* FindDirectionEndPoint.swift in Sources */,
 				081898FD2D33D9ED0067BF01 /* GetBlockUserListResponse.swift in Sources */,
 				083A25B22CF362670099B58E /* NetworkError.swift in Sources */,
 				081899522D363E640067BF01 /* BookMarkPopUpViewTypeModalController.swift in Sources */,
@@ -3108,6 +3156,7 @@
 				08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */,
 				081899052D34080B0067BF01 /* BlockUserListSectionCell.swift in Sources */,
 				4E685EEA2D12CEB6001EF91C /* MapViewController.swift in Sources */,
+				4E6C07062D4B6E56008A962A /* RegionDefinitions.swift in Sources */,
 				089952582D0347AC0022AEF9 /* SearchCategoryController.swift in Sources */,
 				0841BAAA2CFA354C00049E31 /* HomeTitleSectionCell.swift in Sources */,
 				08B191612CF430E70057BC04 /* PPProgressView.swift in Sources */,
@@ -3177,6 +3226,7 @@
 				BD9103862CF614A900BBCCAE /* BannerPopUpStore.swift in Sources */,
 				08B191862CF48A8B0057BC04 /* SignUpStep2Reactor.swift in Sources */,
 				08DC62052CF8AC0E002A2F44 /* HomeController.swift in Sources */,
+				4EA2C93D2D424D3300F4D97C /* MapDirectionRepository.swift in Sources */,
 				083C86702D0ECB8E003F441C /* InstaGuideChildSectionCell.swift in Sources */,
 				086F89D02D1E60A100CA4FC9 /* PostUserBlockRequestDTO.swift in Sources */,
 				081898CE2D30D5C60067BF01 /* InfoEditModalReactor.swift in Sources */,
@@ -3193,6 +3243,7 @@
 				0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
 				4E6CA4852D34D6ED0034D09A /* AdminBottomSheetReactor.swift in Sources */,
+				4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */,
 				08DC62072CF8AC14002A2F44 /* HomeReactor.swift in Sources */,
 				081898F72D33D6B70067BF01 /* BlockUserManageReactor.swift in Sources */,
 				081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */,
@@ -3241,6 +3292,7 @@
 				083C86292D088080003F441C /* DetailContentSection.swift in Sources */,
 				08DC61FA2CF7684F002A2F44 /* SignUpCompleteController.swift in Sources */,
 				083C864A2D0DCF96003F441C /* AddCommentDescriptionSection.swift in Sources */,
+				4E9790C52D40E13500210499 /* MapGuideViewController.swift in Sources */,
 				08B191A42CF5A7030057BC04 /* PPSegmentedControl.swift in Sources */,
 				081898DC2D326DC10067BF01 /* IntroState.swift in Sources */,
 				0899525C2D0347BD0022AEF9 /* SearchCategoryView.swift in Sources */,
@@ -3374,6 +3426,7 @@
 				081898A52D2CC0180067BF01 /* WithdrawlReasonController.swift in Sources */,
 				BDCA41C32CF35AC0005EECF6 /* SceneDelegate.swift in Sources */,
 				08B1917F2CF46DF20057BC04 /* TermsDetailView.swift in Sources */,
+				4E6A06702D42A96100B2A658 /* FullScreenMapViewController.swift in Sources */,
 				4E685EDD2D12CEB6001EF91C /* MapPopUpStoreDTO.swift in Sources */,
 				08B191412CF367FF0057BC04 /* UIFont+.swift in Sources */,
 				0841BA8E2CF9F8A100049E31 /* ImageBannerChildSection.swift in Sources */,
@@ -3416,6 +3469,7 @@
 				089952552D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift in Sources */,
 				BD9103662CF6149D00BBCCAE /* PopUpStoreResponseDTO.swift in Sources */,
 				0841BA802CF9F34100049E31 /* ImageBannerChildSectionCell.swift in Sources */,
+				4EA2C93F2D424D7400F4D97C /* MapDirectionUseCase.swift in Sources */,
 				088DE2512D13019E0030FA9E /* DetailCommentTitleSectionCell.swift in Sources */,
 				083C86592D0DEFC3003F441C /* CommentCheckView.swift in Sources */,
 				083C86732D0EE2B1003F441C /* CommentAPIEndPoint.swift in Sources */,
@@ -3440,6 +3494,7 @@
 				08B191762CF440C40057BC04 /* PPButton.swift in Sources */,
 				083A25CC2CF363CB0099B58E /* LoginView.swift in Sources */,
 				083A259B2CF362090099B58E /* SectionSupplementaryItem.swift in Sources */,
+				4EA2C9412D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift in Sources */,
 				086F89CA2D1E42A700CA4FC9 /* CommentUserBlockView.swift in Sources */,
 				086DD8D02CFDFEB900B97D3B /* HomeListReactor.swift in Sources */,
 				081899202D34DF880067BF01 /* MyPageNoticeDetailController.swift in Sources */,
@@ -3449,6 +3504,7 @@
 				08B191822CF48A7B0057BC04 /* SignUpStep2Controller.swift in Sources */,
 				086F8A112D26297D00CA4FC9 /* MyPageCommentSectionCell.swift in Sources */,
 				4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */,
+				4E6C07082D4B6E74008A962A /* ClusteringModels.swift in Sources */,
 				08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */,
 				0818989C2D2BAA570067BF01 /* WithdrawlCheckModalView.swift in Sources */,
 				081899122D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift in Sources */,

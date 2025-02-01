@@ -83,7 +83,7 @@ private extension StoreListCell {
             make.height.equalTo(thumbnailImageView.snp.width)
         }
 
-        thumbnailImageView.addSubview(bookmarkButton)
+        contentView.addSubview(bookmarkButton)
         bookmarkButton.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview().inset(8)
             make.size.equalTo(24)
@@ -140,4 +140,5 @@ extension StoreListCell: Inputable {
         let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
         bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
+
 }

@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class PopupCardCell: UICollectionViewCell {
     static let identifier = "PopupCardCell"
@@ -25,8 +26,6 @@ final class PopupCardCell: UICollectionViewCell {
     // MARK: - Setup
     private func setupLayout() {
         contentView.layer.cornerRadius = 12
-//        contentView.layer.borderWidth = 1
-//        contentView.layer.borderColor = UIColor.lightGray.cgColor
         contentView.clipsToBounds = true
 
         contentView.addSubview(imageView)
@@ -35,59 +34,58 @@ final class PopupCardCell: UICollectionViewCell {
         contentView.addSubview(addressLabel)
         contentView.addSubview(dateLabel)
 
-        // Image View
+        // 이미지뷰 설정
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(12)
+            make.leading.equalToSuperview().offset(16)  // 왼쪽 여백 16px
+            make.centerY.equalToSuperview()  // 수직 중앙 정렬
             make.width.height.equalTo(97)
         }
 
-        categoryLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
+        // 카테고리 레이블
+        categoryLabel.font = .systemFont(ofSize: 11, weight: .bold)
         categoryLabel.textColor = .systemBlue
         categoryLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
+            make.top.equalTo(imageView)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.trailing.equalToSuperview().inset(16)  // 오른쪽 여백 16px
         }
 
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        // 타이틀 레이블
+        titleLabel.font = .systemFont(ofSize: 14, weight: .bold)
         titleLabel.numberOfLines = 2
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.trailing.equalToSuperview().inset(16)
         }
 
-        // Address Label
-        addressLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        // 주소 레이블
+        addressLabel.font = .systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
         addressLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.trailing.equalToSuperview().inset(16)
         }
 
-        // Date Label
-        dateLabel.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        // 날짜 레이블
+        dateLabel.font = .systemFont(ofSize: 12, weight: .light)
         dateLabel.textColor = .g400
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(addressLabel.snp.bottom).offset(4)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.lessThanOrEqualToSuperview().offset(-12)
+            make.trailing.equalToSuperview().inset(16)
+            make.bottom.lessThanOrEqualTo(imageView)  // 이미지뷰 높이에 맞춤
         }
     }
 
+
     private func configureUI() {
-        // 배경색 설정
         contentView.backgroundColor = UIColor.white
-
-        // 카테고리 강조 색상
         categoryLabel.textColor = .systemBlue
-
-        // Placeholder 배경 설정
         imageView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
     }
 
@@ -96,8 +94,16 @@ final class PopupCardCell: UICollectionViewCell {
         titleLabel.text = store.name
         categoryLabel.text = "#\(store.category)"
         addressLabel.text = store.address
-        dateLabel.text = "\(store.startDate) ~ \(store.endDate)"
 
-        imageView.image = UIImage(named: "placeholderImage") // 실제 이미지 로직에 맞게 수정 예정
+        // Date label formatting
+        let startDate = store.startDate.split(separator: "T").first ?? ""
+        let endDate = store.endDate.split(separator: "T").first ?? ""
+        dateLabel.text = "\(startDate) ~ \(endDate)"
+
+        if let imageUrl = store.mainImageUrl {
+            imageView.setPPImage(path: imageUrl)
+        } else {
+            imageView.image = UIImage(named: "placeholderImage")
+        }
     }
 }

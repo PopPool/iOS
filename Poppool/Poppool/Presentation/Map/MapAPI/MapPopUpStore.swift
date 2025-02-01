@@ -20,23 +20,28 @@ struct MapPopUpStore: Equatable {
     let markerTitle: String
     let markerSnippet: String
     let mainImageUrl: String? // 이미지 URL 추가
+    
 
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
 
-extension MapPopUpStore {
-    func toMarkerInput() -> MapMarker.Input {
-        return .init(
-            title: self.markerTitle,
-            count: 1  // 클러스터링 구현 시 수정
-        )
-    }
+    extension MapPopUpStore {
+        func toMarkerInput() -> MapMarker.Input {
+            return MapMarker.Input(
+                isSelected: false,
+                isCluster: false,
+                regionName: self.markerTitle,  // 또는 name이나 다른 적절한 필드
+                count: 0
+            )
+        }
+    
+
 
     func toStoreItem() -> StoreItem {
         return StoreItem(
-            id: Int(id),
+            id: id,
             thumbnailURL: mainImageUrl ?? "", // 이미지 URL 매핑
             category: category,
             title: name,

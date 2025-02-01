@@ -30,7 +30,39 @@ struct CreatePopUpStoreRequestDTO: Encodable {
     let markerTitle: String
     let markerSnippet: String
     let startDateBeforeEndDate: Bool
+
+    /// - 만약 대표 이미지 URL(mainImageUrl)이 비어 있지 않다면 배너 이미지로 간주하여 bannerYn을 true로 설정합니다.
+    init(name: String,
+         categoryId: Int64,
+         desc: String,
+         address: String,
+         startDate: String,
+         endDate: String,
+         mainImageUrl: String,
+         imageUrlList: [String?],
+         latitude: Double,
+         longitude: Double,
+         markerTitle: String,
+         markerSnippet: String,
+         startDateBeforeEndDate: Bool) {
+
+        self.name = name
+        self.categoryId = categoryId
+        self.desc = desc
+        self.address = address
+        self.startDate = startDate
+        self.endDate = endDate
+        self.mainImageUrl = mainImageUrl
+        self.imageUrlList = imageUrlList
+        self.latitude = latitude
+        self.longitude = longitude
+        self.markerTitle = markerTitle
+        self.markerSnippet = markerSnippet
+        self.startDateBeforeEndDate = startDateBeforeEndDate
+        self.bannerYn = !mainImageUrl.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }
+
 
 // MARK: - Update Store Request
 struct UpdatePopUpStoreRequestDTO: Encodable {

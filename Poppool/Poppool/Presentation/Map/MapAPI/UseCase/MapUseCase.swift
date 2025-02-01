@@ -15,7 +15,11 @@ protocol MapUseCase {
         query: String,
         categories: [Int64]
     ) -> Observable<[MapPopUpStore]>
+
+    func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore]
+
 }
+
 class DefaultMapUseCase: MapUseCase {
     private let repository: MapRepository
 
@@ -56,4 +60,19 @@ class DefaultMapUseCase: MapUseCase {
         )
         .map { $0.map { $0.toDomain() } }
     }
-}
+    func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore] {
+           guard !selectedRegions.isEmpty else { return stores }
+
+           return stores.filter { store in
+               let components = store.address.components(separatedBy: " ")
+               guard components.count >= 2 else { return false }
+
+               let mainRegion = components[0].replacingOccurrences(of: "특별시", with: "")
+                                           .replacingOccurrences(of: "광역시", with: "")
+               let subRegion = components[1]
+
+               return selectedRegions.contains("\(mainRegion)전체") ||
+                      selectedRegions.contains(subRegion)
+           }
+       }
+   }

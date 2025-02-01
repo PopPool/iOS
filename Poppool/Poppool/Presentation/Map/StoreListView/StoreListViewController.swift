@@ -33,6 +33,11 @@ final class StoreListViewController: UIViewController, View {
         setupLayout()
         setupCollectionView()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reactor?.action.onNext(.viewDidLoad) // 데이터 재로드
+    }
+
 
     private func setupLayout() {
         view.backgroundColor = .clear
@@ -62,7 +67,7 @@ final class StoreListViewController: UIViewController, View {
                     category: item.category,
                     title: item.title,
                     location: item.location,
-                    date: item.dateRange,
+                    date: item.formattedDateRange,
                     isBookmarked: item.isBookmarked
                 ))
                 // 북마크 버튼
@@ -77,19 +82,48 @@ final class StoreListViewController: UIViewController, View {
 
         reactor.state
             .map { state -> [StoreListSection] in
-                // 단일 섹션 예시
-                return [
-                    StoreListSection(items: state.stores)
-                ]
+                return [ StoreListSection(items: state.stores) ]
             }
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
+        // 찜한 팝업 토스트 처리 체인
+        reactor.state
+            .map { $0.shouldShowBookmarkToast }
+            .distinctUntilChanged()
+            .filter { $0 == true }
+            .observe(on: MainScheduler.instance)
+            .bind { isBookmarking in
+                let toastView = BookMarkToastView(isBookMark: isBookmarking)
+                if isBookmarking {
+                    toastView.moveButton.rx.tap
+                        .subscribe(onNext: { [weak self] in
+                            // 이동 처리 (예: 찜한 팝업 리스트 페이지로 이동)
+                        })
+                        .disposed(by: self.disposeBag)
+                }
+                ToastMaker.createBookMarkToast(isBookMark: isBookmarking)
+            }
+            .disposed(by: disposeBag)
+
         // 3) 아이템 선택
         mainView.collectionView.rx.itemSelected
-            .map { Reactor.Action.didSelectItem($0.item) }
-            .bind(to: reactor.action)
+            .withUnretained(self)
+            .subscribe(onNext: { owner, indexPath in
+                guard indexPath.item < owner.reactor?.currentState.stores.count ?? 0,
+                      let store = owner.reactor?.currentState.stores[indexPath.item] else { return }
+
+                let detailController = DetailController()
+                detailController.reactor = DetailReactor(popUpID: Int64(store.id))
+
+                // 네비게이션 설정 추가
+                owner.navigationController?.isNavigationBarHidden = false
+                owner.navigationController?.tabBarController?.tabBar.isHidden = false
+
+                owner.navigationController?.pushViewController(detailController, animated: true)
+            })
             .disposed(by: disposeBag)
+
 
         // 4) viewWillAppear -> viewDidLoad
         rx.viewWillAppear
@@ -111,6 +145,18 @@ final class StoreListViewController: UIViewController, View {
                 }
             })
             .disposed(by: disposeBag)
+//        mainView.collectionView.rx.willDisplayCell
+//            .map { cell, indexPath in
+//                // 마지막 셀에 도달하면 다음 페이지 로드
+//                if indexPath.item == reactor.currentState.stores.count - 1 {
+//                    return Reactor.Action.loadNextPage
+//                }
+//                return nil
+//            }
+//            .compactMap { $0 }
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
+    
     }
 
     private func presentFilterBottomSheet(for filterType: FilterType) {
