@@ -65,7 +65,7 @@ private extension CommentUserInfoView {
     func setUpConstraints() {
         self.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(34)
+            make.top.equalToSuperview().inset(32)
             make.leading.equalToSuperview().inset(20)
         }
         
@@ -78,22 +78,23 @@ private extension CommentUserInfoView {
         
         self.addSubview(normalCommentButton)
         normalCommentButton.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+            make.top.equalTo(titleLabel.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(57)
         }
         
         self.addSubview(lineView)
         lineView.snp.makeConstraints { make in
-            make.top.equalTo(normalCommentButton.snp.bottom).offset(16)
-            make.height.equalTo(2)
+            make.top.equalTo(normalCommentButton.snp.bottom)
+            make.height.equalTo(1)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
         self.addSubview(instaCommentButton)
         instaCommentButton.snp.makeConstraints { make in
-            make.top.equalTo(lineView.snp.bottom).offset(16)
+            make.top.equalTo(lineView.snp.bottom)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(32)
+            make.height.equalTo(57)
         }
     }
 }

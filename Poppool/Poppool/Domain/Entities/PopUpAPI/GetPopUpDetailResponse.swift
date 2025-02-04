@@ -18,6 +18,7 @@ struct GetPopUpDetailResponse {
     let commentCount: Int64
     let bookmarkYn: Bool
     let loginYn: Bool
+    let hasCommented: Bool
     let mainImageUrl: String?
     let imageList: [GetPopUpDetailImageResponse]
     let commentList: [GetPopUpDetailCommentResponse]
@@ -38,6 +39,7 @@ struct GetPopUpDetailCommentResponse {
     let content: String?
     let likeYn: Bool
     let likeCount: Int64
+    let myCommentYn: Bool
     let createDateTime: String?
     let commentImageList: [GetPopUpDetailImageResponse]
 }

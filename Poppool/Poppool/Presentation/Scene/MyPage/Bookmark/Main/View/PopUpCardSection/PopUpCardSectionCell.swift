@@ -30,6 +30,7 @@ final class PopUpCardSectionCell: UICollectionViewCell {
     
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 12)
+        label.numberOfLines = 2
         return label
     }()
     
@@ -133,14 +134,14 @@ private extension PopUpCardSectionCell {
         
         trailingView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.top.equalTo(dateLabel.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(44)
         }
         
         trailingView.addSubview(addressLabel)
         addressLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(24)
         }
     }
@@ -161,7 +162,9 @@ extension PopUpCardSectionCell: Inputable {
         imageView.setPPImage(path: input.imagePath)
         dateLabel.setLineHeightText(text: date, font: .EngFont(style: .regular, size: 13))
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 16))
+        titleLabel.textAlignment = .center
         addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 14))
+        addressLabel.textAlignment = .center
         
         if input.isBookMark {
             bookMarkButton.setImage(UIImage(named: "icon_bookmark_fill"), for: .normal)

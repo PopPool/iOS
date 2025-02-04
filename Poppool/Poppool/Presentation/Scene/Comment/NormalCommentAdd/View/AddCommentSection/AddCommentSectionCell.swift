@@ -105,6 +105,7 @@ private extension AddCommentSectionCell {
                 owner.contentView.layer.borderColor = state.borderColor?.cgColor
                 owner.countLabel.textColor = state.countLabelColor
                 owner.commentTextView.textColor = state.textColor
+                owner.noticeLabel.text = state.description
             }
             .disposed(by: disposeBag)
     }
@@ -155,9 +156,12 @@ private extension AddCommentSectionCell {
 
 extension AddCommentSectionCell: Inputable {
     struct Input {
+        var text: String?
     }
     
     func injection(with input: Input) {
+        commentTextView.text = input.text
+        commentState.accept(checkValidation(text: input.text))
     }
 }
 

@@ -91,11 +91,13 @@ final class CommentListReactor: Reactor {
                             date: commentResponse.createDateTime,
                             comment: commentResponse.content,
                             imageList: commentResponse.commentImageList.map { $0.imageUrl },
+                            imageIDList: commentResponse.commentImageList.map { $0.id },
                             isLike: commentResponse.likeYn,
                             likeCount: commentResponse.likeCount,
                             isLogin: true,
                             title: nil,
-                            creator: commentResponse.creator
+                            creator: commentResponse.creator,
+                            isMyComment: commentResponse.myCommentYn
                         )
                     })
                     owner.commentTitleSection.inputDataList = [.init(count: response.commentList.count)]
@@ -121,11 +123,13 @@ final class CommentListReactor: Reactor {
                             date: commentResponse.createDateTime,
                             comment: commentResponse.content,
                             imageList: commentResponse.commentImageList.map { $0.imageUrl },
+                            imageIDList: commentResponse.commentImageList.map { $0.id },
                             isLike: commentResponse.likeYn,
                             likeCount: commentResponse.likeCount,
                             isLogin: true,
                             title: nil,
-                            creator: commentResponse.creator
+                            creator: commentResponse.creator,
+                            isMyComment: commentResponse.myCommentYn
                         )
                     }))
                     owner.commentTitleSection.inputDataList = [.init(count: owner.commentSection.dataCount)]

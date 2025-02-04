@@ -1,8 +1,8 @@
 //
-//  CommentUserInfoController.swift
+//  CommentMyMenuController.swift
 //  Poppool
 //
-//  Created by SeoJunYoung on 12/27/24.
+//  Created by SeoJunYoung on 2/1/25.
 //
 
 import UIKit
@@ -13,18 +13,18 @@ import RxSwift
 import ReactorKit
 import PanModal
 
-final class CommentUserInfoController: BaseViewController, View {
+final class CommentMyMenuController: BaseViewController, View {
     
-    typealias Reactor = CommentUserInfoReactor
+    typealias Reactor = CommentMyMenuReactor
     
     // MARK: - Properties
     var disposeBag = DisposeBag()
     
-    private var mainView = CommentUserInfoView()
+    private var mainView = CommentMyMenuView()
 }
 
 // MARK: - Life Cycle
-extension CommentUserInfoController {
+extension CommentMyMenuController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
@@ -32,7 +32,7 @@ extension CommentUserInfoController {
 }
 
 // MARK: - SetUp
-private extension CommentUserInfoController {
+private extension CommentMyMenuController {
     func setUp() {
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
@@ -42,7 +42,7 @@ private extension CommentUserInfoController {
 }
 
 // MARK: - Methods
-extension CommentUserInfoController {
+extension CommentMyMenuController {
     func bind(reactor: Reactor) {
         mainView.cancelButton.rx.tap
             .map { _ in
@@ -51,42 +51,32 @@ extension CommentUserInfoController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        mainView.normalCommentButton.rx.tap
+        mainView.commentRemoveButton.rx.tap
             .map { _ in
-                Reactor.Action.normalButtonTapped
+                Reactor.Action.removeButtonTapped
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        mainView.instaCommentButton.rx.tap
+        mainView.commentEditButton.rx.tap
             .map { _ in
-                Reactor.Action.instaButtonTapped
+                Reactor.Action.editButtonTapped
             }
             .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        reactor.state
-            .withUnretained(self)
-            .subscribe { (owner, state) in
-                owner.mainView.titleLabel.setLineHeightText(
-                    text: "\(state.nickName ?? "")님에 대해 더 알아보기",
-                    font: .KorFont(style: .bold, size: 18)
-                )
-            }
             .disposed(by: disposeBag)
     }
 }
 
 // MARK: - PanModalPresentable
-extension CommentUserInfoController: PanModalPresentable {
+extension CommentMyMenuController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
     var longFormHeight: PanModalHeight {
-        return .intrinsicHeight
+        return .contentHeightIgnoringSafeArea(226)
     }
     var shortFormHeight: PanModalHeight {
-        return .intrinsicHeight
+        return .contentHeightIgnoringSafeArea(226)
     }
     var showDragIndicator: Bool {
         return false

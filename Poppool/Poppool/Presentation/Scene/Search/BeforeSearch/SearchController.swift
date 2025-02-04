@@ -121,6 +121,8 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
+        guard let userDefaultService = reactor?.userDefaultService else { return cell }
+        var searchList = userDefaultService.fetchArray(key: "searchList") ?? []
         guard let reactor = reactor else { return cell }
         if let cell = cell as? SearchTitleSectionCell {
             cell.titleButton.rx.tap
@@ -130,16 +132,23 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         }
         
         if let cell = cell as? CancelableTagSectionCell {
-            if indexPath.section == 3 {
-                cell.cancelButton.rx.tap
-                    .map { Reactor.Action.recentSearchListDeleteButtonTapped(indexPath: indexPath)}
-                    .bind(to: reactor.action)
-                    .disposed(by: cell.disposeBag)
-            } else {
+            if searchList.isEmpty {
                 cell.cancelButton.rx.tap
                     .map { Reactor.Action.categoryDelteButtonTapped(indexPath: indexPath)}
                     .bind(to: reactor.action)
                     .disposed(by: cell.disposeBag)
+            } else {
+                if indexPath.section == 3 {
+                    cell.cancelButton.rx.tap
+                        .map { Reactor.Action.recentSearchListDeleteButtonTapped(indexPath: indexPath)}
+                        .bind(to: reactor.action)
+                        .disposed(by: cell.disposeBag)
+                } else {
+                    cell.cancelButton.rx.tap
+                        .map { Reactor.Action.categoryDelteButtonTapped(indexPath: indexPath)}
+                        .bind(to: reactor.action)
+                        .disposed(by: cell.disposeBag)
+                }
             }
         }
         

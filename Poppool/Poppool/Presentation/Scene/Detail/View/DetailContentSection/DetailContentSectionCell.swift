@@ -74,6 +74,9 @@ private extension DetailContentSectionCell {
             make.top.bottom.equalToSuperview()
             make.height.equalTo(20)
         }
+        contentLabel.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width - 40)
+        }
         dropDownButton.addSubview(buttonImageView)
         buttonImageView.snp.makeConstraints { make in
             make.size.equalTo(14)

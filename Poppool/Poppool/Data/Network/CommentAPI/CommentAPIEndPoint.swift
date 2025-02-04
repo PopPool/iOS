@@ -19,4 +19,22 @@ struct CommentAPIEndPoint {
             bodyParameters: request
         )
     }
+    
+    static func deleteComment(request: DeleteCommentRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/comments",
+            method: .delete,
+            queryParameters: request
+        )
+    }
+    
+    static func editComment(request: PutCommentRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/comments",
+            method: .put,
+            bodyParameters: request
+        )
+    }
 }

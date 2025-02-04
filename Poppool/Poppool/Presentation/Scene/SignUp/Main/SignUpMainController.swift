@@ -187,7 +187,7 @@ extension SignUpMainController {
             .map({ state in
                 let gender =  state.selectedGenderIndex == 0
                     ? "남성"
-                    : state.selectedGenderIndex == 1 ? "여성" : "선택암함"
+                    : state.selectedGenderIndex == 1 ? "여성" : "선택안함"
                 return Reactor.Action.changeGender(gender: gender)
             })
             .bind(to: reactor.action)

@@ -65,7 +65,7 @@ final class MyPageReactor: Reactor {
 
     // 섹션들
     private var profileSection = MyPageProfileSection(inputDataList: [])
-    private var commentTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "내 코멘트", buttonTitle: "전체보기")])
+    private var commentTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "내가 코멘트한 팝업", buttonTitle: "전체보기")])
     private var commentSection = MyPageCommentSection(inputDataList: [])
     private var normalTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "일반", buttonTitle: nil)])
     private var normalSection = MyPageListSection(inputDataList: [
@@ -240,6 +240,10 @@ final class MyPageReactor: Reactor {
                 nextController.reactor = MyPageRecentReactor()
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
+            case "약관":
+                let nextController = MyPageTermsController()
+                nextController.reactor = MyPageTermsReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }

@@ -5,6 +5,7 @@
 //  Created by SeoJunYoung on 11/25/24.
 //
 
+import Foundation
 import ReactorKit
 import RxSwift
 import RxCocoa
@@ -76,10 +77,20 @@ final class SignUpStep1Reactor: Reactor {
     }
     
     func getTitle(index: Int) -> String {
-        return "[필수] 이용약관"
+        if index == 1 {
+            return "[필수] 이용약관"
+        } else {
+            return "[필수] 개인정보 수집 및 이용"
+        }
     }
     
     func getContent(index: Int) -> String {
-        return "temp Content\ntemp Content\ntemp Content\ntemp Content\ntemp Content\ntemp Content\ntemp Content\n"
+        if let path = Bundle.main.path(forResource: "Terms", ofType: "plist"),
+           let dict = NSDictionary(contentsOfFile: path) as? [String: String],
+           let longText = dict["Terms\(index)"] {
+            return longText
+        } else {
+            return ""
+        }
     }
 }

@@ -231,8 +231,9 @@ extension ImageBannerSectionCell: Inputable {
         }
         
         if input.isHiddenPauseButton {
-            stopButton.isHidden = true
             stopAutoScroll()
+            stopButton.isHidden = true
+            playButton.isHidden = true
         }
         
         bind()

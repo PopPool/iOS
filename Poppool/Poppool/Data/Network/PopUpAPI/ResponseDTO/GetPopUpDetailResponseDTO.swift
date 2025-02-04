@@ -16,6 +16,7 @@ struct GetPopUpDetailResponseDTO: Decodable {
     let commentCount: Int64
     let bookmarkYn: Bool
     let loginYn: Bool
+    let hasCommented: Bool
     let mainImageUrl: String?
     let imageList: [GetPopUpDetailImageResponseDTO]
     let commentList: [GetPopUpDetailCommentResponseDTO]
@@ -35,6 +36,7 @@ extension GetPopUpDetailResponseDTO {
             commentCount: commentCount,
             bookmarkYn: bookmarkYn,
             loginYn: loginYn,
+            hasCommented: hasCommented,
             mainImageUrl: mainImageUrl,
             imageList: imageList.map { $0.toDomain()},
             commentList: commentList.map { $0.toDomain() },
@@ -63,6 +65,7 @@ struct GetPopUpDetailCommentResponseDTO: Decodable {
     let content: String?
     let likeYn: Bool
     let likeCount: Int64
+    let myCommentYn: Bool
     let createDateTime: String?
     let commentImageList: [GetPopUpDetailImageResponseDTO]?
 }
@@ -78,6 +81,7 @@ extension GetPopUpDetailCommentResponseDTO {
             content: content,
             likeYn: likeYn,
             likeCount: likeCount,
+            myCommentYn: myCommentYn,
             createDateTime: createDateTime.toDate().toPPDateString(),
             commentImageList: commentImageList == nil ? [] : commentImageList!.map { $0.toDomain()}
         )

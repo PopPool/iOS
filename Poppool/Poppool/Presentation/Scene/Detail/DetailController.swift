@@ -70,6 +70,7 @@ private extension DetailController {
         mainView.contentCollectionView.register(DetailInfoSectionCell.self, forCellWithReuseIdentifier: DetailInfoSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailCommentTitleSectionCell.self, forCellWithReuseIdentifier: DetailCommentTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailCommentSectionCell.self, forCellWithReuseIdentifier: DetailCommentSectionCell.identifiers)
+        mainView.contentCollectionView.register(DetailEmptyCommetSectionCell.self, forCellWithReuseIdentifier: DetailEmptyCommetSectionCell.identifiers)
         mainView.contentCollectionView.register(SearchTitleSectionCell.self, forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailSimilarSectionCell.self, forCellWithReuseIdentifier: DetailSimilarSectionCell.identifiers)
         view.addSubview(mainView)
@@ -127,6 +128,7 @@ extension DetailController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
+                owner.mainView.commentPostButton.isEnabled = state.commentButtonIsEnable
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
             }
@@ -260,6 +262,16 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 .withUnretained(self)
                 .map { (owner, _) in
                     Reactor.Action.loginButtonTapped(controller: owner)
+                }
+                .bind(to: reactor.action)
+                .disposed(by: cell.disposeBag)
+        }
+        
+        if let cell = cell as? DetailEmptyCommetSectionCell {
+            cell.commentButton.rx.tap
+                .withUnretained(self)
+                .map { (owner, _) in
+                    Reactor.Action.commentButtonTapped(controller: owner)
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)

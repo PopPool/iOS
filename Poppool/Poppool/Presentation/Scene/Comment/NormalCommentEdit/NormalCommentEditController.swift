@@ -1,8 +1,8 @@
 //
-//  NormalCommentAddController.swift
+//  NormalCommentEditController.swift
 //  Poppool
 //
-//  Created by SeoJunYoung on 12/14/24.
+//  Created by SeoJunYoung on 2/1/25.
 //
 
 import UIKit
@@ -13,22 +13,22 @@ import RxSwift
 import ReactorKit
 import RxKeyboard
 
-final class NormalCommentAddController: BaseViewController, View {
+final class NormalCommentEditController: BaseViewController, View {
     
-    typealias Reactor = NormalCommentAddReactor
+    typealias Reactor = NormalCommentEditReactor
     
     // MARK: - Properties
     var disposeBag = DisposeBag()
     
     private var keyBoardDisposeBag = DisposeBag()
     
-    private var mainView = NormalCommentAddView()
+    private var mainView = NormalCommentEditView()
     
     private var sections: [any Sectionable] = []
 }
 
 // MARK: - Life Cycle
-extension NormalCommentAddController {
+extension NormalCommentEditController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
@@ -41,7 +41,7 @@ extension NormalCommentAddController {
 }
 
 // MARK: - SetUp
-private extension NormalCommentAddController {
+private extension NormalCommentEditController {
     func setUp() {
         if let layout = reactor?.compositionalLayout {
             mainView.contentCollectionView.collectionViewLayout = layout
@@ -77,7 +77,7 @@ private extension NormalCommentAddController {
 }
 
 // MARK: - Methods
-extension NormalCommentAddController {
+extension NormalCommentEditController {
     func bind(reactor: Reactor) {
         
         rx.viewWillAppear
@@ -139,11 +139,21 @@ extension NormalCommentAddController {
                 
             }
             .disposed(by: disposeBag)
+        
+        reactor.state
+            .take(1)
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                owner.sections = state.sections
+                if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
+                
+            }
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension NormalCommentAddController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension NormalCommentEditController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
