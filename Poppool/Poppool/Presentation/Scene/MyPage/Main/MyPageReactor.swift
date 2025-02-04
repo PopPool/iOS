@@ -240,6 +240,10 @@ final class MyPageReactor: Reactor {
                 nextController.reactor = MyPageRecentReactor()
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
+            case "약관":
+                let nextController = MyPageTermsController()
+                nextController.reactor = MyPageTermsReactor()
+                controller.navigationController?.pushViewController(nextController, animated: true)
             default:
                 break
             }
