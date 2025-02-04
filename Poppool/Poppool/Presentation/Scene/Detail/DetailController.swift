@@ -274,7 +274,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                     Reactor.Action.commentButtonTapped(controller: owner)
                 }
                 .bind(to: reactor.action)
-                .disposed(by: disposeBag)
+                .disposed(by: cell.disposeBag)
         }
         return cell
     }
