@@ -82,16 +82,25 @@ extension AddCommentImageSectionCell: Inputable {
     struct Input {
         var image: UIImage?
         var isFirstCell: Bool = false
+        var isEditCase: Bool = false
+        var imageURL: String?
+        var imageID: Int64?
     }
     
     func injection(with input: Input) {
+        
         if input.isFirstCell {
             imageView.image = UIImage(named: "icon_camera_blue")
             contentView.layer.borderWidth = 1
             deleteButton.isHidden = true
         } else {
-            contentView.layer.borderWidth = 0
-            imageView.image = input.image
+            if input.isEditCase {
+                contentView.layer.borderWidth = 0
+                imageView.setPPImage(path: input.imageURL)
+            } else {
+                contentView.layer.borderWidth = 0
+                imageView.image = input.image
+            }
             deleteButton.isHidden = false
         }
     }

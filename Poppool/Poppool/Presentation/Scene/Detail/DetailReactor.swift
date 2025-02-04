@@ -87,6 +87,7 @@ final class DetailReactor: Reactor {
     private var infoSection = DetailInfoSection(inputDataList: [])
     private var commentTitleSection = DetailCommentTitleSection(inputDataList: [])
     private var commentSection = DetailCommentSection(inputDataList: [])
+    private var commentEmptySection = DetailEmptyCommetSection(inputDataList: [.init()])
     private var similarTitleSecion = SearchTitleSection(inputDataList: [.init(title: "지금 보고있는 팝업과 비슷한 팝업")])
     private var similarSection = DetailSimilarSection(inputDataList: [])
     
@@ -233,43 +234,85 @@ final class DetailReactor: Reactor {
     
     func getSection() -> [any Sectionable] {
         if similarSection.inputDataList.isEmpty {
-            return [
-                imageBannerSection,
-                spacing36Section,
-                titleSection,
-                spacing20Section,
-                contentSection,
-                spacing28Section,
-                infoSection,
-                spacing40Section,
-                spacing16GraySection,
-                spacing36Section,
-                commentTitleSection,
-                spacing16Section,
-                commentSection,
-                spacing70Section
-            ]
+            if commentSection.inputDataList.isEmpty {
+                return [
+                    imageBannerSection,
+                    spacing36Section,
+                    titleSection,
+                    spacing20Section,
+                    contentSection,
+                    spacing28Section,
+                    infoSection,
+                    spacing40Section,
+                    spacing16GraySection,
+                    spacing36Section,
+                    commentTitleSection,
+                    spacing16Section,
+                    commentEmptySection,
+                    spacing70Section
+                ]
+            } else {
+                return [
+                    imageBannerSection,
+                    spacing36Section,
+                    titleSection,
+                    spacing20Section,
+                    contentSection,
+                    spacing28Section,
+                    infoSection,
+                    spacing40Section,
+                    spacing16GraySection,
+                    spacing36Section,
+                    commentTitleSection,
+                    spacing16Section,
+                    commentSection,
+                    spacing70Section
+                ]
+            }
         } else {
-            return [
-                imageBannerSection,
-                spacing36Section,
-                titleSection,
-                spacing20Section,
-                contentSection,
-                spacing28Section,
-                infoSection,
-                spacing40Section,
-                spacing16GraySection,
-                spacing36Section,
-                commentTitleSection,
-                spacing16Section,
-                commentSection,
-                spacing40Section,
-                similarTitleSecion,
-                spacing24Section,
-                similarSection,
-                spacing70Section
-            ]
+            if commentSection.inputDataList.isEmpty {
+                return [
+                    imageBannerSection,
+                    spacing36Section,
+                    titleSection,
+                    spacing20Section,
+                    contentSection,
+                    spacing28Section,
+                    infoSection,
+                    spacing40Section,
+                    spacing16GraySection,
+                    spacing36Section,
+                    commentTitleSection,
+                    spacing16Section,
+                    commentEmptySection,
+                    spacing40Section,
+                    similarTitleSecion,
+                    spacing24Section,
+                    similarSection,
+                    spacing70Section
+                ]
+            } else {
+                return [
+                    imageBannerSection,
+                    spacing36Section,
+                    titleSection,
+                    spacing20Section,
+                    contentSection,
+                    spacing28Section,
+                    infoSection,
+                    spacing40Section,
+                    spacing16GraySection,
+                    spacing36Section,
+                    commentTitleSection,
+                    spacing16Section,
+                    commentSection,
+                    spacing40Section,
+                    similarTitleSecion,
+                    spacing24Section,
+                    similarSection,
+                    spacing70Section
+                ]
+            }
         }
         
     }
@@ -307,6 +350,7 @@ final class DetailReactor: Reactor {
                         date: commentResponse.createDateTime,
                         comment: commentResponse.content,
                         imageList: commentResponse.commentImageList.map { $0.imageUrl },
+                        imageIDList: commentResponse.commentImageList.map { $0.id },
                         isLike: commentResponse.likeYn,
                         likeCount: commentResponse.likeCount,
                         isLogin: response.loginYn,
@@ -464,10 +508,10 @@ final class DetailReactor: Reactor {
 
                 case .edit:
                     owner.dismiss(animated: true) { [weak controller] in
-//                        guard let popUpName = self.popUpName else { return }
-//                        let editController = NormalCommentEditController()
-//                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName)
-//                        controller?.navigationController?.pushViewController(editController, animated: true)
+                        guard let popUpName = self.popUpName else { return }
+                        let editController = NormalCommentEditController()
+                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        controller?.navigationController?.pushViewController(editController, animated: true)
                     }
                 case .cancel:
                     owner.dismiss(animated: true)

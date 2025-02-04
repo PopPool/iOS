@@ -46,6 +46,7 @@ final class NormalCommentEditReactor: Reactor {
     var disposeBag = DisposeBag()
     private var popUpID: Int64
     private var popUpName: String
+    private var originComment: DetailCommentSection.CellType.Input
     
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
     private let imageService = PreSignedService()
@@ -68,16 +69,22 @@ final class NormalCommentEditReactor: Reactor {
     private var imageSection = AddCommentImageSection(inputDataList: [.init(isFirstCell: true)])
     private let commentTitleSection = AddCommentTitleSection(inputDataList: [.init(title: "코멘트 작성")])
     private lazy var commentDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "방문했던 \(self.popUpName)에 대한 감상평을 작성해주세요.")])
-    private let commentSection = AddCommentSection(inputDataList: [.init()])
+    private lazy var commentSection = AddCommentSection(inputDataList: [.init(text: self.originComment.comment)])
     private let spacing25Section = SpacingSection(inputDataList: [.init(spacing: 25)])
     private let spacing5Section = SpacingSection(inputDataList: [.init(spacing: 5)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing32Section = SpacingSection(inputDataList: [.init(spacing: 32)])
+    
     // MARK: - init
-    init(popUpID: Int64, popUpName: String) {
-        self.initialState = State()
+    init(popUpID: Int64, popUpName: String, comment: DetailCommentSection.CellType.Input) {
+        self.initialState = State(text: comment.comment)
         self.popUpID = popUpID
         self.popUpName = popUpName
+        self.originComment = comment
+        let imageList = zip(comment.imageList, comment.imageIDList)
+        imageSection.inputDataList.append(contentsOf: imageList.map({ url, id in
+                .init(image: nil, isFirstCell: false, isEditCase: true, imageURL: url, imageID: id)
+        }))
     }
     
     // MARK: - Reactor Methods
@@ -137,31 +144,67 @@ final class NormalCommentEditReactor: Reactor {
                 .disposed(by: nextController.disposeBag)
         case .setComment(let text):
             newState.text = text
+            commentSection.inputDataList[0].text = text
         case .save(let controller):
             newState.isSaving = true
-            if imageSection.dataCount == 1 {
-                commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: [])
-                    .subscribe {
-                        controller.navigationController?.popViewController(animated: true)
+            
+            let addImages = imageSection.inputDataList.compactMap { $0.image }.enumerated().map { $0 }
+            let uuid = UUID().uuidString
+            let pathList = addImages.map { "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg" }
+            
+            let keepImages = imageSection.inputDataList.compactMap { $0.imageURL }
+            
+            let originImages = zip(originComment.imageList, originComment.imageIDList)
+            var deleteImages: [(String?, Int64)] = []
+            
+            for (imageURL, imageID) in originImages {
+                if !keepImages.contains(imageURL!) {
+                    deleteImages.append((imageURL, imageID))
+                }
+            }
+            
+            var convertAddImages: [PutCommentImageDataRequestDTO] = addImages.map { .init(imageId: nil, imageUrl: pathList[$0.offset], actionType: "ADD")}
+            var convertKeepImages: [PutCommentImageDataRequestDTO] = keepImages.map { .init(imageId: nil, imageUrl: $0, actionType: "KEEP")}
+            var convertDeleteImages: [PutCommentImageDataRequestDTO] = deleteImages.map { .init(imageId: $0.1, imageUrl: $0.0, actionType: "DELETE")}
+            
+            if !addImages.isEmpty {
+                imageService.tryUpload(datas: addImages.map { .init(filePath: pathList[$0.offset], image: $0.element)})
+                    .subscribe { [weak self] _ in
+                        guard let self = self else { return }
+                        self.commentAPIUseCase.editComment(
+                            popUpStoreId: self.popUpID,
+                            commentId: self.originComment.commentID,
+                            content: newState.text,
+                            imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                        )
+                        .subscribe { [weak self, weak controller] in
+                            guard let self = self else { return }
+                            self.imageService.tryDelete(targetPaths: .init(objectKeyList: deleteImages.compactMap { $0.0 }))
+                                .subscribe {
+                                    controller?.navigationController?.popViewController(animated: true)
+                                }
+                                .disposed(by: self.disposeBag)
+                        }
+                        .disposed(by: self.disposeBag)
                     }
                     .disposed(by: disposeBag)
             } else {
-                let images = imageSection.inputDataList.compactMap { $0.image }.enumerated().map { $0 }
-                let uuid = UUID().uuidString
-                let pathList = images.map { "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg" }
-                
-                imageService.tryUpload(datas: images.map { .init(filePath: "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg", image: $0.element)})
-                    .subscribe(onSuccess: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: pathList)
-                            .subscribe(onDisposed: {
-                                controller.navigationController?.popViewController(animated: true)
-                            })
-                            .disposed(by: disposeBag)
-                    })
-                    .disposed(by: disposeBag)
+                commentAPIUseCase.editComment(
+                    popUpStoreId: self.popUpID,
+                    commentId: self.originComment.commentID,
+                    content: newState.text,
+                    imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                )
+                .subscribe { [weak self, weak controller] in
+                    guard let self = self else { return }
+                    self.imageService.tryDelete(targetPaths: .init(objectKeyList: deleteImages.compactMap { $0.0 }))
+                        .subscribe {
+                            controller?.navigationController?.popViewController(animated: true)
+                        }
+                        .disposed(by: self.disposeBag)
+                }
+                .disposed(by: self.disposeBag)
             }
-            
         }
         return newState
     }

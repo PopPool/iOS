@@ -139,6 +139,16 @@ extension NormalCommentEditController {
                 
             }
             .disposed(by: disposeBag)
+        
+        reactor.state
+            .take(1)
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                owner.sections = state.sections
+                if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
+                
+            }
+            .disposed(by: disposeBag)
     }
 }
 

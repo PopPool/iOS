@@ -19,6 +19,7 @@ final class AddCommentDescriptionSectionCell: UICollectionViewCell {
     private let descriptionLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
         label.textColor = .g600
+        label.numberOfLines = 0
         return label
     }()
     // MARK: - init

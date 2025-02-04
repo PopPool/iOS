@@ -366,6 +366,9 @@
 		08DC620D2CF8AE16002A2F44 /* ImageBannerSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC620C2CF8AE16002A2F44 /* ImageBannerSectionCell.swift */; };
 		08DC62112CF8B446002A2F44 /* SortedRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */; };
 		08DC62132CF8B833002A2F44 /* Optional+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC62122CF8B833002A2F44 /* Optional+.swift */; };
+		08DE8A0D2D5236840049BCAC /* PutCommentRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A0C2D5236840049BCAC /* PutCommentRequestDTO.swift */; };
+		08DE8A102D5255110049BCAC /* DetailEmptyCommetSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A0F2D5255110049BCAC /* DetailEmptyCommetSection.swift */; };
+		08DE8A122D5255180049BCAC /* DetailEmptyCommetSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A112D5255180049BCAC /* DetailEmptyCommetSectionCell.swift */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
 		4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */; };
 		4E685ECF2D12CEB6001EF91C /* BalloonChipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */; };
@@ -841,6 +844,9 @@
 		08DC620C2CF8AE16002A2F44 /* ImageBannerSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBannerSectionCell.swift; sourceTree = "<group>"; };
 		08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedRequestDTO.swift; sourceTree = "<group>"; };
 		08DC62122CF8B833002A2F44 /* Optional+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+.swift"; sourceTree = "<group>"; };
+		08DE8A0C2D5236840049BCAC /* PutCommentRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutCommentRequestDTO.swift; sourceTree = "<group>"; };
+		08DE8A0F2D5255110049BCAC /* DetailEmptyCommetSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailEmptyCommetSection.swift; sourceTree = "<group>"; };
+		08DE8A112D5255180049BCAC /* DetailEmptyCommetSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailEmptyCommetSectionCell.swift; sourceTree = "<group>"; };
 		4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonBackgroundView.swift; sourceTree = "<group>"; };
 		4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonChipCell.swift; sourceTree = "<group>"; };
 		4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetReactor.swift; sourceTree = "<group>"; };
@@ -1620,6 +1626,7 @@
 		083C86212D087A14003F441C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08DE8A0E2D5255000049BCAC /* DetailEmptyCommetSection */,
 				088DE25B2D145E1F0030FA9E /* DetailSimilarSection */,
 				088DE2522D144A6E0030FA9E /* DetailCommentSection */,
 				088DE24D2D13018C0030FA9E /* DetailCommentTitleSection */,
@@ -1804,6 +1811,7 @@
 			children = (
 				083C86752D0EE2CF003F441C /* PostCommentRequestDTO.swift */,
 				082197AC2D4E49370054094A /* DeleteCommentRequestDTO.swift */,
+				08DE8A0C2D5236840049BCAC /* PutCommentRequestDTO.swift */,
 			);
 			path = RequestDTO;
 			sourceTree = "<group>";
@@ -2614,6 +2622,15 @@
 			path = ResponseDTO;
 			sourceTree = "<group>";
 		};
+		08DE8A0E2D5255000049BCAC /* DetailEmptyCommetSection */ = {
+			isa = PBXGroup;
+			children = (
+				08DE8A0F2D5255110049BCAC /* DetailEmptyCommetSection.swift */,
+				08DE8A112D5255180049BCAC /* DetailEmptyCommetSectionCell.swift */,
+			);
+			path = DetailEmptyCommetSection;
+			sourceTree = "<group>";
+		};
 		4E685EB52D12CEB6001EF91C /* FillterSheetView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3164,6 +3181,7 @@
 				4E6C070A2D4B6E81008A962A /* ClusteringManager.swift in Sources */,
 				08A2E47B2D1B06AA00102313 /* ImageDetailController.swift in Sources */,
 				083A25B82CF362670099B58E /* IndicatorMaker.swift in Sources */,
+				08DE8A102D5255110049BCAC /* DetailEmptyCommetSection.swift in Sources */,
 				086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */,
 				08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */,
 				081899542D363E6A0067BF01 /* BookMarkPopUpViewTypeModalReactor.swift in Sources */,
@@ -3186,6 +3204,7 @@
 				08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */,
 				0841BAA82CFA354500049E31 /* HomeTitleSection.swift in Sources */,
 				08B191782CF442230057BC04 /* UIImage+.swift in Sources */,
+				08DE8A122D5255180049BCAC /* DetailEmptyCommetSectionCell.swift in Sources */,
 				081898BC2D2E5F510067BF01 /* MyCommentReactor.swift in Sources */,
 				0841BA892CF9F62400049E31 /* PreSignedURLResponseDTO.swift in Sources */,
 				088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */,
@@ -3461,6 +3480,7 @@
 				08B191742CF43DF40057BC04 /* SignUpCheckBoxButton.swift in Sources */,
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
 				081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */,
+				08DE8A0D2D5236840049BCAC /* PutCommentRequestDTO.swift in Sources */,
 				4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */,
 				4E755B212D2B9BAB00ADFB21 /* AdminResponseDTO.swift in Sources */,
 				08B191382CF366680057BC04 /* UICollectionReusableView+.swift in Sources */,

@@ -57,7 +57,7 @@ final class SearchReactor: Reactor {
     private var lastPage: Int32 = 0
     private var isLoading: Bool = false
     
-    private let userDefaultService = UserDefaultService()
+    let userDefaultService = UserDefaultService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     

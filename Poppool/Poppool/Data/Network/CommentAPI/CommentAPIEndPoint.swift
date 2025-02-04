@@ -28,4 +28,13 @@ struct CommentAPIEndPoint {
             queryParameters: request
         )
     }
+    
+    static func editComment(request: PutCommentRequestDTO) -> RequestEndpoint {
+        return RequestEndpoint(
+            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            path: "/comments",
+            method: .put,
+            bodyParameters: request
+        )
+    }
 }

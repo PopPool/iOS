@@ -272,6 +272,7 @@ extension DetailCommentSectionCell: Inputable {
         var date: String?
         var comment: String?
         var imageList: [String?]
+        var imageIDList: [Int64]
         var isLike: Bool
         var likeCount: Int64
         var isLogin: Bool
@@ -318,7 +319,7 @@ extension DetailCommentSectionCell: Inputable {
             if blurView.image == nil { blur() }
         }
         let title = input.title ?? ""
-        let fullText = "\(title)를 다녀온\n팝플인들의 생생한 후기가 궁금하다면?"
+        let fullText = "\(title)를 다녀온\n팝풀인들의 생생한 후기가 궁금하다면?"
 
         // "팝업스토어명"과 "생생한 후기" 부분의 NSRange 설정
         let popupStoreRange = (fullText as NSString).range(of: title)

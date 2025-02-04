@@ -156,9 +156,12 @@ private extension AddCommentSectionCell {
 
 extension AddCommentSectionCell: Inputable {
     struct Input {
+        var text: String?
     }
     
     func injection(with input: Input) {
+        commentTextView.text = input.text
+        commentState.accept(checkValidation(text: input.text))
     }
 }
 
