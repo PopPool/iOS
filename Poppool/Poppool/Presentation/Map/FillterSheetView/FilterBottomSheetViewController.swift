@@ -95,13 +95,12 @@ final class FilterBottomSheetViewController: UIViewController, View {
                      let reactor = self.reactor,
                      let selectedIndex = reactor.currentState.selectedLocationIndex else { return }
 
-               let location = reactor.currentState.locations[selectedIndex]  // Optional 체크 필요 없음
-
+               let location = reactor.currentState.locations[selectedIndex]
                // 현재 location에 대한 configure 재설정
                self.containerView.balloonBackgroundView.configure(
-                   with: location.sub,
-                   selectedRegions: [], // 빈 배열로 초기화
-                   mainRegionTitle: location.main,
+                   for: location.main,
+                   subRegions: location.sub,
+                   selectedRegions: reactor.currentState.selectedSubRegions, // 여기서 Reactor 상태에서 가져오기
                    selectionHandler: { [weak self] subRegion in
                        self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
                    },
@@ -109,6 +108,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
                        self?.reactor?.action.onNext(.toggleAllSubRegions)
                    }
                )
+
+
            })
            .map { Reactor.Action.resetFilters }
            .bind(to: reactor.action)
@@ -203,18 +204,18 @@ final class FilterBottomSheetViewController: UIViewController, View {
                       selectedIndex < reactor.currentState.locations.count else { return }
 
                 let location = reactor.currentState.locations[selectedIndex]
-
                 self.containerView.balloonBackgroundView.configure(
-                           with: location.sub,
-                           selectedRegions: selectedSubRegions,
-                           mainRegionTitle: location.main,
-                           selectionHandler: { [weak self] subRegion in
-                               self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
-                           },
-                           allSelectionHandler: { [weak self] in
-                               self?.reactor?.action.onNext(.toggleAllSubRegions)
-                           }
-                       )
+                    for: location.main,                // 첫 번째 인자는 메인 지역(String)
+                    subRegions: location.sub,            // 두 번째 인자는 [String]
+                    selectedRegions: selectedSubRegions, // 세 번째 인자는 [String]
+                    selectionHandler: { [weak self] subRegion in
+                        self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
+                    },
+                    allSelectionHandler: { [weak self] in
+                        self?.reactor?.action.onNext(.toggleAllSubRegions)
+                    }
+                )
+
 
                 if let button = self.containerView.locationContentView.subviews[selectedIndex] as? UIButton {
                     self.containerView.updateBalloonPosition(for: button)
@@ -399,10 +400,6 @@ extension FilterBottomSheetViewController: UICollectionViewDataSource {
 extension FilterBottomSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let category = tagSection?.inputDataList[indexPath.item].title else { return }
-//        print("[DEBUG] 👆 Category Option Selected: \(category)")
-//        print("[DEBUG] 💾 Current Saved Filters:")
-//        print("[DEBUG] 📍 Location: \(reactor?.currentState.selectedSubRegions ?? [])")
-//        print("[DEBUG] 🏷️ Category: \(reactor?.currentState.selectedCategories ?? [])")
         reactor?.action.onNext(.toggleCategory(category))
     }
 }

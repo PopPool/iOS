@@ -70,6 +70,7 @@ final class MapPopupCarouselView: UIView {
             animated: true
         )
     }
+    
 }
 
 // MARK: - UICollectionView DataSource & Delegate

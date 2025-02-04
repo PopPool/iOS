@@ -130,9 +130,9 @@ class MapViewController: BaseViewController, View {
             listViewTopConstraint = make.top.equalToSuperview().offset(view.frame.height).constraint // 초기 숨김 상태
         }
 
-        if let reactor = self.reactor {
-                bind(reactor: reactor)
-            }
+//        if let reactor = self.reactor {
+//                bind(reactor: reactor)
+//            }
 
         // 제스처 설정
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
@@ -291,18 +291,31 @@ class MapViewController: BaseViewController, View {
                 self.addMarker(for: store)
             }
             .disposed(by: disposeBag)
-        mainView.searchInput.onSearch = { [weak self] query in
-            self?.reactor?.action.onNext(.searchTapped(query))
-        }
+//        mainView.searchInput.onSearch = { [weak self] query in
+//            self?.reactor?.action.onNext(.searchTapped(query))
+//        }
+//
+//        reactor.state.map { $0.isLoading }
+//            .distinctUntilChanged()
+//            .observe(on: MainScheduler.instance)
+//            .bind { [weak self] isLoading in
+//                self?.mainView.searchInput.searchTextField.isEnabled = !isLoading
+////                self?.mainView.searchInput.setLoading(isLoading)
+//            }
+//            .disposed(by: disposeBag)
 
-        reactor.state.map { $0.isLoading }
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .bind { [weak self] isLoading in
-                self?.mainView.searchInput.searchTextField.isEnabled = !isLoading
-//                self?.mainView.searchInput.setLoading(isLoading)
-            }
+        mainView.searchInput.rx.tapGesture()
+            .when(.recognized)
+            .take(1)
+            .withUnretained(self)
+            .subscribe(onNext: { owner, _ in
+                let searchMainVC = SearchMainController()
+                searchMainVC.reactor = SearchMainReactor()
+                owner.navigationController?.pushViewController(searchMainVC, animated: true)
+            })
             .disposed(by: disposeBag)
+
+
 
         reactor.state.map { $0.searchResults }
             .distinctUntilChanged()
@@ -548,6 +561,7 @@ class MapViewController: BaseViewController, View {
 
     private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
         // 새 스토어 ID 집합 생성
+        
         var newMarkerIDs = Set<Int64>()
 
         // 각 스토어에 대해 증분 업데이트
@@ -632,32 +646,43 @@ class MapViewController: BaseViewController, View {
         sheetReactor.action.onNext(.segmentChanged(initialIndex))
 
         viewController.onSave = { [weak self] filterData in
-              guard let self = self else { return }
-
-            Logger.log(
-                message: """
-                필터 저장:
-                📍 위치: \(filterData.locations)
-                🏷️ 카테고리: \(filterData.categories)
-                """,
-                category: .debug
-            )
-
-              self.reactor?.action.onNext(.updateBothFilters(
-                  locations: filterData.locations,
-                  categories: filterData.categories
-              ))
-              self.reactor?.action.onNext(.filterTapped(nil))
+//              guard let self = self else { return }
+//
+//            Logger.log(
+//                message: """
+//                필터 저장:
+//                📍 위치: \(filterData.locations)
+//                🏷️ 카테고리: \(filterData.categories)
+//                """,
+//                category: .debug
+//            )
+//
+//              self.reactor?.action.onNext(.updateBothFilters(
+//                  locations: filterData.locations,
+//                  categories: filterData.categories
+//              ))
+//              self.reactor?.action.onNext(.filterTapped(nil))
           }
 
         viewController.onSave = { [weak self] filterData in
             guard let self = self else { return }
+            // Reactor에 필터 정보 업데이트
             self.reactor?.action.onNext(.updateBothFilters(
                 locations: filterData.locations,
                 categories: filterData.categories
             ))
             self.reactor?.action.onNext(.filterTapped(nil))
+
+            // (2) 필터 변경 직후 “현재 뷰포트” 다시 요청
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            self.reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
         }
+
 
         viewController.onDismiss = { [weak self] in
             self?.reactor?.action.onNext(.filterTapped(nil))
@@ -850,7 +875,7 @@ extension MapViewController {
             .compactMap { $0 }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .map { $0.viewportStores }
             .distinctUntilChanged()
@@ -867,7 +892,7 @@ extension MapViewController {
             .observe(on: MainScheduler.instance)
             .flatMapLatest { [weak self] stores -> Observable<[StoreItem]> in
                 guard let self = self else { return .just([]) }
-                
+
                 return Observable.from(stores)
                     .flatMap { store -> Observable<StoreItem> in
                         return self.popUpAPIUseCase.getPopUpDetail(

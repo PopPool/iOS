@@ -224,3 +224,70 @@ private extension PreSignedService {
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
 }
+extension PreSignedService {
+    func deleteImage(filePath: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        Logger.log(message: "이미지 삭제 시작 - 경로: \(filePath)", category: .debug)
+
+        let request = PresignedURLRequestDTO(objectKeyList: [filePath])
+
+        tryDelete(targetPaths: request)
+            .subscribe(
+                onCompleted: {
+                    Logger.log(message: "이미지 삭제 성공: \(filePath)", category: .debug)
+                    completion(.success(()))
+                },
+                onError: { error in
+                    Logger.log(message: "이미지 삭제 실패: \(error.localizedDescription)", category: .error)
+                    completion(.failure(error))
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+
+    func deleteImage(filePath: String) -> Single<Void> {
+        return Single.create { [weak self] observer in
+            guard let self = self else {
+                return Disposables.create()
+            }
+
+            let request = PresignedURLRequestDTO(objectKeyList: [filePath])
+
+            self.tryDelete(targetPaths: request)
+                .subscribe(
+                    onCompleted: {
+                        observer(.success(()))
+                    },
+                    onError: { error in
+                        observer(.failure(error))
+                    }
+                )
+                .disposed(by: self.disposeBag)
+
+            return Disposables.create()
+        }
+    }
+
+    // 여러 이미지 한번에 삭제
+    func deleteImages(filePaths: [String]) -> Single<Void> {
+        return Single.create { [weak self] observer in
+            guard let self = self else {
+                return Disposables.create()
+            }
+
+            let request = PresignedURLRequestDTO(objectKeyList: filePaths)
+
+            self.tryDelete(targetPaths: request)
+                .subscribe(
+                    onCompleted: {
+                        observer(.success(()))
+                    },
+                    onError: { error in
+                        observer(.failure(error))
+                    }
+                )
+                .disposed(by: self.disposeBag)
+
+            return Disposables.create()
+        }
+    }
+}

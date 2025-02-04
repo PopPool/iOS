@@ -250,7 +250,10 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private func fillFormWithExistingData(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
         nameField?.text = store.name
         categoryButton.setTitle("\(store.categoryName) ▾", for: .normal)
-        //        addressField?.text = store.address
+        addressField?.text = store.address
+        latField?.text = String(store.latitude)
+        lonField?.text = String(store.longitude)
+        descTV?.text = store.description
     }
     private func setupKeyboardHandling() {
         // 키보드 Notification 등록
@@ -481,7 +484,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         // (마커) => 2줄
         // 1) (마커명 Label + TF)
         let markerLabel = makePlainLabel("마커명")
+        
         let markerField = makeRoundedTextField("")
+        
         let markerStackH = UIStackView(arrangedSubviews: [markerLabel, markerField])
         markerStackH.axis = .horizontal
         markerStackH.spacing = 8
@@ -1325,12 +1330,13 @@ private extension PopUpStoreRegisterViewController {
 
 
     private func getFormattedDate(from date: Date?) -> String {
-        guard let date = date else { return "2025-01-14T09:00:00.000Z" }
+        guard let date = date else { return "" }
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }
+
 
 
 

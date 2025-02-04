@@ -417,6 +417,8 @@
 		4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
 		4E78706F2D37CB2200465FC9 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
 		4E9790C52D40E13500210499 /* MapGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9790C42D40E13500210499 /* MapGuideViewController.swift */; };
+		4E9A465B2D4F01A30010578A /* CustomClusterRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9A465A2D4F01A30010578A /* CustomClusterRenderer.swift */; };
+		4E9A465E2D50B2DB0010578A /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
 		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
 		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
 		4EA2C93D2D424D3300F4D97C /* MapDirectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */; };
@@ -898,6 +900,7 @@
 		4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUseCase.swift; sourceTree = "<group>"; };
 		4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRepository.swift; sourceTree = "<group>"; };
 		4E9790C42D40E13500210499 /* MapGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideViewController.swift; sourceTree = "<group>"; };
+		4E9A465A2D4F01A30010578A /* CustomClusterRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomClusterRenderer.swift; sourceTree = "<group>"; };
 		4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetView.swift; sourceTree = "<group>"; };
 		4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetViewController.swift; sourceTree = "<group>"; };
 		4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterViewController.swift; sourceTree = "<group>"; };
@@ -2747,6 +2750,7 @@
 				4E685EC72D12CEB6001EF91C /* MapMarker.swift */,
 				4E685EC82D12CEB6001EF91C /* MapReactor.swift */,
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
+				4E9A465A2D4F01A30010578A /* CustomClusterRenderer.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
 				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
@@ -3411,6 +3415,7 @@
 				086F8A052D23CB3300CA4FC9 /* MyPageProfileSection.swift in Sources */,
 				081899252D3500B80067BF01 /* FAQView.swift in Sources */,
 				086F89EE2D2009F100CA4FC9 /* SubLoginReactor.swift in Sources */,
+				4E9A465B2D4F01A30010578A /* CustomClusterRenderer.swift in Sources */,
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
@@ -3652,6 +3657,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDCA41E42CF35AC1005EECF6 /* PoppoolUITestsLaunchTests.swift in Sources */,
+				4E9A465E2D50B2DB0010578A /* AdminStoreCell.swift in Sources */,
 				BDCA41E22CF35AC1005EECF6 /* PoppoolUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

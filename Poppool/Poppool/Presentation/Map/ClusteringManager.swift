@@ -14,12 +14,33 @@ class ClusteringManager {
             self.stores = []
             self.storeCount = 0
         }
-        func centerCoordinate() -> CLLocationCoordinate2D {
-            let totalLat = stores.reduce(0.0) { $0 + $1.latitude }
-            let totalLon = stores.reduce(0.0) { $0 + $1.longitude }
-            return CLLocationCoordinate2D(latitude: totalLat / Double(storeCount),
-                                          longitude: totalLon / Double(storeCount))
+        func mercatorProjection(from coordinate: CLLocationCoordinate2D) -> CGPoint {
+            // 위도, 경도를 메르카토르 투영 좌표(미터 단위)로 변환
+            let x = coordinate.longitude * 20037508.34 / 180.0
+            var y = log(tan((90 + coordinate.latitude) * .pi / 360.0)) / (.pi / 180.0)
+            y = y * 20037508.34 / 180.0
+            return CGPoint(x: x, y: y)
         }
+
+        func inverseMercatorProjection(from point: CGPoint) -> CLLocationCoordinate2D {
+            // 메르카토르 좌표를 다시 위도/경도로 복원
+            let lon = (point.x / 20037508.34) * 180.0
+            var lat = (point.y / 20037508.34) * 180.0
+            lat = 180 / .pi * (2 * atan(exp(lat * .pi / 180.0)) - .pi / 2)
+            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        }
+        func centerCoordinate() -> CLLocationCoordinate2D {
+              // 스토어가 없으면 기본 좌표 반환
+              guard storeCount > 0 else { return base.coordinate }
+
+              // 각 스토어의 좌표를 메르카토르 좌표로 변환
+              let projectedPoints = stores.map { mercatorProjection(from: $0.coordinate) }
+              let totalX = projectedPoints.reduce(0, { $0 + $1.x })
+              let totalY = projectedPoints.reduce(0, { $0 + $1.y })
+              let avgPoint = CGPoint(x: totalX / CGFloat(storeCount), y: totalY / CGFloat(storeCount))
+              // 평균 좌표를 다시 위도/경도로 변환하여 반환
+              return inverseMercatorProjection(from: avgPoint)
+          }
 
         func toMarkerData() -> ClusterMarkerData {
                let adjustedCluster = RegionCluster(

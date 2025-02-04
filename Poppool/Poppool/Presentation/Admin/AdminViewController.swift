@@ -176,10 +176,15 @@ final class AdminViewController: BaseViewController, View {
     }
 
     private func deleteStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        adminUseCase.deleteStore(id: store.id)
+        let imageService = PreSignedService()
+
+        imageService.tryDelete(targetPaths: .init(objectKeyList: [store.mainImageUrl]))
+            .andThen(adminUseCase.deleteStore(id: store.id))
+            .observe(on: MainScheduler.instance)
             .subscribe(
                 onNext: { [weak self] _ in
                     self?.reactor?.action.onNext(.reloadData)
+                    ToastMaker.createToast(message: "삭제되었습니다")
                 },
                 onError: { [weak self] error in
                     self?.showErrorAlert(message: "삭제 실패: \(error.localizedDescription)")
@@ -187,7 +192,6 @@ final class AdminViewController: BaseViewController, View {
             )
             .disposed(by: disposeBag)
     }
-
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(
             title: "오류",
@@ -208,7 +212,6 @@ final class AdminViewController: BaseViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        // Register button
         mainView.registerButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }

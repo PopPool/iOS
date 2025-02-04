@@ -11,7 +11,13 @@ struct GetAdminPopUpStoreListResponseDTO: Decodable {
         let name: String
         let categoryName: String
         let mainImageUrl: String
+        let address: String
+        let latitude: Double
+        let longitude: Double
+        let description: String
     }
+
+
 }
 
 // MARK: - Store Detail Response
