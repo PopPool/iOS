@@ -63,6 +63,7 @@ final class DetailReactor: Reactor {
     private var popUpName: String?
     private var isLogin: Bool = false
     
+    private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
@@ -438,7 +439,9 @@ final class DetailReactor: Reactor {
     func showMyCommentMenu(controller: BaseViewController, indexPath: IndexPath, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentMyMenuController()
         nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
+        imageService = PreSignedService()
         controller.presentPanModal(nextController)
+        
         nextController.reactor?.state
             .withUnretained(nextController)
             .subscribe(onNext: { [weak self] (owner, state) in
@@ -446,11 +449,19 @@ final class DetailReactor: Reactor {
                 switch state.selectedType {
                 case .remove:
                     self.commentAPIUseCase.deleteComment(popUpStoreId: self.popUpID, commentId: comment.commentID)
-                        .subscribe(onDisposed:  {
+                        .subscribe(onDisposed: {
                             owner.dismiss(animated: true)
                             ToastMaker.createToast(message: "작성한 코멘트를 삭제했어요")
                         })
                         .disposed(by: owner.disposeBag)
+                    
+                    let commentList = comment.imageList.compactMap { $0 }
+                    self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
+                        .subscribe {
+                            Logger.log(message: "S3 Image Delete 완료", category: .info)
+                        }
+                        .disposed(by: self.disposeBag)
+
                 case .edit:
                     owner.dismiss(animated: true) { [weak controller] in
 //                        guard let popUpName = self.popUpName else { return }
