@@ -68,8 +68,8 @@ struct CreatePopUpStoreRequestDTO: Encodable {
 struct UpdatePopUpStoreRequestDTO: Encodable {
     let popUpStore: PopUpStore
     let location: Location
-    let imagesToAdd: [String]
-    let imagesToDelete: [Int64]
+//    let imagesToAdd: [String]
+//    let imagesToDelete: [Int64]
 
     struct PopUpStore: Encodable {
         let id: Int64

@@ -9,25 +9,24 @@ final class AdminReactor: Reactor {
         case updateSearchQuery(String)
         case tapRegisterButton
         case tapEditButton(Int64)
-
-        // 화면 이동 후 상태를 초기화하기 위한 액션
         case resetNavigation
         case reloadData
-
     }
 
     enum Mutation {
         case setStores([GetAdminPopUpStoreListResponseDTO.PopUpStore])
         case setIsLoading(Bool)
         case navigateToRegister(Bool)
+        case navigateToEdit(GetAdminPopUpStoreListResponseDTO.PopUpStore) // ✅ 수정 데이터 추가
+
     }
 
     struct State {
         var storeList: [GetAdminPopUpStoreListResponseDTO.PopUpStore] = []
         var isLoading: Bool = false
-
-        // true가 되면 등록 화면 이동
         var shouldNavigateToRegister: Bool = false
+        var selectedStoreForEdit: GetAdminPopUpStoreListResponseDTO.PopUpStore? // ✅ 추가
+
     }
 
     var initialState: State
@@ -42,12 +41,12 @@ final class AdminReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad, .reloadData:
-                  return .concat([
-                      .just(.setIsLoading(true)),
-                      useCase.fetchStoreList(query: nil, page: 0, size: 20)
-                          .map { .setStores($0.popUpStoreList) },
-                      .just(.setIsLoading(false))
-                  ])
+            return .concat([
+                .just(.setIsLoading(true)),
+                useCase.fetchStoreList(query: nil, page: 0, size: 20)
+                    .map { .setStores($0.popUpStoreList ?? []) }, // ✅ nil 방지
+                .just(.setIsLoading(false))
+            ])
 
         case let .updateSearchQuery(query):
             return .concat([
@@ -58,21 +57,21 @@ final class AdminReactor: Reactor {
                     }, onError: { error in
                         Logger.log(message: "조회 실패 - 에러: \(error.localizedDescription)", category: .error)
                     })
-                    .map { .setStores($0.popUpStoreList) },
+                    .map { .setStores($0.popUpStoreList ?? []) }, // ✅ nil 방지
                 .just(.setIsLoading(false))
             ])
 
-
         case .tapRegisterButton:
-            // 여기서 State.shouldNavigateToRegister = true 로 변경
             return .just(.navigateToRegister(true))
 
-        case .tapEditButton(_):
-            // 편집 화면 이동 등 다른 로직이 있을 수 있으나, 여기서는 생략
-            return .empty()
-
+        case let .tapEditButton(storeId):
+            // ✅ 선택한 storeId에 해당하는 데이터를 찾아서 Mutation으로 전달
+            if let store = currentState.storeList.first(where: { $0.id == storeId }) {
+                return .just(.navigateToEdit(store))
+            } else {
+                return .empty() // 데이터 없으면 아무 동작 안 함
+            }
         case .resetNavigation:
-            // 화면 이동 후 다시 false로
             return .just(.navigateToRegister(false))
         }
     }
@@ -88,6 +87,8 @@ final class AdminReactor: Reactor {
 
         case let .navigateToRegister(shouldGo):
             newState.shouldNavigateToRegister = shouldGo
+        case let .navigateToEdit(store):
+            newState.selectedStoreForEdit = store // ✅ 수정할 데이터를 상태에 저장
         }
         return newState
     }

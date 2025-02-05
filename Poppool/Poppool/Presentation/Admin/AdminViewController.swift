@@ -228,7 +228,16 @@ final class AdminViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
 
-        // Store list binding
+        reactor.state
+            .map { $0.selectedStoreForEdit }
+            .compactMap { $0 }
+            .subscribe(onNext: { [weak self] store in
+                guard let self = self else { return }
+                self.editStore(store) // ✅ 기존 `editStore(_:)`를 사용
+            })
+            .disposed(by: disposeBag)
+
+
         reactor.state.map { $0.storeList }
             .map { "총 \($0.count)개" }
             .bind(to: mainView.popupCountLabel.rx.text)

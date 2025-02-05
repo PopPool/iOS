@@ -24,7 +24,7 @@ final class BalloonBackgroundView: UIView {
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(30)
+                heightDimension: .absolute(36)
             )
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.interItemSpacing = .fixed(8)
@@ -50,16 +50,6 @@ final class BalloonBackgroundView: UIView {
         return iv
     }()
 
-//    private let singleRegionLabel: UILabel = {
-//        let label = UILabel()
-//        // 기본 텍스트 스타일 (선택 상태일 경우 Bold 15 blu500, 기본은 Medium 14 g400 – 필요에 따라 상태별로 업데이트 가능)
-//        label.font = UIFont.boldSystemFont(ofSize: 15)
-//        label.textColor = UIColor.blu500
-//        label.textAlignment = .center
-//        label.numberOfLines = 0
-//        label.isHidden = true  // 기본은 숨김
-//        return label
-//    }()
     private let singleRegionTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 15)
@@ -110,6 +100,7 @@ final class BalloonBackgroundView: UIView {
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+            
         }
 
         containerView.addSubview(collectionView)

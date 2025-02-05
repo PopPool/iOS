@@ -210,7 +210,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         if let store = editingStore {
-            fillFormWithExistingData(store)
+            loadStoreDetail(for: store.id)
         }
 
         setupNavigation()
@@ -247,14 +247,46 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         }
     }
-    private func fillFormWithExistingData(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        nameField?.text = store.name
-        categoryButton.setTitle("\(store.categoryName) ▾", for: .normal)
-        addressField?.text = store.address
-        latField?.text = String(store.latitude)
-        lonField?.text = String(store.longitude)
-        descTV?.text = store.description
+    private func fillFormWithExistingData(_ storeDetail: GetAdminPopUpStoreDetailResponseDTO) {        // 기본 텍스트 필드에 데이터 채워넣기
+        nameField?.text = storeDetail.name
+        categoryButton.setTitle("\(storeDetail.categoryName) ▾", for: .normal)
+        addressField?.text = storeDetail.address
+        latField?.text = String(storeDetail.latitude)
+        lonField?.text = String(storeDetail.longitude)
+        descTV?.text = storeDetail.desc
+
+        // 시작/종료 날짜 등도 필요한 경우 Date 타입으로 변환하여 업데이트 (필요 시)
+        // 예: selectedStartDate = parseDate(storeDetail.startDate)
+
+        // 대표 이미지 로드 (mainImageUrl)
+        if let mainImageURL = URL(string: storeDetail.mainImageUrl) {
+            URLSession.shared.dataTask(with: mainImageURL) { [weak self] data, response, error in
+                guard let self = self,
+                      let data = data,
+                      let image = UIImage(data: data) else { return }
+                let extendedImage = ExtendedImage(filePath: storeDetail.mainImageUrl, image: image, isMain: true)
+                DispatchQueue.main.async {
+                    self.images.append(extendedImage)
+                    self.imagesCollectionView.reloadData()
+                    self.updateSaveButtonState()
+                }
+            }.resume()
+        }
+
+        // imageList에 여러 이미지가 있는 경우 추가 처리 (원하는 로직에 따라)
+        // 예를 들어, 반복문으로 imageList에 있는 이미지들을 추가할 수 있음.
     }
+    func loadStoreDetail(for storeId: Int64) {
+        adminUseCase.fetchStoreDetail(id: storeId)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] storeDetail in
+                self?.fillFormWithExistingData(storeDetail)
+            }, onError: { error in
+                // 에러 처리
+            })
+            .disposed(by: disposeBag)
+    }
+
     private func setupKeyboardHandling() {
         // 키보드 Notification 등록
         NotificationCenter.default.addObserver(
@@ -1171,10 +1203,12 @@ private extension PopUpStoreRegisterViewController {
                 longitude: longitude,
                 markerTitle: "마커 제목",
                 markerSnippet: "마커 설명"
-            ),
-            imagesToAdd: updatedImagePaths ?? [],
-            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
-        )
+            )
+//            imagesToAdd: updatedImagePaths ?? [],
+//            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
+            )
+
+
 
         adminUseCase.updateStore(request: request)
             .subscribe(
