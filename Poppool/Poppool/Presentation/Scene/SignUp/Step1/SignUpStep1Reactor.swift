@@ -55,10 +55,10 @@ final class SignUpStep1Reactor: Reactor {
         var newState = state
         switch mutation {
         case .setTotalSelected:
-            if newState.selectedIndex.count == 4 {
+            if newState.selectedIndex.count == 3 {
                 newState.selectedIndex = []
             } else {
-                newState.selectedIndex = [1, 2, 3, 4]
+                newState.selectedIndex = [1, 2, 3]
             }
         case .setSelectedIndex(let index):
             if newState.selectedIndex.contains(index) {

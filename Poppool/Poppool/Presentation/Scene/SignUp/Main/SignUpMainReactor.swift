@@ -60,7 +60,7 @@ final class SignUpMainReactor: Reactor {
     
     private var authrizationCode: String?
     
-    private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
+    private var signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
     var isFirstResponderCase: Bool
     
@@ -121,6 +121,8 @@ final class SignUpMainReactor: Reactor {
             guard let socialType = userDefaultService.fetch(key: "socialType"),
                   let nickName = newState.nickName,
                   let gender = newState.gender else { return newState }
+            
+            signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
             
             signUpAPIUseCase.trySignUp(
                 nickName: nickName,
