@@ -112,10 +112,7 @@ final class DetailReactor: Reactor {
         case .viewWillAppear:
             return setContent()
         case .bookMarkButtonTapped:
-            return Observable.concat([
-                bookMark(),
-                setContent()
-            ])
+            return bookMark()
         case .sharedButtonTapped(let controller):
             return Observable.just(.showSharedBoard(controller: controller))
         case .copyButtonTapped:
@@ -131,10 +128,7 @@ final class DetailReactor: Reactor {
         case .commentButtonTapped(let controller):
             return Observable.just(.moveToCommentTypeSelectedScene(controller: controller))
         case .commentLikeButtonTapped(let indexPath):
-            return Observable.concat([
-                commentLike(indexPath: indexPath),
-                setContent()
-            ])
+            return commentLike(indexPath: indexPath)
         case .similarSectionTapped(let controller, let indexPath):
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
         case .backButtonTapped(let controller):
@@ -369,6 +363,7 @@ final class DetailReactor: Reactor {
     
     func bookMark() -> Observable<Mutation> {
         if let isBookMark = titleSection.inputDataList.first?.isBookMark {
+            titleSection.inputDataList[0].isBookMark.toggle()
             ToastMaker.createBookMarkToast(isBookMark: !isBookMark)
             if isBookMark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpID)
@@ -424,10 +419,13 @@ final class DetailReactor: Reactor {
     func commentLike(indexPath: IndexPath) -> Observable<Mutation> {
         let isLike = commentSection.inputDataList[indexPath.row].isLike
         let commentID = commentSection.inputDataList[indexPath.row].commentID
+        commentSection.inputDataList[indexPath.row].isLike.toggle()
         if isLike {
+            commentSection.inputDataList[indexPath.row].likeCount -= 1
             return userAPIUseCase.deleteCommentLike(commentId: commentID)
                 .andThen(Observable.just(.loadView))
         } else {
+            commentSection.inputDataList[indexPath.row].likeCount += 1
             return userAPIUseCase.postCommentLike(commentId: commentID)
                 .andThen(Observable.just(.loadView))
         }
