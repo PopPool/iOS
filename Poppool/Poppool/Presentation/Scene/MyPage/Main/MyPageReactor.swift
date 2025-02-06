@@ -132,6 +132,9 @@ final class MyPageReactor: Reactor {
                     owner.commentSection.inputDataList = response.myCommentedPopUpList.map  {
                         .init(popUpImagePath: $0.mainImageUrl, title: $0.popUpStoreName, popUpID: $0.popUpStoreId)
                     }
+                    if !owner.commentSection.inputDataList.isEmpty {
+                        owner.commentSection.inputDataList[0].isFirstCell = true
+                    }
                     return .loadView
                 }
 
