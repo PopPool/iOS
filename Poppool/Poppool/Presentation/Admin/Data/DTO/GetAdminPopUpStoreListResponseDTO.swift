@@ -68,8 +68,16 @@ struct CreatePopUpStoreRequestDTO: Encodable {
 struct UpdatePopUpStoreRequestDTO: Encodable {
     let popUpStore: PopUpStore
     let location: Location
-//    let imagesToAdd: [String]
-//    let imagesToDelete: [Int64]
+    let imagesToAdd: [String]
+    let imagesToDelete: [Int64]
+
+    // CodingKeys 추가
+    private enum CodingKeys: String, CodingKey {
+        case popUpStore
+        case location
+        case imagesToAdd
+        case imagesToDelete
+    }
 
     struct PopUpStore: Encodable {
         let id: Int64
@@ -83,6 +91,21 @@ struct UpdatePopUpStoreRequestDTO: Encodable {
         let bannerYn: Bool
         let imageUrl: [String]
         let startDateBeforeEndDate: Bool
+
+        // PopUpStore의 CodingKeys도 추가
+        private enum CodingKeys: String, CodingKey {
+            case id
+            case name
+            case categoryId
+            case desc
+            case address
+            case startDate
+            case endDate
+            case mainImageUrl
+            case bannerYn
+            case imageUrl
+            case startDateBeforeEndDate
+        }
     }
 
     struct Location: Encodable {
@@ -90,8 +113,17 @@ struct UpdatePopUpStoreRequestDTO: Encodable {
         let longitude: Double
         let markerTitle: String
         let markerSnippet: String
+
+        // Location의 CodingKeys도 추가
+        private enum CodingKeys: String, CodingKey {
+            case latitude
+            case longitude
+            case markerTitle
+            case markerSnippet
+        }
     }
 }
+
 
 // MARK: - Notice Request
 struct CreateNoticeRequestDTO: Encodable {

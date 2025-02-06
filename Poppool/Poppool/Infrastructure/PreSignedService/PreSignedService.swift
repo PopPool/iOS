@@ -184,28 +184,28 @@ private extension PreSignedService {
     }
 
     func downloadFromS3(url: String) -> Single<Data> {
-        return Single.create { single in
-            if let url = URL(string: url) {
-                let request = AF.request(url).responseData { response in
-                    switch response.result {
-                    case .success(let data):
-                        single(.success(data))
-                    case .failure(let error):
-                        single(.failure(error))
-                    }
-                }
-
-                return Disposables.create {
-                    request.cancel()
-                }
-            } else {
+        return Single.create { [weak self] single in
+            guard let self = self,
+                  let fullURL = self.fullImageURL(from: url) else {
                 single(.failure(NSError(domain: "InvalidDataOrURL", code: -1, userInfo: nil)))
                 return Disposables.create()
+            }
+            let request = AF.request(fullURL).responseData { response in
+                switch response.result {
+                case .success(let data):
+                    single(.success(data))
+                case .failure(let error):
+                    single(.failure(error))
+                }
+            }
+            return Disposables.create {
+                request.cancel()
             }
         }
     }
 
-   
+
+
     func getUploadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
         Logger.log(message: "Presigned URL 생성 요청 데이터: \(request)", category: .debug)
         let provider = ProviderImpl()
@@ -290,4 +290,22 @@ extension PreSignedService {
             return Disposables.create()
         }
     }
+    func fullImageURL(from filePath: String) -> URL? {
+        let baseURL = Secrets.popPoolS3BaseURL.rawValue
+
+        // URL 인코딩 처리를 더 엄격하게
+        guard let encodedPath = filePath
+            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+            .replacingOccurrences(of: "+", with: "%2B") else {
+            Logger.log(message: "URL 인코딩 실패: \(filePath)", category: .error)
+            return nil
+        }
+
+        let fullString = baseURL + encodedPath
+        Logger.log(message: "생성된 URL: \(fullString)", category: .debug)
+
+        return URL(string: fullString)
+    }
+
 }
+

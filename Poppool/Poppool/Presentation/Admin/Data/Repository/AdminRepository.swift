@@ -40,12 +40,20 @@ final class DefaultAdminRepository: AdminRepository {
     }
 
     func fetchStoreDetail(id: Int64) -> Observable<GetAdminPopUpStoreDetailResponseDTO> {
-        let endpoint = AdminAPIEndpoint.fetchStoreDetail(id: id)
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
-        )
+       let endpoint = AdminAPIEndpoint.fetchStoreDetail(id: id)
+       return provider.requestData(
+           with: endpoint,
+           interceptor: tokenInterceptor
+       )
+       .catch { error in
+           if case .responseSerializationFailed = error as? AFError {
+               // 빈 데이터 응답시 기본값 반환
+               return Observable.just(GetAdminPopUpStoreDetailResponseDTO.empty)
+           }
+           throw error
+       }
     }
+
 
     func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
         Logger.log(message: "createStore API 호출 시작", category: .info)
@@ -84,7 +92,15 @@ final class DefaultAdminRepository: AdminRepository {
             with: endpoint,
             interceptor: tokenInterceptor
         )
+        .catch { error -> Observable<EmptyResponse> in
+            if case .responseSerializationFailed(let reason) = error as? AFError,
+               case .inputDataNilOrZeroLength = reason {
+                return Observable.just(EmptyResponse())
+            }
+            throw error
+        }
     }
+
 
     func deleteStore(id: Int64) -> Observable<EmptyResponse> {
         Logger.log(message: "deleteStore API 호출 시작", category: .info)
@@ -126,4 +142,27 @@ final class DefaultAdminRepository: AdminRepository {
             interceptor: tokenInterceptor
         )
     }
+}
+extension GetAdminPopUpStoreDetailResponseDTO {
+   static var empty: GetAdminPopUpStoreDetailResponseDTO {
+       return GetAdminPopUpStoreDetailResponseDTO(
+           id: 0,
+           name: "",
+           categoryId: 0,
+           categoryName: "",
+           desc: "",
+           address: "",
+           startDate: "",
+           endDate: "",
+           createUserId: "",
+           createDateTime: "",
+           mainImageUrl: "",
+           bannerYn: false,
+           imageList: [],
+           latitude: 0.0,
+           longitude: 0.0,
+           markerTitle: "",
+           markerSnippet: ""
+       )
+   }
 }

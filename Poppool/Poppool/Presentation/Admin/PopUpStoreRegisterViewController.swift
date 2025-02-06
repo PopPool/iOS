@@ -247,7 +247,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         }
     }
-    private func fillFormWithExistingData(_ storeDetail: GetAdminPopUpStoreDetailResponseDTO) {        // 기본 텍스트 필드에 데이터 채워넣기
+    private func fillFormWithExistingData(_ storeDetail: GetAdminPopUpStoreDetailResponseDTO) {
         nameField?.text = storeDetail.name
         categoryButton.setTitle("\(storeDetail.categoryName) ▾", for: .normal)
         addressField?.text = storeDetail.address
@@ -255,11 +255,17 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         lonField?.text = String(storeDetail.longitude)
         descTV?.text = storeDetail.desc
 
-        // 시작/종료 날짜 등도 필요한 경우 Date 타입으로 변환하여 업데이트 (필요 시)
-        // 예: selectedStartDate = parseDate(storeDetail.startDate)
+        let isoFormatter = ISO8601DateFormatter()
+        
+        if let startDate = isoFormatter.date(from: storeDetail.startDate),
+           let endDate = isoFormatter.date(from: storeDetail.endDate) {
+            self.selectedStartDate = startDate
+            self.selectedEndDate = endDate
+            self.updatePeriodButtonTitle()  // 버튼에 날짜 텍스트 업데이트
+        }
 
-        // 대표 이미지 로드 (mainImageUrl)
-        if let mainImageURL = URL(string: storeDetail.mainImageUrl) {
+        // 대표 이미지 로드 (생략된 부분은 기존 코드 참고)
+        if let mainImageURL = presignedService.fullImageURL(from: storeDetail.mainImageUrl) {
             URLSession.shared.dataTask(with: mainImageURL) { [weak self] data, response, error in
                 guard let self = self,
                       let data = data,
@@ -272,17 +278,17 @@ final class PopUpStoreRegisterViewController: BaseViewController {
                 }
             }.resume()
         }
-
-        // imageList에 여러 이미지가 있는 경우 추가 처리 (원하는 로직에 따라)
-        // 예를 들어, 반복문으로 imageList에 있는 이미지들을 추가할 수 있음.
     }
     func loadStoreDetail(for storeId: Int64) {
+        Logger.log(message: "상세 정보 요청 시작 - Store ID: \(storeId)", category: .debug)
+
         adminUseCase.fetchStoreDetail(id: storeId)
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] storeDetail in
+                Logger.log(message: "상세 정보 요청 성공", category: .info)
                 self?.fillFormWithExistingData(storeDetail)
             }, onError: { error in
-                // 에러 처리
+                Logger.log(message: "상세 정보 요청 실패: \(error.localizedDescription)", category: .error)
             })
             .disposed(by: disposeBag)
     }
@@ -1203,9 +1209,9 @@ private extension PopUpStoreRegisterViewController {
                 longitude: longitude,
                 markerTitle: "마커 제목",
                 markerSnippet: "마커 설명"
-            )
-//            imagesToAdd: updatedImagePaths ?? [],
-//            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
+            ),
+            imagesToAdd: updatedImagePaths ?? [],
+            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
             )
 
 

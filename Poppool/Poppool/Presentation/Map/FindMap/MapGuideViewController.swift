@@ -286,11 +286,16 @@ final class MapGuideViewController: UIViewController, View {
 
     private func setupMarker(at coordinate: CLLocationCoordinate2D) {
         let marker = GMSMarker(position: coordinate)
-        marker.title = ""
+        // 커스텀 마커 뷰 생성 및 탭 상태 설정
+        let markerView = MapMarker()
+        markerView.injection(with: .init(isSelected: true))
+        marker.iconView = markerView
         marker.map = mapView
+
         let camera = GMSCameraPosition(target: coordinate, zoom: 16)
         mapView.animate(to: camera)
     }
+
 
     private func dismissModalCard() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) {
