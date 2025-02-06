@@ -67,7 +67,7 @@ final class BlockUserManageReactor: Reactor {
             return userAPIUseCase.getBlockUserList(page: 0, size: 999, sort: nil)
                 .withUnretained(self)
                 .map { (owner, response) in
-                    owner.countSection.inputDataList = [.init(count: Int(response.totalElements))]
+                    owner.countSection.inputDataList = [.init(count: Int(response.totalElements), unit: "명")]
                     owner.listSection.inputDataList = response.blockedUserInfoList.map { .init(profileImagePath: $0.profileImageUrl, nickName: $0.nickname, userID: $0.userId, isBlocked: true )}
                     return .loadView
                 }

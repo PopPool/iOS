@@ -45,9 +45,10 @@ private extension CommentListTitleSectionCell {
 extension CommentListTitleSectionCell: Inputable {
     struct Input {
         var count: Int
+        var unit: String = "개"
     }
     
     func injection(with input: Input) {
-        countLabel.setLineHeightText(text: "총 \(input.count)개", font: .KorFont(style: .regular, size: 13))
+        countLabel.setLineHeightText(text: "총 \(input.count)\(input.unit)", font: .KorFont(style: .regular, size: 13))
     }
 }
