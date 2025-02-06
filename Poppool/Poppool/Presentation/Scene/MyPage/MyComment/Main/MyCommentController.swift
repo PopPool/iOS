@@ -48,16 +48,16 @@ private extension MyCommentController {
         mainView.contentCollectionView.dataSource = self
         
         mainView.contentCollectionView.register(
-            ListCountButtonSectionCell.self,
-            forCellWithReuseIdentifier: ListCountButtonSectionCell.identifiers
+            CommentListTitleSectionCell.self,
+            forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers
         )
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
         mainView.contentCollectionView.register(
-            OtherUserCommentSectionCell.self,
-            forCellWithReuseIdentifier: OtherUserCommentSectionCell.identifiers
+            MyCommentedPopUpGridSectionCell.self,
+            forCellWithReuseIdentifier: MyCommentedPopUpGridSectionCell.identifiers
         )
         
         view.backgroundColor = .g50
@@ -117,26 +117,7 @@ extension MyCommentController: UICollectionViewDelegate, UICollectionViewDataSou
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        guard let reactor = reactor else { return cell }
-        if let cell = cell as? ListCountButtonSectionCell {
-            cell.dropdownButton.rx.tap
-                .withUnretained(self)
-                .map { (owner, _) in
-                    Reactor.Action.sortButtonTapped(controller: owner)
-                }
-                .bind(to: reactor.action)
-                .disposed(by: cell.disposeBag)
-        }
         return cell
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentHeight = scrollView.contentSize.height
-        let scrollViewHeight = scrollView.frame.size.height
-        let contentOffsetY = scrollView.contentOffset.y
-        if contentOffsetY + scrollViewHeight >= contentHeight {
-            reactor?.action.onNext(.changePage)
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -99,13 +99,8 @@ final class UserAPIUseCaseImpl {
         return repository.putUserProfile(request: .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro))
     }
     
-    func getMyComment(
-        commentType: String?,
-        sortCode: String?,
-        page: Int32?, size:
-        Int32?, sort: String?
-    ) -> Observable<GetMyCommentResponse> {
-        return repository.getMyComment(request: .init(commentType: commentType, sortCode: sortCode, page: page, size: size, sort: sort)).map { $0.toDomain() }
+    func getMyCommentedPopUp(page: Int32?, size:Int32?, sort: String?) -> Observable<GetMyCommentedPopUpResponse> {
+        return repository.getMyCommentedPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
     }
     
     func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {

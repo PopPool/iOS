@@ -42,7 +42,7 @@
 		081898DC2D326DC10067BF01 /* IntroState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898DB2D326DC10067BF01 /* IntroState.swift */; };
 		081898E02D338F9C0067BF01 /* ListCountButtonSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898DF2D338F9C0067BF01 /* ListCountButtonSection.swift */; };
 		081898E22D338FA40067BF01 /* ListCountButtonSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898E12D338FA40067BF01 /* ListCountButtonSectionCell.swift */; };
-		081898E42D3391550067BF01 /* GetMyCommentResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898E32D3391550067BF01 /* GetMyCommentResponseDTO.swift */; };
+		081898E42D3391550067BF01 /* GetMyCommentedPopUpResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898E32D3391550067BF01 /* GetMyCommentedPopUpResponseDTO.swift */; };
 		081898E62D3391CB0067BF01 /* GetMyCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898E52D3391CB0067BF01 /* GetMyCommentResponse.swift */; };
 		081898E82D3392480067BF01 /* GetMyCommentRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898E72D3392480067BF01 /* GetMyCommentRequestDTO.swift */; };
 		081898EC2D33A3960067BF01 /* MyCommentSortedModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898EB2D33A3960067BF01 /* MyCommentSortedModalView.swift */; };
@@ -372,6 +372,8 @@
 		08DE8A182D525BA20049BCAC /* Terms.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08DE8A172D525BA20049BCAC /* Terms.plist */; };
 		08DE8A1B2D5261DE0049BCAC /* MyPageTermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A1A2D5261DE0049BCAC /* MyPageTermsController.swift */; };
 		08DE8A1D2D5261E70049BCAC /* MyPageTermsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A1C2D5261E70049BCAC /* MyPageTermsReactor.swift */; };
+		08DE8A3F2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */; };
+		08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
 		4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */; };
 		4E685ECF2D12CEB6001EF91C /* BalloonChipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */; };
@@ -530,7 +532,7 @@
 		081898DB2D326DC10067BF01 /* IntroState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroState.swift; sourceTree = "<group>"; };
 		081898DF2D338F9C0067BF01 /* ListCountButtonSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCountButtonSection.swift; sourceTree = "<group>"; };
 		081898E12D338FA40067BF01 /* ListCountButtonSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCountButtonSectionCell.swift; sourceTree = "<group>"; };
-		081898E32D3391550067BF01 /* GetMyCommentResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyCommentResponseDTO.swift; sourceTree = "<group>"; };
+		081898E32D3391550067BF01 /* GetMyCommentedPopUpResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyCommentedPopUpResponseDTO.swift; sourceTree = "<group>"; };
 		081898E52D3391CB0067BF01 /* GetMyCommentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyCommentResponse.swift; sourceTree = "<group>"; };
 		081898E72D3392480067BF01 /* GetMyCommentRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMyCommentRequestDTO.swift; sourceTree = "<group>"; };
 		081898EB2D33A3960067BF01 /* MyCommentSortedModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentSortedModalView.swift; sourceTree = "<group>"; };
@@ -854,6 +856,8 @@
 		08DE8A172D525BA20049BCAC /* Terms.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Terms.plist; sourceTree = "<group>"; };
 		08DE8A1A2D5261DE0049BCAC /* MyPageTermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTermsController.swift; sourceTree = "<group>"; };
 		08DE8A1C2D5261E70049BCAC /* MyPageTermsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTermsReactor.swift; sourceTree = "<group>"; };
+		08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentedPopUpGridSection.swift; sourceTree = "<group>"; };
+		08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentedPopUpGridSectionCell.swift; sourceTree = "<group>"; };
 		4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonBackgroundView.swift; sourceTree = "<group>"; };
 		4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonChipCell.swift; sourceTree = "<group>"; };
 		4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetReactor.swift; sourceTree = "<group>"; };
@@ -1124,6 +1128,7 @@
 		081898DD2D338E2B0067BF01 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				08DE8A3D2D54DCAF0049BCAC /* MyCommentedPopUpGridSection */,
 				081898DE2D338F790067BF01 /* ListCountButtonSection */,
 				081898B92D2E5F4C0067BF01 /* MyCommentView.swift */,
 			);
@@ -2041,7 +2046,7 @@
 				081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */,
 				086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */,
 				081898AD2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift */,
-				081898E32D3391550067BF01 /* GetMyCommentResponseDTO.swift */,
+				081898E32D3391550067BF01 /* GetMyCommentedPopUpResponseDTO.swift */,
 				081898FA2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift */,
 				0818990D2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift */,
 				081899112D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift */,
@@ -2657,6 +2662,15 @@
 			path = Terms;
 			sourceTree = "<group>";
 		};
+		08DE8A3D2D54DCAF0049BCAC /* MyCommentedPopUpGridSection */ = {
+			isa = PBXGroup;
+			children = (
+				08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */,
+				08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */,
+			);
+			path = MyCommentedPopUpGridSection;
+			sourceTree = "<group>";
+		};
 		4E685EB52D12CEB6001EF91C /* FillterSheetView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3266,6 +3280,7 @@
 				08DC62032CF8AC06002A2F44 /* HomeView.swift in Sources */,
 				BD9103622CF6149D00BBCCAE /* LoginResponseDTO.swift in Sources */,
 				083C86642D0EC4A5003F441C /* InstaCommentAddReactor.swift in Sources */,
+				08DE8A3F2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift in Sources */,
 				081898C52D30AEF40067BF01 /* GetMyProfileResponse.swift in Sources */,
 				BD9103922CF6166800BBCCAE /* SplashView.swift in Sources */,
 				0899526E2D0474340022AEF9 /* GetSearchPopUpListResponse.swift in Sources */,
@@ -3332,6 +3347,7 @@
 				086F89F92D226EEB00CA4FC9 /* GetMyPageResponse.swift in Sources */,
 				083A25BF2CF362770099B58E /* Logger.swift in Sources */,
 				08DC61FC2CF76862002A2F44 /* SignUpCompleteReactor.swift in Sources */,
+				08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */,
 				0818992F2D3506290067BF01 /* FAQDropdownSection.swift in Sources */,
 				BD9103832CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift in Sources */,
 				4E6CA4852D34D6ED0034D09A /* AdminBottomSheetReactor.swift in Sources */,
@@ -3406,7 +3422,7 @@
 				083C86602D0EC496003F441C /* InstaCommentAddView.swift in Sources */,
 				08DC62132CF8B833002A2F44 /* Optional+.swift in Sources */,
 				081898F02D33A3A30067BF01 /* MyCommentSortedModalReactor.swift in Sources */,
-				081898E42D3391550067BF01 /* GetMyCommentResponseDTO.swift in Sources */,
+				081898E42D3391550067BF01 /* GetMyCommentedPopUpResponseDTO.swift in Sources */,
 				088DE25D2D145E3A0030FA9E /* DetailSimilarSection.swift in Sources */,
 				4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */,
 				083C863D2D0C8BC4003F441C /* NormalCommentAddController.swift in Sources */,
