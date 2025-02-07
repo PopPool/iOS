@@ -16,9 +16,7 @@ final class MyCommentReactor: Reactor {
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
-        case changePage
         case listTapped(controller: BaseViewController, row: Int)
-        case sortButtonTapped(controller: BaseViewController)
         case backButtonTapped(controller: BaseViewController)
     }
     
@@ -26,7 +24,6 @@ final class MyCommentReactor: Reactor {
         case loadView
         case skip
         case moveToDetailScene(controller: BaseViewController, row: Int)
-        case presentSortModal(controller: BaseViewController)
         case moveToRecentScene(controller: BaseViewController)
     }
     
@@ -39,11 +36,6 @@ final class MyCommentReactor: Reactor {
     
     var initialState: State
     var disposeBag = DisposeBag()
-    private var isLoading: Bool = false
-    private var totalPage: Int32 = 0
-    private var currentPage: Int32 = 0
-    private var size: Int32 = 10
-    private var sortCode: String = "NEWEST"
     
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     
@@ -61,8 +53,8 @@ final class MyCommentReactor: Reactor {
         }
     }()
     
-    private var listCountSection = ListCountButtonSection(inputDataList: [])
-    private var listSection = OtherUserCommentSection(inputDataList: [])
+    private var listCountSection = CommentListTitleSection(inputDataList: [])
+    private var listSection = MyCommentedPopUpGridSection(inputDataList: [])
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private var spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     
@@ -76,52 +68,27 @@ final class MyCommentReactor: Reactor {
         switch action {
         case .viewWillAppear:
             if listSection.isEmpty {
-                return userAPIUseCase.getMyComment(commentType: "NORMAL", sortCode: sortCode, page: currentPage, size: size, sort: nil)
+                return userAPIUseCase.getMyCommentedPopUp(page: 0, size: 100, sort: nil)
                     .withUnretained(self)
                     .map { (owner, response) in
-                        owner.listCountSection.inputDataList = [.init(count: response.totalElements, buttonTitle: owner.sortCode == "NEWEST" ? "최신순" : "반응순")]
-                        owner.listSection.inputDataList = response.commentList.map { .init(
-                            imagePath: $0.popUpStoreInfo.mainImageUrl,
-                            likeCount: $0.likeCount,
-                            title: $0.popUpStoreInfo.popUpStoreName,
-                            comment: $0.content,
-                            date: $0.createDateTime,
-                            popUpID: $0.popUpStoreInfo.popUpStoreId)
+                        owner.listCountSection.inputDataList = [.init(count: response.popUpInfoList.count)]
+                        owner.listSection.inputDataList = response.popUpInfoList.map { popupStore in
+                            return .init(
+                                popUpID: popupStore.popUpStoreId,
+                                imageURL: popupStore.mainImageUrl,
+                                title: popupStore.popUpStoreName,
+                                content: popupStore.desc,
+                                startDate: popupStore.startDate,
+                                endDate: popupStore.endDate
+                            )
                         }
                         return .loadView
                     }
             } else {
                 return Observable.just(.skip)
             }
-        case .changePage:
-            if isLoading {
-                return Observable.just(.skip)
-            } else {
-                if currentPage <= totalPage {
-                    isLoading = true
-                    currentPage += 1
-                    return userAPIUseCase.getMyComment(commentType: "NORMAL", sortCode: sortCode, page: currentPage, size: size, sort: nil)
-                        .withUnretained(self)
-                        .map { (owner, response) in
-                            owner.listCountSection.inputDataList = [.init(count: response.totalElements, buttonTitle: owner.sortCode == "NEWEST" ? "최신순" : "반응순")]
-                            owner.listSection.inputDataList.append(contentsOf: response.commentList.map { .init(
-                                imagePath: $0.popUpStoreInfo.mainImageUrl,
-                                likeCount: $0.likeCount,
-                                title: $0.popUpStoreInfo.popUpStoreName,
-                                comment: $0.content,
-                                date: $0.createDateTime,
-                                popUpID: $0.popUpStoreInfo.popUpStoreId)
-                            })
-                            return .loadView
-                        }
-                } else {
-                    return Observable.just(.skip)
-                }
-            }
         case .listTapped(let controller, let row):
             return Observable.just(.moveToDetailScene(controller: controller, row: row))
-        case .sortButtonTapped(let controller):
-            return Observable.just(.presentSortModal(controller: controller))
         case .backButtonTapped(let controller):
             return Observable.just(.moveToRecentScene(controller: controller))
         }
@@ -141,21 +108,6 @@ final class MyCommentReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(popUpID: popUpID)
             controller.navigationController?.pushViewController(nextController, animated: true)
-        case .presentSortModal(let controller):
-            let nextController = MyCommentSortedModalController()
-            nextController.reactor = MyCommentSortedModalReactor(sortedCode: sortCode)
-            nextController.reactor?.state
-                .withUnretained(self)
-                .subscribe(onNext: { (owner, state) in
-                    if state.isSave {
-                        owner.listSection.inputDataList = []
-                        owner.sortCode = state.currentSortedCode ?? ""
-                        owner.currentPage = 0
-                        ToastMaker.createToast(message: "보기 옵션이 반영되었어요")
-                    }
-                })
-                .disposed(by: nextController.disposeBag)
-            controller.presentPanModal(nextController)
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
         }

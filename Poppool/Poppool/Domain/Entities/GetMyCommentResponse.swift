@@ -7,23 +7,18 @@
 
 import Foundation
 
-struct GetMyCommentResponse {
-    var commentList: [GetMyCommentDataResponse]
-    var totalPages: Int32
-    var totalElements: Int64
+struct GetMyCommentedPopUpResponse {
+    var popUpInfoList: [GetMyCommentedPopUpDataResponse]
 }
 
-struct GetMyCommentDataResponse {
-    var commentId: Int64
-    var content: String?
-    var likeCount: Int64
-    var createDateTime: String?
-    var popUpStoreInfo: GetMyCommentPopUpDataResponse
-}
 
-struct GetMyCommentPopUpDataResponse {
+struct GetMyCommentedPopUpDataResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?
+    var desc: String?
     var mainImageUrl: String?
-    var closeYn: Bool
+    var startDate: String?
+    var endDate: String?
+    var address: String?
+    var closedYn: Bool
 }

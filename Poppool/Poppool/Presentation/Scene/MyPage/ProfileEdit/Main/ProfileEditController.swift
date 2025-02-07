@@ -86,7 +86,6 @@ extension ProfileEditController {
         mainView.introTextView.rx.text
             .distinctUntilChanged()
             .skip(1)
-            .debounce(.milliseconds(100), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changeIntro(intro: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

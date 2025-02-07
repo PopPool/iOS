@@ -25,29 +25,29 @@ final class ProviderImpl: Provider {
                 let urlRequest = try endpoint.getUrlRequest()
 
                 // [중요] 실제 최종 URL 로깅
-                Logger.log(
-                    message: """
-                    [Provider] 최종 요청 URL:
-                    - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-                    - Method: \(urlRequest.httpMethod ?? "알 수 없음")
-                    - Headers: \(urlRequest.allHTTPHeaderFields ?? [:])
-                    요청 시각: \(Date())
-                    """,
-                    category: .debug
-                )
+//                Logger.log(
+//                    message: """
+//                    [Provider] 최종 요청 URL:
+//                    - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
+//                    - Method: \(urlRequest.httpMethod ?? "알 수 없음")
+//                    - Headers: \(urlRequest.allHTTPHeaderFields ?? [:])
+//                    요청 시각: \(Date())
+//                    """,
+//                    category: .debug
+//                )
 
                 // AF.request로 http 요청
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in
-                        Logger.log(
-                            message: """
-                            [Provider] 응답 수신:
-                            - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-                            - 응답 시각: \(Date())
-                            """,
-                            category: .network
-                        )
+//                        Logger.log(
+//                            message: """
+//                            [Provider] 응답 수신:
+//                            - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
+//                            - 응답 시각: \(Date())
+//                            """,
+//                            category: .network
+//                        )
                         switch response.result {
                         case .success(let data):
                             // 빈 응답 처리

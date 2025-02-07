@@ -54,7 +54,6 @@ extension SignUpStep2Controller {
             .disposed(by: disposeBag)
         
         mainView.textField.rx.text
-            .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.inputNickName(text: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

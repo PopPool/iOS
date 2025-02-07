@@ -51,9 +51,37 @@ final class FAQReactor: Reactor {
     }()
     private let faqTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "자주 묻는 질문")])
     private var faqSection = FAQDropdownSection(inputDataList: [
-        .init(title: "회원탈퇴 후 재가입이 가능한가요?", content: "으아아아아", isOpen: false),
-        .init(title: "저장한 팝업을 어디서 볼 수 있나요?", content: "으아아아아", isOpen: false),
-        .init(title: "추천은 어떤 기준으로 보여지나요?", content: "모든 국민은 학문과 예술의 자유를 가진다.모든 국민은 언론·출판의 자유와 집회·결사의 자유를 가진다.헌법재판소는 법률에 저촉되지 아니하는 범위안에서 심판에 관한 절차, 내부규율과 사무처리에 관한 규칙을 제정할 수 있다.", isOpen: false)
+        .init(
+            title: "비회원도 사용할 수 있나요?",
+            content: "비회원이시라도 팝풀에서 제공하는 서비스를 이용할 수 있어요. 단, 팝업스토어 찜하기, 코멘트 남기기 등 일부 기능은 사용할 수 없어요.",
+            isOpen: false
+        ),
+        .init(
+            title: "회원 정보를 수정하고 싶어요.",
+            content: "[마이페이지 > 설정 > 프로필 수정]에서 회원정보를 수정하실 수 있어요. 단, 가입 시 연동한 이메일 계정은 수정이 불가능해요.",
+            isOpen: false
+        ),
+        .init(
+            title: "회원을 탈퇴하고 싶어요.",
+            content: "[마이페이지] 하단의 '회원 탈퇴' 버튼을 클릭해 탈퇴할 수 있어요.",
+            isOpen: false
+        ),
+        .init(
+            title: "추천 팝업은 어떤 기준으로 보여지나요?",
+            content: "추천 팝업은 고객님께서 선택하신 맞춤 정보(성별, 연령대, 관심사)와 연관된 팝업스토어 정보를 기준으로 추천해드려요.",
+            isOpen: false
+        ),
+        .init(
+            title: "팝업스토어 정보가 없거나 정보가 달라요.",
+            content: "[마이페이지 > 고객문의 > 메일로 문의]로 내용을 알려주시면 빠른 시일 내 추가/수정할게요.",
+            isOpen: false
+        ),
+        .init(
+            title: "고객센터 상담은 어디서 할 수 있나요?",
+            content: "[마이페이지 > 고객문의 > 메일로 문의]에서 할 수 있으며, 주말, 공휴일을 제외한 평일 오전 9시부터 오후 6시까지 운영해요.",
+            isOpen: false
+        ),
+
     ])
     private let qnaTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "직접 문의하기")])
     private var qnaSection = MyPageListSection(inputDataList: [

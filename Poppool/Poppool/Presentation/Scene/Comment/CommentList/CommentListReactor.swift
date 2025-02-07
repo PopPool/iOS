@@ -44,11 +44,14 @@ final class CommentListReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
     private let popUpID: Int64
+    private let popUpName: String?
     private var page: Int32 = 0
     private var appendDataIsEmpty: Bool = false
     
+    private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
     
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -70,9 +73,10 @@ final class CommentListReactor: Reactor {
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     // MARK: - init
-    init(popUpID: Int64) {
+    init(popUpID: Int64, popUpName: String?) {
         self.initialState = State()
         self.popUpID = popUpID
+        self.popUpName = popUpName
     }
     
     // MARK: - Reactor Methods
@@ -192,50 +196,8 @@ final class CommentListReactor: Reactor {
             controller.present(nextController, animated: true)
         case .presentCommentMenuScene(let controller, let row):
             let comment = commentSection.inputDataList[row]
-            let nextController = CommentUserInfoController()
-            nextController.reactor = CommentUserInfoReactor(nickName: comment.nickName)
-            controller.presentPanModal(nextController)
-            nextController.reactor?.state
-                .withUnretained(nextController)
-                .subscribe(onNext: { [weak self] (owner, state) in
-                    guard let self = self else { return }
-                    switch state.selectedType {
-                    case .normal:
-                        owner.dismiss(animated: true) {
-                            let otherUserCommentController = OtherUserCommentController()
-                            otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
-                            controller.navigationController?.pushViewController(otherUserCommentController, animated: true)
-                        }
-                    case .block:
-                        owner.dismiss(animated: true) {
-                            let blockController = CommentUserBlockController()
-                            blockController.reactor = CommentUserBlockReactor(nickName: comment.nickName)
-                            controller.presentPanModal(blockController)
-                            blockController.reactor?.state
-                                .withUnretained(blockController)
-                                .subscribe(onNext: { (blockController, state) in
-                                    switch state.selectedType {
-                                    case .none:
-                                        break
-                                    case .block:
-                                        self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
-                                            .subscribe(onDisposed:  {
-                                                blockController.dismiss(animated: true)
-                                            })
-                                            .disposed(by: self.disposeBag)
-                                    case .cancel:
-                                        blockController.dismiss(animated: true)
-                                    }
-                                })
-                                .disposed(by: self.disposeBag)
-                        }
-                    case .cancel:
-                        owner.dismiss(animated: true)
-                    default:
-                        break
-                    }
-                })
-                .disposed(by: disposeBag)
+            // 분기 필요합니다~!~!
+            showOtherUserCommentMenu(controller: controller, comment: comment)
         }
         return newState
     }
@@ -247,5 +209,93 @@ final class CommentListReactor: Reactor {
             spacing28Section,
             commentSection
         ]
+    }
+    
+    func showOtherUserCommentMenu(controller: BaseViewController, comment: DetailCommentSection.CellType.Input) {
+        let nextController = CommentUserInfoController()
+        nextController.reactor = CommentUserInfoReactor(nickName: comment.nickName)
+        controller.presentPanModal(nextController)
+        nextController.reactor?.state
+            .withUnretained(nextController)
+            .subscribe(onNext: { [weak self] (owner, state) in
+                guard let self = self else { return }
+                switch state.selectedType {
+                case .normal:
+                    owner.dismiss(animated: true) { [weak controller] in
+                        let otherUserCommentController = OtherUserCommentController()
+                        otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
+                        controller?.navigationController?.pushViewController(otherUserCommentController, animated: true)
+                    }
+                case .block:
+                    owner.dismiss(animated: true) { [weak controller] in
+                        let blockController = CommentUserBlockController()
+                        blockController.reactor = CommentUserBlockReactor(nickName: comment.nickName)
+                        controller?.presentPanModal(blockController)
+                        blockController.reactor?.state
+                            .withUnretained(blockController)
+                            .subscribe(onNext: { (blockController, state) in
+                                switch state.selectedType {
+                                case .none:
+                                    break
+                                case .block:
+                                    self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
+                                        .subscribe(onDisposed:  {
+                                            blockController.dismiss(animated: true)
+                                        })
+                                        .disposed(by: self.disposeBag)
+                                case .cancel:
+                                    blockController.dismiss(animated: true)
+                                }
+                            })
+                            .disposed(by: self.disposeBag)
+                    }
+                case .cancel:
+                    owner.dismiss(animated: true)
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func showMyCommentMenu(controller: BaseViewController, comment: DetailCommentSection.CellType.Input) {
+        let nextController = CommentMyMenuController()
+        nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
+        imageService = PreSignedService()
+        controller.presentPanModal(nextController)
+        
+        nextController.reactor?.state
+            .withUnretained(nextController)
+            .subscribe(onNext: { [weak self] (owner, state) in
+                guard let self = self else { return }
+                switch state.selectedType {
+                case .remove:
+                    self.commentAPIUseCase.deleteComment(popUpStoreId: self.popUpID, commentId: comment.commentID)
+                        .subscribe(onDisposed: {
+                            owner.dismiss(animated: true)
+                            ToastMaker.createToast(message: "작성한 코멘트를 삭제했어요")
+                        })
+                        .disposed(by: self.disposeBag)
+                    
+                    let commentList = comment.imageList.compactMap { $0 }
+                    self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
+                        .subscribe {
+                            Logger.log(message: "S3 Image Delete 완료", category: .info)
+                        }
+                        .disposed(by: self.disposeBag)
+                case .edit:
+                    owner.dismiss(animated: true) { [weak controller] in
+                        guard let popUpName = self.popUpName else { return }
+                        let editController = NormalCommentEditController()
+                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        controller?.navigationController?.pushViewController(editController, animated: true)
+                    }
+                case .cancel:
+                    owner.dismiss(animated: true)
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }

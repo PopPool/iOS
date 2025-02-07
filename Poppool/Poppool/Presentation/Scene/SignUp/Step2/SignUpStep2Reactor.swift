@@ -100,7 +100,8 @@ final class SignUpStep2Reactor: Reactor {
         if regex.firstMatch(in: text, options: [], range: range) == nil { return isActive ? .korAndEngActive : .korAndEng }
         
         // textLength Check
-        if !(2...10).contains(text.count) { return isActive ? .lengthActive : .length }
+        if text.count < 2 { return isActive ? .shortLengthActive : .shortLength }
+        if text.count > 10 { return isActive ? .longLengthActive : .longLength }
         
         return isActive ? .checkActive : .check
     }

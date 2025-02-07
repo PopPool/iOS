@@ -183,12 +183,8 @@ final class HomeReactor: Reactor {
                 spaceGray24Section,
                 popularSection,
                 spaceGray28Section,
-                spaceClear48Section,
-                newTitleSection,
-                spaceClear24Section,
-                newSection,
                 spaceClear48Section
-            ]
+            ] + getNewSection()
         } else {
             return [
                 loginImageBannerSection,
@@ -197,14 +193,23 @@ final class HomeReactor: Reactor {
                 spaceGray24Section,
                 popularSection,
                 spaceGray28Section,
-                spaceClear48Section,
+                spaceClear48Section
+            ] + getNewSection()
+        }
+
+    }
+    
+    func getNewSection() -> [any Sectionable] {
+        if newSection.isEmpty {
+            return []
+        } else {
+            return [
                 newTitleSection,
                 spaceClear24Section,
                 newSection,
                 spaceClear48Section
             ]
         }
-
     }
     
     func setBannerSection(response: GetHomeInfoResponse) {

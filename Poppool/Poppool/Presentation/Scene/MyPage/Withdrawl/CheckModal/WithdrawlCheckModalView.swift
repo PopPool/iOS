@@ -52,16 +52,7 @@ final class WithdrawlCheckModalView: UIView {
         return label
     }()
     
-    let thirdLabel: UILabel = {
-        let text = "탈퇴 후 재가입은 14일이 지나야 가능해요."
-        let label = UILabel()
-        label.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 13), lineHeight: 1.4)
-        label.numberOfLines = 2
-        label.textColor = .g600
-        return label
-    }()
-    
-    let fourthLabel: PPLabel = {
+    let thirdLabel: PPLabel = {
         let text = "작성하신 코멘트나 댓글 등의 일부 정보는 계속 남아있을 수 있어요. "
         let label = PPLabel(style: .regular, fontSize: 13, text: text)
         label.numberOfLines = 2
@@ -128,6 +119,5 @@ private extension WithdrawlCheckModalView {
         textStackView.addArrangedSubview(firstLabel)
         textStackView.addArrangedSubview(secondLabel)
         textStackView.addArrangedSubview(thirdLabel)
-        textStackView.addArrangedSubview(fourthLabel)
     }
 }

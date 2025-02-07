@@ -142,6 +142,8 @@ extension SignUpMainController {
         step4Controller.mainView.completeButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
+                owner.step4Controller.mainView.completeButton.isEnabled = false
+                owner.step4Controller.mainView.skipButton.isEnabled = false
                 return Reactor.Action.step4ButtonTapped(controller: owner)
             }
             .bind(to: reactor.action)
@@ -151,6 +153,8 @@ extension SignUpMainController {
         step4Controller.mainView.skipButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
+                owner.step4Controller.mainView.completeButton.isEnabled = false
+                owner.step4Controller.mainView.skipButton.isEnabled = false
                 return Reactor.Action.step4SkipButtonTapped(controller: owner)
             }
             .bind(to: reactor.action)

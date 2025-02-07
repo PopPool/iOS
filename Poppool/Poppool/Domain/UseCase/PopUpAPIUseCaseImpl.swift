@@ -34,8 +34,8 @@ final class PopUpAPIUseCaseImpl {
         return repository.getSearchPopUpList(request: .init(query: query)).map { $0.toDomain() }
     }
     
-    func getPopUpDetail(commentType: String?, popUpStoredId: Int64) -> Observable<GetPopUpDetailResponse> {
-        return repository.getPopUpDetail(request: .init(commentType: commentType, popUpStoreId: popUpStoredId)).map { $0.toDomain() }
+    func getPopUpDetail(commentType: String?, popUpStoredId: Int64, isViewCount: Bool? = true) -> Observable<GetPopUpDetailResponse> {
+        return repository.getPopUpDetail(request: .init(commentType: commentType, popUpStoreId: popUpStoredId, viewCountYn: isViewCount)).map { $0.toDomain() }
     }
     
     func getPopUpComment(commentType: String?, page: Int32?, size: Int32?, sort: String?, popUpStoreId: Int64) -> Observable<GetPopUpCommentResponse> {

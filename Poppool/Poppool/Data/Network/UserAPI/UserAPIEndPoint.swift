@@ -142,10 +142,10 @@ struct UserAPIEndPoint {
         )
     }
     
-    static func getMyComment(request: GetMyCommentRequestDTO) -> Endpoint<GetMyCommentResponseDTO> {
+    static func getMyCommentedPopUp(request: SortedRequestDTO) -> Endpoint<GetMyCommentedPopUpResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
-            path: "/users/comments",
+            path: "/users/commented/popup",
             method: .get,
             queryParameters: request
         )
