@@ -16,6 +16,7 @@ struct GetMyCommentedPopUpDataResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?
     var desc: String?
+    var mainImageUrl: String?
     var startDate: String?
     var endDate: String?
     var address: String?

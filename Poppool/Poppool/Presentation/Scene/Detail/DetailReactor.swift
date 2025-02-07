@@ -62,6 +62,7 @@ final class DetailReactor: Reactor {
     private let popUpID: Int64
     private var popUpName: String?
     private var isLogin: Bool = false
+    private var isFirstRequest: Bool = true
     
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
@@ -182,7 +183,7 @@ final class DetailReactor: Reactor {
         case .moveToCommentTotalScene(let controller):
             if isLogin {
                 let nextController = CommentListController()
-                nextController.reactor = CommentListReactor(popUpID: popUpID)
+                nextController.reactor = CommentListReactor(popUpID: popUpID, popUpName: popUpName)
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
                 let loginController = SubLoginController()
@@ -312,10 +313,10 @@ final class DetailReactor: Reactor {
     }
     
     func setContent() -> Observable<Mutation> {
-        return popUpAPIUseCase.getPopUpDetail(commentType: "NORMAL", popUpStoredId: popUpID)
+        return popUpAPIUseCase.getPopUpDetail(commentType: "NORMAL", popUpStoredId: popUpID, isViewCount: isFirstRequest)
             .withUnretained(self)
             .map { (owner, response) in
-                
+                owner.isFirstRequest = false
                 owner.isLogin = response.loginYn
                 // image Banner
                 let imagePaths = response.imageList.compactMap { $0.imageUrl }
@@ -495,7 +496,7 @@ final class DetailReactor: Reactor {
                             owner.dismiss(animated: true)
                             ToastMaker.createToast(message: "작성한 코멘트를 삭제했어요")
                         })
-                        .disposed(by: owner.disposeBag)
+                        .disposed(by: self.disposeBag)
                     
                     let commentList = comment.imageList.compactMap { $0 }
                     self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))

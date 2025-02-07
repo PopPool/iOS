@@ -71,12 +71,11 @@ final class MyCommentReactor: Reactor {
                 return userAPIUseCase.getMyCommentedPopUp(page: 0, size: 100, sort: nil)
                     .withUnretained(self)
                     .map { (owner, response) in
-                        print(response)
                         owner.listCountSection.inputDataList = [.init(count: response.popUpInfoList.count)]
                         owner.listSection.inputDataList = response.popUpInfoList.map { popupStore in
                             return .init(
                                 popUpID: popupStore.popUpStoreId,
-                                imageURL: nil,
+                                imageURL: popupStore.mainImageUrl,
                                 title: popupStore.popUpStoreName,
                                 content: popupStore.desc,
                                 startDate: popupStore.startDate,

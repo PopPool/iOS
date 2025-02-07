@@ -155,7 +155,7 @@ class AnimatedGradientView: UIView {
             UIColor.init(hexCode: "#1570FC").cgColor,
             UIColor.init(hexCode: "#00E6BD").cgColor
         ]
-        animation.duration = 3.0 // 색이 부드럽게 바뀌는 시간
+        animation.duration = 1 // 색이 부드럽게 바뀌는 시간
         animation.autoreverses = true // 원래 색으로 돌아가게 함
         animation.repeatCount = .infinity // 무한 반복
         
