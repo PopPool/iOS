@@ -11,7 +11,7 @@ enum MapZoomLevel {
         case ..<7:
             return .country
         case 7..<10:
-            return .city       // 시단위 클러스터링 영역
+            return .city       
         case 10..<11:
             return .district   // 구단위 클러스터링 영역
         default:

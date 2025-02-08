@@ -19,6 +19,7 @@ struct RegionCoordinate {
     static let gangwon = CLLocationCoordinate2D(latitude: 37.8228, longitude: 128.1555)
     static let jeju = CLLocationCoordinate2D(latitude: 33.4890, longitude: 126.4983)
 }
+
 enum RegionType {
     case seoul
     case gyeonggi

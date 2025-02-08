@@ -1,60 +1,39 @@
 import CoreLocation
+import UIKit
 
 class ClusteringManager {
     private let regions = RegionDefinitions.allClusters
 
-    // 클러스터링을 위한 가변 구조체
     private class MutableCluster {
         let base: RegionCluster
         var stores: [MapPopUpStore]
         var storeCount: Int
+        var fixedCenter: CLLocationCoordinate2D?
 
-        init(base: RegionCluster) {
+        init(base: RegionCluster, fixedCenter: CLLocationCoordinate2D? = nil) {
             self.base = base
             self.stores = []
             self.storeCount = 0
-        }
-        func mercatorProjection(from coordinate: CLLocationCoordinate2D) -> CGPoint {
-            // 위도, 경도를 메르카토르 투영 좌표(미터 단위)로 변환
-            let x = coordinate.longitude * 20037508.34 / 180.0
-            var y = log(tan((90 + coordinate.latitude) * .pi / 360.0)) / (.pi / 180.0)
-            y = y * 20037508.34 / 180.0
-            return CGPoint(x: x, y: y)
+            self.fixedCenter = fixedCenter
         }
 
-        func inverseMercatorProjection(from point: CGPoint) -> CLLocationCoordinate2D {
-            // 메르카토르 좌표를 다시 위도/경도로 복원
-            let lon = (point.x / 20037508.34) * 180.0
-            var lat = (point.y / 20037508.34) * 180.0
-            lat = 180 / .pi * (2 * atan(exp(lat * .pi / 180.0)) - .pi / 2)
-            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        }
         func centerCoordinate() -> CLLocationCoordinate2D {
-              // 스토어가 없으면 기본 좌표 반환
-              guard storeCount > 0 else { return base.coordinate }
-
-              // 각 스토어의 좌표를 메르카토르 좌표로 변환
-              let projectedPoints = stores.map { mercatorProjection(from: $0.coordinate) }
-              let totalX = projectedPoints.reduce(0, { $0 + $1.x })
-              let totalY = projectedPoints.reduce(0, { $0 + $1.y })
-              let avgPoint = CGPoint(x: totalX / CGFloat(storeCount), y: totalY / CGFloat(storeCount))
-              // 평균 좌표를 다시 위도/경도로 변환하여 반환
-              return inverseMercatorProjection(from: avgPoint)
-          }
+            return fixedCenter ?? base.coordinate
+        }
 
         func toMarkerData() -> ClusterMarkerData {
-               let adjustedCluster = RegionCluster(
-                   name: base.name,
-                   subRegions: base.subRegions,
-                   coordinate: self.centerCoordinate(),
-                   type: base.type
-               )
-               return ClusterMarkerData(
-                   cluster: adjustedCluster,
-                   storeCount: storeCount
-               )
-           }
-       }
+            let adjustedCluster = RegionCluster(
+                name: base.name,
+                subRegions: base.subRegions,
+                coordinate: self.centerCoordinate(),
+                type: base.type
+            )
+            return ClusterMarkerData(
+                cluster: adjustedCluster,
+                storeCount: storeCount
+            )
+        }
+    }
 
     func clusterStores(_ stores: [MapPopUpStore], at zoomLevel: Float) -> [ClusterMarkerData] {
         let level = MapZoomLevel.getLevel(from: zoomLevel)
@@ -62,123 +41,182 @@ class ClusteringManager {
         case .country:
             return clusterByProvince(stores)
         case .city:
-            return clusterByCityLevel(stores)  // 시단위 클러스터링
+            return clusterByCityLevel(stores)
         case .district:
-            return clusterByCity(stores)
+            return clusterByDistrict(stores)
         case .detailed:
             return []
         }
     }
 
-
     private func clusterByCityLevel(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
-        // 시단위 클러스터링: 서울, 경기, 광역시만 사용
-        var seoulClusters = initializeClusters(type: .seoul)
-        var gyeonggiClusters = initializeClusters(type: .gyeonggi)
-        var metroClusters = initializeClusters(type: .metropolitan)
+        var clusters: [String: MutableCluster] = [:]
+
+        // 미리 클러스터 초기화
+        let predefinedClusters = [
+            ("서울 북부", RepresentativeScope.seoulNorth.center),
+            ("서울 남부", RepresentativeScope.seoulSouth.center),
+            ("경기 북부", RepresentativeScope.gyeonggiNorth.center),
+            ("경기 남부", RepresentativeScope.gyeonggiSouth.center)
+        ]
+
+        // 미리 클러스터 생성
+        for (name, coordinate) in predefinedClusters {
+            let baseRegion = RegionCluster(
+                name: name,
+                subRegions: [name],
+                coordinate: coordinate,
+                type: .metropolitan
+            )
+            clusters[name] = MutableCluster(base: baseRegion, fixedCenter: coordinate)
+        }
 
         for store in stores {
-            if let cluster = findClusterForStore(store, in: seoulClusters) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
-            } else if let cluster = findClusterForStore(store, in: gyeonggiClusters) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
-            } else if let cluster = findClusterForStore(store, in: metroClusters) {
+            let city = extractCity(from: store.address)
+            var clusterKey: String
+
+            if city == "서울" {
+                clusterKey = seoulNorthRegions.contains(where: { store.address.contains($0) }) ?
+                    "서울 북부" : "서울 남부"
+            } else if city == "경기" {
+                clusterKey = gyeonggiNorthRegions.contains(where: { store.address.contains($0) }) ?
+                    "경기 북부" : "경기 남부"
+            } else {
+                // 다른 도시는 기존 방식 유지
+                clusterKey = city
+                if clusters[clusterKey] == nil {
+                    if let coordinate = getFixedCenterForCity(city) {
+                        let baseRegion = RegionCluster(
+                            name: clusterKey,
+                            subRegions: [clusterKey],
+                            coordinate: coordinate,
+                            type: .metropolitan
+                        )
+                        clusters[clusterKey] = MutableCluster(base: baseRegion, fixedCenter: coordinate)
+                    }
+                }
+            }
+
+            if let cluster = clusters[clusterKey] {
                 cluster.stores.append(store)
                 cluster.storeCount += 1
             }
         }
 
-        let allClusters = seoulClusters + gyeonggiClusters + metroClusters
+        return clusters.values
+            .filter { $0.storeCount > 0 }
+            .map { $0.toMarkerData() }
+    }
+
+    private func clusterByDistrict(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
+        // 1) 서울 구 클러스터 딕셔너리
+        var seoulClusters: [String: MutableCluster] = [:]
+        for cluster in RegionDefinitions.seoulClusters {
+            // 고정 좌표 사용
+            seoulClusters[cluster.name] = MutableCluster(base: cluster, fixedCenter: cluster.coordinate)
+        }
+
+        // 2) 경기 시 클러스터 딕셔너리
+        var gyeonggiClusters: [String: MutableCluster] = [:]
+        for cluster in RegionDefinitions.gyeonggiClusters {
+            // 고정 좌표 사용
+            gyeonggiClusters[cluster.name] = MutableCluster(base: cluster, fixedCenter: cluster.coordinate)
+        }
+
+        // (선택) 3) 다른 도/광역시도 district 레벨에서 처리하고 싶다면 여기에 추가
+
+        // 4) 스토어 분류
+        for store in stores {
+            let city = extractCity(from: store.address)
+
+            // 서울 구 찾기
+            if city == "서울" {
+                // 'seoulClusters' 중 하나와 매칭
+                if let clusterName = findMatchingSeoulDistrictName(in: store.address),
+                   let cluster = seoulClusters[clusterName] {
+                    cluster.stores.append(store)
+                    cluster.storeCount += 1
+                }
+            }
+            // 경기 시 찾기
+            else if city == "경기" {
+                // 'gyeonggiClusters' 중 하나와 매칭
+                if let clusterName = findMatchingGyeonggiCityName(in: store.address),
+                   let cluster = gyeonggiClusters[clusterName] {
+                    cluster.stores.append(store)
+                    cluster.storeCount += 1
+                }
+            }
+            else {
+                // 그 외는 아직 미구현 or 무시
+                Logger.log(message: "🔹 기타 지역(도/광역시) - 주소: \(store.address)", category: .debug)
+            }
+        }
+
+        // 5) 결과 합쳐서 반환 (서울 + 경기)
+        let allClusters = Array(seoulClusters.values) + Array(gyeonggiClusters.values)
         return allClusters
             .filter { $0.storeCount > 0 }
             .map { $0.toMarkerData() }
     }
 
     private func clusterByProvince(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
-        var clusteredStores = initializeClusters(type: .province)
+        var clusters: [String: MutableCluster] = [:]
+
+        for cluster in RegionDefinitions.provinceClusters {
+            clusters[cluster.name] = MutableCluster(base: cluster)
+        }
 
         for store in stores {
-            if let cluster = findClusterForStore(store, in: clusteredStores) {
+            if let provinceName = findMatchingProvinceName(in: store.address),
+               let cluster = clusters[provinceName] {
                 cluster.stores.append(store)
                 cluster.storeCount += 1
             }
         }
 
-        return clusteredStores
+        return clusters.values
             .filter { $0.storeCount > 0 }
             .map { $0.toMarkerData() }
     }
 
-    private func clusterByRegion(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
-        var seoulClusters = initializeClusters(type: .seoul)
-        var gyeonggiClusters = initializeClusters(type: .gyeonggi)
-        var metroClusters = initializeClusters(type: .metropolitan)
-
-        for store in stores {
-            if let cluster = findClusterForStore(store, in: seoulClusters) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
-            } else if let cluster = findClusterForStore(store, in: gyeonggiClusters) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
-            } else if let cluster = findClusterForStore(store, in: metroClusters) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
+    private func findMatchingSeoulDistrictName(in address: String) -> String? {
+        // RegionDefinitions.seoulClusters 중
+        // subRegions에 address가 포함된 클러스터.name 반환
+        return RegionDefinitions.seoulClusters.first { cluster in
+            cluster.subRegions.contains { district in
+                address.contains(district)
             }
-        }
-
-        let allClusters = seoulClusters + gyeonggiClusters + metroClusters
-        return allClusters
-            .filter { $0.storeCount > 0 }
-            .map { $0.toMarkerData() }
+        }?.name
     }
 
-    private func clusterByCity(_ stores: [MapPopUpStore]) -> [ClusterMarkerData] {
-        var clusteredStores = initializeClusters(type: nil)
-
-        for store in stores {
-            if let cluster = findClusterForStore(store, in: clusteredStores) {
-                cluster.stores.append(store)
-                cluster.storeCount += 1
+    private func findMatchingGyeonggiCityName(in address: String) -> String? {
+        // RegionDefinitions.gyeonggiClusters 중
+        // subRegions에 address가 포함된 클러스터.name 반환
+        return RegionDefinitions.gyeonggiClusters.first { cluster in
+            cluster.subRegions.contains { cityName in
+                address.contains(cityName)
             }
-        }
-
-        return clusteredStores
-            .filter { $0.storeCount > 0 }
-            .map { $0.toMarkerData() }
+        }?.name
+    }
+    private func findMatchingProvinceName(in address: String) -> String? {
+        return RegionDefinitions.provinceClusters.first { cluster in
+            cluster.subRegions.contains { province in
+                address.contains(province)
+            }
+        }?.name
     }
 
-    private func initializeClusters(type: RegionType?) -> [MutableCluster] {
-        if let type = type {
-            switch type {
-            case .seoul:
-                return RegionDefinitions.seoulClusters.map { MutableCluster(base: $0) }
-            case .gyeonggi:
-                return RegionDefinitions.gyeonggiClusters.map { MutableCluster(base: $0) }
-            case .metropolitan:
-                return RegionDefinitions.metropolitanClusters.map { MutableCluster(base: $0) }
-            case .province:
-                return RegionDefinitions.provinceClusters.map { MutableCluster(base: $0) }
-            }
-        }
-        return RegionDefinitions.allClusters.map { MutableCluster(base: $0) }
-    }
-
-    private func findClusterForStore(_ store: MapPopUpStore, in clusters: [MutableCluster]) -> MutableCluster? {
-        return clusters.first { cluster in
-            // 좌표 비교: 위도/경도 차이가 아주 작으면 동일한 위치로 간주
-            let latDiff = abs(store.coordinate.latitude - cluster.base.coordinate.latitude)
-            let lonDiff = abs(store.coordinate.longitude - cluster.base.coordinate.longitude)
-            // 예시 임계값: 0.0001 이하 → 동일한 위치
-            if latDiff < 0.0001 && lonDiff < 0.0001 {
-                return true
-            }
-            // 기존: 주소에 특정 키워드가 포함되어 있는지 검사하는 방식
-            return cluster.base.subRegions.contains { region in
-                store.address.contains(region)
-            }
+    private func getFixedCenterForCity(_ city: String) -> CLLocationCoordinate2D? {
+        switch city {
+        case "대구": return RegionCoordinate.daegu
+        case "부산": return RegionCoordinate.busan
+        case "울산": return RegionCoordinate.ulsan
+        case "대전": return RegionCoordinate.daejeon
+        case "광주": return RegionCoordinate.gwangju
+        case "인천": return RegionCoordinate.incheon
+        case "세종": return RegionCoordinate.sejong
+        default: return nil
         }
     }
 }

@@ -5,10 +5,16 @@ import GoogleMaps
 final class MapView: UIView {
     // MARK: - Components
     let mapView: GMSMapView = {
-        let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 15)
+        let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 14)
         let view = GMSMapView(frame: .zero, camera: camera)
         view.settings.myLocationButton = false
-        view.setMinZoom(7.5, maxZoom: 20)  // 올바른 방법
+        view.setMinZoom(7.5, maxZoom: 20)
+
+
+        let southWest = CLLocationCoordinate2D(latitude: 33.0, longitude: 124.0)
+        let northEast = CLLocationCoordinate2D(latitude: 39.0, longitude: 132.0)
+        let koreaBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
+        view.cameraTargetBounds = koreaBounds
 
         return view
     }()

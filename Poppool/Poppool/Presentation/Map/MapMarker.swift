@@ -4,6 +4,7 @@ import GoogleMaps
 
 final class MapMarker: UIView {
    // MARK: - Components
+
    private let markerImageView: UIImageView = {
        let imageView = UIImageView()
        imageView.image = UIImage(named: "Marker")
@@ -18,6 +19,24 @@ final class MapMarker: UIView {
           view.layer.borderWidth = 0
           return view
       }()
+    private let countBadgeView: UIView = {
+            let view = UIView()
+            view.backgroundColor = .white
+            view.layer.cornerRadius = 10
+            view.layer.borderColor = UIColor.blue.cgColor
+            view.layer.borderWidth = 2
+            view.layer.masksToBounds = true
+            view.isHidden = true // 초기에는 숨겨놓음 (겹치는 개수 1 이하일 때)
+            return view
+        }()
+    private let badgeCountLabel: UILabel = {
+           let label = UILabel()
+           label.font = .boldSystemFont(ofSize: 10)
+           label.textColor = .blue
+           label.textAlignment = .center
+           return label
+       }()
+
 
    private let labelStackView: UIStackView = {
        let stack = UIStackView()
@@ -36,7 +55,7 @@ final class MapMarker: UIView {
    private let countLabel: UILabel = {
        let label = UILabel()
        label.font = .systemFont(ofSize: 13)
-       label.textColor = .red
+       label.textColor = .white
        return label
    }()
 
@@ -60,17 +79,21 @@ private extension MapMarker {
        clusterContainer.addSubview(labelStackView)
        labelStackView.addArrangedSubview(regionLabel)
        labelStackView.addArrangedSubview(countLabel)
+       
 
-       // 전체 뷰 크기 제약조건
        self.snp.makeConstraints { make in
-           make.width.height.equalTo(200)  // 충분히 큰 크기로 설정
+           make.width.equalTo(200)
+           make.height.equalTo(70)
+
        }
 
-       // 마커 이미지뷰 제약조건
        markerImageView.snp.makeConstraints { make in
-           make.center.equalToSuperview()
-           make.size.equalTo(32)
+           // 예) 하단 중앙 정렬
+           make.centerX.equalToSuperview()
+           make.bottom.equalToSuperview()       // 커스텀 뷰의 bottom이 곧 "마커 이미지 bottom"
+           make.width.height.equalTo(32)        // 이미지 크기
        }
+
 
        // 클러스터 컨테이너 제약조건
        clusterContainer.snp.makeConstraints { make in
@@ -107,33 +130,34 @@ extension MapMarker: Inputable {
        var isCluster: Bool = false
        var regionName: String = ""
        var count: Int = 0
+       var isMultiMarker: Bool = false
    }
 
     func injection(with input: Input) {
         if input.isCluster {
+            // 클러스터 마커 처리 (기존과 동일)
             markerImageView.isHidden = true
             clusterContainer.isHidden = false
             regionLabel.text = input.regionName
             regionLabel.textColor = .w100
             countLabel.text = "\(input.count)"
 
-            // 만약 regionName과 count가 이전과 동일하다면 너비 계산 생략
             if let previousText = regionLabel.text,
                previousText == input.regionName {
-                // 이미 설정된 제약 조건이 있다면 그대로 사용
+                // 기존 제약조건 유지
             } else {
-                // 레이아웃 업데이트 및 너비 계산은 한 번만 수행
                 self.layoutIfNeeded()
                 let contentWidth = labelStackView.systemLayoutSizeFitting(
                     CGSize(width: UIView.layoutFittingCompressedSize.width, height: 24)
                 ).width
                 let totalWidth = contentWidth + 16
-                Logger.log(message: "클러스터 마커 크기 계산: contentWidth: \(contentWidth), totalWidth: \(totalWidth)", category: .debug)
                 clusterContainer.snp.updateConstraints { make in
                     make.width.equalTo(totalWidth)
                 }
             }
+
         } else {
+            // 단일 마커 처리
             markerImageView.isHidden = false
             clusterContainer.isHidden = true
             updateMarkerImage(isSelected: input.isSelected)
