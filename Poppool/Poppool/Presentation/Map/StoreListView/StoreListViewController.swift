@@ -35,9 +35,10 @@ final class StoreListViewController: UIViewController, View {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reactor?.action.onNext(.viewDidLoad) // 데이터 재로드
+        if let currentStores = reactor?.currentState.stores {
+            reactor?.action.onNext(.setStores(currentStores))
+        }
     }
-
 
     private func setupLayout() {
         view.backgroundColor = .clear
@@ -126,10 +127,10 @@ final class StoreListViewController: UIViewController, View {
 
 
         // 4) viewWillAppear -> viewDidLoad
-        rx.viewWillAppear
-            .map { _ in Reactor.Action.viewDidLoad }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+//        rx.viewWillAppear
+//            .map { _ in Reactor.Action.viewDidLoad }
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
 
         // 5) **필터 상태** 관찰 → 바텀시트 열기/닫기
         reactor.state.map { $0.activeFilterType }

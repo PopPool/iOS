@@ -9,7 +9,7 @@ final class BalloonChipCell: UICollectionViewCell {
            style: .secondary,
            text: "",
            font: .KorFont(style: .medium, size: 12),
-           cornerRadius: 16
+           cornerRadius: 15
        )
        button.titleLabel?.lineBreakMode = .byClipping
        button.titleLabel?.adjustsFontSizeToFitWidth = false

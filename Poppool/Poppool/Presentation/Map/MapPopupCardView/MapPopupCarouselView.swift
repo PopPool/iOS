@@ -13,7 +13,10 @@ final class MapPopupCarouselView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
+        collectionView.layer.cornerRadius = 12
+        collectionView.clipsToBounds = true
         return collectionView
+
     }()
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
@@ -70,6 +73,7 @@ final class MapPopupCarouselView: UIView {
             animated: true
         )
     }
+    
 }
 
 // MARK: - UICollectionView DataSource & Delegate

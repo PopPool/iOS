@@ -54,7 +54,9 @@ final class MapSearchInput: UIView, View {
         super.init(frame: .zero)
         setupLayout()
         setupActions()
-        
+        searchTextField.isEnabled = false
+
+
     }
 
     required init?(coder: NSCoder) {
@@ -101,6 +103,14 @@ final class MapSearchInput: UIView, View {
     func setBackgroundColor(_ color: UIColor) {
         containerView.backgroundColor = color
     }
+    private func setupGesture() {
+        // 전체 뷰에 탭 제스처 추가
+        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
+        addGestureRecognizer(tapGesture)
+        isUserInteractionEnabled = true
+    }
+
+
 }
 
 // MARK: - Setup

@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - Store List Response
 struct GetAdminPopUpStoreListResponseDTO: Decodable {
-    let popUpStoreList: [PopUpStore]
+    let popUpStoreList: [PopUpStore]?
     let totalPages: Int
     let totalElements: Int
 
@@ -12,6 +12,8 @@ struct GetAdminPopUpStoreListResponseDTO: Decodable {
         let categoryName: String
         let mainImageUrl: String
     }
+
+
 }
 
 // MARK: - Store Detail Response

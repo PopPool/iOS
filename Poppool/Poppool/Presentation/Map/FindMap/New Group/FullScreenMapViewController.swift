@@ -36,21 +36,19 @@ final class FullScreenMapViewController: MapViewController {
             .bind { [weak self] data in
                 guard let self = self else { return }
 
-                // 기존 마커 제거
                 self.mainView.mapView.clear()
 
-                // 새 마커 추가
                 let marker = GMSMarker()
                 marker.position = data.coordinate
                 marker.userData = data.store
+                marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
-                // 마커 뷰 설정
                 let markerView = MapMarker()
                 markerView.injection(with: .init(isSelected: true))
                 marker.iconView = markerView
                 marker.map = self.mainView.mapView
+                self.currentMarker = marker
 
-                // 카메라 이동
                 let camera = GMSCameraPosition.camera(
                     withLatitude: data.coordinate.latitude,
                     longitude: data.coordinate.longitude,
@@ -58,12 +56,14 @@ final class FullScreenMapViewController: MapViewController {
                 )
                 self.mainView.mapView.animate(to: camera)
 
-                // 캐러셀 업데이트
+                // 캐러셀뷰 바로 업데이트
                 self.carouselView.updateCards([data.store])
+                self.currentCarouselStores = [data.store]
                 self.carouselView.isHidden = false
             }
             .disposed(by: disposeBag)
     }
+
 
    override func viewWillAppear(_ animated: Bool) {
        super.viewWillAppear(animated)

@@ -210,7 +210,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
         if let store = editingStore {
-            fillFormWithExistingData(store)
+            loadStoreDetail(for: store.id)
         }
 
         setupNavigation()
@@ -247,11 +247,52 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         }
     }
-    private func fillFormWithExistingData(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        nameField?.text = store.name
-        categoryButton.setTitle("\(store.categoryName) ▾", for: .normal)
-        //        addressField?.text = store.address
+    private func fillFormWithExistingData(_ storeDetail: GetAdminPopUpStoreDetailResponseDTO) {
+        nameField?.text = storeDetail.name
+        categoryButton.setTitle("\(storeDetail.categoryName) ▾", for: .normal)
+        addressField?.text = storeDetail.address
+        latField?.text = String(storeDetail.latitude)
+        lonField?.text = String(storeDetail.longitude)
+        descTV?.text = storeDetail.desc
+
+        let isoFormatter = ISO8601DateFormatter()
+        
+        if let startDate = isoFormatter.date(from: storeDetail.startDate),
+           let endDate = isoFormatter.date(from: storeDetail.endDate) {
+            self.selectedStartDate = startDate
+            self.selectedEndDate = endDate
+            self.updatePeriodButtonTitle()  // 버튼에 날짜 텍스트 업데이트
+        }
+
+        // 대표 이미지 로드 (생략된 부분은 기존 코드 참고)
+        if let mainImageURL = presignedService.fullImageURL(from: storeDetail.mainImageUrl) {
+            URLSession.shared.dataTask(with: mainImageURL) { [weak self] data, response, error in
+                guard let self = self,
+                      let data = data,
+                      let image = UIImage(data: data) else { return }
+                let extendedImage = ExtendedImage(filePath: storeDetail.mainImageUrl, image: image, isMain: true)
+                DispatchQueue.main.async {
+                    self.images.append(extendedImage)
+                    self.imagesCollectionView.reloadData()
+                    self.updateSaveButtonState()
+                }
+            }.resume()
+        }
     }
+    func loadStoreDetail(for storeId: Int64) {
+        Logger.log(message: "상세 정보 요청 시작 - Store ID: \(storeId)", category: .debug)
+
+        adminUseCase.fetchStoreDetail(id: storeId)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] storeDetail in
+                Logger.log(message: "상세 정보 요청 성공", category: .info)
+                self?.fillFormWithExistingData(storeDetail)
+            }, onError: { error in
+                Logger.log(message: "상세 정보 요청 실패: \(error.localizedDescription)", category: .error)
+            })
+            .disposed(by: disposeBag)
+    }
+
     private func setupKeyboardHandling() {
         // 키보드 Notification 등록
         NotificationCenter.default.addObserver(
@@ -481,7 +522,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         // (마커) => 2줄
         // 1) (마커명 Label + TF)
         let markerLabel = makePlainLabel("마커명")
+        
         let markerField = makeRoundedTextField("")
+        
         let markerStackH = UIStackView(arrangedSubviews: [markerLabel, markerField])
         markerStackH.axis = .horizontal
         markerStackH.spacing = 8
@@ -1169,7 +1212,9 @@ private extension PopUpStoreRegisterViewController {
             ),
             imagesToAdd: updatedImagePaths ?? [],
             imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
-        )
+            )
+
+
 
         adminUseCase.updateStore(request: request)
             .subscribe(
@@ -1325,12 +1370,13 @@ private extension PopUpStoreRegisterViewController {
 
 
     private func getFormattedDate(from date: Date?) -> String {
-        guard let date = date else { return "2025-01-14T09:00:00.000Z" }
+        guard let date = date else { return "" }
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }
+
 
 
 

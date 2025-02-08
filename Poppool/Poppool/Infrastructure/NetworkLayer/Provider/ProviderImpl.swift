@@ -36,7 +36,6 @@ final class ProviderImpl: Provider {
 //                    category: .debug
 //                )
 
-                // AF.request로 http 요청
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in

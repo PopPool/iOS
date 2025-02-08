@@ -65,6 +65,8 @@ final class PopupCardCell: UICollectionViewCell {
         // 주소 레이블
         addressLabel.font = .systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
+        addressLabel.numberOfLines = 2
+
         addressLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(imageView.snp.trailing).offset(12)

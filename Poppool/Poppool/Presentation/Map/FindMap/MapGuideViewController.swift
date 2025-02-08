@@ -22,7 +22,7 @@ final class MapGuideViewController: UIViewController, View {
 
     private let dimmingView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+        v.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
         v.alpha = 0
         return v
     }()
@@ -154,23 +154,32 @@ final class MapGuideViewController: UIViewController, View {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
 
-                Logger.log(message: "📍   버튼 탭: popUpStoreId = \(self.popUpStoreId)", category: .debug)
                 let provider = ProviderImpl()
                 let useCase = DefaultMapUseCase(repository: DefaultMapRepository(provider: provider))
                 let directionRepository = DefaultMapDirectionRepository(provider: provider)
                 let reactor = MapReactor(useCase: useCase, directionRepository: directionRepository)
 
-                let fullScreenMapVC = FullScreenMapViewController()
-                fullScreenMapVC.reactor = reactor
-                Logger.log(message: "🚀 viewDidLoad Action 발생: popUpStoreId = \(self.popUpStoreId)", category: .debug)
+                // 먼저 reactor에 action을 보내고 응답을 기다림
                 reactor.action.onNext(.viewDidLoad(self.popUpStoreId))
-                
 
-                let nav = UINavigationController(rootViewController: fullScreenMapVC)
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true)
+                // searchResult 상태가 설정될 때까지 기다린 후 화면 전환
+                reactor.state
+                    .map { $0.searchResult }
+                    .distinctUntilChanged()
+                    .compactMap { $0 }
+                    .take(1)  // 첫 번째 값만 사용
+                    .subscribe(onNext: { [weak self] store in
+                        let fullScreenMapVC = FullScreenMapViewController()
+                        fullScreenMapVC.reactor = reactor
+
+                        let nav = UINavigationController(rootViewController: fullScreenMapVC)
+                        nav.modalPresentationStyle = .fullScreen
+                        self?.present(nav, animated: true)
+                    })
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
+
 
         reactor.state.map { $0.destinationCoordinate }
             .compactMap { $0 }
@@ -277,18 +286,44 @@ final class MapGuideViewController: UIViewController, View {
     }
 
     private func presentModalCard() {
-        UIView.animate(withDuration: 0.3) {
             self.dimmingView.alpha = 1
-            self.modalCardBottomConstraint?.update(offset: 0)
+
+
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0.5,
+            options: .curveEaseOut
+        ) {
+            self.modalCardBottomConstraint?.update(offset: 0)  // 모달은 아래에서 위로
             self.view.layoutIfNeeded()
         }
     }
 
     private func setupMarker(at coordinate: CLLocationCoordinate2D) {
-        let marker = GMSMarker(position: coordinate)
-        marker.title = ""
+        mapView.clear()
+
+        let marker = GMSMarker()
+        marker.position = coordinate
+
+        // 마커의 기준점을 하단 중앙으로 설정
+        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
+
+        // 아이콘의 앵커 포인트도 설정
+        marker.appearAnimation = .none  // 애니메이션 제거
+
+        let markerView = MapMarker()
+        markerView.injection(with: .init(isSelected: true))
+        marker.iconView = markerView
+
+        // 마커와 지도의 관계 설정
         marker.map = mapView
-        let camera = GMSCameraPosition(target: coordinate, zoom: 16)
+
+        let camera = GMSCameraPosition(
+            target: coordinate,
+            zoom: 16
+        )
         mapView.animate(to: camera)
     }
 

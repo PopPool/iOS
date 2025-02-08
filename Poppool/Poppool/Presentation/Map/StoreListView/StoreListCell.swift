@@ -41,12 +41,14 @@ final class StoreListCell: UICollectionViewCell {
     private let locationLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 11, text: "")
         label.textColor = .g400
+        label.numberOfLines = 2
         return label
     }()
 
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 12, text: "")
         label.textColor = .g400
+        label.numberOfLines = 2  
         return label
     }()
 

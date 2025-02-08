@@ -386,7 +386,6 @@
 		4E685ED92D12CEB6001EF91C /* MapRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB62D12CEB6001EF91C /* MapRepository.swift */; };
 		4E685EDA2D12CEB6001EF91C /* MapUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EB82D12CEB6001EF91C /* MapUseCase.swift */; };
 		4E685EDB2D12CEB6001EF91C /* MapAPIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBA2D12CEB6001EF91C /* MapAPIEndpoint.swift */; };
-		4E685EDC2D12CEB6001EF91C /* MapPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */; };
 		4E685EDD2D12CEB6001EF91C /* MapPopUpStoreDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBC2D12CEB6001EF91C /* MapPopUpStoreDTO.swift */; };
 		4E685EDE2D12CEB6001EF91C /* MapPopupCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBE2D12CEB6001EF91C /* MapPopupCarouselView.swift */; };
 		4E685EDF2D12CEB6001EF91C /* PopupCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBF2D12CEB6001EF91C /* PopupCardCell.swift */; };
@@ -417,12 +416,15 @@
 		4E78706E2D37CB1900465FC9 /* ProfileEditListButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 081898BF2D2FBD130067BF01 /* ProfileEditListButton.swift */; };
 		4E78706F2D37CB2200465FC9 /* PopUpStoreRegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */; };
 		4E9790C52D40E13500210499 /* MapGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9790C42D40E13500210499 /* MapGuideViewController.swift */; };
+		4E9A465E2D50B2DB0010578A /* AdminStoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */; };
+		4E9A46602D55D1270010578A /* MapUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9A465F2D55D1270010578A /* MapUtilities.swift */; };
 		4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */; };
 		4E9C127A2D2BC811006744D6 /* AdminBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */; };
 		4EA2C93D2D424D3300F4D97C /* MapDirectionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */; };
 		4EA2C93F2D424D7400F4D97C /* MapDirectionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */; };
 		4EA2C9412D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */; };
 		4EA2C9432D424DF900F4D97C /* FindDirectionEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */; };
+		4EA2E3CD2D572C18006FB885 /* MicroClusterMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2E3CC2D572C18006FB885 /* MicroClusterMarkerView.swift */; };
 		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
 		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
 		4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */; };
@@ -432,6 +434,8 @@
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
 		4EEA1D952D358B23003E7DE9 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D942D358B23003E7DE9 /* PopUpStoreRegisterView.swift */; };
+		4EECA3932D5676C900A07CCA /* MapGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9790C42D40E13500210499 /* MapGuideViewController.swift */; };
+		4EECA3942D56770B00A07CCA /* MapPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */; };
 		4EED9BAC2D22730400B288E7 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EED9BAB2D22730400B288E7 /* FilterType.swift */; };
 		BD226D512CF6DB290038C984 /* PPReturnHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD226D502CF6DB290038C984 /* PPReturnHeaderView.swift */; };
 		BD9103612CF6149D00BBCCAE /* AuthAPIEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD91034E2CF6149D00BBCCAE /* AuthAPIEndPoint.swift */; };
@@ -898,6 +902,7 @@
 		4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminUseCase.swift; sourceTree = "<group>"; };
 		4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminRepository.swift; sourceTree = "<group>"; };
 		4E9790C42D40E13500210499 /* MapGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideViewController.swift; sourceTree = "<group>"; };
+		4E9A465F2D55D1270010578A /* MapUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapUtilities.swift; sourceTree = "<group>"; };
 		4E9C12772D2BC7A0006744D6 /* AdminBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetView.swift; sourceTree = "<group>"; };
 		4E9C12792D2BC811006744D6 /* AdminBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminBottomSheetViewController.swift; sourceTree = "<group>"; };
 		4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterViewController.swift; sourceTree = "<group>"; };
@@ -905,6 +910,7 @@
 		4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionUseCase.swift; sourceTree = "<group>"; };
 		4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpDirectionResponseDTO.swift; sourceTree = "<group>"; };
 		4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindDirectionEndPoint.swift; sourceTree = "<group>"; };
+		4EA2E3CC2D572C18006FB885 /* MicroClusterMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroClusterMarkerView.swift; sourceTree = "<group>"; };
 		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
 		4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSMapViewDelegateProxy.swift; sourceTree = "<group>"; };
 		4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewportBounds.swift; sourceTree = "<group>"; };
@@ -2745,12 +2751,14 @@
 				4E685EC52D12CEB6001EF91C /* StoreListView */,
 				4E685EC62D12CEB6001EF91C /* MapFilterChips.swift */,
 				4E685EC72D12CEB6001EF91C /* MapMarker.swift */,
+				4EA2E3CC2D572C18006FB885 /* MicroClusterMarkerView.swift */,
 				4E685EC82D12CEB6001EF91C /* MapReactor.swift */,
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
 				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
 				4E6C07072D4B6E74008A962A /* ClusteringModels.swift */,
+				4E9A465F2D55D1270010578A /* MapUtilities.swift */,
 				4E6C07092D4B6E81008A962A /* ClusteringManager.swift */,
 				4EE5A3D12D40E3B100A2469A /* FindMap */,
 			);
@@ -3211,6 +3219,7 @@
 				0841BA872CF9F62400049E31 /* PreSignedURLDTO.swift in Sources */,
 				086F89EC2D2009EB00CA4FC9 /* SubLoginController.swift in Sources */,
 				083C86262D087A4E003F441C /* DetailTitleSectionCell.swift in Sources */,
+				4E9A46602D55D1270010578A /* MapUtilities.swift in Sources */,
 				086DD8DE2CFF19C400B97D3B /* UserAPIUseCaseImpl.swift in Sources */,
 				081898C32D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift in Sources */,
 				08A2E4802D1BCDE300102313 /* CommentDetailView.swift in Sources */,
@@ -3235,6 +3244,7 @@
 				BD9103692CF6149D00BBCCAE /* HomeAPIRepository.swift in Sources */,
 				083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */,
 				089952752D0475F20022AEF9 /* SearchResultCountSectionCell.swift in Sources */,
+				4EECA3942D56770B00A07CCA /* MapPopUpStore.swift in Sources */,
 				4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */,
 				086DD9362D00963900B97D3B /* SearchTitleSection.swift in Sources */,
 				083A25922CF361F90099B58E /* ViewConvention.swift in Sources */,
@@ -3304,7 +3314,6 @@
 				083C866E2D0ECB87003F441C /* InstaGuideChildSection.swift in Sources */,
 				081898A32D2CC0110067BF01 /* WithdrawlReasonView.swift in Sources */,
 				08B1917A2CF452B30057BC04 /* SignUpTermsView.swift in Sources */,
-				4E685EDC2D12CEB6001EF91C /* MapPopUpStore.swift in Sources */,
 				08B191B82CF6092F0057BC04 /* AuthServiceable.swift in Sources */,
 				0841BAB82CFAC41300049E31 /* SectionBackGroundDecorationView.swift in Sources */,
 				086F89F52D2269E300CA4FC9 /* MyPageReactor.swift in Sources */,
@@ -3326,6 +3335,7 @@
 				088DE2562D144A830030FA9E /* DetailCommentSectionCell.swift in Sources */,
 				08B1919E2CF4A7830057BC04 /* TagSectionCell.swift in Sources */,
 				081899142D34CAEA0067BF01 /* GetNoticeDetailResponse.swift in Sources */,
+				4EA2E3CD2D572C18006FB885 /* MicroClusterMarkerView.swift in Sources */,
 				081898D22D30F57D0067BF01 /* CategoryEditModalView.swift in Sources */,
 				083C860B2D073A15003F441C /* DetailView.swift in Sources */,
 				086F89C52D1E347E00CA4FC9 /* CommentUserInfoController.swift in Sources */,
@@ -3652,6 +3662,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDCA41E42CF35AC1005EECF6 /* PoppoolUITestsLaunchTests.swift in Sources */,
+				4E9A465E2D50B2DB0010578A /* AdminStoreCell.swift in Sources */,
+				4EECA3932D5676C900A07CCA /* MapGuideViewController.swift in Sources */,
 				BDCA41E22CF35AC1005EECF6 /* PoppoolUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
