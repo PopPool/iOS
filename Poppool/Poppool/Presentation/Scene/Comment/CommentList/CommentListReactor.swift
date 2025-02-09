@@ -196,8 +196,12 @@ final class CommentListReactor: Reactor {
             controller.present(nextController, animated: true)
         case .presentCommentMenuScene(let controller, let row):
             let comment = commentSection.inputDataList[row]
-            // 분기 필요합니다~!~!
-            showOtherUserCommentMenu(controller: controller, comment: comment)
+            if comment.isMyComment {
+                showMyCommentMenu(controller: controller, comment: comment)
+            } else {
+                showOtherUserCommentMenu(controller: controller, comment: comment)
+            }
+            
         }
         return newState
     }

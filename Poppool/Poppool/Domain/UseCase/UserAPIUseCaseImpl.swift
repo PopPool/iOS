@@ -39,13 +39,13 @@ final class UserAPIUseCaseImpl {
         return repository.deleteUserBlock(request: .init(blockedUserId: blockedUserId))
     }
     
-    func getOtherUserCommentList(
+    func getOtherUserCommentedPopUpList(
         commenterId: String?,
         commentType: String?,
         page: Int32?,
         size: Int32?,
         sort: String?
-    ) -> Observable<GetOtherUserCommentListResponse> {
+    ) -> Observable<GetOtherUserCommentedPopUpListResponse> {
         return repository.getOtherUserCommentList(
             request: .init(
                 commenterId: commenterId,

@@ -65,7 +65,7 @@ struct UserAPIEndPoint {
         )
     }
     
-    static func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Endpoint<GetOtherUserCommentListResponseDTO> {
+    static func getOtherUserCommentPopUpList(request: GetOtherUserCommentListRequestDTO) -> Endpoint<GetOtherUserCommentedPopUpListResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseUrl.rawValue,
             path: "/users/\(request.commenterId ?? "")/comments",
