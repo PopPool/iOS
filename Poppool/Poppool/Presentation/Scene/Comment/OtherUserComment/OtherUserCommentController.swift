@@ -23,8 +23,6 @@ final class OtherUserCommentController: BaseViewController, View {
     
     private var sections: [any Sectionable] = []
     
-    private let pageChange: PublishSubject<Void> = .init()
-    
     private let cellTapped: PublishSubject<Int> = .init()
 }
 
@@ -46,6 +44,7 @@ extension OtherUserCommentController {
 private extension OtherUserCommentController {
     func setUp() {
         view.addSubview(mainView)
+        view.backgroundColor = .g50
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -65,8 +64,8 @@ private extension OtherUserCommentController {
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )        
         mainView.contentCollectionView.register(
-            OtherUserCommentSectionCell.self,
-            forCellWithReuseIdentifier: OtherUserCommentSectionCell.identifiers
+            MyCommentedPopUpGridSectionCell.self,
+            forCellWithReuseIdentifier: MyCommentedPopUpGridSectionCell.identifiers
         )
     }
 }
@@ -84,12 +83,6 @@ extension OtherUserCommentController {
             .map { (owner, _) in
                 Reactor.Action.backButtonTapped(controller: owner)
             }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        pageChange
-            .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
-            .map { Reactor.Action.changePage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -127,15 +120,6 @@ extension OtherUserCommentController: UICollectionViewDelegate, UICollectionView
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         return cell
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentHeight = scrollView.contentSize.height
-        let scrollViewHeight = scrollView.frame.size.height
-        let contentOffsetY = scrollView.contentOffset.y
-        if contentOffsetY + scrollViewHeight >= contentHeight {
-            pageChange.onNext(())
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

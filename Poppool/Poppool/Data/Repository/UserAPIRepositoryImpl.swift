@@ -48,8 +48,8 @@ final class UserAPIRepositoryImpl {
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
     
-    func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Observable<GetOtherUserCommentListResponseDTO> {
-        let endPoint = UserAPIEndPoint.getOtherUserCommentList(request: request)
+    func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Observable<GetOtherUserCommentedPopUpListResponseDTO> {
+        let endPoint = UserAPIEndPoint.getOtherUserCommentPopUpList(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
     

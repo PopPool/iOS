@@ -215,8 +215,8 @@
 		086F89D52D1E6DB100CA4FC9 /* OtherUserCommentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D42D1E6DB100CA4FC9 /* OtherUserCommentController.swift */; };
 		086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D62D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift */; };
 		086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */; };
-		086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */; };
-		086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */; };
+		086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentedPopUpListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentedPopUpListResponseDTO.swift */; };
+		086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentedPopUpListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentedPopUpListResponse.swift */; };
 		086F89E42D1FE91300CA4FC9 /* OtherUserCommentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E32D1FE91300CA4FC9 /* OtherUserCommentSection.swift */; };
 		086F89E62D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E52D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift */; };
 		086F89EA2D2009E300CA4FC9 /* SubLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F89E92D2009E300CA4FC9 /* SubLoginView.swift */; };
@@ -707,8 +707,8 @@
 		086F89D42D1E6DB100CA4FC9 /* OtherUserCommentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentController.swift; sourceTree = "<group>"; };
 		086F89D62D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentReactor.swift; sourceTree = "<group>"; };
 		086F89D82D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListRequestDTO.swift; sourceTree = "<group>"; };
-		086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListResponseDTO.swift; sourceTree = "<group>"; };
-		086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentListResponse.swift; sourceTree = "<group>"; };
+		086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentedPopUpListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentedPopUpListResponseDTO.swift; sourceTree = "<group>"; };
+		086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentedPopUpListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOtherUserCommentedPopUpListResponse.swift; sourceTree = "<group>"; };
 		086F89E32D1FE91300CA4FC9 /* OtherUserCommentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentSection.swift; sourceTree = "<group>"; };
 		086F89E52D1FE91800CA4FC9 /* OtherUserCommentSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserCommentSectionCell.swift; sourceTree = "<group>"; };
 		086F89E92D2009E300CA4FC9 /* SubLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubLoginView.swift; sourceTree = "<group>"; };
@@ -2048,7 +2048,7 @@
 		086F89DD2D1E7A7A00CA4FC9 /* ResponseDTO */ = {
 			isa = PBXGroup;
 			children = (
-				086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift */,
+				086F89DA2D1E7A6C00CA4FC9 /* GetOtherUserCommentedPopUpListResponseDTO.swift */,
 				081898C22D30AE2C0067BF01 /* GetMyProfileResponseDTO.swift */,
 				086F89F62D226DF600CA4FC9 /* GetMyPageResponseDTO.swift */,
 				081898AD2D2CFC230067BF01 /* GetWithdrawlListResponseDTO.swift */,
@@ -2064,7 +2064,7 @@
 		086F89DE2D1E7CBE00CA4FC9 /* UserAPI */ = {
 			isa = PBXGroup;
 			children = (
-				086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift */,
+				086F89DF2D1E7CC700CA4FC9 /* GetOtherUserCommentedPopUpListResponse.swift */,
 				086F89F82D226EEB00CA4FC9 /* GetMyPageResponse.swift */,
 				081898AF2D2CFCA40067BF01 /* GetWithdrawlListResponse.swift */,
 				081898C42D30AEF40067BF01 /* GetMyProfileResponse.swift */,
@@ -3384,7 +3384,7 @@
 				086F89D72D1E6DB700CA4FC9 /* OtherUserCommentReactor.swift in Sources */,
 				083C867A2D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift in Sources */,
 				4E7823A82D2E84E800AC5110 /* AdminRepository.swift in Sources */,
-				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentListResponseDTO.swift in Sources */,
+				086F89DB2D1E7A6C00CA4FC9 /* GetOtherUserCommentedPopUpListResponseDTO.swift in Sources */,
 				086F89D32D1E6DA600CA4FC9 /* OtherUserCommentView.swift in Sources */,
 				4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */,
 				4E755B292D2BA65A00ADFB21 /* AdminReactor.swift in Sources */,
@@ -3442,7 +3442,7 @@
 				08B191912CF4A00E0057BC04 /* SignUpStep3Reactor.swift in Sources */,
 				083A259C2CF362090099B58E /* InOutputable.swift in Sources */,
 				089952642D0366DA0022AEF9 /* SearchMainReactor.swift in Sources */,
-				086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentListResponse.swift in Sources */,
+				086F89E02D1E7CC700CA4FC9 /* GetOtherUserCommentedPopUpListResponse.swift in Sources */,
 				BD9103652CF6149D00BBCCAE /* HomeAPIEndpoint.swift in Sources */,
 				086DD8E32CFF356300B97D3B /* HomeCardGridSection.swift in Sources */,
 				0841BABE2CFB5AA600049E31 /* Date?+.swift in Sources */,

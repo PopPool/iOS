@@ -20,6 +20,7 @@ final class OtherUserCommentView: UIView {
     
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
+        view.backgroundColor = .g50
         return view
     }()
     
