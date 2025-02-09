@@ -79,6 +79,14 @@ extension SubLoginController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
+        mainView.inquiryButton.rx.tap
+            .withUnretained(self)
+            .map { (owner, _) in
+                Reactor.Action.inquiryButtonTapped(controller: owner)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
         mainView.appleButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
