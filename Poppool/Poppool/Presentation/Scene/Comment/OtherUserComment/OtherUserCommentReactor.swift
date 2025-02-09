@@ -73,7 +73,7 @@ final class OtherUserCommentReactor: Reactor {
                     owner.popUpSection.inputDataList = responseList.popUpInfoList.map({ response in
                         return .init(
                             popUpID: response.popUpStoreId,
-//                            imageURL: response.,
+                            imageURL: response.mainImageUrl,
                             title: response.popUpStoreName,
                             content: response.desc,
                             startDate: response.startDate,

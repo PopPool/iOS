@@ -21,6 +21,7 @@ struct GetOtherUserCommentedPopUpResponseDTO: Decodable {
     var popUpStoreId: Int64
     var popUpStoreName: String?
     var desc: String?
+    var mainImageUrl: String?
     var startDate: String?
     var endDate: String?
     var address: String?
@@ -32,7 +33,8 @@ extension GetOtherUserCommentedPopUpResponseDTO {
         return .init(
             popUpStoreId: popUpStoreId,
             popUpStoreName: popUpStoreName,
-            desc: desc, 
+            desc: desc,
+            mainImageUrl: mainImageUrl,
             startDate: startDate.toDate().toPPDateString(),
             endDate: endDate.toDate().toPPDateString(),
             address: address,
