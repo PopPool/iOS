@@ -34,7 +34,6 @@ final class PopupCardCell: UICollectionViewCell {
         contentView.addSubview(addressLabel)
         contentView.addSubview(dateLabel)
 
-        // 이미지뷰 설정
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
@@ -44,7 +43,6 @@ final class PopupCardCell: UICollectionViewCell {
             make.width.height.equalTo(97)
         }
 
-        // 카테고리 레이블
         categoryLabel.font = .systemFont(ofSize: 11, weight: .bold)
         categoryLabel.textColor = .systemBlue
         categoryLabel.snp.makeConstraints { make in

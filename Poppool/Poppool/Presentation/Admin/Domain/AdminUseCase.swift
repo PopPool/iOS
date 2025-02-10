@@ -41,7 +41,18 @@ final class DefaultAdminUseCase: AdminUseCase {
     }
 
     func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
+        Logger.log(message: """
+            Updating store with location:
+            Latitude: \(request.location.latitude)
+            Longitude: \(request.location.longitude)
+            """, category: .debug)
+
         return repository.updateStore(request: request)
+            .do(onNext: { _ in
+                Logger.log(message: "Store update successful", category: .debug)
+            }, onError: { error in
+                Logger.log(message: "Store update failed: \(error)", category: .error)
+            })
     }
 
     func deleteStore(id: Int64) -> Observable<EmptyResponse> {

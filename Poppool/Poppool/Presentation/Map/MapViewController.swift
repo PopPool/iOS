@@ -79,6 +79,10 @@ class MapViewController: BaseViewController, View {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        mainView.mapView.isMyLocationEnabled = true
+//        mainView.mapView.settings.myLocationButton = true
+
+
 
         carouselView.onCardScrolled = { [weak self] pageIndex in
             guard let self = self else { return }
@@ -588,21 +592,17 @@ class MapViewController: BaseViewController, View {
                        // userData에 [MapPopUpStore] 통째로 넣어둠
                        guard let firstStore = storeGroup.first else { continue }
 
-                       // 임의로 “첫 번째 스토어 id”만 key로 씁니다 (개선 가능)
                        let markerKey = firstStore.id
-
                        if let existingMarker = individualMarkerDictionary[markerKey] {
-                           // 위치 업데이트
                            existingMarker.position = firstStore.coordinate
                            existingMarker.map = mainView.mapView
                            existingMarker.userData = storeGroup
-                           // 아이콘도 "cluster" 형태
                            if let markerView = existingMarker.iconView as? MapMarker {
                                markerView.injection(with: .init(
                                    isSelected: false,
-                                   isCluster: true,
-                                   regionName: "", // 필요하면 지명
-                                   count: storeGroup.count
+                                   isCluster: false,  // 기본 마커 유지
+                                   regionName: "",
+                                   count: storeGroup.count  // 뱃지에 표시될 숫자
                                ))
                            }
                        } else {
@@ -613,7 +613,7 @@ class MapViewController: BaseViewController, View {
                            let markerView = MapMarker()
                            markerView.injection(with: .init(
                                isSelected: false,
-                               isCluster: true,
+                               isCluster: false,
                                regionName: "",
                                count: storeGroup.count
                            ))
@@ -793,22 +793,7 @@ class MapViewController: BaseViewController, View {
         sheetReactor.action.onNext(.segmentChanged(initialIndex))
 
         viewController.onSave = { [weak self] filterData in
-//              guard let self = self else { return }
-//
-//            Logger.log(
-//                message: """
-//                필터 저장:
-//                📍 위치: \(filterData.locations)
-//                🏷️ 카테고리: \(filterData.categories)
-//                """,
-//                category: .debug
-//            )
-//
-//              self.reactor?.action.onNext(.updateBothFilters(
-//                  locations: filterData.locations,
-//                  categories: filterData.categories
-//              ))
-//              self.reactor?.action.onNext(.filterTapped(nil))
+
           }
 
         viewController.onSave = { [weak self] filterData in
@@ -944,9 +929,12 @@ extension MapViewController: GMSMapViewDelegate {
     }
     
     
+    
     /// 지도 이동할 때 클러스터 업데이트
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         updateMapWithClustering()
+        updateTooltipPosition()
+
     }
     
     /// 지도 빈 공간 탭 → 기존 마커/캐러셀 해제
@@ -964,13 +952,32 @@ extension MapViewController: GMSMapViewDelegate {
     
     // MARK: - Helper for single marker tap
     private func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
-        // 이전 마커 해제 로직은 이미 호출 전 실행됨
+
+        currentTooltipView?.removeFromSuperview()
+        currentTooltipView = nil
+
+        if let previousMarker = currentMarker,
+           let previousStores = previousMarker.userData as? [MapPopUpStore] {
+            let markerView = MapMarker()
+            markerView.injection(with: .init(
+                isSelected: false,
+                isCluster: false,
+                count: previousStores.count  // count 정보 유지
+            ))
+            previousMarker.iconView = markerView
+        }
+
         // 새 마커 강조
         let markerView = MapMarker()
-        markerView.injection(with: .init(isSelected: true, isCluster: false))
-        marker.iconView = markerView
-        currentMarker = marker
-        
+          let storeCount = (marker.userData as? [MapPopUpStore])?.count ?? 1
+          markerView.injection(with: .init(
+              isSelected: true,
+              isCluster: false,
+              count: storeCount
+          ))
+          marker.iconView = markerView
+          currentMarker = marker
+
         // (A) 캐러셀에 “뷰포트 내 스토어들” 전체 or 원하는 배열로 업데이트
         carouselView.updateCards(currentStores)
         carouselView.isHidden = currentStores.isEmpty
@@ -984,49 +991,123 @@ extension MapViewController: GMSMapViewDelegate {
         return true
     }
     private func handleRegionalClusterTap(_ marker: GMSMarker, clusterData: ClusterMarkerData) -> Bool {
-        // 예: 줌 레벨 올려서 개별 마커 보이게
-        let clusterToIndividualZoom: Float = 14.0
         let currentZoom = mainView.mapView.camera.zoom
-        let newZoom: Float = (currentZoom < clusterToIndividualZoom)
-        ? clusterToIndividualZoom
-        : min(mainView.mapView.maxZoom, currentZoom + 1)
-        
-        let camera = GMSCameraPosition(target: marker.position, zoom: newZoom)
-        mainView.mapView.animate(to: camera)
-        
-        // 카메라 이동 후, 여러 스토어를 캐러셀에
-        let multiStores = clusterData.cluster.stores
-        carouselView.updateCards(multiStores)
-        carouselView.isHidden = multiStores.isEmpty
-        currentCarouselStores = multiStores
-        
-        return true
-    }
-    private func handleMicroClusterTap(_ marker: GMSMarker, storeArray: [MapPopUpStore]) -> Bool {
-        // 기존 선택 마커 해제
-        if let previousMarker = currentMarker {
-            let markerView = MapMarker()
-            markerView.injection(with: .init(isSelected: false, isCluster: false))
-            previousMarker.iconView = markerView
+        let currentLevel = MapZoomLevel.getLevel(from: currentZoom)
+
+        switch currentLevel {
+        case .city:  // 시 단위 클러스터
+            // 구 단위 클러스터가 보이는 줌 레벨로 이동
+            let districtZoomLevel: Float = 10.0
+            let camera = GMSCameraPosition(target: marker.position, zoom: districtZoomLevel)
+            mainView.mapView.animate(to: camera)
+
+        case .district:  // 구 단위 클러스터
+            // 바로 개별 마커가 보이는 줌 레벨로 이동
+            let detailedZoomLevel: Float = 11.0
+            let camera = GMSCameraPosition(target: marker.position, zoom: detailedZoomLevel)
+            mainView.mapView.animate(to: camera)
+
+        default:
+            break
         }
-        
-        // 탭한 마커 강조: isCluster = true, count = storeArray.count
-        let markerView = MapMarker()
-        markerView.injection(with: .init(
-            isSelected: true,
-            isCluster: true,    // "micro-cluster"
-            count: storeArray.count
-        ))
-        marker.iconView = markerView
-        currentMarker = marker
-        
-        // 여러 스토어 → 캐러셀 or 툴팁 UI 표시
-        carouselView.updateCards(storeArray)
-        carouselView.isHidden = storeArray.isEmpty
-        currentCarouselStores = storeArray
-        
+
+        // 캐러셀 업데이트는 공통
+        carouselView.updateCards(clusterData.cluster.stores)
+        carouselView.isHidden = false
+        self.currentCarouselStores = clusterData.cluster.stores
+
         return true
     }
+
+
+    private func handleMicroClusterTap(_ marker: GMSMarker, storeArray: [MapPopUpStore]) -> Bool {
+            // 1. 이전에 선택된 마커 해제
+            if let previousMarker = currentMarker {
+                let markerView = MapMarker()
+                markerView.injection(with: .init(isSelected: false, isCluster: false))
+                previousMarker.iconView = markerView
+            }
+
+            // 2. 이전 툴팁 제거
+            currentTooltipView?.removeFromSuperview()
+            currentTooltipView = nil
+
+            // 3. 탭한 마커 강조
+            let markerView = MapMarker()
+            markerView.injection(with: .init(
+                isSelected: true,
+                isCluster: false,
+                count: storeArray.count
+            ))
+            marker.iconView = markerView
+            currentMarker = marker
+
+            // 4. 툴팁 생성 (고정 너비, 동적 높이)
+        let fixedWidth: CGFloat = 200
+        let tooltipView = MarkerTooltipView()
+        tooltipView.configure(with: storeArray)
+
+        // Auto Layout을 사용하도록 설정 (프레임을 직접 설정하지 않고)
+        tooltipView.translatesAutoresizingMaskIntoConstraints = false
+//        mainView.mapView.addSubview(tooltipView)
+
+        // 강제로 레이아웃 업데이트
+        tooltipView.setNeedsLayout()
+        tooltipView.layoutIfNeeded()
+
+        // systemLayoutSizeFitting을 사용해 자연스러운 크기 계산
+        let targetSize = CGSize(width: fixedWidth, height: UIView.layoutFittingCompressedSize.height)
+        let fittingSize = tooltipView.systemLayoutSizeFitting(targetSize,
+                                                              withHorizontalFittingPriority: .required,
+                                                              verticalFittingPriority: .fittingSizeLevel)
+
+        // 계산된 크기를 이용해 프레임을 업데이트
+        tooltipView.frame = CGRect(origin: .zero, size: CGSize(width: fixedWidth, height: fittingSize.height))
+            // 5. 지도에 툴팁 추가 후, 마커 위치 기반으로 배치 (초기 위치)
+            mainView.mapView.addSubview(tooltipView)
+            updateTooltipPosition()  // 현재 마커의 위치를 기반으로 tooltipView의 frame.origin을 설정
+
+            currentTooltipView = tooltipView
+            currentTooltipStores = storeArray
+            currentTooltipCoordinate = marker.position
+
+            // 6. 캐러셀 업데이트 (기존 코드와 동일)
+            carouselView.updateCards(storeArray)
+            carouselView.isHidden = false
+            currentCarouselStores = storeArray
+            carouselView.scrollToCard(index: 0)
+
+            return true
+        }
+    private func updateTooltipPosition() {
+        guard let marker = currentMarker, let tooltip = currentTooltipView else { return }
+
+        // marker.position은 기본적으로 마커의 bottom-center입니다.
+        // 이를 기반으로 marker의 아이콘 뷰가 있다면, marker의 중심을 계산합니다.
+        let markerPoint = mainView.mapView.projection.point(for: marker.position)
+        var markerCenter = markerPoint
+        if let iconView = marker.iconView {
+            // 예를 들어, 아이콘 뷰의 높이의 절반만큼 위로 이동하여 marker의 중심을 구함
+            markerCenter.y = markerPoint.y - iconView.bounds.height / 1.5
+        }
+
+        // 원하는 오프셋 값 설정
+        // - offsetX: marker의 중심 기준 오른쪽으로 얼마만큼 이동할지 (예: 10포인트)
+        // - offsetY: badge보다 더 위에 위치하도록 충분히 위쪽으로 (예: 20포인트)
+        let offsetX: CGFloat = -10
+        let offsetY: CGFloat = -6
+
+        // tooltip의 frame.origin을 markerCenter를 기준으로 계산:
+        // x: markerCenter.x + offsetX
+        // y: markerCenter.y - tooltip.height - offsetY  (즉, tooltip이 marker center 위쪽에 위치)
+        tooltip.frame.origin = CGPoint(
+            x: markerCenter.x + offsetX,
+            y: markerCenter.y - tooltip.frame.height - offsetY
+        )
+    }
+
+
+
 }
 
 
