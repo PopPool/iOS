@@ -172,6 +172,12 @@ final class AdminViewController: BaseViewController, View {
             adminUseCase: adminUseCase,
             editingStore: store
         )
+
+        // 수정할 때도 completionHandler 추가
+        registerVC.completionHandler = { [weak self] in
+            self?.reactor?.action.onNext(.reloadData)
+        }
+
         navigationController?.pushViewController(registerVC, animated: true)
     }
 

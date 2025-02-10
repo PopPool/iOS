@@ -88,17 +88,41 @@ final class DefaultAdminRepository: AdminRepository {
 
     func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
         let endpoint = AdminAPIEndpoint.updateStore(request: request)
+
+        Logger.log(message: """
+            Store Update 요청:
+            URL: \(endpoint.baseURL + endpoint.path)
+            Method: PUT
+            Request: \(request)
+            """, category: .debug)
+
         return provider.requestData(
             with: endpoint,
             interceptor: tokenInterceptor
         )
         .catch { error -> Observable<EmptyResponse> in
-            if case .responseSerializationFailed(let reason) = error as? AFError,
-               case .inputDataNilOrZeroLength = reason {
-                return Observable.just(EmptyResponse())
+            Logger.log(message: "Update Store Error 발생: \(error)", category: .error)
+
+            if let afError = error as? AFError {
+                switch afError {
+                case .responseSerializationFailed(let reason):
+                    Logger.log(message: "Serialization 실패 reason: \(reason)", category: .error)
+                    if case .inputDataNilOrZeroLength = reason {
+                        Logger.log(message: "빈 응답 데이터 - 성공으로 처리", category: .info)
+                        return Observable.just(EmptyResponse())
+                    }
+                default:
+                    Logger.log(message: "기타 AFError: \(afError)", category: .error)
+                }
             }
+
             throw error
         }
+        .do(onNext: { _ in
+            Logger.log(message: "Store Update 성공", category: .info)
+        }, onError: { error in
+            Logger.log(message: "Store Update 최종 실패: \(error)", category: .error)
+        })
     }
 
 

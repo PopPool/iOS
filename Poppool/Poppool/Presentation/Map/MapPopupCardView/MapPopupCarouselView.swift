@@ -10,14 +10,18 @@ final class MapPopupCarouselView: UIView {
         layout.itemSize = CGSize(width: 335, height: 137)
         layout.minimumLineSpacing = 12
         layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.layer.cornerRadius = 12
-        collectionView.clipsToBounds = true
-        return collectionView
 
+
+        collectionView.decelerationRate = .fast  // 빠른 감속
+        collectionView.isPagingEnabled = true    // 페이징 활성화
+
+        return collectionView
     }()
+
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
     var onCardScrolled: ((Int) -> Void)?
@@ -30,6 +34,9 @@ final class MapPopupCarouselView: UIView {
         super.init(frame: frame)
         setupLayout()
         setupCollectionView()
+        self.layer.cornerRadius = 16
+        self.layer.masksToBounds = true
+
     }
 
     required init?(coder: NSCoder) {
@@ -53,20 +60,18 @@ final class MapPopupCarouselView: UIView {
 
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
+        guard popupCards != cards else { return } // 🚨 같은 데이터면 리로드 X
         self.popupCards = cards
         collectionView.reloadData()
     }
 
     func updateVisibility(for state: FloatingPanelState) {
-        // 예: FloatingPanel 상태에 따라 숨김
         self.isHidden = (state == .full)
     }
 
-    // **새롭게 추가**: 인덱스로 스크롤
     func scrollToCard(index: Int) {
         guard index >= 0, index < popupCards.count else { return }
         let indexPath = IndexPath(item: index, section: 0)
-        // 타입을 명시해주면 추론 오류가 사라질 수 있음
         collectionView.scrollToItem(
             at: indexPath,
             at: UICollectionView.ScrollPosition.centeredHorizontally,
