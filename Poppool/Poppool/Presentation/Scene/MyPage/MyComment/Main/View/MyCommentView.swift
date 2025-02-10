@@ -14,7 +14,7 @@ final class MyCommentView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "내가 쓴 코멘트", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "내가 코멘트한 팝업", font: .KorFont(style: .regular, size: 15))
         return view
     }()
     
