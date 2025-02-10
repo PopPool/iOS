@@ -5,6 +5,8 @@ import GoogleMaps
 final class MapMarker: UIView {
     // MARK: - Components
 
+    private(set) var isSelected: Bool = false
+
     private let markerImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Marker")
@@ -136,30 +138,33 @@ private extension MapMarker {
     }
 
     func updateMarkerImage(isSelected: Bool) {
+        self.isSelected = isSelected  // 새로 추가
         let imageName = isSelected ? "TapMarker" : "Marker"
-        let size = isSelected ? 44 : 32  // 선택시 마커 크기 변경
+        let size = isSelected ? 44 : 32
         markerImageView.image = UIImage(named: imageName)
 
         markerImageView.snp.updateConstraints { make in
-            make.size.equalTo(size)
+            make.width.height.equalTo(size)
         }
 
-        // 뱃지 위치도 마커 크기에 맞춰 업데이트
-        countBadgeView.snp.updateConstraints { make in
-              make.width.height.equalTo(20)
-              if isSelected {
-                  // 선택됐을 때는 마커와 겹치게
-                  make.top.equalTo(markerImageView.snp.top)
-                  make.right.equalTo(markerImageView.snp.right)
-              } else {
-                  // 기본 상태에서는 살짝 띄움
-                  make.top.equalTo(markerImageView.snp.top).offset(-4)
-                  make.right.equalTo(markerImageView.snp.right).offset(4)
-              }
-          }
+        updateBadgePosition(isSelected: isSelected)  // 새로운 메서드 호출
 
-          layoutIfNeeded()
-      }
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+
+    private func updateBadgePosition(isSelected: Bool) {
+        countBadgeView.snp.updateConstraints { make in
+            make.width.height.equalTo(20)
+            if isSelected {
+                make.top.equalTo(markerImageView.snp.top)
+                make.right.equalTo(markerImageView.snp.right)
+            } else {
+                make.top.equalTo(markerImageView.snp.top).offset(-4)
+                make.right.equalTo(markerImageView.snp.right).offset(4)
+            }
+        }
+    }
 
 
 }
@@ -212,5 +217,10 @@ extension MapMarker: Inputable {
                 countBadgeView.isHidden = true
             }
         }
+    }
+}
+extension MapMarker {
+    var imageView: UIImageView {
+        return markerImageView
     }
 }

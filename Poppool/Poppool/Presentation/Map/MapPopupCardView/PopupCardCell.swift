@@ -38,8 +38,8 @@ final class PopupCardCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)  // 왼쪽 여백 16px
-            make.centerY.equalToSuperview()  // 수직 중앙 정렬
+            make.leading.equalToSuperview().offset(16)
+            make.centerY.equalToSuperview()
             make.width.height.equalTo(97)
         }
 
@@ -48,10 +48,9 @@ final class PopupCardCell: UICollectionViewCell {
         categoryLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().inset(16)  // 오른쪽 여백 16px
+            make.trailing.equalToSuperview().inset(16)
         }
 
-        // 타이틀 레이블
         titleLabel.font = .systemFont(ofSize: 14, weight: .bold)
         titleLabel.numberOfLines = 2
         titleLabel.snp.makeConstraints { make in
@@ -60,7 +59,6 @@ final class PopupCardCell: UICollectionViewCell {
             make.trailing.equalToSuperview().inset(16)
         }
 
-        // 주소 레이블
         addressLabel.font = .systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
         addressLabel.numberOfLines = 2
@@ -71,7 +69,6 @@ final class PopupCardCell: UICollectionViewCell {
             make.trailing.equalToSuperview().inset(16)
         }
 
-        // 날짜 레이블
         dateLabel.font = .systemFont(ofSize: 12, weight: .light)
         dateLabel.textColor = .g400
         dateLabel.snp.makeConstraints { make in

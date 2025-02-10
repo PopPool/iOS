@@ -103,7 +103,6 @@ final class MapReactor: Reactor {
             ])
 
         case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
-            // API에서는 카테고리 필터만 보내도록 함
             let categoryIDs = currentState.selectedCategoryFilters
                 .compactMap { currentState.categoryMapping[$0] }
 
@@ -126,25 +125,31 @@ final class MapReactor: Reactor {
                     categories: categoryIDs   // API에는 카테고리 필터만 전달
                 )
                 .map { stores -> Mutation in
-                    // API 응답 후, 클라이언트 단에서 지역 필터를 추가로 적용
+                    var filteredStores = stores
+
+                    // 🛠 지역 필터 적용
                     let locationFilters = self.currentState.selectedLocationFilters
-                    let filteredStores: [MapPopUpStore]
-                    if locationFilters.isEmpty {
-                        filteredStores = stores
-                    } else {
+                    if !locationFilters.isEmpty {
                         filteredStores = stores.filter { store in
                             return locationFilters.contains { filter in
-                                // 만약 필터에 "전체"가 포함되어 있다면, "전체"를 제거하고 비교
                                 let normalizedFilter = filter.hasSuffix("전체") ? filter.replacingOccurrences(of: "전체", with: "") : filter
                                 return store.address.contains(normalizedFilter)
                             }
                         }
                     }
+
+                    // ✅ 선택한 마커가 있다면 리스트 맨 앞에 삽입
+                    if let selectedStore = self.currentState.selectedStore {
+                        filteredStores.removeAll { $0.id == selectedStore.id }
+                        filteredStores.insert(selectedStore, at: 0)
+                    }
+
                     return .setViewportStores(filteredStores)
                 }
                 .catch { error in .just(.setError(error)) },
                 .just(.setLoading(false))
             ])
+
 
         case let .updateBothFilters(locations, categories):
             return .concat([
@@ -258,7 +263,11 @@ final class MapReactor: Reactor {
                 }
 
         case let .didSelectItem(store):
-            return .just(.setSelectedStore(store))
+            return .concat([
+                .just(.setSelectedStore(store)),
+                .just(.setViewportStores(currentState.viewportStores)), // ✅ 선택된 마커를 캐러셀에서 최우선으로 반영
+            ])
+
 
         default:
             return .empty()
@@ -323,16 +332,24 @@ final class MapReactor: Reactor {
             newState.selectedCategoryFilters = categories
 
         case let .setViewportStores(stores):
+            // ✅ 선택된 스토어가 있다면, 맨 앞에 배치
+            var updatedStores = stores
+            if let selectedStore = state.selectedStore {
+                updatedStores.removeAll { $0.id == selectedStore.id }
+                updatedStores.insert(selectedStore, at: 0) // 🔥 선택된 마커를 캐러셀의 첫 번째로 설정
+            }
+
             Logger.log(
                 message: """
                 Updated viewport stores:
-                - Total: \(stores.count)
-                - Categories in view: \(stores.map { $0.category }.unique())
-                - Current filter: \(newState.selectedCategoryFilters)
+                - Total: \(updatedStores.count)
+                - Selected Store: \(state.selectedStore?.name ?? "None")
                 """,
                 category: .debug
             )
-            newState.viewportStores = stores
+
+            newState.viewportStores = updatedStores
+
 
         case let .setSelectedStore(store):
             newState.selectedStore = store

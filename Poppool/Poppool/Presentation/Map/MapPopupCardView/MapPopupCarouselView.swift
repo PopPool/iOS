@@ -15,7 +15,7 @@ final class MapPopupCarouselView: UIView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
 
-        // 스크롤 관련 속성 추가
+
         collectionView.decelerationRate = .fast  // 빠른 감속
         collectionView.isPagingEnabled = true    // 페이징 활성화
 
@@ -34,6 +34,9 @@ final class MapPopupCarouselView: UIView {
         super.init(frame: frame)
         setupLayout()
         setupCollectionView()
+        self.layer.cornerRadius = 16
+        self.layer.masksToBounds = true
+
     }
 
     required init?(coder: NSCoder) {
@@ -57,12 +60,12 @@ final class MapPopupCarouselView: UIView {
 
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
+        guard popupCards != cards else { return } // 🚨 같은 데이터면 리로드 X
         self.popupCards = cards
         collectionView.reloadData()
     }
 
     func updateVisibility(for state: FloatingPanelState) {
-        // 예: FloatingPanel 상태에 따라 숨김
         self.isHidden = (state == .full)
     }
 
