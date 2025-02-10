@@ -168,15 +168,14 @@ final class DetailReactor: Reactor {
             UIPasteboard.general.string = infoSection.inputDataList.first?.address
             ToastMaker.createToast(message: "주소를 복사했어요")
         case .moveToAddressScene(let controller):
-                 let mapGuideController = MapGuideViewController(popUpStoreId: popUpID)
-                 let reactor = MapGuideReactor(popUpStoreId: popUpID)
-                 mapGuideController.reactor = reactor 
-            // 네비게이션 컨트롤러로 감싸기
-            let navigationController = UINavigationController(rootViewController: mapGuideController)
-            navigationController.modalPresentationStyle = .fullScreen
+            let mapGuideController = MapGuideViewController(popUpStoreId: popUpID)
+            let reactor = MapGuideReactor(popUpStoreId: popUpID)
+            mapGuideController.reactor = reactor
 
-            // 모달로 표시
-            controller.present(navigationController, animated: true)
+            mapGuideController.modalPresentationStyle = .overCurrentContext
+            mapGuideController.modalTransitionStyle = .coverVertical
+            controller.present(mapGuideController, animated: true)
+
 
 
 
