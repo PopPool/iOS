@@ -210,7 +210,6 @@ final class AdminViewController: BaseViewController, View {
 
     // MARK: - Reactor Binding
     func bind(reactor: Reactor) {
-        // Search input
         mainView.searchInput.rx.text.orEmpty
             .distinctUntilChanged()
             .debounce(.milliseconds(300), scheduler: MainScheduler.instance)

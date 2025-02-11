@@ -9,8 +9,8 @@ struct StoreListRequestDTO: Encodable {
 
     enum CodingKeys: String, CodingKey {
         case query
-        case page = "pageable.page"
-        case size = "pageable.size"
+        case page
+        case size 
     }
 }
 
@@ -31,7 +31,6 @@ struct CreatePopUpStoreRequestDTO: Encodable {
     let markerSnippet: String
     let startDateBeforeEndDate: Bool
 
-    /// - 만약 대표 이미지 URL(mainImageUrl)이 비어 있지 않다면 배너 이미지로 간주하여 bannerYn을 true로 설정합니다.
     init(name: String,
          categoryId: Int64,
          desc: String,

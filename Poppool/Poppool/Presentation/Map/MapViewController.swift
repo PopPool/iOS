@@ -230,7 +230,7 @@ class MapViewController: BaseViewController, View {
         }
 
         if let reactor = self.reactor {
-//               bind(reactor: reactor)
+//               bind(reactor: reactor) // ㅅㅂ 뭐지 ? 
                bindViewport(reactor: reactor)
 
             reactor.action.onNext(.fetchCategories)

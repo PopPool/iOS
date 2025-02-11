@@ -21,7 +21,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
 
    // MARK: - Initialization
     init(reactor: AdminBottomSheetReactor) {
-        super.init() // BaseViewController의 init() 호출
+        super.init()
         self.reactor = reactor
     }
     required init?(coder: NSCoder) {
@@ -43,9 +43,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         view.backgroundColor = .clear
 
         Logger.log(message: "초기 뷰 계층:", category: .debug)
-//        print(view.value(forKey: "recursiveDescription") ?? "")
 
-        // mainView 설정 및 추가
         view.addSubview(mainView)
         mainView.isUserInteractionEnabled = true
         mainView.containerView.isUserInteractionEnabled = true
@@ -60,16 +58,14 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         }
 
         Logger.log(message: "mainView 추가 후 계층:", category: .debug)
-//        print(view.value(forKey: "recursiveDescription") ?? "")
 
-        // dimmedView 설정 및 추가
         dimmedView.backgroundColor = .black.withAlphaComponent(0.4)
         dimmedView.alpha = 0
-        dimmedView.isUserInteractionEnabled = true
+        dimmedView.isUserInteractionEnabled = false
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped))
         dimmedView.addGestureRecognizer(tapGesture)
-        tapGesture.cancelsTouchesInView = false // 터치 이벤트가 다른 뷰로 전달되도록 설정
+        tapGesture.cancelsTouchesInView = true // 터치 이벤트가 다른 뷰로 전달되도록 설정
         view.insertSubview(dimmedView, belowSubview: mainView)
 
         dimmedView.snp.makeConstraints { make in
@@ -77,7 +73,6 @@ final class AdminBottomSheetViewController: BaseViewController, View {
         }
 
         Logger.log(message: "최종 뷰 계층:", category: .debug)
-//        print(view.value(forKey: "recursiveDescription") ?? "")
     }
     
    private func setupCollectionView() {
@@ -89,12 +84,8 @@ final class AdminBottomSheetViewController: BaseViewController, View {
 
    // MARK: - Binding
    func bind(reactor: Reactor) {
-       // Action
        mainView.segmentedControl.rx.selectedSegmentIndex
                  .do(onNext: { index in
-                     Logger.log(message: "세그먼트 변경 시도: \(index)", category: .event)
-                     Logger.log(message: "View 상태: \(self.view.window != nil)", category: .debug)
-                     Logger.log(message: "MainView 상태: \(self.mainView.window != nil)", category: .debug)
                  })
                  .map { Reactor.Action.segmentChanged($0) }
                  .bind(to: reactor.action)
@@ -118,7 +109,6 @@ final class AdminBottomSheetViewController: BaseViewController, View {
                   .bind(to: reactor.action)
                   .disposed(by: disposeBag)
 
-       // State
        reactor.state.map { state in
            let items = state.activeSegment == 0 ?
                state.statusOptions :
