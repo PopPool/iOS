@@ -91,7 +91,7 @@ final class HomeReactor: Reactor {
         switch action {
         case .changeIndicatorColor(let controller, let row):
             if !loginImageBannerSection.isEmpty {
-                loginImageBannerSection.inputDataList[0].imagePaths[row].isBrightImagePath { [weak controller] isBright in
+                loginImageBannerSection.inputDataList[0].imagePaths[row - 1].isBrightImagePath { [weak controller] isBright in
                     controller?.systemStatusBarIsDark.accept(isBright)
                 }
             }
@@ -272,7 +272,7 @@ final class HomeReactor: Reactor {
         if isLoign {
             switch indexPath.section {
             case 0:
-                if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row] {
+                if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
                     let controller = DetailController()
                     controller.reactor = DetailReactor(popUpID: id)
                     currentController.navigationController?.pushViewController(controller, animated: true)
