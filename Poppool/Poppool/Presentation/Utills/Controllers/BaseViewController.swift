@@ -54,14 +54,11 @@ class BaseViewController: UIViewController {
         systemStatusBarIsDark
             .withUnretained(self)
             .subscribe { (owner, isDark) in
-                UIView.animate(withDuration: 0.3) { [weak owner] in
-                    if isDark {
-                        owner?.navigationController?.navigationBar.barStyle = .default
-                    } else {
-                        owner?.navigationController?.navigationBar.barStyle = .black
-                    }
+                if isDark {
+                    owner.navigationController?.navigationBar.barStyle = .default
+                } else {
+                    owner.navigationController?.navigationBar.barStyle = .black
                 }
-
             }
             .disposed(by: systemStatusBarDisposeBag)
     }

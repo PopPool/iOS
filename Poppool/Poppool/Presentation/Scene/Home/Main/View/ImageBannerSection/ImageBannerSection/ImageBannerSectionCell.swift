@@ -66,8 +66,10 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     
     let bannerTapped: PublishSubject<Int> = .init()
     
+    private var currentIndex: Int = 1
     private var stopButtonLeadingConstraints: Constraint?
     private var playButtonLeadingConstraints: Constraint?
+    private var isHiddenPauseButton: Bool = true
     
     // MARK: - init
     
@@ -102,7 +104,11 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         playButton.isHidden = true
         isAutoBannerPlay = true
         autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            self?.scrollToNextItem()
+            guard let self = self else { return }
+            self.contentCollectionView.scrollToItem(
+                at: .init(row: self.currentIndex + 1, section: 0),
+                at: .centeredHorizontally, animated: true
+            )
         }
     }
 }
@@ -149,20 +155,6 @@ private extension ImageBannerSectionCell {
     func getSection() -> [any Sectionable] {
         return [imageSection]
     }
-
-    // 다음 배너로 스크롤
-    private func scrollToNextItem() {
-
-        let visibleIndexPaths = contentCollectionView.indexPathsForVisibleItems.sorted()
-        guard let currentIndex = visibleIndexPaths.first else { return }
-
-        let nextIndex = IndexPath(
-            item: (currentIndex.item + 1) % imageSection.dataCount,
-            section: currentIndex.section
-        )
-        contentCollectionView.scrollToItem(at: nextIndex, at: .centeredHorizontally, animated: true)
-        pageControl.currentPage = nextIndex.item
-    }
     
     private func findViewController() -> BaseViewController? {
         var nextResponder = self.next
@@ -202,7 +194,11 @@ private extension ImageBannerSectionCell {
             .distinctUntilChanged()
             .withUnretained(self)
             .subscribe { (owner, index) in
-                owner.pageControl.currentPage = index
+                var index = index
+                owner.currentIndex = index
+                if index == 0 { index = 1 }
+                if index == owner.imageSection.dataCount - 1 { index = owner.imageSection.dataCount - 2 }
+                owner.pageControl.currentPage = index - 1
             }
             .disposed(by: disposeBag)
     }
@@ -216,15 +212,27 @@ extension ImageBannerSectionCell: Inputable {
     }
     
     func injection(with input: Input) {
-        pageControl.numberOfPages = input.imagePaths.count
-        let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
-        stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-        playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-        let datas = zip(input.imagePaths, input.idList)
-        imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
+        if imageSection.isEmpty {
+            pageControl.numberOfPages = input.imagePaths.count
+            let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
+            stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+            playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+            let datas = zip(input.imagePaths, input.idList)
+            let backContents = datas.suffix(1)
+            let frontContents = datas.prefix(1)
+            imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
+            imageSection.inputDataList.append(contentsOf: frontContents.map { .init(imagePath: $0.0, id: $0.1) })
+            imageSection.inputDataList = backContents.map {.init(imagePath: $0.0, id: $0.1) } + imageSection.inputDataList
+            DispatchQueue.main.async { [weak self] in
+                self?.contentCollectionView.scrollToItem(
+                    at: .init(row: 1, section: 0),
+                    at: .centeredHorizontally, animated: false
+                )
+            }
+        }
         
         contentCollectionView.reloadData()
-        
+        isHiddenPauseButton = input.isHiddenPauseButton
         if isFirstResponseAutoScroll {
             startAutoScroll()
             isFirstResponseAutoScroll = false
@@ -266,5 +274,24 @@ extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         bannerTapped.onNext(indexPath.row)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if currentIndex == 0 {
+            contentCollectionView.scrollToItem(
+                at: .init(row: imageSection.dataCount - 2, section: 0),
+                at: .centeredHorizontally, animated: false
+            )
+        }
+        if currentIndex == imageSection.dataCount - 1 {
+            contentCollectionView.scrollToItem(
+                at: .init(row: 1, section: 0),
+                at: .centeredHorizontally, animated: false
+            )
+        }
+        if !isHiddenPauseButton {
+            startAutoScroll()
+        }
+        
     }
 }
