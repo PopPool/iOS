@@ -65,7 +65,6 @@ final class AdminReactor: Reactor {
             return .just(.navigateToRegister(true))
 
         case let .tapEditButton(storeId):
-            // ✅ 선택한 storeId에 해당하는 데이터를 찾아서 Mutation으로 전달
             if let store = currentState.storeList.first(where: { $0.id == storeId }) {
                 return .just(.navigateToEdit(store))
             } else {

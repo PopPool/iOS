@@ -96,26 +96,40 @@ extension SearchMainController {
             })
             .disposed(by: disposeBag)
         
+//        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+//            .withUnretained(self)
+//            .map { (owner, _) in
+//                Reactor.Action.returnSearchKeyWord(text: owner.mainView.searchTextField.text )
+//            }
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
+//        
+//        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+//            .withUnretained(self)
+//            .subscribe(onNext: { (owner, _) in
+//                if let text = owner.mainView.searchTextField.text {
+//                    if !text.isEmpty {
+//                        owner.scrollToPage(.at(index: 1), animated: false)
+//                    }
+//                }
+//                owner.beforeController.reactor?.action.onNext(.returnSearchKeyword(text: owner.mainView.searchTextField.text))
+//            })
+//            .disposed(by: disposeBag)
         mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .withLatestFrom(mainView.searchTextField.rx.text.orEmpty)
             .withUnretained(self)
-            .map { (owner, _) in
-                Reactor.Action.returnSearchKeyWord(text: owner.mainView.searchTextField.text )
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
-                if let text = owner.mainView.searchTextField.text {
-                    if !text.isEmpty {
-                        owner.scrollToPage(.at(index: 1), animated: false)
-                    }
+            .subscribe(onNext: { (owner, query) in
+                owner.view.endEditing(true)
+                // 텍스트가 비어있지 않으면 페이지 전환
+                if !query.isEmpty {
+                    owner.scrollToPage(.at(index: 1), animated: false)
                 }
-                owner.beforeController.reactor?.action.onNext(.returnSearchKeyword(text: owner.mainView.searchTextField.text))
+                owner.reactor?.action.onNext(.returnSearchKeyWord(text: query))
+                owner.beforeController.reactor?.action.onNext(.returnSearchKeyword(text: query))
             })
             .disposed(by: disposeBag)
-        
+
+
         mainView.searchTextField.rx.text
             .withUnretained(self)
             .subscribe(onNext: { (owner, text) in

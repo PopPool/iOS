@@ -53,7 +53,8 @@ final class MapSearchInput: UIView, View {
     init() {
         super.init(frame: .zero)
         setupLayout()
-        setupActions()
+//        setupActions()
+//        setupGesture()
         searchTextField.isEnabled = false
 
 
@@ -79,12 +80,12 @@ final class MapSearchInput: UIView, View {
 
     func bind(reactor: MapReactor) {
         // 엔터 키로 검색 실행
-        searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .withLatestFrom(searchTextField.rx.text.orEmpty)
-            .bind { query in
-                reactor.action.onNext(.searchTapped(query))
-            }
-            .disposed(by: disposeBag)
+//        searchTextField.rx.controlEvent(.editingDidEndOnExit)
+//            .withLatestFrom(searchTextField.rx.text.orEmpty)
+//            .bind { query in
+//                reactor.action.onNext(.searchTapped(query))
+//            }
+//            .disposed(by: disposeBag)
 
         // 텍스트 입력 로그
         searchTextField.rx.text.orEmpty
@@ -138,7 +139,6 @@ private extension MapSearchInput {
     }
 
     func setupActions() {
-        // 텍스트 필드 액션 설정
         searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .withLatestFrom(searchTextField.rx.text.orEmpty)
             .subscribe(onNext: { [weak self] query in
