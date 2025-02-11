@@ -29,9 +29,9 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size = CGSize(width: 200, height: 0) // 고정된 너비, 동적 높이
+        self.frame.size = CGSize(width: 200, height: 100) // 임시 높이로 시작
         setupLayout()
-        setupGestures()
+//        setupGestures()
     }
 
     required init?(coder: NSCoder) {
@@ -41,15 +41,11 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Setup
     private func setupLayout() {
         addSubview(containerView)
-        self.isUserInteractionEnabled = true
-        containerView.isUserInteractionEnabled = true
-        stackView.isUserInteractionEnabled = true
-
         containerView.addSubview(stackView)
 
         containerView.snp.makeConstraints { make in
-            make.width.equalTo(200)
             make.edges.equalToSuperview()
+            make.width.equalTo(200)
         }
 
         stackView.snp.makeConstraints { make in
@@ -71,68 +67,80 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Configuration
     func configure(with stores: [MapPopUpStore]) {
+        // 기존 뷰 제거
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        // stores 배열을 역순으로 처리
-        let reversedStores = stores.reversed()
+        print("🗨️ 툴팁 구성")
+        print("📋 입력받은 스토어: \(stores.map { $0.name })")
 
-        for (index, store) in reversedStores.enumerated() {
-            let rowContainer = UIView()
-            rowContainer.isUserInteractionEnabled = true
-            rowContainer.tag = stores.count - 1 - index  // 인덱스도 반대로 설정
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleRowTap(_:)))
-            rowContainer.addGestureRecognizer(tapGesture)
-
-            let horizontalStack = UIStackView()
-            horizontalStack.axis = .horizontal
-            horizontalStack.spacing = 8
-            horizontalStack.alignment = .center
-
-            let bulletView = UIView()
-            bulletView.backgroundColor = .clear
-            bulletView.layer.cornerRadius = 4
-            bulletView.snp.makeConstraints { make in
-                make.width.height.equalTo(8)
-            }
-
-            let label = UILabel()
-            label.text = store.name
-            label.font = .systemFont(ofSize: 12)
-            label.textColor = .blu500
-            label.numberOfLines = 1
-
-            horizontalStack.addArrangedSubview(bulletView)
-            horizontalStack.addArrangedSubview(label)
-
-            rowContainer.addSubview(horizontalStack)
-            horizontalStack.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+        // stores 배열 순서대로 처리
+        for (index, store) in stores.enumerated() {
+            let rowContainer = createRow(for: store, at: index)
             stackView.addArrangedSubview(rowContainer)
 
+            // 구분선 추가 (마지막 아이템 제외)
             if index < stores.count - 1 {
-                let separator = UIView()
-                separator.backgroundColor = .g50
-                separator.snp.makeConstraints { make in
-                    make.height.equalTo(1)
-                }
+                let separator = createSeparator()
                 stackView.addArrangedSubview(separator)
             }
         }
 
-        selectStore(at: 0)
-    
-
         // 레이아웃 업데이트
-        setNeedsLayout()
         layoutIfNeeded()
 
         // 컨텐츠 크기에 맞게 높이 조정
         let height = stackView.systemLayoutSizeFitting(
             CGSize(width: 200, height: UIView.layoutFittingCompressedSize.height)
-        ).height + 24 // 24는 상하 패딩
+        ).height + 24
 
+        // frame 높이 업데이트
         self.frame.size.height = height
+    }
+
+    private func createRow(for store: MapPopUpStore, at index: Int) -> UIView {
+        let rowContainer = UIView()
+        rowContainer.isUserInteractionEnabled = true
+        rowContainer.tag = index  // 정순 인덱스 사용
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleRowTap(_:)))
+        rowContainer.addGestureRecognizer(tapGesture)
+
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.spacing = 8
+        horizontalStack.alignment = .center
+
+        let bulletView = UIView()
+        bulletView.backgroundColor = .clear
+        bulletView.layer.cornerRadius = 4
+        bulletView.snp.makeConstraints { make in
+            make.width.height.equalTo(8)
+        }
+
+        let label = UILabel()
+        label.text = store.name
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = .blu500
+        label.numberOfLines = 1
+
+        horizontalStack.addArrangedSubview(bulletView)
+        horizontalStack.addArrangedSubview(label)
+
+        rowContainer.addSubview(horizontalStack)
+        horizontalStack.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        return rowContainer
+    }
+
+    private func createSeparator() -> UIView {
+        let separator = UIView()
+        separator.backgroundColor = .g50
+        separator.snp.makeConstraints { make in
+            make.height.equalTo(1)
+        }
+        return separator
     }
 
     // MARK: - Gesture Handling
@@ -148,8 +156,10 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
         guard let row = gesture.view else { return }
         let index = row.tag
 
-        gesture.cancelsTouchesInView = true
+        print("🗨️ 툴팁 탭")
+        print("👆 탭된 인덱스: \(index)")
 
+        gesture.cancelsTouchesInView = true
         selectStore(at: index)
         onStoreSelected?(index)
     }
@@ -166,6 +176,7 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Store Selection
     func selectStore(at index: Int) {
+        // 모든 행을 순회하면서 해당 인덱스의 행만 선택 상태로 변경
         for case let row as UIView in stackView.arrangedSubviews {
             guard let horizontalStack = row.subviews.first as? UIStackView,
                   horizontalStack.arrangedSubviews.count >= 2,
@@ -174,9 +185,11 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
             else { continue }
 
             if row.tag == index {
+                // 선택된 행
                 label.font = .boldSystemFont(ofSize: 12)
                 bulletView.backgroundColor = .jd500
             } else {
+                // 선택되지 않은 행
                 label.font = .systemFont(ofSize: 12)
                 bulletView.backgroundColor = .clear
             }

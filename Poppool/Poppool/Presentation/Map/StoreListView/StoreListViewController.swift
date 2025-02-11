@@ -132,7 +132,6 @@ final class StoreListViewController: UIViewController, View {
 //            .bind(to: reactor.action)
 //            .disposed(by: disposeBag)
 
-        // 5) **필터 상태** 관찰 → 바텀시트 열기/닫기
         reactor.state.map { $0.activeFilterType }
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] filterType in
