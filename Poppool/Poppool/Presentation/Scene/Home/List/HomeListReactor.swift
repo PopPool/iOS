@@ -79,20 +79,24 @@ final class HomeListReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .changePage:
-            if isLoading {
+            if popUpType == .popular {
                 return Observable.just(.skipAction)
             } else {
-                if currentPage <= totalPage {
-                    isLoading = true
-                    currentPage += 1
-                    return homeAPIUseCase.fetchHome(page: currentPage, size: size, sort: "viewCount,desc")
-                        .withUnretained(self)
-                        .map { (owner, response) in
-                            owner.appendSectionData(response: response)
-                            return .appendData
-                        }
-                } else {
+                if isLoading {
                     return Observable.just(.skipAction)
+                } else {
+                    if currentPage <= totalPage {
+                        isLoading = true
+                        currentPage += 1
+                        return homeAPIUseCase.fetchHome(page: currentPage, size: size, sort: "viewCount,desc")
+                            .withUnretained(self)
+                            .map { (owner, response) in
+                                owner.appendSectionData(response: response)
+                                return .appendData
+                            }
+                    } else {
+                        return Observable.just(.skipAction)
+                    }
                 }
             }
         case .viewWillAppear:

@@ -90,11 +90,6 @@ final class HomeReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .changeIndicatorColor(let controller, let row):
-            if !loginImageBannerSection.isEmpty {
-                loginImageBannerSection.inputDataList[0].imagePaths[row - 1].isBrightImagePath { [weak controller] isBright in
-                    controller?.systemStatusBarIsDark.accept(isBright)
-                }
-            }
             return Observable.just(.skip)
         case .viewWillAppear:
             return homeApiUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
