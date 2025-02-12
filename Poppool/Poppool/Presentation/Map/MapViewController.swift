@@ -189,20 +189,34 @@ class MapViewController: BaseViewController, View {
 //        }
 
         carouselView.onCardScrolled = { [weak self] pageIndex in
-            guard let self = self,
-                  pageIndex >= 0,
-                  pageIndex < self.currentCarouselStores.count else { return }
+                  guard let self = self,
+                        pageIndex >= 0,
+                        pageIndex < self.currentCarouselStores.count else { return }
 
-            let store = self.currentCarouselStores[pageIndex]
-            print("🔄 캐러셀 스크롤")
-            print("📱 현재 선택된 스토어: \(store.name) (index: \(pageIndex))")
-            print("🎠 전체 캐러셀 스토어: \(self.currentCarouselStores.map { $0.name })")
+                  let store = self.currentCarouselStores[pageIndex]
 
+                  // 현재 마커의 스토어 배열 가져오기
+                  if let existingMarker = self.currentMarker,
+                     let markerStores = existingMarker.userData as? [MapPopUpStore] {
 
-            // 1. 현재 마커의 스토어 배열 가져오기
-            if let existingMarker = self.currentMarker,
-               let markerStores = existingMarker.userData as? [MapPopUpStore] {
-                print("📍 마커에 저장된 스토어: \(markerStores.map { $0.name })")
+                      // 기존 마커 뷰가 있다면 재사용, 없으면 새로 생성
+                      if let currentMarkerView = existingMarker.iconView as? MapMarker {
+                          // 기존 마커 뷰의 상태만 업데이트
+                          currentMarkerView.injection(with: .init(
+                              isSelected: true,
+                              isCluster: false,
+                              count: markerStores.count
+                          ))
+                      } else {
+                          // 마커 뷰가 없는 경우만 새로 생성
+                          let markerView = MapMarker()
+                          markerView.injection(with: .init(
+                              isSelected: true,
+                              isCluster: false,
+                              count: markerStores.count
+                          ))
+                          existingMarker.iconView = markerView
+                      }
 
 
                 // 2. 선택된 마커 업데이트
@@ -230,7 +244,7 @@ class MapViewController: BaseViewController, View {
         }
 
         if let reactor = self.reactor {
-//               bind(reactor: reactor) // ㅅㅂ 뭐지 ? 
+//               bind(reactor: reactor) // ㅅㅂ 뭐지
                bindViewport(reactor: reactor)
 
             reactor.action.onNext(.fetchCategories)
