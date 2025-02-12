@@ -4,25 +4,30 @@ import FloatingPanel
 
 final class MapPopupCarouselView: UIView {
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 335, height: 137)
-        layout.minimumLineSpacing = 12
+          let layout = UICollectionViewFlowLayout()
+          layout.scrollDirection = .horizontal
 
-        // 양쪽 모두 동일한 여백으로 설정
-        layout.sectionInset = UIEdgeInsets(
-            top: 0,
-            left: 20,  // 이전: leftInset
-            bottom: 0,
-            right: 20
-        )
+          // 화면 너비 기준으로 여백 계산
+          let screenWidth = UIScreen.main.bounds.width
+          let itemWidth: CGFloat = 335
+          let sideInset = (screenWidth - itemWidth) / 2
 
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.showsHorizontalScrollIndicator = false
-        cv.backgroundColor = .clear
-        cv.decelerationRate = .fast
-        return cv
-    }()
+          layout.itemSize = CGSize(width: itemWidth, height: 137)
+          layout.minimumLineSpacing = 12
+          layout.sectionInset = UIEdgeInsets(
+              top: 0,
+              left: sideInset,  // 첫 번째 아이템이 중앙에 오도록
+              bottom: 0,
+              right: sideInset  // 마지막 아이템도 중앙 정렬 가능하도록
+          )
+
+          let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+          cv.showsHorizontalScrollIndicator = false
+          cv.backgroundColor = .clear
+          cv.decelerationRate = .fast
+          cv.contentInsetAdjustmentBehavior = .always
+          return cv
+      }()
 
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
@@ -88,24 +93,22 @@ extension MapPopupCarouselView: UIScrollViewDelegate {
                                  withVelocity velocity: CGPoint,
                                  targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        let cellWidth = layout.itemSize.width
+        let itemWidth = layout.itemSize.width
         let spacing = layout.minimumLineSpacing
 
-        // 현재 컬렉션뷰의 bounds를 기준으로 중앙 위치 계산
-        let collectionViewWidth = collectionView.bounds.width
-        let inset = (collectionViewWidth - cellWidth) / 2
+        // 페이징 처리를 위한 너비
+        let pageWidth = itemWidth + spacing
+        let offset = targetContentOffset.pointee.x
 
-        // 스크롤 위치 계산 (중앙 정렬 기준)
-        let estimatedIndex = (targetContentOffset.pointee.x + inset) / (cellWidth + spacing)
-        let index = round(estimatedIndex)
+        // 가장 가까운 페이지 계산
+        let index = round(offset / pageWidth)
+        let roundedOffset = pageWidth * index
 
-        // 최종 offset 계산 (중앙 정렬되도록)
-        let finalOffset = (cellWidth + spacing) * index - inset
-        targetContentOffset.pointee.x = max(0, finalOffset)
-
+        targetContentOffset.pointee = CGPoint(x: roundedOffset, y: 0)
         onCardScrolled?(Int(index))
     }
 }
+
 
 // MARK: - UICollectionView DataSource & Delegate
 extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

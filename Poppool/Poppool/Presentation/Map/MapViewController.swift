@@ -271,7 +271,7 @@ class MapViewController: BaseViewController, View {
        let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
        tooltipView.frame = CGRect(
            x: markerPoint.x - tooltipView.frame.width/2,
-           y: markerPoint.y - markerHeight - tooltipView.frame.height - 10,
+           y: markerPoint.y - markerHeight - tooltipView.frame.height - 20,
            width: tooltipView.frame.width,
            height: tooltipView.frame.height
        )
@@ -1247,7 +1247,7 @@ extension MapViewController: GMSMapViewDelegate {
 
         case .district:  // 구 단위 클러스터
             // 바로 개별 마커가 보이는 줌 레벨로 이동
-            let detailedZoomLevel: Float = 11.0
+            let detailedZoomLevel: Float = 12.0
             let camera = GMSCameraPosition(target: marker.position, zoom: detailedZoomLevel)
             mainView.mapView.animate(to: camera)
 
