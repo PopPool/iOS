@@ -1128,6 +1128,10 @@ extension MapViewController: GMSMapViewDelegate {
         if currentMarker != nil {
             updateTooltipPosition()
         }
+        carouselView.isHidden = true
+           carouselView.updateCards([])  // 기존 카드 데이터 초기화
+           currentCarouselStores = []
+
     }
 
 
@@ -1137,11 +1141,9 @@ extension MapViewController: GMSMapViewDelegate {
         currentTooltipView?.removeFromSuperview()
         currentTooltipView = nil
 
-        // 이전 마커 상태 초기화
         if let currentMarker = currentMarker {
             let markerView = MapMarker()
 
-            // 마커가 클러스터인 경우를 위한 처리
             if let storeArray = currentMarker.userData as? [MapPopUpStore] {
                 markerView.injection(with: .init(
                     isSelected: false,

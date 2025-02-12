@@ -9,18 +9,21 @@ final class MapPopupCarouselView: UIView {
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 335, height: 137)
         layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.showsHorizontalScrollIndicator = false
+        cv.backgroundColor = .clear
+        cv.decelerationRate = .fast
+        cv.contentInsetAdjustmentBehavior = .always
 
+        // 좌우 여백을 화면 중앙 정렬에 맞게 설정
+        let screenWidth = UIScreen.main.bounds.width
+        let inset = (screenWidth - 335) / 2  // (화면폭 - 카드폭) / 2
+        cv.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
 
-        collectionView.decelerationRate = .fast  // 빠른 감속
-        collectionView.isPagingEnabled = false    // 페이징 활성화
-
-        return collectionView
+        return cv
     }()
+
 
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
@@ -83,27 +86,25 @@ final class MapPopupCarouselView: UIView {
 
 extension MapPopupCarouselView: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                   withVelocity velocity: CGPoint,
-                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        // FlowLayout에서 셀 크기, 최소 간격, inset 값을 가져옵니다.
-        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
-            return
-        }
-        let cellWidth = layout.itemSize.width            // 예: 335
-        let spacing = layout.minimumLineSpacing            // 예: 12
-        let inset = layout.sectionInset.left               // 예: 20
-        // 한 "페이지"의 폭은 셀 폭 + 간격 (단, 마지막 셀에는 간격이 없으므로 일반적으로 모든 셀에 적용된다고 가정)
-        let pageWidth = cellWidth + spacing
+                                 withVelocity velocity: CGPoint,
+                                 targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let cellWidth = layout.itemSize.width
+        let spacing = layout.minimumLineSpacing
 
-        // 현재 오프셋에 inset을 더해 실제 콘텐츠 시작점부터의 오프셋으로 계산합니다.
-        let offsetWithInset = scrollView.contentOffset.x + inset
+        // 현재 컬렉션뷰의 bounds를 기준으로 중앙 위치 계산
+        let collectionViewWidth = collectionView.bounds.width
+        let inset = (collectionViewWidth - cellWidth) / 2
 
-        // 현재 오프셋을 페이지 폭으로 나눈 값을 반올림하면 목표 페이지 인덱스가 됩니다.
-        let page = round(offsetWithInset / pageWidth)
+        // 스크롤 위치 계산 (중앙 정렬 기준)
+        let estimatedIndex = (targetContentOffset.pointee.x + inset) / (cellWidth + spacing)
+        let index = round(estimatedIndex)
 
-        // 새 target offset은 목표 페이지 인덱스에 해당하는 오프셋에서 inset을 빼서 구합니다.
-        let newOffsetX = page * pageWidth - inset
-        targetContentOffset.pointee = CGPoint(x: newOffsetX, y: 0)
+        // 최종 offset 계산 (중앙 정렬되도록)
+        let finalOffset = (cellWidth + spacing) * index - inset
+        targetContentOffset.pointee.x = max(0, finalOffset)
+
+        onCardScrolled?(Int(index))
     }
 }
 
@@ -124,8 +125,7 @@ extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        // 여기서는 커스텀 스냅핑이 적용된 후이므로, targetContentOffset와 거의 일치한 값이 contentOffset에 반영됩니다.
-        // effective pageWidth는 위에서 계산한 것과 동일합니다.
+
         guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         let cellWidth = layout.itemSize.width
         let spacing = layout.minimumLineSpacing
