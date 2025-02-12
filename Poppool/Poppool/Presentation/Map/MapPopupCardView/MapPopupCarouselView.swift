@@ -3,27 +3,26 @@ import SnapKit
 import FloatingPanel
 
 final class MapPopupCarouselView: UIView {
-    // MARK: - Components
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 335, height: 137)
         layout.minimumLineSpacing = 12
 
+        // 양쪽 모두 동일한 여백으로 설정
+        layout.sectionInset = UIEdgeInsets(
+            top: 0,
+            left: 20,  // 이전: leftInset
+            bottom: 0,
+            right: 20
+        )
+
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.showsHorizontalScrollIndicator = false
         cv.backgroundColor = .clear
         cv.decelerationRate = .fast
-        cv.contentInsetAdjustmentBehavior = .always
-
-        // 좌우 여백을 화면 중앙 정렬에 맞게 설정
-        let screenWidth = UIScreen.main.bounds.width
-        let inset = (screenWidth - 335) / 2  // (화면폭 - 카드폭) / 2
-        cv.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
-
         return cv
     }()
-
 
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)

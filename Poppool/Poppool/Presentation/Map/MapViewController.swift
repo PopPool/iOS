@@ -18,7 +18,6 @@ class MapViewController: BaseViewController, View {
         let lng: Int
 
         init(latitude: Double, longitude: Double) {
-            // 예: 소수점 5자리 정도까지 반올림하여 int로 변환
             self.lat = Int(latitude * 1_000_00)
             self.lng = Int(longitude * 1_000_00)
         }
@@ -30,6 +29,7 @@ class MapViewController: BaseViewController, View {
     var currentTooltipCoordinate: CLLocationCoordinate2D?
 
     // MARK: - Properties
+    private var isMovingToMarker = false
     var currentCarouselStores: [MapPopUpStore] = []
     private var markerDictionary: [Int64: GMSMarker] = [:]
     private var individualMarkerDictionary: [Int64: GMSMarker] = [:]
@@ -84,6 +84,19 @@ class MapViewController: BaseViewController, View {
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         mainView.mapView.isMyLocationEnabled = true
+
+        mainView.mapView.rx.idleAtPosition
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                // 만약 툴팁이 존재한다면 마커의 새로운 위치에 맞춰 업데이트
+                if let _ = self.currentTooltipView, let _ = self.currentMarker {
+                    self.updateTooltipPosition()
+                }
+                self.isMovingToMarker = false
+            })
+            .disposed(by: disposeBag)
+
 //        mainView.mapView.settings.myLocationButton = true
 
 //        carouselView.onCardScrolled = { [weak self] pageIndex in
@@ -1109,41 +1122,51 @@ extension MapViewController: GMSMapViewDelegate {
     
     /// 지도 이동할 때 클러스터 업데이트
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        currentTooltipView?.removeFromSuperview()
-        currentTooltipView = nil
-        currentTooltipStores = []
+        if !isMovingToMarker {
+            currentTooltipView?.removeFromSuperview()
+            currentTooltipView = nil
+            currentTooltipStores = []
 
-        updateMapWithClustering()
+            updateMapWithClustering()
 
-        // 뷰포트 변경 처리
-        let bounds = mapView.projection.visibleRegion()
-        reactor?.action.onNext(.viewportChanged(
-            northEastLat: bounds.farRight.latitude,
-            northEastLon: bounds.farRight.longitude,
-            southWestLat: bounds.nearLeft.latitude,
-            southWestLon: bounds.nearLeft.longitude
-        ))
+            // 뷰포트 변경 처리
+            let bounds = mapView.projection.visibleRegion()
+            reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
 
-        // 현재 마커가 있다면 툴팁 위치도 업데이트
-        if currentMarker != nil {
-            updateTooltipPosition()
+            // 현재 마커가 있다면 툴팁 위치도 업데이트
+            if currentMarker != nil {
+                updateTooltipPosition()
+            }
+            // 캐러셀 초기화
+            carouselView.isHidden = true
+            carouselView.updateCards([])
+            currentCarouselStores = []
         }
-        carouselView.isHidden = true
-           carouselView.updateCards([])  // 기존 카드 데이터 초기화
-           currentCarouselStores = []
-
     }
 
 
+    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+        if gesture && !isMovingToMarker {
+            resetSelectedMarker()
+        }
+    }
     /// 지도 빈 공간 탭 → 기존 마커/캐러셀 해제
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         // 툴팁 제거
+        guard !isMovingToMarker else { return }
+
         currentTooltipView?.removeFromSuperview()
         currentTooltipView = nil
 
         if let currentMarker = currentMarker {
             let markerView = MapMarker()
 
+            // 마커가 클러스터인 경우를 위한 처리
             if let storeArray = currentMarker.userData as? [MapPopUpStore] {
                 markerView.injection(with: .init(
                     isSelected: false,
@@ -1170,17 +1193,15 @@ extension MapViewController: GMSMapViewDelegate {
 
     // MARK: - Helper for single marker tap
     private func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
-        // 🛠 이미 선택된 마커를 다시 탭하면 해제
+        currentTooltipView?.removeFromSuperview()
+        currentTooltipView = nil
+
         if currentMarker == marker {
             resetSelectedMarker()
             return false
         }
 
-        // 기존 툴팁 제거
-        currentTooltipView?.removeFromSuperview()
-        currentTooltipView = nil
-
-        // ✅ 기존 마커 강조 해제
+        // 기존 선택된 마커 해제
         if let previousMarker = currentMarker {
             let markerView = MapMarker()
             markerView.injection(with: .init(
@@ -1191,7 +1212,7 @@ extension MapViewController: GMSMapViewDelegate {
             previousMarker.iconView = markerView
         }
 
-        // ✅ 새 마커 강조
+        // 새 마커 강조 및 플래그 설정
         let markerView = MapMarker()
         markerView.injection(with: .init(
             isSelected: true,
@@ -1201,14 +1222,17 @@ extension MapViewController: GMSMapViewDelegate {
         marker.iconView = markerView
         currentMarker = marker
 
-        // ✅ 개별 마커 정보만 캐러셀에 추가
+        // 캐러셀 업데이트 (해당 마커에 연관된 스토어만 표시)
         carouselView.updateCards([store])
         carouselView.isHidden = false
-        self.currentCarouselStores = [store]
-        carouselView.scrollToCard(index: 0) // ✅ 첫 번째 카드로 이동
+        currentCarouselStores = [store]
+        carouselView.scrollToCard(index: 0)
 
+        isMovingToMarker = true
+        mainView.mapView.animate(toLocation: marker.position)
         return true
     }
+
 
     private func handleRegionalClusterTap(_ marker: GMSMarker, clusterData: ClusterMarkerData) -> Bool {
         let currentZoom = mainView.mapView.camera.zoom
@@ -1296,22 +1320,23 @@ extension MapViewController: GMSMapViewDelegate {
         let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
         tooltipView.frame = CGRect(
             x: markerPoint.x - 10,
-            y: markerPoint.y - markerHeight - tooltipView.frame.height - 10,
+            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
             width: tooltipView.frame.width,
             height: tooltipView.frame.height
         )
 
         mainView.addSubview(tooltipView)
-        currentTooltipView = tooltipView
-        currentTooltipStores = storeArray
-        currentTooltipCoordinate = marker.position
+         currentTooltipView = tooltipView
+         currentTooltipStores = storeArray
+         currentTooltipCoordinate = marker.position
 
-        // 첫 번째 아이템으로 스크롤
-        carouselView.scrollToCard(index: 0)
+         // 첫 번째 아이템으로 캐러셀 스크롤
+         carouselView.scrollToCard(index: 0)
 
-        return true
-    }
-
+         isMovingToMarker = true
+         mainView.mapView.animate(toLocation: marker.position)
+         return true
+     }
 
     private func updateTooltipPosition() {
         guard let marker = currentMarker, let tooltip = currentTooltipView else { return }
@@ -1333,7 +1358,6 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     private func resetSelectedMarker() {
-        // 🛠 기존 선택 마커 원래 상태로 복구
         if let currentMarker = currentMarker {
             let markerView = MapMarker()
 
@@ -1383,19 +1407,20 @@ extension MapViewController {
             }
 
         let distinctCameraObservable = cameraObservable.distinctUntilChanged { (cam1, cam2) -> Bool in
-            let latDiff = abs(cam1.target.latitude - cam2.target.latitude)
-            let lonDiff = abs(cam1.target.longitude - cam2.target.longitude)
-            let zoomDiff = abs(cam1.zoom - cam2.zoom)
+            let loc1 = CLLocation(latitude: cam1.target.latitude, longitude: cam1.target.longitude)
+            let loc2 = CLLocation(latitude: cam2.target.latitude, longitude: cam2.target.longitude)
+            let distance = loc1.distance(from: loc2)
+            // 50m 미만이면 변화가 없다고 판단
+            if distance < 20 { return true }
 
-            // ✅ 줌 레벨 변화가 있다면 반드시 업데이트
+            // 줌 레벨 변화가 있다면 반드시 업데이트
+            let zoomDiff = abs(cam1.zoom - cam2.zoom)
             if zoomDiff >= 0.2 { return false }
 
-            return latDiff < 0.02 && lonDiff < 0.02
+            return false
         }
 
 
-        // 3. visibleRegion의 네 모서리 좌표를 사용하여 올바른 뷰포트 경계를 계산합니다.
-        //    (회전된 지도에서도 네 모서리 모두 고려하여 북동(Northeast)와 남서(Southwest) 좌표를 구합니다.)
         let viewportActionObservable = distinctCameraObservable.map { [unowned self] _ -> MapReactor.Action? in
             let visibleRegion = self.mainView.mapView.projection.visibleRegion()
             // 네 모서리 좌표 배열
@@ -1405,7 +1430,6 @@ extension MapViewController {
                 visibleRegion.farLeft,
                 visibleRegion.farRight
             ]
-            // 위도와 경도의 최댓값 및 최솟값 계산
             let lats = corners.map { $0.latitude }
             let lons = corners.map { $0.longitude }
             let northEast = CLLocationCoordinate2D(latitude: lats.max() ?? 0, longitude: lons.max() ?? 0)
@@ -1499,6 +1523,8 @@ extension MapViewController {
 
 private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
         // 1) 클러스터인지
+    isMovingToMarker = true
+
         if let clusterData = marker.userData as? ClusterMarkerData {
             let clusterToIndividualZoom: Float = 14.0
             let currentZoom = mainView.mapView.camera.zoom
