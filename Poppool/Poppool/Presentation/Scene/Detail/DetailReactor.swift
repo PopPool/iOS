@@ -353,7 +353,9 @@ final class DetailReactor: Reactor {
                         isMyComment: commentResponse.myCommentYn
                     )
                 })
-                
+                for (index, cell) in owner.commentSection.inputDataList.enumerated() {
+                    owner.commentSection.inputDataList[index].isLastCell = (index == owner.commentSection.inputDataList.count - 1)
+                }
                 owner.similarSection.inputDataList = response.similarPopUpStoreList.map {
                     return .init(imagePath: $0.mainImageUrl, date: $0.endDate, title: $0.name, id: $0.id)
                 }
