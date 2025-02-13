@@ -15,11 +15,13 @@ final class MapReactor: Reactor {
         case fetchCategories
         case updateBothFilters(locations: [String], categories: [String])  // 새로 추가
         case didSelectItem(MapPopUpStore)
+        case refreshMarkers(northEastLat: Double, northEastLon: Double, southWestLat: Double, southWestLon: Double)
         case viewportChanged(
             northEastLat: Double,
             northEastLon: Double,
             southWestLat: Double,
             southWestLon: Double
+
         )
     }
 
@@ -66,6 +68,20 @@ final class MapReactor: Reactor {
         self.useCase = useCase
         self.directionRepository = directionRepository
         self.initialState = State()
+    }
+    private func store(_ store: MapPopUpStore, matches filter: String) -> Bool {
+        let normalizedAddress = store.address.lowercased()
+        if filter.contains("/") {
+            let individualFilters = filter
+                .components(separatedBy: "/")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            return individualFilters.contains { normalizedAddress.contains($0) }
+        } else {
+            let normalizedFilter = filter.hasSuffix("전체")
+                ? filter.replacingOccurrences(of: "전체", with: "").lowercased()
+                : filter.lowercased()
+            return normalizedAddress.contains(normalizedFilter)
+        }
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -122,23 +138,21 @@ final class MapReactor: Reactor {
                     northEastLon: northEastLon,
                     southWestLat: southWestLat,
                     southWestLon: southWestLon,
-                    categories: categoryIDs   // API에는 카테고리 필터만 전달
+                    categories: categoryIDs
                 )
                 .map { stores -> Mutation in
                     var filteredStores = stores
 
-                    // 🛠 지역 필터 적용
                     let locationFilters = self.currentState.selectedLocationFilters
                     if !locationFilters.isEmpty {
                         filteredStores = stores.filter { store in
                             return locationFilters.contains { filter in
-                                let normalizedFilter = filter.hasSuffix("전체") ? filter.replacingOccurrences(of: "전체", with: "") : filter
-                                return store.address.contains(normalizedFilter)
+                                return self.store(store, matches: filter)
                             }
                         }
                     }
 
-                    // ✅ 선택한 마커가 있다면 리스트 맨 앞에 삽입
+                    // 선택한 스토어가 있다면 리스트 맨 앞에 삽입
                     if let selectedStore = self.currentState.selectedStore {
                         filteredStores.removeAll { $0.id == selectedStore.id }
                         filteredStores.insert(selectedStore, at: 0)
@@ -149,6 +163,7 @@ final class MapReactor: Reactor {
                 .catch { error in .just(.setError(error)) },
                 .just(.setLoading(false))
             ])
+
 
 
         case let .updateBothFilters(locations, categories):
@@ -175,6 +190,26 @@ final class MapReactor: Reactor {
                     .just(.updateCategoryDisplay(displayText))
                 ])
             }
+
+        case .refreshMarkers(let northEastLat, let northEastLon, let southWestLat, let southWestLon):
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }
+            return Observable.concat([
+                Observable.just(.setLoading(true)),
+                useCase.fetchStoresInBounds(
+                    northEastLat: northEastLat,
+                    northEastLon: northEastLon,
+                    southWestLat: southWestLat,
+                    southWestLon: southWestLon,
+                    categories: categoryIDs
+                )
+                .map { stores -> Mutation in
+                    let filteredStores = stores
+                    return .setViewportStores(filteredStores)
+                }
+                .catch { error in Observable.just(.setError(error)) },
+                Observable.just(.setLoading(false))
+            ])
 
         case let .updateBothFilters(locations, categories):
             Logger.log(

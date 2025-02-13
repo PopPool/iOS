@@ -85,6 +85,14 @@ class MapViewController: BaseViewController, View {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         mainView.mapView.isMyLocationEnabled = true
 
+        carouselView.rx.observe(Bool.self, "hidden")
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] isHidden in
+                guard let self = self, let isHidden = isHidden else { return }
+                self.mainView.setStoreCardHidden(isHidden, animated: true)
+            })
+            .disposed(by: disposeBag)
+
         mainView.mapView.rx.idleAtPosition
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
@@ -539,7 +547,13 @@ class MapViewController: BaseViewController, View {
                 self.carouselView.updateCards([]) // 캐러셀 초기화
                 self.carouselView.isHidden = true // 캐러셀 숨기기
 
-                guard !results.isEmpty else { return }
+                if results.isEmpty {
+                            self.mainView.setStoreCardHidden(true, animated: true)
+                            return
+                        } else {
+                            // 검색 결과가 있으면 스토어카드 보이도록 처리
+                            self.mainView.setStoreCardHidden(false, animated: true)
+                        }
 
                 // 1. 리스트 뷰 업데이트
                 let storeItems = results.map { $0.toStoreItem() }
@@ -633,6 +647,7 @@ class MapViewController: BaseViewController, View {
                 let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
                 let newOffset = currentOffset + translation.y
 
+                // 오프셋 제한 범위 설정
                 let minOffset: CGFloat = filterContainerBottomY // 필터 컨테이너 바닥 제한
                 let maxOffset: CGFloat = view.frame.height // 최하단 제한
                 let clampedOffset = min(max(newOffset, minOffset), maxOffset)
@@ -1187,6 +1202,8 @@ extension MapViewController: GMSMapViewDelegate {
         carouselView.isHidden = true
         carouselView.updateCards([])
         self.currentCarouselStores = []
+        mainView.setStoreCardHidden(true, animated: true)
+
     }
 
     // MARK: - Helper for single marker tap
@@ -1225,6 +1242,8 @@ extension MapViewController: GMSMapViewDelegate {
         carouselView.isHidden = false
         currentCarouselStores = [store]
         carouselView.scrollToCard(index: 0)
+        mainView.setStoreCardHidden(false, animated: true)
+
 
         isMovingToMarker = true
         mainView.mapView.animate(toLocation: marker.position)
@@ -1238,13 +1257,11 @@ extension MapViewController: GMSMapViewDelegate {
 
         switch currentLevel {
         case .city:  // 시 단위 클러스터
-            // 구 단위 클러스터가 보이는 줌 레벨로 이동
             let districtZoomLevel: Float = 10.0
             let camera = GMSCameraPosition(target: marker.position, zoom: districtZoomLevel)
             mainView.mapView.animate(to: camera)
 
         case .district:  // 구 단위 클러스터
-            // 바로 개별 마커가 보이는 줌 레벨로 이동
             let detailedZoomLevel: Float = 12.0
             let camera = GMSCameraPosition(target: marker.position, zoom: detailedZoomLevel)
             mainView.mapView.animate(to: camera)
@@ -1331,6 +1348,7 @@ extension MapViewController: GMSMapViewDelegate {
          // 첫 번째 아이템으로 캐러셀 스크롤
          carouselView.scrollToCard(index: 0)
 
+        mainView.setStoreCardHidden(false, animated: true)
          isMovingToMarker = true
          mainView.mapView.animate(toLocation: marker.position)
          return true
