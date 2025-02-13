@@ -89,6 +89,7 @@ final class ProfileEditReactor: Reactor {
         case .changeDefaultImage:
             currentImage = nil
             isChangeImage = true
+            currentImagePath = nil
             return Observable.just(.loadView)
         case .saveButtonTapped:
             return Observable.concat([
@@ -191,13 +192,17 @@ final class ProfileEditReactor: Reactor {
             }
         } else {
             // s3에서 삭제
-            if originProfileData?.profileImageUrl == nil {
-                return Observable.just(.loadView)
+            if currentImagePath == nil {
+                if originProfileData?.profileImageUrl == nil {
+                    return Observable.just(.loadView)
+                } else {
+                    currentImagePath = nil
+                    let deletePath = originProfileData?.profileImageUrl ?? ""
+                    return imageService.tryDelete(targetPaths: .init(objectKeyList: [deletePath]))
+                        .andThen(Observable.just(.loadView))
+                }
             } else {
-                currentImagePath = nil
-                let deletePath = originProfileData?.profileImageUrl ?? ""
-                return imageService.tryDelete(targetPaths: .init(objectKeyList: [deletePath]))
-                    .andThen(Observable.just(.loadView))
+                return Observable.just(.loadView)
             }
         }
     }
