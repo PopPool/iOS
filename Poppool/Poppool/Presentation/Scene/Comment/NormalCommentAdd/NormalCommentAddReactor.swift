@@ -68,7 +68,7 @@ final class NormalCommentAddReactor: Reactor {
     private var imageSection = AddCommentImageSection(inputDataList: [.init(isFirstCell: true)])
     private let commentTitleSection = AddCommentTitleSection(inputDataList: [.init(title: "코멘트 작성")])
     private lazy var commentDescriptionSection = AddCommentDescriptionSection(inputDataList: [.init(description: "방문했던 \(self.popUpName)에 대한 감상평을 작성해주세요.")])
-    private let commentSection = AddCommentSection(inputDataList: [.init()])
+    private var commentSection = AddCommentSection(inputDataList: [.init()])
     private let spacing25Section = SpacingSection(inputDataList: [.init(spacing: 25)])
     private let spacing5Section = SpacingSection(inputDataList: [.init(spacing: 5)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
@@ -96,6 +96,7 @@ final class NormalCommentAddReactor: Reactor {
         case .backButtonTapped(let controller):
             return Observable.just(.showCheckModal(controller: controller))
         case .inputComment(let text):
+            commentSection.inputDataList[0].text = text
             return Observable.just(.setComment(text: text))
         case .saveButtonTapped(let controller):
             return Observable.just(.save(controller: controller))
