@@ -49,13 +49,14 @@ final class MapMarker: UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 4
+        stack.alignment = .center
         return stack
     }()
 
     private let regionLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13)
-        label.textColor = .black
+        label.textColor = .white
         return label
     }()
 
@@ -181,27 +182,28 @@ extension MapMarker: Inputable {
 
     func injection(with input: Input) {
         if input.isCluster {
-            // 클러스터 마커 처리 (시/구 레벨)
             markerImageView.isHidden = true
             clusterContainer.isHidden = false
+
+            // 텍스트 설정
             regionLabel.text = input.regionName
-            regionLabel.textColor = .w100  // 사용자 정의 색상 (예: 흰색 계열)
-            countLabel.text = "\(input.count)"
-            // 클러스터 마커에서는 개별 배지 사용하지 않음
+            countLabel.text = "· \(input.count)"
             countBadgeView.isHidden = true
 
-            // 만약 regionLabel의 텍스트가 변경되었다면 스택뷰의 컨텐츠 사이즈에 따라 clusterContainer 너비 업데이트
-            if let previousText = regionLabel.text, previousText == input.regionName {
-                // 기존 제약조건 유지
-            } else {
-                self.layoutIfNeeded()
-                let contentWidth = labelStackView.systemLayoutSizeFitting(
-                    CGSize(width: UIView.layoutFittingCompressedSize.width, height: 24)
-                ).width
-                let totalWidth = contentWidth + 16
-                clusterContainer.snp.updateConstraints { make in
-                    make.width.equalTo(totalWidth)
-                }
+            // 컨텐츠 실제 크기 계산
+            layoutIfNeeded()
+            let stackSize = labelStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            let requiredWidth = stackSize.width + 24  // 좌우 패딩만 추가
+
+            // 컨테이너 크기를 콘텐츠에 맞게 업데이트
+            clusterContainer.snp.updateConstraints { make in
+                make.width.equalTo(requiredWidth)
+                make.height.equalTo(32)
+            }
+
+            // 레이블 스택뷰 여백
+            labelStackView.snp.updateConstraints { make in
+                make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
             }
         } else {
             // 단일 마커 처리

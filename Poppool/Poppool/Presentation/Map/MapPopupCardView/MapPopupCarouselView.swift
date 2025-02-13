@@ -3,24 +3,31 @@ import SnapKit
 import FloatingPanel
 
 final class MapPopupCarouselView: UIView {
-    // MARK: - Components
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 335, height: 137)
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+          let layout = UICollectionViewFlowLayout()
+          layout.scrollDirection = .horizontal
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
+          // 화면 너비 기준으로 여백 계산
+          let screenWidth = UIScreen.main.bounds.width
+          let itemWidth: CGFloat = 335
+          let sideInset = (screenWidth - itemWidth) / 2
 
+          layout.itemSize = CGSize(width: itemWidth, height: 137)
+          layout.minimumLineSpacing = 12
+          layout.sectionInset = UIEdgeInsets(
+              top: 0,
+              left: sideInset,  // 첫 번째 아이템이 중앙에 오도록
+              bottom: 0,
+              right: sideInset  // 마지막 아이템도 중앙 정렬 가능하도록
+          )
 
-        collectionView.decelerationRate = .fast  // 빠른 감속
-        collectionView.isPagingEnabled = true    // 페이징 활성화
-
-        return collectionView
-    }()
+          let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+          cv.showsHorizontalScrollIndicator = false
+          cv.backgroundColor = .clear
+          cv.decelerationRate = .fast
+          cv.contentInsetAdjustmentBehavior = .always
+          return cv
+      }()
 
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
@@ -34,8 +41,8 @@ final class MapPopupCarouselView: UIView {
         super.init(frame: frame)
         setupLayout()
         setupCollectionView()
-        self.layer.cornerRadius = 16
-        self.layer.masksToBounds = true
+//        self.layer.cornerRadius = 16
+//        self.layer.masksToBounds = true
 
     }
 
@@ -60,7 +67,7 @@ final class MapPopupCarouselView: UIView {
 
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
-        guard popupCards != cards else { return } // 🚨 같은 데이터면 리로드 X
+        guard popupCards != cards else { return }
         self.popupCards = cards
         collectionView.reloadData()
     }
@@ -81,6 +88,28 @@ final class MapPopupCarouselView: UIView {
     
 }
 
+extension MapPopupCarouselView: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                 withVelocity velocity: CGPoint,
+                                 targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let itemWidth = layout.itemSize.width
+        let spacing = layout.minimumLineSpacing
+
+        // 페이징 처리를 위한 너비
+        let pageWidth = itemWidth + spacing
+        let offset = targetContentOffset.pointee.x
+
+        // 가장 가까운 페이지 계산
+        let index = round(offset / pageWidth)
+        let roundedOffset = pageWidth * index
+
+        targetContentOffset.pointee = CGPoint(x: roundedOffset, y: 0)
+        onCardScrolled?(Int(index))
+    }
+}
+
+
 // MARK: - UICollectionView DataSource & Delegate
 extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -98,8 +127,14 @@ extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageWidth = scrollView.bounds.width
-        let pageIndex = Int(scrollView.contentOffset.x / pageWidth)
+
+        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        let cellWidth = layout.itemSize.width
+        let spacing = layout.minimumLineSpacing
+        let inset = layout.sectionInset.left
+        let pageWidth = cellWidth + spacing
+        let offsetWithInset = scrollView.contentOffset.x + inset
+        let pageIndex = Int(round(offsetWithInset / pageWidth))
         onCardScrolled?(pageIndex)
     }
 }

@@ -20,10 +20,6 @@ final class MapSearchInput: UIView, View {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 8
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.1
-        view.layer.shadowRadius = 4
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
         return view
     }()
 

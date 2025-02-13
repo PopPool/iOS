@@ -293,11 +293,11 @@ final class FilterBottomSheetView: UIView {
     private func createCategoryButton(title: String, isSelected: Bool) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        button.layer.cornerRadius = 16
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        button.layer.cornerRadius = 14
         button.layer.masksToBounds = true
 
-        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 12)
+        button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 16, bottom: 7, right: 16)
 
         if isSelected {
             button.backgroundColor = .blu500
@@ -313,19 +313,15 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateContentVisibility(isCategorySelected: Bool) {
-        // 애니메이션과 함께 자연스럽게 처리
         UIView.animate(withDuration: 0.3) {
-            // 먼저 투명도 조정
             self.locationScrollView.alpha = isCategorySelected ? 0 : 1
             self.balloonBackgroundView.alpha = isCategorySelected ? 0 : 1
             self.categoryCollectionView.alpha = isCategorySelected ? 1 : 0
 
-            // 그 다음 숨김 처리
             self.locationScrollView.isHidden = isCategorySelected
             self.balloonBackgroundView.isHidden = isCategorySelected
             self.categoryCollectionView.isHidden = !isCategorySelected
 
-            // 높이 조정
             let newHeight = isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight()
             self.balloonHeightConstraint?.update(offset: newHeight)
 
@@ -341,11 +337,11 @@ final class FilterBottomSheetView: UIView {
             style: .secondary,
             text: title,
             font: .KorFont(style: .medium, size: 13),
-            cornerRadius: 22
+            cornerRadius: 22.5
         )
         button.setBackgroundColor(.w100, for: .normal)
         button.setTitleColor(.g400, for: .normal)
-        button.layer.borderColor = UIColor.g400.cgColor
+        button.layer.borderColor = UIColor.g200.cgColor
         button.layer.borderWidth = 1
 
         if isSelected {
@@ -366,10 +362,12 @@ final class FilterBottomSheetView: UIView {
                 button.setBackgroundColor(.blu500, for: .normal)
                 button.setTitleColor(.w100, for: .normal)
                 button.layer.borderWidth = 0
+                button.titleLabel?.font = .KorFont(style: .bold, size: 13)
             } else {
                 button.setBackgroundColor(.w100, for: .normal)
                 button.setTitleColor(.g400, for: .normal)
                 button.layer.borderColor = UIColor.g200.cgColor
+                button.titleLabel?.font = .KorFont(style: .medium, size: 13)  
                 button.layer.borderWidth = 1
             }
         }

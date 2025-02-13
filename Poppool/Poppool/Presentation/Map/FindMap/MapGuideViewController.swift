@@ -68,7 +68,7 @@ final class MapGuideViewController: UIViewController, View {
     private let expandButton: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(named: "Expandable"), for: .normal)
-        btn.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        btn.backgroundColor = UIColor.white
         btn.layer.cornerRadius = 16
         btn.clipsToBounds = true
         return btn
@@ -241,7 +241,7 @@ final class MapGuideViewController: UIViewController, View {
         mapView.snp.makeConstraints { make in
             make.top.equalTo(topContainer.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(240)
+            make.height.equalTo(320)
 
         }
 

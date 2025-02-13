@@ -62,6 +62,7 @@ final class PopupCardCell: UICollectionViewCell {
         addressLabel.font = .systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
         addressLabel.numberOfLines = 2
+        addressLabel.lineBreakMode = .byTruncatingTail
 
         addressLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
