@@ -18,6 +18,7 @@ final class ImageBannerChildSectionCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
