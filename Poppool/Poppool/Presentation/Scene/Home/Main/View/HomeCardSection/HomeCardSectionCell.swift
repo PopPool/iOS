@@ -19,6 +19,7 @@ final class HomeCardSectionCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

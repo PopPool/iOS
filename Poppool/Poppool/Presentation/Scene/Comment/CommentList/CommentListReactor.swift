@@ -104,6 +104,9 @@ final class CommentListReactor: Reactor {
                             isMyComment: commentResponse.myCommentYn
                         )
                     })
+                    for (index, cell) in owner.commentSection.inputDataList.enumerated() {
+                        owner.commentSection.inputDataList[index].isLastCell = (index == owner.commentSection.inputDataList.count - 1)
+                    }
                     owner.commentTitleSection.inputDataList = [.init(count: response.commentList.count)]
                     return .loadView
                 }
@@ -136,6 +139,9 @@ final class CommentListReactor: Reactor {
                             isMyComment: commentResponse.myCommentYn
                         )
                     }))
+                    for (index, cell) in owner.commentSection.inputDataList.enumerated() {
+                        owner.commentSection.inputDataList[index].isLastCell = (index == owner.commentSection.inputDataList.count - 1)
+                    }
                     owner.commentTitleSection.inputDataList = [.init(count: owner.commentSection.dataCount)]
                     return .loadView
                 }
@@ -242,6 +248,7 @@ final class CommentListReactor: Reactor {
                                 case .none:
                                     break
                                 case .block:
+                                    ToastMaker.createToast(message: "\(comment.nickName ?? "")을 차단했어요")
                                     self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
                                         .subscribe(onDisposed:  {
                                             blockController.dismiss(animated: true)

@@ -15,6 +15,7 @@ final class MyCommentedPopUpGridSectionCell: UICollectionViewCell {
     // MARK: - Components
     private let contentImageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

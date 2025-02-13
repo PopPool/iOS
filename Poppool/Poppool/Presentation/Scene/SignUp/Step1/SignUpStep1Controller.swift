@@ -64,6 +64,10 @@ extension SignUpStep1Controller {
             .map { Reactor.Action.termsButtonTapped(index: 3)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        mainView.terms4Button.button.rx.tap
+            .map { Reactor.Action.termsButtonTapped(index: 4)}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         // terms Detail Button 이벤트
         mainView.terms1Button.righticonButton.rx.tap
@@ -87,13 +91,20 @@ extension SignUpStep1Controller {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        mainView.terms4Button.righticonButton.rx.tap
+            .withUnretained(self)
+            .map({ (owner, _) in
+                Reactor.Action.termsRightButtonTapped(index: 4, controller: owner)
+            })
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 
                 // selectedIndex가 4일 경우 전체 선택 버튼 활성화 및 비활성화
-                if state.selectedIndex.count == 3 {
+                if state.selectedIndex.count == 4 {
                     owner.mainView.totalButton.isSelected.accept(true)
                 } else {
                     owner.mainView.totalButton.isSelected.accept(false)
@@ -103,7 +114,8 @@ extension SignUpStep1Controller {
                 let termsViews = [
                     owner.mainView.terms1Button,
                     owner.mainView.terms2Button,
-                    owner.mainView.terms3Button
+                    owner.mainView.terms3Button,
+                    owner.mainView.terms4Button
                 ]
                 for (index, view) in termsViews.enumerated() {
                     let isSelected = state.selectedIndex.contains(index + 1)

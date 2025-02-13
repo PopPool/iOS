@@ -279,6 +279,7 @@ extension DetailCommentSectionCell: Inputable {
         var title: String?
         var creator: String?
         var isMyComment: Bool
+        var isLastCell: Bool = false
     }
     
     func injection(with input: Input) {
@@ -355,6 +356,8 @@ extension DetailCommentSectionCell: Inputable {
         
         loginNoticelabel.attributedText = attributedString
         loginNoticelabel.textAlignment = .center
+        
+        borderView.isHidden = input.isLastCell
     }
 }
 
