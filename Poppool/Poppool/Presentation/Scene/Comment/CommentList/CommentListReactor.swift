@@ -242,6 +242,7 @@ final class CommentListReactor: Reactor {
                                 case .none:
                                     break
                                 case .block:
+                                    ToastMaker.createToast(message: "\(comment.nickName ?? "")을 차단했어요")
                                     self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
                                         .subscribe(onDisposed:  {
                                             blockController.dismiss(animated: true)

@@ -142,7 +142,11 @@ final class NormalCommentAddReactor: Reactor {
             if imageSection.dataCount == 1 {
                 commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: [])
                     .subscribe {
-                        controller.navigationController?.popViewController(animated: true)
+                        controller.navigationController?.popViewController(animated: true) {
+                            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                ToastMaker.createToast(message: "코멘트 작성을 완료했어요")
+                            }
+                        }
                     }
                     .disposed(by: disposeBag)
             } else {
@@ -155,7 +159,11 @@ final class NormalCommentAddReactor: Reactor {
                         guard let self = self else { return }
                         self.commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: pathList)
                             .subscribe(onDisposed: {
-                                controller.navigationController?.popViewController(animated: true)
+                                controller.navigationController?.popViewController(animated: true) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                        ToastMaker.createToast(message: "코멘트 작성을 완료했어요")
+                                    }
+                                }
                             })
                             .disposed(by: disposeBag)
                     })
