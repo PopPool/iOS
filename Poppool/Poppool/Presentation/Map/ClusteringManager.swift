@@ -149,7 +149,7 @@ class ClusteringManager {
             }
             else {
                 // 그 외는 아직 미구현 or 무시
-                Logger.log(message: "🔹 기타 지역(도/광역시) - 주소: \(store.address)", category: .debug)
+//                Logger.log(message: "🔹 기타 지역(도/광역시) - 주소: \(store.address)", category: .debug)
             }
         }
 

@@ -7,40 +7,41 @@ import GoogleMaps
 
 final class FullScreenMapViewController: MapViewController {
 
-   override func viewDidLoad() {
-       super.viewDidLoad()
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-       self.navigationController?.navigationBar.isHidden = false
-       setupNavigation()
+        self.navigationController?.navigationBar.isHidden = false
+        setupNavigation()
 
-       mainView.searchFilterContainer.isHidden = true
-       mainView.filterChips.isHidden = true
-       mainView.listButton.isHidden = true
-       carouselView.isHidden = false
-   }
+        mainView.searchFilterContainer.isHidden = true
+        mainView.filterChips.isHidden = true
+        mainView.listButton.isHidden = true
+        carouselView.isHidden = false
+
+        // 지도 델리게이트 재설정
+        mainView.mapView.delegate = self
+    }
+
+//    override func bindViewport(reactor: MapReactor) {
+//        // 뷰포트 바인딩 무시
+//    }
 
     override func bind(reactor: Reactor) {
-        super.bind(reactor: reactor)
-
         reactor.state
             .map { $0.searchResult }
             .distinctUntilChanged()
             .compactMap { $0 }
-            .map { store -> (store: MapPopUpStore, coordinate: CLLocationCoordinate2D) in
-                return (
-                    store: store,
-                    coordinate: CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude)
-                )
-            }
             .observe(on: MainScheduler.instance)
-            .bind { [weak self] data in
+            .bind { [weak self] store in
                 guard let self = self else { return }
 
                 self.mainView.mapView.clear()
+                self.currentMarker?.map = nil
+                self.currentMarker = nil
 
                 let marker = GMSMarker()
-                marker.position = data.coordinate
-                marker.userData = data.store
+                marker.position = store.coordinate
+                marker.userData = store
                 marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
                 let markerView = MapMarker()
@@ -50,51 +51,63 @@ final class FullScreenMapViewController: MapViewController {
                 self.currentMarker = marker
 
                 let camera = GMSCameraPosition.camera(
-                    withLatitude: data.coordinate.latitude,
-                    longitude: data.coordinate.longitude,
+                    withLatitude: store.latitude,
+                    longitude: store.longitude,
                     zoom: 16
                 )
                 self.mainView.mapView.animate(to: camera)
 
-                // 캐러셀뷰 바로 업데이트
-                self.carouselView.updateCards([data.store])
-                self.currentCarouselStores = [data.store]
+                self.carouselView.updateCards([store])
+                self.currentCarouselStores = [store]
                 self.carouselView.isHidden = false
             }
             .disposed(by: disposeBag)
     }
 
 
-   override func viewWillAppear(_ animated: Bool) {
-       super.viewWillAppear(animated)
-       self.navigationController?.navigationBar.isHidden = false
-   }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = false
+    }
 
-   private func setupNavigation() {
-       navigationItem.title = "찾아가는 길"
+    // GMSMapViewDelegate 메서드들 override
+    override func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        return true  // 마커 탭 이벤트 중단
+    }
 
-       let appearance = UINavigationBarAppearance()
-       appearance.configureWithOpaqueBackground()
-       appearance.shadowColor = .clear
-       appearance.backgroundColor = .white
-       appearance.titleTextAttributes = [
-           .foregroundColor: UIColor.black,
-           .font: UIFont.systemFont(ofSize: 15, weight: .regular)
-       ]
+    override func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        // 뷰포트 변경 이벤트 중단
+    }
 
-       navigationController?.navigationBar.standardAppearance = appearance
-       navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    override func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        // 지도 탭 이벤트 중단
+    }
 
-       navigationItem.leftBarButtonItem = UIBarButtonItem(
-           image: UIImage(named: "bakcbutton")?.withRenderingMode(.alwaysOriginal),
-           style: .plain,
-           target: self,
-           action: #selector(backButtonTapped)
-       )
-       navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-   }
+    private func setupNavigation() {
+        navigationItem.title = "찾아가는 길"
 
-   @objc private func backButtonTapped() {
-       dismiss(animated: true)
-   }
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.shadowColor = .clear
+        appearance.backgroundColor = .white
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor.black,
+            .font: UIFont.systemFont(ofSize: 15, weight: .regular)
+        ]
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "bakcbutton")?.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(backButtonTapped)
+        )
+        navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+
+    @objc private func backButtonTapped() {
+        dismiss(animated: true)
+    }
 }

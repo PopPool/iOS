@@ -139,20 +139,28 @@ private extension MapMarker {
     }
 
     func updateMarkerImage(isSelected: Bool) {
-        self.isSelected = isSelected  // 새로 추가
-        let imageName = isSelected ? "TapMarker" : "Marker"
-        let size = isSelected ? 44 : 32
-        markerImageView.image = UIImage(named: imageName)
+        self.isSelected = isSelected
 
-        markerImageView.snp.updateConstraints { make in
-            make.width.height.equalTo(size)
+        // 애니메이션 없이 바로 크기 변경
+        UIView.performWithoutAnimation {
+            let imageName = isSelected ? "TapMarker" : "Marker"
+            let size = isSelected ? 44 : 32
+            markerImageView.image = UIImage(named: imageName)
+
+            markerImageView.snp.updateConstraints { make in
+                make.width.height.equalTo(size)
+
+                make.centerX.equalToSuperview()
+                make.bottom.equalToSuperview()
+            }
+
+            // 배지 위치도 즉시 업데이트
+            updateBadgePosition(isSelected: isSelected)
+
+            self.layoutIfNeeded()
         }
-
-        updateBadgePosition(isSelected: isSelected)  // 새로운 메서드 호출
-
-        setNeedsLayout()
-        layoutIfNeeded()
     }
+
 
     private func updateBadgePosition(isSelected: Bool) {
         countBadgeView.snp.updateConstraints { make in
@@ -222,6 +230,7 @@ extension MapMarker: Inputable {
     }
 }
 extension MapMarker {
+    
     var imageView: UIImageView {
         return markerImageView
     }

@@ -430,6 +430,8 @@
 		4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */; };
 		4EAB809F2D3F8EF50041AF30 /* ViewportBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */; };
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
+		4EDE57012D5E6A5F0014D924 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
+		4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */; };
 		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
@@ -915,6 +917,7 @@
 		4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSMapViewDelegateProxy.swift; sourceTree = "<group>"; };
 		4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewportBounds.swift; sourceTree = "<group>"; };
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
+		4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionBottomSheet.swift; sourceTree = "<group>"; };
 		4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideReactor.swift; sourceTree = "<group>"; };
 		4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedImage.swift; sourceTree = "<group>"; };
@@ -2866,6 +2869,7 @@
 				4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */,
 				4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */,
 				4EED9BAB2D22730400B288E7 /* FilterType.swift */,
+				4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -3348,6 +3352,7 @@
 				081898CE2D30D5C60067BF01 /* InfoEditModalReactor.swift in Sources */,
 				083C865D2D0DEFD5003F441C /* CommentCheckReactor.swift in Sources */,
 				BD9103632CF6149D00BBCCAE /* BannerPopUpStoreDTO.swift in Sources */,
+				4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */,
 				081898D62D30F58A0067BF01 /* CategoryEditModalReactor.swift in Sources */,
 				081898B32D2D20D70067BF01 /* WithdrawlCompleteView.swift in Sources */,
 				086DD92A2D0086AA00B97D3B /* SearchController.swift in Sources */,
@@ -3654,6 +3659,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDCA41D82CF35AC1005EECF6 /* PoppoolTests.swift in Sources */,
+				4EDE57012D5E6A5F0014D924 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
