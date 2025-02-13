@@ -110,6 +110,7 @@ final class HomeListReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         case .bookMarkButtonTapped(let indexPath):
             let popUpData = cardSections.inputDataList[indexPath.row]
+            ToastMaker.createBookMarkToast(isBookMark: !popUpData.isBookmark)
             if popUpData.isBookmark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: popUpData.id)
                     .andThen(Observable.just(.reloadView(indexPath: indexPath)))
