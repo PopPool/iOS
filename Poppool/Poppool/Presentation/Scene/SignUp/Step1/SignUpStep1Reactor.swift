@@ -55,10 +55,10 @@ final class SignUpStep1Reactor: Reactor {
         var newState = state
         switch mutation {
         case .setTotalSelected:
-            if newState.selectedIndex.count == 3 {
+            if newState.selectedIndex.count == 4 {
                 newState.selectedIndex = []
             } else {
-                newState.selectedIndex = [1, 2, 3]
+                newState.selectedIndex = [1, 2, 3, 4]
             }
         case .setSelectedIndex(let index):
             if newState.selectedIndex.contains(index) {
@@ -79,8 +79,10 @@ final class SignUpStep1Reactor: Reactor {
     func getTitle(index: Int) -> String {
         if index == 1 {
             return "[필수] 이용약관"
-        } else {
+        } else if index == 2 {
             return "[필수] 개인정보 수집 및 이용"
+        } else {
+            return "[선택] 위치정보 이용약관"
         }
     }
     

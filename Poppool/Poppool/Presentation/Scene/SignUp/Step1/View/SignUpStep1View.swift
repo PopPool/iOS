@@ -26,6 +26,7 @@ final class SignUpStep1View: UIView {
     let terms1Button: SignUpTermsView = SignUpTermsView(title: "[필수] 이용약관")
     let terms2Button: SignUpTermsView = SignUpTermsView(title: "[필수] 개인정보 수집 및 이용")
     let terms3Button: SignUpTermsView = SignUpTermsView(title: "[필수] 만 14세 이상")
+    let terms4Button: SignUpTermsView = SignUpTermsView(title: "[선택] 위치정보 이용약관")
     
     let termsStackView: UIStackView = {
         let view = UIStackView()
@@ -76,6 +77,7 @@ private extension SignUpStep1View {
         termsStackView.addArrangedSubview(terms1Button)
         termsStackView.addArrangedSubview(terms2Button)
         termsStackView.addArrangedSubview(terms3Button)
+        termsStackView.addArrangedSubview(terms4Button)
         
         self.addSubview(completeButton)
         completeButton.snp.makeConstraints { make in

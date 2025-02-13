@@ -37,7 +37,8 @@ final class MyPageTermsReactor: Reactor {
     private lazy var countSection = CommentListTitleSection(inputDataList: [.init(count: termsSection.dataCount)])
     private var termsSection = MyPageListSection(inputDataList: [
         .init(title: "서비스이용약관"),
-        .init(title: "개인정보처리방침")
+        .init(title: "개인정보처리방침"),
+        .init(title: "위치정보 이용약관")
     ])
     
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
@@ -87,7 +88,7 @@ final class MyPageTermsReactor: Reactor {
     func getContent(index: Int) -> String {
         if let path = Bundle.main.path(forResource: "Terms", ofType: "plist"),
            let dict = NSDictionary(contentsOfFile: path) as? [String: String],
-           let longText = dict["Terms\(index)"] {
+           let longText = dict["Terms\(index == 3 ? 4 : index)"] {
             return longText
         } else {
             return ""
