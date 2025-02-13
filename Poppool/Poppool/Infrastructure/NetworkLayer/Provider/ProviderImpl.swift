@@ -99,7 +99,6 @@ final class ProviderImpl: Provider {
             do {
                 let urlRequest = try request.getUrlRequest()
 
-                // [중요] 최종 URL 로깅
                 Logger.log(
                     message: """
                     [Provider] 최종 요청 URL(Completable):

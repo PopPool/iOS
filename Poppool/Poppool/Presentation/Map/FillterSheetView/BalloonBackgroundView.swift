@@ -9,7 +9,6 @@ final class BalloonBackgroundView: UIView {
         let view = UIView()
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
-        // 배경색은 draw(_:)에서 그리거나 여기서 설정할 수 있습니다.
         view.backgroundColor = UIColor.g50
         return view
     }()
@@ -75,6 +74,7 @@ final class BalloonBackgroundView: UIView {
             setNeedsDisplay()
         }
     }
+    private let arrowHeight: CGFloat = 10
 
     private var selectedRegions: Set<String> = []
     private var currentSubRegions: [String] = []
@@ -99,9 +99,9 @@ final class BalloonBackgroundView: UIView {
     private func setupLayout() {
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            
-        }
+                 make.left.right.bottom.equalToSuperview()
+                 make.top.equalToSuperview().offset(arrowHeight)
+             }
 
         containerView.addSubview(collectionView)
         containerView.addSubview(singleRegionIcon)
@@ -140,7 +140,7 @@ final class BalloonBackgroundView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         let arrowWidth: CGFloat = 16
-        let arrowHeight: CGFloat = 10
+//        let arrowHeight: CGFloat = 10
         let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
         let path = UIBezierPath()
         path.move(to: CGPoint(x: arrowX, y: arrowHeight))
@@ -199,11 +199,15 @@ final class BalloonBackgroundView: UIView {
 
     private func setupTagSection() {
         let allKey = "\(mainRegionTitle)전체"
+
+        let originalList = currentSubRegions
         var inputDataList = [allKey]
-        let selectedSub = selectedRegions.filter { $0 != allKey }
-        let unselectedSub = currentSubRegions.filter { !selectedRegions.contains($0) }
-        inputDataList.append(contentsOf: selectedSub)
-        inputDataList.append(contentsOf: unselectedSub)
+
+        inputDataList.append(contentsOf: originalList.map { subRegion in
+            let isSelected = selectedRegions.contains(subRegion)
+            return subRegion
+        })
+
         self.tagSection = TagSection(
             inputDataList: inputDataList.map {
                 TagSectionCell.Input(
@@ -214,44 +218,58 @@ final class BalloonBackgroundView: UIView {
         )
     }
 
+
     func calculateHeight() -> CGFloat {
-        // 만약 collectionView가 숨겨져 있다면 단일 UI 모드
-        if collectionView.isHidden {
-            // 아이콘과 라벨이 배치된 영역의 예상 높이를 반환
-            return 145
-        }
+       if collectionView.isHidden {
+           return 145
+       }
 
-        // 기존 로직 (tagSection이 있을 경우)
-        guard let inputDataList = tagSection?.inputDataList else { return 0 }
-        let balloonWidth = self.bounds.width
-        let horizontalSpacing: CGFloat = 8
-        let leftPadding: CGFloat = 20
-        let rightPadding: CGFloat = 20
-        let availableWidth = balloonWidth - leftPadding - rightPadding - horizontalSpacing
-        var currentRowWidth: CGFloat = 0
-        var numberOfRows: Int = 1
-        for input in inputDataList {
-            let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12), isSelected: input.isSelected ?? false)
-            if currentRowWidth + buttonWidth + horizontalSpacing > availableWidth {
-                numberOfRows += 1
-                currentRowWidth = buttonWidth
-            } else {
-                currentRowWidth += buttonWidth + horizontalSpacing
-            }
-        }
-        let itemHeight: CGFloat = 36
-        let interGroupSpacing: CGFloat = 8
-        let verticalInset: CGFloat = 20 + 10
-        let totalHeight = max(
-            (itemHeight * CGFloat(numberOfRows)) +
-            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
-            verticalInset,
-            36
-        )
-        return totalHeight
+       guard let inputDataList = tagSection?.inputDataList else { return 0 }
+
+       collectionView.layoutIfNeeded()
+
+       print("실제 contentSize 높이: \(collectionView.collectionViewLayout.collectionViewContentSize.height)")
+
+       let balloonWidth = self.bounds.width
+       let horizontalSpacing: CGFloat = 8
+       let leftPadding: CGFloat = 20
+       let rightPadding: CGFloat = 20
+       let availableWidth = balloonWidth - leftPadding - rightPadding
+
+       print("사용 가능한 너비: \(availableWidth)")
+
+       var currentRowWidth: CGFloat = 0
+       var numberOfRows: Int = 1
+
+       for input in inputDataList {
+           let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12), isSelected: input.isSelected ?? false)
+           print("버튼 너비 [\(input.title ?? "")]: \(buttonWidth)")
+
+           let widthWithSpacing = currentRowWidth == 0 ? buttonWidth : buttonWidth + horizontalSpacing
+
+           if currentRowWidth + widthWithSpacing > availableWidth {
+               numberOfRows += 1
+               currentRowWidth = buttonWidth
+               print("새로운 줄 시작: \(numberOfRows)번째 줄")
+           } else {
+               currentRowWidth += widthWithSpacing
+               print("현재 줄 너비: \(currentRowWidth)")
+           }
+       }
+
+       let itemHeight: CGFloat = 36
+       let interGroupSpacing: CGFloat = 8
+       let verticalInset: CGFloat = 20 + 20  // top: 20, bottom: 20
+       let totalHeight = max(
+           (itemHeight * CGFloat(numberOfRows)) +
+           (interGroupSpacing * CGFloat(numberOfRows - 1)) +
+           verticalInset,
+           36
+       )
+
+       print("계산된 최종 높이: \(totalHeight)")
+       return totalHeight
     }
-
-
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width
         let iconWidth: CGFloat = isSelected ? 16 : 0

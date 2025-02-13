@@ -633,7 +633,6 @@ class MapViewController: BaseViewController, View {
                 let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
                 let newOffset = currentOffset + translation.y
 
-                // 오프셋 제한 범위 설정
                 let minOffset: CGFloat = filterContainerBottomY // 필터 컨테이너 바닥 제한
                 let maxOffset: CGFloat = view.frame.height // 최하단 제한
                 let clampedOffset = min(max(newOffset, minOffset), maxOffset)
@@ -641,7 +640,6 @@ class MapViewController: BaseViewController, View {
                 constraint.update(offset: clampedOffset)
                 gesture.setTranslation(.zero, in: view)
 
-                // 알파값 조절: 탑 상태에서만 적용
                 if modalState == .top {
                     adjustMapViewAlpha(for: clampedOffset, minOffset: minOffset, maxOffset: maxOffset)
                 }
@@ -1411,11 +1409,11 @@ extension MapViewController {
             let loc2 = CLLocation(latitude: cam2.target.latitude, longitude: cam2.target.longitude)
             let distance = loc1.distance(from: loc2)
             // 50m 미만이면 변화가 없다고 판단
-            if distance < 20 { return true }
+            if distance < 40 { return true }
 
             // 줌 레벨 변화가 있다면 반드시 업데이트
-            let zoomDiff = abs(cam1.zoom - cam2.zoom)
-            if zoomDiff >= 0.2 { return false }
+//            let zoomDiff = abs(cam1.zoom - cam2.zoom)
+//            if zoomDiff >= 0.2 { return false }
 
             return false
         }
