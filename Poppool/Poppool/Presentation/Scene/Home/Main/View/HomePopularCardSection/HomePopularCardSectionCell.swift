@@ -16,6 +16,7 @@ final class HomePopularCardSectionCell: UICollectionViewCell {
     // MARK: - Components
     private var backGroundImageView: UIImageView = {
         let view = UIImageView()
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -86,19 +87,19 @@ private extension HomePopularCardSectionCell {
             make.edges.equalToSuperview()
         }
         
-        backGroundImageView.addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(48)
         }
         
-        backGroundImageView.addSubview(categoryLabel)
+        contentView.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints { make in
             make.bottom.equalTo(titleLabel.snp.top).offset(-16)
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
-        backGroundImageView.addSubview(dateLabel)
+        contentView.addSubview(dateLabel)
         dateLabel.snp.makeConstraints { make in
             make.bottom.equalTo(categoryLabel.snp.top).offset(-6)
             make.leading.trailing.equalToSuperview().inset(20)
