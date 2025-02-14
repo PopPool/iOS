@@ -448,13 +448,43 @@ class MapViewController: BaseViewController, View {
 
 
 
-        mainView.filterChips.onRemoveLocation = {
-            reactor.action.onNext(.clearFilters(.location))
-        }
-        mainView.filterChips.onRemoveCategory = {
-            reactor.action.onNext(.clearFilters(.category))
-        }
+        mainView.filterChips.onRemoveLocation = { [weak self] in
+            guard let self = self else { return }
+            // 필터 제거 액션
+            self.reactor?.action.onNext(.clearFilters(.location))
 
+            // 현재 뷰포트의 바운드로 마커 업데이트 요청
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            self.reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
+
+            // 필터 변경 시 기존 마커 초기화
+            self.clearAllMarkers()
+            // 또는 클러스터 마커만 초기화
+            self.clusterMarkerDictionary.values.forEach { $0.map = nil }
+            self.clusterMarkerDictionary.removeAll()
+
+            // 그리고 최신 필터 결과에 기반한 클러스터링 업데이트
+            self.updateMapWithClustering()
+        }
+        mainView.filterChips.onRemoveCategory = { [weak self] in
+            guard let self = self else { return }
+            // 필터 제거 액션
+            self.reactor?.action.onNext(.clearFilters(.category))
+
+            // 현재 뷰포트의 바운드로 마커 업데이트 요청
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            self.reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
+        }
         Observable.combineLatest(
             reactor.state.map { $0.selectedLocationFilters }.distinctUntilChanged(),
             reactor.state.map { $0.selectedCategoryFilters }.distinctUntilChanged()
@@ -766,6 +796,9 @@ class MapViewController: BaseViewController, View {
 
     // MARK: - Clustering
     private func updateMapWithClustering() {
+        // 업데이트 시작 시점에 기존 마커 초기화 (개별, 클러스터 모두 제거)
+        clearAllMarkers()
+
         let currentZoom = mainView.mapView.camera.zoom
         let level = MapZoomLevel.getLevel(from: currentZoom)
 
@@ -775,93 +808,51 @@ class MapViewController: BaseViewController, View {
 
         switch level {
         case .detailed:
-            // 새로운 스토어 ID 셋 미리 생성
+            // 현재 필터 결과에 기반한 스토어 ID 집합 생성
             let newStoreIds = Set(currentStores.map { $0.id })
 
-            // 클러스터 마커 숨기기 (실제로 필요한 것만)
-            clusterMarkerDictionary.values.forEach { marker in
-                if marker.map != nil {
-                    marker.map = nil
-                }
-            }
-
+            // 같은 위치에 있는 스토어들을 그룹화
             let groupedDict = groupStoresByExactLocation(currentStores)
-            var markersToUpdate: [(GMSMarker, MapMarker.Input)] = []
 
+            // 그룹별로 마커 생성
             for (_, storeGroup) in groupedDict {
                 if storeGroup.count == 1, let store = storeGroup.first {
-                    // 단일 스토어 마커 처리
-                    if let marker = individualMarkerDictionary[store.id] {
-                        if marker.position.latitude != store.latitude ||
-                            marker.position.longitude != store.longitude {
-                            marker.position = store.coordinate
-                        }
-                        markersToUpdate.append((
-                            marker,
-                            .init(
-                                isSelected: marker == currentMarker,
-                                isCluster: false
-                            )
-                        ))
-                    } else {
-                        let marker = GMSMarker(position: store.coordinate)
-                        marker.userData = store
-                        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
+                    // 단일 스토어 마커 생성
+                    let marker = GMSMarker(position: store.coordinate)
+                    marker.userData = store
+                    marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
-                        let markerView = MapMarker()
-                        markerView.injection(with: .init(
-                            isSelected: false,
-                            isCluster: false
-                        ))
-                        marker.iconView = markerView
-                        marker.map = mainView.mapView
+                    let markerView = MapMarker()
+                    markerView.injection(with: .init(
+                        isSelected: (marker == currentMarker),
+                        isCluster: false
+                    ))
+                    marker.iconView = markerView
+                    marker.map = mainView.mapView
 
-                        individualMarkerDictionary[store.id] = marker
-                    }
+                    individualMarkerDictionary[store.id] = marker
                 } else {
-                    // 다중 스토어 마커 처리
+                    // 동일 위치에 여러 스토어인 경우, 단일 마커로 묶어서 표시
                     guard let firstStore = storeGroup.first else { continue }
                     let markerKey = firstStore.id
+                    let marker = GMSMarker(position: firstStore.coordinate)
+                    marker.userData = storeGroup
+                    marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
-                    if let existingMarker = individualMarkerDictionary[markerKey] {
-                        existingMarker.position = firstStore.coordinate
-                        existingMarker.userData = storeGroup
-                        markersToUpdate.append((
-                            existingMarker,
-                            .init(
-                                isSelected: existingMarker == currentMarker,
-                                isCluster: false,
-                                count: storeGroup.count
-                            )
-                        ))
-                    } else {
-                        let marker = GMSMarker(position: firstStore.coordinate)
-                        marker.userData = storeGroup
-                        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
+                    let markerView = MapMarker()
+                    markerView.injection(with: .init(
+                        isSelected: (marker == currentMarker),
+                        isCluster: false,
+                        count: storeGroup.count
+                    ))
+                    marker.iconView = markerView
+                    marker.map = mainView.mapView
 
-                        let markerView = MapMarker()
-                        markerView.injection(with: .init(
-                            isSelected: false,
-                            isCluster: false,
-                            count: storeGroup.count
-                        ))
-                        marker.iconView = markerView
-                        marker.map = mainView.mapView
-
-                        individualMarkerDictionary[markerKey] = marker
-                    }
+                    individualMarkerDictionary[markerKey] = marker
                 }
             }
 
-            // 일괄 업데이트 실행
-            markersToUpdate.forEach { marker, input in
-                if let markerView = marker.iconView as? MapMarker {
-                    markerView.injection(with: input)
-                }
-                marker.map = mainView.mapView
-            }
-
-            // 불필요한 마커 제거
+            // (필요하다면) 기존 개별 마커 중 더 이상 존재하지 않는 것들은 제거할 수 있습니다.
             individualMarkerDictionary = individualMarkerDictionary.filter { id, marker in
                 if newStoreIds.contains(id) {
                     return true
@@ -872,76 +863,33 @@ class MapViewController: BaseViewController, View {
             }
 
         case .district, .city, .country:
-            // 개별 마커 숨기기
-            individualMarkerDictionary.values.forEach { marker in
-                if marker.map != nil {
-                    marker.map = nil
-                }
-            }
-
+            // 개별 마커는 모두 초기화했으므로 클러스터 마커만 생성
             let clusters = clusteringManager.clusterStores(currentStores, at: currentZoom)
             let activeClusterKeys = Set(clusters.map { $0.cluster.name })
-            var markersToUpdate: [(GMSMarker, MapMarker.Input)] = []
 
             for cluster in clusters {
                 let clusterKey = cluster.cluster.name
+                let marker = GMSMarker(position: cluster.cluster.coordinate)
+                marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
+                marker.userData = cluster
 
-                if let existingMarker = clusterMarkerDictionary[clusterKey] {
-                    existingMarker.position = cluster.cluster.coordinate
-                    existingMarker.userData = cluster
+                let markerView = MapMarker()
+                markerView.injection(with: .init(
+                    isSelected: false,
+                    isCluster: true,
+                    regionName: cluster.cluster.name,
+                    count: cluster.storeCount
+                ))
+                marker.iconView = markerView
+                marker.map = mainView.mapView
 
-                    if let existingCluster = existingMarker.userData as? ClusterMarkerData,
-                       existingCluster.storeCount != cluster.storeCount {
-                        markersToUpdate.append((
-                            existingMarker,
-                            .init(
-                                isSelected: false,
-                                isCluster: true,
-                                regionName: cluster.cluster.name,
-                                count: cluster.storeCount
-                            )
-                        ))
-                    }
-                    existingMarker.map = mainView.mapView
-                } else {
-                    let marker = GMSMarker(position: cluster.cluster.coordinate)
-                    marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
-                    marker.userData = cluster
-
-                    let markerView = MapMarker()
-                    markerView.injection(with: .init(
-                        isSelected: false,
-                        isCluster: true,
-                        regionName: cluster.cluster.name,
-                        count: cluster.storeCount
-                    ))
-                    marker.iconView = markerView
-                    marker.map = mainView.mapView
-
-                    clusterMarkerDictionary[clusterKey] = marker
-                }
-            }
-
-            // 일괄 업데이트 실행
-            markersToUpdate.forEach { marker, input in
-                if let markerView = marker.iconView as? MapMarker {
-                    markerView.injection(with: input)
-                }
-            }
-
-            // 불필요한 클러스터 마커 제거
-            clusterMarkerDictionary = clusterMarkerDictionary.filter { key, marker in
-                if activeClusterKeys.contains(key) {
-                    return true
-                } else {
-                    marker.map = nil
-                    return false
-                }
+                clusterMarkerDictionary[clusterKey] = marker
             }
         }
 
         CATransaction.commit()
     }
+
     private func clearAllMarkers() {
         individualMarkerDictionary.values.forEach { $0.map = nil }
         individualMarkerDictionary.removeAll()
@@ -1052,6 +1000,8 @@ class MapViewController: BaseViewController, View {
                 southWestLat: bounds.nearLeft.latitude,
                 southWestLon: bounds.nearLeft.longitude
             ))
+
+            
         }
 
 
