@@ -35,21 +35,25 @@ final class FullScreenMapViewController: MapViewController {
             .bind { [weak self] store in
                 guard let self = self else { return }
 
+                // 기존 상태 초기화
                 self.mainView.mapView.clear()
                 self.currentMarker?.map = nil
                 self.currentMarker = nil
 
+                // 마커 설정
                 let marker = GMSMarker()
                 marker.position = store.coordinate
                 marker.userData = store
                 marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
                 let markerView = MapMarker()
+                // store.mainImageUrl이 있다면 여기서 setPPImage를 사용하여 처리
                 markerView.injection(with: .init(isSelected: true))
                 marker.iconView = markerView
                 marker.map = self.mainView.mapView
                 self.currentMarker = marker
 
+                // 카메라 이동
                 let camera = GMSCameraPosition.camera(
                     withLatitude: store.latitude,
                     longitude: store.longitude,
@@ -57,6 +61,7 @@ final class FullScreenMapViewController: MapViewController {
                 )
                 self.mainView.mapView.animate(to: camera)
 
+                // 캐러셀 업데이트 - setPPImage 사용
                 self.carouselView.updateCards([store])
                 self.currentCarouselStores = [store]
                 self.carouselView.isHidden = false
