@@ -97,13 +97,39 @@ class MapViewController: BaseViewController, View {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                // 만약 툴팁이 존재한다면 마커의 새로운 위치에 맞춰 업데이트
-                if let _ = self.currentTooltipView, let _ = self.currentMarker {
-                    self.updateTooltipPosition()
+                if let marker = self.currentMarker,
+                   let storeArray = marker.userData as? [MapPopUpStore] {
+                    // tooltip이 없으면 생성, 있으면 위치 업데이트
+                    if self.currentTooltipView == nil {
+                        self.configureTooltip(for: marker, stores: storeArray)
+                    } else {
+                        self.updateTooltipPosition()
+                    }
                 }
                 self.isMovingToMarker = false
             })
             .disposed(by: disposeBag)
+
+
+        // 초기 데이터 로드
+        if let reactor = self.reactor {
+            reactor.action.onNext(.fetchCategories)
+
+            // 한국 전체 영역에 대한 경계값 설정
+            // 대한민국의 대략적인 경계 좌표
+            let koreaRegion = (
+                northEast: CLLocationCoordinate2D(latitude: 38.0, longitude: 132.0),  // 한국 북동쪽 끝
+                southWest: CLLocationCoordinate2D(latitude: 33.0, longitude: 124.0)   // 한국 남서쪽 끝
+            )
+
+            reactor.action.onNext(.viewportChanged(
+                northEastLat: koreaRegion.northEast.latitude,
+                northEastLon: koreaRegion.northEast.longitude,
+                southWestLat: koreaRegion.southWest.latitude,
+                southWestLon: koreaRegion.southWest.longitude
+            ))
+        }
+
 
 //        mainView.mapView.settings.myLocationButton = true
 
@@ -257,66 +283,64 @@ class MapViewController: BaseViewController, View {
 
         if let reactor = self.reactor {
                bindViewport(reactor: reactor)
-
             reactor.action.onNext(.fetchCategories)
 
            }
 
     }
     private func configureTooltip(for marker: GMSMarker, stores: [MapPopUpStore]) {
-       Logger.log(message: """
-           툴팁 설정:
-           - 현재 캐러셀 스토어: \(currentCarouselStores.map { $0.name })
-           - 마커 스토어: \(stores.map { $0.name })
-           """, category: .debug)
+        Logger.log(message: """
+            툴팁 설정:
+            - 현재 캐러셀 스토어: \(currentCarouselStores.map { $0.name })
+            - 마커 스토어: \(stores.map { $0.name })
+            """, category: .debug)
 
-       self.currentTooltipView?.removeFromSuperview()
+        // 기존 툴팁 제거
+        self.currentTooltipView?.removeFromSuperview()
 
-       let tooltipView = MarkerTooltipView()
-       tooltipView.configure(with: stores)
+        let tooltipView = MarkerTooltipView()
+        tooltipView.configure(with: stores)
 
-       let markerPoint = self.mainView.mapView.projection.point(for: marker.position)
-       let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
-       tooltipView.frame = CGRect(
-           x: markerPoint.x - tooltipView.frame.width/2,
-           y: markerPoint.y - markerHeight - tooltipView.frame.height - 20,
-           width: tooltipView.frame.width,
-           height: tooltipView.frame.height
-       )
+        // 선택된 상태로 표시 - 첫 번째 정보를 기본 선택 상태로 만듦
+        tooltipView.selectStore(at: 0)
 
-       tooltipView.onStoreSelected = { [weak self] index in
-           guard let self = self,
-                 index < stores.count else { return }
+        // onStoreSelected 클로저 설정
+        tooltipView.onStoreSelected = { [weak self] index in
+            guard let self = self, index < stores.count else { return }
+            self.currentCarouselStores = stores
+            self.carouselView.updateCards(stores)
+            self.carouselView.scrollToCard(index: index)
 
-           // handleMicroClusterTap과 동일한 방식으로 처리
-           self.currentCarouselStores = stores
-           self.carouselView.updateCards(stores)
-           self.carouselView.scrollToCard(index: index)
+            // 선택된 상태로 업데이트
+            if let markerView = marker.iconView as? MapMarker {
+                markerView.injection(with: .init(
+                    isSelected: true,
+                    isCluster: false,
+                    count: stores.count
+                ))
+            }
+            tooltipView.selectStore(at: index)
+            Logger.log(message: """
+                툴팁 선택:
+                - 선택된 스토어: \(stores[index].name)
+                - 툴팁 인덱스: \(index)
+                """, category: .debug)
+        }
 
-           // 마커 상태 유지
-           if let markerView = marker.iconView as? MapMarker {
-               markerView.injection(with: .init(
-                   isSelected: true,
-                   isCluster: false,
-                   count: stores.count
-               ))
-           }
+        // 툴팁 위치 설정 (예시: 마커 우측에 위치)
+        let markerPoint = self.mainView.mapView.projection.point(for: marker.position)
+        let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
+        tooltipView.frame = CGRect(
+            x: markerPoint.x , // 마커 오른쪽 10포인트
+            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
+            width: tooltipView.frame.width,
+            height: tooltipView.frame.height
+        )
 
-           // 툴팁 선택 상태 업데이트
-           tooltipView.selectStore(at: index)
-
-           Logger.log(message: """
-               툴팁 선택:
-               - 선택된 스토어: \(stores[index].name)
-               - 툴팁 인덱스: \(index)
-               """, category: .debug)
-       }
-
-       // 툴팁 표시 및 상태 저장
-       self.mainView.addSubview(tooltipView)
-       self.currentTooltipView = tooltipView
-       self.currentTooltipStores = stores
-       self.currentTooltipCoordinate = marker.position
+        self.mainView.addSubview(tooltipView)
+        self.currentTooltipView = tooltipView
+        self.currentTooltipStores = stores
+        self.currentTooltipCoordinate = marker.position
     }
 
     // MARK: - Setup
@@ -430,13 +454,43 @@ class MapViewController: BaseViewController, View {
 
 
 
-        mainView.filterChips.onRemoveLocation = {
-            reactor.action.onNext(.clearFilters(.location))
-        }
-        mainView.filterChips.onRemoveCategory = {
-            reactor.action.onNext(.clearFilters(.category))
-        }
+        mainView.filterChips.onRemoveLocation = { [weak self] in
+            guard let self = self else { return }
+            // 필터 제거 액션
+            self.reactor?.action.onNext(.clearFilters(.location))
 
+            // 현재 뷰포트의 바운드로 마커 업데이트 요청
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            self.reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
+
+            // 필터 변경 시 기존 마커 초기화
+            self.clearAllMarkers()
+            // 또는 클러스터 마커만 초기화
+            self.clusterMarkerDictionary.values.forEach { $0.map = nil }
+            self.clusterMarkerDictionary.removeAll()
+
+            // 그리고 최신 필터 결과에 기반한 클러스터링 업데이트
+            self.updateMapWithClustering()
+        }
+        mainView.filterChips.onRemoveCategory = { [weak self] in
+            guard let self = self else { return }
+            // 필터 제거 액션
+            self.reactor?.action.onNext(.clearFilters(.category))
+
+            // 현재 뷰포트의 바운드로 마커 업데이트 요청
+            let bounds = self.mainView.mapView.projection.visibleRegion()
+            self.reactor?.action.onNext(.viewportChanged(
+                northEastLat: bounds.farRight.latitude,
+                northEastLon: bounds.farRight.longitude,
+                southWestLat: bounds.nearLeft.latitude,
+                southWestLon: bounds.nearLeft.longitude
+            ))
+        }
         Observable.combineLatest(
             reactor.state.map { $0.selectedLocationFilters }.distinctUntilChanged(),
             reactor.state.map { $0.selectedCategoryFilters }.distinctUntilChanged()
@@ -541,32 +595,29 @@ class MapViewController: BaseViewController, View {
             .bind { [weak self] results in
                 guard let self = self else { return }
 
-                // 기존 데이터를 초기화
-                self.mainView.mapView.clear()  // 기존 마커 제거
-                self.storeListViewController.reactor?.action.onNext(.setStores([])) // 리스트 뷰 초기화
-                self.carouselView.updateCards([]) // 캐러셀 초기화
-                self.carouselView.isHidden = true // 캐러셀 숨기기
+                // 기존 데이터 초기화
+                self.mainView.mapView.clear()
+                self.storeListViewController.reactor?.action.onNext(.setStores([]))
+                self.carouselView.updateCards([])
+                self.carouselView.isHidden = true
 
                 if results.isEmpty {
-                            self.mainView.setStoreCardHidden(true, animated: true)
-                            return
-                        } else {
-                            // 검색 결과가 있으면 스토어카드 보이도록 처리
-                            self.mainView.setStoreCardHidden(false, animated: true)
-                        }
+                    self.mainView.setStoreCardHidden(true, animated: true)
+                    return
+                } else {
+                    self.mainView.setStoreCardHidden(false, animated: true)
+                }
 
-                // 1. 리스트 뷰 업데이트
-                let storeItems = results.map { $0.toStoreItem() }
-                self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
-
-                // 2. 마커 추가
+                // 전체 마커를 한 번에 추가
                 self.addMarkers(for: results)
 
-                // 3. 캐러셀 뷰 업데이트
-                self.carouselView.updateCards(results)
-                self.carouselView.isHidden = false
+//                 (원래는 캐러셀 업데이트와 리스트 업데이트를 진행하지만, 테스트 시에는 주석 처리)
+                 let storeItems = results.map { $0.toStoreItem() }
+                 self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+                 self.carouselView.updateCards(results)
+                 self.carouselView.isHidden = false
 
-                // 4. 첫 번째 검색 결과로 지도 이동
+                // 첫 번째 검색 결과로 지도 이동
                 if let firstStore = results.first {
                     let camera = GMSCameraPosition.camera(
                         withLatitude: firstStore.latitude,
@@ -577,7 +628,6 @@ class MapViewController: BaseViewController, View {
                 }
             }
             .disposed(by: disposeBag)
-
 
 
 
@@ -602,9 +652,6 @@ class MapViewController: BaseViewController, View {
 
     // MARK: - List View Control
     private func toggleListView() {
-//        print("[DEBUG] Current Modal State: \(modalState)")
-//        print("[DEBUG] Current listViewTopConstraint offset: \(listViewTopConstraint?.layoutConstraints.first?.constant ?? 0)")
-
         UIView.animate(withDuration: 0.3) {
             let middleOffset = -self.view.frame.height * 0.7
             self.listViewTopConstraint?.update(offset: middleOffset)
@@ -688,18 +735,16 @@ class MapViewController: BaseViewController, View {
     }
 
     private func adjustMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
-        let middleOffset = view.frame.height * 0.3 // 미들 상태 기준 높이
+        let middleOffset = view.frame.height * 0.3
 
         if offset <= minOffset {
             mainView.mapView.alpha = 0 // 탑에서는 완전히 숨김
         } else if offset >= maxOffset {
             mainView.mapView.alpha = 1 // 바텀에서는 완전히 보임
         } else if offset <= middleOffset {
-            // 탑 ~ 미들 사이에서는 알파값 점진적 증가
             let progress = (offset - minOffset) / (middleOffset - minOffset)
             mainView.mapView.alpha = progress
         } else {
-            // 미들 ~ 바텀 사이에서는 항상 보임
             mainView.mapView.alpha = 1
         }
     }
@@ -729,20 +774,19 @@ class MapViewController: BaseViewController, View {
 
             case .middle:
                 self.storeListViewController.setGrabberHandleVisible(true)
-                // 필터 컨테이너 바닥 높이를 최소값으로 사용
                 let offset = max(self.view.frame.height * 0.3, self.filterContainerBottomY)
                 self.listViewTopConstraint?.update(offset: offset)
                 self.storeListViewController.mainView.layer.cornerRadius = 20
                 self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                self.mainView.mapView.alpha = 1 // 미들 상태에서는 항상 보임
+                self.mainView.mapView.alpha = 1
                 self.mainView.mapView.isHidden = false
                 self.mainView.searchInput.setBackgroundColor(.white)
 
 
             case .bottom:
                 self.storeListViewController.setGrabberHandleVisible(true)
-                self.listViewTopConstraint?.update(offset: self.view.frame.height) // 화면 아래로 숨김
-                self.mainView.mapView.alpha = 1 // 바텀 상태에서는 항상 보임
+                self.listViewTopConstraint?.update(offset: self.view.frame.height)
+                self.mainView.mapView.alpha = 1
                 self.mainView.mapView.isHidden = false
                 self.mainView.searchInput.setBackgroundColor(.white)
 
@@ -761,116 +805,135 @@ class MapViewController: BaseViewController, View {
         let currentZoom = mainView.mapView.camera.zoom
         let level = MapZoomLevel.getLevel(from: currentZoom)
 
+        // 트랜잭션 시작
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
         switch level {
-        case .detailed:  // 개별 마커
-            clusterMarkerDictionary.values.forEach { $0.map = nil }
-
+        case .detailed:
+            // 현재 표시되어야 할 마커의 키 집합 생성
+            let newStoreIds = Set(currentStores.map { $0.id })
             let groupedDict = groupStoresByExactLocation(currentStores)
-            for (_, storeGroup) in groupedDict {
-                   if storeGroup.count == 1, let store = storeGroup.first {
-                       // (C-1) 단일 스토어 -> 일반 마커
-                       if let marker = individualMarkerDictionary[store.id] {
-                           // 이미 존재하면 위치만 업데이트
-                           if marker.position.latitude != store.latitude ||
-                               marker.position.longitude != store.longitude {
-                               marker.position = store.coordinate
-                           }
-                           marker.map = mainView.mapView
-                       } else {
-                           // 새 마커
-                           let marker = GMSMarker()
-                           marker.position = store.coordinate
-                           marker.userData = store
 
-                           let markerView = MapMarker()
-                           markerView.injection(with: .init(isSelected: false, isCluster: false))
-                           marker.iconView = markerView
-                           marker.map = mainView.mapView
+            // 클러스터 마커는 모두 제거
+            clusterMarkerDictionary.values.forEach { $0.map = nil }
+            clusterMarkerDictionary.removeAll()
 
-                           individualMarkerDictionary[store.id] = marker
-                       }
+            // 그룹별로 마커 생성 또는 업데이트
+            for (coordinate, storeGroup) in groupedDict {
+                if storeGroup.count == 1, let store = storeGroup.first {
+                    // 단일 스토어 마커
+                    if let existingMarker = individualMarkerDictionary[store.id] {
+                        // 기존 마커 재사용
+                        if existingMarker.position != store.coordinate {
+                            existingMarker.position = store.coordinate
+                        }
 
-                   } else {
-                       // (C-2) 동일 좌표에 여러 개 → "마이크로 클러스터" 마커
-                       // userData에 [MapPopUpStore] 통째로 넣어둠
-                       guard let firstStore = storeGroup.first else { continue }
+                        // 마커 뷰 상태 업데이트 (필요한 경우에만)
+                        if let markerView = existingMarker.iconView as? MapMarker,
+                           markerView.currentInput?.isSelected != (existingMarker == currentMarker) {
+                            markerView.injection(with: .init(
+                                isSelected: (existingMarker == currentMarker),
+                                isCluster: false
+                            ))
+                        }
+                    } else {
+                        // 새 마커 생성
+                        let marker = GMSMarker(position: store.coordinate)
+                        marker.userData = store
+                        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
 
-                       let markerKey = firstStore.id
-                       if let existingMarker = individualMarkerDictionary[markerKey] {
-                           existingMarker.position = firstStore.coordinate
-                           existingMarker.map = mainView.mapView
-                           existingMarker.userData = storeGroup
-                           if let markerView = existingMarker.iconView as? MapMarker {
-                               markerView.injection(with: .init(
-                                   isSelected: false,
-                                   isCluster: false,  // 기본 마커 유지
-                                   regionName: "",
-                                   count: storeGroup.count  // 뱃지에 표시될 숫자
-                               ))
-                           }
-                       } else {
-                           // 새 마커
-                           let marker = GMSMarker(position: firstStore.coordinate)
-                           marker.userData = storeGroup
+                        let markerView = MapMarker()
+                        markerView.injection(with: .init(
+                            isSelected: false,
+                            isCluster: false
+                        ))
+                        marker.iconView = markerView
+                        marker.map = mainView.mapView
 
-                           let markerView = MapMarker()
-                           markerView.injection(with: .init(
-                               isSelected: false,
-                               isCluster: false,
-                               regionName: "",
-                               count: storeGroup.count
-                           ))
-                           marker.iconView = markerView
-                           marker.map = mainView.mapView
+                        individualMarkerDictionary[store.id] = marker
+                    }
+                } else {
+                    // 다중 스토어 마커
+                    guard let firstStore = storeGroup.first else { continue }
+                    let markerKey = firstStore.id
 
-                           individualMarkerDictionary[markerKey] = marker
-                       }
-                   }
-               }
+                    if let existingMarker = individualMarkerDictionary[markerKey] {
+                        // 기존 마커 재사용
+                        existingMarker.userData = storeGroup
 
-               // (D) 기존에 더 이상 필요 없어졌는데 남아있는 개별 마커 제거
-               let newIDs = groupedDict.values.flatMap { $0.map { $0.id } }
-               let newIDSet = Set(newIDs)
-               for (id, marker) in individualMarkerDictionary {
-                   // id가 새 목록에 없으면 지도에서 제거
-                   if !newIDSet.contains(id) {
-                       marker.map = nil
-                       individualMarkerDictionary.removeValue(forKey: id)
-                   }
-               }
-        case .district, .city, .country:  // 클러스터 마커
-            // 개별 마커는 숨기기만 하고 제거하지 않음
+                        if let markerView = existingMarker.iconView as? MapMarker,
+                           markerView.currentInput?.count != storeGroup.count ||
+                           markerView.currentInput?.isSelected != (existingMarker == currentMarker) {
+                            markerView.injection(with: .init(
+                                isSelected: (existingMarker == currentMarker),
+                                isCluster: false,
+                                count: storeGroup.count
+                            ))
+                        }
+                    } else {
+                        // 새 마커 생성
+                        let marker = GMSMarker(position: firstStore.coordinate)
+                        marker.userData = storeGroup
+                        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
+
+                        let markerView = MapMarker()
+                        markerView.injection(with: .init(
+                            isSelected: false,
+                            isCluster: false,
+                            count: storeGroup.count
+                        ))
+                        marker.iconView = markerView
+                        marker.map = mainView.mapView
+
+                        individualMarkerDictionary[markerKey] = marker
+                    }
+                }
+            }
+
+            // 더 이상 필요없는 마커 제거
+            individualMarkerDictionary = individualMarkerDictionary.filter { id, marker in
+                if newStoreIds.contains(id) {
+                    return true
+                } else {
+                    marker.map = nil
+                    return false
+                }
+            }
+
+        case .district, .city, .country:
+            // 개별 마커 모두 제거
             individualMarkerDictionary.values.forEach { $0.map = nil }
+            individualMarkerDictionary.removeAll()
 
+            // 클러스터 생성 및 업데이트
             let clusters = clusteringManager.clusterStores(currentStores, at: currentZoom)
+            let activeClusterKeys = Set(clusters.map { $0.cluster.name })
 
-            // 클러스터 마커 업데이트 또는 추가
+            // 클러스터 마커 업데이트
             for cluster in clusters {
                 let clusterKey = cluster.cluster.name
 
                 if let existingMarker = clusterMarkerDictionary[clusterKey] {
-                    // 기존 마커 표시 및 업데이트
-                    existingMarker.map = mainView.mapView
-                    existingMarker.position = cluster.cluster.coordinate
+                    // 기존 마커 재사용
+                    if existingMarker.position != cluster.cluster.coordinate {
+                        existingMarker.position = cluster.cluster.coordinate
+                    }
+                    existingMarker.userData = cluster
 
-                    // 카운트가 변경된 경우에만 마커 뷰 업데이트
-                    if let existingCluster = existingMarker.userData as? ClusterMarkerData,
-                       existingCluster.storeCount != cluster.storeCount {
-                        let markerView = MapMarker()
+                    if let markerView = existingMarker.iconView as? MapMarker,
+                       markerView.currentInput?.count != cluster.storeCount {
                         markerView.injection(with: .init(
                             isSelected: false,
                             isCluster: true,
                             regionName: cluster.cluster.name,
                             count: cluster.storeCount
                         ))
-                        existingMarker.iconView = markerView
                     }
-                    existingMarker.userData = cluster
                 } else {
                     // 새 클러스터 마커 생성
                     let marker = GMSMarker(position: cluster.cluster.coordinate)
                     marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
-
                     marker.userData = cluster
 
                     let markerView = MapMarker()
@@ -887,15 +950,20 @@ class MapViewController: BaseViewController, View {
                 }
             }
 
-            // 현재 표시되지 않는 클러스터 마커는 숨기기
-            let activeClusterKeys = Set(clusters.map { $0.cluster.name })
-            clusterMarkerDictionary.forEach { (key, marker) in
-                if !activeClusterKeys.contains(key) {
+            // 더 이상 필요없는 클러스터 마커 제거
+            clusterMarkerDictionary = clusterMarkerDictionary.filter { key, marker in
+                if activeClusterKeys.contains(key) {
+                    return true
+                } else {
                     marker.map = nil
+                    return false
                 }
             }
         }
+
+        CATransaction.commit()
     }
+
     private func clearAllMarkers() {
         individualMarkerDictionary.values.forEach { $0.map = nil }
         individualMarkerDictionary.removeAll()
@@ -918,19 +986,14 @@ class MapViewController: BaseViewController, View {
 
 
     private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
-        // 새 스토어 ID 집합 생성
-
         var newMarkerIDs = Set<Int64>()
 
-        // 각 스토어에 대해 증분 업데이트
         for store in stores {
             newMarkerIDs.insert(store.id)
             if let marker = individualMarkerDictionary[store.id] {
-                // 기존 마커의 위치 업데이트 (변화가 있을 때만)
                 if marker.position.latitude != store.latitude || marker.position.longitude != store.longitude {
                     marker.position = store.coordinate
                 }
-                // 추가 상태 업데이트가 필요한 경우 이곳에서 처리 (예: 선택 상태 등)
             } else {
                 // 새 마커 생성 및 추가
                 let marker = GMSMarker(position: store.coordinate)
@@ -944,8 +1007,6 @@ class MapViewController: BaseViewController, View {
                 individualMarkerDictionary[store.id] = marker
             }
         }
-
-        // 기존 마커 중 더 이상 보이지 않는 마커 제거
         for (id, marker) in individualMarkerDictionary {
             if !newMarkerIDs.contains(id) {
                 marker.map = nil
@@ -956,17 +1017,16 @@ class MapViewController: BaseViewController, View {
     private func updateClusterMarkers(_ clusters: [ClusterMarkerData]) {
         for clusterData in clusters {
             let clusterKey = clusterData.cluster.name
-            let fixedCoordinate = clusterData.cluster.coordinate // ✅ 구 중심 고정
+            let fixedCoordinate = clusterData.cluster.coordinate
 
             if let marker = clusterMarkerDictionary[clusterKey] {
-                // 기존 마커 위치를 변경하지 않음
                 if marker.position.latitude != fixedCoordinate.latitude ||
                     marker.position.longitude != fixedCoordinate.longitude {
                     marker.position = fixedCoordinate
                 }
             } else {
                 let marker = GMSMarker()
-                marker.position = fixedCoordinate // ✅ 구 단위 클러스터는 고정된 좌표 사용
+                marker.position = fixedCoordinate
                 marker.userData = clusterData
 
                 let markerView = MapMarker()
@@ -1001,14 +1061,12 @@ class MapViewController: BaseViewController, View {
 
         viewController.onSave = { [weak self] filterData in
             guard let self = self else { return }
-            // Reactor에 필터 정보 업데이트
             self.reactor?.action.onNext(.updateBothFilters(
                 locations: filterData.locations,
                 categories: filterData.categories
             ))
             self.reactor?.action.onNext(.filterTapped(nil))
 
-            // (2) 필터 변경 직후 “현재 뷰포트” 다시 요청
             let bounds = self.mainView.mapView.projection.visibleRegion()
             self.reactor?.action.onNext(.viewportChanged(
                 northEastLat: bounds.farRight.latitude,
@@ -1016,6 +1074,8 @@ class MapViewController: BaseViewController, View {
                 southWestLat: bounds.nearLeft.latitude,
                 southWestLon: bounds.nearLeft.longitude
             ))
+
+            
         }
 
 
@@ -1134,33 +1194,54 @@ extension MapViewController: GMSMapViewDelegate {
     
     
     /// 지도 이동할 때 클러스터 업데이트
+//    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+//        if !isMovingToMarker {
+//            currentTooltipView?.removeFromSuperview()
+//            currentTooltipView = nil
+//            currentTooltipStores = []
+//
+//            updateMapWithClustering()
+//
+//            // 뷰포트 변경 처리
+//            let bounds = mapView.projection.visibleRegion()
+//            reactor?.action.onNext(.viewportChanged(
+//                northEastLat: bounds.farRight.latitude,
+//                northEastLon: bounds.farRight.longitude,
+//                southWestLat: bounds.nearLeft.latitude,
+//                southWestLon: bounds.nearLeft.longitude
+//            ))
+//
+//            // 현재 마커가 있다면 툴팁 위치도 업데이트
+//            if currentMarker != nil {
+//                updateTooltipPosition()
+//            }
+//            // 캐러셀 초기화
+//            carouselView.isHidden = true
+//            carouselView.updateCards([])
+//            currentCarouselStores = []
+//        }
+//    }
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         if !isMovingToMarker {
+
+
             currentTooltipView?.removeFromSuperview()
             currentTooltipView = nil
             currentTooltipStores = []
-
             updateMapWithClustering()
 
-            // 뷰포트 변경 처리
-            let bounds = mapView.projection.visibleRegion()
-            reactor?.action.onNext(.viewportChanged(
-                northEastLat: bounds.farRight.latitude,
-                northEastLon: bounds.farRight.longitude,
-                southWestLat: bounds.nearLeft.latitude,
-                southWestLon: bounds.nearLeft.longitude
-            ))
+            // 뷰포트 변경 시 API 요청 제거하고 현재 마커만 관리
+//            if currentMarker != nil {
+//                updateTooltipPosition()
+//            }
 
-            // 현재 마커가 있다면 툴팁 위치도 업데이트
-            if currentMarker != nil {
-                updateTooltipPosition()
-            }
             // 캐러셀 초기화
             carouselView.isHidden = true
             carouselView.updateCards([])
             currentCarouselStores = []
         }
     }
+
 
 
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
@@ -1170,7 +1251,6 @@ extension MapViewController: GMSMapViewDelegate {
     }
     /// 지도 빈 공간 탭 → 기존 마커/캐러셀 해제
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        // 툴팁 제거
         guard !isMovingToMarker else { return }
 
         currentTooltipView?.removeFromSuperview()
@@ -1178,8 +1258,7 @@ extension MapViewController: GMSMapViewDelegate {
 
         if let currentMarker = currentMarker {
             let markerView = MapMarker()
-
-            // 마커가 클러스터인 경우를 위한 처리
+            // 마커가 클러스터인 경우 처리
             if let storeArray = currentMarker.userData as? [MapPopUpStore] {
                 markerView.injection(with: .init(
                     isSelected: false,
@@ -1203,52 +1282,52 @@ extension MapViewController: GMSMapViewDelegate {
         carouselView.updateCards([])
         self.currentCarouselStores = []
         mainView.setStoreCardHidden(true, animated: true)
-
     }
+
 
     // MARK: - Helper for single marker tap
     private func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
-        currentTooltipView?.removeFromSuperview()
-        currentTooltipView = nil
-
         if currentMarker == marker {
             resetSelectedMarker()
             return false
         }
 
-        // 기존 선택된 마커 해제
-        if let previousMarker = currentMarker {
-            let markerView = MapMarker()
-            markerView.injection(with: .init(
+        isMovingToMarker = true
+        currentTooltipView?.removeFromSuperview()
+        currentTooltipView = nil
+
+        // 기존 마커 상태 업데이트
+        if let previousMarker = currentMarker,
+           let previousMarkerView = previousMarker.iconView as? MapMarker {
+            previousMarkerView.injection(with: .init(
                 isSelected: false,
                 isCluster: false,
                 count: (previousMarker.userData as? [MapPopUpStore])?.count ?? 1
             ))
-            previousMarker.iconView = markerView
         }
 
-        // 새 마커 강조 및 플래그 설정
-        let markerView = MapMarker()
-        markerView.injection(with: .init(
-            isSelected: true,
-            isCluster: false,
-            count: 1
-        ))
-        marker.iconView = markerView
+        // 새 마커 상태 업데이트
+        if let markerView = marker.iconView as? MapMarker {
+            markerView.injection(with: .init(
+                isSelected: true,
+                isCluster: false,
+                count: 1
+            ))
+        }
+
         currentMarker = marker
 
-        // 캐러셀 업데이트 (해당 마커에 연관된 스토어만 표시)
+        // 캐러셀 업데이트
         carouselView.updateCards([store])
         carouselView.isHidden = false
         currentCarouselStores = [store]
         carouselView.scrollToCard(index: 0)
         mainView.setStoreCardHidden(false, animated: true)
 
-
-        isMovingToMarker = true
         mainView.mapView.animate(toLocation: marker.position)
         return true
     }
+
 
 
     private func handleRegionalClusterTap(_ marker: GMSMarker, clusterData: ClusterMarkerData) -> Bool {
@@ -1291,24 +1370,23 @@ extension MapViewController: GMSMapViewDelegate {
         currentTooltipView = nil
 
         // 이전 마커 선택 해제
-        if let previousMarker = currentMarker {
-            let markerView = MapMarker()
-            markerView.injection(with: .init(
+        if let previousMarker = currentMarker,
+           let previousMarkerView = previousMarker.iconView as? MapMarker {
+            previousMarkerView.injection(with: .init(
                 isSelected: false,
                 isCluster: false,
                 count: (previousMarker.userData as? [MapPopUpStore])?.count ?? 1
             ))
-            previousMarker.iconView = markerView
         }
 
-        // 새 마커 선택
-        let markerView = MapMarker()
-        markerView.injection(with: .init(
-            isSelected: true,
-            isCluster: false,
-            count: storeArray.count
-        ))
-        marker.iconView = markerView
+        // 새 마커 선택 - 기존 마커뷰 재사용
+        if let markerView = marker.iconView as? MapMarker {
+            markerView.injection(with: .init(
+                isSelected: true,
+                isCluster: false,
+                count: storeArray.count
+            ))
+        }
         currentMarker = marker
 
         // 캐러셀 업데이트
@@ -1316,43 +1394,17 @@ extension MapViewController: GMSMapViewDelegate {
         carouselView.updateCards(storeArray)
         carouselView.isHidden = false
 
-        // 툴팁 설정
-        let tooltipView = MarkerTooltipView()
-        tooltipView.configure(with: storeArray)
+        // 툴팁 생성은 제거 (생성은 idleAtPosition에서 처리)
 
-        // 툴팁 탭 핸들러
-        tooltipView.onStoreSelected = { [weak self] index in
-            guard let self = self else { return }
-
-            // 캐러셀 업데이트 - 동일한 스토어 배열 사용
-            if index < storeArray.count {
-                self.carouselView.scrollToCard(index: index)
-            }
-        }
-
-        // 툴팁 위치 설정
-        let markerPoint = mainView.mapView.projection.point(for: marker.position)
-        let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
-        tooltipView.frame = CGRect(
-            x: markerPoint.x - 10,
-            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
-            width: tooltipView.frame.width,
-            height: tooltipView.frame.height
-        )
-
-        mainView.addSubview(tooltipView)
-         currentTooltipView = tooltipView
-         currentTooltipStores = storeArray
-         currentTooltipCoordinate = marker.position
-
-         // 첫 번째 아이템으로 캐러셀 스크롤
-         carouselView.scrollToCard(index: 0)
+        // 첫 번째 아이템으로 캐러셀 스크롤
+        carouselView.scrollToCard(index: 0)
 
         mainView.setStoreCardHidden(false, animated: true)
-         isMovingToMarker = true
-         mainView.mapView.animate(toLocation: marker.position)
-         return true
-     }
+        isMovingToMarker = true
+        mainView.mapView.animate(toLocation: marker.position)
+        return true
+    }
+
 
     private func updateTooltipPosition() {
         guard let marker = currentMarker, let tooltip = currentTooltipView else { return }
@@ -1374,9 +1426,9 @@ extension MapViewController: GMSMapViewDelegate {
     }
 
     private func resetSelectedMarker() {
-        if let currentMarker = currentMarker {
-            let markerView = MapMarker()
-
+        if let currentMarker = currentMarker,
+           let markerView = currentMarker.iconView as? MapMarker {
+            // 기존 마커뷰 재사용, 새로 생성하지 않음
             if let storeArray = currentMarker.userData as? [MapPopUpStore] {
                 markerView.injection(with: .init(
                     isSelected: false,
@@ -1389,21 +1441,20 @@ extension MapViewController: GMSMapViewDelegate {
                     isCluster: false
                 ))
             }
-            currentMarker.iconView = markerView
         }
 
-        // 🛠 툴팁 제거
+        // 툴팁 제거
         currentTooltipView?.removeFromSuperview()
         currentTooltipView = nil
         currentTooltipStores = []
         currentTooltipCoordinate = nil
 
-        // 🛠 캐러셀 숨기기
+        // 캐러셀 숨기기
         carouselView.isHidden = true
         carouselView.updateCards([])
         currentCarouselStores = []
 
-        // 🛠 현재 마커 참조 제거
+        // 현재 마커 참조 제거
         self.currentMarker = nil
     }
 
@@ -1414,67 +1465,112 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {
         let cameraObservable = Observable.merge([
-            mainView.mapView.rx.didChangePosition,  // 카메라 움직임 중
-            mainView.mapView.rx.idleAtPosition     // 카메라 멈춤
+            mainView.mapView.rx.didChangePosition,
+            mainView.mapView.rx.idleAtPosition
         ])
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)  // 디바운스 추가
-            .map { [unowned self] in
-                self.mainView.mapView.camera
-            }
+        .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+        .map { [unowned self] in
+            self.mainView.mapView.camera
+        }
 
         let distinctCameraObservable = cameraObservable.distinctUntilChanged { (cam1, cam2) -> Bool in
             let loc1 = CLLocation(latitude: cam1.target.latitude, longitude: cam1.target.longitude)
             let loc2 = CLLocation(latitude: cam2.target.latitude, longitude: cam2.target.longitude)
             let distance = loc1.distance(from: loc2)
-            // 50m 미만이면 변화가 없다고 판단
-            if distance < 40 { return true }
-
-            // 줌 레벨 변화가 있다면 반드시 업데이트
-//            let zoomDiff = abs(cam1.zoom - cam2.zoom)
-//            if zoomDiff >= 0.2 { return false }
-
-            return false
+            return distance < 40
         }
 
-
-        let viewportActionObservable = distinctCameraObservable.map { [unowned self] _ -> MapReactor.Action? in
-            let visibleRegion = self.mainView.mapView.projection.visibleRegion()
-            // 네 모서리 좌표 배열
-            let corners = [
-                visibleRegion.nearLeft,
-                visibleRegion.nearRight,
-                visibleRegion.farLeft,
-                visibleRegion.farRight
-            ]
-            let lats = corners.map { $0.latitude }
-            let lons = corners.map { $0.longitude }
-            let northEast = CLLocationCoordinate2D(latitude: lats.max() ?? 0, longitude: lons.max() ?? 0)
-            let southWest = CLLocationCoordinate2D(latitude: lats.min() ?? 0, longitude: lons.min() ?? 0)
-
-            return .viewportChanged(
-                northEastLat: northEast.latitude,
-                northEastLon: northEast.longitude,
-                southWestLat: southWest.latitude,
-                southWestLon: southWest.longitude
-            )
-        }
-            .compactMap { $0 }
-
-        // 4. 계산된 뷰포트 경계를 Reactor의 액션으로 바인딩합니다.
-        viewportActionObservable
+        // 뷰포트가 변경될 때마다 액션 전달
+        distinctCameraObservable
+            .map { [unowned self] _ -> MapReactor.Action in
+                let visibleRegion = self.mainView.mapView.projection.visibleRegion()
+                return .viewportChanged(
+                    northEastLat: visibleRegion.farRight.latitude,
+                    northEastLon: visibleRegion.farRight.longitude,
+                    southWestLat: visibleRegion.nearLeft.latitude,
+                    southWestLon: visibleRegion.nearLeft.longitude
+                )
+            }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        // 현재 뷰포트 내의 스토어 업데이트
+        reactor.state
+            .map { $0.viewportStores }
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
+            .map { [unowned self] stores -> [MapPopUpStore] in
+                // 현재 뷰포트의 경계 가져오기
+                let visibleRegion = self.mainView.mapView.projection.visibleRegion()
+                let bounds = GMSCoordinateBounds(region: visibleRegion)
+
+                // 뷰포트 내의 스토어만 필터링
+                return stores.filter { store in
+                    bounds.contains(CLLocationCoordinate2D(
+                        latitude: store.latitude,
+                        longitude: store.longitude
+                    ))
+                }
+            }
+            .do(onNext: { [unowned self] stores in
+                self.currentStores = stores
+                self.updateMapWithClustering()
+            })
+            // 필터링된 스토어를 StoreItem으로 변환
+            .flatMapLatest { [unowned self] stores -> Observable<[StoreItem]> in
+                guard !stores.isEmpty else { return .just([]) }
+
+                return Observable.from(stores)
+                    .flatMap { store -> Observable<StoreItem> in
+                        return self.popUpAPIUseCase.getPopUpDetail(
+                            commentType: "NORMAL",
+                            popUpStoredId: store.id
+                        )
+                        .map { detail in
+                            StoreItem(
+                                id: store.id,
+                                thumbnailURL: store.mainImageUrl ?? "",
+                                category: store.category,
+                                title: store.name,
+                                location: store.address,
+                                dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                                isBookmarked: detail.bookmarkYn
+                            )
+                        }
+                        .catchAndReturn(StoreItem(
+                            id: store.id,
+                            thumbnailURL: store.mainImageUrl ?? "",
+                            category: store.category,
+                            title: store.name,
+                            location: store.address,
+                            dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                            isBookmarked: false
+                        ))
+                    }
+                    .toArray()
+                    .asObservable()
+            }
+            .bind { [unowned self] storeItems in
+                self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+            }
+            .disposed(by: disposeBag)
+
+
+
 
         // 5. Reactor의 viewportStores가 변경되면 currentStores 업데이트 후 클러스터 갱신
         reactor.state
             .map { $0.viewportStores }
             .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
             .observe(on: MainScheduler.instance)
             .bind { [unowned self] stores in
                 self.currentStores = stores
                 self.updateMapWithClustering()
             }
             .disposed(by: disposeBag)
+
 
         // 6. viewportStores로부터 StoreItem 배열을 생성하여 리스트 뷰 업데이트
         reactor.state
@@ -1595,37 +1691,38 @@ private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
         return (northEast: region.farRight, southWest: region.nearLeft)
     }
     // 커스텀 마커
-    func updateMarkers(with stores: [MapPopUpStore]) {
-        var newMarkerIDs = Set<Int64>()
+    func updateMarkers(with newStores: [MapPopUpStore]) {
+        // 새로운 스토어 ID 집합 생성
+        let newStoreIDs = Set(newStores.map { $0.id })
 
-        // 각 스토어에 대해 마커 업데이트 혹은 생성
-        for store in stores {
-            newMarkerIDs.insert(store.id)
-            if let marker = markerDictionary[store.id] {
-                // 기존 마커의 위치나 상태가 변경되었는지 확인
-                if marker.position.latitude != store.latitude || marker.position.longitude != store.longitude {
+        // 1. 기존 마커 업데이트 또는 추가
+        for store in newStores {
+            if let marker = individualMarkerDictionary[store.id] {
+                // 위치 변경 등 업데이트 (미세한 차이가 있을 때만)
+                if abs(marker.position.latitude - store.latitude) > 0.0001 ||
+                   abs(marker.position.longitude - store.longitude) > 0.0001 {
                     marker.position = store.coordinate
                 }
-                // 마커 상태(예: 선택 여부) 등도 업데이트 필요하면 여기서 처리
+                // 필요한 경우 마커 상태 업데이트 (예: 선택 상태)
             } else {
-                // 새 마커 생성
+                // 새로운 스토어이면 마커 생성
                 let marker = GMSMarker(position: store.coordinate)
                 marker.userData = store
 
-                // 캐싱 또는 재사용 가능한 markerView를 사용하도록 개선 가능
                 let markerView = MapMarker()
                 markerView.injection(with: store.toMarkerInput())
                 marker.iconView = markerView
                 marker.map = mainView.mapView
-                markerDictionary[store.id] = marker
+
+                individualMarkerDictionary[store.id] = marker
             }
         }
 
-        // 기존에 있던 마커 중 새로 전달된 스토어 목록에 없는 마커 제거
-        for (id, marker) in markerDictionary {
-            if !newMarkerIDs.contains(id) {
+        // 2. 기존 마커 중 새로운 목록에 없는 것 제거
+        for (id, marker) in individualMarkerDictionary {
+            if !newStoreIDs.contains(id) {
                 marker.map = nil
-                markerDictionary.removeValue(forKey: id)
+                individualMarkerDictionary.removeValue(forKey: id)
             }
         }
     }

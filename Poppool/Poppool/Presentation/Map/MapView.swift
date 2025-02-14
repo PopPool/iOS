@@ -143,7 +143,6 @@ private extension MapView {
         updateButtonLayout()
     }
 
-    /// 스토어카드의 보임/숨김 상태에 따라 버튼의 제약조건을 재설정합니다.
     func updateButtonLayout() {
         if storeCard.isHidden {
             locationButton.snp.remakeConstraints { make in
