@@ -18,7 +18,7 @@ final class MapMarker: UIView {
     private let clusterContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .blu500
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = 14
         view.layer.borderWidth = 0
         return view
     }()
@@ -189,7 +189,7 @@ extension MapMarker: Inputable {
         countBadgeView.isHidden = true
 
         regionLabel.text = input.regionName
-        countLabel.text = "· \(input.count)"
+        countLabel.text = " \(input.count)"
 
         let stackSize = labelStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         let requiredWidth = stackSize.width + 24

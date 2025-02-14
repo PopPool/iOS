@@ -1465,56 +1465,99 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {
         let cameraObservable = Observable.merge([
-            mainView.mapView.rx.didChangePosition,  // 카메라 움직임 중
-            mainView.mapView.rx.idleAtPosition     // 카메라 멈춤
+            mainView.mapView.rx.didChangePosition,
+            mainView.mapView.rx.idleAtPosition
         ])
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)  // 디바운스 추가
-            .map { [unowned self] in
-                self.mainView.mapView.camera
-            }
+        .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+        .map { [unowned self] in
+            self.mainView.mapView.camera
+        }
 
         let distinctCameraObservable = cameraObservable.distinctUntilChanged { (cam1, cam2) -> Bool in
             let loc1 = CLLocation(latitude: cam1.target.latitude, longitude: cam1.target.longitude)
             let loc2 = CLLocation(latitude: cam2.target.latitude, longitude: cam2.target.longitude)
             let distance = loc1.distance(from: loc2)
-            // 50m 미만이면 변화가 없다고 판단
-            if distance < 40 { return true }
-
-            // 줌 레벨 변화가 있다면 반드시 업데이트
-//            let zoomDiff = abs(cam1.zoom - cam2.zoom)
-//            if zoomDiff >= 0.2 { return false }
-
-            return false
+            return distance < 40
         }
 
+        // 뷰포트가 변경될 때마다 액션 전달
+        distinctCameraObservable
+            .map { [unowned self] _ -> MapReactor.Action in
+                let visibleRegion = self.mainView.mapView.projection.visibleRegion()
+                return .viewportChanged(
+                    northEastLat: visibleRegion.farRight.latitude,
+                    northEastLon: visibleRegion.farRight.longitude,
+                    southWestLat: visibleRegion.nearLeft.latitude,
+                    southWestLon: visibleRegion.nearLeft.longitude
+                )
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
-//        let viewportActionObservable = distinctCameraObservable.map { [unowned self] _ -> MapReactor.Action? in
-//            let visibleRegion = self.mainView.mapView.projection.visibleRegion()
-//            // 네 모서리 좌표 배열
-//            let corners = [
-//                visibleRegion.nearLeft,
-//                visibleRegion.nearRight,
-//                visibleRegion.farLeft,
-//                visibleRegion.farRight
-//            ]
-//            let lats = corners.map { $0.latitude }
-//            let lons = corners.map { $0.longitude }
-//            let northEast = CLLocationCoordinate2D(latitude: lats.max() ?? 0, longitude: lons.max() ?? 0)
-//            let southWest = CLLocationCoordinate2D(latitude: lats.min() ?? 0, longitude: lons.min() ?? 0)
-//
-//            return .viewportChanged(
-//                northEastLat: northEast.latitude,
-//                northEastLon: northEast.longitude,
-//                southWestLat: southWest.latitude,
-//                southWestLon: southWest.longitude
-//            )
-//        }
-//            .compactMap { $0 }
-//
-//        // 4. 계산된 뷰포트 경계를 Reactor의 액션으로 바인딩합니다.
-//        viewportActionObservable
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
+        // 현재 뷰포트 내의 스토어 업데이트
+        reactor.state
+            .map { $0.viewportStores }
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
+            .map { [unowned self] stores -> [MapPopUpStore] in
+                // 현재 뷰포트의 경계 가져오기
+                let visibleRegion = self.mainView.mapView.projection.visibleRegion()
+                let bounds = GMSCoordinateBounds(region: visibleRegion)
+
+                // 뷰포트 내의 스토어만 필터링
+                return stores.filter { store in
+                    bounds.contains(CLLocationCoordinate2D(
+                        latitude: store.latitude,
+                        longitude: store.longitude
+                    ))
+                }
+            }
+            .do(onNext: { [unowned self] stores in
+                self.currentStores = stores
+                self.updateMapWithClustering()
+            })
+            // 필터링된 스토어를 StoreItem으로 변환
+            .flatMapLatest { [unowned self] stores -> Observable<[StoreItem]> in
+                guard !stores.isEmpty else { return .just([]) }
+
+                return Observable.from(stores)
+                    .flatMap { store -> Observable<StoreItem> in
+                        return self.popUpAPIUseCase.getPopUpDetail(
+                            commentType: "NORMAL",
+                            popUpStoredId: store.id
+                        )
+                        .map { detail in
+                            StoreItem(
+                                id: store.id,
+                                thumbnailURL: store.mainImageUrl ?? "",
+                                category: store.category,
+                                title: store.name,
+                                location: store.address,
+                                dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                                isBookmarked: detail.bookmarkYn
+                            )
+                        }
+                        .catchAndReturn(StoreItem(
+                            id: store.id,
+                            thumbnailURL: store.mainImageUrl ?? "",
+                            category: store.category,
+                            title: store.name,
+                            location: store.address,
+                            dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                            isBookmarked: false
+                        ))
+                    }
+                    .toArray()
+                    .asObservable()
+            }
+            .bind { [unowned self] storeItems in
+                self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+            }
+            .disposed(by: disposeBag)
+
+
+
 
         // 5. Reactor의 viewportStores가 변경되면 currentStores 업데이트 후 클러스터 갱신
         reactor.state
