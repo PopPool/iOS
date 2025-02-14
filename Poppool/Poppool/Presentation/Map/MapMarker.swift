@@ -5,6 +5,8 @@ import GoogleMaps
 final class MapMarker: UIView {
     // MARK: - Components
     private(set) var isSelected: Bool = false
+    var currentInput: Input?
+
 
     private let markerImageView: UIImageView = {
         let imageView = UIImageView()
@@ -159,6 +161,13 @@ extension MapMarker: Inputable {
     }
 
     func injection(with input: Input) {
+        if let current = currentInput, current == input {
+            return
+        }
+
+        // 새로운 입력값 저장
+        currentInput = input
+
         CATransaction.begin()
         CATransaction.setDisableActions(true)
 
@@ -171,6 +180,8 @@ extension MapMarker: Inputable {
         self.layoutIfNeeded()
         CATransaction.commit()
     }
+
+
 
     private func setupClusterMarker(_ input: Input) {
         markerImageView.isHidden = true
@@ -211,5 +222,14 @@ extension MapMarker: Inputable {
 extension MapMarker {
     var imageView: UIImageView {
         return markerImageView
+    }
+}
+extension MapMarker.Input: Equatable {
+    static func == (lhs: MapMarker.Input, rhs: MapMarker.Input) -> Bool {
+        return lhs.isSelected == rhs.isSelected &&
+               lhs.isCluster == rhs.isCluster &&
+               lhs.regionName == rhs.regionName &&
+               lhs.count == rhs.count &&
+               lhs.isMultiMarker == rhs.isMultiMarker
     }
 }
