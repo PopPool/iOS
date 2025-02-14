@@ -1372,11 +1372,10 @@ extension MapViewController: GMSMapViewDelegate {
         // 툴팁 설정
         let tooltipView = MarkerTooltipView()
         tooltipView.configure(with: storeArray)
+        tooltipView.selectStore(at: 0)  // 추가된 부분
 
-        // 툴팁 탭 핸들러
         tooltipView.onStoreSelected = { [weak self] index in
             guard let self = self else { return }
-
             // 캐러셀 업데이트 - 동일한 스토어 배열 사용
             if index < storeArray.count {
                 self.carouselView.scrollToCard(index: index)
