@@ -40,7 +40,7 @@ final class MyPageRecentReactor: Reactor {
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
     private var currentPage: Int32 = 0
-    private var size: Int32 = 10
+    private var size: Int32 = 100
     
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     
