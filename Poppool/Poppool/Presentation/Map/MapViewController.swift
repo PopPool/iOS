@@ -1121,40 +1121,35 @@ extension MapViewController: CLLocationManagerDelegate {
             return
         }
 
-        // 현재 위치에서 가장 가까운 스토어 찾기
+        resetSelectedMarker()
+
         let nearestStore = currentStores.min { store1, store2 in
             let location1 = CLLocation(latitude: store1.latitude, longitude: store1.longitude)
             let location2 = CLLocation(latitude: store2.latitude, longitude: store2.longitude)
             return location.distance(from: location1) < location.distance(from: location2)
         }
 
-        // 가장 가까운 스토어가 있다면 캐러셀 표시 및 마커 선택 처리
         if let store = nearestStore {
             if let marker = findMarkerForStore(for: store) {
-                // 수동 탭 이벤트와 동일하게 처리하기 위해 handleSingleStoreTap 호출
                 _ = handleSingleStoreTap(marker, store: store)
             } else {
-                // 마커가 없으면 단일 마커 생성 후 수동 탭 이벤트와 유사하게 처리
                 let marker = GMSMarker()
                 marker.position = store.coordinate
                 marker.userData = store
                 marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
-                if let markerView = marker.iconView as? MapMarker {
-                    markerView.injection(with: .init(
-                        isSelected: true,
-                        isCluster: false,
-                        count: 1
-                    ))
-                } else {
-                    let markerView = MapMarker()
-                    markerView.injection(with: .init(
-                        isSelected: true,
-                        isCluster: false,
-                        count: 1
-                    ))
-                    marker.iconView = markerView
-                }
+
+                let markerView = MapMarker()
+                markerView.injection(with: .init(
+                    isSelected: true,
+                    isCluster: false,
+                    count: 1
+                ))
+                marker.iconView = markerView
                 marker.map = mainView.mapView
+
+                // 마커를 individualMarkerDictionary에 추가
+                individualMarkerDictionary[store.id] = marker
+
                 currentMarker = marker
                 carouselView.updateCards([store])
                 currentCarouselStores = [store]
@@ -1163,7 +1158,6 @@ extension MapViewController: CLLocationManagerDelegate {
             }
         }
     }
-
 }
 
 
@@ -1274,6 +1268,7 @@ extension MapViewController: GMSMapViewDelegate {
         mainView.setStoreCardHidden(false, animated: true)
 
         mainView.mapView.animate(toLocation: marker.position)
+        
         return true
     }
 
@@ -1500,13 +1495,13 @@ extension MapViewController {
                       ))
                   }
 
-                  // 현재 위치에서 가까운 스토어를 찾아 처리
-                  if !filteredStores.isEmpty,
+                  if self.currentMarker == nil,
                      let location = self.locationManager.location {
                       self.findAndShowNearestStore(from: location)
                   }
 
                   return filteredStores
+
               }
               .do(onNext: { [weak self] stores in
                   self?.currentStores = stores
@@ -1518,40 +1513,38 @@ extension MapViewController {
     private func fetchStoreDetails(for stores: [MapPopUpStore]) {
         guard !stores.isEmpty else { return }
 
-        Observable.from(stores)
-            .flatMap { store -> Observable<StoreItem> in
-                return self.popUpAPIUseCase.getPopUpDetail(
-                    commentType: "NORMAL",
-                    popUpStoredId: store.id
-                )
-                .asObservable()
-                .map { detail in
-                    StoreItem(
-                        id: store.id,
-                        thumbnailURL: store.mainImageUrl ?? "",
-                        category: store.category,
-                        title: store.name,
-                        location: store.address,
-                        dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
-                        isBookmarked: detail.bookmarkYn
-                    )
-                }
-                .catchAndReturn(StoreItem(
-                    id: store.id,
-                    thumbnailURL: store.mainImageUrl ?? "",
-                    category: store.category,
-                    title: store.name,
-                    location: store.address,
-                    dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
-                    isBookmarked: false
-                ))
-            }
-            .toArray()
+        // 먼저 기본 정보로 StoreItem 생성하여 순서 유지
+        let initialStoreItems = stores.map { store in
+            StoreItem(
+                id: store.id,
+                thumbnailURL: store.mainImageUrl ?? "",
+                category: store.category,
+                title: store.name,
+                location: store.address,
+                dateRange: "\(store.startDate ?? "") ~ \(store.endDate ?? "")",
+                isBookmarked: false
+            )
+        }
+
+        // 우선 기본 정보로 리스트 업데이트
+        self.storeListViewController.reactor?.action.onNext(.setStores(initialStoreItems))
+
+        // 각 스토어의 상세 정보를 병렬로 가져와서 업데이트
+        stores.forEach { store in
+            self.popUpAPIUseCase.getPopUpDetail(
+                commentType: "NORMAL",
+                popUpStoredId: store.id
+            )
+            .asObservable()
             .observe(on: MainScheduler.instance)
-            .subscribe(onSuccess: { [weak self] storeItems in
-                self?.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+            .subscribe(onNext: { [weak self] detail in
+                self?.storeListViewController.reactor?.action.onNext(.updateStoreBookmark(
+                    id: store.id,
+                    isBookmarked: detail.bookmarkYn
+                ))
             })
             .disposed(by: disposeBag)
+        }
     }
 
     private func findMarkerForStore(for store: MapPopUpStore) -> GMSMarker? {
