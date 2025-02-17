@@ -24,13 +24,13 @@ struct HomeCardSection: Sectionable {
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(158),
-            heightDimension: .estimated(249)
+            heightDimension: .absolute(249)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .estimated(100),
-            heightDimension: .estimated(249)
+            heightDimension: .absolute(249)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 //        group.interItemSpacing = .fixed(16)
