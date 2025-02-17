@@ -4,16 +4,14 @@ import CoreLocation
 import UIKit
 
 final class MapGuideReactor: Reactor {
-    private let popUpStoreId: Int64
-    private let directionRepository: MapDirectionRepository
-
     // MARK: - Actions
     enum Action {
-        case viewDidLoad
+        case viewDidLoad(Int64)
         case loadMap(CLLocationCoordinate2D)
         case openMapApp(String)
         case closeButtonTapped
         case expandMapView
+        case didSelectItem(MapPopUpStore)  // 선택된 스토어 반영 액션
     }
 
     // MARK: - Mutations
@@ -22,6 +20,10 @@ final class MapGuideReactor: Reactor {
         case showToast(String)
         case navigateBack
         case expandToFullScreen
+        
+        case setSearchResult(MapPopUpStore)
+        case setSelectedStore(MapPopUpStore) // [추가]
+
     }
 
     // MARK: - State
@@ -30,20 +32,24 @@ final class MapGuideReactor: Reactor {
         var toastMessage: String?
         var isMapExpanded: Bool = false
         var shouldDismiss: Bool = false
+        var searchResult: MapPopUpStore?  // 네트워크 요청 결과
+        var selectedStore: MapPopUpStore? = nil  // 사용자가 선택한 스토어 [추가]
+
     }
 
-    let initialState: State  // 초기화를 선언에서만 수행
+    let initialState: State
+
+    private let popUpStoreId: Int64
+    private let directionRepository: MapDirectionRepository
 
     // MARK: - Init
     init(
         popUpStoreId: Int64,
-        repository: MapDirectionRepository = DefaultMapDirectionRepository(
-            provider: ProviderImpl()
-        )
+        repository: MapDirectionRepository = DefaultMapDirectionRepository(provider: ProviderImpl())
     ) {
         self.popUpStoreId = popUpStoreId
         self.directionRepository = repository
-        self.initialState = State()  // 선언 시 초기화만 수행
+        self.initialState = State()
     }
 
     // MARK: - Mutate
@@ -61,49 +67,48 @@ final class MapGuideReactor: Reactor {
         case .closeButtonTapped:
             return Observable.just(.navigateBack)
 
-        case .viewDidLoad:
-                   return directionRepository.getPopUpDirection(popUpStoreId: self.popUpStoreId)
-                       .do(
-                           onNext: { response in
-                               Logger.log(
-                                   message: """
-                                   ✅ [응답]: 요청 성공 - popUpStoreId: \(self.popUpStoreId)
-                                   - 위도: \(response.latitude)
-                                   - 경도: \(response.longitude)
-                                   - 주소: \(response.address)
-                                   """,
-                                   category: .network
-                               )
-                           },
-                           onError: { error in
-                               Logger.log(
-                                   message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
-                                   category: .error
-                               )
-                           },
-                           onSubscribe: {
-                               Logger.log(
-                                   message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(self.popUpStoreId)",
-                                   category: .network
-                               )
-                           }
-                       )
-                       .map { response in
-                           let coordinate = CLLocationCoordinate2D(
-                               latitude: response.latitude,
-                               longitude: response.longitude
-                           )
-                           return .setMap(coordinate)
-                       }
-               }
-           }
+        case .viewDidLoad(let id):
+            return directionRepository.getPopUpDirection(popUpStoreId: id)
+                .do(
+                    onNext: { response in
+                        Logger.log(
+                            message: """
+                            ✅ [응답]: 요청 성공 - popUpStoreId: \(id)
+                            - 위도: \(response.latitude)
+                            - 경도: \(response.longitude)
+                            - 주소: \(response.address)
+                            """,
+                            category: .network
+                        )
+                    },
+                    onError: { error in
+                        Logger.log(
+                            message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
+                            category: .error
+                        )
+                    },
+                    onSubscribe: {
+                        Logger.log(
+                            message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(id)",
+                            category: .network
+                        )
+                    }
+                )
+                .map { response in
+                    // 여기서는 네트워크 응답으로부터 MapPopUpStore를 생성합니다.
+                    return Mutation.setMap(CLLocationCoordinate2D(latitude: response.latitude, longitude: response.longitude))
+                }
+
+        case .didSelectItem(let store):
+            return Observable.just(.setSelectedStore(store))
+        }
+    }
 
     private func openMapApp(_ appType: String) -> Observable<Mutation> {
         guard let coordinate = currentState.destinationCoordinate else {
             return Observable.just(.showToast("위치 정보를 가져올 수 없습니다."))
         }
 
-        // 각 맵 앱별 URL 스키마와 앱스토어 URL
         let appInfo: [String: (urlScheme: String, appStoreUrl: String)] = [
             "naver": (
                 "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)",
@@ -126,7 +131,6 @@ final class MapGuideReactor: Reactor {
         Logger.log(message: "🗺 맵 앱 열기 시도: \(urlScheme)", category: .debug)
 
         if let url = URL(string: urlScheme) {
-            // 앱 설치 여부 확인
             if UIApplication.shared.canOpenURL(url) {
                 Logger.log(message: "✅ \(appType) 앱 실행", category: .debug)
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -142,22 +146,26 @@ final class MapGuideReactor: Reactor {
 
         return Observable.just(.showToast("앱을 열 수 없습니다."))
     }
+
     // MARK: - Reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
         case .setMap(let coordinate):
             newState.destinationCoordinate = coordinate
-
         case .showToast(let message):
             newState.toastMessage = message
-
         case .navigateBack:
             newState.shouldDismiss = true
-
         case .expandToFullScreen:
             newState.isMapExpanded = true
+        case .setSearchResult(let store):
+            newState.searchResult = store
+        case let .setSelectedStore(store):
+            newState.searchResult = store
         }
+
+
 
         return newState
     }
