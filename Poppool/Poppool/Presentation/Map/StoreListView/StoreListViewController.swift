@@ -117,7 +117,6 @@ final class StoreListViewController: UIViewController, View {
                 let detailController = DetailController()
                 detailController.reactor = DetailReactor(popUpID: Int64(store.id))
 
-                // 네비게이션 설정 추가
                 owner.navigationController?.isNavigationBarHidden = false
                 owner.navigationController?.tabBarController?.tabBar.isHidden = false
 
@@ -168,7 +167,6 @@ final class StoreListViewController: UIViewController, View {
         viewController.containerView.segmentedControl.selectedSegmentIndex = initialIndex
         sheetReactor.action.onNext(.segmentChanged(initialIndex))
 
-        // onSave -> Reactor.Action.filterUpdated(filterType, ...)
         viewController.onSave = { [weak self] selectedOptions in
             guard let self = self else { return }
             // 닫기
