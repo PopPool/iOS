@@ -1,10 +1,10 @@
 import CoreLocation
 
 enum MapZoomLevel {
-    case country      // 줌 레벨 7 미만
-    case city         // 줌 레벨 7..<10 → 시단위 클러스터링
-    case district     // 줌 레벨 10..<11 → 구단위 클러스터링
-    case detailed     // 줌 레벨 11 이상
+    case country
+    case city
+    case district
+    case detailed
 
     static func getLevel(from zoom: Float) -> MapZoomLevel {
         switch zoom {
@@ -13,7 +13,7 @@ enum MapZoomLevel {
         case 7..<10:
             return .city       
         case 10..<11: 
-            return .district   // 구단위 클러스터링 영역
+            return .district   
         default:
             return .detailed
         }

@@ -53,6 +53,7 @@ final class PopupCardCell: UICollectionViewCell {
 
         titleLabel.font = .systemFont(ofSize: 14, weight: .bold)
         titleLabel.numberOfLines = 2
+        addressLabel.lineBreakMode = .byTruncatingTail
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
             make.leading.equalTo(imageView.snp.trailing).offset(12)
@@ -61,7 +62,7 @@ final class PopupCardCell: UICollectionViewCell {
 
         addressLabel.font = .systemFont(ofSize: 12, weight: .regular)
         addressLabel.textColor = .g400
-        addressLabel.numberOfLines = 2
+        addressLabel.numberOfLines = 1
         addressLabel.lineBreakMode = .byTruncatingTail
 
         addressLabel.snp.makeConstraints { make in

@@ -7,7 +7,6 @@ final class MapPopupCarouselView: UIView {
           let layout = UICollectionViewFlowLayout()
           layout.scrollDirection = .horizontal
 
-          // 화면 너비 기준으로 여백 계산
           let screenWidth = UIScreen.main.bounds.width
           let itemWidth: CGFloat = 335
           let sideInset = (screenWidth - itemWidth) / 2
@@ -16,9 +15,9 @@ final class MapPopupCarouselView: UIView {
           layout.minimumLineSpacing = 12
           layout.sectionInset = UIEdgeInsets(
               top: 0,
-              left: sideInset,  // 첫 번째 아이템이 중앙에 오도록
+              left: sideInset,
               bottom: 0,
-              right: sideInset  // 마지막 아이템도 중앙 정렬 가능하도록
+              right: sideInset
           )
 
           let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -32,17 +31,23 @@ final class MapPopupCarouselView: UIView {
 
     // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
     var onCardScrolled: ((Int) -> Void)?
+    var onCardTapped: ((MapPopUpStore) -> Void)?
 
-    // 예: private로 유지
+
     private var popupCards: [MapPopUpStore] = []
+    private var currentIndex: Int = 0
+
 
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.layer.cornerRadius = 12
+        self.clipsToBounds = true
+
         setupLayout()
         setupCollectionView()
-//        self.layer.cornerRadius = 16
-//        self.layer.masksToBounds = true
+        setupGestures()
+
 
     }
 
@@ -51,6 +56,20 @@ final class MapPopupCarouselView: UIView {
     }
 
     // MARK: - Setup
+    private func setupGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        collectionView.addGestureRecognizer(tapGesture)
+    }
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        let point = gesture.location(in: collectionView)
+        if let indexPath = collectionView.indexPathForItem(at: point),
+           indexPath.item < popupCards.count {
+            let store = popupCards[indexPath.item]
+            onCardTapped?(store)
+        }
+    }
+
+
     private func setupLayout() {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -127,7 +146,6 @@ extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-
         guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         let cellWidth = layout.itemSize.width
         let spacing = layout.minimumLineSpacing
@@ -135,6 +153,9 @@ extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDele
         let pageWidth = cellWidth + spacing
         let offsetWithInset = scrollView.contentOffset.x + inset
         let pageIndex = Int(round(offsetWithInset / pageWidth))
+
+        // 현재 인덱스 업데이트
+        currentIndex = pageIndex
         onCardScrolled?(pageIndex)
     }
 }
