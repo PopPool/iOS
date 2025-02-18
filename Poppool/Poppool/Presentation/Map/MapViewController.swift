@@ -281,7 +281,6 @@ class MapViewController: BaseViewController, View {
         carouselView.isHidden = true
         mainView.mapView.delegate = self
 
-        // 리스트뷰 설정
         addChild(storeListViewController)
         view.addSubview(storeListViewController.view)
         storeListViewController.didMove(toParent: self)
@@ -289,7 +288,7 @@ class MapViewController: BaseViewController, View {
         storeListViewController.view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
-            listViewTopConstraint = make.top.equalToSuperview().offset(view.frame.height).constraint // 초기 숨김 상태
+            listViewTopConstraint = make.top.equalToSuperview().offset(view.frame.height).constraint
         }
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))

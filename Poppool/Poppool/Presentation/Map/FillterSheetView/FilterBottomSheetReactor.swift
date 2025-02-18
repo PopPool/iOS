@@ -78,9 +78,49 @@ final class FilterBottomSheetReactor: Reactor {
                 ]
             ),
             Location(main: "인천", sub: ["부평", "송도"]),
-            Location(main: "부산", sub: ["해운대", "광안리", "사상구", "사하구", "북구", "남구"]),
+            Location(
+                   main: "부산",
+                   sub: [
+                       "중구", "서구", "동구", "영도구", "부산진구",
+                       "동래구", "남구", "북구", "해운대구", "사하구",
+                       "금정구", "강서구", "연제구", "수영구", "사상구",
+                       "기장군"
+                   ]
+               ),
             Location(main: "제주", sub: ["제주시", "서귀포시"]),
-            Location(main: "광주", sub: ["동구", "서구", "남구", "북구", "광산구"])
+            Location(main: "광주", sub: ["동구", "서구", "남구", "북구", "광산구"]),
+            Location(
+                   main: "대전",
+                   sub: ["동구", "중구", "서구", "유성구", "대덕구"]
+               ),
+               Location(
+                   main: "광주",
+                   sub: ["동구", "서구", "남구", "북구", "광산구"]
+               ),
+               Location(
+                   main: "대구",
+                   sub: ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군"]
+               ),
+            Location(
+                   main: "울산",
+                   sub: ["중구", "남구", "동구", "북구", "울주군"]
+               ),
+            Location(main: "전북",
+                     sub:[ ""]
+                    ),
+            Location(main: "전남",
+                     sub:[ ""]
+                    ),
+            Location(main: "경북",
+                     sub:[ ""]
+                    ),
+            Location(main: "경남",
+                     sub:[ ""]
+                    ),
+
+
+
+
         ]
 
         self.initialState = State(
