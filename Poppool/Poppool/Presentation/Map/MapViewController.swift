@@ -156,35 +156,6 @@ class MapViewController: BaseViewController, View {
             .disposed(by: disposeBag)
 
 
-        // 초기 데이터 로드
-//        if let reactor = self.reactor {
-//            reactor.action.onNext(.fetchCategories)
-//
-//            // 한국 전체 영역에 대한 경계값 설정
-//            let koreaRegion = (
-//                northEast: CLLocationCoordinate2D(latitude: 38.0, longitude: 132.0),  // 한국 북동쪽 끝
-//                southWest: CLLocationCoordinate2D(latitude: 33.0, longitude: 124.0)   // 한국 남서쪽 끝
-//            )
-//
-//            reactor.action.onNext(.viewportChanged(
-//                northEastLat: koreaRegion.northEast.latitude,
-//                northEastLon: koreaRegion.northEast.longitude,
-//                southWestLat: koreaRegion.southWest.latitude,
-//                southWestLon: koreaRegion.southWest.longitude
-//            ))
-//            reactor.state
-//                .map { $0.viewportStores }
-//                .distinctUntilChanged()
-//                .filter { !$0.isEmpty }
-//                .take(1)  // 첫 번째 데이터만 처리
-//                .subscribe(onNext: { [weak self] _ in
-//                    guard let self = self,
-//                          let location = self.locationManager.location else { return }
-//                    self.findAndShowNearestStore(from: location)
-//                })
-//                .disposed(by: disposeBag)
-//
-//        }
 
 
         carouselView.onCardScrolled = { [weak self] pageIndex in
@@ -1164,7 +1135,19 @@ extension MapViewController: CLLocationManagerDelegate {
 // MARK: - GMSMapViewDelegate
 extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        
+        let hitBoxSize: CGFloat = 44 // 터치 영역 크기
+            let markerPoint = mapView.projection.point(for: marker.position)
+            let touchPoint = mapView.projection.point(for: marker.position)
+
+            let distance = sqrt(
+                pow(markerPoint.x - touchPoint.x, 2) +
+                pow(markerPoint.y - touchPoint.y, 2)
+            )
+
+            // 터치 영역을 벗어난 경우 무시
+            if distance > hitBoxSize / 2 {
+                return false
+            }
         // (1) 구/시 단위 클러스터
         if let clusterData = marker.userData as? ClusterMarkerData {
             return handleRegionalClusterTap(marker, clusterData: clusterData)
@@ -1212,20 +1195,36 @@ extension MapViewController: GMSMapViewDelegate {
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         guard !isMovingToMarker else { return }
 
+        // 현재 선택된 마커의 상태를 완전히 초기화
+        if let currentMarker = currentMarker {
+            if let markerView = currentMarker.iconView as? MapMarker {
+                markerView.injection(with: .init(
+                    isSelected: false,
+                    isCluster: false,
+                    count: (currentMarker.userData as? [MapPopUpStore])?.count ?? 1
+                ))
+            }
+            currentMarker.map = nil
+            self.currentMarker = nil
+        }
+
+        // 툴팁 제거
         currentTooltipView?.removeFromSuperview()
         currentTooltipView = nil
         currentTooltipStores = []
-        updateMapWithClustering()
-
-        // 현재 마커 참조 제거
-        currentMarker = nil
+        currentTooltipCoordinate = nil
 
         // 캐러셀 초기화
         carouselView.isHidden = true
         carouselView.updateCards([])
         self.currentCarouselStores = []
         mainView.setStoreCardHidden(true, animated: true)
+
+        // 클러스터링 업데이트
+        updateMapWithClustering()
     }
+
+
 
 
     // MARK: - Helper for single marker tap
@@ -1497,7 +1496,7 @@ extension MapViewController {
 
                   if self.currentMarker == nil,
                      let location = self.locationManager.location {
-                      self.findAndShowNearestStore(from: location)
+//                      self.findAndShowNearestStore(from: location)
                   }
 
                   return filteredStores

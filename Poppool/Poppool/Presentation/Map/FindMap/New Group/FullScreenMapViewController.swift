@@ -64,13 +64,26 @@ final class FullScreenMapViewController: MapViewController {
                 self.carouselView.isHidden = false
             })
             .disposed(by: disposeBag)
-    }
+        if let store = selectedStore {
+                reactor.state
+                    .map { $0.viewportStores }
+                    .take(1)
+                    .subscribe(onNext: { [weak self] _ in
+                        guard let self = self,
+                              let marker = self.findMarkerForStore(for: store) else { return }
+                        self.handleSingleStoreTap(marker, store: store)
+                    })
+                    .disposed(by: disposeBag)
+            }
+        }
+    
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
     }
 
+    
     // GMSMapViewDelegate 메서드들 override
     override func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
 
