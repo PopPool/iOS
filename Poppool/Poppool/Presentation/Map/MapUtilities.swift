@@ -52,3 +52,4 @@ public struct RepresentativeScope {
         radius: 4000.0
     )
 }
+

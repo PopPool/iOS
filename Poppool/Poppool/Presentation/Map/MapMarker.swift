@@ -18,7 +18,7 @@ final class MapMarker: UIView {
     private let clusterContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .blu500
-        view.layer.cornerRadius = 14
+        view.layer.cornerRadius = 16
         view.layer.borderWidth = 0
         return view
     }()

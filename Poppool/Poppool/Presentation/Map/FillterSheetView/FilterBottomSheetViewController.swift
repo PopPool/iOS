@@ -23,9 +23,10 @@ final class FilterBottomSheetViewController: UIViewController, View {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.4)
         view.alpha = 0
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
+        view.addGestureRecognizer(tapGesture)
         return view
     }()
-
     // MARK: - Initialization
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -45,22 +46,23 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupCollectionView()
         containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
             guard let self = self, let reactor = self.reactor else { return }
-
-            // Reactor에 액션 전달
             if reactor.currentState.selectedCategories.contains(removedOption) {
                 reactor.action.onNext(.toggleCategory(removedOption))
             } else if reactor.currentState.selectedSubRegions.contains(removedOption) {
                 reactor.action.onNext(.toggleSubRegion(removedOption))
             }
         }
-    
+
+        // 전체 view에 탭 제스처 추가 (containerView 외부 탭 감지)
+        let tapOutsideGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside))
+        tapOutsideGesture.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapOutsideGesture)
+
     }
 
     // MARK: - Setup
     private func setupLayout() {
         view.backgroundColor = .clear
-        containerView.layer.cornerRadius = 10
-        containerView.clipsToBounds = true
 
         view.addSubview(dimmedView)
         dimmedView.snp.makeConstraints { make in
@@ -73,6 +75,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
             make.height.equalTo(UIScreen.main.bounds.height * 0.85)
             bottomConstraint = make.bottom.equalToSuperview().offset(UIScreen.main.bounds.height).constraint
         }
+
+        view.sendSubviewToBack(dimmedView)
     }
 
     private func setupCollectionView() {
@@ -313,7 +317,9 @@ final class FilterBottomSheetViewController: UIViewController, View {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         containerView.addGestureRecognizer(panGesture)
     }
-
+    @objc private func handleDimmedViewTap() {
+           hideBottomSheet()
+       }
     func showBottomSheet() {
         guard let reactor = reactor else { return }
 
@@ -344,6 +350,14 @@ final class FilterBottomSheetViewController: UIViewController, View {
     @objc private func handleTapDimmedView() {
         hideBottomSheet()
     }
+    @objc private func handleTapOutside(_ gesture: UITapGestureRecognizer) {
+          let location = gesture.location(in: self.view)
+          // containerView의 프레임 영역을 구해서, 그 밖이라면 닫기
+          if !containerView.frame.contains(location) {
+              hideBottomSheet()
+          }
+      }
+
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
