@@ -1228,7 +1228,7 @@ extension MapViewController: GMSMapViewDelegate {
 
 
     // MARK: - Helper for single marker tap
-    func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
+     func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
         if currentMarker == marker {
             resetSelectedMarker()
             return false
@@ -1494,13 +1494,14 @@ extension MapViewController {
                       ))
                   }
 
+                  // 현재 마커가 없고, 현재 컨트롤러가 FullScreenMapViewController일 경우에만 호출
                   if self.currentMarker == nil,
-                     let location = self.locationManager.location {
-//                      self.findAndShowNearestStore(from: location)
+                     let location = self.locationManager.location,
+                     self is FullScreenMapViewController {
+                      (self as! FullScreenMapViewController).findAndShowNearestStore(from: location)
                   }
 
                   return filteredStores
-
               }
               .do(onNext: { [weak self] stores in
                   self?.currentStores = stores
@@ -1508,6 +1509,7 @@ extension MapViewController {
               })
               .subscribe()
               .disposed(by: disposeBag)
+
       }
     private func fetchStoreDetails(for stores: [MapPopUpStore]) {
         guard !stores.isEmpty else { return }
@@ -1560,6 +1562,7 @@ extension MapViewController {
         return nil
     }
 
+    
 private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
     isMovingToMarker = true
 

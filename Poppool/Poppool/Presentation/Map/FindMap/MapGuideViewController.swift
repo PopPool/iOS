@@ -20,7 +20,6 @@ final class MapGuideViewController: UIViewController, View {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // UI Components (동일)
     private let dimmingView: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
@@ -211,7 +210,7 @@ final class MapGuideViewController: UIViewController, View {
 
     // MARK: - UI Setup (동일)
     private func setupUI() {
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         view.addSubview(dimmingView)
         dimmingView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
