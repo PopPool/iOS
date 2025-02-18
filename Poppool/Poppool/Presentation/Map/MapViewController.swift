@@ -276,7 +276,7 @@ class MapViewController: BaseViewController, View {
         carouselView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(140)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
         }
         carouselView.isHidden = true
         mainView.mapView.delegate = self

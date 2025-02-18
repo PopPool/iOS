@@ -27,8 +27,8 @@ final class MapPopupCarouselView: UICollectionView {
             bottom: 0,
             right: sideInset
         )
-
         super.init(frame: frame, collectionViewLayout: layout)
+
 
         showsHorizontalScrollIndicator = false
         backgroundColor = .clear
