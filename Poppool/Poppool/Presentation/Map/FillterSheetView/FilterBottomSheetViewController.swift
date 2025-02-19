@@ -139,11 +139,17 @@ final class FilterBottomSheetViewController: UIViewController, View {
 
 
         containerView.closeButton.rx.tap
-            .withUnretained(self)
-            .bind { owner, _ in
-                owner.hideBottomSheet()
+            .bind { [weak self] _ in
+                guard let self = self, let reactor = self.reactor else { return }
+                let filterData: FilterData = (
+                    locations: reactor.currentState.selectedSubRegions,
+                    categories: reactor.currentState.selectedCategories
+                )
+                self.onSave?(filterData)
+                self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
+
 
         // 5. 탭 변경
         reactor.state.map { $0.activeSegment }
@@ -243,7 +249,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             self?.tagSection = TagSection(inputDataList: categories.map {
                 TagSectionCell.Input(
                     title: $0,
-                    isSelected: selectedCategories.contains($0),
+                    isSelected: selectedCategories.contains($0),  // 현재 선택된 카테고리인지 체크
                     id: nil
                 )
             })
@@ -258,6 +264,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
         }
         .disposed(by: disposeBag)
+
 
 
         reactor.state.map { $0.selectedSubRegions + $0.selectedCategories }
@@ -297,6 +304,56 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 }
             }
             .disposed(by: disposeBag)
+        Observable.just(())
+                .withLatestFrom(reactor.state)
+                .take(1)
+                .subscribe(onNext: { [weak self] state in
+                    // 저장된 지역 필터 설정
+                    if !state.savedSubRegions.isEmpty {
+                        state.savedSubRegions.forEach { region in
+                            reactor.action.onNext(.toggleSubRegion(region))
+                        }
+                    }
+
+                    // 저장된 카테고리 필터 설정
+                    if !state.savedCategories.isEmpty {
+                        state.savedCategories.forEach { category in
+                            reactor.action.onNext(.toggleCategory(category))
+                        }
+                    }
+
+                    // 지역이 선택되어 있다면 해당 지역 버튼도 활성화
+                    if let locations = state.savedSubRegions.first?.split(separator: "/").first.map(String.init),
+                       let index = reactor.currentState.locations.firstIndex(where: { $0.main == locations }) {
+                        reactor.action.onNext(.selectLocation(index))
+                    }
+                })
+                .disposed(by: disposeBag)
+
+            // 이전 선택 상태 복원을 위한 추가 바인딩
+            Observable.combineLatest(
+                reactor.state.map { $0.savedSubRegions }.distinctUntilChanged(),
+                reactor.state.map { $0.savedCategories }.distinctUntilChanged()
+            )
+            .take(1)  // 초기 1회만 실행
+            .subscribe(onNext: { [weak self] (subRegions, categories) in
+                guard let self = self else { return }
+
+                // 이전 선택 상태로 UI 업데이트
+                subRegions.forEach { region in
+                    reactor.action.onNext(.toggleSubRegion(region))
+                }
+
+                categories.forEach { category in
+                    reactor.action.onNext(.toggleCategory(category))
+                }
+
+                // UI 업데이트 강제
+                self.containerView.categoryCollectionView.reloadData()
+                self.containerView.balloonBackgroundView.setNeedsDisplay()
+            })
+            .disposed(by: disposeBag)
+
     }
 
     private func updateContentVisibility(_ isCategoryTab: Bool, subRegionCount: Int) {
@@ -323,17 +380,36 @@ final class FilterBottomSheetViewController: UIViewController, View {
     func showBottomSheet() {
         guard let reactor = reactor else { return }
 
+        // 1. 이전에 저장된 지역 필터가 있다면 해당 지역 버튼 활성화
+        if let locations = reactor.currentState.savedSubRegions.first?.split(separator: "/").first.map(String.init),
+           let index = reactor.currentState.locations.firstIndex(where: { $0.main == locations }) {
+            reactor.action.onNext(.selectLocation(index))
+
+//            // 2. 저장된 서브 지역들 선택 상태로 설정
+//            reactor.currentState.savedSubRegions.forEach { region in
+//                reactor.action.onNext(.toggleSubRegion(region))
+//            }
+//        }
+//
+//        // 3. 저장된 카테고리들 선택 상태로 설정
+//        reactor.currentState.savedCategories.forEach { category in
+//            reactor.action.onNext(.toggleCategory(category))
+        }
+
+        // 4. 필터 칩 뷰 업데이트
         containerView.update(
             locationText: reactor.currentState.savedSubRegions.joined(separator: ", "),
             categoryText: reactor.currentState.savedCategories.joined(separator: ", ")
         )
 
+        // 5. 애니메이션
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
             self.dimmedView.alpha = 1
             self.bottomConstraint?.update(offset: 0)
             self.view.layoutIfNeeded()
         }
     }
+
 
 
     func hideBottomSheet() {
