@@ -44,9 +44,9 @@ final class FilterBottomSheetReactor: Reactor {
         }
     }
 
-    let initialState: State
+    var initialState: State
 
-    init() {
+    init(savedSubRegions: [String] = [], savedCategories: [String] = []) {
         let initialLocations: [Location] = [
             Location(
                 main: "서울",
@@ -118,19 +118,25 @@ final class FilterBottomSheetReactor: Reactor {
                      sub:[ ""]
                     ),
 
-
-
-
         ]
 
         self.initialState = State(
             activeSegment: 0,
             selectedLocationIndex: nil,
-            selectedSubRegions: [],
-            selectedCategories: [],
-            locations: initialLocations, // 초기 locations 설정
-            categories: ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션", "엔터테인먼트", "여행", "예술", "음식/요리", "키즈", "패션"]
+            selectedSubRegions: savedSubRegions,  // 이전 선택 상태
+            selectedCategories: savedCategories,  // 이전 선택 상태
+            locations: initialLocations,
+
+            categories: ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션", "엔터테인먼트", "여행", "예술", "음식/요리", "키즈", "패션"],
+            savedSubRegions: savedSubRegions,  // 이전 선택 상태 저장
+            savedCategories: savedCategories   // 이전 선택 상태 저장
+
         )
+        if let location = savedSubRegions.first?.split(separator: "/").first.map(String.init),
+           let index = initialLocations.firstIndex(where: { $0.main == location }) {
+            self.initialState.selectedLocationIndex = index
+        }
+
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -163,15 +169,11 @@ final class FilterBottomSheetReactor: Reactor {
         case .setActiveSegment(let index):
             newState.activeSegment = index
         case .resetFilters:
-            let currentIndex = newState.selectedLocationIndex
-
-            // 선택 상태만 초기화
             newState.selectedSubRegions = []
             newState.selectedCategories = []
-
-            // 이전 선택된 index 복원하여 이벤트 핸들러 유지
-            newState.selectedLocationIndex = currentIndex
-
+            newState.savedSubRegions = []
+            newState.savedCategories = []
+            // 선택된 지역은 유지해도 되면 그대로, 아니면 기본값 설정
             return newState
 
         case .applyFilters:
@@ -185,10 +187,10 @@ final class FilterBottomSheetReactor: Reactor {
             break
         case .updateSavedSubRegions(let subRegions):
             newState.savedSubRegions = subRegions
-            newState.selectedSubRegions = []
+            newState.selectedSubRegions = subRegions
         case .updateSavedCategories(let categories):
             newState.savedCategories = categories
-            newState.selectedCategories = []
+            newState.selectedCategories = categories
         case .toggleSubRegionSelection(let subRegion):
             if let selectedIndex = newState.selectedLocationIndex {
                 let location = newState.locations[selectedIndex]

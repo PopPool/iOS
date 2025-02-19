@@ -52,6 +52,8 @@ final class MapReactor: Reactor {
         var activeFilterType: FilterType?
         var selectedLocationFilters: [String] = []
         var selectedCategoryFilters: [String] = []
+        var tempLocationFilters: [String] = []
+        var tempCategoryFilters: [String] = []
         var locationDisplayText: String = "지역선택"
         var categoryDisplayText: String = "카테고리"
         var selectedStore: MapPopUpStore? = nil // 선택된 스토어
