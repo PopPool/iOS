@@ -9,14 +9,12 @@ import GoogleMaps
 import CoreLocation
 
 final class PopUpStoreRegisterViewController: BaseViewController {
-    //    typealias Reactor = PopUpStoreRegisterReactor
-
 
     // MARK: - Navigation/Header
     var completionHandler: (() -> Void)?
     private var selectedImages: [UIImage] = []
     private var selectedMainImageIndex: Int?
-    private var imageFileNames: [String] = []  // S3 업로드 후의 파일명 저장
+    private var imageFileNames: [String] = []
     private var images: [ExtendedImage] = []
     private var pickerViewController: PHPickerViewController?
     private let adminUseCase: AdminUseCase
@@ -46,12 +44,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         }
     }
 
-
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     private lazy var imagesCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -106,19 +101,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         return lbl
     }()
 
-    // (3) 메인 이미지
-    //    private let mainImageView: UIImageView = {
-    //        let iv = UIImageView()
-    //        iv.contentMode = .scaleAspectFit
-    //        iv.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-    //        return iv
-    //    }()
+
     private let addImageButton = UIButton(type: .system).then {
         $0.setTitle("이미지 추가", for: .normal)
         $0.setTitleColor(.systemBlue, for: .normal)
     }
 
-    // 전체 삭제 버튼 (필요 없다면 제거)
     private let removeAllButton = UIButton(type: .system).then {
         $0.setTitle("전체 삭제", for: .normal)
         $0.setTitleColor(.red, for: .normal)
@@ -132,7 +120,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private let formBackgroundView: UIView = {
         let v = UIView()
         v.backgroundColor = .white
-        // 시안상 사각형 테두리
         v.layer.borderWidth = 1
         v.layer.borderColor = UIColor.lightGray.cgColor
         v.layer.cornerRadius = 8
@@ -732,19 +719,22 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     }
 
     @objc private func didTapPeriodButton() {
-        DateTimePickerManager.shared.showDateRange(on: self) { start, end in
-            // 여기서 ViewController는 날짜 2개만 받고, UI 업데이트
+        DateTimePickerManager.shared.showDateRange(on: self) { [weak self] start, end in
+            guard let self = self else { return }
             self.selectedStartDate = start
             self.selectedEndDate = end
             self.updatePeriodButtonTitle()
+            self.updateSaveButtonState() // 날짜 선택 후 저장 버튼 상태 업데이트
         }
     }
 
     @objc private func didTapTimeButton() {
-        DateTimePickerManager.shared.showTimeRange(on: self) { st, et in
+        DateTimePickerManager.shared.showTimeRange(on: self) { [weak self] st, et in
+            guard let self = self else { return }
             self.selectedStartTime = st
             self.selectedEndTime = et
             self.updateTimeButtonTitle()
+            self.updateSaveButtonState() // 시간 선택 후 저장 버튼 상태 업데이트
         }
     }
 
@@ -1308,22 +1298,26 @@ private extension PopUpStoreRegisterViewController {
             category: .network
         )
 
-        // CreatePopUpStoreRequestDTO 생성자 내부에서 bannerYn을 자동 계산하므로 bannerYn 인자는 전달하지 않습니다.
+        let bannerYn = !mainImage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let dates = prepareDateTime()
+        let isValidDateOrder = validateDates(start: selectedStartDate, end: selectedEndDate)
+
         let request = CreatePopUpStoreRequestDTO(
             name: name,
             categoryId: Int64(categoryId),
             desc: description,
             address: address,
-            startDate: getFormattedDate(from: selectedStartDate),
-            endDate: getFormattedDate(from: selectedEndDate),
+            startDate: dates.startDate,
+            endDate: dates.endDate,
             mainImageUrl: mainImage,
             imageUrlList: imagePaths,
             latitude: latitude,
             longitude: longitude,
             markerTitle: "마커 제목",
             markerSnippet: "마커 설명",
-            startDateBeforeEndDate: true
+            startDateBeforeEndDate: isValidDateOrder
         )
+
 
         adminUseCase.createStore(request: request)
             .subscribe(
@@ -1338,8 +1332,6 @@ private extension PopUpStoreRegisterViewController {
             )
             .disposed(by: disposeBag)
     }
-
-
     private func getCategoryId(from title: String) -> Int {
         Logger.log(message: "카테고리 매핑 시작 - 타이틀: \(title)", category: .debug)
 
@@ -1368,6 +1360,20 @@ private extension PopUpStoreRegisterViewController {
     }
 
 
+    private func createDateTime(date: Date?, time: Date?) -> Date? {
+        guard let date = date else { return nil }
+
+        if let time = time {
+            let calendar = Calendar.current
+            let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
+            return calendar.date(bySettingHour: timeComponents.hour ?? 0,
+                               minute: timeComponents.minute ?? 0,
+                               second: 0,
+                               of: date)
+        }
+
+        return date
+    }
 
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "" }
@@ -1376,6 +1382,23 @@ private extension PopUpStoreRegisterViewController {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter.string(from: date)
     }
+
+    private func prepareDateTime() -> (startDate: String, endDate: String) {
+        let startDateTime = createDateTime(date: selectedStartDate, time: selectedStartTime)
+        let endDateTime = createDateTime(date: selectedEndDate, time: selectedEndTime)
+
+        return (
+            startDate: getFormattedDate(from: startDateTime),
+            endDate: getFormattedDate(from: endDateTime)
+        )
+    }
+
+    // 새로운 검증 함수 추가 (prepareDateTime 함수 아래에 추가)
+    private func validateDates(start: Date?, end: Date?) -> Bool {
+        guard let start = start, let end = end else { return false }
+        return start < end
+    }
+
 
 
 

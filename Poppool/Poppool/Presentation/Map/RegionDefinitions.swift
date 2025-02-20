@@ -203,7 +203,6 @@ struct RegionDefinitions {
         )
     ]
 
-    // 도 단위 지역
     static let provinceClusters: [RegionCluster] = [
         RegionCluster(
             name: "충북",

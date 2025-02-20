@@ -2,53 +2,43 @@ import UIKit
 import SnapKit
 import FloatingPanel
 
-final class MapPopupCarouselView: UIView {
-    private let collectionView: UICollectionView = {
-          let layout = UICollectionViewFlowLayout()
-          layout.scrollDirection = .horizontal
-
-          let screenWidth = UIScreen.main.bounds.width
-          let itemWidth: CGFloat = 335
-          let sideInset = (screenWidth - itemWidth) / 2
-
-          layout.itemSize = CGSize(width: itemWidth, height: 137)
-          layout.minimumLineSpacing = 12
-          layout.sectionInset = UIEdgeInsets(
-              top: 0,
-              left: sideInset,
-              bottom: 0,
-              right: sideInset
-          )
-
-          let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-          cv.showsHorizontalScrollIndicator = false
-          cv.backgroundColor = .clear
-          cv.decelerationRate = .fast
-          cv.contentInsetAdjustmentBehavior = .always
-          return cv
-      }()
-
-
-    // 스크롤 멈췄을 때의 콜백 (카드 인덱스 전달)
+final class MapPopupCarouselView: UICollectionView {
+    // 스크롤 멈췄을 때의 콜백
     var onCardScrolled: ((Int) -> Void)?
     var onCardTapped: ((MapPopUpStore) -> Void)?
-
 
     private var popupCards: [MapPopUpStore] = []
     private var currentIndex: Int = 0
 
-
     // MARK: - Initialization
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.layer.cornerRadius = 12
-        self.clipsToBounds = true
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
 
-        setupLayout()
+        let screenWidth = UIScreen.main.bounds.width
+        let itemWidth: CGFloat = 335
+        let sideInset = (screenWidth - itemWidth) / 2
+
+        layout.itemSize = CGSize(width: itemWidth, height: 137)
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(
+            top: 0,
+            left: sideInset,
+            bottom: 0,
+            right: sideInset
+        )
+        super.init(frame: frame, collectionViewLayout: layout)
+
+
+        showsHorizontalScrollIndicator = false
+        backgroundColor = .clear
+        decelerationRate = .fast
+        contentInsetAdjustmentBehavior = .always
+        layer.cornerRadius = 12
+        clipsToBounds = true
+
         setupCollectionView()
         setupGestures()
-
-
     }
 
     required init?(coder: NSCoder) {
@@ -56,39 +46,31 @@ final class MapPopupCarouselView: UIView {
     }
 
     // MARK: - Setup
+    private func setupCollectionView() {
+        dataSource = self
+        delegate = self
+        register(PopupCardCell.self, forCellWithReuseIdentifier: PopupCardCell.identifier)
+    }
+
     private func setupGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        collectionView.addGestureRecognizer(tapGesture)
+        addGestureRecognizer(tapGesture)
     }
+
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        let point = gesture.location(in: collectionView)
-        if let indexPath = collectionView.indexPathForItem(at: point),
+        let point = gesture.location(in: self)
+        if let indexPath = indexPathForItem(at: point),
            indexPath.item < popupCards.count {
             let store = popupCards[indexPath.item]
             onCardTapped?(store)
         }
     }
 
-
-    private func setupLayout() {
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(16)
-        }
-    }
-
-    private func setupCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(PopupCardCell.self, forCellWithReuseIdentifier: PopupCardCell.identifier)
-    }
-
     // MARK: - Public Methods
     func updateCards(_ cards: [MapPopUpStore]) {
         guard popupCards != cards else { return }
         self.popupCards = cards
-        collectionView.reloadData()
+        reloadData()
     }
 
     func updateVisibility(for state: FloatingPanelState) {
@@ -98,64 +80,59 @@ final class MapPopupCarouselView: UIView {
     func scrollToCard(index: Int) {
         guard index >= 0, index < popupCards.count else { return }
         let indexPath = IndexPath(item: index, section: 0)
-        collectionView.scrollToItem(
+        scrollToItem(
             at: indexPath,
-            at: UICollectionView.ScrollPosition.centeredHorizontally,
+            at: .centeredHorizontally,
             animated: true
         )
     }
-    
 }
 
-extension MapPopupCarouselView: UIScrollViewDelegate {
+// MARK: - UIScrollViewDelegate
+extension MapPopupCarouselView {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                  withVelocity velocity: CGPoint,
                                  targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let layout = self.collectionViewLayout as! UICollectionViewFlowLayout
         let itemWidth = layout.itemSize.width
         let spacing = layout.minimumLineSpacing
 
-        // 페이징 처리를 위한 너비
         let pageWidth = itemWidth + spacing
         let offset = targetContentOffset.pointee.x
 
-        // 가장 가까운 페이지 계산
         let index = round(offset / pageWidth)
         let roundedOffset = pageWidth * index
 
         targetContentOffset.pointee = CGPoint(x: roundedOffset, y: 0)
         onCardScrolled?(Int(index))
     }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let layout = collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        let cellWidth = layout.itemSize.width
+        let spacing = layout.minimumLineSpacing
+        let inset = layout.sectionInset.left
+        let pageWidth = cellWidth + spacing
+        let offsetWithInset = contentOffset.x + inset
+        let pageIndex = Int(round(offsetWithInset / pageWidth))
+
+        currentIndex = pageIndex
+        onCardScrolled?(pageIndex)
+    }
 }
 
-
-// MARK: - UICollectionView DataSource & Delegate
+// MARK: - UICollectionViewDataSource & UICollectionViewDelegateFlowLayout
 extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return popupCards.count
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = dequeueReusableCell(
             withReuseIdentifier: PopupCardCell.identifier,
             for: indexPath
         ) as! PopupCardCell
         cell.configure(with: popupCards[indexPath.item])
         return cell
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        let cellWidth = layout.itemSize.width
-        let spacing = layout.minimumLineSpacing
-        let inset = layout.sectionInset.left
-        let pageWidth = cellWidth + spacing
-        let offsetWithInset = scrollView.contentOffset.x + inset
-        let pageIndex = Int(round(offsetWithInset / pageWidth))
-
-        // 현재 인덱스 업데이트
-        currentIndex = pageIndex
-        onCardScrolled?(pageIndex)
     }
 }

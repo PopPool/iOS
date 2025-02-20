@@ -33,7 +33,6 @@ class DefaultMapRepository: MapRepository {
         self.provider = provider
     }
 
-    // DefaultMapRepository.swift (발췌)
 
     func fetchStoresInBounds(
         northEastLat: Double,

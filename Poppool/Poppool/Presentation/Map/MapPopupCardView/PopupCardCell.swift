@@ -15,9 +15,14 @@ final class PopupCardCell: UICollectionViewCell {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupLayout()
-        configureUI()
-    }
+                layer.cornerRadius = 12
+                clipsToBounds = true
+
+                setupLayout()
+                configureUI()
+            }
+
+    
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -20,7 +20,6 @@ final class MapGuideViewController: UIViewController, View {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // UI Components (동일)
     private let dimmingView: UIView = {
         let v = UIView()
         v.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
@@ -211,7 +210,7 @@ final class MapGuideViewController: UIViewController, View {
 
     // MARK: - UI Setup (동일)
     private func setupUI() {
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         view.addSubview(dimmingView)
         dimmingView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
@@ -305,17 +304,28 @@ final class MapGuideViewController: UIViewController, View {
     }
 
     private func setupMarker(at coordinate: CLLocationCoordinate2D) {
-        mapView.clear()
+        // 새 마커 생성 및 설정
         let marker = GMSMarker()
         marker.position = coordinate
         marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
         marker.appearAnimation = .none
+
         let markerView = MapMarker()
         markerView.injection(with: .init(isSelected: true))
         marker.iconView = markerView
-        marker.map = mapView
+
+        // 카메라 위치 설정
         let camera = GMSCameraPosition(target: coordinate, zoom: 16)
+
+        // 애니메이션과 마커 변경을 하나의 트랜잭션으로 처리
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
+        // 카메라 이동과 마커 설정을 동시에 처리
         mapView.animate(to: camera)
+        marker.map = mapView
+
+        CATransaction.commit()
     }
 
     private func dismissModalCard() {

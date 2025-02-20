@@ -23,7 +23,9 @@ final class StoreListReactor: Reactor {
         case filterTapped(FilterType?)
         case filterUpdated(FilterType, [String])
         case clearFilters(FilterType)
-        
+        case updateStoreBookmark(id: Int64, isBookmarked: Bool)  // 추가
+
+
     }
 
     enum Mutation {
@@ -104,8 +106,29 @@ final class StoreListReactor: Reactor {
 
 
 
-
+//
+//        case let .setStores(storeItems):
+//            return Observable.from(storeItems)
+//                .flatMap { [weak self] store -> Observable<StoreItem> in
+//                    guard let self = self else { return .empty() }
+//                    return self.popUpAPIUseCase.getPopUpDetail(
+//                        commentType: "NORMAL",
+//                        popUpStoredId: store.id
+//                    )
+//                    .map { detail in
+//                        var updatedStore = store
+//                        updatedStore.isBookmarked = detail.bookmarkYn
+//                        return updatedStore
+//                    }
+//                    .asObservable()
+//                }
+//                .toArray()
+//                .map { updatedStores in .setStores(updatedStores) }
+//                .asObservable()
         case let .setStores(storeItems):
+            // 먼저 기존 순서로 저장
+            let orderMap = Dictionary(uniqueKeysWithValues: storeItems.enumerated().map { ($0.element.id, $0.offset) })
+
             return Observable.from(storeItems)
                 .flatMap { [weak self] store -> Observable<StoreItem> in
                     guard let self = self else { return .empty() }
@@ -121,8 +144,22 @@ final class StoreListReactor: Reactor {
                     .asObservable()
                 }
                 .toArray()
-                .map { updatedStores in .setStores(updatedStores) }
+                .map { storeItems in
+                    // 원본 순서대로 정렬
+                    let sortedItems = storeItems.sorted {
+                        orderMap[$0.id, default: 0] < orderMap[$1.id, default: 0]
+                    }
+                    return .setStores(sortedItems)
+                }
                 .asObservable()
+
+        case let .updateStoreBookmark(id, isBookmarked):
+            // 개별 스토어의 북마크 상태만 업데이트
+            if let index = currentState.stores.firstIndex(where: { $0.id == id }) {
+                return .just(.updateBookmark(index, isBookmarked))
+            }
+            return .empty()
+
 
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))

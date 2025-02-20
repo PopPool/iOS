@@ -20,7 +20,8 @@ final class MapGuideReactor: Reactor {
         case showToast(String)
         case navigateBack
         case expandToFullScreen
-        
+        case setStoreInfo(name: String, address: String)  // 추가
+
         case setSearchResult(MapPopUpStore)
         case setSelectedStore(MapPopUpStore) // [추가]
 
@@ -34,6 +35,9 @@ final class MapGuideReactor: Reactor {
         var shouldDismiss: Bool = false
         var searchResult: MapPopUpStore?  // 네트워크 요청 결과
         var selectedStore: MapPopUpStore? = nil  // 사용자가 선택한 스토어 [추가]
+        var storeName: String?    // 추가
+        var address: String?      // 추가
+
 
     }
 
@@ -69,35 +73,14 @@ final class MapGuideReactor: Reactor {
 
         case .viewDidLoad(let id):
             return directionRepository.getPopUpDirection(popUpStoreId: id)
-                .do(
-                    onNext: { response in
-                        Logger.log(
-                            message: """
-                            ✅ [응답]: 요청 성공 - popUpStoreId: \(id)
-                            - 위도: \(response.latitude)
-                            - 경도: \(response.longitude)
-                            - 주소: \(response.address)
-                            """,
-                            category: .network
-                        )
-                    },
-                    onError: { error in
-                        Logger.log(
-                            message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
-                            category: .error
-                        )
-                    },
-                    onSubscribe: {
-                        Logger.log(
-                            message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(id)",
-                            category: .network
-                        )
-                    }
-                )
-                .map { response in
-                    // 여기서는 네트워크 응답으로부터 MapPopUpStore를 생성합니다.
-                    return Mutation.setMap(CLLocationCoordinate2D(latitude: response.latitude, longitude: response.longitude))
+                .map { response -> [Mutation] in
+                    return [
+                        .setMap(CLLocationCoordinate2D(latitude: response.latitude, longitude: response.longitude)),
+                        .setStoreInfo(name: response.name, address: response.address)  // 추가
+                    ]
                 }
+                .flatMap { Observable.from($0) }
+
 
         case .didSelectItem(let store):
             return Observable.just(.setSelectedStore(store))
@@ -105,15 +88,20 @@ final class MapGuideReactor: Reactor {
     }
 
     private func openMapApp(_ appType: String) -> Observable<Mutation> {
-        guard let coordinate = currentState.destinationCoordinate else {
-            return Observable.just(.showToast("위치 정보를 가져올 수 없습니다."))
-        }
+        guard let coordinate = currentState.destinationCoordinate,
+               let storeName = currentState.storeName,
+               let address = currentState.address else {
+             return Observable.just(.showToast("위치 정보를 가져올 수 없습니다."))
+         }
 
-        let appInfo: [String: (urlScheme: String, appStoreUrl: String)] = [
-            "naver": (
-                "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)",
-                "https://apps.apple.com/kr/app/id311867728"
-            ),
+         let encodedName = storeName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+         let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+
+         let appInfo: [String: (urlScheme: String, appStoreUrl: String)] = [
+             "naver": (
+                 "nmap://place?lat=\(coordinate.latitude)&lng=\(coordinate.longitude)&name=\(encodedName)&addr=\(encodedAddress)&appname=com.poppool.app",
+                 "https://apps.apple.com/kr/app/id311867728"
+             ),
             "kakao": (
                 "kakaomap://look?p=\(coordinate.latitude),\(coordinate.longitude)",
                 "https://apps.apple.com/kr/app/id304608425"
@@ -163,6 +151,10 @@ final class MapGuideReactor: Reactor {
             newState.searchResult = store
         case let .setSelectedStore(store):
             newState.searchResult = store
+        case let .setStoreInfo(name, address):
+            newState.storeName = name
+            newState.address = address
+
         }
 
 
