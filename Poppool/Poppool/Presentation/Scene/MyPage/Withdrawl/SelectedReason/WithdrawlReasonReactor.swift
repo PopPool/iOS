@@ -59,7 +59,7 @@ final class WithdrawlReasonReactor: Reactor {
     private var spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
-    
+    private let userDefaultService = UserDefaultService()
     // MARK: - init
     init() {
         self.initialState = State()
@@ -111,7 +111,8 @@ final class WithdrawlReasonReactor: Reactor {
         case .moveToCompleteScene(let controller):
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
-            
+            userDefaultService.delete(key: "lastLogin")
+            userDefaultService.delete(key: "searchList")
             let nextController = WithdrawlCompleteController()
             nextController.mainView.checkButton.rx.tap
                 .withUnretained(nextController)

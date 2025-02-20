@@ -92,7 +92,8 @@ private extension HomeCardSectionCell {
         
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(contentView.bounds.width)
+            make.width.equalTo(contentView.bounds.width)
+            make.height.equalTo(140)
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -109,23 +110,23 @@ private extension HomeCardSectionCell {
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(categoryLabel.snp.bottom).offset(4)
-            make.height.equalTo(40)
             make.leading.trailing.equalToSuperview()
+        }
+        
+
+        
+        contentView.addSubview(dateLabel)
+        dateLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.height.equalTo(15).priority(.high)
+            make.bottom.equalToSuperview()
         }
         
         contentView.addSubview(addressLabel)
         addressLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(6)
+            make.bottom.equalTo(dateLabel.snp.top)
             make.height.equalTo(17).priority(.high)
-        }
-        
-        contentView.addSubview(dateLabel)
-        dateLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.equalTo(addressLabel.snp.bottom)
-            make.height.equalTo(15).priority(.high)
-            make.bottom.equalToSuperview()
         }
         
         contentView.addSubview(bookmarkButton)

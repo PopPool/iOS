@@ -28,6 +28,7 @@ final class SubLoginView: UIView {
     
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 16, text: "간편하게 SNS 로그인하고\n공감가는 코멘트에 반응해볼까요?\n다른 코멘트를 확인해볼까요?")
+        label.setLineHeightText(text: "간편하게 SNS 로그인하고\n공감가는 코멘트에 반응해볼까요?\n다른 코멘트를 확인해볼까요?", font: .KorFont(style: .bold, size: 16), lineHeight: 1.3)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label

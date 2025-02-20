@@ -14,7 +14,7 @@ final class WithdrawlCompleteView: UIView {
     // MARK: - Components
     private let imageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "icon_check_fill")
+        view.image = UIImage(named: "icon_check_fill_blue")
         return view
     }()
     
