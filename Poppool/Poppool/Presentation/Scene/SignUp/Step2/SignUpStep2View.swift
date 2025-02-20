@@ -154,5 +154,8 @@ private extension SignUpStep2View {
             make.height.equalTo(52)
         }
         
+        textField.snp.makeConstraints { make in
+            make.height.equalTo(52)
+        }
     }
 }

@@ -93,15 +93,17 @@ final class SignUpStep2Reactor: Reactor {
         // textEmpty Check
         if text.isEmpty { return isActive ? .emptyActive : .empty }
         
+        
+        // textLength Check
+        if text.count < 2 { return isActive ? .shortLengthActive : .shortLength }
+        if text.count > 10 { return isActive ? .longLengthActive : .longLength }
+        
         // kor and end Check
         let pattern = "^[가-힣a-zA-Z\\s]+$" // 허용하는 문자만 검사
         let regex = try! NSRegularExpression(pattern: pattern)
         let range = NSRange(location: 0, length: text.utf16.count)
         if regex.firstMatch(in: text, options: [], range: range) == nil { return isActive ? .korAndEngActive : .korAndEng }
-        
-        // textLength Check
-        if text.count < 2 { return isActive ? .shortLengthActive : .shortLength }
-        if text.count > 10 { return isActive ? .longLengthActive : .longLength }
+
         
         return isActive ? .checkActive : .check
     }

@@ -102,6 +102,7 @@ final class SearchResultReactor: Reactor {
             let isBookmark = data.isBookmark
             let id = data.id
             searchListSection.inputDataList[indexPath.row].isBookmark.toggle()
+            ToastMaker.createBookMarkToast(isBookMark: !isBookmark)
             if isBookmark {
                 return userAPIUseCase.deleteBookmarkPopUp(popUpID: id)
                     .andThen(Observable.just(.loadView))

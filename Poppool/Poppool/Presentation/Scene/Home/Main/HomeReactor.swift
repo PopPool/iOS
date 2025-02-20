@@ -241,7 +241,8 @@ final class HomeReactor: Reactor {
                 endDate: response.endDate,
                 category: response.category,
                 title: response.name,
-                id: response.id
+                id: response.id,
+                address: response.address
             )
         })
     }

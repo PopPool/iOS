@@ -75,7 +75,7 @@ private extension HomeHeaderView {
         searchBarButton.addSubview(searchLabel)
         searchLabel.snp.makeConstraints { make in
             make.centerY.equalTo(searchIconImageView)
-            make.leading.equalTo(searchIconImageView.snp.trailing)
+            make.leading.equalTo(searchIconImageView.snp.trailing).offset(4)
         }
     }
 }

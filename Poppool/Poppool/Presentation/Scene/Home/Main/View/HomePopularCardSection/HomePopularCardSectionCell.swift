@@ -25,8 +25,8 @@ final class HomePopularCardSectionCell: UICollectionViewCell {
         view.frame = CGRect(x: 0, y: 0, width: 232, height: 332)
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
-            UIColor.init(hexCode: "#FFFFFF", alpha: 0).cgColor,
-            UIColor.init(hexCode: "#141414", alpha: 0.4).cgColor
+            UIColor.init(hexCode: "#141414", alpha: 0).cgColor,
+            UIColor.init(hexCode: "#141414", alpha: 0.65).cgColor
         ]
         gradientLayer.locations = [0, 1]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)  // 시작점
@@ -45,13 +45,20 @@ final class HomePopularCardSectionCell: UICollectionViewCell {
     
     private let categoryLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 16)
-        label.textColor = .w100
+        label.textColor = .g1000
+        label.backgroundColor = .w100
         return label
     }()
     
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 16)
         label.numberOfLines = 2
+        label.textColor = .w100
+        return label
+    }()
+    
+    private let locationLabel: PPLabel = {
+        let label = PPLabel(style: .regular, fontSize: 16)
         label.textColor = .w100
         return label
     }()
@@ -96,7 +103,8 @@ private extension HomePopularCardSectionCell {
         contentView.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints { make in
             make.bottom.equalTo(titleLabel.snp.top).offset(-16)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().inset(20)
+            make.height.equalTo(24)
         }
         
         contentView.addSubview(dateLabel)
@@ -105,6 +113,11 @@ private extension HomePopularCardSectionCell {
             make.leading.trailing.equalToSuperview().inset(20)
         }
         
+        contentView.addSubview(locationLabel)
+        locationLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(categoryLabel)
+            make.leading.equalTo(categoryLabel.snp.trailing).offset(8)
+        }
 
     }
 }
@@ -116,13 +129,21 @@ extension HomePopularCardSectionCell: Inputable {
         var category: String?
         var title: String?
         var id: Int64
+        var address: String?
     }
     
     func injection(with input: Input) {
         let date = "#\(input.endDate.toDate().toPPDateMonthString())까지 열리는"
         dateLabel.setLineHeightText(text: date, font: .KorFont(style: .regular, size: 16))
         let category = "#\(input.category ?? "")"
-        categoryLabel.setLineHeightText(text: category, font: .KorFont(style: .regular, size: 16))
+        if let addressArray = input.address?.components(separatedBy: " ") {
+            if addressArray.count > 2 {
+                let address = addressArray[1]
+                locationLabel.text = "#\(address)"
+            }
+        }
+        
+        categoryLabel.text = category
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .regular, size: 16))
         backGroundImageView.setPPImage(path: input.imagePath)
     }

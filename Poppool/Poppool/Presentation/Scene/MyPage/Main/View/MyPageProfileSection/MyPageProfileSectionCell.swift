@@ -231,7 +231,7 @@ extension MyPageProfileSectionCell: Inputable {
             loginButton.isHidden = true
             blurView.isHidden = false
             nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 16))
-            descriptionLabel.setLineHeightText(text: input.description, font: .KorFont(style: .light, size: 11))
+            descriptionLabel.setLineHeightText(text: input.description ?? "", font: .KorFont(style: .light, size: 11))
             backGroundImageView.image = nil
             backGroundImageView.setPPImage(path: input.profileImagePath)
             profileImageView.setPPImage(path: input.profileImagePath) { [weak self] in
