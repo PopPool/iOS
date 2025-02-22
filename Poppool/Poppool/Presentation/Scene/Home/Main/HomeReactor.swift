@@ -305,6 +305,12 @@ final class HomeReactor: Reactor {
             }
         } else {
             switch indexPath.section {
+            case 0:
+                if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
+                    let controller = DetailController()
+                    controller.reactor = DetailReactor(popUpID: id)
+                    currentController.navigationController?.pushViewController(controller, animated: true)
+                }
             case 2:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(popUpType: .popular)

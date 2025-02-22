@@ -224,7 +224,7 @@ private extension DetailCommentSectionCell {
         contentView.addSubview(loginStackView)
         loginStackView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
         }
         loginButton.snp.makeConstraints { make in
             make.height.equalTo(32)
@@ -320,7 +320,7 @@ extension DetailCommentSectionCell: Inputable {
             if blurView.image == nil { blur() }
         }
         let title = input.title ?? ""
-        let fullText = "\(title)를 다녀온\n팝풀인들의 생생한 후기가 궁금하다면?"
+        let fullText = "\(title)를 다녀온 팝풀인들의 생생한 후기가 궁금하다면?"
 
         // "팝업스토어명"과 "생생한 후기" 부분의 NSRange 설정
         let popupStoreRange = (fullText as NSString).range(of: title)
@@ -356,6 +356,8 @@ extension DetailCommentSectionCell: Inputable {
         
         loginNoticelabel.attributedText = attributedString
         loginNoticelabel.textAlignment = .center
+        loginNoticelabel.lineBreakStrategy = .hangulWordPriority
+        loginNoticelabel.numberOfLines = 0
         
         borderView.isHidden = input.isLastCell
     }

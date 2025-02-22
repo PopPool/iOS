@@ -158,7 +158,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.bannerTapped
                 .withUnretained(self)
                 .map({ (owner, row) in
-                    Reactor.Action.bannerCellTapped(controller: owner, row: row)
+                    return Reactor.Action.bannerCellTapped(controller: owner, row: row)
                 })
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
