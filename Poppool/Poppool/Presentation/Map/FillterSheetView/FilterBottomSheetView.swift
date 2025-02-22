@@ -193,9 +193,9 @@ final class FilterBottomSheetView: UIView {
 
         // 5. locationScrollView 및 contentView
         locationScrollView.snp.makeConstraints { make in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(16)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(44)
+            make.height.equalTo(36)
         }
 
         locationContentView.snp.makeConstraints { make in
@@ -235,7 +235,7 @@ final class FilterBottomSheetView: UIView {
 
     func setupLocationScrollView(locations: [Location], buttonAction: @escaping (Int, UIButton) -> Void) {
         locationContentView.subviews.forEach { $0.removeFromSuperview() }
-        locationScrollView.delegate = self  // 여기에 추가
+        locationScrollView.delegate = self
 
         var lastButton: UIButton?
 
@@ -297,7 +297,7 @@ final class FilterBottomSheetView: UIView {
         button.layer.cornerRadius = 14
         button.layer.masksToBounds = true
 
-        button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 16, bottom: 7, right: 16)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
 
         if isSelected {
             button.backgroundColor = .blu500
@@ -337,7 +337,7 @@ final class FilterBottomSheetView: UIView {
             style: .secondary,
             text: title,
             font: .KorFont(style: .medium, size: 13),
-            cornerRadius: 22.5
+            cornerRadius: 18
         )
         button.setBackgroundColor(.w100, for: .normal)
         button.setTitleColor(.g400, for: .normal)
@@ -350,7 +350,7 @@ final class FilterBottomSheetView: UIView {
             button.layer.borderWidth = 0
         }
 
-        button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 16, bottom: 7, right: 16)
+        button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
 
         return button
     }

@@ -141,7 +141,7 @@ final class MapGuideViewController: UIViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         tmapButton.rx.tap
-            .map { Reactor.Action.openMapApp("tmap") }
+            .map { Reactor.Action.openMapApp("TMap") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -210,7 +210,8 @@ final class MapGuideViewController: UIViewController, View {
 
     // MARK: - UI Setup (동일)
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
+    
         view.addSubview(dimmingView)
         dimmingView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
@@ -330,7 +331,7 @@ final class MapGuideViewController: UIViewController, View {
 
     private func dismissModalCard() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) {
-            self.dimmingView.alpha = 0
+//            self.dimmingView.alpha = 0
             self.modalCardBottomConstraint?.update(offset: 408)
             self.view.layoutIfNeeded()
         } completion: { _ in

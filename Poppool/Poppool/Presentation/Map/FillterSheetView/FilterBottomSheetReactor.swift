@@ -117,19 +117,27 @@ final class FilterBottomSheetReactor: Reactor {
             Location(main: "경남",
                      sub:[ ""]
                     ),
-
+            Location(main: "충남",
+                     sub:[ ""]
+                    ),
+            Location(main: "충북",
+                     sub:[ ""]
+                    ),
+            Location(main: "강원",
+                     sub:[ ""]
+                    ),
         ]
 
         self.initialState = State(
             activeSegment: 0,
             selectedLocationIndex: nil,
-            selectedSubRegions: savedSubRegions,  // 이전 선택 상태
-            selectedCategories: savedCategories,  // 이전 선택 상태
+            selectedSubRegions: savedSubRegions,
+            selectedCategories: savedCategories,
             locations: initialLocations,
 
             categories: ["게임", "라이프스타일", "반려동물", "뷰티", "스포츠", "애니메이션", "엔터테인먼트", "여행", "예술", "음식/요리", "키즈", "패션"],
-            savedSubRegions: savedSubRegions,  // 이전 선택 상태 저장
-            savedCategories: savedCategories   // 이전 선택 상태 저장
+            savedSubRegions: savedSubRegions,
+            savedCategories: savedCategories
 
         )
         if let location = savedSubRegions.first?.split(separator: "/").first.map(String.init),
@@ -144,7 +152,10 @@ final class FilterBottomSheetReactor: Reactor {
         case .segmentChanged(let index):
             return Observable.just(.setActiveSegment(index))
         case .resetFilters:
-            return Observable.just(.resetFilters)
+            return Observable.concat([
+                Observable.just(.resetFilters),
+                Observable.just(.forceSaveEnabled(true))
+            ])
         case .applyFilters:
             let activeSegment = currentState.activeSegment
             if activeSegment == 0 {

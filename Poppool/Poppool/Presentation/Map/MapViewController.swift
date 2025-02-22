@@ -80,6 +80,8 @@ class MapViewController: BaseViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
+        mainView.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+
 
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -416,6 +418,7 @@ class MapViewController: BaseViewController, View {
                 southWestLat: bounds.nearLeft.latitude,
                 southWestLon: bounds.nearLeft.longitude
             ))
+            self.resetSelectedMarker()
             self.carouselView.isHidden = true
                 self.carouselView.updateCards([])
                 self.currentCarouselStores = []

@@ -51,7 +51,6 @@ final class MapView: UIView {
         return button
     }()
 
-    // storeCard를 var로 선언하여 visibility 변경 시 setStoreCardHidden()을 통해 업데이트
     var storeCard: MapPopupCarouselView = {
         let view = MapPopupCarouselView()
         return view
@@ -95,20 +94,21 @@ private extension MapView {
 
         addSubview(searchFilterContainer)
         searchFilterContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(80)
+            make.top.equalToSuperview().offset(60)
             make.leading.trailing.equalToSuperview()
         }
 
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(16)
             make.height.equalTo(37)
         }
 
         searchFilterContainer.addSubview(filterChips)
         filterChips.snp.makeConstraints { make in
-            make.top.equalTo(searchInput.snp.bottom).offset(12)
+            make.top.equalTo(searchInput.snp.bottom).offset(7)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(36)
             make.bottom.equalToSuperview()
@@ -120,7 +120,7 @@ private extension MapView {
 
         locationButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(storeCard.snp.top).offset(-30)
+            make.bottom.equalTo(storeCard.snp.top).offset(-40)
             make.size.equalTo(44)
         }
 
@@ -131,7 +131,7 @@ private extension MapView {
         }
 
         storeCard.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalToSuperview().inset(30)
             make.height.equalTo(137)
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
@@ -158,7 +158,7 @@ private extension MapView {
         } else {
             locationButton.snp.remakeConstraints { make in
                 make.trailing.equalToSuperview().inset(16)
-                make.bottom.equalTo(storeCard.snp.top).offset(-30)
+                make.bottom.equalTo(storeCard.snp.top).offset(-50)
                 make.size.equalTo(44)
             }
             listButton.snp.remakeConstraints { make in

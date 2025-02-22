@@ -741,7 +741,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private func updatePeriodButtonTitle() {
         guard let s = selectedStartDate, let e = selectedEndDate else { return }
         let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
+        df.dateFormat = "yyyy.MM.dd"
         let sStr = df.string(from: s)
         let eStr = df.string(from: e)
 
