@@ -116,6 +116,7 @@ extension FAQDropdownSectionCell: Inputable {
     func injection(with input: Input) {
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 14))
         dropContentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .regular, size: 14), lineHeight: 1.5)
+        dropContentLabel.lineBreakStrategy = .hangulWordPriority
         dropContentLabel.textColor = .g600
         if input.isOpen {
             dropDownImageView.image = UIImage(named: "icon_dropdown_bottom_g300")
