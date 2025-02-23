@@ -215,7 +215,7 @@ extension ImageBannerSectionCell: Inputable {
     func injection(with input: Input) {
         if imageSection.isEmpty {
             pageControl.numberOfPages = input.imagePaths.count
-            if #available(iOS 18, *) {
+            if #available(iOS 18.3, *) {
                 let stopButtonLeadingOffset = -26
                 stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
                 playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
