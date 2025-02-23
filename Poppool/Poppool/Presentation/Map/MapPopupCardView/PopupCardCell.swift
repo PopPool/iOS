@@ -99,15 +99,23 @@ final class PopupCardCell: UICollectionViewCell {
         categoryLabel.text = "#\(store.category)"
         addressLabel.text = store.address
 
-        // Date label formatting
-        let startDate = store.startDate.split(separator: "T").first ?? ""
-        let endDate = store.endDate.split(separator: "T").first ?? ""
-        dateLabel.text = "\(startDate) ~ \(endDate)"
+        // 1) String -> Date 변환
+        let start = store.startDate.toDate()
+        let end   = store.endDate.toDate()
 
+        // 2) Date -> "YYYY. MM. dd" 변환
+        let startString = start.toPPDateString()        // "yyyy. MM. dd"
+        let endString   = end.toPPDateString()          // "yyyy. MM. dd"
+
+        // 3) 최종 라벨 결합
+        dateLabel.text = "\(startString) ~ \(endString)"
+
+        // 이미지
         if let imageUrl = store.mainImageUrl {
             imageView.setPPImage(path: imageUrl)
         } else {
             imageView.image = UIImage(named: "placeholderImage")
         }
     }
+
 }

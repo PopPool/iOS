@@ -19,10 +19,10 @@ extension Optional where Wrapped == String {
         
         if self.contains(".") {
             // 밀리초 포함 형식
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+            dateFormatter.dateFormat = "yyyy.MM.dd'T'HH:mm:ss.SSS"
         } else {
             // 밀리초 없는 형식
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            dateFormatter.dateFormat = "yyyy.MM.dd'T'HH:mm:ss"
         }
         
         return dateFormatter.date(from: self)
