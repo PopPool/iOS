@@ -418,13 +418,20 @@ class MapViewController: BaseViewController, View {
                 southWestLat: bounds.nearLeft.latitude,
                 southWestLon: bounds.nearLeft.longitude
             ))
+
+            // **(추가)** 선택된 마커 및 툴팁, 캐러셀을 완전히 해제
             self.resetSelectedMarker()
+
+            // 만약 지도 위 마커를 전부 제거하고 싶다면 (상황에 따라)
+            // self.clearAllMarkers()
+            // self.clusterMarkerDictionary.values.forEach { $0.map = nil }
+            // self.clusterMarkerDictionary.removeAll()
             self.carouselView.isHidden = true
-                self.carouselView.updateCards([])
-                self.currentCarouselStores = []
-                self.mainView.setStoreCardHidden(true, animated: true)
-            
+            self.carouselView.updateCards([])
+            self.currentCarouselStores = []
+            self.mainView.setStoreCardHidden(true, animated: true)
         }
+
         Observable.combineLatest(
             reactor.state.map { $0.selectedLocationFilters }.distinctUntilChanged(),
             reactor.state.map { $0.selectedCategoryFilters }.distinctUntilChanged()
@@ -529,12 +536,14 @@ class MapViewController: BaseViewController, View {
             .bind { [weak self] results in
                 guard let self = self else { return }
 
-                // 기존 데이터 초기화
+                // 이전 선택된 마커, 툴팁, 캐러셀 초기화
                 self.mainView.mapView.clear()
                 self.storeListViewController.reactor?.action.onNext(.setStores([]))
                 self.carouselView.updateCards([])
                 self.carouselView.isHidden = true
+                self.resetSelectedMarker()  // 추가된 부분
 
+                // 결과가 없으면 스토어 카드 숨김 후 종료
                 if results.isEmpty {
                     self.mainView.setStoreCardHidden(true, animated: true)
                     return
@@ -542,12 +551,24 @@ class MapViewController: BaseViewController, View {
                     self.mainView.setStoreCardHidden(false, animated: true)
                 }
 
+                // 새 결과로 마커 추가 및 업데이트
                 self.addMarkers(for: results)
 
-                 let storeItems = results.map { $0.toStoreItem() }
-                 self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
-                 self.carouselView.updateCards(results)
-                 self.carouselView.isHidden = false
+                // 스토어 리스트 업데이트
+                let storeItems = results.map { $0.toStoreItem() }
+                self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
+
+                // 캐러셀 업데이트
+                self.carouselView.updateCards(results)
+                self.carouselView.isHidden = false
+                self.currentCarouselStores = results
+
+                // 만약 현재 선택된 마커의 스토어가 새로운 결과에 없다면, 선택 상태 초기화
+                if let currentMarker = self.currentMarker,
+                   let selectedStore = currentMarker.userData as? MapPopUpStore,
+                   !results.contains(where: { $0.id == selectedStore.id }) {
+                    self.resetSelectedMarker()
+                }
 
                 // 첫 번째 검색 결과로 지도 이동
                 if let firstStore = results.first {
@@ -560,6 +581,7 @@ class MapViewController: BaseViewController, View {
                 }
             }
             .disposed(by: disposeBag)
+
 
 
 
@@ -1426,8 +1448,6 @@ extension MapViewController: GMSMapViewDelegate {
         currentTooltipView = nil
         currentTooltipStores = []
         currentTooltipCoordinate = nil
-
-        // 캐러셀 숨기기
         carouselView.isHidden = true
         carouselView.updateCards([])
         currentCarouselStores = []
