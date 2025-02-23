@@ -214,9 +214,15 @@ extension ImageBannerSectionCell: Inputable {
     func injection(with input: Input) {
         if imageSection.isEmpty {
             pageControl.numberOfPages = input.imagePaths.count
-            let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
-            stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-            playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+            if #available(iOS 18.3, *) {
+                let stopButtonLeadingOffset = -26
+                stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+                playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+            } else {
+                let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
+                stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+                playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
+            }
             let datas = zip(input.imagePaths, input.idList)
             let backContents = datas.suffix(1)
             let frontContents = datas.prefix(1)
