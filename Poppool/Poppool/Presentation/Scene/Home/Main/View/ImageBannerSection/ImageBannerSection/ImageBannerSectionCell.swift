@@ -24,16 +24,11 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         return view
     }()
     
-    var pageControl: UIPageControl = {
-        let controller = UIPageControl()
-        controller.currentPage = 0
-        controller.preferredIndicatorImage = UIImage(systemName: "circle")
-        controller.preferredCurrentPageIndicatorImage = UIImage(systemName: "circle.fill")
-        controller.isUserInteractionEnabled = false
-        controller.hidesForSinglePage = false
+    var pageControl: CustomPageControl = {
+        let controller = CustomPageControl()
         return controller
     }()
-    
+
     let stopButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "icon_banner_stopButton"), for: .normal)
@@ -68,8 +63,6 @@ final class ImageBannerSectionCell: UICollectionViewCell {
     let bannerTapped: PublishSubject<Int> = .init()
     
     private var currentIndex: Int = 1
-    private var stopButtonLeadingConstraints: Constraint?
-    private var playButtonLeadingConstraints: Constraint?
     private var isHiddenPauseButton: Bool = true
     
     // MARK: - init
@@ -124,7 +117,6 @@ private extension ImageBannerSectionCell {
             ImageBannerChildSectionCell.self,
             forCellWithReuseIdentifier: ImageBannerChildSectionCell.identifiers
         )
-        pageControl.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
     }
     
     func setUpConstraints() {
@@ -135,21 +127,20 @@ private extension ImageBannerSectionCell {
         contentView.addSubview(pageControl)
         pageControl.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.height.equalTo(4)
             make.bottom.equalToSuperview().inset(24)
         }
         contentView.addSubview(stopButton)
         stopButton.snp.makeConstraints { make in
             make.size.equalTo(6)
             make.centerY.equalTo(pageControl)
-            stopButtonLeadingConstraints =  make.leading.equalTo(pageControl.snp.trailing).offset(-40).constraint
+            make.leading.equalTo(pageControl.snp.trailing).offset(6)
         }
         
         contentView.addSubview(playButton)
         playButton.snp.makeConstraints { make in
             make.size.equalTo(6)
             make.centerY.equalTo(pageControl)
-            playButtonLeadingConstraints =  make.leading.equalTo(pageControl.snp.trailing).offset(-40).constraint
+            make.leading.equalTo(pageControl.snp.trailing).offset(6)
         }
     }
     
@@ -214,16 +205,7 @@ extension ImageBannerSectionCell: Inputable {
     
     func injection(with input: Input) {
         if imageSection.isEmpty {
-            pageControl.numberOfPages = input.imagePaths.count
-            if #available(iOS 18.3, *) {
-                let stopButtonLeadingOffset = -26
-                stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-                playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-            } else {
-                let stopButtonLeadingOffset = input.imagePaths.count == 3 ? -40 : input.imagePaths.count == 2 ? -36 : 0
-                stopButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-                playButtonLeadingConstraints?.update(offset: stopButtonLeadingOffset)
-            }
+            pageControl.setNumberOfPages(input.imagePaths.count)
             let datas = zip(input.imagePaths, input.idList)
             let backContents = datas.suffix(1)
             let frontContents = datas.prefix(1)
@@ -300,5 +282,69 @@ extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewData
             startAutoScroll()
         }
         
+    }
+}
+
+class CustomPageControl: UIView {
+    private let stackView = UIStackView()
+    var numberOfPages: Int = 0 {
+        didSet {
+            setupStackView()
+        }
+    }
+    var currentPage: Int = 0 {
+        didSet {
+            updateDots()
+        }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupStackView()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupStackView()
+    }
+
+    private func setupStackView() {
+        stackView.arrangedSubviews.forEach { view in
+            view.removeFromSuperview()
+        }
+        stackView.axis = .horizontal
+        stackView.spacing = 6
+        stackView.alignment = .center
+        addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
+    func setNumberOfPages(_ pages: Int) {
+        numberOfPages = pages
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for _ in 0..<pages {
+            let dot = UIImageView(image: UIImage(systemName: "circle"))
+            dot.contentMode = .scaleAspectFill
+            dot.tintColor = .white
+            dot.snp.makeConstraints { make in
+                make.size.equalTo(7)
+            }
+            stackView.addArrangedSubview(dot)
+        }
+        updateDots()
+    }
+
+    func setCurrentPage(_ page: Int) {
+        currentPage = page
+    }
+
+    private func updateDots() {
+        for (index, view) in stackView.arrangedSubviews.enumerated() {
+            if let view = view as? UIImageView {
+                view.image = index == currentPage ? UIImage(systemName: "circle.fill") : UIImage(systemName: "circle")
+            }
+        }
     }
 }
