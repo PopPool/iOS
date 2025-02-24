@@ -139,26 +139,44 @@ final class BalloonBackgroundView: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        let arrowWidth: CGFloat = 16
-//        let arrowHeight: CGFloat = 10
+
+        let arrowWidth: CGFloat = 12  // 화살표 너비 조정
+        let arrowHeight: CGFloat = 8   // 화살표 높이 조정
+
+        // 화살표의 시작 x좌표 계산
         let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
+
+        // 경로 그리기
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: arrowX, y: arrowHeight))
-        path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))
-        path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: arrowHeight))
-        let containerRect = CGRect(x: 0, y: arrowHeight, width: bounds.width, height: bounds.height - arrowHeight)
-        path.addLine(to: CGPoint(x: containerRect.maxX, y: containerRect.minY))
-        path.addLine(to: CGPoint(x: containerRect.maxX, y: containerRect.maxY))
-        path.addLine(to: CGPoint(x: containerRect.minX, y: containerRect.maxY))
-        path.addLine(to: CGPoint(x: containerRect.minX, y: containerRect.minY))
+
+        // 1. 화살표 그리기
+        path.move(to: CGPoint(x: arrowX, y: arrowHeight))                         // 왼쪽 아래
+        path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))            // 상단 중앙
+        path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: arrowHeight))        // 오른쪽 아래
+
+        // 2. 말풍선 본체 그리기
+        let balloonRect = CGRect(x: 0, y: arrowHeight,
+                                width: bounds.width,
+                                height: bounds.height - arrowHeight)
+
+        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.minY))      // 오른쪽 상단
+        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.maxY))      // 오른쪽 하단
+        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.maxY))      // 왼쪽 하단
+        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.minY))      // 왼쪽 상단
+
         path.close()
+
         UIColor.g50.setFill()
         path.fill()
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.1
-        self.layer.shadowOffset = CGSize(width: 0, height: 2)
-        self.layer.shadowRadius = 4
+
+        // 그림자 설정
+//        layer.shadowPath = path.cgPath
+//        layer.shadowColor = UIColor.black.cgColor
+//        layer.shadowOpacity = 0.1
+//        layer.shadowOffset = CGSize(width: 0, height: 2)
+//        layer.shadowRadius = 4
     }
+
 
     // MARK: - Public
 

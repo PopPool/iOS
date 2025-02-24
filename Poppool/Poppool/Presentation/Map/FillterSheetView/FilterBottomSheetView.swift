@@ -112,6 +112,7 @@ final class FilterBottomSheetView: UIView {
     private var balloonHeightConstraint: Constraint?
 
     // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -383,13 +384,32 @@ final class FilterBottomSheetView: UIView {
 
 
     func updateBalloonPosition(for button: UIButton) {
-        let buttonFrame = button.convert(button.bounds, to: self)
-        let buttonCenterX = buttonFrame.midX
-        let totalWidth = bounds.width
+        // window 좌표계로 변환
+        guard let window = button.window else { return }
 
-        balloonBackgroundView.arrowPosition = buttonCenterX / totalWidth
-        balloonBackgroundView.setNeedsDisplay() 
+        // 1. 버튼과 말풍선의 window 기준 프레임 구하기
+        let buttonFrameInWindow = button.convert(button.bounds, to: window)
+        let balloonFrameInWindow = balloonBackgroundView.convert(balloonBackgroundView.bounds, to: window)
+
+        // 2. 버튼 중앙점의 x좌표
+        let buttonCenterX = buttonFrameInWindow.midX
+
+        // 3. 말풍선 기준으로 상대적 위치 계산
+        let relativeX = buttonCenterX - balloonFrameInWindow.minX
+
+        // 4. 말풍선 너비 기준으로 비율 계산 (0.0 ~ 1.0)
+        let position = relativeX / balloonBackgroundView.bounds.width
+
+        // 5. 경계값 처리 (화살표가 말풍선 영역을 벗어나지 않도록)
+        let minPosition: CGFloat = 0.1  // 왼쪽 여백
+        let maxPosition: CGFloat = 0.9  // 오른쪽 여백
+        let clampedPosition = min(maxPosition, max(minPosition, position))
+
+        // 6. 위치 업데이트 및 다시 그리기
+        balloonBackgroundView.arrowPosition = clampedPosition
+        balloonBackgroundView.setNeedsDisplay()
     }
+
     private func updateBalloonPositionAccurately(for button: PPButton) {
         let buttonFrameInBalloon = button.convert(button.bounds, to: balloonBackgroundView)
         let arrowPosition = buttonFrameInBalloon.midX / balloonBackgroundView.bounds.width
@@ -414,19 +434,15 @@ extension FilterBottomSheetView {
 } 
 extension FilterBottomSheetView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
+        // 선택된 버튼 찾기
         guard let selectedButton = locationContentView.subviews.first(where: { view in
             guard let button = view as? PPButton else { return false }
             return button.backgroundColor == .blu500
-        }) as? PPButton else {
-            return
+        }) as? PPButton else { return }
+        
+        // 스크롤 중에도 실시간으로 위치 업데이트
+        DispatchQueue.main.async { [weak self] in
+            self?.updateBalloonPosition(for: selectedButton)
         }
-
-        let buttonFrame = selectedButton.convert(selectedButton.bounds, to: balloonBackgroundView)
-
-        let arrowPosition = buttonFrame.midX / balloonBackgroundView.bounds.width
-
-        balloonBackgroundView.arrowPosition = arrowPosition
-        balloonBackgroundView.setNeedsDisplay()
     }
 }
