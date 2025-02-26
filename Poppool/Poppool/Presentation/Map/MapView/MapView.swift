@@ -96,7 +96,7 @@ private extension MapView {
         // 2. Search Filter Container 설정
         addSubview(searchFilterContainer)
         searchFilterContainer.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).offset(16)  // 수정된 부분
+            make.top.equalToSuperview().offset(56)
             make.leading.trailing.equalToSuperview()
         }
 

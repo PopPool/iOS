@@ -25,6 +25,7 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     }()
 
     var onStoreSelected: ((Int) -> Void)?
+    var selectedIndex: Int = -1
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -176,7 +177,7 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
 
     // MARK: - Store Selection
     func selectStore(at index: Int) {
-        // 모든 행을 순회하면서 해당 인덱스의 행만 선택 상태로 변경
+        selectedIndex = index
         for case let row as UIView in stackView.arrangedSubviews {
             guard let horizontalStack = row.subviews.first as? UIStackView,
                   horizontalStack.arrangedSubviews.count >= 2,

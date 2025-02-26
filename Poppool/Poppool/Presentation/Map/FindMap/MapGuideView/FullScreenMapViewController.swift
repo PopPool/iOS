@@ -93,7 +93,7 @@ final class FullScreenMapViewController: MapViewController {
     }
 
     override func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        // 지도 빈 공간 탭은 무시 (요구사항에 따라 추가 처리 가능)
+        // 지도 빈 공간 탭은 무시 
     }
 
     private func findMarkerForStore(for store: MapPopUpStore) -> GMSMarker? {
