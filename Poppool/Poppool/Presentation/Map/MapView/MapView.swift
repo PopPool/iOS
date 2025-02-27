@@ -67,11 +67,11 @@ final class MapView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Helper Method: 스토어카드 보임/숨김에 따른 레이아웃 업데이트
-    /// 스토어카드의 표시 상태를 변경하면서 버튼 레이아웃을 업데이트합니다.
+    // MARK: - Helper Method
     func setStoreCardHidden(_ hidden: Bool, animated: Bool = true) {
         guard storeCard.isHidden != hidden else { return }
         storeCard.isHidden = hidden
+
         if animated {
             UIView.animate(withDuration: 0.3) {
                 self.updateButtonLayout()
@@ -87,25 +87,28 @@ final class MapView: UIView {
 // MARK: - SetUp
 private extension MapView {
     func setUpConstraints() {
+        // 1. MapView 설정
         addSubview(mapView)
         mapView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
+        // 2. Search Filter Container 설정
         addSubview(searchFilterContainer)
         searchFilterContainer.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(60)
+            make.top.equalToSuperview().offset(56)
             make.leading.trailing.equalToSuperview()
         }
 
+        // 3. Search Input 설정
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalToSuperview().inset(20)
-            make.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview().inset(20)  // 수정된 부분
             make.height.equalTo(37)
         }
 
+        // 4. Filter Chips 설정
         searchFilterContainer.addSubview(filterChips)
         filterChips.snp.makeConstraints { make in
             make.top.equalTo(searchInput.snp.bottom).offset(7)
@@ -114,27 +117,19 @@ private extension MapView {
             make.bottom.equalToSuperview()
         }
 
-        addSubview(locationButton)
-        addSubview(listButton)
+        // 5. Store Card 설정
         addSubview(storeCard)
-
-        locationButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(storeCard.snp.top).offset(-40)
-            make.size.equalTo(44)
-        }
-
-        listButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(locationButton.snp.top).offset(-12)
-            make.size.equalTo(44)
-        }
-
         storeCard.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(30)
             make.height.equalTo(137)
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide).offset(-24)  // 수정된 부분
         }
+
+        // 6. Buttons 설정
+        addSubview(locationButton)
+        addSubview(listButton)
+
+        // 초기 버튼 레이아웃은 updateButtonLayout()에서 설정됨
     }
 
     func configureUI() {
@@ -144,30 +139,22 @@ private extension MapView {
     }
 
     func updateButtonLayout() {
-        if storeCard.isHidden {
-            locationButton.snp.remakeConstraints { make in
-                make.trailing.equalToSuperview().inset(16)
-                make.bottom.equalTo(safeAreaLayoutGuide).inset(40) 
-                make.size.equalTo(44)
-            }
-            listButton.snp.remakeConstraints { make in
-                make.trailing.equalToSuperview().inset(16)
-                make.bottom.equalTo(locationButton.snp.top).offset(-8) // 예시로 8pt 간격
-                make.size.equalTo(44)
-            }
-        } else {
-            locationButton.snp.remakeConstraints { make in
-                make.trailing.equalToSuperview().inset(16)
-                make.bottom.equalTo(storeCard.snp.top).offset(-50)
-                make.size.equalTo(44)
-            }
-            listButton.snp.remakeConstraints { make in
-                make.trailing.equalToSuperview().inset(16)
-                make.bottom.equalTo(locationButton.snp.top).offset(-12)
-                make.size.equalTo(44)
+        locationButton.snp.remakeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.size.equalTo(44)
+
+            if storeCard.isHidden {
+                make.bottom.equalTo(safeAreaLayoutGuide).offset(-40)
+            } else {
+                make.bottom.equalTo(storeCard.snp.top).offset(-40)
             }
         }
-        layoutIfNeeded()
+
+        listButton.snp.remakeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(locationButton.snp.top).offset(-12)
+            make.size.equalTo(44)
+        }
     }
 }
 

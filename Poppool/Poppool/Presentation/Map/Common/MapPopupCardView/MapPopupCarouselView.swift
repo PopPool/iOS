@@ -9,6 +9,21 @@ final class MapPopupCarouselView: UICollectionView {
 
     private var popupCards: [MapPopUpStore] = []
     private var currentIndex: Int = 0
+    var currentVisibleIndex: Int {
+
+        let centerX = self.contentOffset.x + self.bounds.width / 2
+
+        for i in 0..<self.numberOfItems(inSection: 0) {
+            guard let cell = self.cellForItem(at: IndexPath(item: i, section: 0)) else { continue }
+
+            if cell.frame.minX <= centerX && centerX <= cell.frame.maxX {
+                return i
+            }
+        }
+
+        // 없으면 첫 번째 인덱스 반환
+        return 0
+    }
 
     // MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {

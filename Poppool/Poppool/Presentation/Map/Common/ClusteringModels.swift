@@ -11,9 +11,9 @@ enum MapZoomLevel {
         case ..<7:
             return .country
         case 7..<10:
-            return .city       
-        case 10..<11: 
-            return .district   
+            return .city
+        case 10..<12: // 구 레벨 범위 확장 (10~12)
+            return .district
         default:
             return .detailed
         }
