@@ -113,12 +113,14 @@ class MapViewController: BaseViewController, View {
 
         
         carouselView.rx.observe(Bool.self, "hidden")
-            .distinctUntilChanged()
-            .subscribe(onNext: { [weak self] isHidden in
-                guard let self = self, let isHidden = isHidden else { return }
-                self.mainView.setStoreCardHidden(isHidden, animated: true)
-            })
-            .disposed(by: disposeBag)
+               .distinctUntilChanged()
+               .subscribe(onNext: { [weak self] isHidden in
+                   guard let self = self, let isHidden = isHidden else { return }
+
+                   // 캐러셀 상태 변경 시 마커 처리
+                   self.hideMarkersUnderCarousel()
+               })
+               .disposed(by: disposeBag)
 
         carouselView.onCardTapped = { [weak self] store in
             let detailController = DetailController()
@@ -178,6 +180,8 @@ class MapViewController: BaseViewController, View {
 
                 // 클러스터링 업데이트
                 self.updateMapWithClustering()
+                self.hideMarkersUnderCarousel()
+
             })
             .disposed(by: disposeBag)
 
@@ -999,17 +1003,111 @@ class MapViewController: BaseViewController, View {
         }
 
         CATransaction.commit()
+        hideMarkersUnderCarousel()
+
+    }
+    func hideMarkersUnderCarousel() {
+        // 캐러셀이 숨겨져 있으면 모든 마커 표시
+        if carouselView.isHidden {
+            showAllMarkers()
+            return
+        }
+
+        // 캐러셀의 지도 상 위치 계산 (상단 Y 좌표)
+        let carouselTopY = view.frame.height - carouselView.frame.height - view.safeAreaInsets.bottom
+
+        // 개별 마커 딕셔너리 처리
+        for (id, marker) in individualMarkerDictionary {
+            let markerPoint = mainView.mapView.projection.point(for: marker.position)
+            let isUnderCarousel = markerPoint.y >= carouselTopY
+
+            if isUnderCarousel {
+                // 캐러셀 아래의 마커는 지도에서 완전히 제거
+                marker.map = nil
+
+                // 현재 선택된 마커가 캐러셀 아래에 있으면 툴팁도 제거
+                if marker == currentMarker {
+                    currentTooltipView?.removeFromSuperview()
+                    currentTooltipView = nil
+                    currentMarker = nil
+                }
+            } else {
+                // 캐러셀 위의 마커는 표시
+                if marker.map == nil {
+                    marker.map = mainView.mapView
+                }
+            }
+        }
+
+        // 클러스터 마커 딕셔너리 처리
+        for (key, marker) in clusterMarkerDictionary {
+            let markerPoint = mainView.mapView.projection.point(for: marker.position)
+            if markerPoint.y >= carouselTopY {
+                marker.map = nil
+            } else if marker.map == nil {
+                marker.map = mainView.mapView
+            }
+        }
+
+        // 일반 마커 딕셔너리 처리
+        for (id, marker) in markerDictionary {
+            let markerPoint = mainView.mapView.projection.point(for: marker.position)
+            if markerPoint.y >= carouselTopY {
+                marker.map = nil
+            } else if marker.map == nil {
+                marker.map = mainView.mapView
+            }
+        }
+
+        // 툴팁 위치 확인 및 관리
+        if let tooltipCoord = currentTooltipCoordinate {
+            let tooltipMarkerPoint = mainView.mapView.projection.point(for: tooltipCoord)
+            if tooltipMarkerPoint.y >= carouselTopY {
+                currentTooltipView?.removeFromSuperview()
+                currentTooltipView = nil
+                currentTooltipCoordinate = nil
+            }
+        }
+    }
+
+
+    // 모든 마커를 표시하는 함수
+    func showAllMarkers() {
+        for (_, marker) in individualMarkerDictionary {
+            marker.opacity = 1.0
+        }
+
+        for (_, marker) in clusterMarkerDictionary {
+            marker.opacity = 1.0
+        }
+
+        for (_, marker) in markerDictionary {
+            marker.opacity = 1.0
+        }
     }
     private func clearAllMarkers() {
+        // 개별 마커 제거
         individualMarkerDictionary.values.forEach { $0.map = nil }
         individualMarkerDictionary.removeAll()
 
+        // 클러스터 마커 제거
         clusterMarkerDictionary.values.forEach { $0.map = nil }
         clusterMarkerDictionary.removeAll()
 
+        // 일반 마커 제거
         markerDictionary.values.forEach { $0.map = nil }
         markerDictionary.removeAll()
+
+        // 툴팁 제거
+        currentTooltipView?.removeFromSuperview()
+        currentTooltipView = nil
+        currentTooltipStores = []
+        currentTooltipCoordinate = nil
+
+        // 선택된 마커 초기화
+        currentMarker = nil
     }
+
 
     private func groupStoresByExactLocation(_ stores: [MapPopUpStore]) -> [CoordinateKey: [MapPopUpStore]] {
         var dict = [CoordinateKey: [MapPopUpStore]]()
@@ -1312,6 +1410,8 @@ extension MapViewController: GMSMapViewDelegate {
                 carouselView.updateCards([])
                 currentCarouselStores = []
                 mainView.setStoreCardHidden(true, animated: true)
+                hideMarkersUnderCarousel()
+
 
                 // 툴팁도 숨김
                 currentTooltipView?.removeFromSuperview()
@@ -1458,14 +1558,24 @@ extension MapViewController: GMSMapViewDelegate {
             let detailedZoomLevel: Float = 13.0
             let camera = GMSCameraPosition(target: marker.position, zoom: detailedZoomLevel)
 
-            // 구 클러스터의 스토어들 저장 (idleAtPosition에서 사용)
+            // 선택된 클러스터의 구 이름 가져오기
+            let selectedDistrictName = clusterData.cluster.name
+            Logger.log(message: "선택된 구: \(selectedDistrictName), 스토어 수: \(clusterData.storeCount), 상세 줌으로 확대", category: .debug)
+
+            // 구 클러스터의 스토어들 저장
             let districtStores = clusterData.cluster.stores
 
-            // 해당 구의 스토어만 표시하도록 필터 설정
+            // 1. 기존 마커 초기화
+            clearAllMarkers()
+
+            // 2. 현재 스토어를 해당 구의 스토어로만 설정
             currentStores = districtStores
 
-            // 줌 애니메이션 후 필터링된 마커만 표시
+            // 3. 상세 줌 레벨로 애니메이션하며 이동
             mainView.mapView.animate(to: camera)
+
+            // 4. 애니메이션이 완료되면 updateMapWithClustering이 호출되어
+            // 스토어들이 개별 마커로 표시될 것임
 
         case .detailed:
             // 이미 상세 레벨인 경우, 아무 작업 없음
@@ -1482,6 +1592,7 @@ extension MapViewController: GMSMapViewDelegate {
 
         return true
     }
+
     func handleMicroClusterTap(_ marker: GMSMarker, storeArray: [MapPopUpStore]) -> Bool {
         // 이미 선택된 마커를 다시 탭할 때
         if currentMarker == marker {
@@ -1660,36 +1771,50 @@ extension MapViewController {
 
 
         reactor.state
-              .map { $0.viewportStores }
-              .distinctUntilChanged()
-              .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
-              .observe(on: MainScheduler.instance)
-              .map { [unowned self] stores -> [MapPopUpStore] in
-                  let visibleRegion = self.mainView.mapView.projection.visibleRegion()
-                  let bounds = GMSCoordinateBounds(region: visibleRegion)
+            .map { $0.viewportStores }
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
+            .map { [unowned self] stores -> [MapPopUpStore] in
+                let visibleRegion = self.mainView.mapView.projection.visibleRegion()
+                let bounds = GMSCoordinateBounds(region: visibleRegion)
 
-                  let filteredStores = stores.filter { store in
-                      bounds.contains(CLLocationCoordinate2D(
-                          latitude: store.latitude,
-                          longitude: store.longitude
-                      ))
-                  }
+                // 캐러셀 영역 계산
+                let carouselTopY = self.view.frame.height - self.carouselView.frame.height - self.view.safeAreaInsets.bottom
 
-                  if self.currentMarker == nil,
-                     let location = self.locationManager.location,
-                     self is FullScreenMapViewController {
-                      (self as! FullScreenMapViewController).findAndShowNearestStore(from: location)
-                  }
+                // 뷰포트 내에 있고 캐러셀 영역에 닿지 않는 스토어만 필터링
+                let filteredStores = stores.filter { store in
+                    // 뷰포트 내에 있는지 확인
+                    let isInBounds = bounds.contains(CLLocationCoordinate2D(
+                        latitude: store.latitude,
+                        longitude: store.longitude
+                    ))
 
-                  return filteredStores
-              }
-              .do(onNext: { [weak self] stores in
-                  self?.currentStores = stores
-                  self?.updateMapWithClustering()
-              })
-              .subscribe()
-              .disposed(by: disposeBag)
+                    // 캐러셀 아래에 있는지 확인
+                    let markerPoint = self.mainView.mapView.projection.point(for: CLLocationCoordinate2D(
+                        latitude: store.latitude,
+                        longitude: store.longitude
+                    ))
+                    let isUnderCarousel = markerPoint.y >= carouselTopY
 
+                    // 뷰포트 내에 있고 캐러셀 아래에 있지 않은 스토어만 반환
+                    return isInBounds && !isUnderCarousel
+                }
+
+                if self.currentMarker == nil,
+                   let location = self.locationManager.location,
+                   self is FullScreenMapViewController {
+                    (self as! FullScreenMapViewController).findAndShowNearestStore(from: location)
+                }
+
+                return filteredStores
+            }
+            .do(onNext: { [weak self] stores in
+                self?.currentStores = stores
+                self?.updateMapWithClustering()
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
       }
     private func fetchStoreDetails(for stores: [MapPopUpStore]) {
         guard !stores.isEmpty else { return }
@@ -1772,26 +1897,58 @@ extension MapViewController {
         }
 
         // 현재 다중 마커가 선택된 상태이고 그 마커가 개별 마커 모음이면
-        // 해당 마커의 스토어들만 표시
+        // 해당 마커의 스토어들만 표시 (단, 캐러셀 영역에 닿지 않는 스토어만)
         if let currentMarker = currentMarker,
            let storeArray = currentMarker.userData as? [MapPopUpStore],
            storeArray.count > 1 {
-            currentCarouselStores = storeArray
-            carouselView.updateCards(storeArray)
-            carouselView.isHidden = false
-            mainView.setStoreCardHidden(false, animated: true)
+            // 캐러셀 영역 계산
+            let carouselTopY = view.frame.height - carouselView.frame.height - view.safeAreaInsets.bottom
+
+            // 캐러셀 영역에 닿지 않는 스토어만 필터링
+            let visibleStores = storeArray.filter { store in
+                let markerPoint = mainView.mapView.projection.point(for: CLLocationCoordinate2D(
+                    latitude: store.latitude,
+                    longitude: store.longitude
+                ))
+                return markerPoint.y < carouselTopY
+            }
+
+            if !visibleStores.isEmpty {
+                currentCarouselStores = visibleStores
+                carouselView.updateCards(visibleStores)
+                carouselView.isHidden = false
+                mainView.setStoreCardHidden(false, animated: true)
+            } else {
+                carouselView.isHidden = true
+                carouselView.updateCards([])
+                currentCarouselStores = []
+                mainView.setStoreCardHidden(true, animated: true)
+            }
             return
         }
 
-        // 그 외에는 뷰포트에 보이는 모든 스토어 표시
+        // 그 외에는 뷰포트에 보이는 모든 스토어 표시 (캐러셀 영역 제외)
         let visibleRegion = mainView.mapView.projection.visibleRegion()
         let bounds = GMSCoordinateBounds(region: visibleRegion)
 
+        // 캐러셀 영역 계산
+        let carouselTopY = view.frame.height - carouselView.frame.height - view.safeAreaInsets.bottom
+
+        // 캐러셀 아래에 있지 않은 스토어만 필터링
         let visibleStores = currentStores.filter { store in
-            bounds.contains(CLLocationCoordinate2D(
+            // 바운드 내에 있는지 확인
+            let isInBounds = bounds.contains(CLLocationCoordinate2D(
                 latitude: store.latitude,
                 longitude: store.longitude
             ))
+
+            // 캐러셀 아래에 있는지 확인
+            let markerPoint = mainView.mapView.projection.point(for:
+                CLLocationCoordinate2D(latitude: store.latitude, longitude: store.longitude))
+            let isUnderCarousel = markerPoint.y >= carouselTopY
+
+            // 바운드 내에 있고 캐러셀 아래에 있지 않은 스토어만 반환
+            return isInBounds && !isUnderCarousel
         }
 
         if !visibleStores.isEmpty {
@@ -1825,12 +1982,13 @@ extension MapViewController {
             currentCarouselStores = []
             mainView.setStoreCardHidden(true, animated: true)
 
-            // 마커 이동 중이 아닐 때만 토스트 표시 (사용자 상호작용 체크 제거)
+            // 마커 이동 중이 아닐 때만 토스트 표시
             if !isMovingToMarker {
                 showToast(message: "이 지역에는 팝업 스토어가 없어요")
             }
         }
     }
+
     private func showToast(message: String) {
         // 이미 표시 중인 토스트가 있으면 제거
         view.subviews.forEach { subview in
