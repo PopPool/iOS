@@ -1366,23 +1366,27 @@ private extension PopUpStoreRegisterViewController {
         if let time = time {
             let calendar = Calendar.current
             let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
-            return calendar.date(bySettingHour: timeComponents.hour ?? 0,
-                               minute: timeComponents.minute ?? 0,
-                               second: 0,
-                               of: date)
+            // 현지 시간을 명확하게 지정
+            let newDate = calendar.date(bySettingHour: timeComponents.hour ?? 0,
+                                        minute: timeComponents.minute ?? 0,
+                                        second: 0,
+                                        of: date)
+            return newDate
         }
 
         return date
     }
 
+
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "" }
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.formatOptions = [.withInternetDateTime]
+
+        // 한국 시간대 명시 (GMT+9)
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
         return formatter.string(from: date)
     }
-
     private func prepareDateTime() -> (startDate: String, endDate: String) {
         let startDateTime = createDateTime(date: selectedStartDate, time: selectedStartTime)
         let endDateTime = createDateTime(date: selectedEndDate, time: selectedEndTime)

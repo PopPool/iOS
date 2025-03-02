@@ -375,6 +375,8 @@
 		08DE8A3F2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */; };
 		08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
+		4E643FC12D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */; };
+		4E643FC32D738D930046AF29 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */; };
 		4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */; };
 		4E685ECF2D12CEB6001EF91C /* BalloonChipCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */; };
 		4E685ED12D12CEB6001EF91C /* FilterBottomSheetReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */; };
@@ -862,6 +864,8 @@
 		08DE8A1C2D5261E70049BCAC /* MyPageTermsReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTermsReactor.swift; sourceTree = "<group>"; };
 		08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentedPopUpGridSection.swift; sourceTree = "<group>"; };
 		08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCommentedPopUpGridSectionCell.swift; sourceTree = "<group>"; };
+		4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterReactor.swift; sourceTree = "<group>"; };
+		4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpStoreRegisterView.swift; sourceTree = "<group>"; };
 		4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonBackgroundView.swift; sourceTree = "<group>"; };
 		4E685EAB2D12CEB6001EF91C /* BalloonChipCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonChipCell.swift; sourceTree = "<group>"; };
 		4E685EAD2D12CEB6001EF91C /* FilterBottomSheetReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBottomSheetReactor.swift; sourceTree = "<group>"; };
@@ -2783,6 +2787,8 @@
 			isa = PBXGroup;
 			children = (
 				4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */,
+				4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */,
+				4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */,
 			);
 			path = AdminRegister;
 			sourceTree = "<group>";
@@ -3445,6 +3451,7 @@
 				08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */,
 				08A2E46C2D15BC5000102313 /* CommentLikeRequestDTO.swift in Sources */,
 				086F8A072D23CB3800CA4FC9 /* MyPageProfileSectionCell.swift in Sources */,
+				4E643FC12D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift in Sources */,
 				08B191AE2CF5BFA60057BC04 /* AgeSelectedView.swift in Sources */,
 				4E685EE72D12CEB6001EF91C /* MapSearchInput.swift in Sources */,
 				08A2E4912D1BF6EA00102313 /* CommentListController.swift in Sources */,
@@ -3553,6 +3560,7 @@
 				0818992D2D3506240067BF01 /* FAQDropdownSectionCell.swift in Sources */,
 				08B191742CF43DF40057BC04 /* SignUpCheckBoxButton.swift in Sources */,
 				086DD8D32CFDFF1500B97D3B /* HomePopUpType.swift in Sources */,
+				4E643FC32D738D930046AF29 /* PopUpStoreRegisterView.swift in Sources */,
 				081898CC2D30D5BF0067BF01 /* InfoEditModalController.swift in Sources */,
 				08DE8A0D2D5236840049BCAC /* PutCommentRequestDTO.swift in Sources */,
 				4E685EE92D12CEB6001EF91C /* MapView.swift in Sources */,
@@ -3864,7 +3872,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.17;
+				MARKETING_VERSION = 1.0.18;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -3902,7 +3910,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.17;
+				MARKETING_VERSION = 1.0.18;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

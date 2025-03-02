@@ -7,6 +7,7 @@ import GoogleMaps
 
 final class FullScreenMapViewController: MapViewController {
     var selectedStore: MapPopUpStore?
+    var shouldAutoSelectNearestStore = false  // 일반 모드와 다르게 false로 설정
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,8 @@ final class FullScreenMapViewController: MapViewController {
             updateUI(for: store)
         }
     }
+
+    
 
     // MARK: - Binding
     override func bind(reactor: Reactor) {

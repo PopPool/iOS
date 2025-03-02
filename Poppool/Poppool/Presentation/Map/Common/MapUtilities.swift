@@ -32,9 +32,8 @@ public let gyeonggiSouthRegions: [String] = [
 
 // RepresentativeScope 수정
 public struct RepresentativeScope {
-    // 서울 북부/남부 좌표 조정
     public static let seoulNorth = (
-        center: CLLocationCoordinate2D(latitude: 37.6020, longitude: 127.0350), // 성북/강북 중심
+        center: CLLocationCoordinate2D(latitude: 37.6020, longitude: 127.0350),
         radius: 3000.0
     )
     public static let seoulSouth = (
