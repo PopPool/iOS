@@ -22,16 +22,6 @@ final class TermsDetailView: UIView {
         view.isSelectable = false
         view.isEditable = false
 
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.2
-
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KorFont(style: .regular, size: 15),
-            .paragraphStyle: paragraphStyle
-        ]
-
-        view.attributedText = NSAttributedString(string: view.text, attributes: attributes)
-
         return view
     }()
 
