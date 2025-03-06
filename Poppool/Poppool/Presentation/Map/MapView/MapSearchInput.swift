@@ -14,8 +14,6 @@ final class MapSearchInput: UIView, View {
         return indicator
     }()
 
-
-
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -42,6 +40,8 @@ final class MapSearchInput: UIView, View {
             string: "팝업스토어명, 지역을 입력해보세요",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.g400]
         )
+        // 편집은 하지 않고, 탭으로 화면 전환을 유도
+        textField.isEnabled = false
         return textField
     }()
 
@@ -49,11 +49,8 @@ final class MapSearchInput: UIView, View {
     init() {
         super.init(frame: .zero)
         setupLayout()
-//        setupActions()
-//        setupGesture()
-        searchTextField.isEnabled = false
-
-
+        setupActions()
+        setupGesture()
     }
 
     required init?(coder: NSCoder) {
@@ -62,7 +59,6 @@ final class MapSearchInput: UIView, View {
 
     // MARK: - Public Methods
     func setLoading(_ isLoading: Bool) {
-        searchTextField.isEnabled = !isLoading
         if isLoading {
             activityIndicator.startAnimating()
         } else {
@@ -75,47 +71,46 @@ final class MapSearchInput: UIView, View {
     }
 
     func bind(reactor: MapReactor) {
-        // 엔터 키로 검색 실행
-//        searchTextField.rx.controlEvent(.editingDidEndOnExit)
-//            .withLatestFrom(searchTextField.rx.text.orEmpty)
-//            .bind { query in
-//                reactor.action.onNext(.searchTapped(query))
-//            }
-//            .disposed(by: disposeBag)
-
-        // 텍스트 입력 로그
+        // 텍스트필드 입력 로그 (필요 시 확인)
         searchTextField.rx.text.orEmpty
             .subscribe(onNext: { text in
                 print("[DEBUG] TextField Input: \(text)")
             })
             .disposed(by: disposeBag)
 
-        // 선택된 필터를 검색창에 반영
+        // Reactor의 선택된 위치 필터를 텍스트필드에 바인딩 (없으면 기본 문구)
         reactor.state
-            .map { $0.selectedLocationFilters.first }
+            .map { $0.selectedLocationFilters.first ?? "팝업스토어명을 입력해보세요" }
             .distinctUntilChanged()
             .bind(to: searchTextField.rx.text)
             .disposed(by: disposeBag)
     }
+
     func setBackgroundColor(_ color: UIColor) {
         containerView.backgroundColor = color
     }
+
+    // MARK: - Gesture Setup
     private func setupGesture() {
-        // 전체 뷰에 탭 제스처 추가
-        let tapGesture = UITapGestureRecognizer(target: self, action: nil)
-        addGestureRecognizer(tapGesture)
-        isUserInteractionEnabled = true
+        // containerView에 탭 제스처를 추가하여 화면 전환 트리거
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        containerView.addGestureRecognizer(tapGesture)
+        containerView.isUserInteractionEnabled = true
     }
 
-
+    @objc private func handleTapGesture() {
+        // onSearch 클로저를 호출해서 화면 전환을 진행
+        onSearch?(searchTextField.text ?? "")
+    }
 }
 
-// MARK: - Setup
+// MARK: - Setup Layout and Actions
 private extension MapSearchInput {
     func setupLayout() {
         addSubview(containerView)
         containerView.addSubview(searchIcon)
         containerView.addSubview(searchTextField)
+        containerView.addSubview(activityIndicator)
 
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -132,9 +127,15 @@ private extension MapSearchInput {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-16)
         }
+
+        activityIndicator.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-16)
+            make.centerY.equalToSuperview()
+        }
     }
 
     func setupActions() {
+        // 텍스트필드에서 엔터(검색) 이벤트 발생 시 onSearch 클로저 호출 (필요 시 사용)
         searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .withLatestFrom(searchTextField.rx.text.orEmpty)
             .subscribe(onNext: { [weak self] query in

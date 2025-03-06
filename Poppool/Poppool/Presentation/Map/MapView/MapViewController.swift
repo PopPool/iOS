@@ -23,7 +23,6 @@ class MapViewController: BaseViewController, View {
         }
     }
 
-    // (신규) 툴팁(팝업) 뷰를 담아둘 변수
     var currentTooltipView: UIView?
     var currentTooltipStores: [MapPopUpStore] = []
     var currentTooltipCoordinate: CLLocationCoordinate2D?
@@ -361,7 +360,6 @@ class MapViewController: BaseViewController, View {
         mainView.listButton.rx.tap
             .withUnretained(self)
             .subscribe { owner, _ in
-//                print("[DEBUG] List Button Tapped")
                 owner.animateToState(.middle) // 버튼 눌렀을 때 상태를 middle로 변경
             }
             .disposed(by: disposeBag)
@@ -425,7 +423,6 @@ class MapViewController: BaseViewController, View {
                 southWestLon: bounds.nearLeft.longitude
             ))
 
-            // **(추가)** 선택된 마커 및 툴팁, 캐러셀을 완전히 해제
             self.resetSelectedMarker()
 
             // 만약 지도 위 마커를 전부 제거하고 싶다면 (상황에 따라)
@@ -731,7 +728,13 @@ class MapViewController: BaseViewController, View {
                 self.mainView.mapView.alpha = 1
                 self.mainView.mapView.isHidden = false
                 self.mainView.searchInput.setBackgroundColor(.white)
-                self.fetchStoreDetails(for: self.currentStores)
+
+                // 리스트뷰 표시 시 리액터에서 전체 스토어 목록 가져오기
+                if let reactor = self.reactor {
+                    let allStores = reactor.currentState.viewportStores
+                    self.fetchStoreDetails(for: allStores)  // 전체 스토어 목록 전달
+                }
+
 
 
 
@@ -1701,6 +1704,7 @@ extension MapViewController {
 
       }
     private func fetchStoreDetails(for stores: [MapPopUpStore]) {
+        // 빈 목록이면 처리하지 않음
         guard !stores.isEmpty else { return }
 
         // 먼저 기본 정보로 StoreItem 생성하여 순서 유지
@@ -1716,10 +1720,10 @@ extension MapViewController {
             )
         }
 
-        // 우선 기본 정보로 리스트 업데이트
+        // 리스트에는 모든 스토어 정보 표시 (필터링된 모든 스토어)
         self.storeListViewController.reactor?.action.onNext(.setStores(initialStoreItems))
 
-        // 각 스토어의 상세 정보를 병렬로 가져와서 업데이트
+        // 각 스토어의 상세 정보를 병렬로 가져와서 업데이트 (북마크 정보 등)
         stores.forEach { store in
             self.popUpAPIUseCase.getPopUpDetail(
                 commentType: "NORMAL",
@@ -1736,6 +1740,7 @@ extension MapViewController {
             .disposed(by: disposeBag)
         }
     }
+
 
     private func findMarkerForStore(for store: MapPopUpStore) -> GMSMarker? {
         // individualMarkerDictionary에 저장된 모든 마커를 순회
