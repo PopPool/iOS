@@ -384,28 +384,21 @@ final class FilterBottomSheetView: UIView {
 
 
     func updateBalloonPosition(for button: UIButton) {
-        // window 좌표계로 변환
         guard let window = button.window else { return }
 
-        // 1. 버튼과 말풍선의 window 기준 프레임 구하기
         let buttonFrameInWindow = button.convert(button.bounds, to: window)
         let balloonFrameInWindow = balloonBackgroundView.convert(balloonBackgroundView.bounds, to: window)
 
-        // 2. 버튼 중앙점의 x좌표
         let buttonCenterX = buttonFrameInWindow.midX
 
-        // 3. 말풍선 기준으로 상대적 위치 계산
         let relativeX = buttonCenterX - balloonFrameInWindow.minX
 
-        // 4. 말풍선 너비 기준으로 비율 계산 (0.0 ~ 1.0)
         let position = relativeX / balloonBackgroundView.bounds.width
 
-        // 5. 경계값 처리 (화살표가 말풍선 영역을 벗어나지 않도록)
         let minPosition: CGFloat = 0.1  // 왼쪽 여백
         let maxPosition: CGFloat = 0.9  // 오른쪽 여백
         let clampedPosition = min(maxPosition, max(minPosition, position))
 
-        // 6. 위치 업데이트 및 다시 그리기
         balloonBackgroundView.arrowPosition = clampedPosition
         balloonBackgroundView.setNeedsDisplay()
     }

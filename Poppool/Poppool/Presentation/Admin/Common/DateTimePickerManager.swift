@@ -1,7 +1,6 @@
 import UIKit
 import SnapKit
 
-/// 날짜/시간 피커 로직을 분리한 Manager
 final class DateTimePickerManager {
 
     static let shared = DateTimePickerManager()

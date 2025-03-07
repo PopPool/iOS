@@ -53,10 +53,9 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
         }
 
-        // 전체 view에 탭 제스처 추가 (containerView 외부 탭 감지)
-        let tapOutsideGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside))
-        tapOutsideGesture.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapOutsideGesture)
+//        let tapOutsideGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside))
+//        tapOutsideGesture.cancelsTouchesInView = false
+//        self.view.addGestureRecognizer(tapOutsideGesture)
 
     }
 
@@ -72,11 +71,13 @@ final class FilterBottomSheetViewController: UIViewController, View {
         view.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(UIScreen.main.bounds.height * 0.85)
+            make.height.equalTo(UIScreen.main.bounds.height * 0.7)
             bottomConstraint = make.bottom.equalToSuperview().offset(UIScreen.main.bounds.height).constraint
         }
 
         view.sendSubviewToBack(dimmedView)
+        dimmedView.isUserInteractionEnabled = true
+
     }
 
     private func setupCollectionView() {
@@ -104,7 +105,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
                self.containerView.balloonBackgroundView.configure(
                    for: location.main,
                    subRegions: location.sub,
-                   selectedRegions: reactor.currentState.selectedSubRegions, // 여기서 Reactor 상태에서 가져오기
+                   selectedRegions: reactor.currentState.selectedSubRegions,
                    selectionHandler: { [weak self] subRegion in
                        self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
                    },
@@ -249,7 +250,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             self?.tagSection = TagSection(inputDataList: categories.map {
                 TagSectionCell.Input(
                     title: $0,
-                    isSelected: selectedCategories.contains($0),  // 현재 선택된 카테고리인지 체크
+                    isSelected: selectedCategories.contains($0),
                     id: nil
                 )
             })
@@ -330,16 +331,14 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 })
                 .disposed(by: disposeBag)
 
-            // 이전 선택 상태 복원을 위한 추가 바인딩
             Observable.combineLatest(
                 reactor.state.map { $0.savedSubRegions }.distinctUntilChanged(),
                 reactor.state.map { $0.savedCategories }.distinctUntilChanged()
             )
-            .take(1)  // 초기 1회만 실행
+            .take(1)
             .subscribe(onNext: { [weak self] (subRegions, categories) in
                 guard let self = self else { return }
 
-                // 이전 선택 상태로 UI 업데이트
                 subRegions.forEach { region in
                     reactor.action.onNext(.toggleSubRegion(region))
                 }
@@ -348,7 +347,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                     reactor.action.onNext(.toggleCategory(category))
                 }
 
-                // UI 업데이트 강제
                 self.containerView.categoryCollectionView.reloadData()
                 self.containerView.balloonBackgroundView.setNeedsDisplay()
             })
@@ -367,13 +365,16 @@ final class FilterBottomSheetViewController: UIViewController, View {
     }
 
     private func setupGestures() {
+        // dimmedView에만 탭 제스처를 설정하고 다른 제스처와의 충돌을 방지
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
         dimmedView.addGestureRecognizer(tapGesture)
-        dimmedView.isUserInteractionEnabled = true
+        dimmedView.isUserInteractionEnabled = true  // 확실히 활성화
 
+        // 패닝 제스처는 유지
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         containerView.addGestureRecognizer(panGesture)
     }
+
     @objc private func handleDimmedViewTap() {
            hideBottomSheet()
        }
@@ -385,15 +386,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
            let index = reactor.currentState.locations.firstIndex(where: { $0.main == locations }) {
             reactor.action.onNext(.selectLocation(index))
 
-//            // 2. 저장된 서브 지역들 선택 상태로 설정
-//            reactor.currentState.savedSubRegions.forEach { region in
-//                reactor.action.onNext(.toggleSubRegion(region))
-//            }
-//        }
-//
-//        // 3. 저장된 카테고리들 선택 상태로 설정
-//        reactor.currentState.savedCategories.forEach { category in
-//            reactor.action.onNext(.toggleCategory(category))
+
         }
 
         // 4. 필터 칩 뷰 업데이트
@@ -426,14 +419,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
     @objc private func handleTapDimmedView() {
         hideBottomSheet()
     }
-    @objc private func handleTapOutside(_ gesture: UITapGestureRecognizer) {
-          let location = gesture.location(in: self.view)
-          // containerView의 프레임 영역을 구해서, 그 밖이라면 닫기
-          if !containerView.frame.contains(location) {
-              hideBottomSheet()
-          }
-      }
-
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)

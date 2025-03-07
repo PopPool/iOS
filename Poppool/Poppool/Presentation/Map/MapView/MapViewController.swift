@@ -304,6 +304,9 @@ class MapViewController: BaseViewController, View {
         storeListViewController.mainView.addGestureRecognizer(panGesture)
         setupPanAndSwipeGestures()
 
+        let mapViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapViewTap(_:)))
+        mainView.mapView.addGestureRecognizer(mapViewTapGesture)
+        mapViewTapGesture.delegate = self
 
     }
 
@@ -630,6 +633,14 @@ class MapViewController: BaseViewController, View {
           marker.iconView = markerView
           marker.map = mainView.mapView
       }
+
+    @objc private func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
+        // 리스트뷰가 현재 보이는 상태(중간 또는 상단)일 때만 내림
+        if modalState == .middle || modalState == .top {
+            Logger.log(message: "맵뷰 탭 감지: 리스트뷰 내림", category: .debug)
+            animateToState(.bottom)
+        }
+    }
 
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
@@ -1894,5 +1905,28 @@ extension Reactive where Base: GMSMapView {
 extension CLLocationCoordinate2D: Equatable {
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+}
+extension MapViewController: UIGestureRecognizerDelegate {
+    // 맵뷰의 다른 제스처와 충돌하지 않도록 함
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // 맵의 내장 제스처와 동시 인식 허용
+        return true
+    }
+
+    // 리스트뷰가 보일 때만 커스텀 탭 제스처 허용
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // 터치가 리스트뷰 영역에 있으면 커스텀 제스처 트리거하지 않음
+        let touchPoint = touch.location(in: view)
+
+        // 리스트뷰가 보이고 터치가 리스트뷰 위에 있으면 탭 처리하지 않음
+        if modalState != .bottom {
+            let listViewY = storeListViewController.view.frame.minY
+            if touchPoint.y > listViewY {
+                return false
+            }
+        }
+
+        return true
     }
 }

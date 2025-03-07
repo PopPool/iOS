@@ -1365,28 +1365,42 @@ private extension PopUpStoreRegisterViewController {
 
         if let time = time {
             let calendar = Calendar.current
+
+            // 날짜 부분 추출
+            var components = calendar.dateComponents([.year, .month, .day], from: date)
+
+            // 시간 부분 추출
             let timeComponents = calendar.dateComponents([.hour, .minute], from: time)
-            // 현지 시간을 명확하게 지정
-            let newDate = calendar.date(bySettingHour: timeComponents.hour ?? 0,
-                                        minute: timeComponents.minute ?? 0,
-                                        second: 0,
-                                        of: date)
-            return newDate
+
+            // 날짜와 시간 결합
+            components.hour = timeComponents.hour
+            components.minute = timeComponents.minute
+            components.second = 0
+
+            // 명확한 시간대 지정으로 일관성 유지
+            components.timeZone = TimeZone.current
+
+            return calendar.date(from: components)
         }
 
         return date
     }
 
-
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "" }
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
 
-        // 한국 시간대 명시 (GMT+9)
-        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-        return formatter.string(from: date)
+        // ISO 8601 형식이지만 로컬 시간대를 유지하는 포맷터
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS''" // ISO 8601 형식과 유사하지만 Z는 시간대 변환 없이 표기만
+        formatter.timeZone = TimeZone.current // 로컬 시간대 유지
+
+        let formattedDate = formatter.string(from: date)
+        Logger.log(message: "로컬 시간 포맷: \(formattedDate)", category: .debug)
+
+        return formattedDate
     }
+
+
     private func prepareDateTime() -> (startDate: String, endDate: String) {
         let startDateTime = createDateTime(date: selectedStartDate, time: selectedStartTime)
         let endDateTime = createDateTime(date: selectedEndDate, time: selectedEndTime)
