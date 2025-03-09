@@ -58,7 +58,6 @@ private extension StoreListView {
         backgroundColor = .white
         addSubview(collectionView)
         addSubview(grabberHandle)
-
         grabberHandle.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(14).priority(.high)
                  make.centerX.equalToSuperview()

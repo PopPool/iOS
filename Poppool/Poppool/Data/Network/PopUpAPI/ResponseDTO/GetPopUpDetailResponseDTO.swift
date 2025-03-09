@@ -31,7 +31,7 @@ extension GetPopUpDetailResponseDTO {
             startDate: startDate.toDate().toPPDateString(),
             endDate: endDate.toDate().toPPDateString(),
             startTime: startDate.toDate().toPPTimeeString(),
-            endTime: startDate.toDate().toPPTimeeString(),
+            endTime: endDate.toDate().toPPTimeeString(),
             address: address,
             commentCount: commentCount,
             bookmarkYn: bookmarkYn,

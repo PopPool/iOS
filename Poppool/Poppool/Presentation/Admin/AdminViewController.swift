@@ -238,7 +238,7 @@ final class AdminViewController: BaseViewController, View {
             .compactMap { $0 }
             .subscribe(onNext: { [weak self] store in
                 guard let self = self else { return }
-                self.editStore(store) // ✅ 기존 `editStore(_:)`를 사용
+                self.editStore(store) 
             })
             .disposed(by: disposeBag)
 

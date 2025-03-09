@@ -104,7 +104,7 @@ private extension MapView {
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)  // 수정된 부분
+            make.leading.trailing.equalToSuperview().inset(20)  
             make.height.equalTo(37)
         }
 
@@ -112,7 +112,7 @@ private extension MapView {
         searchFilterContainer.addSubview(filterChips)
         filterChips.snp.makeConstraints { make in
             make.top.equalTo(searchInput.snp.bottom).offset(7)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(36)
             make.bottom.equalToSuperview()
         }
@@ -146,7 +146,7 @@ private extension MapView {
             if storeCard.isHidden {
                 make.bottom.equalTo(safeAreaLayoutGuide).offset(-40)
             } else {
-                make.bottom.equalTo(storeCard.snp.top).offset(-40)
+                make.bottom.equalTo(storeCard.snp.top).offset(-20)
             }
         }
 
