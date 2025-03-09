@@ -733,10 +733,17 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             guard let self = self else { return }
             self.selectedStartTime = st
             self.selectedEndTime = et
+
+            // 디버깅을 위한 로그 추가
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm:ss"
+            Logger.log(message: "시간 선택 완료 - 시작: \(formatter.string(from: st)), 종료: \(formatter.string(from: et))", category: .debug)
+
             self.updateTimeButtonTitle()
-            self.updateSaveButtonState() // 시간 선택 후 저장 버튼 상태 업데이트
+            self.updateSaveButtonState()
         }
     }
+
 
     private func updatePeriodButtonTitle() {
         guard let s = selectedStartDate, let e = selectedEndDate else { return }
@@ -1377,8 +1384,8 @@ private extension PopUpStoreRegisterViewController {
             components.minute = timeComponents.minute
             components.second = 0
 
-            // 명확한 시간대 지정으로 일관성 유지
-            components.timeZone = TimeZone.current
+            // 명시적으로 한국 시간대 지정
+            components.timeZone = TimeZone(identifier: "Asia/Seoul")
 
             return calendar.date(from: components)
         }
@@ -1389,26 +1396,48 @@ private extension PopUpStoreRegisterViewController {
     private func getFormattedDate(from date: Date?) -> String {
         guard let date = date else { return "" }
 
-        // ISO 8601 형식이지만 로컬 시간대를 유지하는 포맷터
+        // 한국 시간대를 명시적으로 지정하고 ISO 8601 형식으로 변환
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS''" // ISO 8601 형식과 유사하지만 Z는 시간대 변환 없이 표기만
-        formatter.timeZone = TimeZone.current // 로컬 시간대 유지
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간대로 명시
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
-        let formattedDate = formatter.string(from: date)
-        Logger.log(message: "로컬 시간 포맷: \(formattedDate)", category: .debug)
-
-        return formattedDate
+        // Z 표기를 추가하지 않음 (시간대 정보 없음)
+        return formatter.string(from: date)
     }
 
 
+
+
     private func prepareDateTime() -> (startDate: String, endDate: String) {
+        // 시작일/시간 결합
         let startDateTime = createDateTime(date: selectedStartDate, time: selectedStartTime)
+
+        // 종료일/시간 결합
         let endDateTime = createDateTime(date: selectedEndDate, time: selectedEndTime)
 
-        return (
-            startDate: getFormattedDate(from: startDateTime),
-            endDate: getFormattedDate(from: endDateTime)
-        )
+        // 디버그용 로그
+        if let startTime = selectedStartTime, let endTime = selectedEndTime {
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "HH:mm"
+            Logger.log(message: "선택된 시작 시간: \(timeFormatter.string(from: startTime))", category: .debug)
+            Logger.log(message: "선택된 종료 시간: \(timeFormatter.string(from: endTime))", category: .debug)
+        }
+
+        // 결합된 날짜/시간 로깅
+        if let start = startDateTime, let end = endDateTime {
+            let dateTimeFormatter = DateFormatter()
+            dateTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            Logger.log(message: "결합된 시작 일시: \(dateTimeFormatter.string(from: start))", category: .debug)
+            Logger.log(message: "결합된 종료 일시: \(dateTimeFormatter.string(from: end))", category: .debug)
+        }
+
+        let startDate = getFormattedDate(from: startDateTime)
+        let endDate = getFormattedDate(from: endDateTime)
+
+        Logger.log(message: "서버로 전송될 시작 일시: \(startDate)", category: .debug)
+        Logger.log(message: "서버로 전송될 종료 일시: \(endDate)", category: .debug)
+
+        return (startDate: startDate, endDate: endDate)
     }
 
     // 새로운 검증 함수 추가 (prepareDateTime 함수 아래에 추가)
