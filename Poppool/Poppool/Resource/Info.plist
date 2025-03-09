@@ -22,11 +22,6 @@
 		<string>kakaomap</string>
 		<string>tmap</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GothicA1-Bold.ttf</string>
