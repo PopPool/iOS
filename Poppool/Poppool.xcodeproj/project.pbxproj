@@ -3860,6 +3860,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Poppool/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "팝풀";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라를 사용합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱이 사용자의 현재 위치를 확인하기 위해 위치 권한이 필요합니다";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하거나 저장하기 위해 사진 라이브러리에 접근합니다.";
@@ -3902,6 +3903,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Poppool/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "팝풀";
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진 촬영을 위해 카메라를 사용합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "앱이 사용자의 현재 위치를 확인하기 위해 위치 권한이 필요합니다";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하거나 저장하기 위해 사진 라이브러리에 접근합니다.";
