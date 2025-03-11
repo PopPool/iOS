@@ -117,7 +117,7 @@ final class ProviderImpl: Provider {
 
                     // 만약 헤더에 새 토큰이 있으면 저장
                     if var accessToken = response.response?.allHeaderFields["Authorization"] as? String,
-                       var refreshToken = response.response?.allHeaderFields["Authorization-refresh"] as? String {
+                       var refreshToken = response.response?.allHeaderFields["authorization-refresh"] as? String {
                         accessToken = accessToken.replacingOccurrences(of: "Bearer ", with: "")
                         refreshToken = refreshToken.replacingOccurrences(of: "Bearer ", with: "")
 
