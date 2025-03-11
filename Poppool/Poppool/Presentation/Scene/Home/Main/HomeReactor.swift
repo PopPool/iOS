@@ -210,7 +210,7 @@ final class HomeReactor: Reactor {
     func setBannerSection(response: GetHomeInfoResponse) {
         let imagePaths = response.bannerPopUpStoreList.map { $0.mainImageUrl }
         let idList = response.bannerPopUpStoreList.map { $0.id }
-        loginImageBannerSection.inputDataList = [.init(imagePaths: imagePaths, idList: idList)]
+        loginImageBannerSection.inputDataList = imagePaths.isEmpty ? [] : [.init(imagePaths: imagePaths, idList: idList)]
     }
     
     func setCurationTitleSection(response: GetHomeInfoResponse) {
