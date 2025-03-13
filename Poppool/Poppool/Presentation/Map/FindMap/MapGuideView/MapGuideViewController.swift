@@ -102,16 +102,6 @@ final class MapGuideViewController: UIViewController, View {
         return btn
     }()
 
-    private let tmapButton: UIButton = {
-        let btn = UIButton()
-        btn.setImage(UIImage(named: "TMap"), for: .normal)
-        btn.layer.cornerRadius = 24
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.g100.cgColor
-        btn.clipsToBounds = true
-        return btn
-    }()
-
     private let appleButton: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(named: "AppleMap"), for: .normal)
@@ -148,10 +138,6 @@ final class MapGuideViewController: UIViewController, View {
             .disposed(by: disposeBag)
         kakaoButton.rx.tap
             .map { Reactor.Action.openMapApp("kakao") }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        tmapButton.rx.tap
-            .map { Reactor.Action.openMapApp("TMap") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         appleButton.rx.tap
@@ -280,18 +266,18 @@ final class MapGuideViewController: UIViewController, View {
             make.centerY.equalToSuperview()
         }
 
-        // 버튼 스택에 애플맵 버튼 추가
-        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, tmapButton, appleButton])
+        // 티맵 버튼 제거, 네이버/카카오/애플맵만 포함
+        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, appleButton])
         appStack.axis = .horizontal
         appStack.alignment = .center
-        appStack.spacing = 12  // 버튼이 하나 더 추가되어 간격 줄임
+        appStack.spacing = 16  // 버튼이 3개로 줄어 간격 다시 늘림
         appStack.distribution = .fillEqually
 
         bottomContainer.addSubview(appStack)
         appStack.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            [naverButton, kakaoButton, tmapButton, appleButton].forEach { button in
+            [naverButton, kakaoButton, appleButton].forEach { button in
                 button.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 48, height: 48))
                 }
