@@ -37,8 +37,6 @@ final class MapGuideReactor: Reactor {
         var selectedStore: MapPopUpStore? = nil  // 사용자가 선택한 스토어 [추가]
         var storeName: String?    // 추가
         var address: String?      // 추가
-
-
     }
 
     let initialState: State
@@ -81,7 +79,6 @@ final class MapGuideReactor: Reactor {
                 }
                 .flatMap { Observable.from($0) }
 
-
         case .didSelectItem(let store):
             return Observable.just(.setSelectedStore(store))
         }
@@ -109,10 +106,15 @@ final class MapGuideReactor: Reactor {
             "tmap": (
                 "tmap://route?goalname=목적지&goaly=\(coordinate.latitude)&goalx=\(coordinate.longitude)",
                 "https://apps.apple.com/kr/app/id431589174"
+            ),
+            // 애플 지도 추가
+            "apple": (
+                "maps://?q=\(encodedName)&ll=\(coordinate.latitude),\(coordinate.longitude)&z=16",
+                ""  
             )
         ]
 
-        guard let (urlScheme, appStoreUrl) = appInfo[appType] else {
+        guard let (urlScheme, appStoreUrl) = appInfo[appType.lowercased()] else {
             return Observable.just(.showToast("지원하지 않는 맵 앱입니다."))
         }
 
@@ -124,11 +126,17 @@ final class MapGuideReactor: Reactor {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 return Observable.empty()
             } else {
-                Logger.log(message: "❌ \(appType) 앱 미설치 - 앱스토어로 이동", category: .debug)
-                if let appStoreURL = URL(string: appStoreUrl) {
-                    UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
+                // 애플 지도는 기본 앱이므로 이 조건에 걸리지 않아야 함
+                // 하지만 혹시 모를 상황을 대비해 처리
+                if appType.lowercased() == "apple" {
+                    return Observable.just(.showToast("애플 지도 앱을 열 수 없습니다."))
+                } else {
+                    Logger.log(message: "❌ \(appType) 앱 미설치 - 앱스토어로 이동", category: .debug)
+                    if let appStoreURL = URL(string: appStoreUrl) {
+                        UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
+                    }
+                    return Observable.just(.showToast("\(appType) 앱이 설치되어 있지 않아 앱스토어로 이동합니다."))
                 }
-                return Observable.just(.showToast("\(appType) 앱이 설치되어 있지 않아 앱스토어로 이동합니다."))
             }
         }
 
@@ -154,10 +162,7 @@ final class MapGuideReactor: Reactor {
         case let .setStoreInfo(name, address):
             newState.storeName = name
             newState.address = address
-
         }
-
-
 
         return newState
     }

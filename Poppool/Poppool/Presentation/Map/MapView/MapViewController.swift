@@ -882,28 +882,21 @@ class MapViewController: BaseViewController, View {
 
         switch level {
         case .detailed:
-            // 현재 표시되어야 할 마커의 키 집합 생성
             let newStoreIds = Set(visibleStores.map { $0.id })
             let groupedDict = groupStoresByExactLocation(visibleStores)
 
-            // 클러스터 마커는 모두 제거
             clusterMarkerDictionary.values.forEach { $0.map = nil }
             clusterMarkerDictionary.removeAll()
 
-            // 그룹별로 마커 생성 또는 업데이트
             for (coordinate, storeGroup) in groupedDict {
                 if storeGroup.count == 1, let store = storeGroup.first {
-                    // 단일 스토어 마커
                     if let existingMarker = individualMarkerDictionary[store.id] {
-                        // 기존 마커 재사용
                         if existingMarker.position != store.coordinate {
                             existingMarker.position = store.coordinate
                         }
 
-                        // 마커를 맵에 표시
                         existingMarker.map = mainView.mapView
 
-                        // 마커 뷰 상태 업데이트 (필요한 경우에만)
                         if let markerView = existingMarker.iconView as? MapMarker,
                            markerView.currentInput?.isSelected != (existingMarker == currentMarker) {
                             markerView.injection(with: .init(
@@ -912,7 +905,6 @@ class MapViewController: BaseViewController, View {
                             ))
                         }
                     } else {
-                        // 새 마커 생성
                         let marker = GMSMarker(position: store.coordinate)
                         marker.userData = store
                         marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
@@ -928,15 +920,12 @@ class MapViewController: BaseViewController, View {
                         individualMarkerDictionary[store.id] = marker
                     }
                 } else {
-                    // 다중 스토어 마커
                     guard let firstStore = storeGroup.first else { continue }
                     let markerKey = firstStore.id
 
                     if let existingMarker = individualMarkerDictionary[markerKey] {
-                        // 기존 마커 재사용
                         existingMarker.userData = storeGroup
 
-                        // 마커를 맵에 표시
                         existingMarker.map = mainView.mapView
 
                         if let markerView = existingMarker.iconView as? MapMarker,
@@ -968,7 +957,6 @@ class MapViewController: BaseViewController, View {
                 }
             }
 
-            // 뷰포트에 없는 마커는 맵에서 숨기기 (딕셔너리에서는 제거하지 않음)
             for (id, marker) in individualMarkerDictionary {
                 if !newStoreIds.contains(id) {
                     marker.map = nil
@@ -1024,7 +1012,6 @@ class MapViewController: BaseViewController, View {
                 }
             }
 
-            // 사용하지 않는 클러스터 마커는 맵에서만 제거 (딕셔너리에서는 유지)
             for (key, marker) in clusterMarkerDictionary {
                 if !activeClusterKeys.contains(key) {
                     marker.map = nil
@@ -1465,7 +1452,6 @@ extension MapViewController: GMSMapViewDelegate {
                 carouselView.updateCards([store])
             }
         } else {
-            // 캐러셀에 이미 해당 스토어가 있는 경우, 해당 위치로 스크롤
             if let index = currentCarouselStores.firstIndex(where: { $0.id == store.id }) {
                 carouselView.scrollToCard(index: index)
             }
@@ -1483,7 +1469,6 @@ extension MapViewController: GMSMapViewDelegate {
                 (currentTooltipView as? MarkerTooltipView)?.selectStore(at: index)
             }
         } else {
-            // 단일 마커인 경우 툴팁 제거
             currentTooltipView?.removeFromSuperview()
             currentTooltipView = nil
         }
@@ -1546,7 +1531,7 @@ extension MapViewController: GMSMapViewDelegate {
             }
 
             currentMarker = nil
-            isMovingToMarker = false  // 여기서 false로 설정
+            isMovingToMarker = false
             return false
         }
 
@@ -1837,10 +1822,8 @@ extension MapViewController {
             )
         }
 
-        // 리스트에는 모든 스토어 정보 표시 (필터링된 모든 스토어)
         self.storeListViewController.reactor?.action.onNext(.setStores(initialStoreItems))
 
-        // 각 스토어의 상세 정보를 병렬로 가져와서 업데이트 (북마크 정보 등)
         stores.forEach { store in
             self.popUpAPIUseCase.getPopUpDetail(
                 commentType: "NORMAL",
@@ -1880,7 +1863,6 @@ extension MapViewController {
         return nil
     }
     private func updateMarkersForCluster(stores: [MapPopUpStore]) {
-        // 전체 개별 및 클러스터 마커 제거
         for marker in individualMarkerDictionary.values {
             marker.map = nil
         }
@@ -1891,7 +1873,6 @@ extension MapViewController {
         }
         clusterMarkerDictionary.removeAll()
 
-        // 클러스터에 포함된 스토어들만 새 마커 추가
         for store in stores {
             addMarker(for: store)
         }
@@ -1957,20 +1938,15 @@ private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
     }
     // 커스텀 마커
     func updateMarkers(with newStores: [MapPopUpStore]) {
-        // 새로운 스토어 ID 집합 생성
         let newStoreIDs = Set(newStores.map { $0.id })
 
-        // 1. 기존 마커 업데이트 또는 추가
         for store in newStores {
             if let marker = individualMarkerDictionary[store.id] {
-                // 위치 변경 등 업데이트 (미세한 차이가 있을 때만)
                 if abs(marker.position.latitude - store.latitude) > 0.0001 ||
                    abs(marker.position.longitude - store.longitude) > 0.0001 {
                     marker.position = store.coordinate
                 }
-                // 필요한 경우 마커 상태 업데이트 (예: 선택 상태)
             } else {
-                // 새로운 스토어이면 마커 생성
                 let marker = GMSMarker(position: store.coordinate)
                 marker.userData = store
 
@@ -1983,7 +1959,6 @@ private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
             }
         }
 
-        // 2. 기존 마커 중 새로운 목록에 없는 것 제거
         for (id, marker) in individualMarkerDictionary {
             if !newStoreIDs.contains(id) {
                 marker.map = nil
@@ -2014,9 +1989,7 @@ extension CLLocationCoordinate2D: Equatable {
     }
 }
 extension MapViewController: UIGestureRecognizerDelegate {
-    // 맵뷰의 다른 제스처와 충돌하지 않도록 함
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // 맵의 내장 제스처와 동시 인식 허용
         return true
     }
 
