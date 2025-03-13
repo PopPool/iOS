@@ -9,7 +9,7 @@ final class MapGuideViewController: UIViewController, View {
     // MARK: - Properties
     var disposeBag = DisposeBag()
     private let popUpStoreId: Int64
-    private var currentCarouselStores: [MapPopUpStore] = []  // [추가] 현재 선택된 스토어 목록
+    private var currentCarouselStores: [MapPopUpStore] = []  // 현재 선택된 스토어 목록
 
     init(popUpStoreId: Int64) {
         self.popUpStoreId = popUpStoreId
@@ -112,6 +112,16 @@ final class MapGuideViewController: UIViewController, View {
         return btn
     }()
 
+    private let appleButton: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(named: "AppleMap"), for: .normal)
+        btn.layer.cornerRadius = 24
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.g100.cgColor
+        btn.clipsToBounds = true
+        return btn
+    }()
+
     private var modalCardBottomConstraint: Constraint?
 
     // MARK: - Lifecycle
@@ -131,7 +141,7 @@ final class MapGuideViewController: UIViewController, View {
             })
             .disposed(by: disposeBag)
 
-        // 지도 앱 열기 (동일)
+        // 지도 앱 열기
         naverButton.rx.tap
             .map { Reactor.Action.openMapApp("naver") }
             .bind(to: reactor.action)
@@ -144,31 +154,31 @@ final class MapGuideViewController: UIViewController, View {
             .map { Reactor.Action.openMapApp("TMap") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        appleButton.rx.tap
+            .map { Reactor.Action.openMapApp("AppleMap") }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
-        // [수정] expandButton tap 이벤트를 하나로 통합
         expandButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                // Reactor 생성 (동일한 provider, useCase, directionRepository 사용)
                 let provider = ProviderImpl()
                 let useCase = DefaultMapUseCase(repository: DefaultMapRepository(provider: provider))
                 let directionRepository = DefaultMapDirectionRepository(provider: provider)
                 let reactor = MapReactor(useCase: useCase, directionRepository: directionRepository)
 
                 if let selectedStore = self.currentCarouselStores.first {
-                    // 선택된 스토어가 있는 경우, 이를 Reactor에 반영하고 FullScreenMapViewController에 주입
                     reactor.action.onNext(.didSelectItem(selectedStore))
                     reactor.action.onNext(.viewDidLoad(self.popUpStoreId))
 
                     let fullScreenMapVC = FullScreenMapViewController()
-                    fullScreenMapVC.selectedStore = selectedStore // [추가] 직접 주입
+                    fullScreenMapVC.selectedStore = selectedStore // 직접 주입
                     fullScreenMapVC.reactor = reactor
 
                     let nav = UINavigationController(rootViewController: fullScreenMapVC)
                     nav.modalPresentationStyle = .fullScreen
                     self.present(nav, animated: true)
                 } else {
-                    // 선택된 스토어가 없는 경우, 기존 로직을 통해 searchResult 상태 사용
                     reactor.action.onNext(.viewDidLoad(self.popUpStoreId))
                     reactor.state
                         .map { $0.searchResult }
@@ -179,7 +189,6 @@ final class MapGuideViewController: UIViewController, View {
                             let fullScreenMapVC = FullScreenMapViewController()
                             fullScreenMapVC.reactor = reactor
 
-
                             let nav = UINavigationController(rootViewController: fullScreenMapVC)
                             nav.modalPresentationStyle = .fullScreen
                             self?.present(nav, animated: true)
@@ -188,7 +197,6 @@ final class MapGuideViewController: UIViewController, View {
                 }
             })
             .disposed(by: disposeBag)
-
 
         reactor.state
             .map { $0.destinationCoordinate }
@@ -208,10 +216,10 @@ final class MapGuideViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
 
-    // MARK: - UI Setup (동일)
+    // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .clear
-    
+
         view.addSubview(dimmingView)
         dimmingView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
@@ -272,17 +280,18 @@ final class MapGuideViewController: UIViewController, View {
             make.centerY.equalToSuperview()
         }
 
-        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, tmapButton])
+        // 버튼 스택에 애플맵 버튼 추가
+        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, tmapButton, appleButton])
         appStack.axis = .horizontal
         appStack.alignment = .center
-        appStack.spacing = 16
+        appStack.spacing = 12  // 버튼이 하나 더 추가되어 간격 줄임
         appStack.distribution = .fillEqually
 
         bottomContainer.addSubview(appStack)
         appStack.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            [naverButton, kakaoButton, tmapButton].forEach { button in
+            [naverButton, kakaoButton, tmapButton, appleButton].forEach { button in
                 button.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 48, height: 48))
                 }
