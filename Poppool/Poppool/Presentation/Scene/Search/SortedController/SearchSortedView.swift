@@ -13,7 +13,7 @@ final class SearchSortedView: UIView {
     
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 18, text: "노출 순서을 선택해주세요")
+        let label = PPLabel(style: .bold, fontSize: 18, text: "노출 순서를 선택해주세요")
         return label
     }()
     
