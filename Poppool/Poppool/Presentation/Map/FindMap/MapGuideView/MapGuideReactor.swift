@@ -107,10 +107,9 @@ final class MapGuideReactor: Reactor {
                 "tmap://route?goalname=목적지&goaly=\(coordinate.latitude)&goalx=\(coordinate.longitude)",
                 "https://apps.apple.com/kr/app/id431589174"
             ),
-            // 애플 지도 추가
             "apple": (
                 "maps://?q=\(encodedName)&ll=\(coordinate.latitude),\(coordinate.longitude)&z=16",
-                ""  
+                "https://apps.apple.com/kr/app/id1108185179"
             )
         ]
 
@@ -126,8 +125,7 @@ final class MapGuideReactor: Reactor {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 return Observable.empty()
             } else {
-                // 애플 지도는 기본 앱이므로 이 조건에 걸리지 않아야 함
-                // 하지만 혹시 모를 상황을 대비해 처리
+
                 if appType.lowercased() == "apple" {
                     return Observable.just(.showToast("애플 지도 앱을 열 수 없습니다."))
                 } else {
