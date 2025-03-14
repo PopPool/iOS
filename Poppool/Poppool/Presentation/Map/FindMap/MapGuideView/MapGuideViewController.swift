@@ -141,7 +141,7 @@ final class MapGuideViewController: UIViewController, View {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         appleButton.rx.tap
-            .map { Reactor.Action.openMapApp("AppleMap") }
+            .map { Reactor.Action.openMapApp("apple") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
