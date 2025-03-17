@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import RxKakaoSDKAuth
 import KakaoSDKAuth
-import RxKakaoSDKCommon
 import GoogleMaps
 import CoreLocation
 
@@ -16,7 +14,7 @@ import CoreLocation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            RxKakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppkey.rawValue, loggingEnable: false)
+//            RxKakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppkey.rawValue, loggingEnable: false)
             GMSServices.provideAPIKey(Secrets.popPoolApiKey.rawValue)
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization() // 권한 요청 초기화

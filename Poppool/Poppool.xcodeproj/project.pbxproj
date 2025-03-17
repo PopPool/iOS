@@ -343,9 +343,6 @@
 		08B191B42CF609260057BC04 /* KakaoLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B32CF609260057BC04 /* KakaoLoginService.swift */; };
 		08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B52CF6092B0057BC04 /* AppleLoginService.swift */; };
 		08B191B82CF6092F0057BC04 /* AuthServiceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B72CF6092F0057BC04 /* AuthServiceable.swift */; };
-		08B191BA2CF609AE0057BC04 /* RxKakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 08B191B92CF609AE0057BC04 /* RxKakaoSDK */; };
-		08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 08B191BB2CF609AE0057BC04 /* RxKakaoSDKAuth */; };
-		08B191BE2CF609AE0057BC04 /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */; };
 		08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191C12CF615CA0057BC04 /* Secrets.swift */; };
 		08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */; };
 		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
@@ -374,6 +371,7 @@
 		08DE8A1D2D5261E70049BCAC /* MyPageTermsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A1C2D5261E70049BCAC /* MyPageTermsReactor.swift */; };
 		08DE8A3F2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */; };
 		08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */; };
+		08F403332D884F4D00BFA61A /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 08F403322D884F4D00BFA61A /* KakaoSDKUser */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
 		4E643FC12D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */; };
 		4E643FC32D738D930046AF29 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */; };
@@ -975,15 +973,13 @@
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
-				08B191BA2CF609AE0057BC04 /* RxKakaoSDK in Frameworks */,
-				08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
 				088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */,
+				08F403332D884F4D00BFA61A /* KakaoSDKUser in Frameworks */,
 				BDCA42102CF35FF5005EECF6 /* Lottie in Frameworks */,
 				BDCA41FE2CF35EE7005EECF6 /* ReactorKit in Frameworks */,
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
 				BDCA420A2CF35FB1005EECF6 /* Pageboy in Frameworks */,
-				08B191BE2CF609AE0057BC04 /* RxKakaoSDKUser in Frameworks */,
 				4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */,
 				4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */,
 				BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */,
@@ -3085,14 +3081,12 @@
 				BDCA420C2CF35FD2005EECF6 /* RxGesture */,
 				BDCA420F2CF35FF5005EECF6 /* Lottie */,
 				083A25CF2CF364B70099B58E /* Alamofire */,
-				08B191B92CF609AE0057BC04 /* RxKakaoSDK */,
-				08B191BB2CF609AE0057BC04 /* RxKakaoSDKAuth */,
-				08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */,
 				088DE2432D104EE70030FA9E /* SwiftSoup */,
 				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 				4EA9989C2D21C404009DC30B /* RxDataSources */,
 				082197A02D426DCB0054094A /* Then */,
+				08F403322D884F4D00BFA61A /* KakaoSDKUser */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -3142,7 +3136,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					BDCA41BC2CF35AC0005EECF6 = {
 						CreatedOnToolsVersion = 15.4;
@@ -3170,7 +3164,6 @@
 				BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BDCA41F32CF35D33005EECF6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				BDCA41F62CF35D9A005EECF6 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				BDCA41FC2CF35EE7005EECF6 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				BDCA41FF2CF35EFE005EECF6 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 				BDCA42022CF35F76005EECF6 /* XCRemoteSwiftPackageReference "PanModal" */,
@@ -3184,6 +3177,7 @@
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */,
+				08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -3934,7 +3928,6 @@
 		BDCA41EB2CF35AC2005EECF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -3954,7 +3947,6 @@
 		BDCA41EC2CF35AC2005EECF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -3974,7 +3966,6 @@
 		BDCA41EE2CF35AC2005EECF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2U86LHQK8Q;
@@ -3992,7 +3983,6 @@
 		BDCA41EF2CF35AC2005EECF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2U86LHQK8Q;
@@ -4081,6 +4071,14 @@
 				minimumVersion = 9.2.0;
 			};
 		};
+		08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.0;
+			};
+		};
 		4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scenee/FloatingPanel.git";
@@ -4119,14 +4117,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 6.8.0;
-			};
-		};
-		BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.23.0;
 			};
 		};
 		BDCA41FC2CF35EE7005EECF6 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
@@ -4208,20 +4198,10 @@
 			package = 088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
 			productName = GoogleMaps;
 		};
-		08B191B92CF609AE0057BC04 /* RxKakaoSDK */ = {
+		08F403322D884F4D00BFA61A /* KakaoSDKUser */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
-			productName = RxKakaoSDK;
-		};
-		08B191BB2CF609AE0057BC04 /* RxKakaoSDKAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
-			productName = RxKakaoSDKAuth;
-		};
-		08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BDCA41F92CF35EC0005EECF6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
-			productName = RxKakaoSDKUser;
+			package = 08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
 		};
 		4E5825662D1951DF00EE83EF /* FloatingPanel */ = {
 			isa = XCSwiftPackageProductDependency;
