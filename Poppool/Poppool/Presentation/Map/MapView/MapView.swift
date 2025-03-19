@@ -1,19 +1,21 @@
 import UIKit
 import SnapKit
-import GoogleMaps
+import NMapsMap
 
 final class MapView: UIView {
     // MARK: - Components
-    let mapView: GMSMapView = {
-        let camera = GMSCameraPosition(latitude: 37.5666, longitude: 126.9784, zoom: 14)
-        let view = GMSMapView(frame: .zero, camera: camera)
-        view.settings.myLocationButton = false
-        view.setMinZoom(7.5, maxZoom: 20)
+    let mapView: NMFMapView = {
+        let view = NMFMapView()
+        view.positionMode = .disabled 
+        view.zoomLevel = 14
 
-        let southWest = CLLocationCoordinate2D(latitude: 33.0, longitude: 124.0)
-        let northEast = CLLocationCoordinate2D(latitude: 39.0, longitude: 132.0)
-        let koreaBounds = GMSCoordinateBounds(coordinate: southWest, coordinate: northEast)
-        view.cameraTargetBounds = koreaBounds
+        view.extent = NMGLatLngBounds(
+            southWest: NMGLatLng(lat: 33.0, lng: 124.0),
+            northEast: NMGLatLng(lat: 39.0, lng: 132.0)
+        )
+
+        view.minZoomLevel = 7.5
+        view.maxZoomLevel = 20
 
         return view
     }()
@@ -87,28 +89,24 @@ final class MapView: UIView {
 // MARK: - SetUp
 private extension MapView {
     func setUpConstraints() {
-        // 1. MapView 설정
         addSubview(mapView)
         mapView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        // 2. Search Filter Container 설정
         addSubview(searchFilterContainer)
         searchFilterContainer.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(56)
             make.leading.trailing.equalToSuperview()
         }
 
-        // 3. Search Input 설정
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)  
+            make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(37)
         }
 
-        // 4. Filter Chips 설정
         searchFilterContainer.addSubview(filterChips)
         filterChips.snp.makeConstraints { make in
             make.top.equalTo(searchInput.snp.bottom).offset(7)
@@ -117,19 +115,16 @@ private extension MapView {
             make.bottom.equalToSuperview()
         }
 
-        // 5. Store Card 설정
         addSubview(storeCard)
         storeCard.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(30)
             make.height.equalTo(137)
-            make.bottom.equalTo(safeAreaLayoutGuide).offset(-24)  // 수정된 부분
+            make.bottom.equalTo(safeAreaLayoutGuide).offset(-24)
         }
 
-        // 6. Buttons 설정
         addSubview(locationButton)
         addSubview(listButton)
 
-        // 초기 버튼 레이아웃은 updateButtonLayout()에서 설정됨
     }
 
     func configureUI() {

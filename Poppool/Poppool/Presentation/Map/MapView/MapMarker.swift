@@ -1,12 +1,11 @@
 import UIKit
 import SnapKit
-import GoogleMaps
+import NMapsMap
 
 final class MapMarker: UIView {
     // MARK: - Components
     private(set) var isSelected: Bool = false
     var currentInput: Input?
-
 
     private let markerImageView: UIImageView = {
         let imageView = UIImageView()
@@ -181,8 +180,6 @@ extension MapMarker: Inputable {
         CATransaction.commit()
     }
 
-
-
     private func setupClusterMarker(_ input: Input) {
         markerImageView.isHidden = true
         clusterContainer.isHidden = false
@@ -223,7 +220,21 @@ extension MapMarker {
     var imageView: UIImageView {
         return markerImageView
     }
+
+    /// 네이버맵용으로 뷰를 UIImage로 렌더링하는 함수
+    func asImage() -> UIImage? {
+        // 필요한 경우 프레임을 강제로 업데이트합니다.
+        self.layoutIfNeeded()
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+        defer { UIGraphicsEndImageContext() }
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.render(in: context)
+            return UIGraphicsGetImageFromCurrentImageContext()
+        }
+        return nil
+    }
 }
+
 extension MapMarker.Input: Equatable {
     static func == (lhs: MapMarker.Input, rhs: MapMarker.Input) -> Bool {
         return lhs.isSelected == rhs.isSelected &&

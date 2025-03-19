@@ -15,7 +15,6 @@ struct MapPopUpStoreDTO: Codable {
     let mainImageUrl: String?
     let bookmarkYn: Bool?
 
-    // toDomain() 메서드 추가
     func toDomain() -> MapPopUpStore {
         return MapPopUpStore(
             id: id,

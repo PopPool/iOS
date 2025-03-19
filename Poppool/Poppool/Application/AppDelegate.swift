@@ -1,29 +1,32 @@
 //
 //  AppDelegate.swift
-//  Poppool
+//  Poppoolasdasdasdasda
 //
 //  Created by Porori on 11/24/24.
 //
-
 import UIKit
 import RxKakaoSDKAuth
 import KakaoSDKAuth
 import RxKakaoSDKCommon
-import GoogleMaps
+import NMapsMap
 import CoreLocation
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            RxKakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppkey.rawValue, loggingEnable: false)
-            GMSServices.provideAPIKey(Secrets.popPoolApiKey.rawValue)
+        RxKakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppkey.rawValue, loggingEnable: false)
+
+
+        NMFAuthManager.shared().clientId = Secrets.naverMapClientId.rawValue
+
         let locationManager = CLLocationManager()
-        locationManager.requestWhenInUseAuthorization() // 권한 요청 초기화
+        locationManager.requestWhenInUseAuthorization() 
+
         return true
+    }
 
-        }
-
+}
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -39,5 +42,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
-}
 

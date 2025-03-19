@@ -1,5 +1,5 @@
 {
-  "originHash" : "9287fcb2d41c7fcf69aee03103ff9eac9ec5b01fe72ca36a57109537b58b6a8d",
+  "originHash" : "eee51fa95670b7e7a0243cf8d8e727c9f941519fb64fa8f1cbe49c209f20b0f8",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "8c6edf4f0fa84fe9c058600a4295eb0c01661c69",
         "version" : "4.5.1"
+      }
+    },
+    {
+      "identity" : "navermap",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zzangzzangguy/NaverMap.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9a3e6913b50ea437de35a3023c3575f73b5ddd27"
       }
     },
     {
