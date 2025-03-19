@@ -1,3 +1,14 @@
+//
+//  AppDelegate.swift
+//  Poppoolasdasdasdasda
+//
+//  Created by Porori on 11/24/24.
+//
+import UIKit
+import RxKakaoSDKAuth
+import KakaoSDKAuth
+import RxKakaoSDKCommon
+import NMapsMap
 import UIKit
 
 import KakaoSDKCommon

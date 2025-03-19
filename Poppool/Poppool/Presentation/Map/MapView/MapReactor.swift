@@ -15,6 +15,7 @@ final class MapReactor: Reactor {
         case fetchCategories
         case updateBothFilters(locations: [String], categories: [String])  // 새로 추가
         case didSelectItem(MapPopUpStore)
+        case fetchAllStores
         case refreshMarkers(northEastLat: Double, northEastLon: Double, southWestLat: Double, southWestLon: Double)
         case viewportChanged(
             northEastLat: Double,
@@ -298,6 +299,43 @@ final class MapReactor: Reactor {
                     )
                     return .setSearchResult(store)
                 }
+        case .fetchAllStores:
+            // 한국 전체 영역에 대한 바운드 설정
+            let koreaRegion = (
+                northEast: (lat: 38.0, lon: 132.0),
+                southWest: (lat: 33.0, lon: 124.0)
+            )
+
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }
+
+            return .concat([
+                .just(.setLoading(true)),
+                useCase.fetchStoresInBounds(
+                    northEastLat: koreaRegion.northEast.lat,
+                    northEastLon: koreaRegion.northEast.lon,
+                    southWestLat: koreaRegion.southWest.lat,
+                    southWestLon: koreaRegion.southWest.lon,
+                    categories: categoryIDs
+                )
+                .map { stores -> Mutation in
+                    var filteredStores = stores
+
+                    let locationFilters = self.currentState.selectedLocationFilters
+                    if !locationFilters.isEmpty {
+                        filteredStores = stores.filter { store in
+                            return locationFilters.contains { filter in
+                                return self.store(store, matches: filter)
+                            }
+                        }
+                    }
+
+                    return .setViewportStores(filteredStores)
+                }
+                .catch { error in .just(.setError(error)) },
+                .just(.setLoading(false))
+            ])
+    
 
         case let .didSelectItem(store):
             return .concat([

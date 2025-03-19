@@ -49,7 +49,7 @@ class DefaultMapRepository: MapRepository {
                 southWestLon: southWestLon,
                 categories: categories
             ),
-            interceptor: TokenInterceptor() // ← 토큰 누락 해결
+            interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
     }
@@ -63,7 +63,7 @@ class DefaultMapRepository: MapRepository {
                 query: query,
                 categories: categories
             ),
-            interceptor: TokenInterceptor() // ← 토큰 누락 해결
+            interceptor: TokenInterceptor() 
         )
         .map { $0.popUpStoreList }
     }

@@ -134,7 +134,8 @@ final class StoreListReactor: Reactor {
                     guard let self = self else { return .empty() }
                     return self.popUpAPIUseCase.getPopUpDetail(
                         commentType: "NORMAL",
-                        popUpStoredId: store.id
+                        popUpStoredId: store.id,
+                        isViewCount: false
                     )
                     .map { detail in
                         var updatedStore = store

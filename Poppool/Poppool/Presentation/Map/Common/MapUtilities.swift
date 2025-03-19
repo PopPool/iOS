@@ -1,6 +1,5 @@
-
-
-import CoreLocation
+import NMapsMap
+import UIKit
 
 public func extractCity(from address: String) -> String {
     let components = address.components(separatedBy: " ")
@@ -33,22 +32,21 @@ public let gyeonggiSouthRegions: [String] = [
 // RepresentativeScope 수정
 public struct RepresentativeScope {
     public static let seoulNorth = (
-        center: CLLocationCoordinate2D(latitude: 37.6020, longitude: 127.0350),
+        center: NMGLatLng(lat: 37.6020, lng: 127.0350),
         radius: 3000.0
     )
     public static let seoulSouth = (
-        center: CLLocationCoordinate2D(latitude: 37.4959, longitude: 127.0664), // 강남/서초 중심
+        center: NMGLatLng(lat: 37.4959, lng: 127.0664), // 강남/서초 중심
         radius: 3000.0
     )
 
     // 경기 북부/남부 좌표 조정
     public static let gyeonggiNorth = (
-        center: CLLocationCoordinate2D(latitude: 37.7358, longitude: 127.0346), // 의정부 중심
+        center: NMGLatLng(lat: 37.7358, lng: 127.0346), // 의정부 중심
         radius: 4000.0
     )
     public static let gyeonggiSouth = (
-        center: CLLocationCoordinate2D(latitude: 37.2911, longitude: 127.0876), // 용인/분당 중심
+        center: NMGLatLng(lat: 37.2911, lng: 127.0876), // 용인/분당 중심
         radius: 4000.0
     )
 }
-

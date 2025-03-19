@@ -1,186 +1,153 @@
-import Foundation
 import UIKit
+import SnapKit
 import RxSwift
-import ReactorKit
+import RxCocoa
+import NMapsMap
 import CoreLocation
-import GoogleMaps
 
-final class FullScreenMapViewController: MapViewController {
-    var selectedStore: MapPopUpStore?
-    var shouldAutoSelectNearestStore = false  // 일반 모드와 다르게 false로 설정
+class FullScreenMapViewController: MapViewController {
+    // MARK: - Properties
+    private var initialStore: MapPopUpStore?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.navigationController?.navigationBar.isHidden = false
-        setupNavigation()
-
-        mainView.searchFilterContainer.isHidden = true
-        mainView.filterChips.isHidden = true
-        mainView.listButton.isHidden = true
-        carouselView.isHidden = false
-
-        // 지도 델리게이트 재설정
-        mainView.mapView.delegate = self
-
-        // 선택된 스토어가 있다면 즉시 마커 탭 처리 (요구사항 1)
-        if let store = selectedStore {
-            updateUI(for: store)
-        }
+    // MARK: - Initialization
+    init(store: MapPopUpStore?) {
+        self.initialStore = store
+        super.init()
     }
 
-    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-    // MARK: - Binding
-    override func bind(reactor: Reactor) {
-        super.bind(reactor: reactor)
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupFullScreenUI()
+        configureInitialMapPosition()
 
-        // [변경] 기존 viewportStores 관련 바인딩은 풀스크린에서 marker tap 처리와 충돌할 수 있으므로 주석처리하거나 제거
-        /*
-        reactor.state
-            .map { $0.viewportStores }
-            .distinctUntilChanged()
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] stores in
-                self?.currentStores = stores
-                self?.updateMapWithClustering()
-            })
-            .disposed(by: disposeBag)
-        */
-
-        // searchResult나 selectedStore 변경시에만 UI 업데이트 (요구사항 1)
-        reactor.state
-            .map { $0.selectedStore ?? $0.searchResult }
-            .distinctUntilChanged { $0?.id == $1?.id }
-            .compactMap { $0 }
-            .filter { [weak self] store in
-                // 현재 선택된 스토어와 다른 경우에만 업데이트
-                self?.selectedStore?.id != store.id
-            }
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] store in
-                self?.updateUI(for: store)
-            })
-            .disposed(by: disposeBag)
+        // 풀스크린 모드에서 별도 터치 델리게이트 설정
+        mainView.mapView.touchDelegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        tabBarController?.tabBar.isHidden = true
     }
 
-    // MARK: - Map Delegate Methods
-    override func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        // (1) 구/시 단위 클러스터
-        if let clusterData = marker.userData as? ClusterMarkerData {
-            return handleRegionalClusterTap(marker, clusterData: clusterData)
-        }
-        // (2) 동일 좌표 마이크로 클러스터
-        else if let storeArray = marker.userData as? [MapPopUpStore] {
-            if storeArray.count > 1 {
-                return handleMicroClusterTap(marker, storeArray: storeArray)
-            } else if let singleStore = storeArray.first {
-                return handleSingleStoreTap(marker, store: singleStore)
-            }
-        }
-        // (3) 단일 스토어
-        else if let singleStore = marker.userData as? MapPopUpStore {
-            return handleSingleStoreTap(marker, store: singleStore)
-        }
-        return false
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        tabBarController?.tabBar.isHidden = false
+        navigationItem.title = "찾아가는 길" 
     }
 
-    override func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        // 카메라 이동 중 별도 처리 없음
-    }
-
-    override func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        // 지도 빈 공간 탭은 무시 
-    }
-
-    private func findMarkerForStore(for store: MapPopUpStore) -> GMSMarker? {
-        if let marker = self.currentMarker,
-           let markerStore = marker.userData as? MapPopUpStore,
-           markerStore.id == store.id {
-            return marker
-        }
-        return nil
-    }
-
-    /// 선택된 스토어 정보를 기반으로 마커, 카메라, 캐러셀을 업데이트 (요구사항 1)
-    private func updateUI(for store: MapPopUpStore) {
-        // 기존 마커 제거
-        mainView.mapView.clear()
-
-        // 새 마커 생성
-        let marker = GMSMarker()
-        marker.position = store.coordinate
-        marker.userData = store
-        marker.groundAnchor = CGPoint(x: 0.5, y: 1.0)
-
-        // 마커 뷰 생성 및 선택 상태 주입
-        let selectedInput = MapMarker.Input(
-            isSelected: true,
-            isCluster: false,
-            regionName: "",
-            count: 1,
-            isMultiMarker: false
-        )
-        let markerView = MapMarker()
-        markerView.injection(with: selectedInput)
-        marker.iconView = markerView
-
-        // 마커를 지도에 추가
-        marker.map = mainView.mapView
-        currentMarker = marker
-
-        mainView.mapView.selectedMarker = marker
-
-        // 카메라 이동
-        let camera = GMSCameraPosition.camera(
-            withLatitude: store.latitude,
-            longitude: store.longitude,
-            zoom: 16
-        )
-        mainView.mapView.animate(to: camera)
-
-        // 캐러셀 업데이트
-        carouselView.updateCards([store])
-        currentCarouselStores = [store]
+    // MARK: - Setup
+    private func setupFullScreenUI() {
+        mainView.filterChips.isHidden = true
+        mainView.listButton.isHidden = true
+        mainView.locationButton.isHidden = true
+        mainView.searchInput.isHidden = true
         carouselView.isHidden = false
 
-        // 약간의 딜레이 후 마커 뷰 재갱신 (필요 시)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            markerView.injection(with: selectedInput)
-            markerView.setNeedsLayout()
-            markerView.layoutIfNeeded()
+        // 닫기 버튼 추가
+        let closeButton = UIButton(type: .system)
+        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        closeButton.tintColor = .black
+        view.addSubview(closeButton)
+
+        closeButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(44)
+        }
+
+        closeButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag) // 상위 클래스의 disposeBag 사용
+
+        mainView.mapView.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        carouselView.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(140)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
         }
     }
 
+    private func configureInitialMapPosition() {
+        guard let store = initialStore else { return }
 
-    @objc private func backButtonTapped() {
-        dismiss(animated: true)
+        let position = NMGLatLng(lat: store.latitude, lng: store.longitude)
+        let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: 15.0)
+        mainView.mapView.moveCamera(cameraUpdate)
+
+        // 여기서 마커를 선택 상태로 추가
+        let marker = NMFMarker()
+        marker.position = position
+        marker.userInfo = ["storeData": store]
+        updateMarkerStyle(marker: marker, selected: true, isCluster: false) // 선택된 스타일 적용
+        marker.mapView = mainView.mapView
+        currentMarker = marker
+
+        // 캐러셀 설정
+        currentCarouselStores = [store]
+        carouselView.updateCards([store])
+        carouselView.isHidden = false
     }
 
-    private func setupNavigation() {
-        navigationItem.title = "찾아가는 길"
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.shadowColor = .clear
-        appearance.backgroundColor = .white
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.black,
-            .font: UIFont.systemFont(ofSize: 15, weight: .regular)
-        ]
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "bakcbutton")?.withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(backButtonTapped)
-        )
-        navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    // MARK: - Override Methods
+    override func bind(reactor: MapReactor) {
+        super.bind(reactor: reactor)
+        // 풀스크린 모드에서 추가 바인딩 필요 시 여기에 작성
+    }
+
+    override func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool {
+        isMovingToMarker = true
+
+        if let previousMarker = currentMarker, previousMarker != marker {
+            updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
+        }
+
+        updateMarkerStyle(marker: marker, selected: true, isCluster: false)
+        currentMarker = marker
+
+        currentCarouselStores = [store]
+        carouselView.updateCards([store])
+        carouselView.isHidden = false
+        mainView.setStoreCardHidden(false, animated: true)
+
+        let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: 15.0)
+        cameraUpdate.animation = .easeIn
+        cameraUpdate.animationDuration = 0.3
+        mainView.mapView.moveCamera(cameraUpdate)
+
+        isMovingToMarker = false
+        return true
+    }
+
+    override func handleRegionalClusterTap(_ marker: NMFMarker, clusterData: ClusterMarkerData) -> Bool {
+        return false // 풀스크린에서는 클러스터 비활성화
+    }
+
+    override func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
+        return false // 풀스크린에서는 마이크로 클러스터 비활성화
     }
 }
+
+// MARK: - NMFMapViewTouchDelegate
+//extension FullScreenMapViewController: NMFMapViewTouchDelegate {
+//    func mapView(_ mapView: NMFMapView, didTapOverlay overlay: NMFOverlay) -> Bool {
+//        guard let marker = overlay as? NMFMarker,
+//              let store = marker.userInfo["storeData"] as? MapPopUpStore else { return false }
+//        return handleSingleStoreTap(marker, store: store)
+//    }
+//
+//    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+//        // 풀스크린 모드에서는 지도 탭 시 동작 없음
+//    }
+//}
