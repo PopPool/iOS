@@ -402,7 +402,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
             self.resetSelectedMarker()
 
-            // 만약 지도 위 마커를 전부 제거하고 싶다면 (상황에 따라)
+            // 만약 지도 위 마커를 전부 제거 (상황에 따라)
             // self.clearAllMarkers()
             // self.clusterMarkerDictionary.values.forEach { $0.mapView = nil }
             // self.clusterMarkerDictionary.removeAll()
@@ -681,8 +681,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     }
 
     private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
-        let progress = (maxOffset - offset) / (maxOffset - minOffset) // 0(탑) ~ 1(바텀)
-        mainView.mapView.alpha = max(0, min(progress, 1)) // 0(완전히 가림) ~ 1(완전히 보임)
+        let progress = (maxOffset - offset) / (maxOffset - minOffset)
+        mainView.mapView.alpha = max(0, min(progress, 1)) 
     }
 
 
@@ -712,21 +712,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 self.mainView.mapView.isHidden = false
                 self.mainView.searchInput.setBackgroundColor(.white)
 
-                // 리스트뷰 표시 시, 전체 한국 영역의 스토어 가져오기
                 if let reactor = self.reactor {
-                    // 한국 전체 영역에 대한 경계값 설정
-                    let koreaRegion = (
-                        northEast: NMGLatLng(lat: 38.0, lng: 132.0),
-                        southWest: NMGLatLng(lat: 33.0, lng: 124.0)
-                    )
-
-                    // 전체 스토어를 가져오기 위해 한국 전체 영역 요청
-                    reactor.action.onNext(.viewportChanged(
-                        northEastLat: koreaRegion.northEast.lat,
-                        northEastLon: koreaRegion.northEast.lng,
-                        southWestLat: koreaRegion.southWest.lat,
-                        southWestLon: koreaRegion.southWest.lng
-                    ))
+                    reactor.action.onNext(.fetchAllStores)
 
                     reactor.state
                         .map { $0.viewportStores }

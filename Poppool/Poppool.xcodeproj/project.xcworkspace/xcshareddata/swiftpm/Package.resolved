@@ -1,5 +1,5 @@
 {
-  "originHash" : "eee51fa95670b7e7a0243cf8d8e727c9f941519fb64fa8f1cbe49c209f20b0f8",
+  "originHash" : "5bfa65f4806c1565c255070b2cc5f8f95e020009954be88121cc302bc25d8731",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -62,15 +62,6 @@
       "state" : {
         "revision" : "8c6edf4f0fa84fe9c058600a4295eb0c01661c69",
         "version" : "4.5.1"
-      }
-    },
-    {
-      "identity" : "navermap",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zzangzzangguy/NaverMap.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "9a3e6913b50ea437de35a3023c3575f73b5ddd27"
       }
     },
     {
@@ -161,6 +152,24 @@
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "spm-nmapsgeometry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsGeometry.git",
+      "state" : {
+        "revision" : "436d5e2e684f557faf5ef5862fd6633a42d7af11",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "spm-nmapsmap",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsMap",
+      "state" : {
+        "revision" : "ad89e53fdfec3b8d8994280fb0414b5a7b1c3e8e",
+        "version" : "3.21.0"
       }
     },
     {
