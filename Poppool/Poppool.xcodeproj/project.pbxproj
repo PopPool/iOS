@@ -373,7 +373,6 @@
 		08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */; };
 		08F403332D884F4D00BFA61A /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 08F403322D884F4D00BFA61A /* KakaoSDKUser */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
-		4E60C2262D8AABBF003A5A37 /* NMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4E60C2252D8AABBF003A5A37 /* NMap */; };
 		4E643FC12D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */; };
 		4E643FC32D738D930046AF29 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */; };
 		4E685ECE2D12CEB6001EF91C /* BalloonBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EAA2D12CEB6001EF91C /* BalloonBackgroundView.swift */; };
@@ -433,6 +432,7 @@
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
 		4EDE57012D5E6A5F0014D924 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
 		4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */; };
+		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
 		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
@@ -982,8 +982,8 @@
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
 				BDCA420A2CF35FB1005EECF6 /* Pageboy in Frameworks */,
 				4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */,
-				4E60C2262D8AABBF003A5A37 /* NMap in Frameworks */,
 				4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */,
+				4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */,
 				BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */,
 				088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */,
 			);
@@ -4089,20 +4089,20 @@
 				minimumVersion = 2.8.6;
 			};
 		};
-		4E60C2242D8AABBF003A5A37 /* XCRemoteSwiftPackageReference "NaverMap" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zzangzzangguy/NaverMap.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.2;
+			};
+		};
+		4EE360FB2D91876300D2441D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
 			};
 		};
 		BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -4218,15 +4218,15 @@
 			package = 4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
 		};
-		4E60C2252D8AABBF003A5A37 /* NMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E60C2242D8AABBF003A5A37 /* XCRemoteSwiftPackageReference "NaverMap" */;
-			productName = NMap;
-		};
 		4EA9989C2D21C404009DC30B /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		4EE360FC2D91876300D2441D /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE360FB2D91876300D2441D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
 		};
 		BDCA41F12CF35D0D005EECF6 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
