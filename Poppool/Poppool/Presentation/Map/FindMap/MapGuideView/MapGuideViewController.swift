@@ -10,6 +10,7 @@ final class MapGuideViewController: UIViewController, View {
     var disposeBag = DisposeBag()
     private let popUpStoreId: Int64
     private var currentCarouselStores: [MapPopUpStore] = [] // 현재 선택된 스토어 목록
+    
 
     init(popUpStoreId: Int64) {
         self.popUpStoreId = popUpStoreId
@@ -156,7 +157,7 @@ final class MapGuideViewController: UIViewController, View {
                 if let selectedStore = self.currentCarouselStores.first {
                     reactor.action.onNext(.didSelectItem(selectedStore))
 
-                    // store: 매개변수명 사용
+                    // 기존 코드 그대로 사용
                     let fullScreenMapVC = FullScreenMapViewController(store: selectedStore)
                     fullScreenMapVC.reactor = reactor
 
@@ -171,8 +172,8 @@ final class MapGuideViewController: UIViewController, View {
                         .distinctUntilChanged()
                         .compactMap { $0 }
                         .take(1)
+                        .observe(on: MainScheduler.instance)
                         .subscribe(onNext: { store in
-                            // store: 매개변수명 사용
                             let fullScreenMapVC = FullScreenMapViewController(store: store)
                             fullScreenMapVC.reactor = reactor
 
@@ -184,6 +185,7 @@ final class MapGuideViewController: UIViewController, View {
                 }
             })
             .disposed(by: disposeBag)
+
 
 
         // 목적지 좌표로 마커 및 카메라 설정
@@ -257,15 +259,15 @@ final class MapGuideViewController: UIViewController, View {
             make.height.equalTo(320)
         }
 
-        mapView.addSubview(expandButton)
+        modalCardView.addSubview(expandButton)
         expandButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(10)
-            make.trailing.equalToSuperview().inset(10)
+            make.bottom.equalTo(mapView.snp.bottom).offset(-10)
+            make.trailing.equalTo(mapView.snp.trailing).offset(-10)
             make.width.height.equalTo(32)
         }
 
         let bottomContainer = UIView()
-        modalCardView.addSubview(bottomContainer) // 오타 수정 필요: bottomContainer로 변경
+        modalCardView.addSubview(bottomContainer) 
         bottomContainer.snp.makeConstraints { make in
             make.top.equalTo(mapView.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
@@ -312,15 +314,14 @@ final class MapGuideViewController: UIViewController, View {
     }
 
     private func setupMarker(at coordinate: CLLocationCoordinate2D) {
-        // 기존 마커 제거
         mapView.subviews.forEach { if $0 is NMFMarker { $0.removeFromSuperview() } }
 
         // 새 마커 생성 및 설정
         let marker = NMFMarker()
         marker.position = NMGLatLng(lat: coordinate.latitude, lng: coordinate.longitude)
-        marker.iconImage = NMFOverlayImage(name: "TapMarker") // MapViewController에서 사용하는 기본 마커
-        marker.width = 32
-        marker.height = 32
+        marker.iconImage = NMFOverlayImage(name: "TapMarker")
+        marker.width = 44
+        marker.height = 44
         marker.anchor = CGPoint(x: 0.5, y: 1.0)
 
         // 먼저 마커를 지도에 추가
