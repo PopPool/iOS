@@ -96,7 +96,7 @@ final class FilterBottomSheetView: UIView {
     }()
 
 
-    private let buttonStack: UIStackView = {
+    let buttonStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 12
@@ -158,18 +158,15 @@ final class FilterBottomSheetView: UIView {
     }
 
     private func setupConstraints() {
-        // 1. 먼저 self의 width 설정
         self.snp.makeConstraints { make in
             make.width.equalTo(UIScreen.main.bounds.width)
         }
 
-        // 2. containerView 설정
         containerView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(headerView.snp.top)
         }
 
-        // 3. headerView 및 내부 요소들
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(70)
@@ -186,13 +183,11 @@ final class FilterBottomSheetView: UIView {
             make.size.equalTo(24)
         }
 
-        // 4. segmentedControl
         segmentedControl.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
         }
 
-        // 5. locationScrollView 및 contentView
         locationScrollView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
@@ -204,28 +199,24 @@ final class FilterBottomSheetView: UIView {
             make.height.equalToSuperview()
         }
 
-        // 6. categoryCollectionView
         categoryCollectionView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
 //            categoryHeightConstraint = make.height.equalTo(160).constraint
         }
 
-        // 7. balloonBackgroundView
         balloonBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(locationScrollView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
             balloonHeightConstraint = make.height.equalTo(0).constraint
         }
 
-        // 8. filterChipsView
         filterChipsView.snp.makeConstraints { make in
             make.top.equalTo(balloonBackgroundView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(80)
         }
 
-        // 9. buttonStack
         buttonStack.snp.makeConstraints { make in
             make.top.equalTo(filterChipsView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
@@ -314,7 +305,7 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateContentVisibility(isCategorySelected: Bool) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.performWithoutAnimation {
             self.locationScrollView.alpha = isCategorySelected ? 0 : 1
             self.balloonBackgroundView.alpha = isCategorySelected ? 0 : 1
             self.categoryCollectionView.alpha = isCategorySelected ? 1 : 0
@@ -323,12 +314,24 @@ final class FilterBottomSheetView: UIView {
             self.balloonBackgroundView.isHidden = isCategorySelected
             self.categoryCollectionView.isHidden = !isCategorySelected
 
+            // filterChipsView 제약조건 업데이트
+            self.filterChipsView.snp.remakeConstraints { make in
+                if isCategorySelected {
+                    make.top.equalTo(self.categoryCollectionView.snp.bottom).offset(16)
+                } else {
+                    make.top.equalTo(self.balloonBackgroundView.snp.bottom).offset(24)
+                }
+                make.leading.trailing.equalToSuperview().inset(16)
+                make.height.equalTo(80)
+            }
+
             let newHeight = isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight()
             self.balloonHeightConstraint?.update(offset: newHeight)
 
             self.layoutIfNeeded()
         }
     }
+
 
 
 
@@ -375,12 +378,20 @@ final class FilterBottomSheetView: UIView {
     }
 
     func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 160) {
-        UIView.animate(withDuration: 0.3) {
-            self.balloonBackgroundView.alpha = isHidden ? 0 : 1
-            self.balloonHeightConstraint?.update(offset: isHidden ? 0 : dynamicHeight)
-            self.layoutIfNeeded()
+        if isHidden {
+            balloonBackgroundView.alpha = 0
+            balloonBackgroundView.isHidden = true
+            balloonHeightConstraint?.update(offset: 0)
+        } else {
+            balloonBackgroundView.alpha = 1
+            balloonBackgroundView.isHidden = false
+            balloonHeightConstraint?.update(offset: dynamicHeight)
         }
+
+        self.setNeedsLayout()
+        self.layoutIfNeeded()
     }
+
 
 
     func updateBalloonPosition(for button: UIButton) {
@@ -395,8 +406,8 @@ final class FilterBottomSheetView: UIView {
 
         let position = relativeX / balloonBackgroundView.bounds.width
 
-        let minPosition: CGFloat = 0.1  // 왼쪽 여백
-        let maxPosition: CGFloat = 0.9  // 오른쪽 여백
+        let minPosition: CGFloat = 0.1
+        let maxPosition: CGFloat = 0.9
         let clampedPosition = min(maxPosition, max(minPosition, position))
 
         balloonBackgroundView.arrowPosition = clampedPosition
@@ -433,7 +444,6 @@ extension FilterBottomSheetView: UIScrollViewDelegate {
             return button.backgroundColor == .blu500
         }) as? PPButton else { return }
         
-        // 스크롤 중에도 실시간으로 위치 업데이트
         DispatchQueue.main.async { [weak self] in
             self?.updateBalloonPosition(for: selectedButton)
         }

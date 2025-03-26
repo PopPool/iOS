@@ -278,7 +278,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         setupPanAndSwipeGestures()
 
         let mapViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapViewTap(_:)))
-        mapViewTapGesture.cancelsTouchesInView = false  // 중요: 다른 터치 이벤트를 방해하지 않음
+//        mapViewTapGesture.cancelsTouchesInView = false  // 중요: 다른 터치 이벤트를 방해하지 않음
         mapViewTapGesture.delaysTouchesBegan = false    // 터치 지연 없음
         mainView.mapView.addGestureRecognizer(mapViewTapGesture)
         mapViewTapGesture.delegate = self
