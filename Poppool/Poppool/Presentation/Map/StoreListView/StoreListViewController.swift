@@ -180,13 +180,13 @@ final class StoreListViewController: UIViewController, View {
 
         viewController.modalPresentationStyle = .overFullScreen
         present(viewController, animated: false) {
-            viewController.showBottomSheet()
+//            viewController.showBottomSheet()
         }
     }
 
     private func dismissFilterBottomSheet() {
         if let sheet = presentedViewController as? FilterBottomSheetViewController {
-            sheet.hideBottomSheet()
+            sheet.dismiss(animated: true)
         }
     }
 }
