@@ -196,6 +196,10 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
         view.backgroundColor = UIColor(white:0.95, alpha:1)
 
         if let store = editingStore {
