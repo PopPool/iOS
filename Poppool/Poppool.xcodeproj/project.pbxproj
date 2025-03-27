@@ -236,7 +236,6 @@
 		086F8A182D265C5F00CA4FC9 /* MyPageListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A172D265C5F00CA4FC9 /* MyPageListSection.swift */; };
 		086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A192D265C6300CA4FC9 /* MyPageListSectionCell.swift */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
-		088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2462D12DB5C0030FA9E /* GoogleMaps */; };
 		088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2492D12F3360030FA9E /* DetailInfoSection.swift */; };
 		088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */; };
 		088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */; };
@@ -979,7 +978,6 @@
 				08B191BA2CF609AE0057BC04 /* RxKakaoSDK in Frameworks */,
 				08B191BC2CF609AE0057BC04 /* RxKakaoSDKAuth in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
-				088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */,
 				BDCA42102CF35FF5005EECF6 /* Lottie in Frameworks */,
 				BDCA41FE2CF35EE7005EECF6 /* ReactorKit in Frameworks */,
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
@@ -3091,7 +3089,6 @@
 				08B191BB2CF609AE0057BC04 /* RxKakaoSDKAuth */,
 				08B191BD2CF609AE0057BC04 /* RxKakaoSDKUser */,
 				088DE2432D104EE70030FA9E /* SwiftSoup */,
-				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 				4EA9989C2D21C404009DC30B /* RxDataSources */,
 				082197A02D426DCB0054094A /* Then */,
@@ -3183,7 +3180,6 @@
 				BDCA420E2CF35FF5005EECF6 /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				083A25CE2CF364B70099B58E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
-				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */,
@@ -4077,14 +4073,6 @@
 				minimumVersion = 2.7.6;
 			};
 		};
-		088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.2.0;
-			};
-		};
 		4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/scenee/FloatingPanel.git";
@@ -4214,11 +4202,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
-		};
-		088DE2462D12DB5C0030FA9E /* GoogleMaps */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
 		};
 		08B191B92CF609AE0057BC04 /* RxKakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;

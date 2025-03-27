@@ -5,7 +5,6 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 import Alamofire
-import GoogleMaps
 import CoreLocation
 
 final class PopUpStoreRegisterViewController: BaseViewController {
