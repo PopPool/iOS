@@ -27,7 +27,6 @@ enum RegionType {
     case province
 
     struct RegionDefinitions {
-        // 서울 클러스터
         static let seoulClusters: [RegionCluster] = [
             RegionCluster(
                 name: "도봉/노원/강북/중랑",
@@ -201,7 +200,6 @@ enum RegionType {
             )
         ]
 
-        // 도 클러스터
         static let provinceClusters: [RegionCluster] = [
             RegionCluster(
                 name: "충북",

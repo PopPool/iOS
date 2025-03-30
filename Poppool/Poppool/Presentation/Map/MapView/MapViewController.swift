@@ -175,7 +175,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         // 지도 이동 완료 감지
         mainView.mapView.addCameraDelegate(delegate: self)
 
-        // idleAtPosition 대체 - 지도 이동 완료 시
         idleSubject
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
@@ -183,7 +182,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 if let marker = self.currentMarker,
                    let storeArray = marker.userInfo["storeData"] as? [MapPopUpStore],
                    storeArray.count > 1 {
-                    // 툴팁이 없으면 생성, 있으면 위치 업데이트
                     if self.currentTooltipView == nil {
                         self.configureTooltip(for: marker, stores: storeArray)
                     } else {
@@ -208,17 +206,14 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         let tooltipView = MarkerTooltipView()
         tooltipView.configure(with: stores)
 
-        // 선택된 상태로 표시 - 첫 번째 정보를 기본 선택 상태로 만듦
         tooltipView.selectStore(at: 0)
 
-        // onStoreSelected 클로저 설정
         tooltipView.onStoreSelected = { [weak self] index in
             guard let self = self, index < stores.count else { return }
             self.currentCarouselStores = stores
             self.carouselView.updateCards(stores)
             self.carouselView.scrollToCard(index: index)
 
-            // 선택된 상태로 업데이트
             self.updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: stores.count)
             tooltipView.selectStore(at: index)
 
@@ -229,9 +224,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 """, category: .debug)
         }
 
-        // 툴팁 위치 설정 (마커 위치 기준으로 계산)
         let markerPoint = self.mainView.mapView.projection.point(from: marker.position)
-        let markerHeight: CGFloat = 32 // 마커 이미지 높이 추정값
+        let markerHeight: CGFloat = 32
 
         tooltipView.frame = CGRect(
             x: markerPoint.x,
@@ -1082,34 +1076,25 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             present(alert, animated: true, completion: nil)
         }
 
-        // 캐러셀 영역을 제외한 실제 가시 영역 계산 함수
         private func getEffectiveViewport() -> NMGLatLngBounds {
-            // 기본 가시 영역 가져오기
             let bounds = getVisibleBounds()
 
-            // 캐러셀이 보이지 않으면 전체 영역 반환
             if carouselView.isHidden {
                 return NMGLatLngBounds(southWest: bounds.southWest, northEast: bounds.northEast)
             }
 
-            // 캐러셀 상단 Y 좌표
             let carouselTopY = carouselView.frame.minY
-
-            // 화면 좌표계에서 캐러셀 상단 라인을 생성 (좌우 전체 폭)
             let leftPoint = CGPoint(x: 0, y: carouselTopY)
             let rightPoint = CGPoint(x: view.frame.width, y: carouselTopY)
 
-            // 화면 좌표를 지도 좌표로 변환
             let leftCoordinate = mainView.mapView.projection.latlng(from: leftPoint)
             let rightCoordinate = mainView.mapView.projection.latlng(from: rightPoint)
 
-            // 캐러셀 영역을 제외한 경계 계산
             let adjustedSouthWest = NMGLatLng(
                 lat: max(leftCoordinate.lat, rightCoordinate.lat),
                 lng: bounds.southWest.lng
             )
 
-            // 조정된 경계로 새 영역 생성
             return NMGLatLngBounds(
                 southWest: adjustedSouthWest,
                 northEast: bounds.northEast

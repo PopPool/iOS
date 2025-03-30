@@ -10,11 +10,12 @@ final class MapGuideViewController: UIViewController, View {
     var disposeBag = DisposeBag()
     private let popUpStoreId: Int64
     private var currentCarouselStores: [MapPopUpStore] = [] // 현재 선택된 스토어 목록
-    
+
 
     init(popUpStoreId: Int64) {
         self.popUpStoreId = popUpStoreId
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .overFullScreen // 모달 스타일 설정
     }
 
     required init?(coder: NSCoder) {
@@ -23,7 +24,7 @@ final class MapGuideViewController: UIViewController, View {
 
     private let dimmingView: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+        v.backgroundColor = UIColor.gray.withAlphaComponent(0.7) // 더 진한 딤드 효과
         v.alpha = 0
         return v
     }()
@@ -101,9 +102,9 @@ final class MapGuideViewController: UIViewController, View {
         return btn
     }()
 
-    private let tmapButton: UIButton = {
+    private let appleButton: UIButton = {
         let btn = UIButton()
-        btn.setImage(UIImage(named: "TMap"), for: .normal)
+        btn.setImage(UIImage(named: "AppleMap"), for: .normal)
         btn.layer.cornerRadius = 24
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.g100.cgColor
@@ -117,7 +118,24 @@ final class MapGuideViewController: UIViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTapGesture() // 탭 제스처 설정 추가
         presentModalCard()
+    }
+
+    // 딤드 영역 탭 제스처 설정
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOnDimmingView))
+        dimmingView.addGestureRecognizer(tapGesture)
+        dimmingView.isUserInteractionEnabled = true // 중요: 상호작용 활성화
+    }
+
+    // 딤드 영역 탭 처리
+    @objc private func handleTapOnDimmingView(_ sender: UITapGestureRecognizer) {
+        // 탭 위치가 modalCardView 영역이 아닌 경우에만 닫기
+        let location = sender.location(in: view)
+        if !modalCardView.frame.contains(location) {
+            dismissModalCard()
+        }
     }
 
     func bind(reactor: MapGuideReactor) {
@@ -126,7 +144,7 @@ final class MapGuideViewController: UIViewController, View {
         // 닫기 버튼
         closeButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
+                self?.dismissModalCard()
             })
             .disposed(by: disposeBag)
 
@@ -139,8 +157,8 @@ final class MapGuideViewController: UIViewController, View {
             .map { Reactor.Action.openMapApp("kakao") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        tmapButton.rx.tap
-            .map { Reactor.Action.openMapApp("tmap") }
+        appleButton.rx.tap
+            .map { Reactor.Action.openMapApp("apple") }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -157,11 +175,21 @@ final class MapGuideViewController: UIViewController, View {
                 if let selectedStore = self.currentCarouselStores.first {
                     reactor.action.onNext(.didSelectItem(selectedStore))
 
-                    // 기존 코드 그대로 사용
-                    let fullScreenMapVC = FullScreenMapViewController(store: selectedStore)
-                    fullScreenMapVC.reactor = reactor
+                    // 현재 맵에 표시된 마커 생성 또는 가져오기
+                    let marker = NMFMarker()
+                    marker.position = NMGLatLng(lat: selectedStore.latitude, lng: selectedStore.longitude)
+                    // 중요: 명시적으로 TapMarker 설정
+                    marker.iconImage = NMFOverlayImage(name: "TapMarker")
+                    marker.width = 44
+                    marker.height = 44
+                    marker.anchor = CGPoint(x: 0.5, y: 1.0)
+                    marker.userInfo = ["storeData": selectedStore]
 
-                    let nav = UINavigationController(rootViewController: fullScreenMapVC)
+                    // 풀스크린 맵 뷰 컨트롤러에 선택된 마커 정보 전달
+                    let fullScreenMapViewController = FullScreenMapViewController(store: selectedStore, existingMarker: marker)
+                    fullScreenMapViewController.reactor = reactor
+
+                    let nav = UINavigationController(rootViewController: fullScreenMapViewController)
                     nav.modalPresentationStyle = .fullScreen
                     self.present(nav, animated: true)
                 } else {
@@ -174,10 +202,19 @@ final class MapGuideViewController: UIViewController, View {
                         .take(1)
                         .observe(on: MainScheduler.instance)
                         .subscribe(onNext: { store in
-                            let fullScreenMapVC = FullScreenMapViewController(store: store)
-                            fullScreenMapVC.reactor = reactor
+                            // 여기서도 동일하게 마커 생성 및 설정
+                            let marker = NMFMarker()
+                            marker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
+                            marker.iconImage = NMFOverlayImage(name: "TapMarker")
+                            marker.width = 44
+                            marker.height = 44
+                            marker.anchor = CGPoint(x: 0.5, y: 1.0)
+                            marker.userInfo = ["storeData": store]
 
-                            let nav = UINavigationController(rootViewController: fullScreenMapVC)
+                            let fullScreenMapViewController = FullScreenMapViewController(store: store, existingMarker: marker)
+                            fullScreenMapViewController.reactor = reactor
+
+                            let nav = UINavigationController(rootViewController: fullScreenMapViewController)
                             nav.modalPresentationStyle = .fullScreen
                             self.present(nav, animated: true)
                         })
@@ -220,7 +257,7 @@ final class MapGuideViewController: UIViewController, View {
 
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .clear // 배경색을 clear로 변경하여 항상 딤드 뷰가 보이도록 함
         view.addSubview(dimmingView)
         dimmingView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
@@ -256,7 +293,7 @@ final class MapGuideViewController: UIViewController, View {
         mapView.snp.makeConstraints { make in
             make.top.equalTo(topContainer.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(320)
+            make.height.equalTo(240) // 약간 줄임
         }
 
         modalCardView.addSubview(expandButton)
@@ -267,7 +304,7 @@ final class MapGuideViewController: UIViewController, View {
         }
 
         let bottomContainer = UIView()
-        modalCardView.addSubview(bottomContainer) 
+        modalCardView.addSubview(bottomContainer)
         bottomContainer.snp.makeConstraints { make in
             make.top.equalTo(mapView.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(20)
@@ -281,7 +318,7 @@ final class MapGuideViewController: UIViewController, View {
             make.centerY.equalToSuperview()
         }
 
-        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, tmapButton])
+        let appStack = UIStackView(arrangedSubviews: [naverButton, kakaoButton, appleButton])
         appStack.axis = .horizontal
         appStack.alignment = .center
         appStack.spacing = 16
@@ -291,7 +328,7 @@ final class MapGuideViewController: UIViewController, View {
         appStack.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            [naverButton, kakaoButton, tmapButton].forEach { button in
+            [naverButton, kakaoButton, appleButton].forEach { button in
                 button.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 48, height: 48))
                 }
@@ -300,7 +337,9 @@ final class MapGuideViewController: UIViewController, View {
     }
 
     private func presentModalCard() {
+        // 백그라운드가 보이도록 처음부터 alpha를 1로 설정
         self.dimmingView.alpha = 1
+
         UIView.animate(
             withDuration: 0.3,
             delay: 0,
@@ -335,7 +374,6 @@ final class MapGuideViewController: UIViewController, View {
         cameraUpdate.animation = .easeIn
         cameraUpdate.animationDuration = 0.3
         mapView.moveCamera(cameraUpdate)
-
     }
 
     private func dismissModalCard() {
