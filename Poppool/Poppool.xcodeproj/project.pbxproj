@@ -97,13 +97,6 @@
 		082197B42D4E4E280054094A /* NormalCommentEditReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082197B32D4E4E280054094A /* NormalCommentEditReactor.swift */; };
 		083A25822CF361EF0099B58E /* BaseTabmanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A257F2CF361EF0099B58E /* BaseTabmanController.swift */; };
 		083A25832CF361EF0099B58E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25802CF361EF0099B58E /* BaseViewController.swift */; };
-		083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25842CF361F90099B58E /* ControllerConvention.swift */; };
-		083A258D2CF361F90099B58E /* ConventionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25852CF361F90099B58E /* ConventionCollectionViewCell.swift */; };
-		083A258E2CF361F90099B58E /* ConventionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25862CF361F90099B58E /* ConventionTableViewCell.swift */; };
-		083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25872CF361F90099B58E /* ReactorConvention.swift */; };
-		083A25902CF361F90099B58E /* TestDynamicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25882CF361F90099B58E /* TestDynamicCell.swift */; };
-		083A25912CF361F90099B58E /* TestDynamicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25892CF361F90099B58E /* TestDynamicSection.swift */; };
-		083A25922CF361F90099B58E /* ViewConvention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A258A2CF361F90099B58E /* ViewConvention.swift */; };
 		083A25992CF362090099B58E /* Sectionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25932CF362090099B58E /* Sectionable.swift */; };
 		083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25942CF362090099B58E /* SectionDecorationItem.swift */; };
 		083A259B2CF362090099B58E /* SectionSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083A25952CF362090099B58E /* SectionSupplementaryItem.swift */; };
@@ -590,13 +583,6 @@
 		082197B32D4E4E280054094A /* NormalCommentEditReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalCommentEditReactor.swift; sourceTree = "<group>"; };
 		083A257F2CF361EF0099B58E /* BaseTabmanController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTabmanController.swift; sourceTree = "<group>"; };
 		083A25802CF361EF0099B58E /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		083A25842CF361F90099B58E /* ControllerConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerConvention.swift; sourceTree = "<group>"; };
-		083A25852CF361F90099B58E /* ConventionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConventionCollectionViewCell.swift; sourceTree = "<group>"; };
-		083A25862CF361F90099B58E /* ConventionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConventionTableViewCell.swift; sourceTree = "<group>"; };
-		083A25872CF361F90099B58E /* ReactorConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactorConvention.swift; sourceTree = "<group>"; };
-		083A25882CF361F90099B58E /* TestDynamicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDynamicCell.swift; sourceTree = "<group>"; };
-		083A25892CF361F90099B58E /* TestDynamicSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDynamicSection.swift; sourceTree = "<group>"; };
-		083A258A2CF361F90099B58E /* ViewConvention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewConvention.swift; sourceTree = "<group>"; };
 		083A25932CF362090099B58E /* Sectionable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sectionable.swift; sourceTree = "<group>"; };
 		083A25942CF362090099B58E /* SectionDecorationItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionDecorationItem.swift; sourceTree = "<group>"; };
 		083A25952CF362090099B58E /* SectionSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionSupplementaryItem.swift; sourceTree = "<group>"; };
@@ -1407,7 +1393,6 @@
 			children = (
 				4E755B1B2D2B9ABF00ADFB21 /* Admin */,
 				4E685ECD2D12CEB6001EF91C /* Map */,
-				083A258B2CF361F90099B58E /* Convention */,
 				08B1915F2CF430D40057BC04 /* Components */,
 				083A25C22CF3635B0099B58E /* Scene */,
 				083A259D2CF3620B0099B58E /* Utills */,
@@ -1423,20 +1408,6 @@
 				083A25802CF361EF0099B58E /* BaseViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		083A258B2CF361F90099B58E /* Convention */ = {
-			isa = PBXGroup;
-			children = (
-				083A25842CF361F90099B58E /* ControllerConvention.swift */,
-				083A25852CF361F90099B58E /* ConventionCollectionViewCell.swift */,
-				083A25862CF361F90099B58E /* ConventionTableViewCell.swift */,
-				083A25872CF361F90099B58E /* ReactorConvention.swift */,
-				083A25882CF361F90099B58E /* TestDynamicCell.swift */,
-				083A25892CF361F90099B58E /* TestDynamicSection.swift */,
-				083A258A2CF361F90099B58E /* ViewConvention.swift */,
-			);
-			path = Convention;
 			sourceTree = "<group>";
 		};
 		083A25962CF362090099B58E /* Sectionable */ = {
@@ -3269,7 +3240,6 @@
 				4EECA3942D56770B00A07CCA /* MapPopUpStore.swift in Sources */,
 				4E9C12782D2BC7A0006744D6 /* AdminBottomSheetView.swift in Sources */,
 				086DD9362D00963900B97D3B /* SearchTitleSection.swift in Sources */,
-				083A25922CF361F90099B58E /* ViewConvention.swift in Sources */,
 				086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */,
 				083C864F2D0DD3A6003F441C /* AddCommentImageSection.swift in Sources */,
 				08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */,
@@ -3327,7 +3297,6 @@
 				083C86622D0EC49E003F441C /* InstaCommentAddController.swift in Sources */,
 				08B1919C2CF4A77C0057BC04 /* TagSection.swift in Sources */,
 				BD91038B2CF614A900BBCCAE /* AuthRepository.swift in Sources */,
-				083A25902CF361F90099B58E /* TestDynamicCell.swift in Sources */,
 				08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */,
 				086DD93B2D009A1C00B97D3B /* CancelableTagSection.swift in Sources */,
 				4E755B232D2B9C5D00ADFB21 /* AdminViewController.swift in Sources */,
@@ -3345,7 +3314,6 @@
 				083C864C2D0DCF9B003F441C /* AddCommentDescriptionSectionCell.swift in Sources */,
 				086DD8CE2CFDFEB000B97D3B /* HomeListView.swift in Sources */,
 				08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */,
-				083A258C2CF361F90099B58E /* ControllerConvention.swift in Sources */,
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
 				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,
@@ -3390,7 +3358,6 @@
 				081899452D35FEA10067BF01 /* RecentPopUpSection.swift in Sources */,
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
-				083A258F2CF361F90099B58E /* ReactorConvention.swift in Sources */,
 				086F89C72D1E348400CA4FC9 /* CommentUserInfoReactor.swift in Sources */,
 				0818990E2D34B68C0067BF01 /* GetNoticeListResponseDTO.swift in Sources */,
 				086DD8C82CFDEA9200B97D3B /* UIView+.swift in Sources */,
@@ -3468,7 +3435,6 @@
 				BD9103652CF6149D00BBCCAE /* HomeAPIEndpoint.swift in Sources */,
 				086DD8E32CFF356300B97D3B /* HomeCardGridSection.swift in Sources */,
 				0841BABE2CFB5AA600049E31 /* Date?+.swift in Sources */,
-				083A258D2CF361F90099B58E /* ConventionCollectionViewCell.swift in Sources */,
 				4E685EE12D12CEB6001EF91C /* StoreListReactor.swift in Sources */,
 				4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */,
 				081898FB2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift in Sources */,
@@ -3581,7 +3547,6 @@
 				081898EE2D33A39D0067BF01 /* MyCommentSortedModalController.swift in Sources */,
 				081898AA2D2CEA2F0067BF01 /* WithdrawlCheckSectionCell.swift in Sources */,
 				086DD8CC2CFDFEA800B97D3B /* HomeListController.swift in Sources */,
-				083A258E2CF361F90099B58E /* ConventionTableViewCell.swift in Sources */,
 				086DD9342D00962500B97D3B /* SearchTitleSectionCell.swift in Sources */,
 				08B191592CF41E610057BC04 /* SignUpMainController.swift in Sources */,
 				0899526C2D0473EC0022AEF9 /* GetSearchPopUpListResponseDTO.swift in Sources */,
@@ -3658,7 +3623,6 @@
 				08A2E49D2D1C416800102313 /* CommentListTitleSection.swift in Sources */,
 				0818989C2D2BAA570067BF01 /* WithdrawlCheckModalView.swift in Sources */,
 				081899122D34CA9E0067BF01 /* GetNoticeDetailResponseDTO.swift in Sources */,
-				083A25912CF361F90099B58E /* TestDynamicSection.swift in Sources */,
 				086DD8D82CFF185200B97D3B /* PostBookmarkPopUpRequestDTO.swift in Sources */,
 				089952422D031E650022AEF9 /* SearchSortedController.swift in Sources */,
 				089952532D033C940022AEF9 /* PopUpAPIRepositoryImpl.swift in Sources */,
