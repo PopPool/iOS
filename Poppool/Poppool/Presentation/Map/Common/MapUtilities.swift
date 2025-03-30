@@ -29,24 +29,3 @@ public let gyeonggiSouthRegions: [String] = [
     "여주시", "양평군", "광주시", "이천시"
 ]
 
-// RepresentativeScope 수정
-public struct RepresentativeScope {
-    public static let seoulNorth = (
-        center: NMGLatLng(lat: 37.6020, lng: 127.0350),
-        radius: 3000.0
-    )
-    public static let seoulSouth = (
-        center: NMGLatLng(lat: 37.4959, lng: 127.0664), // 강남/서초 중심
-        radius: 3000.0
-    )
-
-    // 경기 북부/남부 좌표 조정
-    public static let gyeonggiNorth = (
-        center: NMGLatLng(lat: 37.7358, lng: 127.0346), // 의정부 중심
-        radius: 4000.0
-    )
-    public static let gyeonggiSouth = (
-        center: NMGLatLng(lat: 37.2911, lng: 127.0876), // 용인/분당 중심
-        radius: 4000.0
-    )
-}

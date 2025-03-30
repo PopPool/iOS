@@ -13,7 +13,6 @@ final class BalloonBackgroundView: UIView {
         return view
     }()
 
-    // 기존 말풍선 UI: 서브 지역을 나열하는 CollectionView (서울/경기/부산용)
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewCompositionalLayout { section, env in
             let itemSize = NSCollectionLayoutSize(
@@ -44,8 +43,8 @@ final class BalloonBackgroundView: UIView {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.tintColor = .blu500
-        iv.image = UIImage(named: "Marker") // 에셋에 추가된 Marker 이미지
-        iv.isHidden = true  // 기본은 숨김
+        iv.image = UIImage(named: "Marker")
+        iv.isHidden = true
         return iv
     }()
 
@@ -62,7 +61,7 @@ final class BalloonBackgroundView: UIView {
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textColor = UIColor.g400
         label.textAlignment = .center
-        label.numberOfLines = 2  // 두 줄 표시
+        label.numberOfLines = 2
         return label
     }()
 
@@ -88,15 +87,21 @@ final class BalloonBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        self.isUserInteractionEnabled = true
+        containerView.isUserInteractionEnabled = true
+        collectionView.isUserInteractionEnabled = true  
         setupLayout()
         setupCollectionView()
     }
+
+
 
     required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - Setup
 
     private func setupLayout() {
+        
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -169,12 +174,6 @@ final class BalloonBackgroundView: UIView {
         UIColor.g50.setFill()
         path.fill()
 
-        // 그림자 설정
-//        layer.shadowPath = path.cgPath
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOpacity = 0.1
-//        layer.shadowOffset = CGSize(width: 0, height: 2)
-//        layer.shadowRadius = 4
     }
 
 
@@ -272,7 +271,7 @@ final class BalloonBackgroundView: UIView {
 
        let itemHeight: CGFloat = 36
        let interGroupSpacing: CGFloat = 8
-       let verticalInset: CGFloat = 20 + 20  // top: 20, bottom: 20
+       let verticalInset: CGFloat = 20 + 20
        let totalHeight = max(
            (itemHeight * CGFloat(numberOfRows)) +
            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
@@ -280,7 +279,6 @@ final class BalloonBackgroundView: UIView {
            36
        )
 
-       print("계산된 최종 높이: \(totalHeight)")
        return totalHeight
     }
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {

@@ -11,6 +11,7 @@ final class BalloonChipCell: UICollectionViewCell {
            font: .KorFont(style: .medium, size: 11),
            cornerRadius: 15
        )
+       
        button.titleLabel?.lineBreakMode = .byTruncatingTail
        button.titleLabel?.adjustsFontSizeToFitWidth = false
        return button
