@@ -493,6 +493,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05229DD02D99519200D88E73 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		0818988D2D295DC30067BF01 /* MyPageLogoutSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageLogoutSection.swift; sourceTree = "<group>"; };
 		0818988F2D295DC80067BF01 /* MyPageLogoutSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageLogoutSectionCell.swift; sourceTree = "<group>"; };
 		081898932D2965C20067BF01 /* ProfileEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditController.swift; sourceTree = "<group>"; };
@@ -2976,6 +2977,7 @@
 		BDCA41B42CF35AC0005EECF6 = {
 			isa = PBXGroup;
 			children = (
+				05229DD02D99519200D88E73 /* .swiftlint.yml */,
 				BDCA41BF2CF35AC0005EECF6 /* Poppool */,
 				BDCA41D62CF35AC1005EECF6 /* PoppoolTests */,
 				BDCA41E02CF35AC1005EECF6 /* PoppoolUITests */,
@@ -3031,6 +3033,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BDCA41E72CF35AC2005EECF6 /* Build configuration list for PBXNativeTarget "Poppool" */;
 			buildPhases = (
+				05229DCF2D99507C00D88E73 /* Run SwiftLint */,
 				BDCA41B92CF35AC0005EECF6 /* Sources */,
 				BDCA41BA2CF35AC0005EECF6 /* Frameworks */,
 				BDCA41BB2CF35AC0005EECF6 /* Resources */,
@@ -3197,6 +3200,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		05229DCF2D99507C00D88E73 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BDCA41B92CF35AC0005EECF6 /* Sources */ = {
@@ -3816,6 +3841,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Poppool/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "사용자가 프로필 사진을 업로드하거나 댓글에 사진을 추가할 수 있도록 카메라를 사용합니다.";
@@ -3858,6 +3884,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Poppool/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "사용자가 프로필 사진을 업로드하거나 댓글에 사진을 추가할 수 있도록 카메라를 사용합니다.";
