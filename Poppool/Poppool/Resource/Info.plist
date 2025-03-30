@@ -22,6 +22,8 @@
 		<string>kakaomap</string>
 		<string>tmap</string>
 		<string>maps</string>
+		<string>kakaokompassauth</string>
+		<string>kakaotalk</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>

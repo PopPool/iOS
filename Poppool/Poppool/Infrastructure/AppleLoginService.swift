@@ -58,23 +58,12 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             guard let idToken = appleIDCredential.identityToken else {
                 // 토큰이 없는 경우 오류 방출
-                Logger.log(
-                    message: "AppleLogin Token is Not Found",
-                    category: .error,
-                    fileName: #file,
-                    line: #line
-                )
-                authServiceResponse.onError(AuthError.unknownError)
+                authServiceResponse.onError(AuthError.unknownError(description: "AppleLogin Token is Not Found"))
                 return
             }
             guard let idToken = String(data: idToken, encoding: .utf8) else {
-                Logger.log(
-                    message: "AppleLogin Token Convert Fail",
-                    category: .error,
-                    fileName: #file,
-                    line: #line
-                )
-                authServiceResponse.onError(AuthError.unknownError)
+                // 토큰 convert가 실패할 경우 오류 방출
+                authServiceResponse.onError(AuthError.unknownError(description: "AppleLogin Token Convert Fail"))
                 return
             }
             guard let authorizationCode = appleIDCredential.authorizationCode else {
