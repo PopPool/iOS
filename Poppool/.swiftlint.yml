@@ -1,15 +1,21 @@
 # 기본 활성화된 룰 중에 비활성화할 룰을 지정
 disabled_rules:
-
+    - redundant_optional_initialization
 
 # 기본(default) 룰이 아닌 룰들을 활성화
 opt_in_rules:
-    
+    - sorted_imports
+    - direct_return
+    - file_header
+    - weak_delegate
 
-# swiftlint 과정에 포함할 파일 경로
-included:
+# 기본 활성화된 룰 중에 조건을 변경할 룰
+file_length: 400
 
+function_body_length:
+    warning: 100
+    error: 150
 
-# swiftlint를 적용하지 않게 설정할 파일 경로
-excluded:
-
+cyclomatic_complexity:
+    warning: 15
+    error: 30
