@@ -14,6 +14,7 @@ enum ImageLoaderError: Error {
 class ImageLoader {
     
     static let shared = ImageLoader()
+    private static let memoryCache = NSCache<NSString, UIImage>()
     
     private init() {}
     
@@ -24,8 +25,24 @@ class ImageLoader {
             return
         }
         
+        let cacheKey = url.absoluteString as NSString
+        
+        if let cachedImage = fetchImageFromMemory(forKey: cacheKey) {
+            completion(.success(cachedImage))
+            return
+        }
+        
         fetchImageFrom(url: url) { result in
-            completion(result)
+            switch result {
+            case .success(let image):
+                if let image = image {
+                    self.storeInMemoryCache(image: image, forKey: cacheKey)
+                }
+                completion(.success(image))
+                
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
 }
@@ -46,5 +63,13 @@ private extension ImageLoader {
             completion(.success(image))
         }
         task.resume()
+    }
+    
+    func storeInMemoryCache(image: UIImage, forKey key: NSString) {
+        ImageLoader.memoryCache.setObject(image, forKey: key)
+    }
+    
+    func fetchImageFromMemory(forKey key: NSString) -> UIImage? {
+        return ImageLoader.memoryCache.object(forKey: key)
     }
 }
