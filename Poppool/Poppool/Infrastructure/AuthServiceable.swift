@@ -24,5 +24,5 @@ struct AuthServiceResponse: Encodable {
 
 enum AuthError: Error {
     case notInstalled
-    case unknownError
+    case unknownError(description: String?)
 }
