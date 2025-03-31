@@ -17,15 +17,20 @@ extension UIImageView {
         }
         let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            let imageURL = URL(string: cenvertimageURL)
-            self.kf.setImage(with: imageURL) { result in
-                switch result {
-                case .failure(let error):
-                    Logger.log(message: "\(path) image Load Fail: \(error.localizedDescription)", category: .error)
-                default:
-                    break
+            ImageLoader.shared.loadImage(with: cenvertimageURL, defaultImage: UIImage(named: "image_default")) { [weak self] image in
+                DispatchQueue.main.async {
+                    self?.image = image
                 }
             }
+//            let imageURL = URL(string: cenvertimageURL)
+//            self.kf.setImage(with: imageURL) { result in
+//                switch result {
+//                case .failure(let error):
+//                    Logger.log(message: "\(path) image Load Fail: \(error.localizedDescription)", category: .error)
+//                default:
+//                    break
+//                }
+//            }
         }
     }
     

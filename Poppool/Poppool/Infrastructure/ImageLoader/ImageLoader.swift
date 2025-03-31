@@ -1,75 +1,90 @@
 import UIKit
 
-//URL을 사용한 이미지 로드
-//메모리 캐싱
-//디스크 캐싱
-//일정 시간 후 캐싱 데이터를 제거
-//이미지 리사이징 모듈
-
 enum ImageLoaderError: Error {
     case invalidURL
     case networkError(description: String?)
+    case convertError(description: String?)
 }
 
+/// 이미지 로더 설정 클래스
+/// - `memoryCacheExpiration`: 메모리 캐시 만료 시간 (기본값 300초)
+class ImageLoaderConfigure {
+    var memoryCacheExpiration: TimeInterval = 300
+}
+
+/// URL을 통해 이미지를 비동기적으로 로드하는 클래스
 class ImageLoader {
     
     static let shared = ImageLoader()
-    private static let memoryCache = NSCache<NSString, UIImage>()
+    
+    /// 이미지 로더 설정 객체
+    let configure = ImageLoaderConfigure()
     
     private init() {}
     
-    func loadImage(with stringURL: String?, completion: @escaping (Result<UIImage?, Error>) -> Void) {
-        guard let stringURL = stringURL,
-              let url = URL(string: stringURL) else {
-            completion(.failure(ImageLoaderError.invalidURL))
-            return
-        }
-        
-        let cacheKey = url.absoluteString as NSString
-        
-        if let cachedImage = fetchImageFromMemory(forKey: cacheKey) {
-            completion(.success(cachedImage))
-            return
-        }
-        
-        fetchImageFrom(url: url) { result in
+    /// URL을 통해 이미지를 로드하고, 실패 시 기본 이미지를 반환하는 메서드
+    /// - Parameters:
+    ///   - stringURL: 이미지 URL 문자열
+    ///   - defaultImage: 로드 실패 시 반환할 기본 이미지
+    ///   - completion: 로드 완료 후 호출되는 클로저
+    func loadImage(with stringURL: String?, defaultImage: UIImage?, completion: @escaping (UIImage?) -> Void) {
+        loadImage(with: stringURL) { result in
             switch result {
             case .success(let image):
-                if let image = image {
-                    self.storeInMemoryCache(image: image, forKey: cacheKey)
-                }
-                completion(.success(image))
-                
-            case .failure(let error):
-                completion(.failure(error))
+                completion(image)
+            case .failure:
+                completion(defaultImage)
             }
         }
     }
 }
 
 private extension ImageLoader {
-    func fetchImageFrom(url: URL, completion: @escaping (Result<UIImage?, Error>) -> Void) {
+    
+    /// URL을 통해 이미지를 로드하는 내부 메서드
+    /// - Parameters:
+    ///   - stringURL: 이미지 URL 문자열
+    ///   - completion: 로드 완료 후 호출되는 클로저
+    func loadImage(with stringURL: String?, completion: @escaping (Result<UIImage?, Error>) -> Void) {
+        guard let stringURL = stringURL, let url = URL(string: stringURL) else {
+            completion(.failure(ImageLoaderError.invalidURL))
+            return
+        }
+
+        // 메모리 캐시에서 이미지 조회
+        if let cachedImage = MemoryStorage.shared.fetchImage(url: stringURL) {
+            completion(.success(cachedImage))
+            return
+        }
+        
+        // 네트워크에서 데이터 요청
+        fetchDataFrom(url: url) { result in
+            switch result {
+            case .success(let data):
+                if let data = data, let image = UIImage(data: data) {
+                    MemoryStorage.shared.store(image: image, url: stringURL)
+                    completion(.success(image))
+                } else {
+                    completion(.failure(ImageLoaderError.convertError(description: "Failed to convert data to UIImage")))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /// URL을 통해 데이터를 요청하는 메서드
+    /// - Parameters:
+    ///   - url: 요청할 URL 객체
+    ///   - completion: 요청 완료 후 호출되는 클로저
+    func fetchDataFrom(url: URL, completion: @escaping (Result<Data?, Error>) -> Void) {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(ImageLoaderError.networkError(description: "Network Error: \(error.localizedDescription)")))
                 return
             }
-            
-            guard let data = data, let image = UIImage(data: data) else {
-                completion(.failure(ImageLoaderError.networkError(description: "Network Error: Invalid image data")))
-                return
-            }
-            
-            completion(.success(image))
+            completion(.success(data))
         }
         task.resume()
-    }
-    
-    func storeInMemoryCache(image: UIImage, forKey key: NSString) {
-        ImageLoader.memoryCache.setObject(image, forKey: key)
-    }
-    
-    func fetchImageFromMemory(forKey key: NSString) -> UIImage? {
-        return ImageLoader.memoryCache.object(forKey: key)
     }
 }
