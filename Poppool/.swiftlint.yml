@@ -1,1 +1,15 @@
+# 기본 활성화된 룰 중에 비활성화할 룰을 지정
+disabled_rules:
+
+
+# 기본(default) 룰이 아닌 룰들을 활성화
+opt_in_rules:
+    
+
+# swiftlint 과정에 포함할 파일 경로
+included:
+
+
+# swiftlint를 적용하지 않게 설정할 파일 경로
+excluded:
 
