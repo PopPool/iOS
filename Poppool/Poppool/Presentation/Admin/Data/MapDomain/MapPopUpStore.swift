@@ -1,5 +1,4 @@
 import Foundation
-import CoreLocation
 import NMapsMap
 
 struct MapPopUpStore: Equatable {
@@ -16,9 +15,6 @@ struct MapPopUpStore: Equatable {
     let markerSnippet: String
     let mainImageUrl: String?
 
-    var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-    }
 
     var nmgCoordinate: NMGLatLng {
         NMGLatLng(lat: latitude, lng: longitude)
