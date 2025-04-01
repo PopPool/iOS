@@ -17,7 +17,7 @@ extension UIImageView {
         }
         let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            ImageLoader.shared.loadImage(with: cenvertimageURL, defaultImage: UIImage(named: "image_default")) { [weak self] image in
+            ImageLoader.shared.loadImage(with: cenvertimageURL, defaultImage: UIImage(named: "image_default"), imageQuality: .origin) { [weak self] image in
                 DispatchQueue.main.async {
                     self?.image = image
                 }

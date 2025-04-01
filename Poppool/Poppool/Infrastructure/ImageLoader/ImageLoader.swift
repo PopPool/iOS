@@ -6,6 +6,26 @@ enum ImageLoaderError: Error {
     case convertError(description: String?)
 }
 
+enum ImageSizeOption {
+    case low
+    case middle
+    case high
+    case origin
+    
+    var size: CGSize {
+        switch self {
+        case .low:
+            return CGSize(width: 100, height: 100)
+        case .middle:
+            return CGSize(width: 200, height: 200)
+        case .high:
+            return CGSize(width: 400, height: 400)
+        case .origin:
+            return CGSize(width: 1000, height: 1000)
+        }
+    }
+}
+
 /// 이미지 로더 설정 클래스
 /// - `memoryCacheExpiration`: 메모리 캐시 만료 시간 (기본값 300초)
 class ImageLoaderConfigure {
@@ -28,11 +48,16 @@ final class ImageLoader {
     ///   - stringURL: 이미지 URL 문자열
     ///   - defaultImage: 로드 실패 시 반환할 기본 이미지
     ///   - completion: 로드 완료 후 호출되는 클로저
-    func loadImage(with stringURL: String?, defaultImage: UIImage?, completion: @escaping (UIImage?) -> Void) {
-        loadImage(with: stringURL) { result in
+    func loadImage(
+        with stringURL: String?,
+        defaultImage: UIImage?,
+        imageQuality: ImageSizeOption = .origin,
+        completion: @escaping (UIImage?) -> Void
+    ) {
+        loadImage(with: stringURL) { [weak self] result in
             switch result {
             case .success(let image):
-                completion(image)
+                completion(self?.resizeImage(image, defaultImage: defaultImage, with: imageQuality))
             case .failure:
                 completion(defaultImage)
             }
@@ -96,5 +121,29 @@ private extension ImageLoader {
             completion(.success(data))
         }
         task.resume()
+    }
+    
+    func resizeImage(_ image: UIImage?, defaultImage: UIImage?, with sizeOption: ImageSizeOption) -> UIImage? {
+        guard let image else { return defaultImage }
+        
+        if sizeOption == .origin { return image }
+        
+        let targetSize = sizeOption.size
+        
+        // 비율 유지 리사이징
+        let aspectRatio = image.size.width / image.size.height
+        var newSize = targetSize
+        
+        if aspectRatio > 1 { // 가로 이미지
+            newSize.height = targetSize.width / aspectRatio
+        } else { // 세로 이미지
+            newSize.width = targetSize.height * aspectRatio
+        }
+        
+        let renderer = UIGraphicsImageRenderer(size: newSize)
+        
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
     }
 }
