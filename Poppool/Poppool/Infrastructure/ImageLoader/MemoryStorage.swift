@@ -22,7 +22,7 @@ class StorageData: NSObject {
 }
 
 /// 메모리 캐시를 관리하는 클래스
-class MemoryStorage {
+final class MemoryStorage {
     
     /// 싱글톤 인스턴스
     static let shared = MemoryStorage()
@@ -78,7 +78,7 @@ class MemoryStorage {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             
-            Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+            let cleanTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
                 for key in self.cachedKeys {
                     let nsKey = key as NSString
                     if let cachedData = self.cache.object(forKey: nsKey), cachedData.isExpired() {
@@ -87,6 +87,9 @@ class MemoryStorage {
                     }
                 }
             }
+            // 백그라운드에서 실행되는 타이머를 메인 루프에 추가
+            RunLoop.current.add(cleanTimer, forMode: .common)
+            RunLoop.current.run() // 백그라운드 스레드에서 타이머를 계속 실행하기 위해 RunLoop를 유지
         }
     }
 }

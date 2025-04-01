@@ -353,6 +353,7 @@
 		08CBEA3A2D3FABE100248007 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA392D3FABE100248007 /* ToastView.swift */; };
 		08CBEA3C2D3FABED00248007 /* BookMarkToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */; };
 		08CBEA3E2D3FF6A100248007 /* PopUpCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */; };
+		08CFD3922D9BDE99004CDD50 /* DiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CFD3912D9BDE99004CDD50 /* DiskStorage.swift */; };
 		08DC61F32CF75037002A2F44 /* KeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F22CF75037002A2F44 /* KeyChainService.swift */; };
 		08DC61F52CF765B5002A2F44 /* UserDefaultService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */; };
 		08DC61F82CF76843002A2F44 /* SignUpCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */; };
@@ -845,6 +846,7 @@
 		08CBEA392D3FABE100248007 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		08CBEA3B2D3FABED00248007 /* BookMarkToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookMarkToastView.swift; sourceTree = "<group>"; };
 		08CBEA3D2D3FF6A100248007 /* PopUpCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpCardView.swift; sourceTree = "<group>"; };
+		08CFD3912D9BDE99004CDD50 /* DiskStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskStorage.swift; sourceTree = "<group>"; };
 		08DC61F22CF75037002A2F44 /* KeyChainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChainService.swift; sourceTree = "<group>"; };
 		08DC61F42CF765B5002A2F44 /* UserDefaultService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultService.swift; sourceTree = "<group>"; };
 		08DC61F72CF76843002A2F44 /* SignUpCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpCompleteView.swift; sourceTree = "<group>"; };
@@ -2317,6 +2319,7 @@
 			children = (
 				089B4FD72D9A57AE00FC0CC3 /* ImageLoader.swift */,
 				089B4FDE2D9A8F9A00FC0CC3 /* MemoryStorage.swift */,
+				08CFD3912D9BDE99004CDD50 /* DiskStorage.swift */,
 			);
 			path = ImageLoader;
 			sourceTree = "<group>";
@@ -3485,6 +3488,7 @@
 				086DD8E32CFF356300B97D3B /* HomeCardGridSection.swift in Sources */,
 				0841BABE2CFB5AA600049E31 /* Date?+.swift in Sources */,
 				083A258D2CF361F90099B58E /* ConventionCollectionViewCell.swift in Sources */,
+				08CFD3922D9BDE99004CDD50 /* DiskStorage.swift in Sources */,
 				4E685EE12D12CEB6001EF91C /* StoreListReactor.swift in Sources */,
 				4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */,
 				081898FB2D33D9320067BF01 /* GetBlockUserListResponseDTO.swift in Sources */,

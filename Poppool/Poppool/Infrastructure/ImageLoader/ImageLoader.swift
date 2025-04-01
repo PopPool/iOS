@@ -10,10 +10,11 @@ enum ImageLoaderError: Error {
 /// - `memoryCacheExpiration`: 메모리 캐시 만료 시간 (기본값 300초)
 class ImageLoaderConfigure {
     var memoryCacheExpiration: TimeInterval = 300
+    var diskCacheExpiration: TimeInterval = 86_400
 }
 
 /// URL을 통해 이미지를 비동기적으로 로드하는 클래스
-class ImageLoader {
+final class ImageLoader {
     
     static let shared = ImageLoader()
     
@@ -50,10 +51,18 @@ private extension ImageLoader {
             completion(.failure(ImageLoaderError.invalidURL))
             return
         }
-
+        
         // 메모리 캐시에서 이미지 조회
         if let cachedImage = MemoryStorage.shared.fetchImage(url: stringURL) {
             completion(.success(cachedImage))
+            return
+        }
+        
+        // 디스크 캐시 확인
+        if let diskImage = DiskStorage.shared.fetchImage(url: stringURL) {
+            // 메모리 캐시에 저장 후 반환
+            MemoryStorage.shared.store(image: diskImage, url: stringURL)
+            completion(.success(diskImage))
             return
         }
         
@@ -63,6 +72,7 @@ private extension ImageLoader {
             case .success(let data):
                 if let data = data, let image = UIImage(data: data) {
                     MemoryStorage.shared.store(image: image, url: stringURL)
+                    DiskStorage.shared.store(image: image, url: stringURL)
                     completion(.success(image))
                 } else {
                     completion(.failure(ImageLoaderError.convertError(description: "Failed to convert data to UIImage")))
