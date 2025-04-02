@@ -23,7 +23,7 @@ jobs:
         run: brew install swiftlint
 
       - name: 🎨 Run SwiftLint Autocorrect  # SwiftLint 자동 수정 실행
-        run: swiftlint autocorrect
+        run: swiftlint --fix
 
       - name: 🚀 Commit and Push Changes  # 변경 사항 자동 커밋 및 푸시
         run: |
