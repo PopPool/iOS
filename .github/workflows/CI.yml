@@ -11,6 +11,7 @@ jobs:
     name: Build & Lint Workflow
     runs-on: macos-15  # 최신 macOS 15 환경에서 실행
     timeout-minutes: 15  # 최대 실행 시간 15분 설정
+    if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
 
     steps:
       - name: ✅ Checkout Repository  # 저장소 코드 체크아웃
