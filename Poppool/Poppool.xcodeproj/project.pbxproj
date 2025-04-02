@@ -336,7 +336,7 @@
 		08B191B42CF609260057BC04 /* KakaoLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B32CF609260057BC04 /* KakaoLoginService.swift */; };
 		08B191B62CF6092B0057BC04 /* AppleLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B52CF6092B0057BC04 /* AppleLoginService.swift */; };
 		08B191B82CF6092F0057BC04 /* AuthServiceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191B72CF6092F0057BC04 /* AuthServiceable.swift */; };
-		08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191C12CF615CA0057BC04 /* Secrets.swift */; };
+		08B191C22CF615CA0057BC04 /* KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B191C12CF615CA0057BC04 /* KeyPath.swift */; };
 		08CBEA032D38989E00248007 /* PostTokenReissueResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */; };
 		08CBEA062D38991600248007 /* PostTokenReissueResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */; };
 		08CBEA0B2D38DBD600248007 /* LastLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CBEA0A2D38DBD600248007 /* LastLoginView.swift */; };
@@ -799,7 +799,7 @@
 		08B191B32CF609260057BC04 /* KakaoLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KakaoLoginService.swift; sourceTree = "<group>"; };
 		08B191B52CF6092B0057BC04 /* AppleLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleLoginService.swift; sourceTree = "<group>"; };
 		08B191B72CF6092F0057BC04 /* AuthServiceable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthServiceable.swift; sourceTree = "<group>"; };
-		08B191C12CF615CA0057BC04 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		08B191C12CF615CA0057BC04 /* KeyPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPath.swift; sourceTree = "<group>"; };
 		08CBEA022D38989E00248007 /* PostTokenReissueResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponseDTO.swift; sourceTree = "<group>"; };
 		08CBEA052D38991600248007 /* PostTokenReissueResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTokenReissueResponse.swift; sourceTree = "<group>"; };
 		08CBEA0A2D38DBD600248007 /* LastLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastLoginView.swift; sourceTree = "<group>"; };
@@ -1338,7 +1338,7 @@
 			isa = PBXGroup;
 			children = (
 				08DE8A132D525A4A0049BCAC /* Strings */,
-				08B191C12CF615CA0057BC04 /* Secrets.swift */,
+				08B191C12CF615CA0057BC04 /* KeyPath.swift */,
 				057151572D9D2E0800260615 /* Debug.xcconfig */,
 				08B191532CF41D6F0057BC04 /* PP_loading.json */,
 				08B191542CF41D6F0057BC04 /* PP_splash.json */,
@@ -3218,7 +3218,7 @@
 				086DD9402D01EEEB00B97D3B /* SearchCountTitleSection.swift in Sources */,
 				083C864C2D0DCF9B003F441C /* AddCommentDescriptionSectionCell.swift in Sources */,
 				086DD8CE2CFDFEB000B97D3B /* HomeListView.swift in Sources */,
-				08B191C22CF615CA0057BC04 /* Secrets.swift in Sources */,
+				08B191C22CF615CA0057BC04 /* KeyPath.swift in Sources */,
 				083C86242D087A44003F441C /* DetailTitleSection.swift in Sources */,
 				08A2E4822D1BCDEA00102313 /* CommentDetailController.swift in Sources */,
 				0841BAA32CFA31A300049E31 /* SpacingSection.swift in Sources */,

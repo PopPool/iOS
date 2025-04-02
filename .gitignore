@@ -3,7 +3,6 @@ xcuserdata/
 .DS_Store
 
 # 개인 설정 및 비밀 정보
-Secrets.swift
 *.xcconfig
 
 # Objective-C / Swift 관련
