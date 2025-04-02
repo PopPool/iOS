@@ -1,0 +1,50 @@
+name: 📱 iOS CI
+
+on:
+  pull_request:
+    branches: [dev]  # dev 브랜치로의 PR에 대해 실행
+  push:
+    branches: [dev]  # dev 브랜치로의 push에 대해 실행
+
+jobs:
+  build:
+    name: Build & Lint Workflow
+    runs-on: macos-15  # 최신 macOS 15 환경에서 실행
+    timeout-minutes: 15  # 최대 실행 시간 15분 설정
+
+    steps:
+      - name: ✅ Checkout Repository  # 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: ⬇️ Install SwiftLint  # SwiftLint 설치
+        run: brew install swiftlint
+
+      - name: 🎨 Run SwiftLint  # SwiftLint 코드 스타일 검사 실행
+        run: swiftlint
+
+      - name: 🔍 Detect Default Scheme  # 기본 scheme 자동 검지
+        id: detect_scheme
+        run: |
+          SCHEME=$(xcodebuild -list -json | jq -r '.project.schemes[0]')
+          echo "Detected scheme: $SCHEME"
+          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+
+      - name: 🔍 Detect Latest iPhone Simulator  # 최신 사용 가능한 iPhone 시뮬레이터 검지
+        id: detect_latest_simulator
+        run: |
+          DEVICE=$(xcrun simctl list devices available | grep -Eo 'iPhone .* \([0-9A-F\-]+\)' | head -n 1)
+          UDID=$(echo "$DEVICE" | grep -Eo '[0-9A-F\-]{36}')
+          NAME=$(echo "$DEVICE" | cut -d '(' -f1 | xargs)
+          echo "Detected simulator: $NAME ($UDID)"
+          echo "sim_name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "sim_udid=$UDID" >> "$GITHUB_OUTPUT"
+
+      - name: 🏗️ Build the project  # 자동 검지된 Scheme과 Simulator로 빌드 수행
+        run: |
+          xcodebuild -scheme "${{ steps.detect_scheme.outputs.scheme }}" \
+            -workspace Poppool.xcworkspace \
+            -destination "platform=iOS Simulator,id=${{ steps.detect_latest_simulator.outputs.sim_udid }}" \
+            clean build | xcpretty
