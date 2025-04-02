@@ -1,5 +1,14 @@
 # 기본 활성화된 룰 중에 비활성화할 룰을 지정
 disabled_rules:
+    - type_body_length
+    - function_body_length
+    - file_length
+    - line_length
+    - force_cast
+    - force_try
+    - duplicate_conditions
+    - identifier_name
+    - cyclomatic_complexity
     - redundant_optional_initialization
 
 # 기본(default) 룰이 아닌 룰들을 활성화
@@ -8,14 +17,3 @@ opt_in_rules:
     - direct_return
     - file_header
     - weak_delegate
-
-# 기본 활성화된 룰 중에 조건을 변경할 룰
-file_length: 400
-
-function_body_length:
-    warning: 100
-    error: 150
-
-cyclomatic_complexity:
-    warning: 15
-    error: 30
