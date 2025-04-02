@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 final class MyPageView: UIView {
-    
+
     // MARK: - Components
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
@@ -22,7 +22,7 @@ final class MyPageView: UIView {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,7 +30,7 @@ final class MyPageView: UIView {
 
 // MARK: - SetUp
 private extension MyPageView {
-    
+
     func setUpConstraints() {
         self.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in

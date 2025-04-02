@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class LoginController: BaseViewController, View {
-    
+
     typealias Reactor = LoginReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = LoginView()
 }
 
@@ -28,7 +28,7 @@ extension LoginController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let lastLogin = reactor?.userDefaultService.fetch(key: "lastLogin") {
@@ -57,12 +57,12 @@ private extension LoginController {
 // MARK: - Methods
 extension LoginController {
     func bind(reactor: Reactor) {
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.guestButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -70,7 +70,7 @@ extension LoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.kakaoButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -78,7 +78,7 @@ extension LoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.inquiryButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -86,7 +86,7 @@ extension LoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.appleButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in

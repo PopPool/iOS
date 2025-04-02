@@ -8,35 +8,35 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class BlockUserManageReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case blockButtonTapped(row: Int)
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isEmptyList: Bool = true
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -50,16 +50,16 @@ final class BlockUserManageReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var countSection = CommentListTitleSection(inputDataList: [])
     private var listSection = BlockUserListSection(inputDataList: [])
     private var spcing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -87,7 +87,7 @@ final class BlockUserManageReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -99,7 +99,7 @@ final class BlockUserManageReactor: Reactor {
         newState.isEmptyList = listSection.isEmpty
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spcing16Section,

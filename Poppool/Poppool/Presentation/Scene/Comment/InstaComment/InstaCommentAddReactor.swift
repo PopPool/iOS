@@ -8,31 +8,31 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class InstaCommentAddReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case instaButtonTapped
     }
-    
+
     enum Mutation {
         case loadView
         case moveToInsta
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -46,7 +46,7 @@ final class InstaCommentAddReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private let guideSection = InstaGuideSection(inputDataList: [
         .init(
             imageList: [
@@ -103,12 +103,12 @@ final class InstaCommentAddReactor: Reactor {
             ]
         )
     ])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -118,7 +118,7 @@ final class InstaCommentAddReactor: Reactor {
             return Observable.just(.moveToInsta)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -126,21 +126,21 @@ final class InstaCommentAddReactor: Reactor {
             newState.sections = getSection()
         case .moveToInsta:
             openInstagram()
-            
+
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             guideSection
         ]
     }
-    
+
     func openInstagram() {
         // Instagram 앱의 URL Scheme
         let instagramURL = URL(string: "instagram://app")!
-        
+
         if UIApplication.shared.canOpenURL(instagramURL) {
             // Instagram 앱 열기
             UIApplication.shared.open(instagramURL, options: [:], completionHandler: nil)

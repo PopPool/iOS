@@ -7,39 +7,39 @@
 
 import UIKit
 
-import SnapKit
+import Pageboy
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import Pageboy
+import SnapKit
 import Tabman
 
 final class SearchMainController: BaseTabmanController, View {
-    
+
     typealias Reactor = SearchMainReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SearchMainView()
-    
+
     var beforeController: SearchController = {
         let controller = SearchController()
         controller.reactor = SearchReactor()
         return controller
     }()
-    
+
     var afterController: SearchResultController = {
         let controller = SearchResultController()
         controller.reactor = SearchResultReactor()
         return controller
     }()
-    
+
     lazy var controllers = [
         beforeController,
         afterController
     ]
-    
+
     var isResponseTextField: Bool = false
 }
 
@@ -49,7 +49,7 @@ extension SearchMainController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !isResponseTextField {
@@ -57,7 +57,7 @@ extension SearchMainController {
             isResponseTextField = true
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -95,7 +95,7 @@ extension SearchMainController {
                 }
             })
             .disposed(by: disposeBag)
-        
+
 //        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
 //            .withUnretained(self)
 //            .map { (owner, _) in
@@ -129,7 +129,6 @@ extension SearchMainController {
             })
             .disposed(by: disposeBag)
 
-
         mainView.searchTextField.rx.text
             .withUnretained(self)
             .subscribe(onNext: { (owner, text) in
@@ -140,7 +139,7 @@ extension SearchMainController {
                 }
             })
             .disposed(by: disposeBag)
-        
+
         mainView.cancelButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -156,7 +155,7 @@ extension SearchMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.clearButton.rx.tap
             .withUnretained(self)
             .subscribe { (owner, _) in
@@ -164,7 +163,7 @@ extension SearchMainController {
                 owner.mainView.clearButton.isHidden = true
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -180,18 +179,18 @@ extension SearchMainController: PageboyViewControllerDataSource, TMBarDataSource
     func barItem(for bar: any Tabman.TMBar, at index: Int) -> any Tabman.TMBarItemable {
         return TMBarItem(title: "")
     }
-    
+
     func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         return controllers.count
     }
-    
+
     func viewController(
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
         return controllers[index]
     }
-    
+
     func defaultPage(
         for pageboyViewController: Pageboy.PageboyViewController
     ) -> Pageboy.PageboyViewController.Page? {

@@ -10,19 +10,18 @@ import UIKit
 import SnapKit
 
 final class BlockUserManageView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
         view.headerLabel.setLineHeightText(text: "차단한 사용자 관리", font: .KorFont(style: .regular, size: 15))
         return view
     }()
-    
+
     let contentCollectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
-        return view
+        return UICollectionView(frame: .zero, collectionViewLayout: .init())
     }()
-    
+
     let emptyLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 14, text: "차단한 사용자가 없어요")
         label.textColor = .g400
@@ -33,7 +32,7 @@ final class BlockUserManageView: UIView {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -41,19 +40,19 @@ final class BlockUserManageView: UIView {
 
 // MARK: - SetUp
 private extension BlockUserManageView {
-    
+
     func setUpConstraints() {
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         self.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         self.addSubview(emptyLabel)
         emptyLabel.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(137)

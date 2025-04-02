@@ -1,10 +1,10 @@
 //
-//import UIKit
-//import SnapKit
-//import RxSwift
+// import UIKit
+// import SnapKit
+// import RxSwift
 //
 //
-//class StoreListHeaderView: UICollectionReusableView {
+// class StoreListHeaderView: UICollectionReusableView {
 //    static let identifier = "StoreListHeaderView"
 //
 //    let searchInput = MapSearchInput()
@@ -51,4 +51,4 @@
 //
 //
 //    }
-//}
+// }

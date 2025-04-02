@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 
 final class MyPageBookmarkView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
         view.headerLabel.setLineHeightText(text: "찜한 팝업", font: .KorFont(style: .regular, size: 15))
         return view
     }()
-    
+
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
         view.backgroundColor = .g50
@@ -25,39 +25,38 @@ final class MyPageBookmarkView: UIView {
         view.isPrefetchingEnabled = true
         return view
     }()
-    
+
     let emptyLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 14, text: "앗! 아직 찜해둔 팝업이 없어요")
         label.textColor = .g400
         label.isHidden = true
         return label
     }()
-    
+
     let countButtonView: CountButtonView = {
-        let view = CountButtonView()
-        return view
+        return CountButtonView()
     }()
-    
+
     let emptyButton: UIButton = {
         let button = UIButton()
         let buttonTitle = NSAttributedString(
             string: "추천 팝업 보러가기",
             attributes: [
-                .font : UIFont.KorFont(style: .regular, size: 13)!,
-                .underlineStyle : NSUnderlineStyle.single.rawValue,
-                .foregroundColor : UIColor.g1000
+                .font: UIFont.KorFont(style: .regular, size: 13)!,
+                .underlineStyle: NSUnderlineStyle.single.rawValue,
+                .foregroundColor: UIColor.g1000
             ]
         )
         button.setAttributedTitle(buttonTitle, for: .normal)
         return button
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -65,7 +64,7 @@ final class MyPageBookmarkView: UIView {
 
 // MARK: - SetUp
 private extension MyPageBookmarkView {
-    
+
     func setUpConstraints() {
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
@@ -82,13 +81,13 @@ private extension MyPageBookmarkView {
             make.top.equalTo(countButtonView.snp.bottom).offset(16)
             make.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         self.addSubview(emptyLabel)
         emptyLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(245)
         }
-        
+
         self.addSubview(emptyButton)
         emptyButton.snp.makeConstraints { make in
             make.top.equalTo(emptyLabel.snp.bottom).offset(26)

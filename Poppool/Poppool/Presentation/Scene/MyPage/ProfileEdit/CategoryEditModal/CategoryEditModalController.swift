@@ -7,21 +7,21 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CategoryEditModalController: BaseViewController, View {
-    
+
     typealias Reactor = CategoryEditModalReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CategoryEditModalView()
-    
+
     private var sections: [any Sectionable] = []
 }
 
@@ -42,7 +42,7 @@ private extension CategoryEditModalController {
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
         mainView.contentCollectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
-        
+
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -57,7 +57,7 @@ extension CategoryEditModalController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.xmarkButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -65,7 +65,7 @@ extension CategoryEditModalController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.saveButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -73,7 +73,7 @@ extension CategoryEditModalController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -90,19 +90,18 @@ extension CategoryEditModalController: UICollectionViewDelegate, UICollectionVie
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.cellTapped(row: indexPath.row))
     }
@@ -113,7 +112,7 @@ extension CategoryEditModalController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
-    
+
     var longFormHeight: PanModalHeight {
         return .contentHeight(360)
     }

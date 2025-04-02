@@ -7,22 +7,22 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class MyCommentController: BaseViewController, View {
-    
+
     typealias Reactor = MyCommentReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = MyCommentView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private var cellTapped: PublishSubject<Int> = .init()
 }
 
@@ -46,7 +46,7 @@ private extension MyCommentController {
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
-        
+
         mainView.contentCollectionView.register(
             CommentListTitleSectionCell.self,
             forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers
@@ -59,7 +59,7 @@ private extension MyCommentController {
             MyCommentedPopUpGridSectionCell.self,
             forCellWithReuseIdentifier: MyCommentedPopUpGridSectionCell.identifiers
         )
-        
+
         view.backgroundColor = .g50
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
@@ -75,7 +75,7 @@ extension MyCommentController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -83,7 +83,7 @@ extension MyCommentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, row) in
@@ -91,7 +91,7 @@ extension MyCommentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -107,19 +107,18 @@ extension MyCommentController: UICollectionViewDelegate, UICollectionViewDataSou
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 { cellTapped.onNext(indexPath.row) }
     }

@@ -5,8 +5,8 @@
 //  Created by 김기현 on 12/4/24.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 
 struct MapAPIEndpoint {
     /// 뷰 바운즈 내에 있는 팝업 스토어 정보를 조회
@@ -84,4 +84,3 @@ struct SearchQueryDTO: Encodable {
     let query: String
     let categories: [Int64]?
 }
-

@@ -8,37 +8,37 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class MyCommentReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case listTapped(controller: BaseViewController, row: Int)
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case skip
         case moveToDetailScene(controller: BaseViewController, row: Int)
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -52,17 +52,17 @@ final class MyCommentReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var listCountSection = CommentListTitleSection(inputDataList: [])
     private var listSection = MyCommentedPopUpGridSection(inputDataList: [])
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private var spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -93,7 +93,7 @@ final class MyCommentReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -113,7 +113,7 @@ final class MyCommentReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing16Section,

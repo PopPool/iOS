@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class HomeListReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -21,7 +21,7 @@ final class HomeListReactor: Reactor {
         case changePage
         case cellTapped(controller: BaseViewController, row: Int)
     }
-    
+
     enum Mutation {
         case moveToRecentScene(controller: BaseViewController)
         case loadView
@@ -30,28 +30,28 @@ final class HomeListReactor: Reactor {
         case appendData
         case moveToDetailScene(controller: BaseViewController, row: Int)
     }
-    
+
     struct State {
         var popUpType: HomePopUpType
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var popUpType: HomePopUpType
-    
+
     private let homeAPIUseCase = HomeAPIUseCaseImpl()
     private let userDefaultService = UserDefaultService()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
     private var currentPage: Int32 = 0
     private var size: Int32 = 10
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -68,13 +68,13 @@ final class HomeListReactor: Reactor {
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
     private var cardSections = HomeCardGridSection(inputDataList: [])
-    
+
     // MARK: - init
     init(popUpType: HomePopUpType) {
         self.initialState = State(popUpType: popUpType)
         self.popUpType = popUpType
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -122,7 +122,7 @@ final class HomeListReactor: Reactor {
             return Observable.just(.moveToDetailScene(controller: controller, row: row))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -149,11 +149,11 @@ final class HomeListReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
-        return [spacing24Section,cardSections,spacing64Section]
+        return [spacing24Section, cardSections, spacing64Section]
     }
-    
+
     func setSection(response: GetHomeInfoResponse) {
         let isLogin = response.loginYn
         switch popUpType {
@@ -206,7 +206,7 @@ final class HomeListReactor: Reactor {
             totalPage = response.popularPopUpStoreTotalPages
         }
     }
-    
+
     func appendSectionData(response: GetHomeInfoResponse) {
         let isLogin = response.loginYn
         switch popUpType {

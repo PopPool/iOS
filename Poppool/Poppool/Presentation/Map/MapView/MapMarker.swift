@@ -1,12 +1,11 @@
-import UIKit
-import SnapKit
 import GoogleMaps
+import SnapKit
+import UIKit
 
 final class MapMarker: UIView {
     // MARK: - Components
     private(set) var isSelected: Bool = false
     var currentInput: Input?
-
 
     private let markerImageView: UIImageView = {
         let imageView = UIImageView()
@@ -180,8 +179,6 @@ extension MapMarker: Inputable {
         self.layoutIfNeeded()
         CATransaction.commit()
     }
-
-
 
     private func setupClusterMarker(_ input: Input) {
         markerImageView.isHidden = true

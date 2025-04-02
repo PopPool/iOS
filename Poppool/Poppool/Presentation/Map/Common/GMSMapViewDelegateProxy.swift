@@ -1,6 +1,6 @@
-import RxSwift
-import RxCocoa
 import GoogleMaps
+import RxCocoa
+import RxSwift
 
 class GMSMapViewDelegateProxy: DelegateProxy<GMSMapView, GMSMapViewDelegate>, DelegateProxyType, GMSMapViewDelegate {
 

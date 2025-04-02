@@ -6,28 +6,28 @@
 //
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class WithdrawlCheckModalController: BaseViewController, View {
-    
+
     typealias Reactor = WithdrawlCheckModalReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = WithdrawlCheckModalView()
-    
+
     init(nickName: String?) {
         super.init()
         let title = "\(nickName ?? "")님, 팝풀 서비스를\n정말 탈퇴하시겠어요?"
         mainView.titleLabel.setLineHeightText(text: title, font: .KorFont(style: .bold, size: 18), lineHeight: 1.312)
         mainView.titleLabel.numberOfLines = 2
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -58,7 +58,7 @@ extension WithdrawlCheckModalController {
             .map { Reactor.Action.cancelButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.agreeButton.rx.tap
             .map { Reactor.Action.appleyButtonTapped }
             .bind(to: reactor.action)
@@ -71,7 +71,7 @@ extension WithdrawlCheckModalController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
-    
+
     var longFormHeight: PanModalHeight {
         return .contentHeight(370)
     }

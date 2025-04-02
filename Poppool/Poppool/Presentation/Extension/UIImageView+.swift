@@ -28,7 +28,7 @@ extension UIImageView {
             }
         }
     }
-    
+
     func setPPImage(path: String?, completion: @escaping () -> Void) {
         guard let path = path else {
             self.image = UIImage(named: "image_default")

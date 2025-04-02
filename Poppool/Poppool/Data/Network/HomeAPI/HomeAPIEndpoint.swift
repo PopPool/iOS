@@ -8,7 +8,7 @@
 import Foundation
 
 struct HomeAPIEndpoint {
-    
+
     static func fetchHome(
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
@@ -19,7 +19,7 @@ struct HomeAPIEndpoint {
             queryParameters: request
         )
     }
-    
+
     static func fetchPopularPopUp(
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
@@ -30,7 +30,7 @@ struct HomeAPIEndpoint {
             queryParameters: request
         )
     }
-    
+
     static func fetchNewPopUp(
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
@@ -41,7 +41,7 @@ struct HomeAPIEndpoint {
             queryParameters: request
         )
     }
-    
+
     static func fetchCustomPopUp(
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {

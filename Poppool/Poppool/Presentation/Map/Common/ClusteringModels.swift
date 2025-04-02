@@ -20,7 +20,6 @@ enum MapZoomLevel {
     }
 }
 
-
 struct RegionCluster {
     let name: String
     let subRegions: [String]

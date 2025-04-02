@@ -7,11 +7,11 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class DetailCommentSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
     private let contentStackView: UIStackView = {
         let view = UIStackView()
@@ -20,12 +20,11 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         view.spacing = 16
         return view
     }()
-    
+
     let profileView: DetailCommentProfileView = {
-        let view = DetailCommentProfileView()
-        return view
+        return DetailCommentProfileView()
     }()
-    
+
     let imageCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = .init(width: 80, height: 80)
@@ -36,53 +35,51 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         view.showsHorizontalScrollIndicator = false
         return view
     }()
-    
+
     private let contentLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 13)
         label.numberOfLines = 3
         return label
     }()
-    
+
     let totalViewButton: UIButton = {
-        let button = UIButton()
-        return button
+        return UIButton()
     }()
-    
+
     private let buttonTitleLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 13, text: "코멘트 전체보기")
         label.textColor = .g600
         return label
     }()
-    
+
     private let buttonImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "icon_right_black")
         return view
     }()
-    
+
     let likeButton: UIButton = {
-        let button = UIButton()
-        return button
+        return UIButton()
     }()
-    
+
     private let likeButtonTitleLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13, text: "도움돼요")
         label.textColor = .g400
         return label
     }()
-    
+
     private let likeButtonImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "icon_like_gray")
         return view
     }()
-    
+
     private let borderView: UIView = {
         let view = UIView()
         view.backgroundColor = .g100
         return view
     }()
-    
+
     private let blurBackGroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -95,9 +92,9 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         view.isUserInteractionEnabled = false
         return view
     }()
-    
+
     var disposeBag = DisposeBag()
-    
+
     private let loginStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
@@ -105,13 +102,13 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         view.spacing = 16
         return view
     }()
-    
+
     private let loginNoticelabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         return label
     }()
-    
+
     let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("로그인하고 후기보기", for: .normal)
@@ -121,19 +118,19 @@ final class DetailCommentSectionCell: UICollectionViewCell {
         button.backgroundColor = .blu500
         return button
     }()
-    
+
     private var imagePathList: [String?] = []
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -143,12 +140,11 @@ final class DetailCommentSectionCell: UICollectionViewCell {
 // MARK: - SetUp
 private extension DetailCommentSectionCell {
     func setUpConstraints() {
-        
+
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         imageCollectionView.register(DetailCommentImageCell.self, forCellWithReuseIdentifier: DetailCommentImageCell.identifiers)
-        
-        
+
         totalViewButton.addSubview(buttonTitleLabel)
         buttonTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
@@ -163,7 +159,7 @@ private extension DetailCommentSectionCell {
             make.leading.equalTo(buttonTitleLabel.snp.trailing)
             make.centerY.equalToSuperview()
         }
-        
+
         profileView.snp.makeConstraints { make in
             make.width.equalTo(contentView.bounds.width - 40).priority(.high)
         }
@@ -178,32 +174,32 @@ private extension DetailCommentSectionCell {
         contentStackView.addArrangedSubview(imageCollectionView)
         contentStackView.addArrangedSubview(contentLabel)
         contentStackView.addArrangedSubview(totalViewButton)
-        
+
         contentView.addSubview(contentStackView)
         contentStackView.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(20)
             make.leading.trailing.equalToSuperview()
         }
-        
+
         likeButton.addSubview(likeButtonTitleLabel)
         likeButtonTitleLabel.snp.makeConstraints { make in
             make.height.equalTo(20).priority(.high)
             make.top.bottom.trailing.equalToSuperview()
         }
-        
+
         likeButton.addSubview(likeButtonImageView)
         likeButtonImageView.snp.makeConstraints { make in
             make.size.equalTo(20)
             make.leading.centerY.equalToSuperview()
             make.trailing.equalTo(likeButtonTitleLabel.snp.leading)
         }
-        
+
         contentView.addSubview(likeButton)
         likeButton.snp.makeConstraints { make in
             make.top.equalTo(contentStackView.snp.bottom).offset(16)
             make.trailing.equalToSuperview().inset(20)
         }
-        
+
         contentView.addSubview(borderView)
         borderView.snp.makeConstraints { make in
             make.top.equalTo(likeButton.snp.bottom).offset(16)
@@ -211,7 +207,7 @@ private extension DetailCommentSectionCell {
             make.height.equalTo(1).priority(.high)
             make.bottom.equalToSuperview()
         }
-        
+
         contentView.addSubview(blurBackGroundView)
         blurBackGroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -220,7 +216,7 @@ private extension DetailCommentSectionCell {
         blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         contentView.addSubview(loginStackView)
         loginStackView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -281,7 +277,7 @@ extension DetailCommentSectionCell: Inputable {
         var isMyComment: Bool
         var isLastCell: Bool = false
     }
-    
+
     func injection(with input: Input) {
 
         let comment = input.comment ?? ""
@@ -308,7 +304,7 @@ extension DetailCommentSectionCell: Inputable {
             imageCollectionView.isHidden = false
             imagePathList = input.imageList
         }
-        
+
         imageCollectionView.reloadData()
         if input.isLogin {
             blurBackGroundView.isHidden = true
@@ -327,7 +323,7 @@ extension DetailCommentSectionCell: Inputable {
         let reviewRange = (fullText as NSString).range(of: "생생한 후기")
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.4
-        
+
         // 기본 스타일 (폰트, 색상 등)
         let normalAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.KorFont(style: .regular, size: 14)!,
@@ -353,12 +349,11 @@ extension DetailCommentSectionCell: Inputable {
         attributedString.addAttributes(popupStoreAttributes, range: popupStoreRange)
         attributedString.addAttributes(reviewAttributes, range: reviewRange)
 
-        
         loginNoticelabel.attributedText = attributedString
         loginNoticelabel.textAlignment = .center
         loginNoticelabel.lineBreakStrategy = .hangulWordPriority
         loginNoticelabel.numberOfLines = 0
-        
+
         borderView.isHidden = input.isLastCell
     }
 }
@@ -368,7 +363,7 @@ extension DetailCommentSectionCell: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imagePathList.count
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath

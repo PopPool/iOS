@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 struct PopUpAPIEndPoint {
-    
+
     static func getClosePopUpList(request: GetSearchPopUpListRequestDTO) -> Endpoint<GetClosePopUpListResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -19,7 +19,7 @@ struct PopUpAPIEndPoint {
             queryParameters: request
         )
     }
-    
+
     static func getOpenPopUpList(request: GetSearchPopUpListRequestDTO) -> Endpoint<GetOpenPopUpListResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -28,7 +28,7 @@ struct PopUpAPIEndPoint {
             queryParameters: request
         )
     }
-    
+
     static func getSearchPopUpList(request: GetSearchPopUpListRequestDTO) -> Endpoint<GetSearchPopUpListResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -37,7 +37,7 @@ struct PopUpAPIEndPoint {
             queryParameters: request
         )
     }
-    
+
     static func getPopUpDetail(request: GetPopUpDetailRequestDTO) -> Endpoint<GetPopUpDetailResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -46,7 +46,7 @@ struct PopUpAPIEndPoint {
             queryParameters: request
         )
     }
-    
+
     static func getPopUpComment(request: GetPopUpCommentRequestDTO) -> Endpoint<GetPopUpCommentResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,

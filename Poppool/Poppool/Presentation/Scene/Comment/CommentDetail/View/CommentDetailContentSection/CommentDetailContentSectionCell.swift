@@ -7,11 +7,11 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class CommentDetailContentSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     private let contentLabel: PPLabel = {
@@ -19,15 +19,15 @@ final class CommentDetailContentSectionCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
+
     let disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -47,7 +47,7 @@ extension CommentDetailContentSectionCell: Inputable {
     struct Input {
         var content: String?
     }
-    
+
     func injection(with input: Input) {
         contentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .medium, size: 13))
     }

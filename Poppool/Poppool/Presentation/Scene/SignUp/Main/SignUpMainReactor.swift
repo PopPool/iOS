@@ -6,11 +6,11 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpMainReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case cancelButtonTapped(controller: BaseTabmanController)
@@ -27,7 +27,7 @@ final class SignUpMainReactor: Reactor {
         case changeGender(gender: String?)
         case changeAge(age: Int?)
     }
-    
+
     enum Mutation {
         case moveToLoginScene(controller: BaseTabmanController)
         case increasePageIndex(controller: BaseTabmanController, currentIndex: Int)
@@ -41,7 +41,7 @@ final class SignUpMainReactor: Reactor {
         case setGender(gender: String?)
         case setAge(age: Int?)
     }
-    
+
     struct State {
         var currentIndex: Int = 0
         var isMarketingAgree: Bool = false
@@ -52,25 +52,25 @@ final class SignUpMainReactor: Reactor {
         var categoryIDList: [Int64] = []
         var age: Int?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private var authrizationCode: String?
-    
+
     private var signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
     var isFirstResponderCase: Bool
-    
+
     // MARK: - init
     init(isFirstResponderCase: Bool, authrizationCode: String?) {
         self.initialState = State()
         self.authrizationCode = authrizationCode
         self.isFirstResponderCase = isFirstResponderCase
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -105,7 +105,7 @@ final class SignUpMainReactor: Reactor {
             ])
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -121,9 +121,9 @@ final class SignUpMainReactor: Reactor {
             guard let socialType = userDefaultService.fetch(key: "socialType"),
                   let nickName = newState.nickName,
                   let gender = newState.gender else { return newState }
-            
+
             signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
-            
+
             signUpAPIUseCase.trySignUp(
                 nickName: nickName,
                 gender: gender,
@@ -146,7 +146,7 @@ final class SignUpMainReactor: Reactor {
                 ToastMaker.createToast(message: "회원가입 실패:\(error.localizedDescription)")
             }
             .disposed(by: disposeBag)
-            
+
         case .skipStep3(let controller, let currentIndex):
             if newState.categoryIDList.count >= 5 {
                 newState.categorys = Array(newState.categoryIDList.shuffled().prefix(5))

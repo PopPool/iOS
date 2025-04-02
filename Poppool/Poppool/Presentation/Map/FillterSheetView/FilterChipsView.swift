@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class FilterChipsView: UIView {
     // MARK: - Components
@@ -97,7 +97,7 @@ final class FilterChipsView: UIView {
         let removedFilter = filters[index]
         filters.remove(at: index)
         updateUI()
-        
+
         // 콜백 호출
         onRemoveChip?(removedFilter)
     }

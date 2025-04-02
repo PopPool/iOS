@@ -8,9 +8,9 @@
 import UIKit
 
 class PPLabel: UILabel {
-    
+
     init(
-        style: UIFont.FontStyle, 
+        style: UIFont.FontStyle,
         fontSize: CGFloat,
         text: String = "",
         lineHeight: CGFloat = 1.2
@@ -24,7 +24,7 @@ class PPLabel: UILabel {
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

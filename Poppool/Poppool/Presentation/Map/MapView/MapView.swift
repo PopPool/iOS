@@ -1,6 +1,6 @@
-import UIKit
-import SnapKit
 import GoogleMaps
+import SnapKit
+import UIKit
 
 final class MapView: UIView {
     // MARK: - Components
@@ -52,8 +52,7 @@ final class MapView: UIView {
     }()
 
     var storeCard: MapPopupCarouselView = {
-        let view = MapPopupCarouselView()
-        return view
+        return MapPopupCarouselView()
     }()
 
     // MARK: - Init
@@ -104,7 +103,7 @@ private extension MapView {
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)  
+            make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(37)
         }
 

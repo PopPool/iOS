@@ -1,6 +1,6 @@
-import UIKit
-import SnapKit
 import FloatingPanel
+import SnapKit
+import UIKit
 
 final class MapPopupCarouselView: UICollectionView {
     // 스크롤 멈췄을 때의 콜백
@@ -43,7 +43,6 @@ final class MapPopupCarouselView: UICollectionView {
             right: sideInset
         )
         super.init(frame: frame, collectionViewLayout: layout)
-
 
         showsHorizontalScrollIndicator = false
         backgroundColor = .clear

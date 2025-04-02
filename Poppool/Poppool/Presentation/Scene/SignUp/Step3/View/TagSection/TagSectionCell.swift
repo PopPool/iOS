@@ -7,25 +7,24 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class TagSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 13)
-        return label
+        return PPLabel(style: .medium, fontSize: 13)
     }()
-    
+
     let disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -37,7 +36,7 @@ private extension TagSectionCell {
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 18
         contentView.layer.borderColor = UIColor.g200.cgColor
-        
+
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(14).priority(.high)
@@ -52,7 +51,7 @@ extension TagSectionCell: Inputable {
         var isSelected: Bool
         var id: Int64?
     }
-    
+
     func injection(with input: Input) {
         titleLabel.text = input.title
         if input.isSelected {

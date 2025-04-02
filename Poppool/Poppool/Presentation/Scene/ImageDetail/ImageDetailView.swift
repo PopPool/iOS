@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 final class ImageDetailView: UIView {
-    
+
     // MARK: - Components
     let imageView: UIImageView = {
         let view = UIImageView()
@@ -18,13 +18,13 @@ final class ImageDetailView: UIView {
         view.contentMode = .scaleAspectFit
         return view
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -32,7 +32,7 @@ final class ImageDetailView: UIView {
 
 // MARK: - SetUp
 private extension ImageDetailView {
-    
+
     func setUpConstraints() {
         self.addSubview(imageView)
         imageView.snp.makeConstraints { make in

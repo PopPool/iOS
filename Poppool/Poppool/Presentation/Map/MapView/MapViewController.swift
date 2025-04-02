@@ -1,17 +1,15 @@
-import UIKit
-import FloatingPanel
-import SnapKit
-import RxSwift
-import RxCocoa
-import ReactorKit
-import GoogleMaps
 import CoreLocation
+import FloatingPanel
+import GoogleMaps
+import ReactorKit
+import RxCocoa
 import RxGesture
-
+import RxSwift
+import SnapKit
+import UIKit
 
 class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
-
 
     fileprivate struct CoordinateKey: Hashable {
         let lat: Int
@@ -27,7 +25,6 @@ class MapViewController: BaseViewController, View {
     var currentTooltipView: UIView?
     var currentTooltipStores: [MapPopUpStore] = []
     var currentTooltipCoordinate: CLLocationCoordinate2D?
-
 
     // MARK: - Properties
     private var storeDetailsCache: [Int64: StoreItem] = [:]
@@ -82,7 +79,6 @@ class MapViewController: BaseViewController, View {
         setUp()
         mainView.mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
 
-
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -133,8 +129,6 @@ class MapViewController: BaseViewController, View {
                 .disposed(by: disposeBag)
         }
 
-
-
         carouselView.rx.observe(Bool.self, "hidden")
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] isHidden in
@@ -170,9 +164,6 @@ class MapViewController: BaseViewController, View {
                 self.isMovingToMarker = false
             })
             .disposed(by: disposeBag)
-
-
-
 
         carouselView.onCardScrolled = { [weak self] pageIndex in
             guard let self = self,
@@ -302,7 +293,7 @@ class MapViewController: BaseViewController, View {
         let markerPoint = self.mainView.mapView.projection.point(for: marker.position)
         let markerHeight = (marker.iconView as? MapMarker)?.imageView.frame.height ?? 32
         tooltipView.frame = CGRect(
-            x: markerPoint.x , // 마커 오른쪽 10포인트
+            x: markerPoint.x,
             y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
             width: tooltipView.frame.width,
             height: tooltipView.frame.height
@@ -447,10 +438,6 @@ class MapViewController: BaseViewController, View {
             }
             .disposed(by: disposeBag)
 
-
-
-
-
         mainView.filterChips.onRemoveLocation = { [weak self] in
             guard let self = self else { return }
             // 필터 제거 액션
@@ -545,7 +532,6 @@ class MapViewController: BaseViewController, View {
         }
         .disposed(by: disposeBag)
 
-
         reactor.state.map { $0.activeFilterType }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -599,8 +585,6 @@ class MapViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
 
-
-
         reactor.state.map { $0.searchResults }
             .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
@@ -653,9 +637,6 @@ class MapViewController: BaseViewController, View {
             }
             .disposed(by: disposeBag)
 
-
-
-
 //        reactor.state.map { $0.searchResults.isEmpty }
 //            .distinctUntilChanged()
 //            .skip(1)  // 초기값 스킵
@@ -672,7 +653,6 @@ class MapViewController: BaseViewController, View {
 //            .disposed(by: disposeBag)
     }
 
-
     // MARK: - List View Control
     private func toggleListView() {
         UIView.animate(withDuration: 0.3) {
@@ -684,7 +664,6 @@ class MapViewController: BaseViewController, View {
         }
 
          }
-
 
     func addMarker(for store: MapPopUpStore) {
           let marker = GMSMarker()
@@ -772,7 +751,6 @@ class MapViewController: BaseViewController, View {
         }
     }
 
-
     private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
         let progress = (maxOffset - offset) / (maxOffset - minOffset) // 0(탑) ~ 1(바텀)
         mainView.mapView.alpha = max(0, min(progress, 1)) // 0(완전히 가림) ~ 1(완전히 보임)
@@ -792,8 +770,6 @@ class MapViewController: BaseViewController, View {
                 self.storeListViewController.setGrabberHandleVisible(false)
                 self.listViewTopConstraint?.update(offset: filterChipsFrame.maxY)
                 self.mainView.searchInput.setBackgroundColor(.g50)
-
-
 
             case .middle:
                 self.storeListViewController.setGrabberHandleVisible(true)
@@ -860,7 +836,6 @@ class MapViewController: BaseViewController, View {
         }
     }
 
-
     // updateMapWithClustering() 메서드 전체 구현
     private func updateMapWithClustering() {
         let currentZoom = mainView.mapView.camera.zoom
@@ -875,7 +850,6 @@ class MapViewController: BaseViewController, View {
 
         // 현재 화면에 보이는 스토어 업데이트
         currentStores = visibleStores
-
 
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -1041,7 +1015,6 @@ class MapViewController: BaseViewController, View {
         return dict
     }
 
-
     private func updateIndividualMarkers(_ stores: [MapPopUpStore]) {
         var newMarkerIDs = Set<Int64>()
 
@@ -1101,8 +1074,6 @@ class MapViewController: BaseViewController, View {
         }
     }
 
-
-
     func presentFilterBottomSheet(for filterType: FilterType) {
         guard let reactor = self.reactor else { return }
 
@@ -1150,7 +1121,7 @@ class MapViewController: BaseViewController, View {
         }
         currentFilterBottomSheet = nil
     }
-    //기본 마커
+    // 기본 마커
     private func addMarkers(for stores: [MapPopUpStore]) {
         mainView.mapView.clear()
         markerDictionary.removeAll()
@@ -1215,8 +1186,6 @@ class MapViewController: BaseViewController, View {
         )
     }
 
-
-
     // MARK: - Location
     private func checkLocationAuthorization() {
         switch locationManager.authorizationStatus {
@@ -1263,7 +1232,6 @@ extension MapViewController: CLLocationManagerDelegate {
 
         locationManager.stopUpdatingLocation()
     }
-
 
     private func findAndShowNearestStore(from location: CLLocation) {
         guard !currentStores.isEmpty else {
@@ -1341,7 +1309,6 @@ extension MapViewController: GMSMapViewDelegate {
            return false
        }
 
-
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         if !isMovingToMarker {
             currentTooltipView?.removeFromSuperview()
@@ -1355,8 +1322,6 @@ extension MapViewController: GMSMapViewDelegate {
             currentCarouselStores = []
         }
     }
-
-
 
     func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
         if gesture && !isMovingToMarker {
@@ -1395,9 +1360,6 @@ extension MapViewController: GMSMapViewDelegate {
         // 클러스터링 업데이트
         updateMapWithClustering()
     }
-
-
-
 
     // MARK: - Helper for single marker tap
     func handleSingleStoreTap(_ marker: GMSMarker, store: MapPopUpStore) -> Bool {
@@ -1476,9 +1438,6 @@ extension MapViewController: GMSMapViewDelegate {
         isMovingToMarker = false
         return true
     }
-
-
-
 
     func handleRegionalClusterTap(_ marker: GMSMarker, clusterData: ClusterMarkerData) -> Bool {
         let currentZoom = mainView.mapView.camera.zoom
@@ -1633,9 +1592,7 @@ extension MapViewController: GMSMapViewDelegate {
         self.currentMarker = nil
     }
 
-
 }
-
 
 extension MapViewController {
     func bindViewport(reactor: MapReactor) {
@@ -1692,7 +1649,6 @@ extension MapViewController {
                    self.updateMapWithClustering()
                })
                .disposed(by: disposeBag)
-
 
         // 뷰포트 내 마커 업데이트 및 캐러셀 표시 (수정된 부분)
         reactor.state
@@ -1841,7 +1797,6 @@ extension MapViewController {
         }
     }
 
-
     private func findMarkerForStore(for store: MapPopUpStore) -> GMSMarker? {
         // individualMarkerDictionary에 저장된 모든 마커를 순회
         for marker in individualMarkerDictionary.values {
@@ -1877,8 +1832,6 @@ extension MapViewController {
             addMarker(for: store)
         }
     }
-
-
 
 private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
     isMovingToMarker = true
@@ -1930,7 +1883,6 @@ private func handleMarkerTap(_ marker: GMSMarker) -> Bool {
 
         return true
     }
-
 
     private func getCurrentViewportBounds() -> (northEast: CLLocationCoordinate2D, southWest: CLLocationCoordinate2D) {
         let region = mainView.mapView.projection.visibleRegion()

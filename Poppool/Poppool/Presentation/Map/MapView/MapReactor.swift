@@ -1,6 +1,6 @@
+import CoreLocation
 import ReactorKit
 import RxSwift
-import CoreLocation
 
 final class MapReactor: Reactor {
     // MARK: - Reactor
@@ -166,8 +166,6 @@ final class MapReactor: Reactor {
                 .just(.setLoading(false))
             ])
 
-
-
         case let .updateBothFilters(locations, categories):
             return .concat([
                 .just(.setLocationFilters(locations)),
@@ -302,9 +300,8 @@ final class MapReactor: Reactor {
         case let .didSelectItem(store):
             return .concat([
                 .just(.setSelectedStore(store)),
-                .just(.setViewportStores(currentState.viewportStores)), // ✅ 선택된 마커를 캐러셀에서 최우선으로 반영
+                .just(.setViewportStores(currentState.viewportStores)) // ✅ 선택된 마커를 캐러셀에서 최우선으로 반영
             ])
-
 
         default:
             return .empty()
@@ -386,7 +383,6 @@ final class MapReactor: Reactor {
             )
 
             newState.viewportStores = updatedStores
-
 
         case let .setSelectedStore(store):
             newState.selectedStore = store

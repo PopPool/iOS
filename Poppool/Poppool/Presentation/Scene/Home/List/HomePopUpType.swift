@@ -11,7 +11,7 @@ enum HomePopUpType {
     case curation
     case new
     case popular
-    
+
     var title: String {
         switch self {
         case .curation:
@@ -22,7 +22,7 @@ enum HomePopUpType {
             return "인기 팝업 전체보기"
         }
     }
-    
+
     var path: String {
         switch self {
         case .curation:

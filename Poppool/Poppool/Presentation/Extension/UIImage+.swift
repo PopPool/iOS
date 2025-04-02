@@ -22,7 +22,7 @@ extension UIImage {
 extension UIImage {
     func isBright(threshold: CGFloat = 0.5) -> Bool? {
         guard let cgImage = self.cgImage else { return nil }
-        
+
         let width = 1
         let height = 1
         let bitsPerComponent = 8
@@ -30,9 +30,9 @@ extension UIImage {
         let bytesPerRow = bytesPerPixel * width
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
-        
+
         var pixelData = [UInt8](repeating: 0, count: width * height * bytesPerPixel)
-        
+
         guard let context = CGContext(
             data: &pixelData,
             width: width,
@@ -42,16 +42,16 @@ extension UIImage {
             space: colorSpace,
             bitmapInfo: bitmapInfo
         ) else { return nil }
-        
+
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
+
         let red = CGFloat(pixelData[0]) / 255.0
         let green = CGFloat(pixelData[1]) / 255.0
         let blue = CGFloat(pixelData[2]) / 255.0
-        
+
         // Brightness calculation formula
         let brightness = (red * 0.299 + green * 0.587 + blue * 0.114)
-        
+
         return brightness > threshold
     }
 }

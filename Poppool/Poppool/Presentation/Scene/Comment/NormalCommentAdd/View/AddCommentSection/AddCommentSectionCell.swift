@@ -7,16 +7,16 @@
 
 import UIKit
 
-import SnapKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import SnapKit
 
 final class AddCommentSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
-    
+
     var disposeBag = DisposeBag()
-    
+
     let commentTextView: UITextView = {
         let view = UITextView()
         view.textContainerInset = .zero
@@ -24,42 +24,42 @@ final class AddCommentSectionCell: UICollectionViewCell {
         view.font = .KorFont(style: .medium, size: 14)
         return view
     }()
-    
+
     let countLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 12)
         label.textColor = .g500
         return label
     }()
-    
+
     private let placeHolderLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 14, text: "최소 10자 이상 입력해주세요")
         label.textColor = .g200
         return label
     }()
-    
+
     private let noticeLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 12, text: "최대 500자까지 입력해주세요")
         label.textColor = .re500
         label.isHidden = true
         return label
     }()
-    
+
     private var isActiveComment: Bool = false
-    
+
     private var commentState: BehaviorRelay<CommentState> = .init(value: .empty)
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
         bind()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -70,7 +70,7 @@ final class AddCommentSectionCell: UICollectionViewCell {
 // MARK: - SetUp
 private extension AddCommentSectionCell {
     func bind() {
-        
+
         commentTextView.rx.didBeginEditing
             .withUnretained(self)
             .subscribe { (owner, _) in
@@ -78,7 +78,7 @@ private extension AddCommentSectionCell {
                 owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
             }
             .disposed(by: disposeBag)
-        
+
         commentTextView.rx.didEndEditing
             .withUnretained(self)
             .subscribe { (owner, _) in
@@ -86,7 +86,7 @@ private extension AddCommentSectionCell {
                 owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
             }
             .disposed(by: disposeBag)
-        
+
         commentTextView.rx.didChange
             .debounce(.milliseconds(5), scheduler: MainScheduler.instance)
             .withUnretained(self)
@@ -94,7 +94,7 @@ private extension AddCommentSectionCell {
                 owner.commentState.accept(owner.checkValidation(text: owner.commentTextView.text))
             }
             .disposed(by: disposeBag)
-        
+
         commentState
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -109,7 +109,7 @@ private extension AddCommentSectionCell {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func setUpConstraints() {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
@@ -136,13 +136,13 @@ private extension AddCommentSectionCell {
             make.bottom.equalToSuperview().inset(16)
         }
     }
-    
+
     func checkValidation(text: String?) -> CommentState {
         guard let text = text else { return .empty }
         if text.isEmpty {
             return isActiveComment ? .emptyActive : .empty
         }
-        
+
         switch text.count {
         case 1...9:
             return isActiveComment ? .shortLengthActive : .shortLength
@@ -158,7 +158,7 @@ extension AddCommentSectionCell: Inputable {
     struct Input {
         var text: String?
     }
-    
+
     func injection(with input: Input) {
         commentTextView.text = input.text
         commentState.accept(checkValidation(text: input.text))
@@ -174,7 +174,7 @@ enum CommentState {
     case longLengthActive
     case normal
     case normalActive
-    
+
     var borderColor: UIColor? {
         switch self {
         case .shortLength, .longLength, .longLengthActive:
@@ -183,7 +183,7 @@ enum CommentState {
             return .g100
         }
     }
-    
+
     var countLabelColor: UIColor? {
         switch self {
         case .shortLength, .longLength, .longLengthActive:
@@ -192,7 +192,7 @@ enum CommentState {
             return .g500
         }
     }
-    
+
     var textColor: UIColor? {
         switch self {
         case .shortLength, .longLength, .longLengthActive:
@@ -201,7 +201,7 @@ enum CommentState {
             return .g1000
         }
     }
-    
+
     var description: String? {
         switch self {
         case .longLength, .longLengthActive:
@@ -212,7 +212,7 @@ enum CommentState {
             return nil
         }
     }
-    
+
     var isHiddenNoticeLabel: Bool {
         switch self {
         case .longLength, .longLengthActive, .shortLength:
@@ -221,7 +221,7 @@ enum CommentState {
             return true
         }
     }
-    
+
     var isHiddenPlaceHolder: Bool {
         switch self {
         case .empty, .emptyActive:

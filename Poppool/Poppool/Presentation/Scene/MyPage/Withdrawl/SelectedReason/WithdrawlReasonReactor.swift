@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class WithdrawlReasonReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -22,25 +22,25 @@ final class WithdrawlReasonReactor: Reactor {
         case skipButtonTapped(controller: BaseViewController)
         case checkButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
         case none
         case moveToCompleteScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var buttonIsEnabled: Bool = false
         var isReloadView: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -54,7 +54,7 @@ final class WithdrawlReasonReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var reasonSection = WithdrawlCheckSection(inputDataList: [])
     private var spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
@@ -64,7 +64,7 @@ final class WithdrawlReasonReactor: Reactor {
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -96,7 +96,7 @@ final class WithdrawlReasonReactor: Reactor {
                 .andThen(Observable.just(.moveToCompleteScene(controller: controller)))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -125,9 +125,9 @@ final class WithdrawlReasonReactor: Reactor {
                 .disposed(by: disposeBag)
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
-        
+
         let isEmpty = reasonSection.inputDataList.filter { $0.isSelected == true }.isEmpty
-        
+
         if let etc = reasonSection.inputDataList.filter({ $0.title == "기타" }).first {
             if etc.isSelected {
                 if etc.text?.isEmpty ?? true {
@@ -143,7 +143,7 @@ final class WithdrawlReasonReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             reasonSection,

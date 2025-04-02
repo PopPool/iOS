@@ -4,8 +4,8 @@
 //
 //  Created by 김기현 on 12/3/24.
 //
-import Foundation
 import CoreLocation
+import Foundation
 
 struct MapPopUpStore: Equatable {
     let id: Int64
@@ -20,7 +20,6 @@ struct MapPopUpStore: Equatable {
     let markerTitle: String
     let markerSnippet: String
     let mainImageUrl: String? // 이미지 URL 추가
-    
 
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -36,8 +35,6 @@ struct MapPopUpStore: Equatable {
                 count: 0
             )
         }
-    
-
 
     func toStoreItem() -> StoreItem {
         return StoreItem(

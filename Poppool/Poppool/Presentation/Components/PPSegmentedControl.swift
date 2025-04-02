@@ -5,11 +5,11 @@
 //  Created by SeoJunYoung on 6/27/24.
 //
 
-import UIKit
 import SnapKit
+import UIKit
 
 final class PPSegmentedControl: UISegmentedControl {
-    
+
     /// 세그먼트 컨트롤 타입
     enum SegmentedControlType {
         case radio
@@ -31,24 +31,24 @@ final class PPSegmentedControl: UISegmentedControl {
         bottomLineView.addSubview(view)
         return view
     }()
-    
+
     init(type: SegmentedControlType, segments: [String], selectedSegmentIndex: Int? = nil) {
         super.init(frame: .zero)
         setUpSegments(type: type, segments: segments)
         if let selectedSegmentIndex = selectedSegmentIndex {
             self.selectedSegmentIndex = selectedSegmentIndex
         }
-        
+
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     /// 서브뷰 레이아웃 설정
     override func layoutSubviews() {
         super.layoutSubviews()
-        //layout이 업데이트 될 때 underbar 업데이트
+        // layout이 업데이트 될 때 underbar 업데이트
         let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
         self.underlineView.snp.updateConstraints { make in
             make.leading.equalTo(underlineFinalXPosition)
@@ -61,7 +61,7 @@ final class PPSegmentedControl: UISegmentedControl {
 
 // MARK: - SetUp
 private extension PPSegmentedControl {
-    
+
     /// 세그먼트 설정 메서드
     /// - Parameters:
     ///   - type: 세그먼트 컨트롤 타입
@@ -122,7 +122,7 @@ private extension PPSegmentedControl {
             setFont(color: .g400, font: .KorFont(style: .medium, size: 15), state: .normal)
         }
     }
-    
+
     /// 폰트 설정 메서드
     /// - Parameters:
     ///   - color: 폰트 색상

@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class MyCommentSortedModalController: BaseViewController, View {
-    
+
     typealias Reactor = MyCommentSortedModalReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = MyCommentSortedModalView()
 }
 
@@ -48,13 +48,13 @@ extension MyCommentSortedModalController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.sortedSegmentControl.rx.selectedSegmentIndex
             .skip(1)
             .map { Reactor.Action.selectedSegmentControl(row: $0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.saveButton.rx.tap
             .withUnretained(self)
             .compactMap { (owner, _) in
@@ -62,7 +62,7 @@ extension MyCommentSortedModalController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.xmarkButton.rx.tap
             .withUnretained(self)
             .compactMap { (owner, _) in
@@ -70,7 +70,7 @@ extension MyCommentSortedModalController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -92,7 +92,7 @@ extension MyCommentSortedModalController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
-    
+
     var longFormHeight: PanModalHeight {
         return .contentHeight(250)
     }
@@ -106,4 +106,3 @@ extension MyCommentSortedModalController: PanModalPresentable {
         return 20
     }
 }
-

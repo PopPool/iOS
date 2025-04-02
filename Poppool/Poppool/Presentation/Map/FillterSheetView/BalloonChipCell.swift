@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class BalloonChipCell: UICollectionViewCell {
    static let identifier = "BalloonChipCell"
@@ -45,7 +45,6 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setTitleColor(.white, for: .normal)
            button.layer.borderWidth = 0
            button.titleLabel?.font = .KorFont(style: .bold, size: 11)
-
 
        } else {
            button.setImage(nil, for: .normal)

@@ -6,39 +6,39 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpStep4Reactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case selectedGender(index: Int)
         case ageSelectedButtonTapped(controller: BaseViewController)
         case ageSelected(age: Int?)
     }
-    
+
     enum Mutation {
         case setGender(index: Int)
         case setAge(age: Int?)
         case moveToAgeSelectedScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var selectedGenderIndex: Int = 2
         var age: Int?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -50,7 +50,7 @@ final class SignUpStep4Reactor: Reactor {
             return Observable.just(.moveToAgeSelectedScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {

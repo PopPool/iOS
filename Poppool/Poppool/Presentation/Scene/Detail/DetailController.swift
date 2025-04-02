@@ -7,10 +7,10 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class DetailController: BaseViewController, View {
 
@@ -51,7 +51,6 @@ extension DetailController {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
     }
-
 
 }
 
@@ -266,7 +265,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? DetailEmptyCommetSectionCell {
             cell.commentButton.rx.tap
                 .withUnretained(self)

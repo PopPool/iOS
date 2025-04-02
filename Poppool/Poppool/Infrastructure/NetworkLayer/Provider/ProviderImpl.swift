@@ -5,9 +5,9 @@
 //  Created by SeoJunYoung on 8/16/24.
 //
 
+import Alamofire
 import Foundation
 import RxSwift
-import Alamofire
 
 final class ProviderImpl: Provider {
 

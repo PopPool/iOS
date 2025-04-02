@@ -5,15 +5,15 @@
 //  Created by SeoJunYoung on 2/1/25.
 //
 
-import UIKit
 import PhotosUI
+import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class NormalCommentEditReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -24,7 +24,7 @@ final class NormalCommentEditReactor: Reactor {
         case inputComment(text: String?)
         case saveButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case showImagePicker(controller: BaseViewController)
@@ -32,25 +32,25 @@ final class NormalCommentEditReactor: Reactor {
         case setComment(text: String?)
         case save(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var text: String?
         var isReloadView: Bool = true
         var isSaving: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private var popUpID: Int64
     private var popUpName: String
     private var originComment: DetailCommentSection.CellType.Input
-    
+
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
     private let imageService = PreSignedService()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -74,7 +74,7 @@ final class NormalCommentEditReactor: Reactor {
     private let spacing5Section = SpacingSection(inputDataList: [.init(spacing: 5)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing32Section = SpacingSection(inputDataList: [.init(spacing: 32)])
-    
+
     // MARK: - init
     init(popUpID: Int64, popUpName: String, comment: DetailCommentSection.CellType.Input) {
         self.initialState = State(text: comment.comment)
@@ -86,7 +86,7 @@ final class NormalCommentEditReactor: Reactor {
                 .init(image: nil, isFirstCell: false, isEditCase: true, imageURL: url, imageID: id)
         }))
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -108,7 +108,7 @@ final class NormalCommentEditReactor: Reactor {
             return Observable.just(.save(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -147,26 +147,26 @@ final class NormalCommentEditReactor: Reactor {
             commentSection.inputDataList[0].text = text
         case .save(let controller):
             newState.isSaving = true
-            
+
             let addImages = imageSection.inputDataList.compactMap { $0.image }.enumerated().map { $0 }
             let uuid = UUID().uuidString
             let pathList = addImages.map { "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg" }
-            
+
             let keepImages = imageSection.inputDataList.compactMap { $0.imageURL }
-            
+
             let originImages = zip(originComment.imageList, originComment.imageIDList)
             var deleteImages: [(String?, Int64)] = []
-            
+
             for (imageURL, imageID) in originImages {
                 if !keepImages.contains(imageURL!) {
                     deleteImages.append((imageURL, imageID))
                 }
             }
-            
+
             var convertAddImages: [PutCommentImageDataRequestDTO] = addImages.map { .init(imageId: nil, imageUrl: pathList[$0.offset], actionType: "ADD")}
             var convertKeepImages: [PutCommentImageDataRequestDTO] = keepImages.map { .init(imageId: nil, imageUrl: $0, actionType: "KEEP")}
             var convertDeleteImages: [PutCommentImageDataRequestDTO] = deleteImages.map { .init(imageId: $0.1, imageUrl: $0.0, actionType: "DELETE")}
-            
+
             if !addImages.isEmpty {
                 imageService.tryUpload(datas: addImages.map { .init(filePath: pathList[$0.offset], image: $0.element)})
                     .subscribe { [weak self] _ in
@@ -208,7 +208,7 @@ final class NormalCommentEditReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing25Section,
@@ -233,19 +233,19 @@ final class NormalCommentEditReactor: Reactor {
 extension NormalCommentEditReactor: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        
+
         // 이미지가 로드된 순서를 보장하기 위해 선택한 이미지 개수만큼의 nil 배열을 생성
         var originImageList = [UIImage?](repeating: nil, count: results.count)
         let dispatchGroup = DispatchGroup() // 모든 이미지를 로드할 때까지 대기
-        
+
         // results에서 이미지를 비동기적으로 로드
         for (index, result) in results.enumerated() {
             if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
                 dispatchGroup.enter() // 이미지 로드가 시작될 때 그룹에 등록
-                
+
                 result.itemProvider.loadObject(ofClass: UIImage.self) { image, _ in
                     defer { dispatchGroup.leave() } // 이미지 로드가 끝날 때 그룹에서 제거
-                    
+
                     if let image = image as? UIImage {
                         originImageList[index] = image // 로드된 이미지를 해당 인덱스에 저장
                     } else {
@@ -256,7 +256,7 @@ extension NormalCommentEditReactor: PHPickerViewControllerDelegate {
                 Logger.log(message: "ItemProvider Can Not Load Object", category: .error)
             }
         }
-        
+
         // 모든 이미지가 로드된 후에 한 번에 choiceImageList 업데이트
         dispatchGroup.notify(queue: .main) {
             let filteredImages = originImageList.compactMap { $0 }

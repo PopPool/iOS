@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SearchCategoryReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -21,14 +21,14 @@ final class SearchCategoryReactor: Reactor {
         case resetButtonTapped(controller: BaseViewController)
         case cellTapped(indexPath: IndexPath)
     }
-    
+
     enum Mutation {
         case moveToRecentScene(controller: BaseViewController)
         case loadView
         case save(controller: BaseViewController)
         case reset(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var categoryIDList: [Int64] = []
@@ -37,9 +37,9 @@ final class SearchCategoryReactor: Reactor {
         var isSave: Bool = false
         var isReset: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var originCategoryList: [Int64]
@@ -58,13 +58,13 @@ final class SearchCategoryReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     // MARK: - init
     init(originCategoryList: [Int64]) {
         self.initialState = State()
         self.originCategoryList = originCategoryList
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -89,7 +89,7 @@ final class SearchCategoryReactor: Reactor {
             return Observable.just(.reset(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -111,7 +111,7 @@ final class SearchCategoryReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             tagSection

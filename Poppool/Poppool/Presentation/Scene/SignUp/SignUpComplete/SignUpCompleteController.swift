@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SignUpCompleteController: BaseViewController, View {
-    
+
     typealias Reactor = SignUpCompleteReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SignUpCompleteView()
 }
 
@@ -43,7 +43,7 @@ private extension SignUpCompleteController {
 // MARK: - Methods
 extension SignUpCompleteController {
     func bind(reactor: Reactor) {
-        
+
         mainView.bottomButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -51,7 +51,7 @@ extension SignUpCompleteController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -65,7 +65,7 @@ extension SignUpCompleteController {
                 let categoryString = state.categoryTitles.enumerated()
                     .map { "#\($0.element)" }
                     .joined(separator: ", ")
-                
+
                 let attributedText = NSMutableAttributedString(
                     string: categoryString,
                     attributes: [

@@ -8,14 +8,14 @@
 import UIKit
 
 class PPButton: UIButton {
-    
+
     enum ButtonStyle {
         case primary
         case secondary
         case tertiary
         case kakao
         case apple
-        
+
         var backgroundColor: UIColor {
             switch self {
             case .primary:
@@ -30,7 +30,7 @@ class PPButton: UIButton {
                 return .g900
             }
         }
-        
+
         var textColor: UIColor {
             switch self {
             case .primary:
@@ -45,7 +45,7 @@ class PPButton: UIButton {
                 return .w100
             }
         }
-        
+
         var disabledBackgroundColor: UIColor {
             switch self {
             case .primary:
@@ -56,7 +56,7 @@ class PPButton: UIButton {
                 return .blu500
             }
         }
-        
+
         var disabledTextColor: UIColor {
             switch self {
             case .primary:
@@ -68,8 +68,7 @@ class PPButton: UIButton {
             }
         }
     }
-    
-    
+
     init(
         style: ButtonStyle,
         text: String,
@@ -78,25 +77,25 @@ class PPButton: UIButton {
         cornerRadius: CGFloat = 4
     ) {
         super.init(frame: .zero)
-        
+
         self.setTitle(text, for: .normal)
         self.setTitle(disabledText, for: .disabled)
-        
+
         self.setTitleColor(style.textColor, for: .normal)
         self.setTitleColor(style.disabledTextColor, for: .disabled)
-        
+
         self.setBackgroundColor(style.backgroundColor, for: .normal)
         self.setBackgroundColor(style.disabledBackgroundColor, for: .disabled)
-    
+
         self.titleLabel?.font = font
         self.layer.cornerRadius = cornerRadius
         self.clipsToBounds = true
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     /// 버튼 배경색 설정
     /// - Parameters:
     ///   - color: 색상
@@ -109,7 +108,7 @@ class PPButton: UIButton {
 
         let backgroundImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-         
+
         self.setBackgroundImage(backgroundImage, for: state)
     }
 }

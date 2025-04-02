@@ -6,18 +6,17 @@
 //
 
 import Foundation
-import UIKit
-import SnapKit
-import RxSwift
 import RxCocoa
-
+import RxSwift
+import SnapKit
+import UIKit
 
 final class PPProgressIndicator: UIStackView {
-    
+
     // MARK: - Properties
     private var progressViews: [PPProgressView]
     private var progressIndex: Int
-    
+
     // MARK: - init
     /// 전체 단계 수와 시작 지점을 기반으로 CMPTProgressIndicator를 초기화
     /// - Parameters:
@@ -32,7 +31,7 @@ final class PPProgressIndicator: UIStackView {
         setUp()
         setUpConstraints()
     }
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -40,14 +39,14 @@ final class PPProgressIndicator: UIStackView {
 
 // MARK: - SetUp
 private extension PPProgressIndicator {
-    
+
     /// 스택 뷰 속성 설정
     func setUp() {
         self.axis = .horizontal
         self.distribution = .fillEqually
         self.spacing = 6
     }
-    
+
     /// 진행 뷰의 제약 조건을 설정
     func setUpConstraints() {
         progressViews.forEach { views in
@@ -58,7 +57,7 @@ private extension PPProgressIndicator {
 
 // MARK: - Methods
 extension PPProgressIndicator {
-    
+
     /// 진행 인디케이터를 한 단계 앞으로 이동
     func increaseIndicator() {
         if progressIndex < progressViews.count {
@@ -67,7 +66,7 @@ extension PPProgressIndicator {
             progressViews[progressIndex - 1].fillAnimation(option: .fromLeft)
         }
     }
-    
+
     /// 진행 인디케이터를 한 단계 뒤로 이동
     func decreaseIndicator() {
         if progressIndex - 1 > 0 {

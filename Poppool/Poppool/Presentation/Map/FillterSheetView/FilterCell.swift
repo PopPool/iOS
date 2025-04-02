@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class FilterCell: UICollectionViewCell {
     // MARK: - Properties

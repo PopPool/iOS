@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
+import RxCocoa
 import RxGesture
+import RxSwift
+import SnapKit
 
 final class SearchController: BaseViewController, View {
-    
+
     typealias Reactor = SearchReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SearchView()
     private var sections: [any Sectionable] = []
     private let cellTapped: PublishSubject<IndexPath> = .init()
@@ -32,7 +32,7 @@ extension SearchController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -81,7 +81,7 @@ extension SearchController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map({ (owner, indexPath) in
@@ -89,13 +89,13 @@ extension SearchController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         pageChange
             .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changePage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -111,11 +111,11 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -130,7 +130,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? CancelableTagSectionCell {
             if searchList.isEmpty {
                 cell.cancelButton.rx.tap
@@ -151,7 +151,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
                 }
             }
         }
-        
+
         if let cell = cell as? SearchCountTitleSectionCell {
             cell.sortedButton.rx.tap
                 .withUnretained(self)
@@ -161,7 +161,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? HomeCardSectionCell {
             cell.bookmarkButton.rx.tap
                 .map { Reactor.Action.bookmarkButtonTapped(indexPath: indexPath)}
@@ -170,7 +170,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         }
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         mainView.endEditing(true)
         let contentHeight = scrollView.contentSize.height
@@ -180,7 +180,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
             pageChange.onNext(())
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellTapped.onNext(indexPath)
     }

@@ -1,6 +1,5 @@
-import UIKit
 import SnapKit
-
+import UIKit
 
 class MapFilterChips: UIView {
    // MARK: - Components

@@ -7,43 +7,41 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class FAQDropdownSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
     let contentStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
         return view
     }()
-    
+
     let listContentButton = UIButton()
-    
+
     let qLabel: UILabel = {
         let label = UILabel()
         label.setLineHeightText(text: "Q", font: .EngFont(style: .bold, size: 16), lineHeight: 1)
         label.textColor = .blu500
         return label
     }()
-    
+
     let titleLabel: UILabel = {
-        let label = UILabel()
-        return label
+        return UILabel()
     }()
-    
+
     let dropDownImageView: UIImageView = {
-        let view = UIImageView()
-        return view
+        return UIImageView()
     }()
-    
+
     let dropContentView: UIView = {
         let view = UIView()
         view.backgroundColor = .pb4
         return view
     }()
-    
+
     let dropContentLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -51,16 +49,16 @@ final class FAQDropdownSectionCell: UICollectionViewCell {
     }()
     var disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -74,7 +72,7 @@ private extension FAQDropdownSectionCell {
         contentStackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         listContentButton.snp.makeConstraints { make in
             make.height.equalTo(59).priority(.high)
         }
@@ -94,7 +92,7 @@ private extension FAQDropdownSectionCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(20)
         }
-        
+
         dropContentView.addSubview(dropContentLabel)
         dropContentLabel.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(16)
@@ -112,7 +110,7 @@ extension FAQDropdownSectionCell: Inputable {
         var content: String?
         var isOpen: Bool
     }
-    
+
     func injection(with input: Input) {
         titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 14))
         dropContentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .regular, size: 14), lineHeight: 1.5)

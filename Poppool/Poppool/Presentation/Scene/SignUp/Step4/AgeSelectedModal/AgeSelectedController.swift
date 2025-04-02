@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class AgeSelectedController: BaseViewController, View {
-    
+
     typealias Reactor = AgeSelectedReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = AgeSelectedView()
 }
 
@@ -51,7 +51,7 @@ extension AgeSelectedController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.completeButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -60,7 +60,7 @@ extension AgeSelectedController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in

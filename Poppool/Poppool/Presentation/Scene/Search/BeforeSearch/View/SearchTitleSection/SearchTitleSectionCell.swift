@@ -7,36 +7,35 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class SearchTitleSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     var disposeBag = DisposeBag()
-    
+
     private let sectionTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .KorFont(style: .bold, size: 16)
         return label
     }()
-    
+
     let titleButton: UIButton = {
-        let button = UIButton()
-        return button
+        return UIButton()
     }()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -52,7 +51,7 @@ private extension SearchTitleSectionCell {
             make.centerY.equalToSuperview()
             make.height.equalTo(22)
         }
-        
+
         self.addSubview(titleButton)
         titleButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -67,7 +66,7 @@ extension SearchTitleSectionCell: Inputable {
         var title: String?
         var buttonTitle: String?
     }
-    
+
     func injection(with input: Input) {
         sectionTitleLabel.text = input.title
         if let buttonTitle = input.buttonTitle {

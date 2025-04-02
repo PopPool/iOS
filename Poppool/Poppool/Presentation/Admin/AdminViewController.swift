@@ -1,7 +1,7 @@
-import UIKit
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 final class AdminViewController: BaseViewController, View {
 
@@ -238,10 +238,9 @@ final class AdminViewController: BaseViewController, View {
             .compactMap { $0 }
             .subscribe(onNext: { [weak self] store in
                 guard let self = self else { return }
-                self.editStore(store) 
+                self.editStore(store)
             })
             .disposed(by: disposeBag)
-
 
         reactor.state.map { $0.storeList }
             .map { "총 \($0.count)개" }

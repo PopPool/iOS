@@ -7,15 +7,15 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class InstaGuideChildSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     let disposeBag = DisposeBag()
-    
+
     private let indexTrailgView: UIView = {
         let view = UIView()
         view.backgroundColor = .g900
@@ -23,7 +23,7 @@ final class InstaGuideChildSectionCell: UICollectionViewCell {
         view.layer.cornerRadius = 4
         return view
     }()
-    
+
     private let indexLabel: UILabel = {
         let label = UILabel()
         label.font = .EngFont(style: .medium, size: 16)
@@ -31,27 +31,27 @@ final class InstaGuideChildSectionCell: UICollectionViewCell {
         label.textAlignment = .center
         return label
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         return label
     }()
-    
+
     private let imageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 8
         view.clipsToBounds = true
         return view
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -67,12 +67,12 @@ private extension InstaGuideChildSectionCell {
             make.width.equalTo(40)
             make.height.equalTo(33)
         }
-        
+
         indexTrailgView.addSubview(indexLabel)
         indexLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-        
+
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(20)
@@ -94,7 +94,7 @@ extension InstaGuideChildSectionCell: Inputable {
         var title: NSMutableAttributedString?
         var index: Int
     }
-    
+
     func injection(with input: Input) {
         indexLabel.text = "#\(input.index + 1)"
         titleLabel.attributedText = input.title

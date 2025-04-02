@@ -8,7 +8,7 @@
 import Foundation
 
 struct SignUpAPIEndpoint {
-    
+
     /// 닉네임 중복을 확인합니다.
     /// - Parameter request: 닉네임 체크 요청 DTO
     /// - Returns: Endpoint<Bool>
@@ -20,7 +20,7 @@ struct SignUpAPIEndpoint {
             queryParameters: request
         )
     }
-    
+
     /// 관심사 목록을 가져옵니다.
     /// - Returns: Endpoint<GetInterestListResponseDTO>
     static func signUp_getCategoryList() -> Endpoint<GetCategoryListResponseDTO> {
@@ -30,7 +30,7 @@ struct SignUpAPIEndpoint {
             method: .get
         )
     }
-    
+
     /// 회원가입을 시도합니다.
     /// - Parameter request: 회원가입 요청 DTO
     /// - Returns: RequestEndpoint

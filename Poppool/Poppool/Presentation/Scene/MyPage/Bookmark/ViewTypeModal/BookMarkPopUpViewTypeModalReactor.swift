@@ -6,11 +6,11 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class BookMarkPopUpViewTypeModalReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -18,13 +18,13 @@ final class BookMarkPopUpViewTypeModalReactor: Reactor {
         case saveButtonTapped(controller: BaseViewController)
         case xmarkButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case setSelectedIndex(row: Int)
         case dismissScene(controller: BaseViewController, isSave: Bool)
     }
-    
+
     struct State {
         var isSetView: Bool = false
         var originSortedCode: String
@@ -32,18 +32,17 @@ final class BookMarkPopUpViewTypeModalReactor: Reactor {
         var saveButtonIsEnabled: Bool = false
         var isSave: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
-    
+
     // MARK: - init
     init(sortedCode: String) {
         self.initialState = State(originSortedCode: sortedCode)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -57,7 +56,7 @@ final class BookMarkPopUpViewTypeModalReactor: Reactor {
             return Observable.just(.dismissScene(controller: controller, isSave: false))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isSetView = false

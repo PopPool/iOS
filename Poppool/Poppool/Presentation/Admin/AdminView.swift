@@ -1,6 +1,6 @@
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
 final class AdminView: UIView {
 
@@ -18,7 +18,7 @@ final class AdminView: UIView {
     let usernameLabel = PPLabel(
            style: .bold,
            fontSize: 14,
-           text: "" 
+           text: ""
        )
 
     let menuButton = UIButton(type: .system).then {

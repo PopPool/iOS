@@ -1,5 +1,3 @@
-
-
 import CoreLocation
 
 public func extractCity(from address: String) -> String {
@@ -51,4 +49,3 @@ public struct RepresentativeScope {
         radius: 4000.0
     )
 }
-

@@ -26,10 +26,10 @@ enum NickNameState {
     case shortLengthActive
     case longLength
     case longLengthActive
-    
+
     var borderColor: UIColor? {
         switch self {
-        case .empty, .duplicated, .validate, .check , .myNickName:
+        case .empty, .duplicated, .validate, .check, .myNickName:
             return .g200
         case .emptyActive, .duplicatedActive, .validateActive, .checkActive, .myNickNameActive:
             return .g1000
@@ -37,7 +37,7 @@ enum NickNameState {
             return .re500
         }
     }
-    
+
     var description: String? {
         switch self {
         case .empty, .emptyActive:
@@ -62,18 +62,18 @@ enum NickNameState {
             return nil
         }
     }
-    
+
     var textColor: UIColor? {
         switch self {
         case .empty, .emptyActive, .check, .checkActive:
             return .g500
         case .length, .lengthActive, .korAndEng, .korAndEngActive, .duplicated, .duplicatedActive, .shortLength, .shortLengthActive, .longLength, .longLengthActive:
             return .re500
-        case .validate, .validateActive , .myNickName ,.myNickNameActive:
+        case .validate, .validateActive, .myNickName, .myNickNameActive:
             return .blu500
         }
     }
-    
+
     var textFieldTextColor: UIColor? {
         switch self {
         case .length, .lengthActive, .korAndEng, .korAndEngActive, .duplicated, .duplicatedActive, .shortLength, .shortLengthActive, .longLength, .longLengthActive:
@@ -82,25 +82,25 @@ enum NickNameState {
             return .g1000
         }
     }
-    
+
     var isHiddenClearButton: Bool {
         switch self {
-        case .lengthActive , .korAndEngActive, .duplicatedActive, .validateActive, .checkActive, .myNickNameActive, .shortLengthActive, .longLengthActive:
+        case .lengthActive, .korAndEngActive, .duplicatedActive, .validateActive, .checkActive, .myNickNameActive, .shortLengthActive, .longLengthActive:
             return false
         default:
             return true
         }
     }
-    
+
     var isHiddenCheckButton: Bool {
         switch self {
-        case .length , .korAndEng, .duplicated, .validate, .check, .shortLength, .longLength ,.myNickName:
+        case .length, .korAndEng, .duplicated, .validate, .check, .shortLength, .longLength, .myNickName:
             return false
         default:
             return true
         }
     }
-    
+
     var isShakeAnimation: Bool {
         switch self {
         case .lengthActive, .korAndEngActive, .duplicatedActive:
@@ -109,7 +109,7 @@ enum NickNameState {
             return false
         }
     }
-    
+
     var duplicatedCheckButtonIsEnabled: Bool {
         switch self {
         case .check, .checkActive:

@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-import RxSwift
-import RxCocoa
 import Alamofire
+import RxCocoa
+import RxSwift
 
 class ImageCache {
     static let shared = NSCache<NSString, UIImage>()
@@ -24,9 +24,9 @@ class PreSignedService {
     }
 
     let tokenInterceptor = TokenInterceptor()
-    
+
     let provider = ProviderImpl()
-    
+
     let disposeBag = DisposeBag()
 
     func tryDelete(targetPaths: PresignedURLRequestDTO) -> Completable {
@@ -81,7 +81,6 @@ class PreSignedService {
             return Disposables.create()
         }
     }
-
 
     func tryDownload(filePaths: [String]) -> Single<[UIImage]> {
 
@@ -149,7 +148,6 @@ class PreSignedService {
     }
 }
 
-
 private extension PreSignedService {
 
     func uploadFromS3(url: String, image: UIImage) -> Single<Void> {
@@ -203,8 +201,6 @@ private extension PreSignedService {
             }
         }
     }
-
-
 
     func getUploadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
         Logger.log(message: "Presigned URL 생성 요청 데이터: \(request)", category: .debug)
@@ -308,4 +304,3 @@ extension PreSignedService {
     }
 
 }
-

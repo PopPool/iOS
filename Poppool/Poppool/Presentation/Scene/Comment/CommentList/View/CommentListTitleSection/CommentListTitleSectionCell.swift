@@ -7,11 +7,11 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class CommentListTitleSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     private let countLabel: PPLabel = {
@@ -21,12 +21,12 @@ final class CommentListTitleSectionCell: UICollectionViewCell {
     }()
     let disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -47,7 +47,7 @@ extension CommentListTitleSectionCell: Inputable {
         var count: Int
         var unit: String = "개"
     }
-    
+
     func injection(with input: Input) {
         countLabel.setLineHeightText(text: "총 \(input.count)\(input.unit)", font: .KorFont(style: .regular, size: 13))
     }

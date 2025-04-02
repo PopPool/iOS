@@ -8,9 +8,9 @@
 import Foundation
 
 struct AuthAPIEndPoint {
-    
+
     // MARK: - Auth API
-    
+
     /// 로그인을 시도합니다.
     /// - Parameters:
     ///   - userCredential: 사용자 자격 증명
@@ -25,7 +25,7 @@ struct AuthAPIEndPoint {
             headers: ["Content-Type": "application/json"]
         )
     }
-    
+
     static func postTokenReissue() -> Endpoint<PostTokenReissueResponseDTO> {
         return Endpoint(
             baseURL: KeyPath.popPoolBaseURL,

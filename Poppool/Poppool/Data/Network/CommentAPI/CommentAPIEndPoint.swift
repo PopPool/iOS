@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 struct CommentAPIEndPoint {
-    
+
     static func postCommentAdd(request: PostCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -19,7 +19,7 @@ struct CommentAPIEndPoint {
             bodyParameters: request
         )
     }
-    
+
     static func deleteComment(request: DeleteCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
             baseURL: KeyPath.popPoolBaseURL,
@@ -28,7 +28,7 @@ struct CommentAPIEndPoint {
             queryParameters: request
         )
     }
-    
+
     static func editComment(request: PutCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
             baseURL: KeyPath.popPoolBaseURL,

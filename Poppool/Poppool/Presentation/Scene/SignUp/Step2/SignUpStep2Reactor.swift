@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpStep2Reactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case inputNickName(text: String?)
@@ -21,32 +21,32 @@ final class SignUpStep2Reactor: Reactor {
         case clearButtonTapped
         case duplicatedButtonTapped
     }
-    
+
     enum Mutation {
         case setNickNameState(text: String?)
         case setActiveState(isActive: Bool)
         case setDuplicatedSet(isDuplicated: Bool)
         case resetNickName
     }
-    
+
     struct State {
         var nickNameState: NickNameState = .empty
         var isActiveInput: Bool = false
         var nickName: String? = nil
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private var nickName: String?
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -66,7 +66,7 @@ final class SignUpStep2Reactor: Reactor {
             return Observable.just(.resetNickName)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -78,7 +78,7 @@ final class SignUpStep2Reactor: Reactor {
             newState.isActiveInput = isActive
             newState.nickNameState = checkNickNameState(text: newState.nickName, isActive: newState.isActiveInput)
         case .setDuplicatedSet(let isDuplicated):
-            newState.nickNameState = isDuplicated 
+            newState.nickNameState = isDuplicated
             ? newState.isActiveInput ? .duplicatedActive : .duplicated
             : newState.isActiveInput ? .validateActive : .validate
         case .resetNickName:
@@ -87,24 +87,22 @@ final class SignUpStep2Reactor: Reactor {
         }
         return newState
     }
-    
+
     func checkNickNameState(text: String?, isActive: Bool) -> NickNameState {
         guard let text = text else { return isActive ? .emptyActive : .empty }
         // textEmpty Check
         if text.isEmpty { return isActive ? .emptyActive : .empty }
-        
-        
+
         // textLength Check
         if text.count < 2 { return isActive ? .shortLengthActive : .shortLength }
         if text.count > 10 { return isActive ? .longLengthActive : .longLength }
-        
+
         // kor and end Check
         let pattern = "^[가-힣a-zA-Z\\s]+$" // 허용하는 문자만 검사
         let regex = try! NSRegularExpression(pattern: pattern)
         let range = NSRange(location: 0, length: text.utf16.count)
         if regex.firstMatch(in: text, options: [], range: range) == nil { return isActive ? .korAndEngActive : .korAndEng }
 
-        
         return isActive ? .checkActive : .check
     }
 }

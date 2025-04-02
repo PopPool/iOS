@@ -1,7 +1,7 @@
-import UIKit
-import SnapKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import SnapKit
+import UIKit
 
 final class PopUpStoreRegisterView: UIView {
     // 상단 네비게이션 영역

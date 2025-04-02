@@ -15,7 +15,7 @@ struct Logger {
         case error
         case event
         case custom(categoryName: String)
-        
+
         var categoryName: String {
             switch self {
             case .info:
@@ -32,7 +32,7 @@ struct Logger {
                 return categoryName
             }
         }
-        
+
         var categoryIcon: String {
             switch self {
             case .info:
@@ -50,13 +50,13 @@ struct Logger {
             }
         }
     }
-    
+
     static var isShowFileName: Bool = false
     static var isShowLine: Bool = false
     static var isShowLog: Bool = true
-    
+
     static private let noInputText = "Input is not found"
-    
+
     static func log(
         message: Any,
         category: Level,

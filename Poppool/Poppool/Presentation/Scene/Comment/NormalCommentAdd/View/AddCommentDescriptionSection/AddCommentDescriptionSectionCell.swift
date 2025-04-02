@@ -7,15 +7,15 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class AddCommentDescriptionSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     let disposeBag = DisposeBag()
-    
+
     private let descriptionLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
         label.textColor = .g600
@@ -23,12 +23,12 @@ final class AddCommentDescriptionSectionCell: UICollectionViewCell {
         return label
     }()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -48,7 +48,7 @@ extension AddCommentDescriptionSectionCell: Inputable {
     struct Input {
         var description: String?
     }
-    
+
     func injection(with input: Input) {
         descriptionLabel.setLineHeightText(text: input.description, font: .KorFont(style: .regular, size: 13))
     }

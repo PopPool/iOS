@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class BalloonBackgroundView: UIView {
 
@@ -15,7 +15,7 @@ final class BalloonBackgroundView: UIView {
 
     // 기존 말풍선 UI: 서브 지역을 나열하는 CollectionView (서울/경기/부산용)
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewCompositionalLayout { section, env in
+        let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(30),
                 heightDimension: .absolute(30)
@@ -177,7 +177,6 @@ final class BalloonBackgroundView: UIView {
 //        layer.shadowRadius = 4
     }
 
-
     // MARK: - Public
 
     /// configure 메서드
@@ -214,7 +213,6 @@ final class BalloonBackgroundView: UIView {
         }
     }
 
-
     private func setupTagSection() {
         let allKey = "\(mainRegionTitle)전체"
 
@@ -235,7 +233,6 @@ final class BalloonBackgroundView: UIView {
             }
         )
     }
-
 
     func calculateHeight() -> CGFloat {
        if collectionView.isHidden {
@@ -293,8 +290,7 @@ final class BalloonBackgroundView: UIView {
         let iconWidth: CGFloat = isSelected ? 16 : 0
         let iconGap: CGFloat = isSelected ? 4 : 0
         let horizontalPadding: CGFloat = 24
-        let calculatedWidth = textWidth + iconWidth + iconGap + horizontalPadding
-        return calculatedWidth
+        return textWidth + iconWidth + iconGap + horizontalPadding
     }
 }
 

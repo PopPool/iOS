@@ -1,9 +1,8 @@
-import UIKit
-import SnapKit
-import RxSwift
-import RxCocoa
 import ReactorKit
-
+import RxCocoa
+import RxSwift
+import SnapKit
+import UIKit
 
 final class AdminBottomSheetViewController: BaseViewController, View {
 
@@ -27,8 +26,6 @@ final class AdminBottomSheetViewController: BaseViewController, View {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-
 
    // MARK: - Life Cycle
    override func viewDidLoad() {
@@ -74,7 +71,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
 
         Logger.log(message: "최종 뷰 계층:", category: .debug)
     }
-    
+
    private func setupCollectionView() {
        mainView.contentCollectionView.register(
            TagSectionCell.self,
@@ -85,7 +82,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
    // MARK: - Binding
    func bind(reactor: Reactor) {
        mainView.segmentedControl.rx.selectedSegmentIndex
-                 .do(onNext: { index in
+                 .do(onNext: { _ in
                  })
                  .map { Reactor.Action.segmentChanged($0) }
                  .bind(to: reactor.action)

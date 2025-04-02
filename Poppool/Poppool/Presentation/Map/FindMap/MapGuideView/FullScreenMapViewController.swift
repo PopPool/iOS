@@ -1,9 +1,9 @@
-import Foundation
-import UIKit
-import RxSwift
-import ReactorKit
 import CoreLocation
+import Foundation
 import GoogleMaps
+import ReactorKit
+import RxSwift
+import UIKit
 
 final class FullScreenMapViewController: MapViewController {
     var selectedStore: MapPopUpStore?
@@ -28,8 +28,6 @@ final class FullScreenMapViewController: MapViewController {
             updateUI(for: store)
         }
     }
-
-    
 
     // MARK: - Binding
     override func bind(reactor: Reactor) {
@@ -157,7 +155,6 @@ final class FullScreenMapViewController: MapViewController {
             markerView.layoutIfNeeded()
         }
     }
-
 
     @objc private func backButtonTapped() {
         dismiss(animated: true)

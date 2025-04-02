@@ -8,9 +8,9 @@
 import UIKit
 
 class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
-    
+
     private let waveLayer = CAShapeLayer()
-    
+
     private let dotView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 0.6
@@ -18,7 +18,7 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         view.backgroundColor = .blu500
         return view
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         addSomeTabItems()
@@ -26,36 +26,36 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         setupWaveTabBar()
         delegate = self
     }
-    
+
     private func setupWaveTabBar() {
         // TabBar의 배경 투명 설정
         tabBar.backgroundImage = UIImage()
         tabBar.shadowImage = UIImage()
         tabBar.isTranslucent = true
-        
+
         // Wave Layer 설정
         waveLayer.fillColor = UIColor.white.cgColor
         tabBar.layer.insertSublayer(waveLayer, at: 0)
-        
+
         // Dot 설정
         dotView.frame.size = CGSize(width: 12, height: 12)
         dotView.layer.cornerRadius = 6
         tabBar.addSubview(dotView)
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateWavePath()
         updateDotPosition(animated: false)
         updateItem()
     }
-    
+
     private func updateItem() {
         let tabBarItemViews = tabBar.subviews.filter { $0.isUserInteractionEnabled }
-        
+
         if selectedIndex < tabBarItemViews.count {
             let selectedView = tabBarItemViews[selectedIndex]
-            
+
             // 애니메이션 적용
             UIView.animate(
                 withDuration: 0.3,
@@ -71,7 +71,7 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
             )
         }
     }
-    
+
     private func updateWavePath(animated: Bool = false) {
         guard let items = tabBar.items else { return }
         let tabWidth = tabBar.bounds.width / CGFloat(items.count)
@@ -139,12 +139,12 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         guard let items = tabBar.items else { return }
         let tabWidth = tabBar.bounds.width / CGFloat(items.count)
         let selectedTabX = CGFloat(selectedIndex) * tabWidth
-        
+
         let targetCenter = CGPoint(
             x: selectedTabX + tabWidth / 2,
             y: -12
         )
-        
+
         if animated {
             UIView.animate(withDuration: 1,
                            delay: 0,
@@ -158,20 +158,20 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
             dotView.center = targetCenter
         }
     }
-    
+
     // 탭 선택 시 애니메이션 적용
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         updateWavePath(animated: true)
         updateDotPosition(animated: true)
         updateItem()
     }
-    
+
     func setUp() {
         self.selectedIndex = 1
         self.tabBar.barTintColor = .g200
         self.tabBar.tintColor = .blu500
     }
-    
+
     func resizeImage(image: UIImage?, targetSize: CGSize) -> UIImage? {
         guard let image = image else { return nil }
         let size = image.size
@@ -180,32 +180,32 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         let heightRatio = targetSize.height / size.height
 
         let scaleFactor = min(widthRatio, heightRatio)
-        
+
         let scaledImageSize = CGSize(width: size.width * scaleFactor, height: size.height * scaleFactor)
 
         UIGraphicsBeginImageContextWithOptions(scaledImageSize, false, 0.0)
         image.draw(in: CGRect(origin: .zero, size: scaledImageSize))
-        
+
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
         return resizedImage
     }
-    
+
     func addSomeTabItems() {
         let provider = ProviderImpl()
 
         let mapController = MapViewController()
         let mapUseCase = DefaultMapUseCase(repository: DefaultMapRepository(provider: provider))
-        let directionRepository = DefaultMapDirectionRepository(provider: provider) 
+        let directionRepository = DefaultMapDirectionRepository(provider: provider)
         mapController.reactor = MapReactor(useCase: mapUseCase, directionRepository: directionRepository)
 
         let homeController = HomeController()
         homeController.reactor = HomeReactor()
-        
+
         let myPageController = MyPageController()
         myPageController.reactor = MyPageReactor()
-        
+
         let iconSize = CGSize(width: 32, height: 32)
         // 탭바 아이템 생성
         mapController.tabBarItem = UITabBarItem(
@@ -223,17 +223,17 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
             image: resizeImage(image: UIImage(named: "icon_tabbar_menu"), targetSize: iconSize),
             selectedImage: resizeImage(image: UIImage(named: "icon_tabbar_menu"), targetSize: iconSize)
         )
-        
+
         // 네비게이션 컨트롤러 설정
         let map = UINavigationController(rootViewController: mapController)
         let home = UINavigationController(rootViewController: homeController)
         let myPage = UINavigationController(rootViewController: myPageController)
-        
+
         viewControllers = [map, home, myPage]
-        
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.2  // 기본 값보다 높은 라인 간격을 설정
-        
+
         // 폰트 설정
         let appearance = UITabBarAppearance()
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
@@ -244,12 +244,12 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
             .font: UIFont.KorFont(style: .bold, size: 11)!,
             .paragraphStyle: paragraphStyle
         ]
-        
+
         let verticalOffset: CGFloat = 4 // 원하는 간격 (양수: 아래로 이동, 음수: 위로 이동)
         appearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: verticalOffset)
         appearance.stackedLayoutAppearance.selected.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: verticalOffset)
-        
+
         tabBar.standardAppearance = appearance
     }
-    
+
 }

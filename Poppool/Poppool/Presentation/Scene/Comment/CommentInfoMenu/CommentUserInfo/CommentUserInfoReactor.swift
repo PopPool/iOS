@@ -6,29 +6,29 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class CommentUserInfoReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case cancelButtonTapped
         case normalButtonTapped
         case instaButtonTapped
     }
-    
+
     enum Mutation {
         case moveToRecentScene
         case moveToCommentScene
         case moveToBlockScene
     }
-    
+
     struct State {
         var selectedType: SelectedType = .none
         var nickName: String?
     }
-    
+
     enum SelectedType {
         case none
         case cancel
@@ -36,15 +36,15 @@ final class CommentUserInfoReactor: Reactor {
         case block
     }
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init(nickName: String?) {
         self.initialState = State(nickName: nickName)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -56,7 +56,7 @@ final class CommentUserInfoReactor: Reactor {
             return Observable.just(.moveToBlockScene)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {

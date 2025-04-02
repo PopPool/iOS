@@ -1,7 +1,7 @@
-//import UIKit
-//import SnapKit
+// import UIKit
+// import SnapKit
 //
-//final class CategoryFilterView: UIView {
+// final class CategoryFilterView: UIView {
 //    private let stackView = UIStackView()
 //    private let categories = ["게임", "라이프스타일", "엔터테인먼트", "패션", "음식/요리", "키즈"]
 //
@@ -32,4 +32,4 @@
 //            stackView.addArrangedSubview(chip)
 //        }
 //    }
-//}
+// }

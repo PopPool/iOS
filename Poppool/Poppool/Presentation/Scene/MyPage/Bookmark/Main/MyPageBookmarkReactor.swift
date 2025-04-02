@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class MyPageBookmarkReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -23,7 +23,7 @@ final class MyPageBookmarkReactor: Reactor {
         case emptyButtonTapped(controller: BaseViewController)
         case bookMarkButtonTapped(row: Int)
     }
-    
+
     enum Mutation {
         case loadView
         case skip
@@ -32,7 +32,7 @@ final class MyPageBookmarkReactor: Reactor {
         case presentModal(controller: BaseViewController)
         case moveToSuggestScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
@@ -40,9 +40,9 @@ final class MyPageBookmarkReactor: Reactor {
         var count: Int32 = 0
         var buttonTitle: String?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private var isLoading: Bool = false
@@ -51,9 +51,9 @@ final class MyPageBookmarkReactor: Reactor {
     private var currentPage: Int32 = 0
     private var size: Int32 = 10
     private var viewType: String = "크게보기"
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -67,17 +67,17 @@ final class MyPageBookmarkReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var listSection = RecentPopUpSection(inputDataList: [])
     private var cardListSection = PopUpCardSection(inputDataList: [])
     private var spacing12Section = SpacingSection(inputDataList: [.init(spacing: 12)])
     private var spacing150Section = SpacingSection(inputDataList: [.init(spacing: 150)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -165,7 +165,7 @@ final class MyPageBookmarkReactor: Reactor {
             }
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -204,7 +204,7 @@ final class MyPageBookmarkReactor: Reactor {
         newState.buttonTitle = viewType
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing12Section,

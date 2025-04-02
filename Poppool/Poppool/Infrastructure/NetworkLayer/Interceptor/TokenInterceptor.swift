@@ -5,12 +5,12 @@
 //  Created by SeoJunYoung on 10/14/24.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 import RxSwift
 
 final class TokenInterceptor: RequestInterceptor {
-    
+
     func adapt(
         _ urlRequest: URLRequest,
         for session: Session,
@@ -29,7 +29,7 @@ final class TokenInterceptor: RequestInterceptor {
                 completion(.success(urlRequest))
             }
         }
-    
+
     func retry(
         _ request: Request,
         for session: Session,

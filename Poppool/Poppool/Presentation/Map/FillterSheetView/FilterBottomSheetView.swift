@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class FilterBottomSheetView: UIView {
     // MARK: - UI Components
@@ -32,8 +32,7 @@ final class FilterBottomSheetView: UIView {
     }()
 
     let segmentedControl: PPSegmentedControl = {
-        let control = PPSegmentedControl(type: .tab, segments: ["지역", "카테고리"], selectedSegmentIndex: 0)
-        return control
+        return PPSegmentedControl(type: .tab, segments: ["지역", "카테고리"], selectedSegmentIndex: 0)
     }()
 
     let locationScrollView: UIScrollView = {
@@ -45,7 +44,7 @@ final class FilterBottomSheetView: UIView {
     var categoryHeightConstraint: Constraint?
 
     let categoryCollectionView: UICollectionView = {
-        let layout = UICollectionViewCompositionalLayout { section, env in
+        let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(26),
                 heightDimension: .absolute(36)
@@ -81,20 +80,15 @@ final class FilterBottomSheetView: UIView {
         return collectionView
     }()
 
-
     let balloonBackgroundView = BalloonBackgroundView()
 
     let resetButton: PPButton = {
-        let button = PPButton(style: .secondary, text: "초기화")
-        return button
+        return PPButton(style: .secondary, text: "초기화")
     }()
-
 
     let saveButton: PPButton = {
-        let button = PPButton(style: .primary, text: "옵션저장", disabledText: "옵션저장")
-        return button
+        return PPButton(style: .primary, text: "옵션저장", disabledText: "옵션저장")
     }()
-
 
     private let buttonStack: UIStackView = {
         let stack = UIStackView()
@@ -105,14 +99,13 @@ final class FilterBottomSheetView: UIView {
     }()
 
     let filterChipsView: FilterChipsView = {
-        let view = FilterChipsView()
-        return view
+        return FilterChipsView()
     }()
 
     private var balloonHeightConstraint: Constraint?
 
     // MARK: - Initialization
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -330,9 +323,6 @@ final class FilterBottomSheetView: UIView {
         }
     }
 
-
-
-
     private func createStyledButton(title: String, isSelected: Bool = false) -> PPButton {
         let button = PPButton(
             style: .secondary,
@@ -368,7 +358,7 @@ final class FilterBottomSheetView: UIView {
                 button.setBackgroundColor(.w100, for: .normal)
                 button.setTitleColor(.g400, for: .normal)
                 button.layer.borderColor = UIColor.g200.cgColor
-                button.titleLabel?.font = .KorFont(style: .medium, size: 13)  
+                button.titleLabel?.font = .KorFont(style: .medium, size: 13)
                 button.layer.borderWidth = 1
             }
         }
@@ -381,7 +371,6 @@ final class FilterBottomSheetView: UIView {
             self.layoutIfNeeded()
         }
     }
-
 
     func updateBalloonPosition(for button: UIButton) {
         guard let window = button.window else { return }
@@ -424,7 +413,7 @@ extension FilterBottomSheetView {
 
         filterChipsView.updateChips(with: filters)
     }
-} 
+}
 extension FilterBottomSheetView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // 선택된 버튼 찾기
@@ -432,7 +421,7 @@ extension FilterBottomSheetView: UIScrollViewDelegate {
             guard let button = view as? PPButton else { return false }
             return button.backgroundColor == .blu500
         }) as? PPButton else { return }
-        
+
         // 스크롤 중에도 실시간으로 위치 업데이트
         DispatchQueue.main.async { [weak self] in
             self?.updateBalloonPosition(for: selectedButton)

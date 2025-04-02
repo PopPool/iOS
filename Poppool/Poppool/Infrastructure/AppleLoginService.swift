@@ -5,25 +5,25 @@
 //  Created by SeoJunYoung on 8/20/24.
 //
 
-import RxSwift
 import AuthenticationServices
+import RxSwift
 
 final class AppleLoginService: NSObject, AuthServiceable {
-    
+
     // 사용자 자격 증명 정보를 방출할 subject
     private var authServiceResponse: PublishSubject<AuthServiceResponse> = .init()
-    
+
     func fetchUserCredential() -> Observable<AuthServiceResponse> {
         performRequest()
         return authServiceResponse
     }
-    
+
     // Apple 인증 요청을 수행하는 함수
     private func performRequest() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
-        
+
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
@@ -48,7 +48,7 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
         }
         return window
     }
-    
+
     // 인증 성공 시 호출되는 함수
     func authorizationController(
         controller: ASAuthorizationController,
@@ -69,7 +69,7 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
             guard let authorizationCode = appleIDCredential.authorizationCode else {
                 return
             }
-            
+
             guard let convertAuthorizationCode = String(data: authorizationCode, encoding: .utf8) else {
                 return
             }

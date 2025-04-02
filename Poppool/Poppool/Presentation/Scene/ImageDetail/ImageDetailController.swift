@@ -7,20 +7,20 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class ImageDetailController: BaseViewController, View {
-    
+
     typealias Reactor = ImageDetailReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = ImageDetailView()
-    
+
     private let cancelButton: UIButton = {
         let view = UIButton()
         view.setImage(UIImage(named: "icon_xmark_white"), for: .normal)
@@ -56,7 +56,7 @@ private extension ImageDetailController {
 // MARK: - Methods
 extension ImageDetailController {
     func bind(reactor: Reactor) {
-        
+
         cancelButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -64,7 +64,7 @@ extension ImageDetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in

@@ -1,9 +1,9 @@
-import UIKit
-import SnapKit
+import CoreLocation
 import GoogleMaps
 import ReactorKit
 import RxSwift
-import CoreLocation
+import SnapKit
+import UIKit
 
 final class MapGuideViewController: UIViewController, View {
     // MARK: - Properties
@@ -171,7 +171,7 @@ final class MapGuideViewController: UIViewController, View {
                         .distinctUntilChanged()
                         .compactMap { $0 }
                         .take(1)
-                        .subscribe(onNext: { [weak self] store in
+                        .subscribe(onNext: { [weak self] _ in
                             let fullScreenMapVC = FullScreenMapViewController()
                             fullScreenMapVC.reactor = reactor
 

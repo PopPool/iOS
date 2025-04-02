@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SignUpStep1Controller: BaseViewController, View {
-    
+
     typealias Reactor = SignUpStep1Reactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = SignUpStep1View()
 }
 
@@ -44,13 +44,13 @@ private extension SignUpStep1Controller {
 // MARK: - Methods
 extension SignUpStep1Controller {
     func bind(reactor: Reactor) {
-        
+
         // totalButton Tap 이벤트
         mainView.totalButton.button.rx.tap
             .map { Reactor.Action.totalButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // terms Tap 이벤트
         mainView.terms1Button.button.rx.tap
             .map { Reactor.Action.termsButtonTapped(index: 1)}
@@ -68,7 +68,7 @@ extension SignUpStep1Controller {
             .map { Reactor.Action.termsButtonTapped(index: 4)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // terms Detail Button 이벤트
         mainView.terms1Button.righticonButton.rx.tap
             .withUnretained(self)
@@ -98,18 +98,18 @@ extension SignUpStep1Controller {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
-                
+
                 // selectedIndex가 4일 경우 전체 선택 버튼 활성화 및 비활성화
                 if state.selectedIndex.count == 4 {
                     owner.mainView.totalButton.isSelected.accept(true)
                 } else {
                     owner.mainView.totalButton.isSelected.accept(false)
                 }
-                
+
                 // 현 selectedIndex에 따라 view 변경
                 let termsViews = [
                     owner.mainView.terms1Button,
@@ -121,7 +121,7 @@ extension SignUpStep1Controller {
                     let isSelected = state.selectedIndex.contains(index + 1)
                     view.isSelected.accept(isSelected)
                 }
-                
+
                 // selectedIndex가 1,2,3을 포함할 시 completeButton 활성화
                 if state.selectedIndex.contains(1)
                     && state.selectedIndex.contains(2)

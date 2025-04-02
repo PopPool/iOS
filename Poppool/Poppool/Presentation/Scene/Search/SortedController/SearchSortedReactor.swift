@@ -6,11 +6,11 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SearchSortedReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case closeButtonTapped(controller: BaseViewController)
@@ -18,29 +18,29 @@ final class SearchSortedReactor: Reactor {
         case changeSortedIndex(index: Int)
         case saveButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case moveToRecentScene(controller: BaseViewController)
         case loadView
         case save(controller: BaseViewController)
     }
-    
+
     struct State {
         var filterIndex: Int
         var sortedIndex: Int
         var saveButtonIsEnable: Bool = false
         var isSave: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var originFilterIndex: Int
     var originSortedIndex: Int
     private var selectedFilterIndex: Int
     private var selectedSortedIndex: Int
-    
+
     // MARK: - init
     init(filterIndex: Int, sortedIndex: Int) {
         self.initialState = State(filterIndex: filterIndex, sortedIndex: sortedIndex)
@@ -49,7 +49,7 @@ final class SearchSortedReactor: Reactor {
         self.selectedFilterIndex = filterIndex
         self.selectedSortedIndex = sortedIndex
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -65,7 +65,7 @@ final class SearchSortedReactor: Reactor {
             return Observable.just(.save(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -74,7 +74,7 @@ final class SearchSortedReactor: Reactor {
         case .loadView:
             newState.filterIndex = selectedFilterIndex
             newState.sortedIndex = selectedSortedIndex
-            
+
             if selectedFilterIndex != originFilterIndex  || selectedSortedIndex != originSortedIndex {
                 newState.saveButtonIsEnable = true
             } else {

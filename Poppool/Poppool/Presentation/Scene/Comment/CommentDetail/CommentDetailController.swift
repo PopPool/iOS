@@ -7,23 +7,23 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CommentDetailController: BaseViewController, View {
-    
+
     typealias Reactor = CommentDetailReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = CommentDetailView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private var cellTapped: PublishSubject<IndexPath> = .init()
 }
 
@@ -47,16 +47,16 @@ private extension CommentDetailController {
             DetailCommentImageCell.self,
             forCellWithReuseIdentifier: DetailCommentImageCell.identifiers
         )
-        
+
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             CommentDetailContentSectionCell.self,
             forCellWithReuseIdentifier: CommentDetailContentSectionCell.identifiers
         )
-        
+
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -72,7 +72,7 @@ extension CommentDetailController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, indexPath) in
@@ -80,12 +80,12 @@ extension CommentDetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.likeButton.rx.tap
             .map { Reactor.Action.likeButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -112,19 +112,18 @@ extension CommentDetailController: UICollectionViewDelegate, UICollectionViewDat
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let _  = collectionView.cellForItem(at: indexPath) as? DetailCommentImageCell {
             cellTapped.onNext(indexPath)
@@ -139,11 +138,11 @@ extension CommentDetailController: PanModalPresentable {
     var longFormHeight: PanModalHeight {
         return .contentHeight(UIScreen.main.bounds.height - 68)
     }
-    
+
     var shortFormHeight: PanModalHeight {
         return .contentHeight(UIScreen.main.bounds.height - 68)
     }
-    
+
     var showDragIndicator: Bool {
         return false
     }

@@ -10,9 +10,9 @@ import UIKit
 import SnapKit
 
 final class BookMarkToastView: UIView {
-    
+
     // MARK: - Components
-    
+
     private let bgView: UIView = {
         let view = UIView()
         view.backgroundColor = .pb70
@@ -20,14 +20,14 @@ final class BookMarkToastView: UIView {
         view.clipsToBounds = true
         return view
     }()
-    
+
     private let bookMarkLabel: UILabel = {
         let label = UILabel()
         label.setLineHeightText(text: "찜한 팝업에 저장했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
         label.textColor = .w100
         return label
     }()
-    
+
     private let unbookMarkLabel: UILabel = {
         let label = PPLabel(style: .regular, fontSize: 15, text: "찜한 팝업을 해제했어요")
         label.setLineHeightText(text: "찜한 팝업을 해제했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
@@ -45,7 +45,7 @@ final class BookMarkToastView: UIView {
         button.titleLabel?.font = .KorFont(style: .medium, size: 12)
         return button
     }()
-    
+
     // MARK: - init
     init(isBookMark: Bool) {
         super.init(frame: .zero)
@@ -59,7 +59,7 @@ final class BookMarkToastView: UIView {
             setUpUnBookMarkConstraints()
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -67,7 +67,7 @@ final class BookMarkToastView: UIView {
 
 // MARK: - SetUp
 private extension BookMarkToastView {
-    
+
     func setUpBookMarkConstraints() {
         bgView.addSubview(moveButton)
         moveButton.snp.makeConstraints { make in
@@ -83,7 +83,7 @@ private extension BookMarkToastView {
             make.centerY.equalToSuperview()
         }
     }
-    
+
     func setUpUnBookMarkConstraints() {
         bgView.addSubview(unbookMarkLabel)
         unbookMarkLabel.snp.makeConstraints { make in
