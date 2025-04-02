@@ -1,0 +1,47 @@
+name: 🔧 Swiftlint Autocorrect
+
+on:
+  pull_request:
+    types: [opened]
+    branches: ['dev/**']
+
+jobs:
+  autocorrect:
+    name: SwiftLint Autocorrect
+    runs-on: macos-15
+    if: github.actor != 'github-actions[bot]'  # 커밋 무한 루프 방지를 위해 봇 커밋은 무시
+
+    steps:
+      - name: 📁 Checkout Repository  # 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔨 Set up Xcode  # Xcode 16.2 선택
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: ⬇️ Install SwiftLint  # SwiftLint 설치
+        run: brew install swiftlint
+
+      - name: 🔧 Run SwiftLint Autocorrect  # SwiftLint 자동 수정 실행
+        run: swiftlint autocorrect
+
+      - name: 🚀 Commit and Push Changes  # 변경 사항 자동 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH_NAME="${GITHUB_REF_NAME}"
+          if [[ "$BRANCH_NAME" =~ (#([0-9]+)) ]]; then
+            ISSUE_NUMBER="${BASH_REMATCH[1]}"
+          else
+            ISSUE_NUMBER="#??"
+          fi
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "style/${ISSUE_NUMBER}: Apply SwiftLint autocorrect"
+            git push
+          else
+            echo "No changes to commit"
+          fi

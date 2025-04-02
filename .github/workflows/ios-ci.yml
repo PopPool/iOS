@@ -17,7 +17,7 @@ jobs:
       - name: ✅ Checkout Repository  # 저장소 코드 체크아웃
         uses: actions/checkout@v4
 
-      - name: 🛠️ Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
+      - name: 🔨 Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
       - name: ⬇️ Install SwiftLint  # SwiftLint 설치
