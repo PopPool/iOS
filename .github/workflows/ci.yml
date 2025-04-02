@@ -13,7 +13,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
 
     steps:
-      - name: 📁 Checkout Repository  # 저장소 코드 체크아웃
+      - name: Checkout Repository  # 저장소 코드 체크아웃
         uses: actions/checkout@v4
 
       - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
@@ -30,16 +30,18 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          BRANCH_NAME="${GITHUB_REF_NAME}"
-          if [[ "$BRANCH_NAME" =~ (#([0-9]+)) ]]; then
+          git checkout "${GITHUB_HEAD_REF}"
+
+          BRANCH_NAME="${GITHUB_HEAD_REF}"
+          if [[ "$BRANCH_NAME" =~ ([0-9]+) ]]; then
             ISSUE_NUMBER="${BASH_REMATCH[1]}"
           else
-            ISSUE_NUMBER="#??"
+            ISSUE_NUMBER=""
           fi
 
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "style/${ISSUE_NUMBER}: Apply SwiftLint autocorrect"
+            git commit -m "style/#${ISSUE_NUMBER}: Apply SwiftLint autocorrect"
             git push
           else
             echo "No changes to commit"
@@ -92,7 +94,8 @@ jobs:
 
       - name: 🏗️ Build the project  # 자동 검지된 Scheme과 Simulator로 빌드 수행
         run: |
+          WORKSPACE=$(find . -name "*.xcworkspace" | head -n 1)
           xcodebuild -scheme "${{ steps.detect_scheme.outputs.scheme }}" \
-            -workspace Poppool.xcworkspace \
+            -workspace "$WORKSPACE" \
             -destination "platform=iOS Simulator,id=${{ steps.detect_latest_simulator.outputs.sim_udid }}" \
             clean build | xcpretty
