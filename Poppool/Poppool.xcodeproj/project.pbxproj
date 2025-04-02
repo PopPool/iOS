@@ -472,6 +472,7 @@
 
 /* Begin PBXFileReference section */
 		05229DD02D99519200D88E73 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		057151572D9D2E0800260615 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		0818988D2D295DC30067BF01 /* MyPageLogoutSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageLogoutSection.swift; sourceTree = "<group>"; };
 		0818988F2D295DC80067BF01 /* MyPageLogoutSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageLogoutSectionCell.swift; sourceTree = "<group>"; };
 		081898932D2965C20067BF01 /* ProfileEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditController.swift; sourceTree = "<group>"; };
@@ -1338,6 +1339,7 @@
 			children = (
 				08DE8A132D525A4A0049BCAC /* Strings */,
 				08B191C12CF615CA0057BC04 /* Secrets.swift */,
+				057151572D9D2E0800260615 /* Debug.xcconfig */,
 				08B191532CF41D6F0057BC04 /* PP_loading.json */,
 				08B191542CF41D6F0057BC04 /* PP_splash.json */,
 				08B1914A2CF41D680057BC04 /* Font */,
@@ -3678,6 +3680,7 @@
 		};
 		BDCA41E82CF35AC2005EECF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 057151572D9D2E0800260615 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3721,6 +3724,7 @@
 		};
 		BDCA41E92CF35AC2005EECF6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 057151572D9D2E0800260615 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
