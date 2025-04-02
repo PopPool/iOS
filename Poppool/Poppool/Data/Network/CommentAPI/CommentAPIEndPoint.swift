@@ -13,7 +13,7 @@ struct CommentAPIEndPoint {
     
     static func postCommentAdd(request: PostCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/comments",
             method: .post,
             bodyParameters: request
@@ -22,7 +22,7 @@ struct CommentAPIEndPoint {
     
     static func deleteComment(request: DeleteCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/comments",
             method: .delete,
             queryParameters: request
@@ -31,7 +31,7 @@ struct CommentAPIEndPoint {
     
     static func editComment(request: PutCommentRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/comments",
             method: .put,
             bodyParameters: request

@@ -13,7 +13,7 @@ struct UserAPIEndPoint {
     
     static func postBookmarkPopUp(request: PostBookmarkPopUpRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/bookmark-popupstores",
             method: .post,
             queryParameters: request
@@ -22,7 +22,7 @@ struct UserAPIEndPoint {
     
     static func deleteBookmarkPopUp(request: PostBookmarkPopUpRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/bookmark-popupstores",
             method: .delete,
             queryParameters: request
@@ -31,7 +31,7 @@ struct UserAPIEndPoint {
     
     static func postCommentLike(request: CommentLikeRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/likes",
             method: .post,
             queryParameters: request
@@ -40,7 +40,7 @@ struct UserAPIEndPoint {
     
     static func deleteCommentLike(request: CommentLikeRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/likes",
             method: .delete,
             queryParameters: request
@@ -49,7 +49,7 @@ struct UserAPIEndPoint {
     
     static func postUserBlock(request: PostUserBlockRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/block",
             method: .post,
             queryParameters: request
@@ -58,7 +58,7 @@ struct UserAPIEndPoint {
     
     static func deleteUserBlock(request: PostUserBlockRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/unblock",
             method: .delete,
             queryParameters: request
@@ -67,7 +67,7 @@ struct UserAPIEndPoint {
     
     static func getOtherUserCommentPopUpList(request: GetOtherUserCommentListRequestDTO) -> Endpoint<GetOtherUserCommentedPopUpListResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/\(request.commenterId ?? "")/comments",
             method: .get,
             queryParameters: request
@@ -76,7 +76,7 @@ struct UserAPIEndPoint {
     
     static func getMyPage() -> Endpoint<GetMyPageResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/my-page",
             method: .get
         )
@@ -84,7 +84,7 @@ struct UserAPIEndPoint {
     
     static func postLogout() -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/logout",
             method: .post
         )
@@ -92,7 +92,7 @@ struct UserAPIEndPoint {
     
     static func getWithdrawlList() -> Endpoint<GetWithdrawlListResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/withdrawl/surveys",
             method: .get
         )
@@ -100,7 +100,7 @@ struct UserAPIEndPoint {
     
     static func postWithdrawl(request: PostWithdrawlListRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/delete",
             method: .post,
             bodyParameters: request
@@ -109,7 +109,7 @@ struct UserAPIEndPoint {
     
     static func getMyProfile() -> Endpoint<GetMyProfileResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/profiles",
             method: .get
         )
@@ -117,7 +117,7 @@ struct UserAPIEndPoint {
     
     static func putUserTailoredInfo(request: PutUserTailoredInfoRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/tailored-info",
             method: .put,
             bodyParameters: request
@@ -126,7 +126,7 @@ struct UserAPIEndPoint {
     
     static func putUserCategory(request: PutUserCategoryRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/interests",
             method: .put,
             bodyParameters: request
@@ -135,7 +135,7 @@ struct UserAPIEndPoint {
     
     static func putUserProfile(request: PutUserProfileRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/profiles",
             method: .put,
             bodyParameters: request
@@ -144,7 +144,7 @@ struct UserAPIEndPoint {
     
     static func getMyCommentedPopUp(request: SortedRequestDTO) -> Endpoint<GetMyCommentedPopUpResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/commented/popup",
             method: .get,
             queryParameters: request
@@ -153,7 +153,7 @@ struct UserAPIEndPoint {
     
     static func getBlockUserList(request: GetBlockUserListRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/blocked",
             method: .get,
             queryParameters: request
@@ -162,7 +162,7 @@ struct UserAPIEndPoint {
     
     static func getNoticeList() -> Endpoint<GetNoticeListResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/notice/list",
             method: .get
         )
@@ -170,7 +170,7 @@ struct UserAPIEndPoint {
     
     static func getNoticeDetail(noticeID: Int64) -> Endpoint<GetNoticeDetailResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/notice/\(noticeID)",
             method: .get
         )
@@ -178,7 +178,7 @@ struct UserAPIEndPoint {
     
     static func getRecentPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/recent-popupstores",
             method: .get,
             queryParameters: request
@@ -187,7 +187,7 @@ struct UserAPIEndPoint {
     
     static func getBookmarkPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/users/bookmark-popupstores",
             method: .get,
             queryParameters: request

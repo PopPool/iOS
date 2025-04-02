@@ -8,8 +8,8 @@ import CoreLocation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        KakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppKey)
-        GMSServices.provideAPIKey(Secrets.popPoolAPIKey)
+        KakaoSDK.initSDK(appKey: KeyPath.kakaoAuthAppKey)
+        GMSServices.provideAPIKey(KeyPath.popPoolAPIKey)
         
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization() // 권한 요청 초기화

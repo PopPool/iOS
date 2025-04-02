@@ -14,7 +14,7 @@ struct AdminAPIEndpoint {
             size: size
         )
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/popup-stores/list",
             method: .get,
             queryParameters: params
@@ -26,7 +26,7 @@ struct AdminAPIEndpoint {
         id: Int64
     ) -> Endpoint<GetAdminPopUpStoreDetailResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/popup-stores",
             method: .get,
             queryParameters: ["popUpStoreId": id]
@@ -38,7 +38,7 @@ struct AdminAPIEndpoint {
         request: CreatePopUpStoreRequestDTO
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/popup-stores",
             method: .post,
             bodyParameters: request
@@ -50,7 +50,7 @@ struct AdminAPIEndpoint {
         request: UpdatePopUpStoreRequestDTO
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/popup-stores",
             method: .put,
             bodyParameters: request
@@ -62,7 +62,7 @@ struct AdminAPIEndpoint {
         id: Int64
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/popup-stores",
             method: .delete,
             queryParameters: ["popUpStoreId": id]
@@ -74,7 +74,7 @@ struct AdminAPIEndpoint {
         request: CreateNoticeRequestDTO
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/notice",
             method: .post,
             bodyParameters: request
@@ -86,7 +86,7 @@ struct AdminAPIEndpoint {
         request: UpdateNoticeRequestDTO
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/notice/\(id)",
             method: .put,
             bodyParameters: request
@@ -97,7 +97,7 @@ struct AdminAPIEndpoint {
         id: Int64
     ) -> Endpoint<EmptyResponse> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseURL,
+            baseURL: KeyPath.popPoolBaseURL,
             path: "/admin/notice/\(id)",
             method: .delete
         )

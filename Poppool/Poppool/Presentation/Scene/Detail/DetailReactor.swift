@@ -381,7 +381,7 @@ final class DetailReactor: Reactor {
     
     func showSharedBoard(controller: BaseViewController) {
         let storeName = titleSection.inputDataList.first?.title ?? ""
-        let imagePath = Secrets.popPoolS3BaseURL + (imageBannerSection.inputDataList.first?.imagePaths.first ?? "")
+        let imagePath = KeyPath.popPoolS3BaseURL + (imageBannerSection.inputDataList.first?.imagePaths.first ?? "")
         
         // URL 인코딩 후 생성
         guard let encodedPath = imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),

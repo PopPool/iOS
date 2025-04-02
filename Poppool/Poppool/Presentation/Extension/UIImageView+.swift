@@ -15,7 +15,7 @@ extension UIImageView {
             self.image = UIImage(named: "image_default")
             return
         }
-        let imageURLString = Secrets.popPoolS3BaseURL + path
+        let imageURLString = KeyPath.popPoolS3BaseURL + path
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             let imageURL = URL(string: cenvertimageURL)
             self.kf.setImage(with: imageURL) { result in
@@ -35,7 +35,7 @@ extension UIImageView {
             completion()
             return
         }
-        let imageURLString = Secrets.popPoolS3BaseURL + path
+        let imageURLString = KeyPath.popPoolS3BaseURL + path
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             let imageURL = URL(string: cenvertimageURL)
             self.kf.setImage(with: imageURL) { result in
