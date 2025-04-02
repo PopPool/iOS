@@ -1244,7 +1244,7 @@ private extension PopUpStoreRegisterViewController {
     // 이미지 업로드
     private func uploadImages() {
         let uuid = UUID().uuidString
-        //        let baseS3URL = Secrets.popPoolS3BaseURL.rawValue
+        //        let baseS3URL = Secrets.popPoolS3BaseURL
         let updatedImages = images.enumerated().map { index, image in
             let filePath = "PopUpImage/\(nameField?.text ?? "")/\(uuid)/\(index).jpg"
             return ExtendedImage(

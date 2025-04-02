@@ -14,7 +14,7 @@ struct SignUpAPIEndpoint {
     /// - Returns: Endpoint<Bool>
     static func signUp_checkNickName(with request: CheckNickNameRequestDTO) -> Endpoint<Bool> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/signup/check-nickname",
             method: .get,
             queryParameters: request
@@ -25,7 +25,7 @@ struct SignUpAPIEndpoint {
     /// - Returns: Endpoint<GetInterestListResponseDTO>
     static func signUp_getCategoryList() -> Endpoint<GetCategoryListResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/signup/categories",
             method: .get
         )
@@ -36,7 +36,7 @@ struct SignUpAPIEndpoint {
     /// - Returns: RequestEndpoint
     static func signUp_trySignUp(with request: SignUpRequestDTO) -> RequestEndpoint {
         return RequestEndpoint(
-            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/signup",
             method: .post,
             bodyParameters: request

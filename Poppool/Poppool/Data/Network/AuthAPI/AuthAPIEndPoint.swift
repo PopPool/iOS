@@ -18,7 +18,7 @@ struct AuthAPIEndPoint {
     /// - Returns: Endpoint<LoginResponseDTO>
     static func auth_tryLogin(with userCredential: Encodable, path: String) -> Endpoint<LoginResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/auth/\(path)",
             method: .post,
             bodyParameters: userCredential,
@@ -28,7 +28,7 @@ struct AuthAPIEndPoint {
     
     static func postTokenReissue() -> Endpoint<PostTokenReissueResponseDTO> {
         return Endpoint(
-            baseURL: Secrets.popPoolBaseUrl.rawValue,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/auth/token/reissue",
             method: .post
         )

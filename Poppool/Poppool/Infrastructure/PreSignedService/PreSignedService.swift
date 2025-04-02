@@ -291,7 +291,7 @@ extension PreSignedService {
         }
     }
     func fullImageURL(from filePath: String) -> URL? {
-        let baseURL = Secrets.popPoolS3BaseURL.rawValue
+        let baseURL = Secrets.popPoolS3BaseURL
 
         // URL 인코딩 처리를 더 엄격하게
         guard let encodedPath = filePath

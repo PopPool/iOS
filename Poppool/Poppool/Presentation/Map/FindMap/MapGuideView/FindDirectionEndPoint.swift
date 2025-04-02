@@ -13,7 +13,7 @@ struct FindDirectionEndPoint {
        popUpStoreId: Int64
    ) -> Endpoint<GetPopUpDirectionResponseDTO> {
        return Endpoint(
-           baseURL: Secrets.popPoolBaseUrl.rawValue,
+           baseURL: Secrets.popPoolBaseURL,
            path: "/popup/\(popUpStoreId)/directions",
            method: .get
        )
