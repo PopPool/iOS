@@ -43,7 +43,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add .
             git commit -m "style/#${ISSUE_NUMBER}: Apply SwiftLint autocorrect"
-            git push
+            git push --set-upstream origin "${GITHUB_HEAD_REF}"
           else
             echo "No changes to commit"
           fi
