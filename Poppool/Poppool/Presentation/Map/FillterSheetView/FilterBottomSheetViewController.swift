@@ -44,7 +44,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupLayout()
         setupGestures()
         setupCollectionView()
-        containerView.isUserInteractionEnabled = true
+        
         containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
             guard let self = self, let reactor = self.reactor else { return }
 

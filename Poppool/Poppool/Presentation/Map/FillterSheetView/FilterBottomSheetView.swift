@@ -200,7 +200,7 @@ final class FilterBottomSheetView: UIView {
 
     func setupLocationScrollView(locations: [Location], buttonAction: @escaping (Int, UIButton) -> Void) {
         locationContentView.subviews.forEach { $0.removeFromSuperview() }
-        locationScrollView.delegate = self
+        locationScrollView.delegate = self as? UIScrollViewDelegate
 
         var lastButton: UIButton?
 
@@ -208,10 +208,14 @@ final class FilterBottomSheetView: UIView {
             let button = createStyledButton(title: location.main)
             button.tag = index
 
-            button.addAction(UIAction { _ in
+            button.addTarget(self, action: #selector(locationButtonTapped(_:)), for: .touchUpInside)
+
+            // actionHandler 클로저 저장
+            button.layer.setValue(index, forKey: "buttonIndex")
+            objc_setAssociatedObject(button, &AssociatedKeys.actionHandler, { [weak self] in
                 buttonAction(index, button)
-                self.updateMainLocationSelection(index)
-            }, for: .touchUpInside)
+                self?.updateMainLocationSelection(index)
+            }, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
             locationContentView.addSubview(button)
 
@@ -231,6 +235,16 @@ final class FilterBottomSheetView: UIView {
             lastButton.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().inset(16)
             }
+        }
+    }
+
+    private struct AssociatedKeys {
+        static var actionHandler = "actionHandler"
+    }
+
+    @objc private func locationButtonTapped(_ sender: UIButton) {
+        if let actionHandler = objc_getAssociatedObject(sender, &AssociatedKeys.actionHandler) as? () -> Void {
+            actionHandler()
         }
     }
 
@@ -256,6 +270,19 @@ final class FilterBottomSheetView: UIView {
         }
     }
 
+    func updateContentVisibility(isCategorySelected: Bool) {
+        self.locationScrollView.isHidden = isCategorySelected
+        self.balloonBackgroundView.isHidden = isCategorySelected
+        self.categoryCollectionView.isHidden = !isCategorySelected
+
+        self.locationScrollView.alpha = isCategorySelected ? 0 : 1
+        self.balloonBackgroundView.alpha = isCategorySelected ? 0 : 1
+        self.categoryCollectionView.alpha = isCategorySelected ? 1 : 0
+
+        let newHeight = isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight()
+        self.balloonHeightConstraint?.update(offset: newHeight)
+    }
+
     private func createCategoryButton(title: String, isSelected: Bool) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
@@ -276,21 +303,6 @@ final class FilterBottomSheetView: UIView {
         }
 
         return button
-    }
-
-    func updateContentVisibility(isCategorySelected: Bool) {
-        locationScrollView.isHidden = isCategorySelected
-        balloonBackgroundView.isHidden = isCategorySelected
-        categoryCollectionView.isHidden = !isCategorySelected
-
-        locationScrollView.alpha = isCategorySelected ? 0 : 1
-        balloonBackgroundView.alpha = isCategorySelected ? 0 : 1
-        categoryCollectionView.alpha = isCategorySelected ? 1 : 0
-
-        let newHeight = isCategorySelected ? 170 : self.balloonBackgroundView.calculateHeight()
-        balloonHeightConstraint?.update(offset: newHeight)
-
-        self.layoutIfNeeded()
     }
 
     private func createStyledButton(title: String, isSelected: Bool = false) -> PPButton {
@@ -340,7 +352,7 @@ final class FilterBottomSheetView: UIView {
         balloonHeightConstraint?.update(offset: isHidden ? 0 : dynamicHeight)
         self.layoutIfNeeded()
     }
-    
+
     func updateBalloonPosition(for button: UIButton) {
         DispatchQueue.main.async {
             guard let window = button.window else { return }
@@ -359,14 +371,25 @@ final class FilterBottomSheetView: UIView {
             self.balloonBackgroundView.setNeedsDisplay()
         }
     }
+
     private func updateBalloonPositionAccurately(for button: PPButton) {
         let buttonFrameInBalloon = button.convert(button.bounds, to: balloonBackgroundView)
         let arrowPosition = buttonFrameInBalloon.midX / balloonBackgroundView.bounds.width
         balloonBackgroundView.arrowPosition = arrowPosition
         balloonBackgroundView.setNeedsDisplay()
     }
+
+    private func updateSelectedButtonPosition() {
+        guard let selectedButton = locationContentView.subviews.first(where: { view in
+            guard let button = view as? PPButton else { return false }
+            return button.backgroundColor == .blu500
+        }) as? PPButton else { return }
+
+        updateBalloonPosition(for: selectedButton)
+    }
 }
 
+// MARK: - Extensions
 extension FilterBottomSheetView {
     func update(locationText: String?, categoryText: String?) {
         var filters: [String] = []
@@ -395,14 +418,5 @@ extension FilterBottomSheetView: UIScrollViewDelegate {
         if !decelerate {
             updateSelectedButtonPosition()
         }
-    }
-
-    private func updateSelectedButtonPosition() {
-        guard let selectedButton = locationContentView.subviews.first(where: { view in
-            guard let button = view as? PPButton else { return false }
-            return button.backgroundColor == .blu500
-        }) as? PPButton else { return }
-
-        updateBalloonPosition(for: selectedButton)
     }
 }

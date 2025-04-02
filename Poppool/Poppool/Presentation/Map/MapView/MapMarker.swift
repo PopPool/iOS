@@ -221,9 +221,7 @@ extension MapMarker {
         return markerImageView
     }
 
-    /// 네이버맵용으로 뷰를 UIImage로 렌더링하는 함수
     func asImage() -> UIImage? {
-        // 필요한 경우 프레임을 강제로 업데이트합니다.
         self.layoutIfNeeded()
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
         defer { UIGraphicsEndImageContext() }
