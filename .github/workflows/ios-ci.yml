@@ -1,4 +1,4 @@
-name: 📱 iOS CI
+name: Run CI
 
 on:
   pull_request:
@@ -14,10 +14,10 @@ jobs:
     if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
 
     steps:
-      - name: ✅ Checkout Repository  # 저장소 코드 체크아웃
+      - name: Checkout Repository  # 저장소 코드 체크아웃
         uses: actions/checkout@v4
 
-      - name: 🧾 Generate Debug.xcconfig
+      - name: ⚙️ Generate xcconfig
         run: |
           cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig
           KAKAO_AUTH_APP_KEY=${{ secrets.KAKAO_AUTH_APP_KEY }}
@@ -27,7 +27,7 @@ jobs:
           POPPOOL_API_KEY=${{ secrets.POPPOOL_API_KEY }}
           EOF
 
-      - name: 🔨 Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
+      - name: 🛠️ Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
       - name: ⬇️ Install SwiftLint  # SwiftLint 설치
