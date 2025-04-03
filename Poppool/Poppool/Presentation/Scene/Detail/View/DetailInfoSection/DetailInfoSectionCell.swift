@@ -170,4 +170,3 @@ extension DetailInfoSectionCell: Inputable {
         addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 13))
     }
 }
-

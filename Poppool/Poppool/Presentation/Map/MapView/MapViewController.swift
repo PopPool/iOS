@@ -1,12 +1,12 @@
-import UIKit
-import FloatingPanel
-import SnapKit
-import RxSwift
-import RxCocoa
-import ReactorKit
-import NMapsMap
 import CoreLocation
+import FloatingPanel
+import NMapsMap
+import ReactorKit
+import RxCocoa
 import RxGesture
+import RxSwift
+import SnapKit
+import UIKit
 
 class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, UIGestureRecognizerDelegate {
     typealias Reactor = MapReactor
@@ -278,7 +278,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         mapViewTapGesture.delegate = self
     }
 
-
     private let defaultZoomLevel: Double = 15.0
     private func setupPanAndSwipeGestures() {
         storeListViewController.mainView.grabberHandle.rx.swipeGesture(.up)
@@ -347,11 +346,9 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                     lng: location.coordinate.longitude
                 ), zoomTo: 15.0)
 
-
                 self.mainView.mapView.moveCamera(cameraUpdate)
             }
             .disposed(by: disposeBag)
-
 
         mainView.filterChips.onRemoveLocation = { [weak self] in
             guard let self = self else { return }
@@ -547,7 +544,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: 1)
 
         // 중요: 마커에 직접 터치 핸들러 추가
-        marker.touchHandler = { [weak self] (overlay) -> Bool in
+        marker.touchHandler = { [weak self] (_) -> Bool in
             guard let self = self else { return false }
 
             Logger.log(message: "마커 터치됨! 위치: \(marker.position), 스토어: \(store.name)", category: .debug)
@@ -559,7 +556,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         marker.mapView = mainView.mapView
         markerDictionary[store.id] = marker
     }
-
 
     func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int = 1, regionName: String = "") {
         if selected {
@@ -660,9 +656,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
     private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
         let progress = (maxOffset - offset) / (maxOffset - minOffset)
-        mainView.mapView.alpha = max(0, min(progress, 1)) 
+        mainView.mapView.alpha = max(0, min(progress, 1))
     }
-
 
     private func animateToState(_ state: ModalState) {
         guard modalState != state else { return }
@@ -790,7 +785,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                         updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
                         // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (overlay) -> Bool in
+                        marker.touchHandler = { [weak self] (_) -> Bool in
                             guard let self = self else { return false }
 
                             print("개별 마커 터치됨! 스토어: \(store.name)")
@@ -816,7 +811,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                         updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeGroup.count)
 
                         // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (overlay) -> Bool in
+                        marker.touchHandler = { [weak self] (_) -> Bool in
                             guard let self = self else { return false }
 
                             print("마이크로 클러스터 마커 터치됨! 스토어 수: \(storeGroup.count)개")
@@ -901,7 +896,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         CATransaction.commit()
     }
-
 
         private func clearAllMarkers() {
             individualMarkerDictionary.values.forEach { $0.mapView = nil }
@@ -1024,7 +1018,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             currentFilterBottomSheet = nil
         }
 
-        //기본 마커
+        // 기본 마커
     private func addMarkers(for stores: [MapPopUpStore]) {
         markerDictionary.values.forEach { $0.mapView = nil }
         markerDictionary.removeAll()
@@ -1037,7 +1031,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
             // 직접 터치 핸들러 추가
-            marker.touchHandler = { [weak self] (overlay) -> Bool in
+            marker.touchHandler = { [weak self] (_) -> Bool in
                 guard let self = self else { return false }
 
                 print("검색 결과 마커 터치됨! 스토어: \(store.name)")
@@ -1175,7 +1169,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
             // 직접 터치 핸들러 추가
-            marker.touchHandler = { [weak self] (overlay) -> Bool in
+            marker.touchHandler = { [weak self] (_) -> Bool in
                 guard let self = self else { return false }
 
                 print("클러스터 내 마커 터치됨! 스토어: \(store.name)")
@@ -1186,7 +1180,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             individualMarkerDictionary[store.id] = marker
         }
     }
-
 
         private func findMarkerForStore(for store: MapPopUpStore) -> NMFMarker? {
             // individualMarkerDictionary에 저장된 모든 마커를 순회
@@ -1508,10 +1501,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             cameraUpdate.animation = .easeIn
             cameraUpdate.animationDuration = 0.3
             mainView.mapView.moveCamera(cameraUpdate)
-
-        default:
+            default:
             print("기타 레벨 클러스터 처리")
-            break
         }
 
         // 클러스터에 포함된 스토어들만 표시하도록 마커 업데이트
@@ -1524,7 +1515,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         return true
     }
-
 
         // 마이크로 클러스터 탭 처리
         func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
@@ -1643,7 +1633,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             Logger.log(message: "인식할 수 없는 마커 타입", category: .error)
             return false
         }
-
 
         // 지도 탭 이벤트 처리
         func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {

@@ -1,8 +1,8 @@
-import UIKit
-import SnapKit
-import RxSwift
-import RxCocoa
 import ReactorKit
+import RxCocoa
+import RxSwift
+import SnapKit
+import UIKit
 
 final class FilterBottomSheetViewController: UIViewController, View {
     typealias Reactor = FilterBottomSheetReactor
@@ -43,7 +43,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
         setupLayout()
         setupGestures()
         setupCollectionView()
-        
+
         containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
             guard let self = self, let reactor = self.reactor else { return }
 
@@ -140,13 +140,10 @@ final class FilterBottomSheetViewController: UIViewController, View {
                    }
                )
 
-
            })
            .map { Reactor.Action.resetFilters }
            .bind(to: reactor.action)
            .disposed(by: disposeBag)
-
-
 
         containerView.saveButton.rx.tap
             .bind { [weak self] _ in
@@ -164,7 +161,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
-
         containerView.closeButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self, let reactor = self.reactor else { return }
@@ -176,7 +172,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
-
 
         // 5. 탭 변경
         reactor.state.map { $0.activeSegment }
@@ -195,7 +190,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 self.updateContainerHeight()
             }
             .disposed(by: disposeBag)
-
 
         // 6. 위치 데이터 바인딩
         let locations = reactor.state
@@ -223,7 +217,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
-
         let locationAndSubRegions = reactor.state
             .map { ($0.selectedLocationIndex, $0.selectedSubRegions) }
             .distinctUntilChanged { prev, curr in
@@ -238,7 +231,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
             .bind { [weak self] data in
                 guard let self = self, let reactor = self.reactor else { return }
                 let (selectedIndexOptional, selectedSubRegions) = data
-
 
                 guard let selectedIndex = selectedIndexOptional,
                       selectedIndex >= 0,
@@ -256,7 +248,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                         self?.reactor?.action.onNext(.toggleAllSubRegions)
                     }
                 )
-
 
                 if let button = self.containerView.locationContentView.subviews[selectedIndex] as? UIButton {
                     self.containerView.updateBalloonPosition(for: button)
@@ -296,8 +287,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
         }
         .disposed(by: disposeBag)
 
-
-
         reactor.state.map { $0.selectedSubRegions + $0.selectedCategories }
             .distinctUntilChanged()
             .bind { [weak self] selectedOptions in
@@ -317,7 +306,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 }
             }
             .disposed(by: disposeBag)
-
 
         reactor.state.map { $0.isSaveEnabled }
             .distinctUntilChanged()
@@ -418,7 +406,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
         view.layoutIfNeeded()
     }
 
-
     private func setupGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
         tapGesture.delegate = self
@@ -441,7 +428,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
            let index = reactor.currentState.locations.firstIndex(where: { $0.main == locations }) {
             reactor.action.onNext(.selectLocation(index))
 
-
         }
 
         // 4. 필터 칩 뷰 업데이트
@@ -457,8 +443,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
             self.view.layoutIfNeeded()
         }
     }
-
-
 
     func hideBottomSheet() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {

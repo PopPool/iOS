@@ -62,7 +62,7 @@ class DefaultMapRepository: MapRepository {
                 query: query,
                 categories: categories
             ),
-            interceptor: TokenInterceptor() 
+            interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
     }

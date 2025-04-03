@@ -217,7 +217,7 @@ final class MapReactor: Reactor {
         case .viewDidLoad(let id):
             return directionRepository.getPopUpDirection(popUpStoreId: id)
                 .do(
-                    onNext: { response in
+                    onNext: { _ in
                     },
                     onError: { error in
                         Logger.log(

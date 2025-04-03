@@ -1,9 +1,9 @@
-import UIKit
-import SnapKit
-import ReactorKit
-import RxSwift
 import CoreLocation
 import NMapsMap
+import ReactorKit
+import RxSwift
+import SnapKit
+import UIKit
 
 final class MapGuideViewController: UIViewController, View {
     // MARK: - Properties
@@ -15,7 +15,7 @@ final class MapGuideViewController: UIViewController, View {
 
     private let dimmingView: UIView = {
         let viewInstance = UIView()
-        viewInstance.backgroundColor = UIColor.gray.withAlphaComponent(0.7) 
+        viewInstance.backgroundColor = UIColor.gray.withAlphaComponent(0.7)
         viewInstance.alpha = 0
         return viewInstance
     }()

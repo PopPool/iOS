@@ -89,26 +89,23 @@ final class BalloonBackgroundView: UIView {
         backgroundColor = .clear
         self.isUserInteractionEnabled = true
         containerView.isUserInteractionEnabled = true
-        collectionView.isUserInteractionEnabled = true  
+        collectionView.isUserInteractionEnabled = true
         setupLayout()
         setupCollectionView()
     }
-
-
 
     required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - Setup
 
     private func setupLayout() {
-        
+
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(arrowHeight)
             make.bottom.equalToSuperview().priority(.high)
         }
-
 
         containerView.addSubview(collectionView)
         containerView.addSubview(singleRegionIcon)
@@ -119,7 +116,6 @@ final class BalloonBackgroundView: UIView {
             make.top.left.right.equalToSuperview()
             make.bottom.equalToSuperview().priority(.high)
         }
-
 
         singleRegionIcon.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
@@ -242,13 +238,11 @@ final class BalloonBackgroundView: UIView {
 
        collectionView.layoutIfNeeded()
 
-
        let balloonWidth = self.bounds.width
        let horizontalSpacing: CGFloat = 8
        let leftPadding: CGFloat = 20
        let rightPadding: CGFloat = 20
        let availableWidth = balloonWidth - leftPadding - rightPadding
-
 
        var currentRowWidth: CGFloat = 0
        var numberOfRows: Int = 1
@@ -269,14 +263,12 @@ final class BalloonBackgroundView: UIView {
        let itemHeight: CGFloat = 36
        let interGroupSpacing: CGFloat = 8
        let verticalInset: CGFloat = 20 + 20
-       let totalHeight = max(
+       return max(
            (itemHeight * CGFloat(numberOfRows)) +
            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
            verticalInset,
            36
        )
-
-       return totalHeight
     }
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width

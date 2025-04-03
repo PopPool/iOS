@@ -1,7 +1,7 @@
-import UIKit
-import KakaoSDKCommon
 import CoreLocation
+import KakaoSDKCommon
 import NMapsMap
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
