@@ -1,11 +1,13 @@
 import UIKit
+import CoreLocation
+import PhotosUI
+
+import Then
 import SnapKit
 import ReactorKit
 import RxSwift
 import RxCocoa
-import PhotosUI
 import Alamofire
-import CoreLocation
 
 final class PopUpStoreRegisterViewController: BaseViewController {
 
@@ -121,14 +123,13 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private let contentView = UIView()
 
     // MARK: - Form Background
-    private let formBackgroundView: UIView = {
-        let v = UIView()
-        v.backgroundColor = .white
-        v.layer.borderWidth = 1
-        v.layer.borderColor = UIColor.lightGray.cgColor
-        v.layer.cornerRadius = 8
-        return v
-    }()
+    private let formBackgroundView = UIView().then() {
+        $0.backgroundColor = .white
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.cornerRadius = 8
+    }
+    
     private let verticalStack = UIStackView()
 
     // MARK: - Bottom Save Button

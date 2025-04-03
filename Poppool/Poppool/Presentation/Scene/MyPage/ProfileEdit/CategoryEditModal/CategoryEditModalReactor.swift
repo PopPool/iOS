@@ -90,11 +90,11 @@ final class CategoryEditModalReactor: Reactor {
             var keepList: [Int64] = []
             var deleteList: [Int64] = []
             let currentArray = tagSection.inputDataList.filter { $0.isSelected == true }.compactMap { $0.id }
-            for i in currentArray {
-                if originSelectedID.contains(i) {
-                    keepList.append(i)
+            for index in currentArray {
+                if originSelectedID.contains(index) {
+                    keepList.append(index)
                 } else {
-                    addList.append(i)
+                    addList.append(index)
                 }
             }
             deleteList = originSelectedID.filter { !currentArray.contains($0) }
