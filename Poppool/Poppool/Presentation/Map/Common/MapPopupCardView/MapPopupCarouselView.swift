@@ -13,11 +13,11 @@ final class MapPopupCarouselView: UICollectionView {
 
         let centerX = self.contentOffset.x + self.bounds.width / 2
 
-        for i in 0..<self.numberOfItems(inSection: 0) {
-            guard let cell = self.cellForItem(at: IndexPath(item: i, section: 0)) else { continue }
+        for index in 0..<self.numberOfItems(inSection: 0) {
+            guard let cell = self.cellForItem(at: IndexPath(item: index, section: 0)) else { continue }
 
             if cell.frame.minX <= centerX && centerX <= cell.frame.maxX {
-                return i
+                return index
             }
         }
 
@@ -107,7 +107,7 @@ extension MapPopupCarouselView {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                  withVelocity velocity: CGPoint,
                                  targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let layout = self.collectionViewLayout as! UICollectionViewFlowLayout
+        guard let layout = self.collectionViewLayout as? UICollectionViewFlowLayout else { return }
         let itemWidth = layout.itemSize.width
         let spacing = layout.minimumLineSpacing
 
@@ -142,10 +142,11 @@ extension MapPopupCarouselView: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueReusableCell(
+        guard let cell = dequeueReusableCell(
             withReuseIdentifier: PopupCardCell.identifier,
             for: indexPath
-        ) as! PopupCardCell
+        ) as? PopupCardCell
+        else { return UICollectionViewCell() }
         cell.configure(with: popupCards[indexPath.item])
         return cell
     }

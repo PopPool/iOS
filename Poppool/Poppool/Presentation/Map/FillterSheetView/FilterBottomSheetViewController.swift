@@ -1,8 +1,8 @@
-import ReactorKit
-import RxCocoa
-import RxSwift
-import SnapKit
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
+import ReactorKit
 
 final class FilterBottomSheetViewController: UIViewController, View {
     typealias Reactor = FilterBottomSheetReactor
@@ -13,6 +13,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
     var onSave: ((FilterData) -> Void)?
     var onDismiss: (() -> Void)?
     private var bottomConstraint: Constraint?
+    private var containerHeightConstraint: Constraint?
+
     let containerView = FilterBottomSheetView()
     private var containerViewBottomConstraint: NSLayoutConstraint?
     private var savedLocation: String?
@@ -23,8 +25,6 @@ final class FilterBottomSheetViewController: UIViewController, View {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.4)
         view.alpha = 0
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
-        view.addGestureRecognizer(tapGesture)
         return view
     }()
     // MARK: - Initialization
@@ -38,24 +38,50 @@ final class FilterBottomSheetViewController: UIViewController, View {
     }
 
     // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         setupGestures()
         setupCollectionView()
+        
         containerView.filterChipsView.onRemoveChip = { [weak self] removedOption in
             guard let self = self, let reactor = self.reactor else { return }
-            if reactor.currentState.selectedCategories.contains(removedOption) {
+
+            let isCategory = reactor.currentState.selectedCategories.contains(removedOption)
+            let isSubRegion = reactor.currentState.selectedSubRegions.contains(removedOption)
+
+            if isCategory {
                 reactor.action.onNext(.toggleCategory(removedOption))
-            } else if reactor.currentState.selectedSubRegions.contains(removedOption) {
+            } else if isSubRegion {
                 reactor.action.onNext(.toggleSubRegion(removedOption))
             }
-        }
 
-//        let tapOutsideGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapOutside))
-//        tapOutsideGesture.cancelsTouchesInView = false
-//        self.view.addGestureRecognizer(tapOutsideGesture)
+            DispatchQueue.main.async {
+                let activeSegment = reactor.currentState.activeSegment
+
+                if isCategory && activeSegment == 1 {
+                    self.containerView.categoryCollectionView.reloadData()
+                } else if isSubRegion && activeSegment == 0 {
+                    if let selectedIndex = reactor.currentState.selectedLocationIndex {
+                        let location = reactor.currentState.locations[selectedIndex]
+                        self.containerView.balloonBackgroundView.configure(
+                            for: location.main,
+                            subRegions: location.sub,
+                            selectedRegions: reactor.currentState.selectedSubRegions,
+                            selectionHandler: { [weak self] subRegion in
+                                self?.reactor?.action.onNext(.toggleSubRegion(subRegion))
+                            },
+                            allSelectionHandler: { [weak self] in
+                                self?.reactor?.action.onNext(.toggleAllSubRegions)
+                            }
+                        )
+                    }
+                }
+
+                self.updateContainerHeight()
+                self.containerView.updateContentVisibility(isCategorySelected: activeSegment == 1)
+            }
+        }
 
     }
 
@@ -71,7 +97,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
         view.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(UIScreen.main.bounds.height * 0.7)
+            containerHeightConstraint = make.height.greaterThanOrEqualTo(400).constraint
             bottomConstraint = make.bottom.equalToSuperview().offset(UIScreen.main.bounds.height).constraint
         }
 
@@ -114,10 +140,13 @@ final class FilterBottomSheetViewController: UIViewController, View {
                    }
                )
 
+
            })
            .map { Reactor.Action.resetFilters }
            .bind(to: reactor.action)
            .disposed(by: disposeBag)
+
+
 
         containerView.saveButton.rx.tap
             .bind { [weak self] _ in
@@ -135,6 +164,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
+
         containerView.closeButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self, let reactor = self.reactor else { return }
@@ -146,6 +176,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 self.hideBottomSheet()
             }
             .disposed(by: disposeBag)
+
 
         // 5. 탭 변경
         reactor.state.map { $0.activeSegment }
@@ -159,8 +190,12 @@ final class FilterBottomSheetViewController: UIViewController, View {
                     self.containerView.updateBalloonHeight(isHidden: true)
                 }
                 self.containerView.updateContentVisibility(isCategorySelected: activeSegment == 1)
+
+                // 여기에 컨테이너 높이 업데이트 추가
+                self.updateContainerHeight()
             }
             .disposed(by: disposeBag)
+
 
         // 6. 위치 데이터 바인딩
         let locations = reactor.state
@@ -188,6 +223,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
+
         let locationAndSubRegions = reactor.state
             .map { ($0.selectedLocationIndex, $0.selectedSubRegions) }
             .distinctUntilChanged { prev, curr in
@@ -202,6 +238,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
             .bind { [weak self] data in
                 guard let self = self, let reactor = self.reactor else { return }
                 let (selectedIndexOptional, selectedSubRegions) = data
+
 
                 guard let selectedIndex = selectedIndexOptional,
                       selectedIndex >= 0,
@@ -219,6 +256,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
                         self?.reactor?.action.onNext(.toggleAllSubRegions)
                     }
                 )
+
 
                 if let button = self.containerView.locationContentView.subviews[selectedIndex] as? UIButton {
                     self.containerView.updateBalloonPosition(for: button)
@@ -258,6 +296,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
         }
         .disposed(by: disposeBag)
 
+
+
         reactor.state.map { $0.selectedSubRegions + $0.selectedCategories }
             .distinctUntilChanged()
             .bind { [weak self] selectedOptions in
@@ -277,6 +317,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
                 }
             }
             .disposed(by: disposeBag)
+
 
         reactor.state.map { $0.isSaveEnabled }
             .distinctUntilChanged()
@@ -352,12 +393,37 @@ final class FilterBottomSheetViewController: UIViewController, View {
             self.view.layoutIfNeeded()
         }
     }
+    func updateContainerHeight() {
+        let contentHeight: CGFloat
+
+        if containerView.segmentedControl.selectedSegmentIndex == 0 {
+            // 지역탭일 때
+            contentHeight = containerView.balloonBackgroundView.calculateHeight() +
+                           containerView.filterChipsView.frame.height +
+                           containerView.segmentedControl.frame.height +
+                           containerView.saveButton.frame.height + 100 // 패딩 및 여유 높이
+        } else {
+            // 카테고리탭일 때
+            contentHeight = containerView.categoryCollectionView.contentSize.height +
+                           containerView.filterChipsView.frame.height +
+                           containerView.segmentedControl.frame.height +
+                           containerView.saveButton.frame.height + 100
+        }
+
+        // 최소 400, 최대는 화면 높이의 80%로 제한
+        let finalHeight = min(max(contentHeight, 400), UIScreen.main.bounds.height * 0.8)
+        containerHeightConstraint?.update(offset: finalHeight)
+
+        // 컨테이너 크기 변경 후 레이아웃 업데이트
+        view.layoutIfNeeded()
+    }
+
 
     private func setupGestures() {
-        // dimmedView에만 탭 제스처를 설정하고 다른 제스처와의 충돌을 방지
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
+        tapGesture.delegate = self
         dimmedView.addGestureRecognizer(tapGesture)
-        dimmedView.isUserInteractionEnabled = true  // 확실히 활성화
+        dimmedView.isUserInteractionEnabled = true
 
         // 패닝 제스처는 유지
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
@@ -375,6 +441,7 @@ final class FilterBottomSheetViewController: UIViewController, View {
            let index = reactor.currentState.locations.firstIndex(where: { $0.main == locations }) {
             reactor.action.onNext(.selectLocation(index))
 
+
         }
 
         // 4. 필터 칩 뷰 업데이트
@@ -390,6 +457,8 @@ final class FilterBottomSheetViewController: UIViewController, View {
             self.view.layoutIfNeeded()
         }
     }
+
+
 
     func hideBottomSheet() {
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn) {
@@ -462,5 +531,15 @@ extension FilterBottomSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let category = tagSection?.inputDataList[indexPath.item].title else { return }
         reactor?.action.onNext(.toggleCategory(category))
+    }
+}
+extension FilterBottomSheetViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if gestureRecognizer.view == dimmedView {
+            // 딤드 영역에서만 터치 인식
+            let touchPoint = touch.location(in: view)
+            return !containerView.frame.contains(touchPoint)
+        }
+        return true
     }
 }

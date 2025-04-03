@@ -1,4 +1,4 @@
-import CoreLocation
+import NMapsMap
 
 enum MapZoomLevel {
     case country
@@ -12,7 +12,7 @@ enum MapZoomLevel {
             return .country
         case 7..<10:
             return .city
-        case 10..<12:
+        case 10..<11:
             return .district
         default:
             return .detailed
@@ -23,7 +23,7 @@ enum MapZoomLevel {
 struct RegionCluster {
     let name: String
     let subRegions: [String]
-    let coordinate: CLLocationCoordinate2D
+    let coordinate: NMGLatLng
     let type: RegionType
 
     var storeCount: Int = 0

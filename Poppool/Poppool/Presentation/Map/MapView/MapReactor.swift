@@ -15,6 +15,7 @@ final class MapReactor: Reactor {
         case fetchCategories
         case updateBothFilters(locations: [String], categories: [String])  // 새로 추가
         case didSelectItem(MapPopUpStore)
+        case fetchAllStores
         case refreshMarkers(northEastLat: Double, northEastLon: Double, southWestLat: Double, southWestLon: Double)
         case viewportChanged(
             northEastLat: Double,
@@ -89,17 +90,14 @@ final class MapReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .fetchCategories:
-            Logger.log(message: "카테고리 매핑", category: .debug)
             return useCase.fetchCategories()
                 .map { categories in
                     let mapping = categories.reduce(into: [String: Int64]()) { dict, category in
                         dict[category.category] = category.categoryId
                     }
-                    Logger.log(message: "생성된 카테고리 매핑: \(mapping)", category: .debug)
                     return .setCategoryMapping(mapping)
                 }
                 .catch { error in
-                    Logger.log(message: "카테고리 매핑 생성 중 오류: \(error.localizedDescription)", category: .error)
                     return .just(.setError(error))
                 }
 
@@ -123,15 +121,6 @@ final class MapReactor: Reactor {
         case let .viewportChanged(northEastLat, northEastLon, southWestLat, southWestLon):
             let categoryIDs = currentState.selectedCategoryFilters
                 .compactMap { currentState.categoryMapping[$0] }
-
-            Logger.log(
-                message: """
-                        지도 영역이 변경되었습니다:
-                        📍 선택된 카테고리: \(currentState.selectedCategoryFilters)
-                        🔢 변환된 카테고리 ID: \(categoryIDs)
-                        """,
-                category: .debug
-            )
 
             return .concat([
                 .just(.setLoading(true)),
@@ -211,20 +200,6 @@ final class MapReactor: Reactor {
                 Observable.just(.setLoading(false))
             ])
 
-        case let .updateBothFilters(locations, categories):
-            Logger.log(
-                message: """
-                Updating both filters:
-                - Locations: \(locations)
-                - Categories: \(categories)
-                """,
-                category: .debug
-            )
-            return .concat([
-                .just(.setLocationFilters(locations)),
-                .just(.setCategoryFilters(categories))
-            ])
-
         case let .clearFilters(type):
             switch type {
             case .location:
@@ -243,17 +218,6 @@ final class MapReactor: Reactor {
             return directionRepository.getPopUpDirection(popUpStoreId: id)
                 .do(
                     onNext: { response in
-                        Logger.log(
-                            message: """
-                            ✅ [응답]: 요청 성공 - popUpStoreId: \(id)
-                            - ID: \(response.id)
-                            - 이름: \(response.name)
-                            - 카테고리: \(response.categoryName)
-                            - 위도: \(response.latitude), 경도: \(response.longitude)
-                            - 주소: \(response.address)
-                            """,
-                            category: .network
-                        )
                     },
                     onError: { error in
                         Logger.log(
@@ -261,19 +225,11 @@ final class MapReactor: Reactor {
                             category: .error
                         )
                     },
-                    onSubscribe: {
-                        Logger.log(
-                            message: "🌎 [네트워크]: 요청 보냄 - popUpStoreId: \(id)",
-                            category: .network
-                        )
-                    }
+                    onSubscribe: { }
                 )
                 .map { dto in
                     let response = dto.toDomain()
-                    Logger.log(
-                        message: "🛠️ [도메인 매핑]: \(response)",
-                        category: .debug
-                    )
+
                     return MapPopUpStore(
                         id: response.id,
                         category: response.categoryName,
@@ -290,12 +246,44 @@ final class MapReactor: Reactor {
                     )
                 }
                 .map { store in
-                    Logger.log(
-                        message: "📌 [최종 데이터]: \(store)",
-                        category: .debug
-                    )
                     return .setSearchResult(store)
                 }
+        case .fetchAllStores:
+            // 한국 전체 영역에 대한 바운드 설정
+            let koreaRegion = (
+                northEast: (lat: 38.0, lon: 132.0),
+                southWest: (lat: 33.0, lon: 124.0)
+            )
+
+            let categoryIDs = currentState.selectedCategoryFilters
+                .compactMap { currentState.categoryMapping[$0] }
+
+            return .concat([
+                .just(.setLoading(true)),
+                useCase.fetchStoresInBounds(
+                    northEastLat: koreaRegion.northEast.lat,
+                    northEastLon: koreaRegion.northEast.lon,
+                    southWestLat: koreaRegion.southWest.lat,
+                    southWestLon: koreaRegion.southWest.lon,
+                    categories: categoryIDs
+                )
+                .map { stores -> Mutation in
+                    var filteredStores = stores
+
+                    let locationFilters = self.currentState.selectedLocationFilters
+                    if !locationFilters.isEmpty {
+                        filteredStores = stores.filter { store in
+                            return locationFilters.contains { filter in
+                                return self.store(store, matches: filter)
+                            }
+                        }
+                    }
+
+                    return .setViewportStores(filteredStores)
+                }
+                .catch { error in .just(.setError(error)) },
+                .just(.setLoading(false))
+            ])
 
         case let .didSelectItem(store):
             return .concat([
@@ -325,18 +313,15 @@ final class MapReactor: Reactor {
 
         case let .setSearchResult(store):
             newState.searchResult = store
-            Logger.log(message: "🎯 단일 검색 결과 설정: \(store)", category: .debug)
 
         case let .setToastMessage(message):
             newState.toastMessage = message
 
         case let .setActiveFilter(filterType):
             newState.activeFilterType = filterType
-            Logger.log(message: "🎯 Active Filter Changed: \(String(describing: filterType))", category: .debug)
 
         case let .setLocationFilters(filters):
             newState.selectedLocationFilters = filters
-            Logger.log(message: "선택된 위치 필터가 업데이트: \(filters)", category: .debug)
 
         case let .setCategoryFilters(filters):
             newState.selectedCategoryFilters = filters
@@ -354,14 +339,6 @@ final class MapReactor: Reactor {
             newState.selectedCategoryFilters = []
 
         case let .updateBothFilters(locations, categories):
-            Logger.log(
-                message: """
-                💾 필터 상태 업데이트
-                📍 이전 위치 필터: \(newState.selectedLocationFilters)
-                🏷️ 이전 카테고리 필터: \(newState.selectedCategoryFilters)
-                """,
-                category: .debug
-            )
             newState.selectedLocationFilters = locations
             newState.selectedCategoryFilters = categories
 
@@ -386,7 +363,6 @@ final class MapReactor: Reactor {
 
         case let .setSelectedStore(store):
             newState.selectedStore = store
-            print("[DEBUG] 📍 Selected Store: \(store.name)")
 
         case let .setError(error):
             newState.error = error
@@ -403,10 +379,6 @@ final class MapReactor: Reactor {
             }
 
         case let .setCategoryMapping(mapping):
-            Logger.log(
-                message: "카테고리 매핑 업데이트 완료: \(mapping)",
-                category: .debug
-            )
             newState.categoryMapping = mapping
         }
         return newState

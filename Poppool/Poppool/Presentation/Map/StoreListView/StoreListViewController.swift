@@ -57,11 +57,12 @@ final class StoreListViewController: UIViewController, View {
     func bind(reactor: Reactor) {
         let dataSource = RxCollectionViewSectionedReloadDataSource<StoreListSection>(
             configureCell: { [weak self] _, cv, indexPath, item in
-                guard let self = self else { return UICollectionViewCell() }
-                let cell = cv.dequeueReusableCell(
-                    withReuseIdentifier: StoreListCell.identifier,
-                    for: indexPath
-                ) as! StoreListCell
+                guard let self = self,
+                      let cell = cv.dequeueReusableCell(
+                          withReuseIdentifier: StoreListCell.identifier,
+                          for: indexPath
+                      ) as? StoreListCell
+                else { return UICollectionViewCell() }
 
                 cell.injection(with: .init(
                     thumbnailURL: item.thumbnailURL,
@@ -179,13 +180,13 @@ final class StoreListViewController: UIViewController, View {
 
         viewController.modalPresentationStyle = .overFullScreen
         present(viewController, animated: false) {
-            viewController.showBottomSheet()
+//            viewController.showBottomSheet()
         }
     }
 
     private func dismissFilterBottomSheet() {
         if let sheet = presentedViewController as? FilterBottomSheetViewController {
-            sheet.hideBottomSheet()
+            sheet.dismiss(animated: true)
         }
     }
 }

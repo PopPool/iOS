@@ -1,5 +1,5 @@
 {
-  "originHash" : "460c30523d69559c359ade610d8fe09aab6a0d403cc71804de63aa23b3649fe0",
+  "originHash" : "90182ae75bddc149e01f3583353785f437a618e30e1e9df09cabd3c7f3605747",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -17,15 +17,6 @@
       "state" : {
         "revision" : "b6e8928b1a3ad909e6db6a0278d286c33cfd0dc3",
         "version" : "2.8.6"
-      }
-    },
-    {
-      "identity" : "ios-maps-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/googlemaps/ios-maps-sdk",
-      "state" : {
-        "revision" : "9fa352d6eca4a731949efcdb27ed851f1fcd4447",
-        "version" : "9.3.0"
       }
     },
     {
@@ -125,6 +116,24 @@
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "spm-nmapsgeometry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsGeometry.git",
+      "state" : {
+        "revision" : "436d5e2e684f557faf5ef5862fd6633a42d7af11",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "spm-nmapsmap",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/navermaps/SPM-NMapsMap",
+      "state" : {
+        "revision" : "ad89e53fdfec3b8d8994280fb0414b5a7b1c3e8e",
+        "version" : "3.21.0"
       }
     },
     {

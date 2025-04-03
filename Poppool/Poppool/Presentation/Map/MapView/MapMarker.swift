@@ -1,6 +1,6 @@
-import GoogleMaps
-import SnapKit
 import UIKit
+import SnapKit
+import NMapsMap
 
 final class MapMarker: UIView {
     // MARK: - Components
@@ -220,7 +220,19 @@ extension MapMarker {
     var imageView: UIImageView {
         return markerImageView
     }
+
+    func asImage() -> UIImage? {
+        self.layoutIfNeeded()
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+        defer { UIGraphicsEndImageContext() }
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.render(in: context)
+            return UIGraphicsGetImageFromCurrentImageContext()
+        }
+        return nil
+    }
 }
+
 extension MapMarker.Input: Equatable {
     static func == (lhs: MapMarker.Input, rhs: MapMarker.Input) -> Bool {
         return lhs.isSelected == rhs.isSelected &&
