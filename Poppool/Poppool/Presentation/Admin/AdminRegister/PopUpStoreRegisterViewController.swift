@@ -5,7 +5,6 @@ import RxSwift
 import RxCocoa
 import PhotosUI
 import Alamofire
-import GoogleMaps
 import CoreLocation
 
 final class PopUpStoreRegisterViewController: BaseViewController {
@@ -23,9 +22,14 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private var latField: UITextField?
     private var lonField: UITextField?
     private var descTV: UITextView?
+    
 
 
     private let popupName: String = ""
+    private var originalImageIds: [String: Int64] = [:]
+    private var deletedImageIds: [Int64] = []
+    private var deletedImagePaths: [String] = []
+
     private let editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore?
     let presignedService = PreSignedService()
 
@@ -191,15 +195,27 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white:0.95, alpha:1)
-
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        if let store = editingStore {
-            loadStoreDetail(for: store.id)
-        }
+        
+        view.backgroundColor = UIColor(white:0.95, alpha:1)
 
+        if let store = editingStore {
+                // 삭제된 이미지 ID 복원
+                if let savedIds = UserDefaults.standard.array(forKey: "deletedImageIds_\(store.id)") as? [Int64] {
+                    self.deletedImageIds = savedIds
+                    Logger.log(message: "저장된 삭제 이미지 ID 복원: \(savedIds.count)개", category: .debug)
+                }
+
+                // 삭제된 이미지 경로 복원
+                if let savedPaths = UserDefaults.standard.array(forKey: "deletedImagePaths_\(store.id)") as? [String] {
+                    self.deletedImagePaths = savedPaths
+                    Logger.log(message: "저장된 삭제 이미지 경로 복원: \(savedPaths.count)개", category: .debug)
+                }
+
+                loadStoreDetail(for: store.id)
+            }
         setupNavigation()
         setupLayout()
         setupRows()
@@ -207,6 +223,8 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         setupImageCollectionActions()
         setupKeyboardHandling()
         setupAddressField()
+        setupAllFieldListeners()
+
 
 
     }
@@ -235,6 +253,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         }
     }
     private func fillFormWithExistingData(_ storeDetail: GetAdminPopUpStoreDetailResponseDTO) {
+        // 기본 필드 채우기
         nameField?.text = storeDetail.name
         categoryButton.setTitle("\(storeDetail.categoryName) ▾", for: .normal)
         addressField?.text = storeDetail.address
@@ -242,30 +261,121 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         lonField?.text = String(storeDetail.longitude)
         descTV?.text = storeDetail.desc
 
+        // 중요: ID와 URL 매핑 초기화 및 설정
+        self.originalImageIds.removeAll()
+        // deletedImageIds와 deletedImagePaths는 초기화하지 않음 (기존 삭제 정보 유지)
+
+        // 중요: 여기서 originalImageIds 맵을 세팅합니다
+        for image in storeDetail.imageList {
+            self.originalImageIds[image.imageUrl] = image.id
+            Logger.log(message: "이미지 ID 매핑: \(image.imageUrl) -> \(image.id)", category: .debug)
+        }
+
+        // 날짜 설정
         let isoFormatter = ISO8601DateFormatter()
-        
+
         if let startDate = isoFormatter.date(from: storeDetail.startDate),
            let endDate = isoFormatter.date(from: storeDetail.endDate) {
             self.selectedStartDate = startDate
             self.selectedEndDate = endDate
-            self.updatePeriodButtonTitle()  // 버튼에 날짜 텍스트 업데이트
+            self.updatePeriodButtonTitle()
         }
 
-        // 대표 이미지 로드 (생략된 부분은 기존 코드 참고)
-        if let mainImageURL = presignedService.fullImageURL(from: storeDetail.mainImageUrl) {
-            URLSession.shared.dataTask(with: mainImageURL) { [weak self] data, response, error in
-                guard let self = self,
-                      let data = data,
-                      let image = UIImage(data: data) else { return }
-                let extendedImage = ExtendedImage(filePath: storeDetail.mainImageUrl, image: image, isMain: true)
-                DispatchQueue.main.async {
-                    self.images.append(extendedImage)
-                    self.imagesCollectionView.reloadData()
-                    self.updateSaveButtonState()
-                }
-            }.resume()
+        // 중요: 기존 이미지는 먼저 모두 제거
+        self.images.removeAll()
+
+        // 이미지 목록 디버깅 - 실제 서버에서 받은 목록 확인
+        Logger.log(message: "서버에서 받은 이미지 목록 (총 \(storeDetail.imageList.count)개):", category: .debug)
+        for (index, image) in storeDetail.imageList.enumerated() {
+            Logger.log(message: "  \(index+1). ID: \(image.id), URL: \(image.imageUrl)", category: .debug)
+        }
+
+        // 삭제된 이미지 ID 집합 생성 (빠른 검색을 위해)
+        let deletedIdSet = Set(self.deletedImageIds)
+        Logger.log(message: "삭제된 이미지 ID 목록: \(deletedIdSet)", category: .debug)
+
+        // 중복 및 삭제된 이미지 제외를 위한 집합
+        var loadedImageUrls = Set<String>()
+
+        let dispatchGroup = DispatchGroup()
+        let mainImageUrl = storeDetail.mainImageUrl
+        Logger.log(message: "대표 이미지 URL: \(mainImageUrl)", category: .debug)
+
+        for imageData in storeDetail.imageList {
+            // 중복 이미지 건너뛰기
+            if loadedImageUrls.contains(imageData.imageUrl) {
+                Logger.log(message: "중복 이미지 스킵: \(imageData.imageUrl)", category: .debug)
+                continue
+            }
+
+            // 삭제된 이미지 건너뛰기
+            if deletedIdSet.contains(imageData.id) {
+                Logger.log(message: "삭제된 이미지 스킵: ID \(imageData.id), URL: \(imageData.imageUrl)", category: .debug)
+                continue
+            }
+
+            loadedImageUrls.insert(imageData.imageUrl)
+
+            dispatchGroup.enter()
+
+            if let imageURL = presignedService.fullImageURL(from: imageData.imageUrl) {
+                Logger.log(message: "이미지 로드 시작: \(imageData.imageUrl)", category: .debug)
+
+                URLSession.shared.dataTask(with: imageURL) { [weak self] data, response, error in
+                    defer { dispatchGroup.leave() }
+
+                    // 응답 상태 코드 확인 추가
+                    if let httpResponse = response as? HTTPURLResponse {
+                        Logger.log(message: "이미지 로드 응답 코드: \(httpResponse.statusCode) - URL: \(imageData.imageUrl)", category: .debug)
+                        if httpResponse.statusCode != 200 {
+                            Logger.log(message: "이미지 로드 실패 - 상태 코드: \(httpResponse.statusCode)", category: .error)
+                            return
+                        }
+                    }
+
+                    if let error = error {
+                        Logger.log(message: "이미지 로드 오류: \(error.localizedDescription)", category: .error)
+                        return
+                    }
+
+                    guard let self = self,
+                          let data = data,
+                          let image = UIImage(data: data) else {
+                        Logger.log(message: "이미지 변환 실패", category: .error)
+                        return
+                    }
+
+                    let isMain = (imageData.imageUrl == mainImageUrl)
+
+                    let extendedImage = ExtendedImage(filePath: imageData.imageUrl, image: image, isMain: isMain)
+
+                    DispatchQueue.main.async {
+                        self.images.append(extendedImage)
+                        Logger.log(message: "이미지 로드 완료: \(imageData.imageUrl), isMain: \(isMain)", category: .debug)
+                    }
+                }.resume()
+            } else {
+                Logger.log(message: "이미지 URL 생성 실패: \(imageData.imageUrl)", category: .error)
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+
+            if !self.images.isEmpty && !self.images.contains(where: { $0.isMain }) {
+                self.images[0].isMain = true
+                Logger.log(message: "대표 이미지가 없어 첫 번째 이미지를 대표로 설정", category: .debug)
+            }
+
+            Logger.log(message: "모든 이미지 로드 완료: 총 \(self.images.count)개", category: .debug)
+            self.imagesCollectionView.reloadData()
+            self.updateSaveButtonState()
         }
     }
+
+
+
     func loadStoreDetail(for storeId: Int64) {
         Logger.log(message: "상세 정보 요청 시작 - Store ID: \(storeId)", category: .debug)
 
@@ -281,7 +391,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     }
 
     private func setupKeyboardHandling() {
-        // 키보드 Notification 등록
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow),
@@ -449,10 +558,40 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             make.height.equalTo(44)
         }
     }
+    private func getCurrentFormattedTime() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간대 명시적 설정
+        return formatter.string(from: Date())
+    }
+    private func setupCreationTimeLabel() -> UILabel {
+        let currentTime = getCurrentFormattedTime()
+        return makeSimpleLabel(currentTime)
+    }
+
+    private func setupAllFieldListeners() {
+        // 이름 필드
+        nameField?.addTarget(self, action: #selector(anyFieldDidChange(_:)), for: .editingChanged)
+
+        // 주소, 위도, 경도 필드
+        addressField?.addTarget(self, action: #selector(anyFieldDidChange(_:)), for: .editingChanged)
+        latField?.addTarget(self, action: #selector(anyFieldDidChange(_:)), for: .editingChanged)
+        lonField?.addTarget(self, action: #selector(anyFieldDidChange(_:)), for: .editingChanged)
+
+        // 설명 필드 (UITextView는 다르게 처리해야 함)
+        descTV?.delegate = self
+
+        // 로그 추가
+        Logger.log(message: "모든 필드에 변경 리스너가 설정되었습니다", category: .debug)
+    }
+    @objc private func anyFieldDidChange(_ textField: UITextField) {
+        Logger.log(message: "\(textField.accessibilityIdentifier ?? "알 수 없는 필드") 값 변경: \(textField.text ?? "nil")", category: .debug)
+        updateSaveButtonState()
+    }
     // MARK: - Setup Rows
     private func setupRows() {
         addRowTextField(leftTitle: "이름", placeholder: "팝업스토어 이름을 입력해 주세요.")
-        addRowTextField(leftTitle: "이미지", placeholder: "팝업스토어 대표 이미지를 업로드 해주세요.")
+//        addRowTextField(leftTitle: "이미지", placeholder: "팝업스토어 대표 이미지를 업로드 해주세요.")
 
         categoryButton.addTarget(self, action: #selector(didTapCategoryButton), for: .touchUpInside)
         addRowCustom(leftTitle: "카테고리", rightView: categoryButton)
@@ -509,9 +648,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         // (마커) => 2줄
         // 1) (마커명 Label + TF)
         let markerLabel = makePlainLabel("마커명")
-        
+
         let markerField = makeRoundedTextField("")
-        
+
         let markerStackH = UIStackView(arrangedSubviews: [markerLabel, markerField])
         markerStackH.axis = .horizontal
         markerStackH.spacing = 8
@@ -548,7 +687,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         addRowCustom(leftTitle: "작성자", rightView: writerLbl)
 
         // (13) 작성시간
-        let timeLbl = makeSimpleLabel("2025.01.06 10:30")
+        let timeLbl = setupCreationTimeLabel()
         addRowCustom(leftTitle: "작성시간", rightView: timeLbl)
 
         // (14) 상태값
@@ -641,17 +780,22 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
     }
-    // 저장 버튼 활성화 여부 갱신
     private func updateSaveButtonState() {
-        let isFormValid = validateForm() // 폼 유효성 검사 결과
+        // 디버깅을 위한 로깅 추가
+        Logger.log(message: "updateSaveButtonState 호출됨", category: .debug)
+
+        let isFormValid = validateForm()
+
+        // 이전 상태와 새 상태가 다를 때만 로그 출력
+        if saveButton.isEnabled != isFormValid {
+            Logger.log(message: "저장 버튼 상태 변경: \(saveButton.isEnabled) -> \(isFormValid)", category: .debug)
+        }
+
         saveButton.isEnabled = isFormValid
         saveButton.backgroundColor = isFormValid ? .systemBlue : .lightGray
     }
 
-    /**
-     rowHeight: 기본(41)
-     totalHeight: 2줄 필요한 경우(90~100), 3줄 등 필요 시 더 크게
-     */
+
     private func addRowCustom(leftTitle: String,
                               rightView: UIView,
                               rowHeight: CGFloat? = 36,
@@ -845,6 +989,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
     private func updateCategoryButtonTitle(with category: String) {
         categoryButton.setTitle("\(category) ▾", for: .normal)
+            updateSaveButtonState()
     }
 
     // MARK: - UI Helpers
@@ -965,10 +1110,46 @@ private extension PopUpStoreRegisterViewController {
 
     /// 특정 index 이미지 삭제
     func deleteImage(index: Int) {
+        // 삭제될 이미지가 대표 이미지였는지 확인
+        let wasMainImage = images[index].isMain
+
+        // 삭제된 이미지의 URL 가져오기
+        let imageUrl = images[index].filePath
+
+        // 기존에 존재하던 이미지인 경우 (ID가 있는 경우)
+        if let imageId = originalImageIds[imageUrl] {
+            // 이미 삭제 목록에 있는지 확인 (중복 방지)
+            if !deletedImageIds.contains(imageId) {
+                deletedImageIds.append(imageId)
+                deletedImagePaths.append(imageUrl)
+                Logger.log(message: "기존 이미지 삭제 목록에 추가: ID \(imageId), URL: \(imageUrl)", category: .debug)
+
+                // 삭제된 이미지 정보 영구 저장 (앱 재시작 간에도 유지)
+                if let store = editingStore {
+                    UserDefaults.standard.set(deletedImageIds, forKey: "deletedImageIds_\(store.id)")
+                    UserDefaults.standard.set(deletedImagePaths, forKey: "deletedImagePaths_\(store.id)")
+                    Logger.log(message: "삭제된 이미지 정보 저장 완료", category: .debug)
+                }
+            }
+        }
+
+        // S3 삭제 로직 제거 - 서버 업데이트 후로 이동
+
+        // 이미지 배열에서 제거
         images.remove(at: index)
+
+        // 대표 이미지가 삭제되었고, 다른 이미지가 남아있다면 첫 번째 이미지를 대표 이미지로 설정
+        if wasMainImage && !images.isEmpty {
+            images[0].isMain = true
+        }
+
         imagesCollectionView.reloadData()
         updateSaveButtonState()
     }
+
+
+
+
 }
 extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
@@ -983,6 +1164,10 @@ extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
         let itemProviders = results.map(\.itemProvider)
         let dispatchGroup = DispatchGroup()
 
+        // 이미 로드된 이미지 경로 목록 (중복 방지)
+        let existingPaths = Set(self.images.map { $0.filePath })
+        Logger.log(message: "기존 이미지 경로 수: \(existingPaths.count)", category: .debug)
+
         for (i, provider) in itemProviders.enumerated() {
             if provider.canLoadObject(ofClass: UIImage.self) {
                 dispatchGroup.enter()
@@ -992,6 +1177,13 @@ extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
                           let image = object as? UIImage else { return }
 
                     let filePath = "PopUpImage/\(name)/\(uuid)/\(i).jpg"
+
+                    // 이미 같은 경로가 있는지 확인 (거의 발생하지 않겠지만 안전장치)
+                    if existingPaths.contains(filePath) {
+                        Logger.log(message: "중복된 이미지 경로 발견: \(filePath)", category: .debug)
+                        return
+                    }
+
                     let extended = ExtendedImage(
                         filePath: filePath,
                         image: image,
@@ -1003,16 +1195,25 @@ extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
         }
 
         dispatchGroup.notify(queue: .main) {
+            if newImages.isEmpty {
+                Logger.log(message: "추가할 새 이미지가 없음", category: .debug)
+                return
+            }
+
+            Logger.log(message: "새 이미지 \(newImages.count)개 추가", category: .debug)
             self.images.append(contentsOf: newImages)
+
             if !self.images.isEmpty && !self.images.contains(where: { $0.isMain }) {
                 self.images[0].isMain = true  // 첫 번째 이미지를 대표 이미지로
+                Logger.log(message: "대표 이미지 설정: \(self.images[0].filePath)", category: .debug)
             }
+
             self.imagesCollectionView.reloadData()
             self.updateSaveButtonState()
         }
     }
-
 }
+
 private extension PopUpStoreRegisterViewController {
     private func validateForm() -> Bool {
         // (1) 팝업스토어 이름
@@ -1138,14 +1339,87 @@ private extension PopUpStoreRegisterViewController {
         return true
     }
     private func updateStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        // 이미지가 수정되었다면 먼저 이미지 업로드
-        if !images.isEmpty {
-            uploadImagesForUpdate(store)
+        // 기존에 저장된 이미지는 재업로드하지 않고 그대로 사용
+        // 새로 추가된 이미지만 업로드
+
+        // 새로 추가된 이미지만 필터링
+        let newImages = images.filter { image in
+            return !originalImageIds.keys.contains(image.filePath)
+        }
+
+        if !newImages.isEmpty {
+            // 새 이미지만 업로드
+            uploadNewImagesForUpdate(store, newImages: newImages)
         } else {
-            // 이미지 수정이 없다면 바로 스토어 정보 업데이트
+            // 새 이미지가 없으면 바로 스토어 정보 업데이트
             updateStoreInfo(store, updatedImagePaths: nil)
         }
     }
+    private func uploadNewImagesForUpdate(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore, newImages: [ExtendedImage]) {
+        let uuid = UUID().uuidString
+        let updatedImages = newImages.enumerated().map { index, image in
+            let filePath = "PopUpImage/\(nameField?.text ?? "")/\(uuid)/\(index).jpg"
+            return ExtendedImage(
+                filePath: filePath,
+                image: image.image,
+                isMain: image.isMain)
+        }
+
+        presignedService.tryUpload(datas: updatedImages.map {
+            PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
+        })
+        .subscribe(
+            onSuccess: { [weak self] _ in
+                guard let self = self else { return }
+                Logger.log(message: "새 이미지 업로드 성공", category: .info)
+
+                // 모든 이미지 경로 (기존 이미지 + 새 이미지)
+                var allPaths: [String] = []
+
+                // 삭제되지 않은 기존 이미지 경로 추가
+                let deletedIdSet = Set(self.deletedImageIds)
+                for (path, id) in self.originalImageIds {
+                    if !deletedIdSet.contains(id) {
+                        allPaths.append(path)
+                    }
+                }
+
+                // 새로 업로드된 이미지 경로 추가
+                let newPaths = updatedImages.map { $0.filePath }
+                allPaths.append(contentsOf: newPaths)
+
+                // 메인 이미지 경로 결정
+                let mainImage: String
+                if let mainImg = self.images.first(where: { $0.isMain }) {
+                    if self.originalImageIds.keys.contains(mainImg.filePath) {
+                        // 기존 이미지가 메인
+                        mainImage = mainImg.filePath
+                    } else {
+                        // 새 이미지가 메인인 경우, 새 경로 찾기
+                        let idx = self.images.firstIndex(where: { $0.filePath == mainImg.filePath }) ?? 0
+                        if idx < updatedImages.count {
+                            mainImage = updatedImages[idx].filePath
+                        } else {
+                            mainImage = updatedImages.first?.filePath ?? ""
+                        }
+                    }
+                } else if !allPaths.isEmpty {
+                    mainImage = allPaths[0]
+                } else {
+                    mainImage = ""
+                }
+
+                self.updateStoreInfo(store, updatedImagePaths: allPaths, mainImage: mainImage)
+            },
+            onError: { [weak self] error in
+                Logger.log(message: "이미지 업로드 실패: \(error.localizedDescription)", category: .error)
+                self?.showErrorAlert(message: "이미지 업로드 실패: \(error.localizedDescription)")
+            }
+        )
+        .disposed(by: disposeBag)
+    }
+
+
     private func uploadImagesForUpdate(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
         let uuid = UUID().uuidString
         let updatedImages = images.enumerated().map { index, image in
@@ -1174,7 +1448,7 @@ private extension PopUpStoreRegisterViewController {
         .disposed(by: disposeBag)
     }
 
-    private func updateStoreInfo(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore, updatedImagePaths: [String]?) {
+    private func updateStoreInfo(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore, updatedImagePaths: [String]?, mainImage: String? = nil) {
         guard let name = nameField?.text,
               let address = addressField?.text,
               let latitude = Double(latField?.text ?? ""),
@@ -1184,9 +1458,27 @@ private extension PopUpStoreRegisterViewController {
             return
         }
 
-        // 업데이트할 이미지가 있다면 첫 번째 값을 대표 이미지로, 없으면 기존 스토어의 mainImageUrl 사용
-        let mainImage = updatedImagePaths?.first ?? store.mainImageUrl
+        // 메인 이미지 결정
+        let finalMainImage: String
+        if let mainImagePath = mainImage {
+            finalMainImage = mainImagePath
+        } else if let firstImage = updatedImagePaths?.first {
+            finalMainImage = firstImage
+        } else {
+            // 이미지가 없는 경우 기존 메인 이미지 사용
+            finalMainImage = store.mainImageUrl
+        }
 
+        // 이미지 URL 목록 결정
+        let imageUrls: [String]
+        if let paths = updatedImagePaths, !paths.isEmpty {
+            imageUrls = paths
+        } else {
+            // 이미지 변동이 없을 경우
+            imageUrls = [store.mainImageUrl]
+        }
+
+        // 서버에 스토어 정보 업데이트 요청
         let request = UpdatePopUpStoreRequestDTO(
             popUpStore: .init(
                 id: store.id,
@@ -1196,9 +1488,9 @@ private extension PopUpStoreRegisterViewController {
                 address: address,
                 startDate: getFormattedDate(from: selectedStartDate),
                 endDate: getFormattedDate(from: selectedEndDate),
-                mainImageUrl: mainImage,
-                bannerYn: !mainImage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                imageUrl: updatedImagePaths ?? [store.mainImageUrl],
+                mainImageUrl: finalMainImage,
+                bannerYn: !finalMainImage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                imageUrl: imageUrls,
                 startDateBeforeEndDate: true
             ),
             location: .init(
@@ -1207,21 +1499,55 @@ private extension PopUpStoreRegisterViewController {
                 markerTitle: "마커 제목",
                 markerSnippet: "마커 설명"
             ),
-            imagesToAdd: updatedImagePaths ?? [],
-            imagesToDelete: []  // 필요한 경우 기존 이미지 삭제 로직 추가
-            )
+            imagesToAdd: updatedImagePaths?.filter { !originalImageIds.keys.contains($0) } ?? [],
+            imagesToDelete: deletedImageIds
+        )
 
-
+        // 요청 데이터 로깅
+        Logger.log(message: "업데이트 요청 데이터: \(request)", category: .debug)
 
         adminUseCase.updateStore(request: request)
             .subscribe(
                 onNext: { [weak self] _ in
+                    guard let self = self else { return }
                     Logger.log(message: "updateStore API 호출 성공", category: .info)
-                    self?.showSuccessAlert(isUpdate: true)
+
+                    // 서버 응답이 성공하면 S3에서 이미지 삭제 수행
+                    self.deleteImagesFromS3()
+
+                    // 성공 시 저장된 삭제 이미지 정보 초기화
+                    if let storeId = self.editingStore?.id {
+                        UserDefaults.standard.removeObject(forKey: "deletedImageIds_\(storeId)")
+                        UserDefaults.standard.removeObject(forKey: "deletedImagePaths_\(storeId)")
+                        Logger.log(message: "삭제된 이미지 정보 영구 저장소에서 제거 완료", category: .debug)
+                    }
+
+                    // 메모리 내 삭제 목록도 초기화
+                    self.deletedImageIds.removeAll()
+                    self.deletedImagePaths.removeAll()
+
+                    self.showSuccessAlert(isUpdate: true)
                 },
                 onError: { [weak self] error in
                     Logger.log(message: "updateStore API 호출 실패: \(error.localizedDescription)", category: .error)
                     self?.showErrorAlert(message: error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
+
+    }
+    private func deleteImagesFromS3() {
+        // 삭제해야 할 이미지가 없으면 바로 리턴
+        guard !deletedImagePaths.isEmpty else { return }
+
+        // 모든 이미지 한 번에 삭제
+        presignedService.tryDelete(targetPaths: .init(objectKeyList: deletedImagePaths))
+            .subscribe(
+                onCompleted: {
+                    Logger.log(message: "S3에서 모든 이미지 삭제 성공: \(self.deletedImagePaths.count)개", category: .info)
+                },
+                onError: { error in
+                    Logger.log(message: "S3에서 이미지 삭제 실패: \(error.localizedDescription)", category: .error)
                 }
             )
             .disposed(by: disposeBag)
@@ -1450,6 +1776,7 @@ private extension PopUpStoreRegisterViewController {
 
 
 
+
     private func showSuccessAlert() {
         let alert = UIAlertController(
             title: "등록 성공",
@@ -1499,7 +1826,7 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
                 return Observable.create { observer in
                     let geocoder = CLGeocoder()
                     let fullAddress = "\(address), Korea"
-                    
+
                     geocoder.geocodeAddressString(
                         fullAddress,
                         in: nil,
@@ -1511,7 +1838,7 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
                             observer.onCompleted()
                             return
                         }
-                        
+
                         if let location = placemarks?.first?.location {
                             observer.onNext(location)
                         } else {
@@ -1519,7 +1846,7 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
                         }
                         observer.onCompleted()
                     }
-                    
+
                     return Disposables.create()
                 }
             }
@@ -1532,23 +1859,23 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
             })
             .disposed(by: disposeBag)
     }
-    
-    
+
+
     @objc private func addressFieldDidChange(_ textField: UITextField) {
         guard let address = textField.text, !address.isEmpty else { return }
-        
+
         // 한국 주소임을 명시
         let geocoder = CLGeocoder()
         let addressWithCountry = address + ", South Korea"
-        
+
         geocoder.geocodeAddressString(addressWithCountry) { [weak self] placemarks, error in
             if let error = error {
                 print("Geocoding error: \(error.localizedDescription)")
                 return
             }
-            
+
             guard let location = placemarks?.first?.location else { return }
-            
+
             DispatchQueue.main.async {
                 self?.latField?.text = String(format: "%.6f", location.coordinate.latitude)
                 self?.lonField?.text = String(format: "%.6f", location.coordinate.longitude)
@@ -1556,5 +1883,11 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
             }
         }
     }
-    
+
+}
+extension PopUpStoreRegisterViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        Logger.log(message: "설명 필드 값 변경: \(textView.text.count) 글자", category: .debug)
+        updateSaveButtonState()
+    }
 }

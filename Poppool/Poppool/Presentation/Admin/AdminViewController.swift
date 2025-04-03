@@ -182,21 +182,46 @@ final class AdminViewController: BaseViewController, View {
     }
 
     private func deleteStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        let imageService = PreSignedService()
-
-        imageService.tryDelete(targetPaths: .init(objectKeyList: [store.mainImageUrl]))
-            .andThen(adminUseCase.deleteStore(id: store.id))
+        // 먼저 스토어 상세 정보를 가져와 모든 이미지 URL을 확인
+        adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
-                onNext: { [weak self] _ in
-                    self?.reactor?.action.onNext(.reloadData)
-                    ToastMaker.createToast(message: "삭제되었습니다")
+                onNext: { [weak self] storeDetail in
+                    guard let self = self else { return }
+
+                    var allImageUrls = [String]()
+
+                    allImageUrls.append(storeDetail.mainImageUrl)
+
+                    // 다른 모든 이미지 URL 추가
+                    let otherImageUrls = storeDetail.imageList.map { $0.imageUrl }
+                    allImageUrls.append(contentsOf: otherImageUrls)
+
+                    allImageUrls = Array(Set(allImageUrls))
+
+                    Logger.log(message: "삭제할 이미지: \(allImageUrls.count)개", category: .debug)
+
+                    let imageService = PreSignedService()
+                    imageService.tryDelete(targetPaths: .init(objectKeyList: allImageUrls))
+                        .andThen(self.adminUseCase.deleteStore(id: store.id))
+                        .observe(on: MainScheduler.instance)
+                        .subscribe(
+                            onNext: { [weak self] _ in
+                                self?.reactor?.action.onNext(.reloadData)
+                                ToastMaker.createToast(message: "삭제되었습니다")
+                            },
+                            onError: { [weak self] error in
+                                self?.showErrorAlert(message: "삭제 실패: \(error.localizedDescription)")
+                            }
+                        )
+                        .disposed(by: self.disposeBag)
                 },
                 onError: { [weak self] error in
-                    self?.showErrorAlert(message: "삭제 실패: \(error.localizedDescription)")
+                    self?.showErrorAlert(message: "스토어 정보 조회 실패: \(error.localizedDescription)")
                 }
             )
             .disposed(by: disposeBag)
+
     }
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(

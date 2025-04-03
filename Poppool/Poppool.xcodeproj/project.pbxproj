@@ -236,7 +236,6 @@
 		086F8A182D265C5F00CA4FC9 /* MyPageListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A172D265C5F00CA4FC9 /* MyPageListSection.swift */; };
 		086F8A1A2D265C6300CA4FC9 /* MyPageListSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F8A192D265C6300CA4FC9 /* MyPageListSectionCell.swift */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
-		088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2462D12DB5C0030FA9E /* GoogleMaps */; };
 		088DE24A2D12F3360030FA9E /* DetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE2492D12F3360030FA9E /* DetailInfoSection.swift */; };
 		088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24B2D12F33B0030FA9E /* DetailInfoSectionCell.swift */; };
 		088DE24F2D13019A0030FA9E /* DetailCommentTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088DE24E2D13019A0030FA9E /* DetailCommentTitleSection.swift */; };
@@ -371,7 +370,10 @@
 		08DE8A1D2D5261E70049BCAC /* MyPageTermsReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A1C2D5261E70049BCAC /* MyPageTermsReactor.swift */; };
 		08DE8A3F2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A3E2D54DCC40049BCAC /* MyCommentedPopUpGridSection.swift */; };
 		08DE8A412D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DE8A402D54DCCA0049BCAC /* MyCommentedPopUpGridSectionCell.swift */; };
-		08F403332D884F4D00BFA61A /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 08F403322D884F4D00BFA61A /* KakaoSDKUser */; };
+		4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1514292D99480200DFD08F /* NMapsMap */; };
+		4E15142C2D994A3A00DFD08F /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 4E15142B2D994A3A00DFD08F /* KakaoSDK */; };
+		4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */; };
+		4E1514302D994A3A00DFD08F /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 4E15142F2D994A3A00DFD08F /* KakaoSDKCommon */; };
 		4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E5825662D1951DF00EE83EF /* FloatingPanel */; };
 		4E643FC12D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */; };
 		4E643FC32D738D930046AF29 /* PopUpStoreRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */; };
@@ -427,11 +429,12 @@
 		4EA2C9432D424DF900F4D97C /* FindDirectionEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */; };
 		4EA9989A2D21C2FC009DC30B /* StoreListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA998992D21C2FC009DC30B /* StoreListSection.swift */; };
 		4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA9989C2D21C404009DC30B /* RxDataSources */; };
-		4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */; };
+		4EAB809D2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */; };
 		4EAB809F2D3F8EF50041AF30 /* ViewportBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */; };
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
 		4EDE57012D5E6A5F0014D924 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685ECC2D12CEB6001EF91C /* MapViewController.swift */; };
 		4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */; };
+		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
 		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
@@ -914,7 +917,7 @@
 		4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPopUpDirectionResponseDTO.swift; sourceTree = "<group>"; };
 		4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindDirectionEndPoint.swift; sourceTree = "<group>"; };
 		4EA998992D21C2FC009DC30B /* StoreListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListSection.swift; sourceTree = "<group>"; };
-		4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMSMapViewDelegateProxy.swift; sourceTree = "<group>"; };
+		4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMFMapViewDelegateProxy.swift; sourceTree = "<group>"; };
 		4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewportBounds.swift; sourceTree = "<group>"; };
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
 		4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionBottomSheet.swift; sourceTree = "<group>"; };
@@ -973,17 +976,20 @@
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
+				4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
-				088DE2472D12DB5C0030FA9E /* GoogleMaps in Frameworks */,
-				08F403332D884F4D00BFA61A /* KakaoSDKUser in Frameworks */,
+				4E1514302D994A3A00DFD08F /* KakaoSDKCommon in Frameworks */,
 				BDCA42102CF35FF5005EECF6 /* Lottie in Frameworks */,
 				BDCA41FE2CF35EE7005EECF6 /* ReactorKit in Frameworks */,
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
 				BDCA420A2CF35FB1005EECF6 /* Pageboy in Frameworks */,
 				4E5825672D1951DF00EE83EF /* FloatingPanel in Frameworks */,
 				4EA9989D2D21C404009DC30B /* RxDataSources in Frameworks */,
+				4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */,
 				BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */,
+				4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */,
 				088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */,
+				4E15142C2D994A3A00DFD08F /* KakaoSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2880,7 +2886,7 @@
 		4EED9BAA2D2272F500B288E7 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				4EAB809C2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift */,
+				4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */,
 				4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */,
 				4EED9BAB2D22730400B288E7 /* FilterType.swift */,
 				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
@@ -3082,11 +3088,13 @@
 				BDCA420F2CF35FF5005EECF6 /* Lottie */,
 				083A25CF2CF364B70099B58E /* Alamofire */,
 				088DE2432D104EE70030FA9E /* SwiftSoup */,
-				088DE2462D12DB5C0030FA9E /* GoogleMaps */,
 				4E5825662D1951DF00EE83EF /* FloatingPanel */,
 				4EA9989C2D21C404009DC30B /* RxDataSources */,
 				082197A02D426DCB0054094A /* Then */,
-				08F403322D884F4D00BFA61A /* KakaoSDKUser */,
+				4E1514292D99480200DFD08F /* NMapsMap */,
+				4E15142B2D994A3A00DFD08F /* KakaoSDK */,
+				4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */,
+				4E15142F2D994A3A00DFD08F /* KakaoSDKCommon */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -3173,11 +3181,11 @@
 				BDCA420E2CF35FF5005EECF6 /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				083A25CE2CF364B70099B58E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */,
-				088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */,
 				08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				4E1514282D99480200DFD08F /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
 			projectDirPath = "";
@@ -3647,7 +3655,7 @@
 				086F89CA2D1E42A700CA4FC9 /* CommentUserBlockView.swift in Sources */,
 				086DD8D02CFDFEB900B97D3B /* HomeListReactor.swift in Sources */,
 				081899202D34DF880067BF01 /* MyPageNoticeDetailController.swift in Sources */,
-				4EAB809D2D3F78AA0041AF30 /* GMSMapViewDelegateProxy.swift in Sources */,
+				4EAB809D2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift in Sources */,
 				083C86472D0DCDFB003F441C /* AddCommentTitleSection.swift in Sources */,
 				0841BAB62CFABEDC00049E31 /* HomePopularCardSectionCell.swift in Sources */,
 				082197A92D4E3EE90054094A /* CommentMyMenuController.swift in Sources */,
@@ -4063,20 +4071,20 @@
 				minimumVersion = 2.7.6;
 			};
 		};
-		088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.2.0;
-			};
-		};
 		08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.24.0;
+			};
+		};
+		4E1514282D99480200DFD08F /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
 			};
 		};
 		4E5825652D1951DF00EE83EF /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
@@ -4093,6 +4101,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.2;
+			};
+		};
+		4EE360FB2D91876300D2441D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
 			};
 		};
 		BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -4193,15 +4209,22 @@
 			package = 088DE2422D104EE70030FA9E /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
 		};
-		088DE2462D12DB5C0030FA9E /* GoogleMaps */ = {
+		4E1514292D99480200DFD08F /* NMapsMap */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 088DE2452D12DB5C0030FA9E /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
-			productName = GoogleMaps;
+			package = 4E1514282D99480200DFD08F /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
 		};
-		08F403322D884F4D00BFA61A /* KakaoSDKUser */ = {
+		4E15142B2D994A3A00DFD08F /* KakaoSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 08F403312D884F4D00BFA61A /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
-			productName = KakaoSDKUser;
+			productName = KakaoSDK;
+		};
+		4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KakaoSDKAuth;
+		};
+		4E15142F2D994A3A00DFD08F /* KakaoSDKCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KakaoSDKCommon;
 		};
 		4E5825662D1951DF00EE83EF /* FloatingPanel */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -4212,6 +4235,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4EA9989B2D21C404009DC30B /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		4EE360FC2D91876300D2441D /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE360FB2D91876300D2441D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
 		};
 		BDCA41F12CF35D0D005EECF6 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
