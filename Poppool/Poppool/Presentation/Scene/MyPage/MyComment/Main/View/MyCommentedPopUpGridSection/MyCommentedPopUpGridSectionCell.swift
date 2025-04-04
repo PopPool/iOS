@@ -99,9 +99,9 @@ extension MyCommentedPopUpGridSectionCell: Inputable {
 
     func injection(with input: Input) {
         contentImageView.setPPImage(path: input.imageURL)
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 11))
-        contentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .medium, size: 11))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 11))
+        contentLabel.setLineHeightText(text: input.content, font: .korFont(style: .medium, size: 11))
         contentLabel.numberOfLines = 2
-        dateLabel.setLineHeightText(text: "\(input.startDate ?? "") ~ \(input.endDate ?? "")", font: .EngFont(style: .regular, size: 11))
+        dateLabel.setLineHeightText(text: "\(input.startDate ?? "") ~ \(input.endDate ?? "")", font: .engFont(style: .regular, size: 11))
     }
 }

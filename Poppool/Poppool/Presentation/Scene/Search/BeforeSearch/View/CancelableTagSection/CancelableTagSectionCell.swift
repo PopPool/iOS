@@ -86,12 +86,12 @@ extension CancelableTagSectionCell: Inputable {
         cancelButton.setImage(xmarkImage, for: .normal)
         if input.isSelected {
             contentView.backgroundColor = .blu500
-            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .w100
             contentView.layer.borderColor = UIColor.blu500.cgColor
         } else {
             contentView.backgroundColor = .clear
-            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .g400
             contentView.layer.borderColor = UIColor.g200.cgColor
         }

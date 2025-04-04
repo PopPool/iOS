@@ -14,14 +14,14 @@ final class WithdrawlReasonView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "회원 탈퇴", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "회원 탈퇴", font: .korFont(style: .regular, size: 15))
         return view
     }()
 
     private let titleLabel: UILabel = {
         let text = "탈퇴하려는 이유가\n무엇인가요?"
         let label = UILabel()
-        label.setLineHeightText(text: text, font: .KorFont(style: .bold, size: 20), lineHeight: 1.312)
+        label.setLineHeightText(text: text, font: .korFont(style: .bold, size: 20), lineHeight: 1.312)
         label.numberOfLines = 2
         return label
     }()
@@ -31,7 +31,7 @@ final class WithdrawlReasonView: UIView {
         let label = PPLabel(style: .regular, fontSize: 15, text: text)
         label.textColor = .g600
         label.numberOfLines = 2
-        label.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 15), lineHeight: 1.4)
+        label.setLineHeightText(text: text, font: .korFont(style: .regular, size: 15), lineHeight: 1.4)
         return label
     }()
 

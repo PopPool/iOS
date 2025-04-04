@@ -73,7 +73,7 @@ class PPButton: UIButton {
         style: ButtonStyle,
         text: String,
         disabledText: String = "",
-        font: UIFont? = .KorFont(style: .medium, size: 16),
+        font: UIFont? = .korFont(style: .medium, size: 16),
         cornerRadius: CGFloat = 4
     ) {
         super.init(frame: .zero)

@@ -69,13 +69,13 @@ extension SignUpCompleteController {
                 let attributedText = NSMutableAttributedString(
                     string: categoryString,
                     attributes: [
-                        .font: UIFont.KorFont(style: .bold, size: 15)!,
+                        .font: UIFont.korFont(style: .bold, size: 15)!,
                         .foregroundColor: UIColor.g600,
                         NSAttributedString.Key.paragraphStyle: paragraphStyle
                     ]
                 )
                 attributedText.append(NSAttributedString(string: "와 연관된 팝업스토어 정보를 안내해드릴게요.", attributes: [
-                    .font: UIFont.KorFont(style: .regular, size: 15)!,
+                    .font: UIFont.korFont(style: .regular, size: 15)!,
                     .foregroundColor: UIColor.g600,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]))

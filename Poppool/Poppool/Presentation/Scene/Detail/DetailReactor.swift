@@ -1,10 +1,3 @@
-//
-//  DetailReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/9/24.
-//
-
 import UIKit
 
 import LinkPresentation
@@ -26,7 +19,7 @@ final class DetailReactor: Reactor {
         case commentMenuButtonTapped(controller: BaseViewController, indexPath: IndexPath)
         case commentDetailButtonTapped(controller: BaseViewController, indexPath: IndexPath)
         case commentLikeButtonTapped(indexPath: IndexPath)
-        case commentImageTapped(controller: BaseViewController, cellRow: Int, ImageRow: Int)
+        case commentImageTapped(controller: BaseViewController, cellRow: Int, imageRow: Int)
         case similarSectionTapped(controller: BaseViewController, indexPath: IndexPath)
         case backButtonTapped(controller: BaseViewController)
         case loginButtonTapped(controller: BaseViewController)
@@ -44,7 +37,7 @@ final class DetailReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case moveToRecentScene(controller: BaseViewController)
         case moveToLoginScene(controller: BaseViewController)
-        case moveToImageDetailScene(controller: BaseViewController, cellRow: Int, ImageRow: Int)
+        case moveToImageDetailScene(controller: BaseViewController, cellRow: Int, imageRow: Int)
     }
 
     private var commentButtonIsEnable: Bool = false
@@ -135,8 +128,8 @@ final class DetailReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         case .loginButtonTapped(let controller):
             return Observable.just(.moveToLoginScene(controller: controller))
-        case .commentImageTapped(let controller, let cellRow, let ImageRow):
-            return Observable.just(.moveToImageDetailScene(controller: controller, cellRow: cellRow, ImageRow: ImageRow))
+        case .commentImageTapped(let controller, let cellRow, let imageRow):
+            return Observable.just(.moveToImageDetailScene(controller: controller, cellRow: cellRow, imageRow: imageRow))
         }
     }
 
@@ -212,8 +205,8 @@ final class DetailReactor: Reactor {
             let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
-        case .moveToImageDetailScene(let controller, let cellRow, let ImageRow):
-            let imagePath = commentSection.inputDataList[cellRow].imageList[ImageRow]
+        case .moveToImageDetailScene(let controller, let cellRow, let imageRow):
+            let imagePath = commentSection.inputDataList[cellRow].imageList[imageRow]
             let nextController = ImageDetailController()
             nextController.reactor = ImageDetailReactor(imagePath: imagePath)
             nextController.modalPresentationStyle = .overCurrentContext
@@ -221,7 +214,10 @@ final class DetailReactor: Reactor {
         }
         return newState
     }
+}
 
+// MARK: Section function
+extension DetailReactor {
     func getSection() -> [any Sectionable] {
         if similarSection.inputDataList.isEmpty {
             if commentSection.inputDataList.isEmpty {
@@ -304,7 +300,6 @@ final class DetailReactor: Reactor {
                 ]
             }
         }
-
     }
 
     func setContent() -> Observable<Mutation> {

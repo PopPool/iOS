@@ -22,7 +22,7 @@ final class DetailSimilarSectionCell: UICollectionViewCell {
 
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 11)
-        label.font = .EngFont(style: .regular, size: 11)
+        label.font = .engFont(style: .regular, size: 11)
         label.textColor = .g400
         return label
     }()
@@ -142,8 +142,8 @@ extension DetailSimilarSectionCell: Inputable {
     func injection(with input: Input) {
         let date = input.date ?? ""
         imageView.setPPImage(path: input.imagePath)
-        dateLabel.setLineHeightText(text: "~" + date, font: .EngFont(style: .regular, size: 11))
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 12))
+        dateLabel.setLineHeightText(text: "~" + date, font: .engFont(style: .regular, size: 11))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 12))
         if let isBookMark = input.isBookMark {
             bookMarkButton.isHidden = false
             if isBookMark {

@@ -89,7 +89,7 @@ extension ListCountButtonSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        countLabel.setLineHeightText(text: "총 \(input.count)개", font: .KorFont(style: .regular, size: 13))
-        buttonTitleLabel.setLineHeightText(text: input.buttonTitle, font: .KorFont(style: .regular, size: 13))
+        countLabel.setLineHeightText(text: "총 \(input.count)개", font: .korFont(style: .regular, size: 13))
+        buttonTitleLabel.setLineHeightText(text: input.buttonTitle, font: .korFont(style: .regular, size: 13))
     }
 }

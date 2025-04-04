@@ -50,6 +50,6 @@ extension AddCommentDescriptionSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        descriptionLabel.setLineHeightText(text: input.description, font: .KorFont(style: .regular, size: 13))
+        descriptionLabel.setLineHeightText(text: input.description, font: .korFont(style: .regular, size: 13))
     }
 }

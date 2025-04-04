@@ -75,7 +75,7 @@ final class MyPageProfileSectionCell: UICollectionViewCell {
         let button = UIButton()
         button.setTitle("로그인/회원가입", for: .normal)
         button.backgroundColor = .w10
-        button.titleLabel?.font = .KorFont(style: .medium, size: 13)
+        button.titleLabel?.font = .korFont(style: .medium, size: 13)
         button.setTitleColor(.w100, for: .normal)
         button.layer.cornerRadius = 4
         return button
@@ -223,8 +223,8 @@ extension MyPageProfileSectionCell: Inputable {
             loginLabel.isHidden = true
             loginButton.isHidden = true
             blurView.isHidden = false
-            nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 16))
-            descriptionLabel.setLineHeightText(text: input.description ?? "", font: .KorFont(style: .light, size: 11))
+            nickNameLabel.setLineHeightText(text: input.nickName, font: .korFont(style: .bold, size: 16))
+            descriptionLabel.setLineHeightText(text: input.description ?? "", font: .korFont(style: .light, size: 11))
             backGroundImageView.image = nil
             backGroundImageView.setPPImage(path: input.profileImagePath)
             profileImageView.setPPImage(path: input.profileImagePath) { [weak self] in

@@ -85,8 +85,8 @@ private extension PPSegmentedControl {
                 }
             }
             self.selectedSegmentTintColor = .blu500
-            setFont(color: .w100, font: .KorFont(style: .bold, size: 15), state: .selected)
-            setFont(color: .g400, font: .KorFont(style: .medium, size: 15), state: .normal)
+            setFont(color: .w100, font: .korFont(style: .bold, size: 15), state: .selected)
+            setFont(color: .g400, font: .korFont(style: .medium, size: 15), state: .normal)
         case .base:
             // background color 변경이 g50값으로 변경이 되지 않아 subview에 접근하여 layer를 Hidden처리 하고 새로운 뷰를 덮어씌워서 색상을 적용
             for (index, view) in self.subviews.enumerated() {
@@ -100,8 +100,8 @@ private extension PPSegmentedControl {
                 }
             }
             self.selectedSegmentTintColor = .blu500
-            setFont(color: .w100, font: .KorFont(style: .bold, size: 15), state: .selected)
-            setFont(color: .g400, font: .KorFont(style: .medium, size: 14), state: .normal)
+            setFont(color: .w100, font: .korFont(style: .bold, size: 15), state: .selected)
+            setFont(color: .g400, font: .korFont(style: .medium, size: 14), state: .normal)
         case .tab:
             self.clipsToBounds = false
             self.setBackgroundImage(emptyImage, for: .normal, barMetrics: .default)
@@ -118,8 +118,8 @@ private extension PPSegmentedControl {
                 make.height.equalTo(2)
                 make.bottom.equalTo(bottomLineView.snp.bottom)
             }
-            setFont(color: .blu500, font: .KorFont(style: .bold, size: 15), state: .selected)
-            setFont(color: .g400, font: .KorFont(style: .medium, size: 15), state: .normal)
+            setFont(color: .blu500, font: .korFont(style: .bold, size: 15), state: .selected)
+            setFont(color: .g400, font: .korFont(style: .medium, size: 15), state: .normal)
         }
     }
 

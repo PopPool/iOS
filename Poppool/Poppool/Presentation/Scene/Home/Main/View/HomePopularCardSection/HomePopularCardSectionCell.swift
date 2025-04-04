@@ -134,7 +134,7 @@ extension HomePopularCardSectionCell: Inputable {
 
     func injection(with input: Input) {
         let date = "#\(input.endDate.toDate().toPPDateMonthString())까지 열리는"
-        dateLabel.setLineHeightText(text: date, font: .KorFont(style: .regular, size: 16))
+        dateLabel.setLineHeightText(text: date, font: .korFont(style: .regular, size: 16))
         let category = "#\(input.category ?? "")"
         if let addressArray = input.address?.components(separatedBy: " ") {
             if addressArray.count > 2 {
@@ -144,7 +144,7 @@ extension HomePopularCardSectionCell: Inputable {
         }
 
         categoryLabel.text = category
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .regular, size: 16))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .regular, size: 16))
         backGroundImageView.setPPImage(path: input.imagePath)
     }
 }

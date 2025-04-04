@@ -14,7 +14,7 @@ final class MyPageBookmarkView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "찜한 팝업", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "찜한 팝업", font: .korFont(style: .regular, size: 15))
         return view
     }()
 
@@ -42,7 +42,7 @@ final class MyPageBookmarkView: UIView {
         let buttonTitle = NSAttributedString(
             string: "추천 팝업 보러가기",
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!,
+                .font: UIFont.korFont(style: .regular, size: 13)!,
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 .foregroundColor: UIColor.g1000
             ]

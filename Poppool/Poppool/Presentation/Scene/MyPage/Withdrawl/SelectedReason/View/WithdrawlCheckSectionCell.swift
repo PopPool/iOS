@@ -26,7 +26,7 @@ final class WithdrawlCheckSectionCell: UICollectionViewCell {
         let view = UITextView()
         view.textContainerInset = .zero
         view.contentInset = .zero
-        view.font = .KorFont(style: .medium, size: 14)
+        view.font = .korFont(style: .medium, size: 14)
         view.backgroundColor = .clear
         return view
     }()
@@ -157,7 +157,7 @@ extension WithdrawlCheckSectionCell: Inputable {
         let image = input.isSelected ? UIImage(named: "icon_check_fill") : UIImage(named: "icon_check")
         checkImageView.image = image
         let title = input.title ?? ""
-        titleLabel.setLineHeightText(text: title, font: .KorFont(style: .regular, size: 14))
+        titleLabel.setLineHeightText(text: title, font: .korFont(style: .regular, size: 14))
         bind()
         if input.isSelected {
             if title == "기타" {

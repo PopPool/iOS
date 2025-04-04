@@ -14,7 +14,7 @@ final class InstaCommentAddView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "코멘트 작성하기", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "코멘트 작성하기", font: .korFont(style: .regular, size: 15))
         return view
     }()
 
@@ -27,10 +27,10 @@ final class InstaCommentAddView: UIView {
         let title = "Instagram 열기"
         let attributedTitle = NSMutableAttributedString(string: title)
 
-        let englishFont = UIFont.EngFont(style: .medium, size: 15)!
+        let englishFont = UIFont.engFont(style: .medium, size: 15)!
         attributedTitle.addAttribute(.font, value: englishFont, range: (title as NSString).range(of: "Instagram"))
 
-        let koreanFont = UIFont.KorFont(style: .medium, size: 15)!
+        let koreanFont = UIFont.korFont(style: .medium, size: 15)!
         attributedTitle.addAttribute(.font, value: koreanFont, range: (title as NSString).range(of: "열기"))
 
         button.setAttributedTitle(attributedTitle, for: .normal)

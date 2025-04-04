@@ -23,7 +23,7 @@ final class PopUpCardSectionCell: UICollectionViewCell {
 
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 11)
-        label.font = .EngFont(style: .regular, size: 11)
+        label.font = .engFont(style: .regular, size: 11)
         label.textColor = .g1000
         return label
     }()
@@ -159,10 +159,10 @@ extension PopUpCardSectionCell: Inputable {
     func injection(with input: Input) {
         let date = input.date ?? ""
         imageView.setPPImage(path: input.imagePath)
-        dateLabel.setLineHeightText(text: date, font: .EngFont(style: .regular, size: 13))
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 16))
+        dateLabel.setLineHeightText(text: date, font: .engFont(style: .regular, size: 13))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 16))
         titleLabel.textAlignment = .center
-        addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .regular, size: 14))
+        addressLabel.setLineHeightText(text: input.address, font: .korFont(style: .regular, size: 14))
         addressLabel.textAlignment = .center
 
         if input.isBookMark {

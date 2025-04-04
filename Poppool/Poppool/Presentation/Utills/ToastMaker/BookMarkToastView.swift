@@ -23,14 +23,14 @@ final class BookMarkToastView: UIView {
 
     private let bookMarkLabel: UILabel = {
         let label = UILabel()
-        label.setLineHeightText(text: "찜한 팝업에 저장했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
+        label.setLineHeightText(text: "찜한 팝업에 저장했어요", font: .korFont(style: .regular, size: 15), lineHeight: 1)
         label.textColor = .w100
         return label
     }()
 
     private let unbookMarkLabel: UILabel = {
         let label = PPLabel(style: .regular, fontSize: 15, text: "찜한 팝업을 해제했어요")
-        label.setLineHeightText(text: "찜한 팝업을 해제했어요", font: .KorFont(style: .regular, size: 15), lineHeight: 1)
+        label.setLineHeightText(text: "찜한 팝업을 해제했어요", font: .korFont(style: .regular, size: 15), lineHeight: 1)
         label.textColor = .w100
         return label
     }()
@@ -42,7 +42,7 @@ final class BookMarkToastView: UIView {
         button.setTitleColor(.blu300, for: .normal)
         button.layer.cornerRadius = 4
         button.clipsToBounds = true
-        button.titleLabel?.font = .KorFont(style: .medium, size: 12)
+        button.titleLabel?.font = .korFont(style: .medium, size: 12)
         return button
     }()
 

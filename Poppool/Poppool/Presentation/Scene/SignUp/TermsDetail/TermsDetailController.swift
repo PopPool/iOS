@@ -24,7 +24,7 @@ final class TermsDetailController: BaseViewController {
         paragraphStyle.lineHeightMultiple = 1.2
 
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KorFont(style: .regular, size: 14),
+            .font: UIFont.korFont(style: .regular, size: 14),
             .paragraphStyle: paragraphStyle
         ]
 

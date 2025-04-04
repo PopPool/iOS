@@ -70,7 +70,16 @@ final class HomeReactor: Reactor {
     private var popularTitleSection = HomeTitleSection(inputDataList: [
         .init(blueText: "팝풀이", topSubText: "들은 지금 이런", bottomText: "팝업에 가장 관심있어요", backgroundColor: .g700, textColor: .w100)
     ])
-    private var popularSection = HomePopularCardSection(inputDataList: [], decorationItems: [SectionDecorationItem(elementKind: "BackgroundView", reusableView: SectionBackGroundDecorationView(), viewInput: .init(backgroundColor: .g700))])
+    private var popularSection = HomePopularCardSection(
+        inputDataList: [],
+        decorationItems: [
+            SectionDecorationItem(
+                elementKind: "BackgroundView",
+                reusableView: SectionBackGroundDecorationView(),
+                viewInput: .init(backgroundColor: .g700)
+            )
+        ]
+    )
     private var newTitleSection = HomeTitleSection(inputDataList: [.init(blueText: "제일 먼저", topSubText: "피드 올리는", bottomText: "신규 오픈 팝업")])
     private var newSection = HomeCardSection(inputDataList: [])
     private var spaceClear48Section = SpacingSection(inputDataList: [.init(spacing: 48)])

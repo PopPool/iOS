@@ -14,7 +14,7 @@ final class MyPageNoticeDetailView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "공지사항", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "공지사항", font: .korFont(style: .regular, size: 15))
         return view
     }()
 

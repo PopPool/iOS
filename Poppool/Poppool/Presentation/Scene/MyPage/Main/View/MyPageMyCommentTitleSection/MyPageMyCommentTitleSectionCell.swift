@@ -61,13 +61,13 @@ extension MyPageMyCommentTitleSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 16))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 16))
 
         if input.buttonTitle != nil {
             let buttonTitle = NSAttributedString(
                 string: input.buttonTitle ?? "",
                 attributes: [
-                    .font: UIFont.KorFont(style: .regular, size: 13)!,
+                    .font: UIFont.korFont(style: .regular, size: 13)!,
                     .underlineStyle: NSUnderlineStyle.single.rawValue,
                     .foregroundColor: UIColor.g600
                 ]

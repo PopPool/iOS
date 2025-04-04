@@ -26,7 +26,7 @@ final class ToastView: UIView {
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.textColor = .w100
-        label.font = .KorFont(style: .regular, size: 15)
+        label.font = .korFont(style: .regular, size: 15)
         return label
     }()
 

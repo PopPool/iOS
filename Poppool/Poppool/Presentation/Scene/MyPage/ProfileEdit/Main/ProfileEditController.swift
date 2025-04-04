@@ -162,10 +162,10 @@ extension ProfileEditController {
                     categoryTitle = ""
                 }
                 owner.mainView.categoryButton.subTitleLabel
-                    .setLineHeightText(text: categoryTitle, font: .KorFont(style: .regular, size: 13), lineHeight: 1)
+                    .setLineHeightText(text: categoryTitle, font: .korFont(style: .regular, size: 13), lineHeight: 1)
                 let userInfoTitle = "\(originProfileData.gender ?? "")・\(originProfileData.age)세"
                 owner.mainView.infoButton.subTitleLabel
-                    .setLineHeightText(text: userInfoTitle, font: .KorFont(style: .regular, size: 13), lineHeight: 1)
+                    .setLineHeightText(text: userInfoTitle, font: .korFont(style: .regular, size: 13), lineHeight: 1)
 
                 // NickName TextField 설정
                 owner.mainView.nickNameTextFieldTrailingView.layer.borderColor = state.nickNameState.borderColor?.cgColor

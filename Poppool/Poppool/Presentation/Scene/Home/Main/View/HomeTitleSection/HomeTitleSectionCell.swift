@@ -90,9 +90,9 @@ extension HomeTitleSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        blueLabel.setLineHeightText(text: input.blueText, font: .KorFont(style: .bold, size: 16))
-        subLabel.setLineHeightText(text: input.topSubText, font: .KorFont(style: .bold, size: 16))
-        bottomLabel.setLineHeightText(text: input.bottomText, font: .KorFont(style: .bold, size: 16))
+        blueLabel.setLineHeightText(text: input.blueText, font: .korFont(style: .bold, size: 16))
+        subLabel.setLineHeightText(text: input.topSubText, font: .korFont(style: .bold, size: 16))
+        bottomLabel.setLineHeightText(text: input.bottomText, font: .korFont(style: .bold, size: 16))
         contentView.backgroundColor = input.backgroundColor
         subLabel.textColor = input.textColor
         bottomLabel.textColor = input.textColor

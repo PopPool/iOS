@@ -46,7 +46,7 @@ final class LastLoginView: UIView {
 
     private let notificationLabel: UILabel = {
         let label = UILabel()
-        label.font = .KorFont(style: .medium, size: 13)
+        label.font = .korFont(style: .medium, size: 13)
         return label
     }()
 

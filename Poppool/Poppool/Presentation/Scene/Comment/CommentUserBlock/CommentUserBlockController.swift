@@ -59,7 +59,7 @@ extension CommentUserBlockController {
             .subscribe { (owner, state) in
                 owner.mainView.titleLabel.setLineHeightText(
                     text: "\(state.nickName ?? "")님을 차단할까요?",
-                    font: .KorFont(style: .bold, size: 18)
+                    font: .korFont(style: .bold, size: 18)
                 )
             }
             .disposed(by: disposeBag)

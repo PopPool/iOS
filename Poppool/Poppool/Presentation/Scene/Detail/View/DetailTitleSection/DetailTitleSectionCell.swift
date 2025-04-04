@@ -82,7 +82,7 @@ extension DetailTitleSectionCell: Inputable {
     func injection(with input: Input) {
         let bookMarkImage = input.isBookMark ? UIImage(named: "icon_bookmark_blue") : UIImage(named: "icon_bookmark_gray")
         bookMarkButton.setImage(bookMarkImage, for: .normal)
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 18))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 18))
         bookMarkButton.isHidden = !input.isLogin
     }
 }

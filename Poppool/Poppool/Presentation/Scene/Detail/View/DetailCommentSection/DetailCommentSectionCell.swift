@@ -112,7 +112,7 @@ final class DetailCommentSectionCell: UICollectionViewCell {
     let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("로그인하고 후기보기", for: .normal)
-        button.titleLabel?.font = .KorFont(style: .medium, size: 13)
+        button.titleLabel?.font = .korFont(style: .medium, size: 13)
         button.setTitleColor(.w100, for: .normal)
         button.layer.cornerRadius = 4
         button.backgroundColor = .blu500
@@ -282,10 +282,10 @@ extension DetailCommentSectionCell: Inputable {
 
         let comment = input.comment ?? ""
         profileView.profileImageView.setPPImage(path: input.profileImagePath)
-        profileView.nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 13))
-        profileView.dateLabel.setLineHeightText(text: input.date, font: .KorFont(style: .regular, size: 12))
-        contentLabel.setLineHeightText(text: input.comment, font: .KorFont(style: .regular, size: 13))
-        likeButtonTitleLabel.setLineHeightText(text: "도움돼요 \(input.likeCount)", font: .KorFont(style: .regular, size: 13))
+        profileView.nickNameLabel.setLineHeightText(text: input.nickName, font: .korFont(style: .bold, size: 13))
+        profileView.dateLabel.setLineHeightText(text: input.date, font: .korFont(style: .regular, size: 12))
+        contentLabel.setLineHeightText(text: input.comment, font: .korFont(style: .regular, size: 13))
+        likeButtonTitleLabel.setLineHeightText(text: "도움돼요 \(input.likeCount)", font: .korFont(style: .regular, size: 13))
         if input.isLike {
             likeButtonImageView.image = UIImage(named: "icon_like_blue")
             likeButtonTitleLabel.textColor = .blu500
@@ -326,20 +326,20 @@ extension DetailCommentSectionCell: Inputable {
 
         // 기본 스타일 (폰트, 색상 등)
         let normalAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KorFont(style: .regular, size: 14)!,
+            .font: UIFont.korFont(style: .regular, size: 14)!,
             .foregroundColor: UIColor.g1000,
             .paragraphStyle: paragraphStyle
         ]
 
         // 스타일을 다르게 할 부분 (팝업스토어명, 생생한 후기)
         let popupStoreAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KorFont(style: .bold, size: 14)!,  // 다른 폰트 스타일
+            .font: UIFont.korFont(style: .bold, size: 14)!,  // 다른 폰트 스타일
             .foregroundColor: UIColor.blu500,  // 다른 색상
             .paragraphStyle: paragraphStyle
         ]
 
         let reviewAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.KorFont(style: .bold, size: 14)!,  // 이탤릭체
+            .font: UIFont.korFont(style: .bold, size: 14)!,  // 이탤릭체
             .foregroundColor: UIColor.g1000,  // 다른 색상
             .paragraphStyle: paragraphStyle
         ]

@@ -14,7 +14,7 @@ final class BlockUserManageView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "차단한 사용자 관리", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "차단한 사용자 관리", font: .korFont(style: .regular, size: 15))
         return view
     }()
 

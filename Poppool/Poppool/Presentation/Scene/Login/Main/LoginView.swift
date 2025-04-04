@@ -15,7 +15,7 @@ final class LoginView: UIView {
     let guestButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("둘러보기", for: .normal)
-        button.titleLabel?.font = .KorFont(style: .regular, size: 14)
+        button.titleLabel?.font = .korFont(style: .regular, size: 14)
         button.setTitleColor(.g1000, for: .normal)
         return button
     }()
@@ -57,7 +57,7 @@ final class LoginView: UIView {
     let inquiryButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그인이 어려우신가요?", for: .normal)
-        button.titleLabel?.font = .KorFont(style: .regular, size: 12)
+        button.titleLabel?.font = .korFont(style: .regular, size: 12)
         button.setTitleColor(.g1000, for: .normal)
         return button
     }()

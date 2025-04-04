@@ -305,7 +305,7 @@ final class FilterBottomSheetView: UIView {
         let button = PPButton(
             style: .secondary,
             text: title,
-            font: .KorFont(style: .medium, size: 13),
+            font: .korFont(style: .medium, size: 13),
             cornerRadius: 18
         )
         button.setBackgroundColor(.w100, for: .normal)
@@ -331,12 +331,12 @@ final class FilterBottomSheetView: UIView {
                 button.setBackgroundColor(.blu500, for: .normal)
                 button.setTitleColor(.w100, for: .normal)
                 button.layer.borderWidth = 0
-                button.titleLabel?.font = .KorFont(style: .bold, size: 13)
+                button.titleLabel?.font = .korFont(style: .bold, size: 13)
             } else {
                 button.setBackgroundColor(.w100, for: .normal)
                 button.setTitleColor(.g400, for: .normal)
                 button.layer.borderColor = UIColor.g200.cgColor
-                button.titleLabel?.font = .KorFont(style: .medium, size: 13)
+                button.titleLabel?.font = .korFont(style: .medium, size: 13)
                 button.layer.borderWidth = 1
             }
         }

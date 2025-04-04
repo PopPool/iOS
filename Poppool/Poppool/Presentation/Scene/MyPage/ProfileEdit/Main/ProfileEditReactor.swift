@@ -241,7 +241,7 @@ final class ProfileEditReactor: Reactor {
 
         // kor and end Check
         let pattern = "^[가-힣a-zA-Z\\s]+$" // 허용하는 문자만 검사
-        let regex = try! NSRegularExpression(pattern: pattern)
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return .empty }
         let range = NSRange(location: 0, length: text.utf16.count)
         if regex.firstMatch(in: text, options: [], range: range) == nil { return isActive ? .korAndEngActive : .korAndEng }
 

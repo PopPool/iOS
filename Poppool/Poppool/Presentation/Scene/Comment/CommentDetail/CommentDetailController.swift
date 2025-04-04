@@ -92,7 +92,7 @@ extension CommentDetailController {
                 owner.mainView.profileView.dateLabel.text = state.commentData.date
                 owner.mainView.profileView.nickNameLabel.text = state.commentData.nickName
                 owner.mainView.profileView.profileImageView.setPPImage(path: state.commentData.profileImagePath)
-                owner.mainView.likeButtonTitleLabel.setLineHeightText(text: "도움돼요 \(state.commentData.likeCount)", font: .KorFont(style: .medium, size: 13))
+                owner.mainView.likeButtonTitleLabel.setLineHeightText(text: "도움돼요 \(state.commentData.likeCount)", font: .korFont(style: .medium, size: 13))
                 if state.commentData.isLike {
                     owner.mainView.likeButtonImageView.image = UIImage(named: "icon_like_blue")
                     owner.mainView.likeButtonTitleLabel.textColor = .blu500

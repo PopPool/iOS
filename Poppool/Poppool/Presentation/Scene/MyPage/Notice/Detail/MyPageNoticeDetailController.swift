@@ -60,9 +60,9 @@ extension MyPageNoticeDetailController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
-                owner.mainView.titleLabel.setLineHeightText(text: state.title, font: .KorFont(style: .bold, size: 18))
-                owner.mainView.dateLabel.setLineHeightText(text: state.date, font: .EngFont(style: .regular, size: 14))
-                owner.mainView.contentLabel.setLineHeightText(text: state.content, font: .KorFont(style: .regular, size: 14))
+                owner.mainView.titleLabel.setLineHeightText(text: state.title, font: .korFont(style: .bold, size: 18))
+                owner.mainView.dateLabel.setLineHeightText(text: state.date, font: .engFont(style: .regular, size: 14))
+                owner.mainView.contentLabel.setLineHeightText(text: state.content, font: .korFont(style: .regular, size: 14))
             }
             .disposed(by: disposeBag)
     }

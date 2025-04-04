@@ -14,7 +14,7 @@ final class FAQView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "고객문의", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "고객문의", font: .korFont(style: .regular, size: 15))
         return view
     }()
 

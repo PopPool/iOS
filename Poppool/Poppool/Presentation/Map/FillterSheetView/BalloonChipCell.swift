@@ -8,7 +8,7 @@ final class BalloonChipCell: UICollectionViewCell {
        let button = PPButton(
            style: .secondary,
            text: "",
-           font: .KorFont(style: .medium, size: 11),
+           font: .korFont(style: .medium, size: 11),
            cornerRadius: 15
        )
 
@@ -45,7 +45,7 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setBackgroundColor(.blu500, for: .normal)
            button.setTitleColor(.white, for: .normal)
            button.layer.borderWidth = 0
-           button.titleLabel?.font = .KorFont(style: .bold, size: 11)
+           button.titleLabel?.font = .korFont(style: .bold, size: 11)
 
        } else {
            button.setImage(nil, for: .normal)
@@ -56,7 +56,7 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setTitleColor(.g400, for: .normal)
            button.layer.borderWidth = 1
            button.layer.borderColor = UIColor.g200.cgColor
-           button.titleLabel?.font = .KorFont(style: .medium, size: 11)
+           button.titleLabel?.font = .korFont(style: .medium, size: 11)
 
        }
    }

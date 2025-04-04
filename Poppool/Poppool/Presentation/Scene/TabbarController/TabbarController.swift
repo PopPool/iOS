@@ -237,11 +237,11 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         // 폰트 설정
         let appearance = UITabBarAppearance()
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .font: UIFont.KorFont(style: .medium, size: 11)!,
+            .font: UIFont.korFont(style: .medium, size: 11)!,
             .paragraphStyle: paragraphStyle
         ]
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-            .font: UIFont.KorFont(style: .bold, size: 11)!,
+            .font: UIFont.korFont(style: .bold, size: 11)!,
             .paragraphStyle: paragraphStyle
         ]
 

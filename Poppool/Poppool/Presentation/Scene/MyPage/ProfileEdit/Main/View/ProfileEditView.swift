@@ -14,7 +14,7 @@ final class ProfileEditView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "프로필 설정", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "프로필 설정", font: .korFont(style: .regular, size: 15))
         return view
     }()
     let saveButton: PPButton = {
@@ -69,7 +69,7 @@ final class ProfileEditView: UIView {
     let nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "별명을 입력해주세요"
-        textField.font = .KorFont(style: .medium, size: 14)
+        textField.font = .korFont(style: .medium, size: 14)
         return textField
     }()
     let nickNameClearButton: UIButton = {
@@ -96,7 +96,7 @@ final class ProfileEditView: UIView {
         let attributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g1000 // 텍스트 색상
             ]
@@ -104,7 +104,7 @@ final class ProfileEditView: UIView {
         let disabledAttributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g300 // 텍스트 색상
             ]
@@ -130,7 +130,7 @@ final class ProfileEditView: UIView {
         let view = UITextView()
         view.textContainerInset = .zero
         view.contentInset = .zero
-        view.font = .KorFont(style: .medium, size: 14)
+        view.font = .korFont(style: .medium, size: 14)
         return view
     }()
     let introTextCountLabel: PPLabel = {
@@ -154,13 +154,13 @@ final class ProfileEditView: UIView {
 
     let categoryButton: ProfileEditListButton = {
         let button = ProfileEditListButton()
-        button.mainTitleLabel.setLineHeightText(text: "관심 카테고리", font: .KorFont(style: .regular, size: 15))
+        button.mainTitleLabel.setLineHeightText(text: "관심 카테고리", font: .korFont(style: .regular, size: 15))
         return button
     }()
 
     let infoButton: ProfileEditListButton = {
         let button = ProfileEditListButton()
-        button.mainTitleLabel.setLineHeightText(text: "사용자 정보", font: .KorFont(style: .regular, size: 15))
+        button.mainTitleLabel.setLineHeightText(text: "사용자 정보", font: .korFont(style: .regular, size: 15))
         return button
     }()
 

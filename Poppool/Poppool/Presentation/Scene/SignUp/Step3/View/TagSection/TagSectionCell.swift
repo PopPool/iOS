@@ -58,12 +58,12 @@ extension TagSectionCell: Inputable {
             contentView.backgroundColor = .blu500
             contentView.layer.borderWidth = 0
             titleLabel.textColor = .w100
-            titleLabel.font = . KorFont(style: .medium, size: 13)
+            titleLabel.font = . korFont(style: .medium, size: 13)
         } else {
             contentView.backgroundColor = .clear
             contentView.layer.borderWidth = 1
             titleLabel.textColor = .g400
-            titleLabel.font = . KorFont(style: .medium, size: 13)
+            titleLabel.font = . korFont(style: .medium, size: 13)
         }
     }
 }

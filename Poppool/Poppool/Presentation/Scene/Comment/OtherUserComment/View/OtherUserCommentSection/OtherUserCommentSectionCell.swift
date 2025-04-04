@@ -121,9 +121,9 @@ extension OtherUserCommentSectionCell: Inputable {
 
     func injection(with input: Input) {
         imageView.setPPImage(path: input.imagePath)
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 11))
-        contentLabel.setLineHeightText(text: input.comment, font: .KorFont(style: .medium, size: 11))
-        dateLabel.setLineHeightText(text: input.date, font: .KorFont(style: .regular, size: 11))
-        likeCountLabel.setLineHeightText(text: "\(input.likeCount)", font: .KorFont(style: .regular, size: 11))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 11))
+        contentLabel.setLineHeightText(text: input.comment, font: .korFont(style: .medium, size: 11))
+        dateLabel.setLineHeightText(text: input.date, font: .korFont(style: .regular, size: 11))
+        likeCountLabel.setLineHeightText(text: "\(input.likeCount)", font: .korFont(style: .regular, size: 11))
     }
 }

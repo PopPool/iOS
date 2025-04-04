@@ -99,7 +99,7 @@ extension DetailContentSectionCell: Inputable {
 
     func injection(with input: Input) {
         let text = input.content ?? ""
-        contentLabel.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 13))
+        contentLabel.setLineHeightText(text: text, font: .korFont(style: .regular, size: 13))
         if text.count >= 68 {
             dropDownButton.isHidden = false
         } else {

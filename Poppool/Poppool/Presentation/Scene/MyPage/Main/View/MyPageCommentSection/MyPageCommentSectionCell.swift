@@ -102,7 +102,7 @@ extension MyPageCommentSectionCell: Inputable {
 
     func injection(with input: Input) {
         imageView.setPPImage(path: input.popUpImagePath)
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .regular, size: 11))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .regular, size: 11))
         titleLabel.textAlignment = .center
 
         if input.isFirstCell {

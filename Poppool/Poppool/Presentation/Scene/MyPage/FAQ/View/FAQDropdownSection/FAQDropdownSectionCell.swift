@@ -23,7 +23,7 @@ final class FAQDropdownSectionCell: UICollectionViewCell {
 
     let qLabel: UILabel = {
         let label = UILabel()
-        label.setLineHeightText(text: "Q", font: .EngFont(style: .bold, size: 16), lineHeight: 1)
+        label.setLineHeightText(text: "Q", font: .engFont(style: .bold, size: 16), lineHeight: 1)
         label.textColor = .blu500
         return label
     }()
@@ -112,8 +112,8 @@ extension FAQDropdownSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 14))
-        dropContentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .regular, size: 14), lineHeight: 1.5)
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 14))
+        dropContentLabel.setLineHeightText(text: input.content, font: .korFont(style: .regular, size: 14), lineHeight: 1.5)
         dropContentLabel.lineBreakStrategy = .hangulWordPriority
         dropContentLabel.textColor = .g600
         if input.isOpen {

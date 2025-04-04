@@ -24,7 +24,7 @@ final class WithdrawlCheckModalController: BaseViewController, View {
     init(nickName: String?) {
         super.init()
         let title = "\(nickName ?? "")님, 팝풀 서비스를\n정말 탈퇴하시겠어요?"
-        mainView.titleLabel.setLineHeightText(text: title, font: .KorFont(style: .bold, size: 18), lineHeight: 1.312)
+        mainView.titleLabel.setLineHeightText(text: title, font: .korFont(style: .bold, size: 18), lineHeight: 1.312)
         mainView.titleLabel.numberOfLines = 2
     }
 

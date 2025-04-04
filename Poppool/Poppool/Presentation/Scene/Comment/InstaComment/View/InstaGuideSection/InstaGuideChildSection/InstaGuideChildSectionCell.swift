@@ -26,7 +26,7 @@ final class InstaGuideChildSectionCell: UICollectionViewCell {
 
     private let indexLabel: UILabel = {
         let label = UILabel()
-        label.font = .EngFont(style: .medium, size: 16)
+        label.font = .engFont(style: .medium, size: 16)
         label.textColor = .w100
         label.textAlignment = .center
         return label

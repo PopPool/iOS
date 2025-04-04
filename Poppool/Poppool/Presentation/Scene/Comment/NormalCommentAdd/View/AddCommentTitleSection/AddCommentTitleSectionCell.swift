@@ -47,6 +47,6 @@ extension AddCommentTitleSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 16))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 16))
     }
 }

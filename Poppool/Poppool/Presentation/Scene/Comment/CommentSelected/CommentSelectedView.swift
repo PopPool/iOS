@@ -14,7 +14,7 @@ final class CommentSelectedView: UIView {
     // MARK: - Components
     private let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 18)
-        label.setLineHeightText(text: "코멘트 작성 방법 선택", font: .KorFont(style: .bold, size: 18))
+        label.setLineHeightText(text: "코멘트 작성 방법 선택", font: .korFont(style: .bold, size: 18))
         return label
     }()
 
@@ -28,7 +28,7 @@ final class CommentSelectedView: UIView {
         let button = UIButton()
         button.setTitle("일반 코멘트 작성하기", for: .normal)
         button.setTitleColor(.g1000, for: .normal)
-        button.titleLabel?.font = .KorFont(style: .medium, size: 15)
+        button.titleLabel?.font = .korFont(style: .medium, size: 15)
         button.contentHorizontalAlignment = .leading
         return button
     }()
@@ -43,7 +43,7 @@ final class CommentSelectedView: UIView {
         let button = UIButton()
         button.setTitle("인스타그램 연동 코멘트 작성하기", for: .normal)
         button.setTitleColor(.g1000, for: .normal)
-        button.titleLabel?.font = .KorFont(style: .medium, size: 15)
+        button.titleLabel?.font = .korFont(style: .medium, size: 15)
         button.contentHorizontalAlignment = .leading
         return button
     }()

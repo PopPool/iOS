@@ -93,7 +93,7 @@ final class AdminBottomSheetView: UIView {
         let button = PPButton(
             style: .secondary,
             text: "초기화",
-            font: .KorFont(style: .medium, size: 16),
+            font: .korFont(style: .medium, size: 16),
             cornerRadius: 4
         )
         button.isEnabled = false
@@ -111,7 +111,7 @@ final class AdminBottomSheetView: UIView {
             style: .primary,
             text: "옵션저장",
             disabledText: "옵션저장",
-            font: .KorFont(style: .medium, size: 16),
+            font: .korFont(style: .medium, size: 16),
             cornerRadius: 4
         )
         button.isEnabled = false

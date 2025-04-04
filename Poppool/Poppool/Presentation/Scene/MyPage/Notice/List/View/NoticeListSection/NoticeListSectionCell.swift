@@ -73,7 +73,7 @@ extension NoticeListSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 14))
-        dateLabel.setLineHeightText(text: input.date, font: .EngFont(style: .regular, size: 12))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 14))
+        dateLabel.setLineHeightText(text: input.date, font: .engFont(style: .regular, size: 12))
     }
 }

@@ -97,10 +97,10 @@ extension PPPicker: UIPickerViewDelegate, UIPickerViewDataSource {
         let label = UILabel()
         label.text = components[row]
         label.textAlignment = .center
-        label.font = .KorFont(style: .medium, size: 16)
+        label.font = .korFont(style: .medium, size: 16)
         DispatchQueue.main.async {
             if let label = pickerView.view(forRow: row, forComponent: component) as? UILabel {
-                label.font = .KorFont(style: .bold, size: 18)
+                label.font = .korFont(style: .bold, size: 18)
             }
         }
         pickerView.subviews[1].isHidden = true

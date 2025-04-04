@@ -49,6 +49,6 @@ extension CommentDetailContentSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        contentLabel.setLineHeightText(text: input.content, font: .KorFont(style: .medium, size: 13))
+        contentLabel.setLineHeightText(text: input.content, font: .korFont(style: .medium, size: 13))
     }
 }

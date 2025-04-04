@@ -27,7 +27,7 @@ final class DetailEmptyCommetSectionCell: UICollectionViewCell {
         let attributedTitle = NSAttributedString(
             string: "첫번째 코멘트 남기기",
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!,  // 커스텀 폰트 적용
+                .font: UIFont.korFont(style: .regular, size: 13)!,  // 커스텀 폰트 적용
                 .underlineStyle: NSUnderlineStyle.single.rawValue // 밑줄 스타일
             ]
         )

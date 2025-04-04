@@ -20,7 +20,7 @@ final class PPReturnHeaderView: UIView {
 
     let headerLabel: UILabel = {
         let label = UILabel()
-        label.font = .KorFont(style: .regular, size: 15)
+        label.font = .korFont(style: .regular, size: 15)
         label.textColor = .g1000
         return label
     }()

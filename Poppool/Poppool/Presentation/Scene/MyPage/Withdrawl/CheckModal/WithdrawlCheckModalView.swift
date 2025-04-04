@@ -34,7 +34,7 @@ final class WithdrawlCheckModalView: UIView {
     let firstLabel: UILabel = {
         let text = "서비스 탈퇴 시 회원 전용 서비스 이용이 불가하며 회원 데이터는 일괄 삭제 처리돼요."
         let label = UILabel()
-        label.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 13), lineHeight: 1.4)
+        label.setLineHeightText(text: text, font: .korFont(style: .regular, size: 13), lineHeight: 1.4)
         label.numberOfLines = 2
         label.textColor = .g600
         return label
@@ -43,7 +43,7 @@ final class WithdrawlCheckModalView: UIView {
     let secondLabel: UILabel = {
         let text = "탈퇴 후에는 계정을 다시 살리거나 복구할 수 없어요."
         let label = UILabel()
-        label.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 13), lineHeight: 1.4)
+        label.setLineHeightText(text: text, font: .korFont(style: .regular, size: 13), lineHeight: 1.4)
         label.numberOfLines = 2
         label.textColor = .g600
         return label

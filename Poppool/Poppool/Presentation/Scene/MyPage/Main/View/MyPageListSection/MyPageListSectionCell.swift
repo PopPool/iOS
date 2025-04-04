@@ -67,7 +67,7 @@ extension MyPageListSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .regular, size: 15))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .regular, size: 15))
 
         if input.subTitle == nil {
             rightImageView.isHidden = false
@@ -75,7 +75,7 @@ extension MyPageListSectionCell: Inputable {
         } else {
             rightImageView.isHidden = true
             subTitleLabel.isHidden = false
-            subTitleLabel.setLineHeightText(text: input.subTitle, font: .KorFont(style: .regular, size: 13))
+            subTitleLabel.setLineHeightText(text: input.subTitle, font: .korFont(style: .regular, size: 13))
             subTitleLabel.textColor = . blu500
         }
     }

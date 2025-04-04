@@ -86,16 +86,16 @@ extension BlockUserListSectionCell: Inputable {
 
     func injection(with input: Input) {
         profileImageView.setPPImage(path: input.profileImagePath)
-        nickNameLabel.setLineHeightText(text: input.nickName, font: .KorFont(style: .bold, size: 14))
+        nickNameLabel.setLineHeightText(text: input.nickName, font: .korFont(style: .bold, size: 14))
         if input.isBlocked {
             blockButton.setTitle("차단완료", for: .normal)
-            blockButton.titleLabel?.font = .KorFont(style: .medium, size: 13)
+            blockButton.titleLabel?.font = .korFont(style: .medium, size: 13)
             blockButton.backgroundColor = .re600
             blockButton.setTitleColor(.w100, for: .normal)
             blockButton.layer.borderWidth = 0
         } else {
             blockButton.setTitle("차단해제", for: .normal)
-            blockButton.titleLabel?.font = .KorFont(style: .medium, size: 13)
+            blockButton.titleLabel?.font = .korFont(style: .medium, size: 13)
             blockButton.backgroundColor = .w100
             blockButton.setTitleColor(.g300, for: .normal)
             blockButton.layer.borderWidth = 1

@@ -21,7 +21,7 @@ final class MyPageTermsController: BaseViewController, View {
 
     private let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "약관", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "약관", font: .korFont(style: .regular, size: 15))
         return view
     }()
 

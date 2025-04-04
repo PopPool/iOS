@@ -157,11 +157,11 @@ extension HomeCardSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        categoryLabel.setLineHeightText(text: "#" + (input.category ?? ""), font: .KorFont(style: .bold, size: 11))
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 14))
-        addressLabel.setLineHeightText(text: input.address, font: .KorFont(style: .medium, size: 11))
+        categoryLabel.setLineHeightText(text: "#" + (input.category ?? ""), font: .korFont(style: .bold, size: 11))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 14))
+        addressLabel.setLineHeightText(text: input.address, font: .korFont(style: .medium, size: 11))
         let date = input.startDate.toDate().toPPDateString() + " ~ " + input.endDate.toDate().toPPDateString()
-        dateLabel.setLineHeightText(text: date, font: .KorFont(style: .medium, size: 11))
+        dateLabel.setLineHeightText(text: date, font: .korFont(style: .medium, size: 11))
         let bookmarkImage = input.isBookmark ? UIImage(named: "icon_bookmark_fill") : UIImage(named: "icon_bookmark")
         bookmarkButton.setImage(bookmarkImage, for: .normal)
         imageView.setPPImage(path: input.imagePath)
@@ -169,7 +169,7 @@ extension HomeCardSectionCell: Inputable {
 
         rankLabel.isHidden = !input.isPopular
         let rank = input.row ?? 0
-        rankLabel.setLineHeightText(text: "\(rank + 1)위", font: .KorFont(style: .medium, size: 11), lineHeight: 1)
+        rankLabel.setLineHeightText(text: "\(rank + 1)위", font: .korFont(style: .medium, size: 11), lineHeight: 1)
         rankLabel.textAlignment = .center
         if rank > 2 {
             rankLabel.isHidden = true

@@ -204,12 +204,12 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
                 .subscribe { (collectionView, _) in
                     cell.isOpen.toggle()
                     if cell.isOpen {
-                        cell.buttonTitleLabel.setLineHeightText(text: "닫기", font: .KorFont(style: .medium, size: 13))
+                        cell.buttonTitleLabel.setLineHeightText(text: "닫기", font: .korFont(style: .medium, size: 13))
                         cell.contentLabel.numberOfLines = 0
                         cell.buttonImageView.image = UIImage(named: "icon_dropdown_top_gray")
                     } else {
                         cell.contentLabel.numberOfLines = 3
-                        cell.buttonTitleLabel.setLineHeightText(text: "더보기", font: .KorFont(style: .medium, size: 13))
+                        cell.buttonTitleLabel.setLineHeightText(text: "더보기", font: .korFont(style: .medium, size: 13))
                         cell.buttonImageView.image = UIImage(named: "icon_dropdown_bottom_gray")
                     }
                     collectionView.reloadData()

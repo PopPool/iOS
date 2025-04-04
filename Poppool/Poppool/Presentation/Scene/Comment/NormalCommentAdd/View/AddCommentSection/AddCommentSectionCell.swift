@@ -21,7 +21,7 @@ final class AddCommentSectionCell: UICollectionViewCell {
         let view = UITextView()
         view.textContainerInset = .zero
         view.textContainer.lineFragmentPadding = 0
-        view.font = .KorFont(style: .medium, size: 14)
+        view.font = .korFont(style: .medium, size: 14)
         return view
     }()
 

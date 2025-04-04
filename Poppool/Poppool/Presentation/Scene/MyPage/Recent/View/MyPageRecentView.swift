@@ -14,7 +14,7 @@ final class MyPageRecentView: UIView {
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "최근 본 팝업", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "최근 본 팝업", font: .korFont(style: .regular, size: 15))
         return view
     }()
 

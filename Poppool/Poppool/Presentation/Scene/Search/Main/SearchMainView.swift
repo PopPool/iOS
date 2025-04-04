@@ -37,15 +37,15 @@ final class SearchMainView: UIView {
         let button = UIButton(type: .system)
         button.setTitle("취소", for: .normal)
         button.setTitleColor(.g1000, for: .normal)
-        button.titleLabel?.font = .KorFont(style: .regular, size: 14)
+        button.titleLabel?.font = .korFont(style: .regular, size: 14)
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
 
     let searchTextField: UITextField = {
         let view = UITextField()
-        view.font = .KorFont(style: .regular, size: 14)
-        view.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .KorFont(style: .regular, size: 14)!)
+        view.font = .korFont(style: .regular, size: 14)
+        view.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .korFont(style: .regular, size: 14)!)
         return view
     }()
 

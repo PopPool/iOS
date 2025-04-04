@@ -14,7 +14,7 @@ final class CommentMyMenuView: UIView {
     // MARK: - Components
     let titleLabel: PPLabel = {
         let label = PPLabel(style: .bold, fontSize: 18)
-        label.setLineHeightText(text: "내가 작성한 코멘트", font: .KorFont(style: .bold, size: 18))
+        label.setLineHeightText(text: "내가 작성한 코멘트", font: .korFont(style: .bold, size: 18))
         return label
     }()
 
@@ -28,7 +28,7 @@ final class CommentMyMenuView: UIView {
         let button = UIButton()
         button.setTitle("코멘트 삭제하기", for: .normal)
         button.setTitleColor(.g1000, for: .normal)
-        button.titleLabel?.font = .KorFont(style: .medium, size: 15)
+        button.titleLabel?.font = .korFont(style: .medium, size: 15)
         button.contentHorizontalAlignment = .leading
         return button
     }()
@@ -43,7 +43,7 @@ final class CommentMyMenuView: UIView {
         let button = UIButton()
         button.setTitle("코멘트 수정하기", for: .normal)
         button.setTitleColor(.g1000, for: .normal)
-        button.titleLabel?.font = .KorFont(style: .medium, size: 15)
+        button.titleLabel?.font = .korFont(style: .medium, size: 15)
         button.contentHorizontalAlignment = .leading
         return button
     }()

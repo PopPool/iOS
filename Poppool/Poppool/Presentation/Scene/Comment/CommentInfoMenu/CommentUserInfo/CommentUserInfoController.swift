@@ -70,7 +70,7 @@ extension CommentUserInfoController {
             .subscribe { (owner, state) in
                 owner.mainView.titleLabel.setLineHeightText(
                     text: "\(state.nickName ?? "")님에 대해 더 알아보기",
-                    font: .KorFont(style: .bold, size: 18)
+                    font: .korFont(style: .bold, size: 18)
                 )
             }
             .disposed(by: disposeBag)

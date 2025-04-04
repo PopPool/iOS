@@ -16,7 +16,7 @@ class PPLabel: UILabel {
         lineHeight: CGFloat = 1.2
     ) {
         super.init(frame: .zero)
-        self.font = .KorFont(style: style, size: fontSize)
+        self.font = .korFont(style: style, size: fontSize)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeight
         self.attributedText = NSMutableAttributedString(
