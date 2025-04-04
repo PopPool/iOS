@@ -85,6 +85,8 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         autoScrollTimer = nil
     }
     
+    // FIXME: (홈 -> 상세) 이동 시 홈의 자동 스크롤이 계속 돌아감.
+    // FIXME: 또한 오토 스크롤을 한번만 실행하면 되는데, 사진이 넘어갈 때 마다 실행되는것으로 보임
     func startAutoScroll(interval: TimeInterval = 3.0) {
         stopAutoScroll() // 기존 타이머를 중지
         stopButton.isHidden = false
