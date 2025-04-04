@@ -200,16 +200,20 @@ extension ImageBannerSectionCell: Inputable {
         if imageSection.isEmpty {
             pageControl.setNumberOfPages(input.imagePaths.count)
             let datas = zip(input.imagePaths, input.idList)
-            let backContents = datas.suffix(1)
-            let frontContents = datas.prefix(1)
-            imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
-            imageSection.inputDataList.append(contentsOf: frontContents.map { .init(imagePath: $0.0, id: $0.1) })
-            imageSection.inputDataList = backContents.map {.init(imagePath: $0.0, id: $0.1) } + imageSection.inputDataList
-            DispatchQueue.main.async { [weak self] in
-                self?.contentCollectionView.scrollToItem(
-                    at: .init(row: 1, section: 0),
-                    at: .centeredHorizontally, animated: false
-                )
+            if input.imagePaths.count > 1 {
+                let backContents = datas.suffix(1)
+                let frontContents = datas.prefix(1)
+                imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
+                imageSection.inputDataList.append(contentsOf: frontContents.map { .init(imagePath: $0.0, id: $0.1) })
+                imageSection.inputDataList = backContents.map { .init(imagePath: $0.0, id: $0.1) } + imageSection.inputDataList
+                DispatchQueue.main.async { [weak self] in
+                    self?.contentCollectionView.scrollToItem(
+                        at: .init(row: 1, section: 0),
+                        at: .centeredHorizontally, animated: false
+                    )
+                }
+            } else {
+                imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
             }
         }
         
