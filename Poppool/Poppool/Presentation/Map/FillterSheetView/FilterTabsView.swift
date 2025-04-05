@@ -1,8 +1,8 @@
-//import UIKit
-//import RxSwift
-//import RxCocoa
+// import UIKit
+// import RxSwift
+// import RxCocoa
 //
-//final class FilterTabsView: UIView {
+// final class FilterTabsView: UIView {
 //    private let tabs = ["지역", "카테고리"]
 //    let segmentedControl = UISegmentedControl()
 //
@@ -30,10 +30,10 @@
 //            make.edges.equalToSuperview()
 //        }
 //    }
-//}
+// }
 //
-//extension Reactive where Base: FilterTabsView {
+// extension Reactive where Base: FilterTabsView {
 //    var selectedIndex: ControlProperty<Int> {
 //        return base.segmentedControl.rx.selectedSegmentIndex
 //    }
-//}
+// }

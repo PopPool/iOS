@@ -14,7 +14,7 @@ enum IntroState {
     case validateActive
     case longLength
     case longLengthActive
-    
+
     var borderColor: UIColor? {
         switch self {
         case .empty, .validate:
@@ -25,7 +25,7 @@ enum IntroState {
             return .re500
         }
     }
-    
+
     var description: String? {
         switch self {
         case .empty, .emptyActive, .validate, .validateActive:
@@ -34,7 +34,7 @@ enum IntroState {
             return "최대 30글자까지 입력해주세요"
         }
     }
-    
+
     var textColor: UIColor? {
         switch self {
         case .empty, .emptyActive, .validate, .validateActive:
@@ -43,7 +43,7 @@ enum IntroState {
             return .re500
         }
     }
-    
+
     var textFieldTextColor: UIColor? {
         switch self {
         case .longLength, .longLengthActive:
@@ -52,7 +52,7 @@ enum IntroState {
             return .g1000
         }
     }
-    
+
     var placeHolderIsHidden: Bool {
         switch self {
         case .empty, .emptyActive:

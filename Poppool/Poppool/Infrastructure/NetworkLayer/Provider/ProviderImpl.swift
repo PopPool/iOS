@@ -1,13 +1,6 @@
-//
-//  ProviderImpl.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/16/24.
-//
-
+import Alamofire
 import Foundation
 import RxSwift
-import Alamofire
 
 final class ProviderImpl: Provider {
 
@@ -50,9 +43,13 @@ final class ProviderImpl: Provider {
                         case .success(let data):
                             // 빈 응답 처리
                             if R.self == EmptyResponse.self && data.isEmpty {
-                                observer.onNext(EmptyResponse() as! R)
-                                observer.onCompleted()
-                                return
+                                if let response = EmptyResponse() as? R {
+                                    observer.onNext(response)
+                                    observer.onCompleted()
+                                    return
+                                } else {
+                                    observer.onError(NetworkError.decodeError)
+                                }
                             }
                             do {
                                 // JSON 디코딩

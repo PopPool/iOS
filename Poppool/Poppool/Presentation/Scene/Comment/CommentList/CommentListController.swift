@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class CommentListController: BaseViewController, View {
-    
+
     typealias Reactor = CommentListReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CommentListView()
     private var sections: [any Sectionable] = []
     private let scrollObserver: PublishSubject<Void> = .init()
@@ -30,7 +30,7 @@ extension CommentListController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -58,18 +58,18 @@ private extension CommentListController {
 // MARK: - Methods
 extension CommentListController {
     func bind(reactor: Reactor) {
-        
+
         scrollObserver
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .map { Reactor.Action.scrollDidEndPoint }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -77,7 +77,7 @@ extension CommentListController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -85,7 +85,7 @@ extension CommentListController {
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData()}
             }
             .disposed(by: disposeBag)
-        
+
     }
 }
 
@@ -94,11 +94,11 @@ extension CommentListController: UICollectionViewDelegate, UICollectionViewDataS
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -113,7 +113,7 @@ extension CommentListController: UICollectionViewDelegate, UICollectionViewDataS
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.profileView.button.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -121,7 +121,7 @@ extension CommentListController: UICollectionViewDelegate, UICollectionViewDataS
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.totalViewButton.rx.tap
                 .withUnretained(self)
                 .map { (owner, _) in
@@ -129,7 +129,7 @@ extension CommentListController: UICollectionViewDelegate, UICollectionViewDataS
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.likeButton.rx.tap
                 .map { Reactor.Action.likeButtonTapped(row: indexPath.row) }
                 .bind(to: reactor.action)
@@ -137,7 +137,7 @@ extension CommentListController: UICollectionViewDelegate, UICollectionViewDataS
         }
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentHeight = scrollView.contentSize.height
         let scrollViewHeight = scrollView.frame.size.height

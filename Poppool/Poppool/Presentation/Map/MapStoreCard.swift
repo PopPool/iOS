@@ -1,7 +1,7 @@
-//import UIKit
-//import SnapKit
+// import UIKit
+// import SnapKit
 //
-//final class MapStoreCard: UIView {
+// final class MapStoreCard: UIView {
 //   // MARK: - Components
 //   private let containerView: UIView = {
 //       let view = UIView()
@@ -43,10 +43,10 @@
 //   required init?(coder: NSCoder) {
 //       fatalError("init(coder:) has not been implemented")
 //   }
-//}
+// }
 //
 //// MARK: - Setup
-//private extension MapStoreCard {
+// private extension MapStoreCard {
 //   func setupLayout() {
 //       addSubview(containerView)
 //
@@ -94,10 +94,10 @@
 //       locationLabel.textColor = .g500
 //       dateLabel.textColor = .g500
 //   }
-//}
+// }
 //
 //// MARK: - Inputable
-//extension MapStoreCard: Inputable {
+// extension MapStoreCard: Inputable {
 //   struct Input {
 //       let image: UIImage?
 //       let category: String
@@ -113,4 +113,4 @@
 //       locationLabel.text = input.location
 //       dateLabel.text = input.date
 //   }
-//}
+// }

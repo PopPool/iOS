@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class LocationPermissionBottomSheet: UIViewController {
 
@@ -10,7 +10,7 @@ final class LocationPermissionBottomSheet: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "내 위치를 중심으로\n보기 위한 준비가 필요해요"
-        label.font = UIFont.KorFont(style: .bold, size: 18)
+        label.font = UIFont.korFont(style: .bold, size: 18)
         label.textColor = .g1000
         label.numberOfLines = 2
         label.textAlignment = .center
@@ -21,7 +21,7 @@ final class LocationPermissionBottomSheet: UIViewController {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "설정 > 위치 권한을 허용하신 후에\n내 주변의 다양한 팝업스토어를 볼 수 있어요."
-        label.font = UIFont.KorFont(style: .regular, size: 14)
+        label.font = UIFont.korFont(style: .regular, size: 14)
         label.textColor = .g600
         label.numberOfLines = 2
         label.textAlignment = .center
@@ -33,7 +33,7 @@ final class LocationPermissionBottomSheet: UIViewController {
         let button = UIButton()
         button.setTitle("취소", for: .normal)
         button.setTitleColor(.g600, for: .normal)
-        button.titleLabel?.font = UIFont.KorFont(style: .medium, size: 16)
+        button.titleLabel?.font = UIFont.korFont(style: .medium, size: 16)
         button.backgroundColor = .g50
         button.layer.cornerRadius = 10
         return button
@@ -44,7 +44,7 @@ final class LocationPermissionBottomSheet: UIViewController {
         let button = UIButton()
         button.setTitle("권한설정", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.KorFont(style: .medium, size: 16)
+        button.titleLabel?.font = UIFont.korFont(style: .medium, size: 16)
         button.backgroundColor = .blu500
         button.layer.cornerRadius = 10
         return button

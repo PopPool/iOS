@@ -7,23 +7,23 @@
 
 import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
+import RxCocoa
 import RxGesture
+import RxSwift
+import SnapKit
 
 final class SignUpStep3Controller: BaseViewController, View {
-    
+
     typealias Reactor = SignUpStep3Reactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = SignUpStep3View()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private let selectedTag: PublishSubject<IndexPath> = .init()
 }
 
@@ -63,12 +63,12 @@ extension SignUpStep3Controller {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-            
+
         selectedTag
             .map { Reactor.Action.selectedTag(indexPath: $0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -85,19 +85,18 @@ extension SignUpStep3Controller: UICollectionViewDelegate, UICollectionViewDataS
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedTag.onNext(indexPath)
     }

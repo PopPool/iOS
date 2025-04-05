@@ -7,20 +7,19 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class AddCommentImageSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     var disposeBag = DisposeBag()
-    
+
     private let imageView: UIImageView = {
-        let view = UIImageView()
-        return view
+        return UIImageView()
     }()
-    
+
     let deleteButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .w100
@@ -28,24 +27,24 @@ final class AddCommentImageSectionCell: UICollectionViewCell {
         button.clipsToBounds = true
         return button
     }()
-    
+
     private let xmarkImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "icon_xmark")
         return view
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -58,18 +57,18 @@ private extension AddCommentImageSectionCell {
         contentView.layer.cornerRadius = 4
         contentView.clipsToBounds = true
         contentView.layer.borderColor = UIColor.blu400.cgColor
-        
+
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         contentView.addSubview(deleteButton)
         deleteButton.snp.makeConstraints { make in
             make.size.equalTo(16)
             make.top.trailing.equalToSuperview().inset(6)
         }
-        
+
         deleteButton.addSubview(xmarkImageView)
         xmarkImageView.snp.makeConstraints { make in
             make.center.equalToSuperview()
@@ -86,9 +85,9 @@ extension AddCommentImageSectionCell: Inputable {
         var imageURL: String?
         var imageID: Int64?
     }
-    
+
     func injection(with input: Input) {
-        
+
         if input.isFirstCell {
             imageView.image = UIImage(named: "icon_camera_blue")
             contentView.layer.borderWidth = 1

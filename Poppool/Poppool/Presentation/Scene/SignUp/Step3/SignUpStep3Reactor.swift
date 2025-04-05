@@ -8,35 +8,35 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpStep3Reactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case selectedTag(indexPath: IndexPath)
     }
-    
+
     enum Mutation {
         case loadView
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var selectedCategory: [Int64] = []
         var selectedCategoryTitle: [String] = []
         var categoryIDList: [Int64] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private var cetegoryIDList: [Int64] = []
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -50,14 +50,14 @@ final class SignUpStep3Reactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var categorySection: TagSection = TagSection(inputDataList: [])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -79,14 +79,14 @@ final class SignUpStep3Reactor: Reactor {
                 } else {
                     ToastMaker.createToast(message: "최대 5개까지 선택할 수 있어요")
                 }
-                
+
             } else {
                 categorySection.inputDataList[indexPath.row].isSelected.toggle()
             }
             return Observable.just(.loadView)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -98,7 +98,7 @@ final class SignUpStep3Reactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             categorySection

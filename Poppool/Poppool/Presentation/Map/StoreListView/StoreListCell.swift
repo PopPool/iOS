@@ -1,7 +1,7 @@
-import UIKit
-import SnapKit
-import RxSwift
 import ReactorKit
+import RxSwift
+import SnapKit
+import UIKit
 
 final class StoreListCell: UICollectionViewCell {
     static let identifier = "StoreListCell"
@@ -48,7 +48,7 @@ final class StoreListCell: UICollectionViewCell {
     private let dateLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 12, text: "")
         label.textColor = .g400
-        label.numberOfLines = 2  
+        label.numberOfLines = 2
         return label
     }()
 

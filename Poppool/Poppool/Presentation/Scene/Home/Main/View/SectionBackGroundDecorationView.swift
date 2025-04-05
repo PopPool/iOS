@@ -13,7 +13,7 @@ class SectionBackGroundDecorationView: UICollectionReusableView {
         super.init(frame: frame)
         self.backgroundColor = .g700
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -23,7 +23,7 @@ extension SectionBackGroundDecorationView: Inputable {
     struct Input {
         var backgroundColor: UIColor
     }
-    
+
     func injection(with input: Input) {
         self.backgroundColor = input.backgroundColor
     }

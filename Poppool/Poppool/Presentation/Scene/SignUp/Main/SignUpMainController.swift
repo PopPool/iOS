@@ -7,46 +7,46 @@
 
 import UIKit
 
-import SnapKit
+import Pageboy
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import Pageboy
+import SnapKit
 import Tabman
 
 final class SignUpMainController: BaseTabmanController, View {
-    
+
     typealias Reactor = SignUpMainReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SignUpMainView()
-    
+
     var step1Controller: SignUpStep1Controller = {
         let controller = SignUpStep1Controller()
         controller.reactor = SignUpStep1Reactor()
         return controller
     }()
-    
+
     var step2Controller: SignUpStep2Controller = {
         let controller = SignUpStep2Controller()
         controller.reactor = SignUpStep2Reactor()
         return controller
     }()
-    
+
     var step3Controller: SignUpStep3Controller = {
         let controller = SignUpStep3Controller()
         controller.reactor = SignUpStep3Reactor()
         return controller
     }()
-    
+
     var step4Controller: SignUpStep4Controller = {
         let controller = SignUpStep4Controller()
         controller.reactor = SignUpStep4Reactor()
         return controller
     }()
-    
+
     lazy var controllers = [
         step1Controller,
         step2Controller,
@@ -78,7 +78,7 @@ private extension SignUpMainController {
 // MARK: - Methods
 extension SignUpMainController {
     func bind(reactor: Reactor) {
-        
+
         // 취소버튼 이벤트
         mainView.headerView.cancelButton.rx.tap
             .withUnretained(self)
@@ -87,7 +87,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // 뒤로가기 버튼
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
@@ -97,7 +97,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step1 button tap 이벤트
         step1Controller.mainView.completeButton.rx.tap
             .withUnretained(self)
@@ -107,7 +107,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step2 button tap 이벤트
         step2Controller.mainView.completeButton.rx.tap
             .withUnretained(self)
@@ -117,7 +117,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step3 button tap 이벤트
         step3Controller.mainView.completeButton.rx.tap
             .withUnretained(self)
@@ -127,7 +127,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step3 Skip button tap 이벤트
         step3Controller.mainView.skipButton.rx.tap
             .withUnretained(self)
@@ -137,7 +137,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step4 button tap 이벤트
         step4Controller.mainView.completeButton.rx.tap
             .withUnretained(self)
@@ -148,7 +148,7 @@ extension SignUpMainController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step4 Skip button tap 이벤트
         step4Controller.mainView.skipButton.rx.tap
             .withUnretained(self)
@@ -160,7 +160,6 @@ extension SignUpMainController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-
         // step1 Terms 이벤트
         step1Controller.reactor?.state
             .map({ (state) in
@@ -169,7 +168,7 @@ extension SignUpMainController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step2 nickName 이벤트
         step2Controller.reactor?.state
             .map({ state in
@@ -177,7 +176,7 @@ extension SignUpMainController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step3 category 이벤트
         step3Controller.reactor?.state
             .map({ state in
@@ -185,7 +184,7 @@ extension SignUpMainController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // step4 gender 이벤트
         step4Controller.reactor?.state
             .map({ state in
@@ -205,7 +204,6 @@ extension SignUpMainController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -225,18 +223,18 @@ extension SignUpMainController: PageboyViewControllerDataSource, TMBarDataSource
     func barItem(for bar: any Tabman.TMBar, at index: Int) -> any Tabman.TMBarItemable {
         return TMBarItem(title: "")
     }
-    
+
     func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         return controllers.count
     }
-    
+
     func viewController(
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
         return controllers[index]
     }
-    
+
     func defaultPage(
         for pageboyViewController: Pageboy.PageboyViewController
     ) -> Pageboy.PageboyViewController.Page? {

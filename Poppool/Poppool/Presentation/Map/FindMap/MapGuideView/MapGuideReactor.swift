@@ -1,6 +1,6 @@
+import CoreLocation
 import ReactorKit
 import RxSwift
-import CoreLocation
 import UIKit
 
 final class MapGuideReactor: Reactor {

@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class ImageCell: UICollectionViewCell {
     static let identifier = "ImageCell"

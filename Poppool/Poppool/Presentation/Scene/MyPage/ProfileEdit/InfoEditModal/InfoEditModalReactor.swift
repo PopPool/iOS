@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class InfoEditModalReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -22,7 +22,7 @@ final class InfoEditModalReactor: Reactor {
         case changeAge(age: Int32)
         case saveButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case setGender(index: Int)
@@ -30,24 +30,24 @@ final class InfoEditModalReactor: Reactor {
         case moveToAgeSelectedScene(controller: BaseViewController)
         case moveToRecentScene(controller: BaseViewController, isEdit: Bool)
     }
-    
+
     struct State {
         var age: Int32
         var gender: String?
         var isLoadView: Bool = true
         var saveButtonEnable: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     var originAge: Int32
     var originGender: String?
     var currentAge: Int32 = 0
     var currentGender: String?
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     // MARK: - init
     init(age: Int32, gender: String?) {
@@ -55,7 +55,7 @@ final class InfoEditModalReactor: Reactor {
         self.originGender = gender
         self.initialState = State(age: age, gender: gender)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -74,7 +74,7 @@ final class InfoEditModalReactor: Reactor {
                 .andThen(Observable.just(.moveToRecentScene(controller: controller, isEdit: true)))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isLoadView = false
@@ -96,7 +96,6 @@ final class InfoEditModalReactor: Reactor {
                     .disposed(by: nextController.disposeBag)
             }
 
-            
         case .moveToRecentScene(let controller, let isEdit):
             if isEdit { ToastMaker.createToast(message: "수정사항을 반영했어요") }
             controller.dismiss(animated: true)
@@ -106,7 +105,7 @@ final class InfoEditModalReactor: Reactor {
         case .setAge(let age):
             newState.age = age
         }
-        
+
         if newState.gender == originGender && newState.age == originAge {
             newState.saveButtonEnable = false
         } else {

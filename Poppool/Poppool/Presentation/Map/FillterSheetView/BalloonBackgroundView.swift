@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class BalloonBackgroundView: UIView {
 
@@ -14,7 +14,7 @@ final class BalloonBackgroundView: UIView {
     }()
 
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewCompositionalLayout { section, env in
+        let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(30),
                 heightDimension: .absolute(30)
@@ -89,26 +89,23 @@ final class BalloonBackgroundView: UIView {
         backgroundColor = .clear
         self.isUserInteractionEnabled = true
         containerView.isUserInteractionEnabled = true
-        collectionView.isUserInteractionEnabled = true  
+        collectionView.isUserInteractionEnabled = true
         setupLayout()
         setupCollectionView()
     }
-
-
 
     required init?(coder: NSCoder) { fatalError() }
 
     // MARK: - Setup
 
     private func setupLayout() {
-        
+
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(arrowHeight)
             make.bottom.equalToSuperview().priority(.high)
         }
-
 
         containerView.addSubview(collectionView)
         containerView.addSubview(singleRegionIcon)
@@ -119,7 +116,6 @@ final class BalloonBackgroundView: UIView {
             make.top.left.right.equalToSuperview()
             make.bottom.equalToSuperview().priority(.high)
         }
-
 
         singleRegionIcon.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(24)
@@ -176,7 +172,6 @@ final class BalloonBackgroundView: UIView {
 
     }
 
-
     // MARK: - Public
 
     /// configure 메서드
@@ -213,7 +208,6 @@ final class BalloonBackgroundView: UIView {
         }
     }
 
-
     private func setupTagSection() {
         let allKey = "\(mainRegionTitle)전체"
 
@@ -235,7 +229,6 @@ final class BalloonBackgroundView: UIView {
         )
     }
 
-
     func calculateHeight() -> CGFloat {
        if collectionView.isHidden {
            return 145
@@ -245,13 +238,11 @@ final class BalloonBackgroundView: UIView {
 
        collectionView.layoutIfNeeded()
 
-
        let balloonWidth = self.bounds.width
        let horizontalSpacing: CGFloat = 8
        let leftPadding: CGFloat = 20
        let rightPadding: CGFloat = 20
        let availableWidth = balloonWidth - leftPadding - rightPadding
-
 
        var currentRowWidth: CGFloat = 0
        var numberOfRows: Int = 1
@@ -272,22 +263,19 @@ final class BalloonBackgroundView: UIView {
        let itemHeight: CGFloat = 36
        let interGroupSpacing: CGFloat = 8
        let verticalInset: CGFloat = 20 + 20
-       let totalHeight = max(
+       return max(
            (itemHeight * CGFloat(numberOfRows)) +
            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
            verticalInset,
            36
        )
-
-       return totalHeight
     }
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width
         let iconWidth: CGFloat = isSelected ? 16 : 0
         let iconGap: CGFloat = isSelected ? 4 : 0
         let horizontalPadding: CGFloat = 24
-        let calculatedWidth = textWidth + iconWidth + iconGap + horizontalPadding
-        return calculatedWidth
+        return textWidth + iconWidth + iconGap + horizontalPadding
     }
 }
 

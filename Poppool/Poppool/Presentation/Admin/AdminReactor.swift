@@ -1,6 +1,6 @@
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class AdminReactor: Reactor {
 

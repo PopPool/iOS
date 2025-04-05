@@ -1,25 +1,24 @@
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class ImageBannerSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     var disposeBag = DisposeBag()
-    
+
     private var autoScrollTimer: Timer?
-    
+
     private lazy var contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         view.contentInsetAdjustmentBehavior = .never
         return view
     }()
-    
+
     var pageControl: CustomPageControl = {
-        let controller = CustomPageControl()
-        return controller
+        return CustomPageControl()
     }()
 
     let stopButton: UIButton = {
@@ -27,18 +26,18 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         button.setImage(UIImage(named: "icon_banner_stopButton"), for: .normal)
         return button
     }()
-    
+
     let playButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "icon_banner_playButton"), for: .normal)
         return button
     }()
-    
+
     private var isAutoBannerPlay: Bool = false
     private var isFirstResponseAutoScroll: Bool = true
-    
+
     var imageSection = ImageBannerChildSection(inputDataList: [])
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -52,30 +51,30 @@ final class ImageBannerSectionCell: UICollectionViewCell {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     let bannerTapped: PublishSubject<Int> = .init()
-    
+
     private var currentIndex: Int = 1
     private var isHiddenPauseButton: Bool = true
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUp()
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
         isFirstResponseAutoScroll = false
     }
-    
+
     // 자동 스크롤 중지 함수
     func stopAutoScroll() {
         stopButton.isHidden = true
@@ -84,7 +83,7 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         autoScrollTimer?.invalidate()
         autoScrollTimer = nil
     }
-    
+
     // FIXME: (홈 -> 상세) 이동 시 홈의 자동 스크롤이 계속 돌아감.
     // FIXME: 또한 오토 스크롤을 한번만 실행하면 되는데, 사진이 넘어갈 때 마다 실행되는것으로 보임
     func startAutoScroll(interval: TimeInterval = 3.0) {
@@ -107,13 +106,13 @@ private extension ImageBannerSectionCell {
     func setUp() {
         contentCollectionView.delegate = self
         contentCollectionView.dataSource = self
-        
+
         contentCollectionView.register(
             ImageBannerChildSectionCell.self,
             forCellWithReuseIdentifier: ImageBannerChildSectionCell.identifiers
         )
     }
-    
+
     func setUpConstraints() {
         contentView.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in
@@ -130,7 +129,7 @@ private extension ImageBannerSectionCell {
             make.centerY.equalTo(pageControl)
             make.leading.equalTo(pageControl.snp.trailing).offset(6)
         }
-        
+
         contentView.addSubview(playButton)
         playButton.snp.makeConstraints { make in
             make.size.equalTo(6)
@@ -138,11 +137,11 @@ private extension ImageBannerSectionCell {
             make.leading.equalTo(pageControl.snp.trailing).offset(6)
         }
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [imageSection]
     }
-    
+
     private func findViewController() -> BaseViewController? {
         var nextResponder = self.next
         while nextResponder != nil {
@@ -153,7 +152,7 @@ private extension ImageBannerSectionCell {
         }
         return nil
     }
-    
+
     func bind() {
         stopButton.rx.tap
             .withUnretained(self)
@@ -165,7 +164,7 @@ private extension ImageBannerSectionCell {
                 }
             }
             .disposed(by: disposeBag)
-        
+
         playButton.rx.tap
             .withUnretained(self)
             .subscribe { (owner, _) in
@@ -176,7 +175,7 @@ private extension ImageBannerSectionCell {
                 }
             }
             .disposed(by: disposeBag)
-        
+
         imageSection.currentPage
             .distinctUntilChanged()
             .withUnretained(self)
@@ -197,7 +196,7 @@ extension ImageBannerSectionCell: Inputable {
         var idList: [Int64]
         var isHiddenPauseButton: Bool = false
     }
-    
+
     func injection(with input: Input) {
         if imageSection.isEmpty {
             pageControl.setNumberOfPages(input.imagePaths.count)
@@ -218,22 +217,22 @@ extension ImageBannerSectionCell: Inputable {
                 imageSection.inputDataList = datas.map { .init(imagePath: $0.0, id: $0.1) }
             }
         }
-        
+
         contentCollectionView.reloadData()
         isHiddenPauseButton = input.isHiddenPauseButton
         if isFirstResponseAutoScroll {
             startAutoScroll()
             isFirstResponseAutoScroll = false
         }
-        
+
         if input.isHiddenPauseButton {
             stopAutoScroll()
             stopButton.isHidden = true
             playButton.isHidden = true
         }
-        
+
         bind()
-        
+
         if input.imagePaths.count == 1 {
             playButton.isHidden = true
             stopButton.isHidden = true
@@ -244,26 +243,25 @@ extension ImageBannerSectionCell: Inputable {
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return getSection().count
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return getSection()[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = getSection()[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return getSection()[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         bannerTapped.onNext(indexPath.row)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard imageSection.dataCount > 1 else { return }
         
@@ -282,7 +280,7 @@ extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewData
         if !isHiddenPauseButton {
             startAutoScroll()
         }
-        
+
     }
 }
 

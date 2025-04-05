@@ -6,44 +6,44 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class MyPageNoticeDetailReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var title: String?
         var date: String?
         var content: String?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var title: String?
     var date: String?
     var content: String?
     var noticeID: Int64
-    
+
     let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     // MARK: - init
     init(noticeID: Int64) {
         self.noticeID = noticeID
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -60,7 +60,7 @@ final class MyPageNoticeDetailReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {

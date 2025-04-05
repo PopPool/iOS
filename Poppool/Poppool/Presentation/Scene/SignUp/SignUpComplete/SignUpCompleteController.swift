@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SignUpCompleteController: BaseViewController, View {
-    
+
     typealias Reactor = SignUpCompleteReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SignUpCompleteView()
 }
 
@@ -43,7 +43,7 @@ private extension SignUpCompleteController {
 // MARK: - Methods
 extension SignUpCompleteController {
     func bind(reactor: Reactor) {
-        
+
         mainView.bottomButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -51,7 +51,7 @@ extension SignUpCompleteController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -65,17 +65,17 @@ extension SignUpCompleteController {
                 let categoryString = state.categoryTitles.enumerated()
                     .map { "#\($0.element)" }
                     .joined(separator: ", ")
-                
+
                 let attributedText = NSMutableAttributedString(
                     string: categoryString,
                     attributes: [
-                        .font: UIFont.KorFont(style: .bold, size: 15)!,
+                        .font: UIFont.korFont(style: .bold, size: 15)!,
                         .foregroundColor: UIColor.g600,
                         NSAttributedString.Key.paragraphStyle: paragraphStyle
                     ]
                 )
                 attributedText.append(NSAttributedString(string: "와 연관된 팝업스토어 정보를 안내해드릴게요.", attributes: [
-                    .font: UIFont.KorFont(style: .regular, size: 15)!,
+                    .font: UIFont.korFont(style: .regular, size: 15)!,
                     .foregroundColor: UIColor.g600,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle
                 ]))

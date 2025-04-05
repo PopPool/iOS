@@ -26,8 +26,6 @@ extension GetWithdrawlListDataResponseDTO {
     }
 }
 
-
-
 struct PostWithdrawlListRequestDTO: Encodable {
     var checkedSurveyList: [GetWithdrawlListDataResponseDTO]
 }

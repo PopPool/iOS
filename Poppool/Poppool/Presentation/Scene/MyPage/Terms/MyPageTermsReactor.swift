@@ -7,47 +7,47 @@
 
 import Foundation
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class MyPageTermsReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
-        case cellTapped(indexPath: IndexPath, controller : BaseViewController)
+        case cellTapped(indexPath: IndexPath, controller: BaseViewController)
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private lazy var countSection = CommentListTitleSection(inputDataList: [.init(count: termsSection.dataCount)])
     private var termsSection = MyPageListSection(inputDataList: [
         .init(title: "서비스이용약관"),
         .init(title: "개인정보처리방침"),
         .init(title: "위치정보 이용약관")
     ])
-    
+
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -57,10 +57,10 @@ final class MyPageTermsReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         case .cellTapped(let indexPath, let controller):
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: indexPath))
-            
+
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -75,7 +75,7 @@ final class MyPageTermsReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSections() -> [any Sectionable] {
         return [
             spacing16Section,
@@ -84,7 +84,7 @@ final class MyPageTermsReactor: Reactor {
             termsSection
         ]
     }
-    
+
     func getContent(index: Int) -> String {
         if let path = Bundle.main.path(forResource: "Terms", ofType: "plist"),
            let dict = NSDictionary(contentsOfFile: path) as? [String: String],

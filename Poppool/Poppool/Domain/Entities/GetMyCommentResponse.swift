@@ -11,7 +11,6 @@ struct GetMyCommentedPopUpResponse {
     var popUpInfoList: [GetMyCommentedPopUpDataResponse]
 }
 
-
 struct GetMyCommentedPopUpDataResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?

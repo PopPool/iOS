@@ -1,7 +1,7 @@
-//import UIKit
-//import SnapKit
+// import UIKit
+// import SnapKit
 //
-//final class LocationFilterView: UIView {
+// final class LocationFilterView: UIView {
 //    private let scrollView = UIScrollView()
 //    private let contentStack = UIStackView()
 //
@@ -37,4 +37,4 @@
 //            contentStack.addArrangedSubview(chip)
 //        }
 //    }
-//}
+// }

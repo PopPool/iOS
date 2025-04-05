@@ -7,14 +7,14 @@
 
 import UIKit
 
-import RxSwift
 import RxCocoa
+import RxSwift
 
 class BaseViewController: UIViewController {
-    
+
     var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
     var systemStatusBarDisposeBag = DisposeBag()
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
         Logger.log(
@@ -24,23 +24,23 @@ class BaseViewController: UIViewController {
             line: #line
         )
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.isHidden = true
         systemStatusBarIsDarkBind()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         systemStatusBarIsDark.accept(systemStatusBarIsDark.value)
     }
-    
+
     deinit {
         Logger.log(
             message: "\(self) deinit",
@@ -49,7 +49,7 @@ class BaseViewController: UIViewController {
             line: #line
         )
     }
-    
+
     func systemStatusBarIsDarkBind() {
         systemStatusBarIsDark
             .withUnretained(self)

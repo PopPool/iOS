@@ -1,12 +1,12 @@
-import UIKit
-import SnapKit
 import NMapsMap
+import SnapKit
+import UIKit
 
 final class MapView: UIView {
     // MARK: - Components
     let mapView: NMFMapView = {
         let view = NMFMapView()
-        view.positionMode = .disabled 
+        view.positionMode = .disabled
         view.zoomLevel = 14
 
         view.extent = NMGLatLngBounds(
@@ -54,8 +54,7 @@ final class MapView: UIView {
     }()
 
     var storeCard: MapPopupCarouselView = {
-        let view = MapPopupCarouselView()
-        return view
+        return MapPopupCarouselView()
     }()
 
     // MARK: - Init

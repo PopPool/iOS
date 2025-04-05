@@ -1,4 +1,3 @@
-
 import Foundation
 
 // MARK: - Store List Request
@@ -10,7 +9,7 @@ struct StoreListRequestDTO: Encodable {
     enum CodingKeys: String, CodingKey {
         case query
         case page
-        case size 
+        case size
     }
 }
 
@@ -61,7 +60,6 @@ struct CreatePopUpStoreRequestDTO: Encodable {
         self.bannerYn = !mainImageUrl.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
-
 
 // MARK: - Update Store Request
 struct UpdatePopUpStoreRequestDTO: Encodable {
@@ -122,7 +120,6 @@ struct UpdatePopUpStoreRequestDTO: Encodable {
         }
     }
 }
-
 
 // MARK: - Notice Request
 struct CreateNoticeRequestDTO: Encodable {

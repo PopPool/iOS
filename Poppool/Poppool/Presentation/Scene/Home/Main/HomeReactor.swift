@@ -1,11 +1,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class HomeReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -17,7 +17,7 @@ final class HomeReactor: Reactor {
         case bannerCellTapped(controller: BaseViewController, row: Int)
         case changeIndicatorColor(controller: BaseViewController, row: Int)
     }
-    
+
     enum Mutation {
         case loadView
         case setHedaerState(isDarkMode: Bool)
@@ -26,23 +26,23 @@ final class HomeReactor: Reactor {
         case moveToSearchScene(controller: BaseViewController)
         case skip
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var headerIsDarkMode: Bool = true
         var isReloadView: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
-    
+
     var disposeBag = DisposeBag()
-    
+
     private let homeApiUseCase = HomeAPIUseCaseImpl()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -63,7 +63,16 @@ final class HomeReactor: Reactor {
     private var popularTitleSection = HomeTitleSection(inputDataList: [
         .init(blueText: "팝풀이", topSubText: "들은 지금 이런", bottomText: "팝업에 가장 관심있어요", backgroundColor: .g700, textColor: .w100)
     ])
-    private var popularSection = HomePopularCardSection(inputDataList: [], decorationItems: [SectionDecorationItem(elementKind: "BackgroundView", reusableView: SectionBackGroundDecorationView(), viewInput: .init(backgroundColor: .g700))])
+    private var popularSection = HomePopularCardSection(
+        inputDataList: [],
+        decorationItems: [
+            SectionDecorationItem(
+                elementKind: "BackgroundView",
+                reusableView: SectionBackGroundDecorationView(),
+                viewInput: .init(backgroundColor: .g700)
+            )
+        ]
+    )
     private var newTitleSection = HomeTitleSection(inputDataList: [.init(blueText: "제일 먼저", topSubText: "피드 올리는", bottomText: "신규 오픈 팝업")])
     private var newSection = HomeCardSection(inputDataList: [])
     private var spaceClear48Section = SpacingSection(inputDataList: [.init(spacing: 48)])
@@ -73,12 +82,12 @@ final class HomeReactor: Reactor {
     private var spaceGray40Section = SpacingSection(inputDataList: [.init(spacing: 40, backgroundColor: .g700)])
     private var spaceGray28Section = SpacingSection(inputDataList: [.init(spacing: 28, backgroundColor: .g700)])
     private var spaceGray24Section = SpacingSection(inputDataList: [.init(spacing: 24, backgroundColor: .g700)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -118,7 +127,7 @@ final class HomeReactor: Reactor {
             return Observable.just(.moveToDetailScene(controller: controller, indexPath: IndexPath(row: row, section: 0)))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -155,9 +164,9 @@ final class HomeReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
-        
+
         if isLoign {
             return [
                 loginImageBannerSection,
@@ -186,7 +195,7 @@ final class HomeReactor: Reactor {
         }
 
     }
-    
+
     func getNewSection() -> [any Sectionable] {
         if newSection.isEmpty {
             return []
@@ -199,17 +208,17 @@ final class HomeReactor: Reactor {
             ]
         }
     }
-    
+
     func setBannerSection(response: GetHomeInfoResponse) {
         let imagePaths = response.bannerPopUpStoreList.map { $0.mainImageUrl }
         let idList = response.bannerPopUpStoreList.map { $0.id }
         loginImageBannerSection.inputDataList = imagePaths.isEmpty ? [] : [.init(imagePaths: imagePaths, idList: idList)]
     }
-    
+
     func setCurationTitleSection(response: GetHomeInfoResponse) {
         curationTitleSection.inputDataList = [.init(blueText: response.nickname, topSubText: "님을 위한", bottomText: "맞춤 팝업 큐레이션")]
     }
-    
+
     func setCurationSection(response: GetHomeInfoResponse) {
         let islogin = response.loginYn
         curationSection.inputDataList = response.customPopUpStoreList.map({ response in
@@ -226,7 +235,7 @@ final class HomeReactor: Reactor {
             )
         })
     }
-    
+
     func setPopularSection(response: GetHomeInfoResponse) {
         popularSection.inputDataList = response.popularPopUpStoreList.map({ response in
             return .init(
@@ -239,7 +248,7 @@ final class HomeReactor: Reactor {
             )
         })
     }
-    
+
     func setNewSection(response: GetHomeInfoResponse) {
         let islogin = response.loginYn
         newSection.inputDataList = response.newPopUpStoreList.map({ response in
@@ -256,7 +265,7 @@ final class HomeReactor: Reactor {
             )
         })
     }
-    
+
     func getDetailController(indexPath: IndexPath, currentController: BaseViewController) {
         if isLoign {
             switch indexPath.section {
@@ -327,7 +336,7 @@ final class HomeReactor: Reactor {
             }
         }
     }
-    
+
     func getPopUpData(indexPath: IndexPath) -> HomeCardSectionCell.Input {
         if isLoign {
             switch indexPath.section {

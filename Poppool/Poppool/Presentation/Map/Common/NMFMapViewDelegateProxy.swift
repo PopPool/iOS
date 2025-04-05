@@ -1,6 +1,6 @@
 import NMapsMap
-import RxSwift
 import RxCocoa
+import RxSwift
 
 /// NMFMapViewDelegateProxy는 NMFMapView의 delegate 이벤트를 RxSwift Observable로 변환하는 역할
 class NMFMapViewDelegateProxy: DelegateProxy<NMFMapView, NMFMapViewDelegate>, DelegateProxyType, NMFMapViewDelegate {

@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class CategoryEditModalReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -20,24 +20,24 @@ final class CategoryEditModalReactor: Reactor {
         case cellTapped(row: Int)
         case saveButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController, isEdit: Bool)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var originSelectedID: [Int64]
         var saveButtonIsEnable: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let originSelectedID: [Int64]
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -51,17 +51,17 @@ final class CategoryEditModalReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var signUpUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private var userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private var tagSection = TagSection(inputDataList: [])
-    
+
     // MARK: - init
     init(selectedID: [Int64]) {
         self.originSelectedID = selectedID
         self.initialState = State(originSelectedID: selectedID)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -90,11 +90,11 @@ final class CategoryEditModalReactor: Reactor {
             var keepList: [Int64] = []
             var deleteList: [Int64] = []
             let currentArray = tagSection.inputDataList.filter { $0.isSelected == true }.compactMap { $0.id }
-            for i in currentArray {
-                if originSelectedID.contains(i) {
-                    keepList.append(i)
+            for index in currentArray {
+                if originSelectedID.contains(index) {
+                    keepList.append(index)
                 } else {
-                    addList.append(i)
+                    addList.append(index)
                 }
             }
             deleteList = originSelectedID.filter { !currentArray.contains($0) }
@@ -106,7 +106,7 @@ final class CategoryEditModalReactor: Reactor {
             .andThen(Observable.just(.moveToRecentScene(controller: controller, isEdit: true)))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         let originArray = originSelectedID.sorted(by: <)
@@ -118,7 +118,7 @@ final class CategoryEditModalReactor: Reactor {
             if isEdit { ToastMaker.createToast(message: "수정사항을 반영했어요")}
             controller.dismiss(animated: true)
         }
-        
+
         if currentArray.isEmpty {
             newState.saveButtonIsEnable = false
         } else {
@@ -126,7 +126,7 @@ final class CategoryEditModalReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [tagSection]
     }

@@ -7,22 +7,22 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class OtherUserCommentController: BaseViewController, View {
-    
+
     typealias Reactor = OtherUserCommentReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = OtherUserCommentView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private let cellTapped: PublishSubject<Int> = .init()
 }
 
@@ -31,9 +31,9 @@ extension OtherUserCommentController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
-        
+
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -48,13 +48,13 @@ private extension OtherUserCommentController {
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         if let layout = reactor?.compositionalLayout {
             mainView.contentCollectionView.collectionViewLayout = layout
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
-        
+
         mainView.contentCollectionView.register(
             CommentListTitleSectionCell.self,
             forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers
@@ -62,7 +62,7 @@ private extension OtherUserCommentController {
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             MyCommentedPopUpGridSectionCell.self,
             forCellWithReuseIdentifier: MyCommentedPopUpGridSectionCell.identifiers
@@ -77,7 +77,7 @@ extension OtherUserCommentController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -85,7 +85,7 @@ extension OtherUserCommentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, row) in
@@ -93,7 +93,7 @@ extension OtherUserCommentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -109,19 +109,18 @@ extension OtherUserCommentController: UICollectionViewDelegate, UICollectionView
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 { cellTapped.onNext(indexPath.row) }
     }

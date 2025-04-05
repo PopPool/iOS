@@ -6,41 +6,41 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class CommentCheckReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case continueButtonTapped
         case stopButtonTapped
     }
-    
+
     enum Mutation {
         case setSelectedType(type: SelectedType)
     }
-    
+
     struct State {
         var selectedType: SelectedType = .none
     }
-    
+
     enum SelectedType {
         case none
         case continues
         case stop
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -50,7 +50,7 @@ final class CommentCheckReactor: Reactor {
             return Observable.just(.setSelectedType(type: .stop))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {

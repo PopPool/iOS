@@ -13,7 +13,7 @@ protocol RequesteResponsable: Requestable, Responsable where Response: Decodable
 
 class Endpoint<R: Decodable>: RequesteResponsable {
     typealias Response = R
-    
+
     var baseURL: String
     var path: String
     var method: HTTPMethod

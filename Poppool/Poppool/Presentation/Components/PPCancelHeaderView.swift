@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 final class PPCancelHeaderView: UIView {
-    
+
     // MARK: - Components
     let backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -18,21 +18,21 @@ final class PPCancelHeaderView: UIView {
         button.tintColor = .black
         return button
     }()
-    
+
     let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("취소", for: .normal)
-        button.titleLabel?.font = .KorFont(style: .regular, size: 14)
+        button.titleLabel?.font = .korFont(style: .regular, size: 14)
         button.setTitleColor(.black, for: .normal)
         return button
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -40,7 +40,7 @@ final class PPCancelHeaderView: UIView {
 
 // MARK: - SetUp
 private extension PPCancelHeaderView {
-    
+
     func setUpConstraints() {
         self.addSubview(backButton)
         backButton.snp.makeConstraints { make in
@@ -48,7 +48,7 @@ private extension PPCancelHeaderView {
             make.top.bottom.equalToSuperview().inset(8)
             make.leading.equalToSuperview().inset(12)
         }
-        
+
         self.addSubview(cancelButton)
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(backButton)

@@ -20,6 +20,15 @@ struct GetMyProfileResponseDTO: Decodable {
 
 extension GetMyProfileResponseDTO {
     func toDomain() -> GetMyProfileResponse {
-        return .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro, gender: gender, age: age, interestCategoryList: interestCategoryList.map { $0.toDomain() })
+        return .init(
+            profileImageUrl: profileImageUrl,
+            nickname: nickname,
+            email: email,
+            instagramId: instagramId,
+            intro: intro,
+            gender: gender,
+            age: age,
+            interestCategoryList: interestCategoryList.map { $0.toDomain() }
+        )
     }
 }

@@ -6,11 +6,11 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SubLoginReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case kakaoButtonTapped(controller: BaseViewController)
@@ -19,7 +19,7 @@ final class SubLoginReactor: Reactor {
         case viewWillAppear
         case inquiryButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case moveToSignUpScene(controller: BaseViewController)
         case dismissScene(controller: BaseViewController)
@@ -27,28 +27,28 @@ final class SubLoginReactor: Reactor {
         case resetService
         case moveToInquiryScene(controller: BaseViewController)
     }
-    
+
     struct State {
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private var authrizationCode: String?
-    
+
     private let kakaoLoginService = KakaoLoginService()
     private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     let userDefaultService = UserDefaultService()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -64,7 +64,7 @@ final class SubLoginReactor: Reactor {
             return Observable.just(.moveToInquiryScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToSignUpScene(let controller):
@@ -85,7 +85,7 @@ final class SubLoginReactor: Reactor {
         }
         return state
     }
-    
+
     func loginWithKakao(controller: BaseViewController) -> Observable<Mutation> {
         return kakaoLoginService.fetchUserCredential()
             .withUnretained(self)
@@ -112,7 +112,7 @@ final class SubLoginReactor: Reactor {
                 }
             }
     }
-    
+
     func loginWithApple(controller: BaseViewController) -> Observable<Mutation> {
         return appleLoginService.fetchUserCredential()
             .withUnretained(self)

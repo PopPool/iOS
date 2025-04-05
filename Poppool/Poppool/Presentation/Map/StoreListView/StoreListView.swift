@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class StoreListView: UIView {
     // MARK: - Components

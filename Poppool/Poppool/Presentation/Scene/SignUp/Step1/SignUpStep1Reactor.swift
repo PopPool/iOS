@@ -7,38 +7,38 @@
 
 import Foundation
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpStep1Reactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case totalButtonTapped
         case termsButtonTapped(index: Int)
         case termsRightButtonTapped(index: Int, controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case setTotalSelected
         case setSelectedIndex(index: Int)
         case moveToTermsDetailScene(index: Int, controller: BaseViewController)
     }
-    
+
     struct State {
         var selectedIndex: [Int] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -50,7 +50,7 @@ final class SignUpStep1Reactor: Reactor {
             return Observable.just(.moveToTermsDetailScene(index: index, controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -75,7 +75,7 @@ final class SignUpStep1Reactor: Reactor {
         }
         return newState
     }
-    
+
     func getTitle(index: Int) -> String {
         if index == 1 {
             return "[필수] 이용약관"
@@ -85,7 +85,7 @@ final class SignUpStep1Reactor: Reactor {
             return "[선택] 위치정보 이용약관"
         }
     }
-    
+
     func getContent(index: Int) -> String {
         if let path = Bundle.main.path(forResource: "Terms", ofType: "plist"),
            let dict = NSDictionary(contentsOfFile: path) as? [String: String],

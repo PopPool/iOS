@@ -1,12 +1,12 @@
 import UIKit
 
-import ReactorKit
-import RxSwift
-import RxCocoa
 import LinkPresentation
+import ReactorKit
+import RxCocoa
+import RxSwift
 
 final class DetailReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -19,12 +19,12 @@ final class DetailReactor: Reactor {
         case commentMenuButtonTapped(controller: BaseViewController, indexPath: IndexPath)
         case commentDetailButtonTapped(controller: BaseViewController, indexPath: IndexPath)
         case commentLikeButtonTapped(indexPath: IndexPath)
-        case commentImageTapped(controller: BaseViewController, cellRow: Int, ImageRow: Int)
+        case commentImageTapped(controller: BaseViewController, cellRow: Int, imageRow: Int)
         case similarSectionTapped(controller: BaseViewController, indexPath: IndexPath)
         case backButtonTapped(controller: BaseViewController)
         case loginButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToCommentTypeSelectedScene(controller: BaseViewController)
@@ -37,26 +37,26 @@ final class DetailReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case moveToRecentScene(controller: BaseViewController)
         case moveToLoginScene(controller: BaseViewController)
-        case moveToImageDetailScene(controller: BaseViewController, cellRow: Int, ImageRow: Int)
+        case moveToImageDetailScene(controller: BaseViewController, cellRow: Int, imageRow: Int)
     }
-    
+
     private var commentButtonIsEnable: Bool = false
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var barkGroundImagePath: String?
         var commentButtonIsEnable: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let popUpID: Int64
     private var popUpName: String?
     private var isLogin: Bool = false
     private var isFirstRequest: Bool = true
-    
+
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
@@ -74,7 +74,7 @@ final class DetailReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var imageBannerSection = ImageBannerSection(inputDataList: [])
     private var titleSection = DetailTitleSection(inputDataList: [])
     private var contentSection = DetailContentSection(inputDataList: [])
@@ -84,8 +84,7 @@ final class DetailReactor: Reactor {
     private var commentEmptySection = DetailEmptyCommetSection(inputDataList: [.init()])
     private var similarTitleSecion = SearchTitleSection(inputDataList: [.init(title: "지금 보고있는 팝업과 비슷한 팝업")])
     private var similarSection = DetailSimilarSection(inputDataList: [])
-    
-    
+
     private var spacing70Section = SpacingSection(inputDataList: [.init(spacing: 70)])
     private var spacing40Section = SpacingSection(inputDataList: [.init(spacing: 40)])
     private var spacing36Section = SpacingSection(inputDataList: [.init(spacing: 36)])
@@ -99,7 +98,7 @@ final class DetailReactor: Reactor {
         self.popUpID = popUpID
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -129,11 +128,11 @@ final class DetailReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         case .loginButtonTapped(let controller):
             return Observable.just(.moveToLoginScene(controller: controller))
-        case .commentImageTapped(let controller, let cellRow, let ImageRow):
-            return Observable.just(.moveToImageDetailScene(controller: controller, cellRow: cellRow, ImageRow: ImageRow))
+        case .commentImageTapped(let controller, let cellRow, let imageRow):
+            return Observable.just(.moveToImageDetailScene(controller: controller, cellRow: cellRow, imageRow: imageRow))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -168,9 +167,6 @@ final class DetailReactor: Reactor {
             mapGuideController.modalPresentationStyle = .overCurrentContext
             mapGuideController.modalTransitionStyle = .coverVertical
             controller.present(mapGuideController, animated: true)
-
-
-
 
         case .moveToCommentTotalScene(let controller):
             if isLogin {
@@ -209,8 +205,8 @@ final class DetailReactor: Reactor {
             let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
-        case .moveToImageDetailScene(let controller, let cellRow, let ImageRow):
-            let imagePath = commentSection.inputDataList[cellRow].imageList[ImageRow]
+        case .moveToImageDetailScene(let controller, let cellRow, let imageRow):
+            let imagePath = commentSection.inputDataList[cellRow].imageList[imageRow]
             let nextController = ImageDetailController()
             nextController.reactor = ImageDetailReactor(imagePath: imagePath)
             nextController.modalPresentationStyle = .overCurrentContext
@@ -218,7 +214,10 @@ final class DetailReactor: Reactor {
         }
         return newState
     }
-    
+}
+
+// MARK: Section function
+extension DetailReactor {
     func getSection() -> [any Sectionable] {
         if similarSection.inputDataList.isEmpty {
             if commentSection.inputDataList.isEmpty {
@@ -301,9 +300,8 @@ final class DetailReactor: Reactor {
                 ]
             }
         }
-        
     }
-    
+
     func setContent() -> Observable<Mutation> {
         return popUpAPIUseCase.getPopUpDetail(commentType: "NORMAL", popUpStoredId: popUpID, isViewCount: isFirstRequest)
             .withUnretained(self)
@@ -318,7 +316,7 @@ final class DetailReactor: Reactor {
                 // titleSection
                 owner.titleSection.inputDataList = [.init(title: response.name, isBookMark: response.bookmarkYn, isLogin: response.loginYn)]
                 owner.popUpName = response.name
-                
+
                 // contentSection
                 owner.contentSection.inputDataList = [.init(content: response.desc)]
                 owner.infoSection.inputDataList = [.init(
@@ -355,7 +353,7 @@ final class DetailReactor: Reactor {
                 return .loadView
             }
     }
-    
+
     func bookMark() -> Observable<Mutation> {
         if let isBookMark = titleSection.inputDataList.first?.isBookMark {
             titleSection.inputDataList[0].isBookMark.toggle()
@@ -371,32 +369,32 @@ final class DetailReactor: Reactor {
             return Observable.just(.loadView)
         }
     }
-    
+
     func showSharedBoard(controller: BaseViewController) {
         let storeName = titleSection.inputDataList.first?.title ?? ""
-        let imagePath = Secrets.popPoolS3BaseURL.rawValue + (imageBannerSection.inputDataList.first?.imagePaths.first ?? "")
-        
+        let imagePath = KeyPath.popPoolS3BaseURL + (imageBannerSection.inputDataList.first?.imagePaths.first ?? "")
+
         // URL 인코딩 후 생성
         guard let encodedPath = imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encodedPath) else {
             Logger.log(message: "URL 생성 실패", category: .error)
             return
         }
-        
+
         // 🔹 비동기적으로 이미지 다운로드
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                 Logger.log(message: "다운로드 실패", category: .error)
                 return
             }
-            
+
             guard let data = data, let image = UIImage(data: data) else {
                 Logger.log(message: "이미지 변환 실패", category: .error)
                 return
             }
-            
+
             Logger.log(message: "이미지 다운로드 성공", category: .info)
-            
+
             let sharedText = "[팝풀] \(storeName) 팝업 어때요?\n지금 바로 팝풀에서 확인해보세요!"
             // UI 업데이트는 메인 스레드에서 실행
             DispatchQueue.main.async {
@@ -407,10 +405,10 @@ final class DetailReactor: Reactor {
                 )
                 controller.present(activityViewController, animated: true, completion: nil)
             }
-            
+
         }.resume()
     }
-    
+
     func commentLike(indexPath: IndexPath) -> Observable<Mutation> {
         let isLike = commentSection.inputDataList[indexPath.row].isLike
         let commentID = commentSection.inputDataList[indexPath.row].commentID
@@ -425,7 +423,7 @@ final class DetailReactor: Reactor {
                 .andThen(Observable.just(.loadView))
         }
     }
-    
+
     func showOtherUserCommentMenu(controller: BaseViewController, indexPath: IndexPath, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentUserInfoController()
         nextController.reactor = CommentUserInfoReactor(nickName: comment.nickName)
@@ -455,7 +453,7 @@ final class DetailReactor: Reactor {
                                 case .block:
                                     ToastMaker.createToast(message: "\(comment.nickName ?? "")을 차단했어요")
                                     self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
-                                        .subscribe(onDisposed:  {
+                                        .subscribe(onDisposed: {
                                             blockController.dismiss(animated: true)
                                         })
                                         .disposed(by: self.disposeBag)
@@ -473,13 +471,13 @@ final class DetailReactor: Reactor {
             })
             .disposed(by: disposeBag)
     }
-    
+
     func showMyCommentMenu(controller: BaseViewController, indexPath: IndexPath, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentMyMenuController()
         nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
         imageService = PreSignedService()
         controller.presentPanModal(nextController)
-        
+
         nextController.reactor?.state
             .withUnretained(nextController)
             .subscribe(onNext: { [weak self] (owner, state) in
@@ -492,7 +490,7 @@ final class DetailReactor: Reactor {
                             ToastMaker.createToast(message: "작성한 코멘트를 삭제했어요")
                         })
                         .disposed(by: self.disposeBag)
-                    
+
                     let commentList = comment.imageList.compactMap { $0 }
                     self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
                         .subscribe {
@@ -520,7 +518,7 @@ final class DetailReactor: Reactor {
 class ItemDetailSource: NSObject {
     let name: String
     let image: UIImage
-    
+
     init(name: String, image: UIImage) {
         self.name = name
         self.image = image
@@ -528,14 +526,14 @@ class ItemDetailSource: NSObject {
 }
 
 extension ItemDetailSource: UIActivityItemSource {
-    
+
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         image
     }
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         image
     }
-    
+
     func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         let metaData = LPLinkMetadata()
         metaData.title = name

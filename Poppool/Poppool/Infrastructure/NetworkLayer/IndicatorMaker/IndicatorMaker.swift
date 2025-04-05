@@ -11,26 +11,26 @@ import Lottie
 import SnapKit
 
 struct IndicatorMaker {
-    
+
     static let indicatorImageView: LottieAnimationView = {
         let view = LottieAnimationView(name: "indicator")
         view.loopMode = .loop
         return view
     }()
-    
+
     static let overlayView: UIView = {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.1)
         return view
     }()
-    
+
     static func showIndicator() {
         DispatchQueue.main.async {
             guard let topVC = UIApplication.topViewController() else {
                 print("Error: Cannot find top view controller")
                 return
             }
-            
+
             topVC.view.addSubview(overlayView)
             overlayView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
@@ -44,7 +44,7 @@ struct IndicatorMaker {
             topVC.view.isUserInteractionEnabled = false
         }
     }
-    
+
     static func hideIndicator() {
         DispatchQueue.main.async {
             indicatorImageView.stop()

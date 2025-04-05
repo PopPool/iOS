@@ -8,34 +8,34 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class MyPageNoticeReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case listCellTapped(controller: BaseViewController, row: Int)
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToDetailScene(controller: BaseViewController, row: Int)
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -53,12 +53,11 @@ final class MyPageNoticeReactor: Reactor {
     private var listSection = NoticeListSection(inputDataList: [])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
 
-    
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -78,7 +77,7 @@ final class MyPageNoticeReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -93,7 +92,7 @@ final class MyPageNoticeReactor: Reactor {
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing16Section,

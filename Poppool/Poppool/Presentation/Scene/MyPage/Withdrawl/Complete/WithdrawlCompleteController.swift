@@ -7,16 +7,16 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class WithdrawlCompleteController: BaseViewController {
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = WithdrawlCompleteView()
 }
 

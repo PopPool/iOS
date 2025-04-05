@@ -5,13 +5,13 @@
 //  Created by SeoJunYoung on 7/3/24.
 //
 
+import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
-import RxSwift
-import RxCocoa
 
 final class PPPicker: UIView {
-    
+
     // MARK: - Components
     private let components: [String]
     let pickerView = UIPickerView()
@@ -24,7 +24,7 @@ final class PPPicker: UIView {
     private let disposeBag = DisposeBag()
     /// 항목 선택 이벤트를 전달하는 PublishSubject입니다.
     let itemSelectObserver: PublishSubject<Int> = .init()
-    
+
     // MARK: - init
      /// PickerCPNT init
      /// - Parameter components: UIPickerView에 표시할 문자열 배열입니다.
@@ -35,7 +35,7 @@ final class PPPicker: UIView {
         setUpConstraints()
         bind()
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -49,7 +49,7 @@ extension PPPicker {
         pickerView.delegate = self
         pickerView.dataSource = self
     }
-    
+
     func setUpConstraints() {
         self.addSubview(selectView)
         self.addSubview(pickerView)
@@ -62,7 +62,7 @@ extension PPPicker {
             make.center.equalToSuperview()
         }
     }
-    
+
     func bind() {
         pickerView.rx.itemSelected
             .withUnretained(self)
@@ -75,7 +75,7 @@ extension PPPicker {
 
 // MARK: - Methods
 extension PPPicker {
-    
+
     /// 지정된 인덱스로 UIPickerView를 설정
     /// - Parameter index: 설정할 인덱스 값
     func setIndex(index: Int) {
@@ -88,19 +88,19 @@ extension PPPicker: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return components.count
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = UILabel()
         label.text = components[row]
         label.textAlignment = .center
-        label.font = .KorFont(style: .medium, size: 16)
+        label.font = .korFont(style: .medium, size: 16)
         DispatchQueue.main.async {
             if let label = pickerView.view(forRow: row, forComponent: component) as? UILabel {
-                label.font = .KorFont(style: .bold, size: 18)
+                label.font = .korFont(style: .bold, size: 18)
             }
         }
         pickerView.subviews[1].isHidden = true
@@ -110,7 +110,7 @@ extension PPPicker: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 48
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         pickerView.reloadAllComponents()
     }
