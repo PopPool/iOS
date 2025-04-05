@@ -15,7 +15,6 @@ struct MapPopUpStore: Equatable {
     let markerSnippet: String
     let mainImageUrl: String?
 
-
     var nmgCoordinate: NMGLatLng {
         NMGLatLng(lat: latitude, lng: longitude)
     }

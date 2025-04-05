@@ -1,10 +1,10 @@
-import UIKit
-import SnapKit
-import RxCocoa
-import RxSwift
-import ReactorKit
 import FloatingPanel
+import ReactorKit
+import RxCocoa
 import RxDataSources
+import RxSwift
+import SnapKit
+import UIKit
 
 final class StoreListViewController: UIViewController, View {
     typealias Reactor = StoreListReactor
@@ -56,15 +56,16 @@ final class StoreListViewController: UIViewController, View {
 
     func bind(reactor: Reactor) {
         let dataSource = RxCollectionViewSectionedReloadDataSource<StoreListSection>(
-            configureCell: { [weak self] ds, cv, indexPath, item in
-                guard let self = self else { return UICollectionViewCell() }
-                let cell = cv.dequeueReusableCell(
-                    withReuseIdentifier: StoreListCell.identifier,
-                    for: indexPath
-                ) as! StoreListCell
+            configureCell: { [weak self] _, cv, indexPath, item in
+                guard let self = self,
+                      let cell = cv.dequeueReusableCell(
+                          withReuseIdentifier: StoreListCell.identifier,
+                          for: indexPath
+                      ) as? StoreListCell
+                else { return UICollectionViewCell() }
 
                 cell.injection(with: .init(
-                    thumbnailURL: item.thumbnailURL, 
+                    thumbnailURL: item.thumbnailURL,
                     category: item.category,
                     title: item.title,
                     location: item.location,
@@ -124,7 +125,6 @@ final class StoreListViewController: UIViewController, View {
             })
             .disposed(by: disposeBag)
 
-
         // 4) viewWillAppear -> viewDidLoad
 //        rx.viewWillAppear
 //            .map { _ in Reactor.Action.viewDidLoad }
@@ -155,7 +155,7 @@ final class StoreListViewController: UIViewController, View {
 //            .compactMap { $0 }
 //            .bind(to: reactor.action)
 //            .disposed(by: disposeBag)
-    
+
     }
 
     private func presentFilterBottomSheet(for filterType: FilterType) {
@@ -167,7 +167,7 @@ final class StoreListViewController: UIViewController, View {
         viewController.containerView.segmentedControl.selectedSegmentIndex = initialIndex
         sheetReactor.action.onNext(.segmentChanged(initialIndex))
 
-        viewController.onSave = { [weak self] selectedOptions in
+        viewController.onSave = { [weak self] _ in
             guard let self = self else { return }
             // 닫기
             self.reactor?.action.onNext(.filterTapped(nil))

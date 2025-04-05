@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class CommentListReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -24,7 +24,7 @@ final class CommentListReactor: Reactor {
         case profileButtonTapped(controller: BaseViewController, row: Int)
         case detailSceneLikeButtonTapped(row: Int)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
@@ -33,26 +33,26 @@ final class CommentListReactor: Reactor {
         case presentImageScene(controller: BaseViewController, commentRow: Int, imageRow: Int)
         case presentCommentMenuScene(controller: BaseViewController, row: Int)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isReloadView: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private let popUpID: Int64
     private let popUpName: String?
     private var page: Int32 = 0
     private var appendDataIsEmpty: Bool = false
-    
+
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -66,10 +66,10 @@ final class CommentListReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var commentTitleSection = CommentListTitleSection(inputDataList: [])
     private var commentSection = DetailCommentSection(inputDataList: [])
-    
+
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     // MARK: - init
@@ -78,7 +78,7 @@ final class CommentListReactor: Reactor {
         self.popUpID = popUpID
         self.popUpName = popUpName
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -173,7 +173,7 @@ final class CommentListReactor: Reactor {
             return Observable.just(.loadView)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -207,11 +207,11 @@ final class CommentListReactor: Reactor {
             } else {
                 showOtherUserCommentMenu(controller: controller, comment: comment)
             }
-            
+
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing24Section,
@@ -220,7 +220,7 @@ final class CommentListReactor: Reactor {
             commentSection
         ]
     }
-    
+
     func showOtherUserCommentMenu(controller: BaseViewController, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentUserInfoController()
         nextController.reactor = CommentUserInfoReactor(nickName: comment.nickName)
@@ -250,7 +250,7 @@ final class CommentListReactor: Reactor {
                                 case .block:
                                     ToastMaker.createToast(message: "\(comment.nickName ?? "")을 차단했어요")
                                     self.userAPIUseCase.postUserBlock(blockedUserId: comment.creator)
-                                        .subscribe(onDisposed:  {
+                                        .subscribe(onDisposed: {
                                             blockController.dismiss(animated: true)
                                         })
                                         .disposed(by: self.disposeBag)
@@ -268,13 +268,13 @@ final class CommentListReactor: Reactor {
             })
             .disposed(by: disposeBag)
     }
-    
+
     func showMyCommentMenu(controller: BaseViewController, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentMyMenuController()
         nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
         imageService = PreSignedService()
         controller.presentPanModal(nextController)
-        
+
         nextController.reactor?.state
             .withUnretained(nextController)
             .subscribe(onNext: { [weak self] (owner, state) in
@@ -287,7 +287,7 @@ final class CommentListReactor: Reactor {
                             ToastMaker.createToast(message: "작성한 코멘트를 삭제했어요")
                         })
                         .disposed(by: self.disposeBag)
-                    
+
                     let commentList = comment.imageList.compactMap { $0 }
                     self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
                         .subscribe {

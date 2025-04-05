@@ -1,9 +1,9 @@
-import UIKit
-import SnapKit
-import RxSwift
-import RxCocoa
-import NMapsMap
 import CoreLocation
+import NMapsMap
+import RxCocoa
+import RxSwift
+import SnapKit
+import UIKit
 
 class FullScreenMapViewController: MapViewController {
     // MARK: - Properties
@@ -12,15 +12,12 @@ class FullScreenMapViewController: MapViewController {
     private var markerLocked = false // 마커 상태 잠금 플래그
     private var initialMarker: NMFMarker?
 
-
     // MARK: - Initialization
     init(store: MapPopUpStore?, existingMarker: NMFMarker? = nil) {
         self.initialStore = store
         self.initialMarker = existingMarker
         super.init()
     }
-
-
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -35,7 +32,6 @@ class FullScreenMapViewController: MapViewController {
         self.navigationController?.navigationBar.isHidden = false
         Logger.log(message: "💡 초기 위치 구성 직전: initialStore=\(String(describing: initialStore?.name))", category: .debug)
         configureInitialMapPosition()
-
 
         Logger.log(message: "✅ FullScreenMapViewController - viewDidLoad 완료", category: .debug)
 
@@ -145,8 +141,6 @@ class FullScreenMapViewController: MapViewController {
         carouselView.isHidden = false
     }
 
-
-
     override func bind(reactor: MapReactor) {
         super.bind(reactor: reactor)
 
@@ -191,7 +185,6 @@ class FullScreenMapViewController: MapViewController {
 
         super.updateMarkerStyle(marker: marker, selected: selected, isCluster: isCluster, count: count, regionName: regionName)
     }
-
 
     override func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool {
         isMovingToMarker = true

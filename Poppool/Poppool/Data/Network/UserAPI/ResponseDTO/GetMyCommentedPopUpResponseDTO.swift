@@ -5,7 +5,6 @@
 //  Created by SeoJunYoung on 1/12/25.
 //
 
-
 import Foundation
 
 struct GetMyCommentedPopUpResponseDTO: Decodable {

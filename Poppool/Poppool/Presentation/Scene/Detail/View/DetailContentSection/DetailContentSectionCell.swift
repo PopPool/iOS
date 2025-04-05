@@ -7,11 +7,11 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class DetailContentSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     private let contentStackView: UIStackView = {
@@ -26,38 +26,37 @@ final class DetailContentSectionCell: UICollectionViewCell {
         label.numberOfLines = 3
         return label
     }()
-    
+
     let dropDownButton: UIButton = {
-        let button = UIButton()
-        return button
+        return UIButton()
     }()
-    
+
     let buttonTitleLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 13, text: "더보기")
         label.textColor = .g600
         return label
     }()
-    
+
     let buttonImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "icon_dropdown_bottom_gray")
         return view
     }()
-    
+
     var isOpen: Bool = false
-    
+
     var disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -97,10 +96,10 @@ extension DetailContentSectionCell: Inputable {
     struct Input {
         var content: String?
     }
-    
+
     func injection(with input: Input) {
         let text = input.content ?? ""
-        contentLabel.setLineHeightText(text: text, font: .KorFont(style: .regular, size: 13))
+        contentLabel.setLineHeightText(text: text, font: .korFont(style: .regular, size: 13))
         if text.count >= 68 {
             dropDownButton.isHidden = false
         } else {

@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CommentCheckController: BaseViewController, View {
-    
+
     typealias Reactor = CommentCheckReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CommentCheckView()
 }
 
@@ -48,7 +48,7 @@ extension CommentCheckController {
             .map { Reactor.Action.continueButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.stopButton.rx.tap
             .map { Reactor.Action.stopButtonTapped }
             .bind(to: reactor.action)

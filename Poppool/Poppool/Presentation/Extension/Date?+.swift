@@ -19,7 +19,7 @@ extension Optional where Wrapped == Date {
         formatter.dateFormat = "yyyy. MM. dd"
         return formatter.string(from: date)
     }
-    
+
     func toPPDateMonthString(defaultString: String = "") -> String {
         guard let date = self else {
             return defaultString
@@ -28,7 +28,7 @@ extension Optional where Wrapped == Date {
         formatter.dateFormat = "MM월 dd일"
         return formatter.string(from: date)
     }
-    
+
     func toPPTimeeString(defaultString: String = "") -> String {
         guard let date = self else {
             return defaultString

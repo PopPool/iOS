@@ -7,23 +7,22 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class NoticeListSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 14)
-        return label
+        return PPLabel(style: .medium, fontSize: 14)
     }()
-    
+
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.textColor = .g400
         return label
     }()
-    
+
     private let arrowImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "icon_right_gray")
@@ -31,12 +30,12 @@ final class NoticeListSectionCell: UICollectionViewCell {
     }()
     let disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -50,14 +49,13 @@ private extension NoticeListSectionCell {
             make.leading.equalToSuperview()
             make.top.equalToSuperview().inset(20)
         }
-        
+
         contentView.addSubview(dateLabel)
         dateLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview().inset(20)
         }
-        
-        
+
         contentView.addSubview(arrowImageView)
         arrowImageView.snp.makeConstraints { make in
             make.size.equalTo(22)
@@ -73,9 +71,9 @@ extension NoticeListSectionCell: Inputable {
         var date: String?
         var noticeID: Int64
     }
-    
+
     func injection(with input: Input) {
-        titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 14))
-        dateLabel.setLineHeightText(text: input.date, font: .EngFont(style: .regular, size: 12))
+        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 14))
+        dateLabel.setLineHeightText(text: input.date, font: .engFont(style: .regular, size: 12))
     }
 }

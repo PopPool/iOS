@@ -7,14 +7,14 @@
 
 import UIKit
 
-import SnapKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import SnapKit
 
 final class ToastMaker {
-    
+
     // MARK: - Properties
-    
+
     /// 현재 디바이스 최상단 Window를 지정
     static var window: UIWindow? {
         return UIApplication
@@ -23,7 +23,7 @@ final class ToastMaker {
             .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
             .first { $0.isKeyWindow }
     }
-    
+
     /// 최상단의 ViewController를 가져오는 메서드
     private static func topViewController(
         _ rootViewController: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
@@ -39,32 +39,32 @@ final class ToastMaker {
         }
         return rootViewController
     }
-    
+
     private static var currentToast: ToastView?
     private static var currentBookMarkToast: BookMarkToastView?
     private static var disposeBag = DisposeBag()
 }
 
 extension ToastMaker {
-    
+
     // MARK: - Method
-    
+
     /// 토스트 메시지를 생성하는 메서드
     /// - Parameter message: 토스트 메세지에 담길 String 타입
     static func createToast(message: String) {
-        
+
         currentToast?.removeFromSuperview()
         currentToast = nil
         let toastMSG = ToastView(message: message)
         guard let window = window else { return }
         window.addSubview(toastMSG)
         currentToast = toastMSG
-        
+
         toastMSG.snp.makeConstraints { make in
             make.bottom.equalTo(window.snp.bottom).inset(120)
             make.centerX.equalTo(window.snp.centerX)
         }
-        
+
         UIView.animate(
             withDuration: 0.3,
             delay: 4,
@@ -76,11 +76,11 @@ extension ToastMaker {
             if currentToast == toastMSG { currentToast = nil }
         }
     }
-    
+
     /// 토스트 메시지를 생성하는 메서드
     /// - Parameter message: 토스트 메세지에 담길 String 타입
     static func createBookMarkToast(isBookMark: Bool) {
-        
+
         currentBookMarkToast?.removeFromSuperview()
         currentBookMarkToast = nil
         disposeBag = DisposeBag()
@@ -96,7 +96,7 @@ extension ToastMaker {
                 owner.navigationController?.pushViewController(nextController, animated: true)
             })
             .disposed(by: disposeBag)
-        
+
         if isBookMark {
             toastMSG.snp.makeConstraints { make in
                 make.bottom.equalTo(currentVC.view.snp.bottom).inset(120)
@@ -108,8 +108,7 @@ extension ToastMaker {
                 make.centerX.equalTo(currentVC.view.snp.centerX)
             }
         }
-        
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
             UIView.animate(
                 withDuration: 0.3, delay: 0,
@@ -122,6 +121,6 @@ extension ToastMaker {
                 disposeBag = DisposeBag()
             }
         }
-        
+
     }
 }

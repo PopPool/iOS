@@ -8,31 +8,31 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class InstaCommentAddReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case instaButtonTapped
     }
-    
+
     enum Mutation {
         case loadView
         case moveToInsta
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -46,7 +46,7 @@ final class InstaCommentAddReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private let guideSection = InstaGuideSection(inputDataList: [
         .init(
             imageList: [
@@ -59,7 +59,7 @@ final class InstaCommentAddReactor: Reactor {
                 {
                     let title = "아래 인스타그램 열기\n버튼을 터치해 앱 열기"
                     let attributedTitle = NSMutableAttributedString(string: title)
-                    let koreanFont = UIFont.KorFont(style: .bold, size: 20)!
+                    let koreanFont = UIFont.korFont(style: .bold, size: 20)!
                     attributedTitle.addAttribute(.font, value: koreanFont, range: NSRange(location: 0, length: title.count))
                     attributedTitle.addAttribute(.foregroundColor, value: UIColor.blu500.cgColor, range: (title as NSString).range(of: "인스타그램 열기"))
                     let paragraphStyle = NSMutableParagraphStyle()
@@ -70,7 +70,7 @@ final class InstaCommentAddReactor: Reactor {
                 {
                     let title = "원하는 피드의 이미지로 이동 후\n공유하기 > 링크복사 터치하기"
                     let attributedTitle = NSMutableAttributedString(string: title)
-                    let koreanFont = UIFont.KorFont(style: .bold, size: 20)!
+                    let koreanFont = UIFont.korFont(style: .bold, size: 20)!
                     attributedTitle.addAttribute(.font, value: koreanFont, range: NSRange(location: 0, length: title.count))
                     attributedTitle.addAttribute(.foregroundColor, value: UIColor.blu500.cgColor, range: (title as NSString).range(of: "공유하기 > 링크복사"))
                     let paragraphStyle = NSMutableParagraphStyle()
@@ -81,7 +81,7 @@ final class InstaCommentAddReactor: Reactor {
                 {
                     let title = "아래 이미지 영역을 터치해\n팝풀 앱으로 돌아오기"
                     let attributedTitle = NSMutableAttributedString(string: title)
-                    let koreanFont = UIFont.KorFont(style: .bold, size: 20)!
+                    let koreanFont = UIFont.korFont(style: .bold, size: 20)!
                     attributedTitle.addAttribute(.font, value: koreanFont, range: NSRange(location: 0, length: title.count))
                     attributedTitle.addAttribute(.foregroundColor, value: UIColor.blu500.cgColor, range: (title as NSString).range(of: "팝풀 앱"))
                     let paragraphStyle = NSMutableParagraphStyle()
@@ -92,7 +92,7 @@ final class InstaCommentAddReactor: Reactor {
                 {
                     let title = "복사된 인스타 피드 이미지와\n함께할 글을 입력 후 등록하기"
                     let attributedTitle = NSMutableAttributedString(string: title)
-                    let koreanFont = UIFont.KorFont(style: .bold, size: 20)!
+                    let koreanFont = UIFont.korFont(style: .bold, size: 20)!
                     attributedTitle.addAttribute(.font, value: koreanFont, range: NSRange(location: 0, length: title.count))
                     attributedTitle.addAttribute(.foregroundColor, value: UIColor.blu500.cgColor, range: (title as NSString).range(of: "글을 입력 후 등록"))
                     let paragraphStyle = NSMutableParagraphStyle()
@@ -103,12 +103,12 @@ final class InstaCommentAddReactor: Reactor {
             ]
         )
     ])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -118,7 +118,7 @@ final class InstaCommentAddReactor: Reactor {
             return Observable.just(.moveToInsta)
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -126,21 +126,21 @@ final class InstaCommentAddReactor: Reactor {
             newState.sections = getSection()
         case .moveToInsta:
             openInstagram()
-            
+
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             guideSection
         ]
     }
-    
+
     func openInstagram() {
         // Instagram 앱의 URL Scheme
         let instagramURL = URL(string: "instagram://app")!
-        
+
         if UIApplication.shared.canOpenURL(instagramURL) {
             // Instagram 앱 열기
             UIApplication.shared.open(instagramURL, options: [:], completionHandler: nil)

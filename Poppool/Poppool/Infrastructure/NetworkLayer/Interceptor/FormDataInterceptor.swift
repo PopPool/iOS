@@ -5,20 +5,20 @@
 //  Created by SeoJunYoung on 10/25/24.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 import RxSwift
 
 final class FormDataInterceptor: RequestInterceptor {
-    
+
     private var disposeBag = DisposeBag()
-    
+
     func adapt(
         _ urlRequest: URLRequest,
         for session: Session,
         completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         }
-    
+
     func retry(
         _ request: Request,
         for session: Session,

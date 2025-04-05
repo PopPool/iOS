@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SignUpStep4Controller: BaseViewController, View {
-    
+
     typealias Reactor = SignUpStep4Reactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = SignUpStep4View()
 }
 
@@ -50,7 +50,7 @@ extension SignUpStep4Controller {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.ageSelectedButton.button.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -58,7 +58,7 @@ extension SignUpStep4Controller {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in

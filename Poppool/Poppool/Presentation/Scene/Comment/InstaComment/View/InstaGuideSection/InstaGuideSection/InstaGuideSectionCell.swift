@@ -7,24 +7,24 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class InstaGuideSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     let disposeBag = DisposeBag()
-    
+
     private var autoScrollTimer: Timer?
-    
+
     private lazy var contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
         view.isScrollEnabled = false
         view.backgroundColor = .g50
         return view
     }()
-    
+
     var pageControl: UIPageControl = {
         let controller = UIPageControl()
         controller.currentPage = 0
@@ -36,17 +36,17 @@ final class InstaGuideSectionCell: UICollectionViewCell {
         controller.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         return controller
     }()
-    
+
     let stopButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "icon_banner_stopButton_gray"), for: .normal)
         return button
     }()
-    
+
     private var isAutoBannerPlay: Bool = false
-    
+
     private var imageSection = InstaGuideChildSection(inputDataList: [])
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -60,25 +60,25 @@ final class InstaGuideSectionCell: UICollectionViewCell {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUp()
         setUpConstraints()
         bind()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         stopAutoScroll()
     }
-    
+
     deinit {
         stopAutoScroll()
     }
@@ -89,7 +89,7 @@ private extension InstaGuideSectionCell {
     func setUp() {
         contentCollectionView.delegate = self
         contentCollectionView.dataSource = self
-        
+
         contentCollectionView.register(
             InstaGuideChildSectionCell.self,
             forCellWithReuseIdentifier: InstaGuideChildSectionCell.identifiers
@@ -101,21 +101,21 @@ private extension InstaGuideSectionCell {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func setUpConstraints() {
         contentView.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(504)
         }
-        
+
         contentView.addSubview(pageControl)
         pageControl.snp.makeConstraints { make in
             make.top.equalTo(contentCollectionView.snp.bottom)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
+
         contentView.addSubview(stopButton)
         stopButton.snp.makeConstraints { make in
             make.size.equalTo(8)
@@ -123,11 +123,11 @@ private extension InstaGuideSectionCell {
             make.leading.equalTo(pageControl.snp.trailing).offset(-36)
         }
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [imageSection]
     }
-    
+
     func startAutoScroll(interval: TimeInterval = 3.0) {
         stopAutoScroll() // 기존 타이머를 중지
         isAutoBannerPlay = true
@@ -157,7 +157,7 @@ private extension InstaGuideSectionCell {
         contentCollectionView.scrollToItem(at: nextIndex, at: .centeredHorizontally, animated: true)
         pageControl.currentPage = nextIndex.item
     }
-    
+
     func bind() {
         stopButton.rx.tap
             .withUnretained(self)
@@ -177,7 +177,7 @@ extension InstaGuideSectionCell: Inputable {
         var imageList: [UIImage?]
         var title: [NSMutableAttributedString?]
     }
-    
+
     func injection(with input: Input) {
         pageControl.numberOfPages = input.imageList.count
         let datas = zip(input.imageList, input.title).enumerated().map { $0 }
@@ -189,19 +189,18 @@ extension InstaGuideSectionCell: Inputable {
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension InstaGuideSectionCell: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return getSection().count
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return getSection()[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = getSection()[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return getSection()[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
 }

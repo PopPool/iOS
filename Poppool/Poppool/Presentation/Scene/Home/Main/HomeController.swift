@@ -7,29 +7,28 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class HomeController: BaseViewController, View {
-    
+
     typealias Reactor = HomeReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = HomeView()
-    
+
     let homeHeaderView: HomeHeaderView = {
-        let view = HomeHeaderView()
-        return view
+        return HomeHeaderView()
     }()
-    
+
     private let headerBackgroundView: UIView = UIView()
     let backGroundblurEffect = UIBlurEffect(style: .regular)
     lazy var backGroundblurView = UIVisualEffectView(effect: backGroundblurEffect)
-    
+
     private var sections: [any Sectionable] = []
 }
 
@@ -39,7 +38,7 @@ extension HomeController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
@@ -55,58 +54,57 @@ private extension HomeController {
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
-        
+
         mainView.contentCollectionView.register(
             ImageBannerSectionCell.self,
             forCellWithReuseIdentifier: ImageBannerSectionCell.identifiers
         )
-        
+
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
-        
+
         mainView.contentCollectionView.register(
             HomeTitleSectionCell.self,
             forCellWithReuseIdentifier: HomeTitleSectionCell.identifiers
         )
-        
+
         mainView.contentCollectionView.register(
             HomeCardSectionCell.self,
             forCellWithReuseIdentifier: HomeCardSectionCell.identifiers
         )
-        
+
         mainView.contentCollectionView.register(
             HomePopularCardSectionCell.self,
             forCellWithReuseIdentifier: HomePopularCardSectionCell.identifiers
         )
-        
+
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         view.addSubview(homeHeaderView)
         homeHeaderView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).inset(7)
             make.leading.trailing.equalToSuperview()
         }
-        
+
         headerBackgroundView.addSubview(backGroundblurView)
         backGroundblurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         backGroundblurView.isUserInteractionEnabled = false
         backGroundblurView.isHidden = true
-        
+
         view.addSubview(headerBackgroundView)
         headerBackgroundView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(homeHeaderView.snp.bottom).offset(7)
         }
 
-        
         view.bringSubviewToFront(homeHeaderView)
     }
 }
@@ -118,7 +116,7 @@ extension HomeController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         homeHeaderView.searchBarButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -126,7 +124,7 @@ extension HomeController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -142,18 +140,18 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
-        
+
         if let cell = cell as? ImageBannerSectionCell {
             cell.bannerTapped
                 .withUnretained(self)
@@ -162,7 +160,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
                 })
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-            
+
             cell.imageSection.currentPage
                 .distinctUntilChanged()
                 .withUnretained(self)
@@ -182,17 +180,17 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? HomeCardSectionCell {
             cell.bookmarkButton.rx.tap
                 .map { Reactor.Action.bookMarkButtonTapped(indexPath: indexPath)}
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
             backGroundblurView.isHidden = true
@@ -201,7 +199,7 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
             backGroundblurView.isHidden = false
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.collectionViewCellTapped(controller: self, indexPath: indexPath))
     }

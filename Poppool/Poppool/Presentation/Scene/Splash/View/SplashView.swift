@@ -7,25 +7,25 @@
 
 import UIKit
 
-import SnapKit
 import Lottie
+import SnapKit
 
 final class SplashView: UIView {
-    
+
     // MARK: - Components
-    
+
     let animationView: LottieAnimationView = {
         let view = LottieAnimationView(name: "PP_splash")
         view.contentMode = .scaleAspectFit
         return view
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,7 +33,7 @@ final class SplashView: UIView {
 
 // MARK: - SetUp
 private extension SplashView {
-    
+
     func setUpConstraints() {
         addSubview(animationView)
         animationView.snp.makeConstraints { make in

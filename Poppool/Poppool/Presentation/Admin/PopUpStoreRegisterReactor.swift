@@ -5,12 +5,12 @@
 ////  Created by 김기현 on 1/14/25.
 ////
 //
-//import Foundation
-//import ReactorKit
-//import RxSwift
-//import UIKit
+// import Foundation
+// import ReactorKit
+// import RxSwift
+// import UIKit
 //
-//final class PopUpStoreRegisterReactor: Reactor {
+// final class PopUpStoreRegisterReactor: Reactor {
 //
 //    // MARK: - Action
 //    enum Action {
@@ -303,4 +303,4 @@
 //        default: return 100
 //        }
 //    }
-//}
+// }

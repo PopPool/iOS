@@ -36,7 +36,7 @@ class DefaultMapUseCase: MapUseCase {
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [Int64]  
+        categories: [Int64]
     ) -> Observable<[MapPopUpStore]> {
 
         return repository.fetchStoresInBounds(
@@ -48,7 +48,6 @@ class DefaultMapUseCase: MapUseCase {
         )
         .map { $0.map { $0.toDomain() } }
     }
-
 
     func searchStores(
         query: String,

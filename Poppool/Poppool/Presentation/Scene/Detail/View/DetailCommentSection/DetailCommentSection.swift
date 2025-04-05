@@ -10,17 +10,17 @@ import UIKit
 import RxSwift
 
 struct DetailCommentSection: Sectionable {
-    
+
     var currentPage: PublishSubject<Int> = .init()
-    
+
     typealias CellType = DetailCommentSectionCell
-    
+
     var inputDataList: [CellType.Input]
-    
+
     var supplementaryItems: [any SectionSupplementaryItemable]?
-    
+
     var decorationItems: [any SectionDecorationItemable]?
-    
+
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -37,7 +37,7 @@ struct DetailCommentSection: Sectionable {
         // 섹션 생성
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        
+
         return section
     }
 }

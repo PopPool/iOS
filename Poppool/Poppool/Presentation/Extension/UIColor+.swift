@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    
+
     // 무채색 컬러
     static let g50 = UIColor(hexCode: "F2F5F7")
     static let g100 = UIColor(hexCode: "DFE2E6")
@@ -21,7 +21,7 @@ extension UIColor {
     static let g800 = UIColor(hexCode: "1F242B")
     static let g900 = UIColor(hexCode: "17191C")
     static let g1000 = UIColor(hexCode: "141414")
-    
+
     // 화이트 톤
     static let w4 = UIColor(hexCode: "ffffff", alpha: 0.04)
     static let w7 = UIColor(hexCode: "ffffff", alpha: 0.07)
@@ -31,8 +31,7 @@ extension UIColor {
     static let w70 = UIColor(hexCode: "ffffff", alpha: 0.7)
     static let w90 = UIColor(hexCode: "ffffff", alpha: 0.9)
     static let w100 = UIColor(hexCode: "ffffff", alpha: 1.0)
-    
-    
+
     // 퓨어 블랙
     static let pb4 = UIColor(hexCode: "141414", alpha: 0.04)
     static let pb7 = UIColor(hexCode: "141414", alpha: 0.07)
@@ -43,7 +42,7 @@ extension UIColor {
     static let pb70 = UIColor(hexCode: "141414", alpha: 0.7)
     static let pb90 = UIColor(hexCode: "141414", alpha: 0.9)
     static let pb100 = UIColor(hexCode: "141414", alpha: 1.0)
-    
+
     // 블루
     static let blu100 = UIColor(hexCode: "E5EEFF")
     static let blu200 = UIColor(hexCode: "B5CCFE")
@@ -54,7 +53,7 @@ extension UIColor {
     static let blu700 = UIColor(hexCode: "023197")
     static let blu800 = UIColor(hexCode: "022364")
     static let blu900 = UIColor(hexCode: "011132")
-    
+
     // 제이드
     static let jd100 = UIColor(hexCode: "E6FFFA")
     static let jd200 = UIColor(hexCode: "CCFFF6")
@@ -66,7 +65,7 @@ extension UIColor {
     static let jd800 = UIColor(hexCode: "00997D")
     static let jd900 = UIColor(hexCode: "00997D")
     static let jd1000 = UIColor(hexCode: "004D3E")
-    
+
     // 레드
     static let re100 = UIColor(hexCode: "FFE6E5")
     static let re200 = UIColor(hexCode: "FFCCCC")
@@ -77,19 +76,19 @@ extension UIColor {
     static let re700 = UIColor(hexCode: "B30100")
     static let re800 = UIColor(hexCode: "800000")
     static let re900 = UIColor(hexCode: "4D0000")
-    
+
     convenience init(hexCode: String, alpha: CGFloat = 1.0) {
             var hexFormatted: String = hexCode.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
-            
+
             if hexFormatted.hasPrefix("#") {
                 hexFormatted = String(hexFormatted.dropFirst())
             }
-            
+
             assert(hexFormatted.count == 6, "Invalid hex code used.")
-            
+
             var rgbValue: UInt64 = 0
             Scanner(string: hexFormatted).scanHexInt64(&rgbValue)
-            
+
             self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
                       green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
                       blue: CGFloat(rgbValue & 0x0000FF) / 255.0,

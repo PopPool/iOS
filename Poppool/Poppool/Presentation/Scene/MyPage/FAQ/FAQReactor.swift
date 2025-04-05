@@ -8,11 +8,11 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class FAQReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -20,22 +20,22 @@ final class FAQReactor: Reactor {
         case backButtonTapped(controller: BaseViewController)
         case mailInquiryCellTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToRecentScene(controller: BaseViewController)
         case moveToMailApp(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -80,7 +80,7 @@ final class FAQReactor: Reactor {
             title: "고객센터 상담은 어디서 할 수 있나요?",
             content: "[마이페이지 > 고객문의 > 메일로 문의]에서 할 수 있으며, 주말, 공휴일을 제외한 평일 오전 9시부터 오후 6시까지 운영해요.",
             isOpen: false
-        ),
+        )
 
     ])
     private let qnaTitleSection = MyPageMyCommentTitleSection(inputDataList: [.init(title: "직접 문의하기")])
@@ -94,7 +94,7 @@ final class FAQReactor: Reactor {
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -109,7 +109,7 @@ final class FAQReactor: Reactor {
             return Observable.just(.moveToMailApp(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -128,27 +128,27 @@ final class FAQReactor: Reactor {
         }
         return newState
     }
-    
+
     func showMailAppRecoveryAlert(controller: BaseViewController) {
-        
+
         let alert = UIAlertController(
             title: "'Mail' 앱을 복원하겠습니까?",
             message: "계속하려면 App Store에서 'Mail' 앱을\n다운로드하십시오",
             preferredStyle: .alert
         )
-        
+
         alert.addAction(UIAlertAction(title: "App Store로 이동", style: .default, handler: { _ in
             // 📌 App Store의 메일 앱 복구 페이지 열기
             if let mailAppURL = URL(string: "itms-apps://itunes.apple.com/app/id1108187098") {
                 UIApplication.shared.open(mailAppURL, options: [:], completionHandler: nil)
             }
         }))
-        
+
         alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-        
+
         controller.present(alert, animated: true, completion: nil)
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing24Section,

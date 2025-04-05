@@ -7,24 +7,24 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class SpacingSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     let disposeBag = DisposeBag()
-    
+
     private let spaceView: UIView = UIView()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -42,7 +42,7 @@ extension SpacingSectionCell: Inputable {
         var spacing: Float
         var backgroundColor: UIColor? = .clear
     }
-    
+
     func injection(with input: Input) {
         spaceView.snp.removeConstraints()
         spaceView.snp.makeConstraints { make in

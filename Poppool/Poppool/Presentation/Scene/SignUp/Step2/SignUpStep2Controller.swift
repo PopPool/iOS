@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
+import RxCocoa
 import RxGesture
+import RxSwift
+import SnapKit
 
 final class SignUpStep2Controller: BaseViewController, View {
-    
+
     typealias Reactor = SignUpStep2Reactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     var mainView = SignUpStep2View()
 }
 
@@ -45,29 +45,29 @@ private extension SignUpStep2Controller {
 // MARK: - Methods
 extension SignUpStep2Controller {
     func bind(reactor: Reactor) {
-        
+
         mainView.rx.tapGesture()
             .withUnretained(self)
             .subscribe { (owner, _) in
                 owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)
-        
+
         mainView.textField.rx.text
             .map { Reactor.Action.inputNickName(text: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.textField.rx.controlEvent(.editingDidBegin)
             .map { Reactor.Action.beginNickNameInput }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.textField.rx.controlEvent(.editingDidEnd)
             .map { Reactor.Action.endNickNameInput }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.clearButton.rx.tap
             .withUnretained(self)
             .map({ (owner, _) in
@@ -76,16 +76,16 @@ extension SignUpStep2Controller {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.duplicatedCheckButton.rx.tap
             .map { Reactor.Action.duplicatedButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
-                
+
                 // duplicatedButton Active set
                 switch state.nickNameState {
                 case .check, .checkActive:
@@ -98,11 +98,11 @@ extension SignUpStep2Controller {
                 owner.mainView.textFieldTrailingView.layer.borderColor = state.nickNameState.borderColor?.cgColor
                 owner.mainView.textDescriptionLabel.text = state.nickNameState.description
                 owner.mainView.textDescriptionLabel.textColor = state.nickNameState.textColor
-                
+
                 // clearButton, Duplicated Button set
                 owner.mainView.duplicatedCheckButton.isHidden = state.nickNameState.isHiddenCheckButton
                 owner.mainView.clearButton.isHidden = state.nickNameState.isHiddenClearButton
-                
+
                 // count Label set
                 if let nickName = state.nickName {
                     owner.mainView.textCountLabel.text = "\(nickName.count) / 10자"
@@ -114,8 +114,7 @@ extension SignUpStep2Controller {
                 default:
                     owner.mainView.textCountLabel.textColor = .g500
                 }
-                
-                
+
                 // completeButton isActive set
                 switch state.nickNameState {
                 case .validate, .validateActive:

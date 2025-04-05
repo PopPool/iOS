@@ -1,7 +1,7 @@
-import UIKit
 import ReactorKit
 import RxCocoa
 import RxSwift
+import UIKit
 
 final class MapSearchInput: UIView, View {
     // MARK: - Components

@@ -7,20 +7,20 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SplashController: BaseViewController {
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SplashView()
     private let authAPIUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
-    
+
     private var rootViewController: UIViewController?
 }
 
@@ -43,7 +43,7 @@ private extension SplashController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
-    
+
     func playAnimation() {
         mainView.animationView.play { [weak self] _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -51,15 +51,15 @@ private extension SplashController {
             }
         }
     }
-    
+
     func setRootview() {
         authAPIUseCase.postTokenReissue()
             .withUnretained(self)
             .subscribe(onNext: { (owner, response) in
                 let newAccessToken = response.accessToken ?? ""
                 let newRefreshToken = response.refreshToken ?? ""
-                let _ = owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
-                let _ = owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
+                _ = owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
+                _ = owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
                 let navigationController = WaveTabBarController()
                 owner.rootViewController = navigationController
             }, onError: { [weak self] _ in
@@ -71,7 +71,7 @@ private extension SplashController {
             })
             .disposed(by: disposeBag)
     }
-    
+
     func changeRootView() {
         view.window?.rootViewController = rootViewController
         view.window?.makeKeyAndVisible()

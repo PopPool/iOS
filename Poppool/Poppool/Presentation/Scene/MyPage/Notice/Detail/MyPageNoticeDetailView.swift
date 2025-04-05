@@ -10,17 +10,16 @@ import UIKit
 import SnapKit
 
 final class MyPageNoticeDetailView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "공지사항", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "공지사항", font: .korFont(style: .regular, size: 15))
         return view
     }()
-    
+
     let titleLabel: UILabel = {
-        let label = UILabel()
-        return label
+        return UILabel()
     }()
     let dateLabel: UILabel = {
         let label = UILabel()
@@ -32,16 +31,16 @@ final class MyPageNoticeDetailView: UIView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private let scrollView: UIScrollView = UIScrollView()
     private let contentView: UIView = UIView()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -49,26 +48,26 @@ final class MyPageNoticeDetailView: UIView {
 
 // MARK: - SetUp
 private extension MyPageNoticeDetailView {
-    
+
     func setUpConstraints() {
         self.backgroundColor = .g50
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         self.addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
-        
+
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
         }
-        
+
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(24)

@@ -1,8 +1,8 @@
 //
-//import FloatingPanel
-//import UIKit
+// import FloatingPanel
+// import UIKit
 //
-//class StoreListPanelLayout: FloatingPanelLayout {
+// class StoreListPanelLayout: FloatingPanelLayout {
 //    let position: FloatingPanelPosition = .bottom
 //    let initialState: FloatingPanelState = .half
 //
@@ -27,4 +27,4 @@
 //    func surfaceLayout(for size: CGSize) -> NSCollectionLayoutDimension {
 //        return .fractionalWidth(1.0)
 //    }
-//}
+// }

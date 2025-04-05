@@ -6,11 +6,11 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class LoginReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case kakaoButtonTapped(controller: BaseViewController)
@@ -19,7 +19,7 @@ final class LoginReactor: Reactor {
         case viewWillAppear
         case inquiryButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case moveToSignUpScene(controller: BaseViewController)
         case moveToHomeScene(controller: BaseViewController)
@@ -27,28 +27,28 @@ final class LoginReactor: Reactor {
         case resetService
         case moveToInquiryScene(controller: BaseViewController)
     }
-    
+
     struct State {
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private var authrizationCode: String?
-    
+
     private let kakaoLoginService = KakaoLoginService()
     private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
     private let keyChainService = KeyChainService()
     let userDefaultService = UserDefaultService()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -57,8 +57,8 @@ final class LoginReactor: Reactor {
         case .appleButtonTapped(let controller):
             return loginWithApple(controller: controller)
         case .guestButtonTapped(let controller):
-            let _ = keyChainService.deleteToken(type: .accessToken)
-            let _ = keyChainService.deleteToken(type: .refreshToken)
+            _ = keyChainService.deleteToken(type: .accessToken)
+            _ = keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene(controller: controller))
         case .viewWillAppear:
             return Observable.just(.resetService)
@@ -66,7 +66,7 @@ final class LoginReactor: Reactor {
             return Observable.just(.moveToInquiryScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToSignUpScene(let controller):
@@ -88,7 +88,7 @@ final class LoginReactor: Reactor {
         }
         return state
     }
-    
+
     func loginWithKakao(controller: BaseViewController) -> Observable<Mutation> {
         return kakaoLoginService.fetchUserCredential()
             .withUnretained(self)
@@ -115,7 +115,7 @@ final class LoginReactor: Reactor {
                 }
             }
     }
-    
+
     func loginWithApple(controller: BaseViewController) -> Observable<Mutation> {
         return appleLoginService.fetchUserCredential()
             .withUnretained(self)

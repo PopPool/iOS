@@ -17,5 +17,3 @@ extension GetSearchPopUpListResponseDTO {
         return .init(popUpStoreList: popUpStoreList.map { $0.toDomain() }, loginYn: loginYn)
     }
 }
-
-

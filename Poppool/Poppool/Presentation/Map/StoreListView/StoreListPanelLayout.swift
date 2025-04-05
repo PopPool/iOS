@@ -20,9 +20,6 @@ class StoreListPanelLayout: FloatingPanelLayout {
         ]
     }
 
-
-
-
     func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
         return 0.0
     }

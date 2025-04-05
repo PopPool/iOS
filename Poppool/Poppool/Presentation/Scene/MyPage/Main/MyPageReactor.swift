@@ -5,10 +5,10 @@
 //  Created by SeoJunYoung on 12/30/24.
 //
 
-import UIKit
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
+import UIKit
 
 final class MyPageReactor: Reactor {
 
@@ -129,7 +129,7 @@ final class MyPageReactor: Reactor {
                         )
                     ]
                     // 내가 댓글 단 팝업 리스트
-                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map  {
+                    owner.commentSection.inputDataList = response.myCommentedPopUpList.map {
                         .init(popUpImagePath: $0.mainImageUrl, title: $0.popUpStoreName, popUpID: $0.popUpStoreId)
                     }
                     if !owner.commentSection.inputDataList.isEmpty {
@@ -185,8 +185,8 @@ final class MyPageReactor: Reactor {
 
         case .logout:
             let service = KeyChainService()
-            let _ = service.deleteToken(type: .accessToken)
-            let _ = service.deleteToken(type: .refreshToken)
+            _ = service.deleteToken(type: .accessToken)
+            _ = service.deleteToken(type: .refreshToken)
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)

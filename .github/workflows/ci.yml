@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev]
+  push:
+    branches: [dev]
+
+jobs:
+  autocorrect:
+    name: 🤖 Autocorrect Workflow
+    runs-on: macos-15  # 최신 macOS 15 환경에서 실행
+    if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
+
+    steps:
+      - name: Checkout Repository  # 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: ⬇️ Install SwiftLint  # SwiftLint 설치
+        run: brew install swiftlint
+
+      - name: 🎨 Run SwiftLint Autocorrect  # SwiftLint 자동 수정 실행
+        run: swiftlint --fix
+
+      - name: 🚀 Commit and Push Changes  # 변경 사항 자동 커밋 및 푸시
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin "${GITHUB_HEAD_REF}:${GITHUB_HEAD_REF}"
+          git checkout "${GITHUB_HEAD_REF}"
+
+          BRANCH_NAME="${GITHUB_HEAD_REF}"
+          if [[ "$BRANCH_NAME" =~ \#([0-9]+) ]]; then
+            ISSUE_NUMBER="${BASH_REMATCH[1]}"
+          else
+            ISSUE_NUMBER=""
+          fi
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "style/#${ISSUE_NUMBER}: Apply SwiftLint autocorrect"
+            git push --set-upstream origin "${GITHUB_HEAD_REF}"
+          else
+            echo "No changes to commit"
+          fi
+
+  build:
+    name: 🏗️ Build Workflow
+    runs-on: macos-15  # 최신 macOS 15 환경에서 실행
+    if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
+
+    steps:
+      - name: Checkout Repository  # 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Generate xcconfig
+        run: |
+          cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig
+          KAKAO_AUTH_APP_KEY=${{ secrets.KAKAO_AUTH_APP_KEY }}
+          NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}
+          POPPOOL_BASE_URL=${{ secrets.POPPOOL_BASE_URL }}
+          POPPOOL_S3_BASE_URL=${{ secrets.POPPOOL_S3_BASE_URL }}
+          POPPOOL_API_KEY=${{ secrets.POPPOOL_API_KEY }}
+          EOF
+
+      - name: 🛠️ Select Xcode 16.2  # Xcode 16.2 버전 사용 설정
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: ⬇️ Install SwiftLint  # SwiftLint 설치
+        run: brew install swiftlint
+        
+      - name: 🎨 Run SwiftLint  # SwiftLint 코드 스타일 검사 실행
+        run: swiftlint
+
+      - name: 🔍 Detect Default Scheme  # 기본 scheme 자동 검지
+        id: detect_scheme
+        run: |
+          SCHEME=$(xcodebuild -list -json | jq -r '.project.schemes[0]')
+          echo "Detected scheme: $SCHEME"
+          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+
+      - name: 🔍 Detect Latest iPhone Simulator  # 최신 사용 가능한 iPhone 시뮬레이터 검지
+        id: detect_latest_simulator
+        run: |
+          DEVICE=$(xcrun simctl list devices available | grep -Eo 'iPhone .* \([0-9A-F\-]+\)' | head -n 1)
+          UDID=$(echo "$DEVICE" | grep -Eo '[0-9A-F\-]{36}')
+          NAME=$(echo "$DEVICE" | cut -d '(' -f1 | xargs)
+          echo "Detected simulator: $NAME ($UDID)"
+          echo "sim_name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "sim_udid=$UDID" >> "$GITHUB_OUTPUT"
+
+      - name: 🏗️ Build the project  # 자동 검지된 Scheme과 Simulator로 빌드 수행
+        run: |
+          WORKSPACE=$(find . -name "*.xcworkspace" | head -n 1)
+          xcodebuild -scheme "${{ steps.detect_scheme.outputs.scheme }}" \
+            -workspace "$WORKSPACE" \
+            -destination "platform=iOS Simulator,id=${{ steps.detect_latest_simulator.outputs.sim_udid }}" \
+            clean build | xcpretty

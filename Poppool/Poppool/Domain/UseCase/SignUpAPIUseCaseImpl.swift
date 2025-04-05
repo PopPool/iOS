@@ -10,7 +10,7 @@ import RxSwift
 
 final class SignUpAPIUseCaseImpl {
     var repository: SignUpRepositoryImpl
-    
+
     init(repository: SignUpRepositoryImpl) {
         self.repository = repository
     }
@@ -36,7 +36,7 @@ final class SignUpAPIUseCaseImpl {
     func checkNickName(nickName: String) -> Observable<Bool> {
         return repository.checkNickName(nickName: nickName)
     }
-    
+
     func fetchCategoryList() -> Observable<[Category]> {
         return repository.fetchCategoryList()
     }

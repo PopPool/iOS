@@ -8,31 +8,31 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SearchResultReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case returnSearch(text: String)
         case bookmarkButtonTapped(indexPath: IndexPath)
         case cellTapped(controller: BaseViewController, indexPath: IndexPath)
     }
-    
+
     enum Mutation {
         case loadView
         case emptyView
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var isEmptyResult: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private var popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
@@ -50,19 +50,19 @@ final class SearchResultReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var titleSection = SearchTitleSection(inputDataList: [.init(title: "포함된 팝업", buttonTitle: nil)])
     private var searchCountSection = SearchResultCountSection(inputDataList: [.init(count: 65)])
     private var searchListSection = HomeCardGridSection(inputDataList: [])
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -112,7 +112,7 @@ final class SearchResultReactor: Reactor {
             }
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -128,8 +128,7 @@ final class SearchResultReactor: Reactor {
         }
         return newState
     }
-    
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing24Section,
@@ -142,14 +141,14 @@ final class SearchResultReactor: Reactor {
     }
     func hasFinalConsonant(_ text: String) -> Bool {
         guard let lastCharacter = text.last else { return false }
-        
+
         let unicodeValue = Int(lastCharacter.unicodeScalars.first!.value)
-        
+
         // 한글 유니코드 범위 체크
         let base = 0xAC00
         let last = 0xD7A3
         guard base...last ~= unicodeValue else { return false }
-        
+
         // 종성 인덱스 계산 (받침이 있으면 1 이상)
         let finalConsonantIndex = (unicodeValue - base) % 28
         return finalConsonantIndex != 0

@@ -10,18 +10,18 @@ import UIKit
 import SnapKit
 
 final class SignUpMainView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPCancelHeaderView = PPCancelHeaderView()
-    
+
     let progressIndicator: PPProgressIndicator = PPProgressIndicator(totalStep: 4, startPoint: 1)
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -29,7 +29,7 @@ final class SignUpMainView: UIView {
 
 // MARK: - SetUp
 private extension SignUpMainView {
-    
+
     func setUpConstraints() {
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in

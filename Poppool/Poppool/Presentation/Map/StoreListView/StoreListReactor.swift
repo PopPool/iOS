@@ -1,8 +1,7 @@
-import ReactorKit
-import RxSwift
 import Foundation
+import ReactorKit
 import RxCocoa
-
+import RxSwift
 
 final class StoreListReactor: Reactor {
     // MARK: - Reactor
@@ -10,7 +9,6 @@ final class StoreListReactor: Reactor {
     private let popUpAPIUseCase: PopUpAPIUseCaseImpl
     private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
-    
 //    private var currentPage = 0
 //    private let pageSize = 10
 //    private var hasMorePages = true
@@ -24,7 +22,6 @@ final class StoreListReactor: Reactor {
         case filterUpdated(FilterType, [String])
         case clearFilters(FilterType)
         case updateStoreBookmark(id: Int64, isBookmarked: Bool)  // 추가
-
 
     }
 
@@ -59,7 +56,6 @@ final class StoreListReactor: Reactor {
         self.initialState = State()
     }
 
-
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -84,7 +80,7 @@ final class StoreListReactor: Reactor {
                 return .empty()
             }
 
-            let bookmarkRequest = popUpAPIUseCase.getPopUpDetail(
+            return popUpAPIUseCase.getPopUpDetail(
                 commentType: "NORMAL",
                 popUpStoredId: Int64(idInt32) // Int32 → Int64 변환
             )
@@ -101,10 +97,6 @@ final class StoreListReactor: Reactor {
                         .just(.showBookmarkToast(isBookmarking))
                     ]))
             }
-
-            return bookmarkRequest
-
-
 
 //
 //        case let .setStores(storeItems):
@@ -161,7 +153,6 @@ final class StoreListReactor: Reactor {
             }
             return .empty()
 
-
         case let .filterTapped(filterType):
             return .just(.setActiveFilter(filterType))
 
@@ -182,7 +173,6 @@ final class StoreListReactor: Reactor {
             }
         }
     }
-
 
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
@@ -207,10 +197,9 @@ final class StoreListReactor: Reactor {
                 )
             }
 
-
         case let .showBookmarkToast(isBookmarked):
             if currentState.stores.isEmpty {
-                break 
+                break
             }
 
             newState.shouldShowBookmarkToast = isBookmarked
@@ -237,10 +226,7 @@ final class StoreListReactor: Reactor {
         bookmarkStateRelay.accept((storeId, isBookmarked))
     }
 
-
-
 }
-
 
     // MARK: - Model
 struct StoreItem {

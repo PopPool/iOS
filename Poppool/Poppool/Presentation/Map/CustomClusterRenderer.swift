@@ -1,6 +1,6 @@
-//import GoogleMaps
+// import GoogleMaps
 //
-//class CustomClusterRenderer: GMUDefaultClusterRenderer {
+// class CustomClusterRenderer: GMUDefaultClusterRenderer {
 //    override func willRenderMarker(_ marker: GMSMarker) {
 //        super.willRenderMarker(marker)
 //        // 클러스터일 경우 처리
@@ -12,4 +12,4 @@
 //            marker.iconView = customView
 //        }
 //    }
-//}
+// }

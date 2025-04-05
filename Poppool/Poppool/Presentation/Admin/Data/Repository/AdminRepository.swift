@@ -1,7 +1,7 @@
+import Alamofire
 import Foundation
 import RxSwift
 import UIKit
-import Alamofire
 
 protocol AdminRepository {
     func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<GetAdminPopUpStoreListResponseDTO>
@@ -54,7 +54,6 @@ final class DefaultAdminRepository: AdminRepository {
        }
     }
 
-
     func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
         Logger.log(message: "createStore API 호출 시작", category: .info)
         let endpoint = AdminAPIEndpoint.createStore(request: request)
@@ -83,8 +82,6 @@ final class DefaultAdminRepository: AdminRepository {
             }
         )
     }
-
-
 
     func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
         let endpoint = AdminAPIEndpoint.updateStore(request: request)
@@ -125,12 +122,11 @@ final class DefaultAdminRepository: AdminRepository {
         })
     }
 
-
     func deleteStore(id: Int64) -> Observable<EmptyResponse> {
         Logger.log(message: "deleteStore API 호출 시작", category: .info)
         let endpoint = AdminAPIEndpoint.deleteStore(id: id)
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
-            .andThen(Observable.just(EmptyResponse()))  
+            .andThen(Observable.just(EmptyResponse()))
             .do(
                 onNext: { _ in
                     Logger.log(message: "deleteStore API 호출 성공", category: .info)
@@ -140,7 +136,6 @@ final class DefaultAdminRepository: AdminRepository {
                 }
             )
     }
-    
 
     // MARK: - Notice Methods
     func createNotice(request: CreateNoticeRequestDTO) -> Observable<EmptyResponse> {

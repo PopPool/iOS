@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct GetPopUpDirectionResponseDTO: Decodable {
     let id: Int64
     let categoryName: String

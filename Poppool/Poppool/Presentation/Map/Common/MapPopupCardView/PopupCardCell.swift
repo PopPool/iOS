@@ -1,6 +1,6 @@
-import UIKit
-import SnapKit
 import Kingfisher
+import SnapKit
+import UIKit
 
 final class PopupCardCell: UICollectionViewCell {
     static let identifier = "PopupCardCell"
@@ -21,8 +21,6 @@ final class PopupCardCell: UICollectionViewCell {
                 setupLayout()
                 configureUI()
             }
-
-    
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -85,7 +83,6 @@ final class PopupCardCell: UICollectionViewCell {
             make.bottom.lessThanOrEqualTo(imageView)  // 이미지뷰 높이에 맞춤
         }
     }
-
 
     private func configureUI() {
         contentView.backgroundColor = UIColor.white

@@ -7,28 +7,28 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class MyPageBookmarkController: BaseViewController, View {
-    
+
     typealias Reactor = MyPageBookmarkReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = MyPageBookmarkView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private var cellTapped: PublishSubject<Int> = .init()
-    
+
     private var currentPageIndex: Int = 0
-    
+
     private var maxPageIndex: Int = 0
-    
+
     private var viewType: String?
 }
 
@@ -38,7 +38,7 @@ extension MyPageBookmarkController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -64,7 +64,7 @@ private extension MyPageBookmarkController {
         mainView.contentCollectionView.register(
             ListCountButtonSectionCell.self,
             forCellWithReuseIdentifier: ListCountButtonSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             PopUpCardSectionCell.self,
             forCellWithReuseIdentifier: PopUpCardSectionCell.identifiers
@@ -84,7 +84,7 @@ extension MyPageBookmarkController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -92,7 +92,7 @@ extension MyPageBookmarkController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, row) in
@@ -100,7 +100,7 @@ extension MyPageBookmarkController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.emptyButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -108,7 +108,7 @@ extension MyPageBookmarkController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.countButtonView.dropdownButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -116,7 +116,7 @@ extension MyPageBookmarkController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.contentCollectionView.rx.gesture(.swipe(direction: .up))
             .skip(1)
             .withUnretained(self)
@@ -139,12 +139,12 @@ extension MyPageBookmarkController {
                         }
                         owner.currentPageIndex += 1
                         owner.mainView.contentCollectionView.scrollToItem(at: .init(row: owner.currentPageIndex, section: 1), at: .top, animated: true)
-                        
+
                     }
                 }
             }
             .disposed(by: disposeBag)
-        
+
         mainView.contentCollectionView.rx.gesture(.swipe(direction: .down))
             .skip(1)
             .withUnretained(self)
@@ -157,7 +157,7 @@ extension MyPageBookmarkController {
                 }
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -166,13 +166,13 @@ extension MyPageBookmarkController {
                 owner.mainView.contentCollectionView.isHidden = state.isEmptyCase
                 owner.mainView.emptyLabel.isHidden = !state.isEmptyCase
                 owner.mainView.emptyButton.isHidden = !state.isEmptyCase
-                owner.mainView.countButtonView.buttonTitleLabel.setLineHeightText(text: state.buttonTitle, font: .KorFont(style: .regular, size: 13))
-                owner.mainView.countButtonView.countLabel.setLineHeightText(text: "총 \(state.count)개", font: .KorFont(style: .regular, size: 13))
-                
+                owner.mainView.countButtonView.buttonTitleLabel.setLineHeightText(text: state.buttonTitle, font: .korFont(style: .regular, size: 13))
+                owner.mainView.countButtonView.countLabel.setLineHeightText(text: "총 \(state.count)개", font: .korFont(style: .regular, size: 13))
+
                 if state.buttonTitle != owner.viewType {
                     owner.mainView.contentCollectionView.scrollsToTop = true
                 }
-                
+
                 if state.buttonTitle == "크게보기" {
                     owner.mainView.contentCollectionView.isScrollEnabled = false
                     if owner.viewType == "모아서보기" {
@@ -182,7 +182,7 @@ extension MyPageBookmarkController {
                 } else {
                     owner.mainView.contentCollectionView.isScrollEnabled = true
                 }
-                
+
                 owner.maxPageIndex = Int(state.count)
                 owner.viewType = state.buttonTitle
             }
@@ -195,11 +195,11 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -212,7 +212,7 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? DetailSimilarSectionCell {
             cell.bookMarkButton.rx.tap
                 .map { Reactor.Action.bookMarkButtonTapped(row: indexPath.row) }
@@ -221,7 +221,7 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
         }
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentHeight = scrollView.contentSize.height
         let scrollViewHeight = scrollView.frame.size.height
@@ -230,7 +230,7 @@ extension MyPageBookmarkController: UICollectionViewDelegate, UICollectionViewDa
             reactor?.action.onNext(.changePage)
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 1 { cellTapped.onNext(indexPath.row) }
     }

@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class SearchSortedController: BaseViewController, View {
-    
+
     typealias Reactor = SearchSortedReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SearchSortedView()
 }
 
@@ -51,7 +51,7 @@ extension SearchSortedController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.filterSegmentControl.rx.controlEvent(.valueChanged)
             .withUnretained(self)
             .map({ (owner, _) in
@@ -59,7 +59,7 @@ extension SearchSortedController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.sortedSegmentControl.rx.controlEvent(.valueChanged)
             .withUnretained(self)
             .map({ (owner, _) in
@@ -67,7 +67,7 @@ extension SearchSortedController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.saveButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -75,7 +75,7 @@ extension SearchSortedController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in

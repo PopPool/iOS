@@ -5,15 +5,15 @@
 //  Created by SeoJunYoung on 12/14/24.
 //
 
-import UIKit
 import PhotosUI
+import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class NormalCommentAddReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -24,7 +24,7 @@ final class NormalCommentAddReactor: Reactor {
         case inputComment(text: String?)
         case saveButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case showImagePicker(controller: BaseViewController)
@@ -32,24 +32,24 @@ final class NormalCommentAddReactor: Reactor {
         case setComment(text: String?)
         case save(controller: BaseViewController)
     }
-    
+
     struct State {
         var sections: [any Sectionable] = []
         var text: String?
         var isReloadView: Bool = true
         var isSaving: Bool = false
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     private var popUpID: Int64
     private var popUpName: String
-    
+
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
     private let imageService = PreSignedService()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -79,7 +79,7 @@ final class NormalCommentAddReactor: Reactor {
         self.popUpID = popUpID
         self.popUpName = popUpName
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -102,7 +102,7 @@ final class NormalCommentAddReactor: Reactor {
             return Observable.just(.save(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         newState.isReloadView = false
@@ -154,7 +154,7 @@ final class NormalCommentAddReactor: Reactor {
                 let images = imageSection.inputDataList.compactMap { $0.image }.enumerated().map { $0 }
                 let uuid = UUID().uuidString
                 let pathList = images.map { "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg" }
-                
+
                 imageService.tryUpload(datas: images.map { .init(filePath: "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg", image: $0.element)})
                     .subscribe(onSuccess: { [weak self] _ in
                         guard let self = self else { return }
@@ -170,11 +170,11 @@ final class NormalCommentAddReactor: Reactor {
                     })
                     .disposed(by: disposeBag)
             }
-            
+
         }
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
         return [
             spacing25Section,
@@ -199,19 +199,19 @@ final class NormalCommentAddReactor: Reactor {
 extension NormalCommentAddReactor: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        
+
         // 이미지가 로드된 순서를 보장하기 위해 선택한 이미지 개수만큼의 nil 배열을 생성
         var originImageList = [UIImage?](repeating: nil, count: results.count)
         let dispatchGroup = DispatchGroup() // 모든 이미지를 로드할 때까지 대기
-        
+
         // results에서 이미지를 비동기적으로 로드
         for (index, result) in results.enumerated() {
             if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
                 dispatchGroup.enter() // 이미지 로드가 시작될 때 그룹에 등록
-                
+
                 result.itemProvider.loadObject(ofClass: UIImage.self) { image, _ in
                     defer { dispatchGroup.leave() } // 이미지 로드가 끝날 때 그룹에서 제거
-                    
+
                     if let image = image as? UIImage {
                         originImageList[index] = image // 로드된 이미지를 해당 인덱스에 저장
                     } else {
@@ -222,7 +222,7 @@ extension NormalCommentAddReactor: PHPickerViewControllerDelegate {
                 Logger.log(message: "ItemProvider Can Not Load Object", category: .error)
             }
         }
-        
+
         // 모든 이미지가 로드된 후에 한 번에 choiceImageList 업데이트
         dispatchGroup.notify(queue: .main) {
             let filteredImages = originImageList.compactMap { $0 }

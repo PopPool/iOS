@@ -1,11 +1,13 @@
-import UIKit
-import SnapKit
-import ReactorKit
-import RxSwift
-import RxCocoa
-import PhotosUI
-import Alamofire
 import CoreLocation
+import PhotosUI
+import UIKit
+
+import Alamofire
+import ReactorKit
+import RxCocoa
+import RxSwift
+import SnapKit
+import Then
 
 final class PopUpStoreRegisterViewController: BaseViewController {
 
@@ -22,8 +24,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private var latField: UITextField?
     private var lonField: UITextField?
     private var descTV: UITextView?
-    
-
 
     private let popupName: String = ""
     private var originalImageIds: [String: Int64] = [:]
@@ -80,7 +80,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         return lbl
     }()
 
-
     private let menuButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(UIImage(systemName: "adminlist"), for: .normal)
@@ -105,7 +104,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         return lbl
     }()
 
-
     private let addImageButton = UIButton(type: .system).then {
         $0.setTitle("이미지 추가", for: .normal)
         $0.setTitleColor(.systemBlue, for: .normal)
@@ -121,14 +119,13 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private let contentView = UIView()
 
     // MARK: - Form Background
-    private let formBackgroundView: UIView = {
-        let v = UIView()
-        v.backgroundColor = .white
-        v.layer.borderWidth = 1
-        v.layer.borderColor = UIColor.lightGray.cgColor
-        v.layer.cornerRadius = 8
-        return v
-    }()
+    private let formBackgroundView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.cornerRadius = 8
+    }
+
     private let verticalStack = UIStackView()
 
     // MARK: - Bottom Save Button
@@ -157,12 +154,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("카테고리 선택 ▾", for: .normal)
         btn.setTitleColor(.darkGray, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize:14)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         btn.layer.cornerRadius = 8
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top:7, left:8, bottom:7, right:8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 7, left: 8, bottom: 7, right: 8)
         return btn
     }()
 
@@ -170,12 +167,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("기간 선택 ▾", for: .normal)
         btn.setTitleColor(.darkGray, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize:14)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         btn.layer.cornerRadius = 8
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top:7, left:8, bottom:7, right:8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 7, left: 8, bottom: 7, right: 8)
         return btn
     }()
 
@@ -183,12 +180,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("시간 선택 ▾", for: .normal)
         btn.setTitleColor(.darkGray, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize:14)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         btn.layer.cornerRadius = 8
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top:7, left:8, bottom:7, right:8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 7, left: 8, bottom: 7, right: 8)
         return btn
     }()
 
@@ -198,8 +195,8 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
-        
-        view.backgroundColor = UIColor(white:0.95, alpha:1)
+
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
 
         if let store = editingStore {
                 // 삭제된 이미지 ID 복원
@@ -225,10 +222,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         setupAddressField()
         setupAllFieldListeners()
 
-
-
     }
-
 
     // MARK: - Navigation
     private func setupNavigation() {
@@ -374,8 +368,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         }
     }
 
-
-
     func loadStoreDetail(for storeId: Int64) {
         Logger.log(message: "상세 정보 요청 시작 - Store ID: \(storeId)", category: .debug)
 
@@ -446,8 +438,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
             self.scrollView.scrollIndicatorInsets = .zero
         }
     }
-
-
 
     // MARK: - Layout
     private func setupLayout() {
@@ -600,7 +590,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         // 1) 주소 (TextField)
         let addressField = makeRoundedTextField("팝업스토어 주소를 입력해 주세요.")
         self.addressField = addressField
-        addressField.snp.makeConstraints { make in
+        addressField.snp.makeConstraints { _ in
             addressField.addTarget(self, action: #selector(fieldDidChange(_:)), for: .editingChanged)
 
         }
@@ -612,13 +602,11 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         self.latField = latField // latField와 연결
         latField.addTarget(self, action: #selector(fieldDidChange(_:)), for: .editingChanged)
 
-
         let lonLabel = makePlainLabel("경도")
         let lonField = makeRoundedTextField("")
         self.lonField = lonField // lonField와 연결
         lonField.textAlignment = .center
         lonField.addTarget(self, action: #selector(fieldDidChange(_:)), for: .editingChanged)
-
 
         let latStack = UIStackView(arrangedSubviews: [latLabel, latField])
         latStack.axis = .horizontal
@@ -640,7 +628,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         locationVStack.axis = .vertical
         locationVStack.spacing = 8
         locationVStack.distribution = .fillEqually
-
 
         // 한 행에 왼쪽 "위치", 오른쪽 2줄(주소 / 위도경도)
         addRowCustom(leftTitle: "위치", rightView: locationVStack, rowHeight: nil, totalHeight: 80)
@@ -669,7 +656,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         markerVStack.axis = .vertical
         markerVStack.spacing = 8
         markerVStack.distribution = .fillEqually
-
 
         // 한 행 => "마커" 라벨, 오른쪽 2줄 (마커명, 스니펫)
         addRowCustom(leftTitle: "마커", rightView: markerVStack, rowHeight: nil, totalHeight: 80)
@@ -700,7 +686,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         addRowCustom(leftTitle: "설명", rightView: descTV, rowHeight: nil, totalHeight: 120)
 
     }
-
 
     // MARK: - Row
 
@@ -795,7 +780,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         saveButton.backgroundColor = isFormValid ? .systemBlue : .lightGray
     }
 
-
     private func addRowCustom(leftTitle: String,
                               rightView: UIView,
                               rowHeight: CGFloat? = 36,
@@ -888,13 +872,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         }
     }
 
-
     private func updatePeriodButtonTitle() {
-        guard let s = selectedStartDate, let e = selectedEndDate else { return }
+        guard let selectedStartDate = selectedStartDate, let selectedEndDate = selectedEndDate else { return }
         let df = DateFormatter()
         df.dateFormat = "yyyy.MM.dd"
-        let sStr = df.string(from: s)
-        let eStr = df.string(from: e)
+        let sStr = df.string(from: selectedStartDate)
+        let eStr = df.string(from: selectedEndDate)
 
         periodButton.setTitle("\(sStr) ~ \(eStr)", for: .normal)
     }
@@ -996,7 +979,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private func makeRoundedTextField(_ placeholder: String) -> UITextField {
         let tf = UITextField()
         tf.placeholder = placeholder
-        tf.font = UIFont.systemFont(ofSize:14)
+        tf.font = UIFont.systemFont(ofSize: 14)
         tf.textColor = .darkGray
         tf.borderStyle = .none
         tf.layer.cornerRadius = 8
@@ -1010,12 +993,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         let btn = UIButton(type: .system)
         btn.setTitle(title, for: .normal)
         btn.setTitleColor(.darkGray, for: .normal)
-        btn.titleLabel?.font = UIFont.systemFont(ofSize:14)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         btn.layer.cornerRadius = 8
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.lightGray.cgColor
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top:7, left:8, bottom:7, right:8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 7, left: 8, bottom: 7, right: 8)
         return btn
     }
 
@@ -1024,7 +1007,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         if let icon = UIImage(named: iconName) {
             btn.setImage(icon, for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
-            btn.titleEdgeInsets = UIEdgeInsets(top:0, left:6, bottom:0, right:0)
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
         }
         return btn
     }
@@ -1032,7 +1015,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     private func makeSimpleLabel(_ text: String) -> UILabel {
         let lbl = UILabel()
         lbl.text = text
-        lbl.font = UIFont.systemFont(ofSize:14)
+        lbl.font = UIFont.systemFont(ofSize: 14)
         lbl.textColor = .darkGray
         return lbl
     }
@@ -1041,7 +1024,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
         // 작은 라벨(위도/경도/마커명/스니펫 등)
         let lbl = UILabel()
         lbl.text = text
-        lbl.font = UIFont.systemFont(ofSize:14)
+        lbl.font = UIFont.systemFont(ofSize: 14)
         lbl.textColor = .darkGray
         lbl.textAlignment = .right
         lbl.setContentHuggingPriority(.required, for: .horizontal)
@@ -1050,12 +1033,12 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
     private func makeRoundedTextView() -> UITextView {
         let tv = UITextView()
-        tv.font = UIFont.systemFont(ofSize:14)
+        tv.font = UIFont.systemFont(ofSize: 14)
         tv.textColor = .darkGray
         tv.layer.cornerRadius = 8
         tv.layer.borderWidth = 1
         tv.layer.borderColor = UIColor.lightGray.cgColor
-        tv.textContainerInset = UIEdgeInsets(top:7, left:7, bottom:7, right:7)
+        tv.textContainerInset = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         tv.isScrollEnabled = true
         return tv
     }
@@ -1063,8 +1046,8 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
 // MARK: - Padding
 private extension UITextField {
-    func setLeftPaddingPoints(_ amount: CGFloat){
-        let paddingView = UIView(frame: CGRect(x:0, y:0, width:amount, height: frame.size.height))
+    func setLeftPaddingPoints(_ amount: CGFloat) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: frame.size.height))
         leftView = paddingView
         leftViewMode = .always
     }
@@ -1102,8 +1085,8 @@ extension PopUpStoreRegisterViewController: UICollectionViewDataSource, UICollec
 private extension PopUpStoreRegisterViewController {
     /// 대표이미지를 단 하나만 허용 -> 누른 index만 isMain = true
     func toggleMainImage(index: Int) {
-        for i in 0..<images.count {
-            images[i].isMain = (i == index)
+        for imageIndex in 0..<images.count {
+            images[imageIndex].isMain = (imageIndex == index)
         }
         imagesCollectionView.reloadData()
     }
@@ -1147,9 +1130,6 @@ private extension PopUpStoreRegisterViewController {
         updateSaveButtonState()
     }
 
-
-
-
 }
 extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
@@ -1168,15 +1148,15 @@ extension PopUpStoreRegisterViewController: PHPickerViewControllerDelegate {
         let existingPaths = Set(self.images.map { $0.filePath })
         Logger.log(message: "기존 이미지 경로 수: \(existingPaths.count)", category: .debug)
 
-        for (i, provider) in itemProviders.enumerated() {
+        for (index, provider) in itemProviders.enumerated() {
             if provider.canLoadObject(ofClass: UIImage.self) {
                 dispatchGroup.enter()
-                provider.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+                provider.loadObject(ofClass: UIImage.self) { [weak self] object, _ in
                     defer { dispatchGroup.leave() }
                     guard let self = self,
                           let image = object as? UIImage else { return }
 
-                    let filePath = "PopUpImage/\(name)/\(uuid)/\(i).jpg"
+                    let filePath = "PopUpImage/\(name)/\(uuid)/\(index).jpg"
 
                     // 이미 같은 경로가 있는지 확인 (거의 발생하지 않겠지만 안전장치)
                     if existingPaths.contains(filePath) {
@@ -1246,7 +1226,6 @@ private extension PopUpStoreRegisterViewController {
             Logger.log(message: "주소 필드가 비어 있습니다.", category: .debug)
             return false
         }
-
 
         // (4) 위도/경도
         Logger.log(message: "latField.text = \(latField?.text ?? "nil")", category: .debug)
@@ -1322,7 +1301,6 @@ private extension PopUpStoreRegisterViewController {
             uploadImages()
         }
     }
-
 
     // 폼 데이터 검증
     private func validateFormData() -> Bool {
@@ -1418,7 +1396,6 @@ private extension PopUpStoreRegisterViewController {
         )
         .disposed(by: disposeBag)
     }
-
 
     private func uploadImagesForUpdate(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
         let uuid = UUID().uuidString
@@ -1651,7 +1628,6 @@ private extension PopUpStoreRegisterViewController {
             startDateBeforeEndDate: isValidDateOrder
         )
 
-
         adminUseCase.createStore(request: request)
             .subscribe(
                 onNext: { [weak self] _ in
@@ -1692,7 +1668,6 @@ private extension PopUpStoreRegisterViewController {
         }
     }
 
-
     private func createDateTime(date: Date?, time: Date?) -> Date? {
         guard let date = date else { return nil }
 
@@ -1731,9 +1706,6 @@ private extension PopUpStoreRegisterViewController {
         return formatter.string(from: date)
     }
 
-
-
-
     private func prepareDateTime() -> (startDate: String, endDate: String) {
         // 시작일/시간 결합
         let startDateTime = createDateTime(date: selectedStartDate, time: selectedStartTime)
@@ -1771,11 +1743,6 @@ private extension PopUpStoreRegisterViewController {
         guard let start = start, let end = end else { return false }
         return start < end
     }
-
-
-
-
-
 
     private func showSuccessAlert() {
         let alert = UIAlertController(
@@ -1859,7 +1826,6 @@ extension PopUpStoreRegisterViewController: UITextFieldDelegate {
             })
             .disposed(by: disposeBag)
     }
-
 
     @objc private func addressFieldDidChange(_ textField: UITextField) {
         guard let address = textField.text, !address.isEmpty else { return }

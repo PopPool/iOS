@@ -1,6 +1,6 @@
-import UIKit
-import SnapKit
 import NMapsMap
+import SnapKit
+import UIKit
 
 final class MapMarker: UIView {
     // MARK: - Components

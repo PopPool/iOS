@@ -7,22 +7,22 @@
 
 import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
-import RxKeyboard
+import RxCocoa
 import RxGesture
+import RxKeyboard
+import RxSwift
+import SnapKit
 
 final class WithdrawlReasonController: BaseViewController, View {
-    
+
     typealias Reactor = WithdrawlReasonReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = WithdrawlReasonView()
-    
+
     private var sections: [any Sectionable] = []
 }
 
@@ -32,7 +32,7 @@ extension WithdrawlReasonController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -50,12 +50,12 @@ private extension WithdrawlReasonController {
         mainView.contentCollectionView.register(
             WithdrawlCheckSectionCell.self,
             forCellWithReuseIdentifier: WithdrawlCheckSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
-        
+
         view.backgroundColor = .g50
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
@@ -73,7 +73,7 @@ extension WithdrawlReasonController {
                 owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)
-            
+
         RxKeyboard.instance.visibleHeight
             .drive { [weak self] height in
                 if height > 0 {
@@ -93,7 +93,7 @@ extension WithdrawlReasonController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-    
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -101,7 +101,7 @@ extension WithdrawlReasonController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.checkButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -109,7 +109,7 @@ extension WithdrawlReasonController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.skipButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -117,7 +117,7 @@ extension WithdrawlReasonController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -136,24 +136,24 @@ extension WithdrawlReasonController: UICollectionViewDelegate, UICollectionViewD
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let reactor = reactor else { return cell }
-        
+
         if let cell = cell as? WithdrawlCheckSectionCell {
             cell.cellButton.rx.tap
                 .map { Reactor.Action.cellTapped(row: indexPath.row) }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
-        
+
             cell.textView.rx.text
                 .map { Reactor.Action.etcTextInput(text: $0)}
                 .bind(to: reactor.action)

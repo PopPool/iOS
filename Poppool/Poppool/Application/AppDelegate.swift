@@ -1,14 +1,14 @@
-import UIKit
-import KakaoSDKCommon
 import CoreLocation
+import KakaoSDKCommon
 import NMapsMap
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        KakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppkey.rawValue)
-        NMFAuthManager.shared().clientId = Secrets.naverMapClientId.rawValue
+        KakaoSDK.initSDK(appKey: KeyPath.kakaoAuthAppKey)
+        NMFAuthManager.shared().clientId = KeyPath.naverMapClientID
 
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()

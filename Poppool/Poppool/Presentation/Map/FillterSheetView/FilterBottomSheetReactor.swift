@@ -1,5 +1,5 @@
-import ReactorKit
 import Foundation
+import ReactorKit
 import RxSwift
 
 struct Location: Equatable {
@@ -59,27 +59,27 @@ final class FilterBottomSheetReactor: Reactor {
             Location(
                 main: "서울",
                 sub: [
-                    "도봉/노원","강북/중랑","동대문/성북","중구/종로","성동/광진",
-                    "송파/강동","동작/관악","서초/강남","은평/서대문/마포",
-                    "영등포/구로","용산","양천/강서/금천"
+                    "도봉/노원", "강북/중랑", "동대문/성북", "중구/종로", "성동/광진",
+                    "송파/강동", "동작/관악", "서초/강남", "은평/서대문/마포",
+                    "영등포/구로", "용산", "양천/강서/금천"
                 ]
             ),
             Location(
                 main: "경기",
                 sub: [
-                    "포천/연천","동두천/양주/의정부","구리/남양주/가평",
-                    "파주/고양/김포","용인/화성/수원","군포/의왕",
-                    "과천/안양","부천/광명","시흥/안산",
-                    "안성/평택/오산","성남/하남/광주","이천/여주/양평"
+                    "포천/연천", "동두천/양주/의정부", "구리/남양주/가평",
+                    "파주/고양/김포", "용인/화성/수원", "군포/의왕",
+                    "과천/안양", "부천/광명", "시흥/안산",
+                    "안성/평택/오산", "성남/하남/광주", "이천/여주/양평"
                 ]
             ),
             Location(main: "인천", sub: ["부평", "송도"]),
             Location(
                 main: "부산",
                 sub: [
-                    "중구","서구","동구","영도구","부산진구",
-                    "동래구","남구","북구","해운대구","사하구",
-                    "금정구","강서구","연제구","수영구","사상구",
+                    "중구", "서구", "동구", "영도구", "부산진구",
+                    "동래구", "남구", "북구", "해운대구", "사하구",
+                    "금정구", "강서구", "연제구", "수영구", "사상구",
                     "기장군"
                 ]
             ),
@@ -177,14 +177,12 @@ final class FilterBottomSheetReactor: Reactor {
         switch mutation {
         case .setActiveSegment(let index):
             newState.activeSegment = index
-
-        case .resetFilters:
+            case .resetFilters:
             newState.selectedSubRegions = []
             newState.selectedCategories = []
             newState.savedSubRegions = []
             newState.savedCategories = []
             // 여기서 forceSaveEnabled는 나중에 setForceSaveEnabled가 적용됨
-            break
 
         case .applyFilters(let combined):
             print("필터 적용: \(newState.selectedSubRegions + newState.selectedCategories)")
