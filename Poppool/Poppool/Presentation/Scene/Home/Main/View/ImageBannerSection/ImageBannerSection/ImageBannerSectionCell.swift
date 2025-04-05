@@ -264,7 +264,7 @@ extension ImageBannerSectionCell: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard imageSection.dataCount > 1 else { return }
-        
+
         if currentIndex == 0 {
             contentCollectionView.scrollToItem(
                 at: .init(row: imageSection.dataCount - 2, section: 0),
