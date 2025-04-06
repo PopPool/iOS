@@ -1,13 +1,4 @@
-//
-//  UIImageView+.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/3/24.
-//
-
 import UIKit
-
-import Kingfisher
 
 extension UIImageView {
     func setPPImage(path: String?) {
@@ -22,15 +13,6 @@ extension UIImageView {
                     self?.image = image
                 }
             }
-//            let imageURL = URL(string: cenvertimageURL)
-//            self.kf.setImage(with: imageURL) { result in
-//                switch result {
-//                case .failure(let error):
-//                    Logger.log(message: "\(path) image Load Fail: \(error.localizedDescription)", category: .error)
-//                default:
-//                    break
-//                }
-//            }
         }
     }
     
@@ -43,13 +25,10 @@ extension UIImageView {
         let imageURLString = Secrets.popPoolS3BaseURL.rawValue + path
         if let cenvertimageURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             let imageURL = URL(string: cenvertimageURL)
-            self.kf.setImage(with: imageURL) { result in
-                completion()
-                switch result {
-                case .failure(let error):
-                    Logger.log(message: "\(path) image Load Fail: \(error.localizedDescription)", category: .error)
-                default:
-                    break
+            ImageLoader.shared.loadImage(with: cenvertimageURL, defaultImage: UIImage(named: "image_default"), imageQuality: .origin) { [weak self] image in
+                DispatchQueue.main.async {
+                    completion()
+                    self?.image = image
                 }
             }
         }

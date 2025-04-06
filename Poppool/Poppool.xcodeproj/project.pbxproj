@@ -474,7 +474,6 @@
 		BDCA41E22CF35AC1005EECF6 /* PoppoolUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCA41E12CF35AC1005EECF6 /* PoppoolUITests.swift */; };
 		BDCA41E42CF35AC1005EECF6 /* PoppoolUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCA41E32CF35AC1005EECF6 /* PoppoolUITestsLaunchTests.swift */; };
 		BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA41F12CF35D0D005EECF6 /* SnapKit */; };
-		BDCA41F52CF35D33005EECF6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA41F42CF35D33005EECF6 /* Kingfisher */; };
 		BDCA41F82CF35D9A005EECF6 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA41F72CF35D9A005EECF6 /* RxSwift */; };
 		BDCA41FE2CF35EE7005EECF6 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA41FD2CF35EE7005EECF6 /* ReactorKit */; };
 		BDCA42012CF35EFE005EECF6 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA42002CF35EFE005EECF6 /* RxKeyboard */; };
@@ -975,7 +974,6 @@
 			files = (
 				BDCA41F82CF35D9A005EECF6 /* RxSwift in Frameworks */,
 				BDCA420D2CF35FD2005EECF6 /* RxGesture in Frameworks */,
-				BDCA41F52CF35D33005EECF6 /* Kingfisher in Frameworks */,
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
@@ -3088,7 +3086,6 @@
 			name = Poppool;
 			packageProductDependencies = (
 				BDCA41F12CF35D0D005EECF6 /* SnapKit */,
-				BDCA41F42CF35D33005EECF6 /* Kingfisher */,
 				BDCA41F72CF35D9A005EECF6 /* RxSwift */,
 				BDCA41FD2CF35EE7005EECF6 /* ReactorKit */,
 				BDCA42002CF35EFE005EECF6 /* RxKeyboard */,
@@ -3179,7 +3176,6 @@
 			mainGroup = BDCA41B42CF35AC0005EECF6;
 			packageReferences = (
 				BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				BDCA41F32CF35D33005EECF6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				BDCA41F62CF35D9A005EECF6 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				BDCA41FC2CF35EE7005EECF6 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				BDCA41FF2CF35EFE005EECF6 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
@@ -4123,14 +4119,6 @@
 				minimumVersion = 5.7.1;
 			};
 		};
-		BDCA41F32CF35D33005EECF6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.1.1;
-			};
-		};
 		BDCA41F62CF35D9A005EECF6 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -4237,11 +4225,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BDCA41F02CF35D0D005EECF6 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		BDCA41F42CF35D33005EECF6 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BDCA41F32CF35D33005EECF6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 		BDCA41F72CF35D9A005EECF6 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;

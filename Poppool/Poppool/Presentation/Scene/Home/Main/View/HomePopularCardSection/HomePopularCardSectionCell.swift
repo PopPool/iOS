@@ -1,15 +1,7 @@
-//
-//  HomePopularCardSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/30/24.
-//
-
 import UIKit
 
 import SnapKit
 import RxSwift
-import Kingfisher
 
 final class HomePopularCardSectionCell: UICollectionViewCell {
     
