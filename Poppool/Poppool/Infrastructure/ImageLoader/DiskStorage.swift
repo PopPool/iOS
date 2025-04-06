@@ -120,36 +120,26 @@ final class DiskStorage {
     }
     
     /// 주기적으로 만료된 캐시를 삭제하는 메서드
-    /// - 5분(300초)마다 실행되며, 만료된 이미지와 메타데이터를 정리함.
     private func startCacheCleanup() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let self = self else { return }
+        let files = (try? self.fileManager.contentsOfDirectory(at: self.cacheDirectory, includingPropertiesForKeys: nil)) ?? []
 
-            let cleanTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
-                let files = (try? self.fileManager.contentsOfDirectory(at: self.cacheDirectory, includingPropertiesForKeys: nil)) ?? []
+        for file in files {
+            if file.pathExtension == "metadata",
+               let metadataData = try? Data(contentsOf: file),
+               let metadata = try? JSONSerialization.jsonObject(with: metadataData) as? [String: TimeInterval],
+               let expirationTime = metadata["expiration"] {
 
-                for file in files {
-                    if file.pathExtension == "metadata",
-                       let metadataData = try? Data(contentsOf: file),
-                       let metadata = try? JSONSerialization.jsonObject(with: metadataData) as? [String: TimeInterval],
-                       let expirationTime = metadata["expiration"] {
-
-                        // 만료 시간이 지나면 이미지와 메타데이터 삭제
-                        if Date().timeIntervalSince1970 > expirationTime {
-                            let imageFileURL = file.deletingPathExtension() // 메타데이터와 동일한 이름의 이미지 파일
-                            do {
-                                try self.fileManager.removeItem(at: imageFileURL)
-                                try self.fileManager.removeItem(at: file) // 메타데이터 삭제
-                            } catch {
-                                print("Failed to delete expired cache: \(error)")
-                            }
-                        }
+                // 만료 시간이 지나면 이미지와 메타데이터 삭제
+                if Date().timeIntervalSince1970 > expirationTime {
+                    let imageFileURL = file.deletingPathExtension() // 메타데이터와 동일한 이름의 이미지 파일
+                    do {
+                        try self.fileManager.removeItem(at: imageFileURL)
+                        try self.fileManager.removeItem(at: file) // 메타데이터 삭제
+                    } catch {
+                        print("Failed to delete expired cache: \(error)")
                     }
                 }
             }
-            // 백그라운드에서 실행되는 타이머를 메인 루프에 추가
-            RunLoop.current.add(cleanTimer, forMode: .common)
-            RunLoop.current.run() // 백그라운드 스레드에서 타이머를 계속 실행하기 위해 RunLoop를 유지
         }
     }
 }
