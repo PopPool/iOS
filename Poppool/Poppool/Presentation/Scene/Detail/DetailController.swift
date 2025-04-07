@@ -224,7 +224,7 @@ extension DetailController: UICollectionViewDelegate, UICollectionViewDataSource
             cell.imageCollectionView.rx.itemSelected
                 .withUnretained(self)
                 .map { (owner, cellIndexPath) in
-                    Reactor.Action.commentImageTapped(controller: owner, cellRow: indexPath.row, ImageRow: cellIndexPath.row)
+                    Reactor.Action.commentImageTapped(controller: owner, cellRow: indexPath.row, imageRow: cellIndexPath.row)
                 }
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
