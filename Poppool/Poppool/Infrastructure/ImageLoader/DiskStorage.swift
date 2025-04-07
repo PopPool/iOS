@@ -1,30 +1,30 @@
-import UIKit
 import CryptoKit
+import UIKit
 
 /// 디스크에 이미지를 캐싱하는 클래스
 final class DiskStorage {
-    
+
     /// 싱글톤 인스턴스
     static let shared = DiskStorage()
-    
+
     /// 파일 관리 객체
     private let fileManager = FileManager.default
-    
+
     /// 이미지 캐시 디렉터리 경로
     private let cacheDirectory: URL
-    
+
     /// 초기화 메서드 (캐시 디렉터리 생성 및 자동 삭제 스케줄 시작)
     private init() {
         let urls = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
         cacheDirectory = urls[0].appendingPathComponent("ImageCache")
-        
+
         // 디렉터리가 존재하지 않으면 생성
         if !fileManager.fileExists(atPath: cacheDirectory.path) {
             try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
         }
         startCacheCleanup()
     }
-    
+
     /// URL을 안전한 파일명으로 변환하는 메서드
     /// - Parameter url: 원본 URL 문자열
     /// - Returns: 파일명으로 변환된 문자열
@@ -33,7 +33,7 @@ final class DiskStorage {
         let hashed = SHA256.hash(data: data)
         return hashed.compactMap { String(format: "%02x", $0) }.joined()
     }
-    
+
     /// 이미지를 디스크에 저장하는 메서드
     /// - Parameters:
     ///   - image: 저장할 UIImage 객체
@@ -42,7 +42,7 @@ final class DiskStorage {
         let fileName = cacheFileName(for: url)
         let fileURL = cacheDirectory.appendingPathComponent(fileName)
         let metadataURL = cacheDirectory.appendingPathComponent("\(fileName).metadata")
-        
+
         // 이미지 데이터를 JPEG 형식으로 변환하여 저장
         if let data = image.jpegData(compressionQuality: 0.8) {
             do {
@@ -51,11 +51,11 @@ final class DiskStorage {
                 print("Error writing image data to disk: \(error)")
             }
         }
-        
+
         // 만료 시간 기록
         let expirationDate = Date().addingTimeInterval(ImageLoader.shared.configure.diskCacheExpiration)
         let metadata = ["expiration": expirationDate.timeIntervalSince1970]
-        
+
         // 만료 정보를 JSON 형태로 저장
         if let metadataData = try? JSONSerialization.data(withJSONObject: metadata) {
             do {
@@ -65,7 +65,7 @@ final class DiskStorage {
             }
         }
     }
-    
+
     /// 디스크에서 이미지를 불러오는 메서드 (만료된 경우 자동 삭제)
     /// - Parameter url: 이미지의 원본 URL 문자열
     /// - Returns: UIImage 객체 (없거나 만료된 경우 nil)
@@ -73,34 +73,34 @@ final class DiskStorage {
         let fileName = cacheFileName(for: url)
         let fileURL = cacheDirectory.appendingPathComponent(fileName)
         let metadataURL = cacheDirectory.appendingPathComponent("\(fileName).metadata")
-        
+
         // 만료 시간 확인
         if let metadataData = try? Data(contentsOf: metadataURL),
            let metadata = try? JSONSerialization.jsonObject(with: metadataData) as? [String: TimeInterval],
            let expirationTime = metadata["expiration"] {
-            
+
             // 만료 시간이 현재 시각을 초과하면 삭제 후 nil 반환
             if Date().timeIntervalSince1970 > expirationTime {
                 removeImage(url: url)
                 return nil
             }
         }
-        
+
         // 이미지 파일이 존재하면 로드하여 반환
         if let data = try? Data(contentsOf: fileURL) {
             return UIImage(data: data)
         }
-        
+
         return nil
     }
-    
+
     /// 특정 URL에 해당하는 이미지를 디스크에서 삭제하는 메서드
     /// - Parameter url: 삭제할 이미지의 원본 URL 문자열
     func removeImage(url: String) {
         let fileName = cacheFileName(for: url)
         let fileURL = cacheDirectory.appendingPathComponent(fileName)
         let metadataURL = cacheDirectory.appendingPathComponent("\(fileName).metadata")
-        
+
         do {
             try fileManager.removeItem(at: fileURL)     // 이미지 파일 삭제
             try fileManager.removeItem(at: metadataURL) // 메타데이터 파일 삭제
@@ -108,7 +108,7 @@ final class DiskStorage {
             print("Failed to remove image: \(error)")
         }
     }
-    
+
     /// 모든 캐시 데이터를 삭제하는 메서드
     func clearCache() {
         do {
@@ -118,7 +118,7 @@ final class DiskStorage {
             print("Failed to clear cache: \(error)")
         }
     }
-    
+
     /// 주기적으로 만료된 캐시를 삭제하는 메서드
     private func startCacheCleanup() {
         let files = (try? self.fileManager.contentsOfDirectory(at: self.cacheDirectory, includingPropertiesForKeys: nil)) ?? []
