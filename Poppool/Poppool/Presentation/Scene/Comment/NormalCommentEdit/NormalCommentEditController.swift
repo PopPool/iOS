@@ -7,23 +7,23 @@
 
 import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
+import RxCocoa
 import RxKeyboard
+import RxSwift
+import SnapKit
 
 final class NormalCommentEditController: BaseViewController, View {
-    
+
     typealias Reactor = NormalCommentEditReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var keyBoardDisposeBag = DisposeBag()
-    
+
     private var mainView = NormalCommentEditView()
-    
+
     private var sections: [any Sectionable] = []
 }
 
@@ -33,7 +33,7 @@ extension NormalCommentEditController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -79,12 +79,12 @@ private extension NormalCommentEditController {
 // MARK: - Methods
 extension NormalCommentEditController {
     func bind(reactor: Reactor) {
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -92,7 +92,7 @@ extension NormalCommentEditController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         // RxKeyboard로 키보드 높이 감지
         RxKeyboard.instance.visibleHeight
             .skip(1)
@@ -103,7 +103,7 @@ extension NormalCommentEditController {
                     UIView.animate(withDuration: 0.3) {
                         self.mainView.transform = .identity
                     }
-                    
+
                 } else {
                     UIView.animate(withDuration: 0.3) {
                         self.mainView.transform = .init(translationX: 0, y: -100)
@@ -111,7 +111,7 @@ extension NormalCommentEditController {
                 }
             })
             .disposed(by: keyBoardDisposeBag)
-        
+
         mainView.saveButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -120,7 +120,7 @@ extension NormalCommentEditController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -136,17 +136,17 @@ extension NormalCommentEditController {
                 }
                 owner.sections = state.sections
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
-                
+
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .take(1)
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
-                
+
             }
             .disposed(by: disposeBag)
     }
@@ -157,11 +157,11 @@ extension NormalCommentEditController: UICollectionViewDelegate, UICollectionVie
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -174,7 +174,7 @@ extension NormalCommentEditController: UICollectionViewDelegate, UICollectionVie
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         if let cell = cell as? AddCommentSectionCell {
             cell.commentTextView.rx.didChange
                 .withUnretained(cell)

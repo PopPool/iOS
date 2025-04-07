@@ -7,11 +7,11 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class DetailCommentImageCell: UICollectionViewCell {
-    
+
     // MARK: - Components
     private let imageView: UIImageView = {
         let view = UIImageView()
@@ -19,14 +19,14 @@ final class DetailCommentImageCell: UICollectionViewCell {
         view.clipsToBounds = true
         return view
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -46,7 +46,7 @@ extension DetailCommentImageCell: Inputable {
     struct Input {
         var imagePath: String?
     }
-    
+
     func injection(with input: Input) {
         imageView.setPPImage(path: input.imagePath)
     }

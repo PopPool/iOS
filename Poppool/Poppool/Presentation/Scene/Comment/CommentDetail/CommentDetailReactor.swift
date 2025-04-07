@@ -8,36 +8,36 @@
 import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class CommentDetailReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
         case imageCellTapped(controller: BaseViewController, row: Int)
         case likeButtonTapped
     }
-    
+
     enum Mutation {
         case loadView
         case presentImageDetailView(controller: BaseViewController, row: Int)
         case likeChange
     }
-    
+
     struct State {
         var commentData: DetailCommentSection.CellType.Input
         var sections: [any Sectionable] = []
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -51,17 +51,17 @@ final class CommentDetailReactor: Reactor {
             return getSection()[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private var imageSection = CommentDetailImageSection(inputDataList: [])
     private var contentSection = CommentDetailContentSection(inputDataList: [])
-    
+
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
-    
+
     // MARK: - init
     init(comment: DetailCommentSection.CellType.Input) {
         self.initialState = State(commentData: comment)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -73,7 +73,7 @@ final class CommentDetailReactor: Reactor {
             return Observable.just(.presentImageDetailView(controller: controller, row: row))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -93,26 +93,26 @@ final class CommentDetailReactor: Reactor {
             if newState.commentData.isLike {
                 newState.commentData.likeCount += 1
                 userAPIUseCase.postCommentLike(commentId: newState.commentData.commentID)
-                    .subscribe(onDisposed:  {
+                    .subscribe(onDisposed: {
                         Logger.log(message: "CommentLike", category: .info)
                     })
                     .disposed(by: disposeBag)
             } else {
                 newState.commentData.likeCount -= 1
                 userAPIUseCase.deleteCommentLike(commentId: newState.commentData.commentID)
-                    .subscribe(onDisposed:  {
+                    .subscribe(onDisposed: {
                         Logger.log(message: "CommentLikeDelete", category: .info)
                     })
                     .disposed(by: disposeBag)
             }
             newState.sections = getSection()
         }
-        
+
         return newState
     }
-    
+
     func getSection() -> [any Sectionable] {
-        if imageSection.isEmpty  {
+        if imageSection.isEmpty {
             return [
                 contentSection
             ]

@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-//protocol AuthRepository {
+// protocol AuthRepository {
 //    
 //    /// 네트워크 요청을 처리하는 프로바이더
 //    var provider: Provider { get set }
@@ -19,4 +19,4 @@ import RxSwift
 //    ///   - socialType: 소셜 로그인 타입 (예: "google", "facebook")
 //    /// - Returns: 로그인 응답을 나타내는 Observable 객체
 //    func tryLogIn(userCredential: Encodable, socialType: String) -> Observable<LoginResponse>
-//}
+// }

@@ -17,7 +17,7 @@ class MultipartEndPoint: URLRequestConvertible {
     var jsonData: [String: Any]?
     var images: [UIImage]
     var headers: [String: String]?
-    
+
     init(
         baseURL: String,
         path: String,
@@ -35,22 +35,22 @@ class MultipartEndPoint: URLRequestConvertible {
         self.images = images
         self.headers = headers
     }
-    
+
     func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL().appendingPathComponent(path)
         var request = URLRequest(url: url)
         Logger.log(message: "\(request) URL 생성", category: .network)
         request.method = method
-        
+
         if let headers = headers {
             for (key, value) in headers {
                 request.setValue(value, forHTTPHeaderField: key)
             }
         }
-        
+
         return request
     }
-    
+
     func asMultipartFormData(multipartFormData: MultipartFormData) {
         // JSON 데이터를 data 필드로 추가
         if let jsonData = jsonData {
@@ -65,7 +65,7 @@ class MultipartEndPoint: URLRequestConvertible {
                 Logger.log(message: "JSON 변환 오류: \(error)", category: .network)
             }
         }
-        
+
         // 이미지 파일 추가
         for (index, image) in images.enumerated() {
             if let imageData = image.jpegData(compressionQuality: 0.8) {

@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CommentMyMenuController: BaseViewController, View {
-    
+
     typealias Reactor = CommentMyMenuReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CommentMyMenuView()
 }
 
@@ -50,14 +50,14 @@ extension CommentMyMenuController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.commentRemoveButton.rx.tap
             .map { _ in
                 Reactor.Action.removeButtonTapped
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.commentEditButton.rx.tap
             .map { _ in
                 Reactor.Action.editButtonTapped

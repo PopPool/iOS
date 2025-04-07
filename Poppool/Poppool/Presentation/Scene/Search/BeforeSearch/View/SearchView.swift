@@ -10,19 +10,18 @@ import UIKit
 import SnapKit
 
 final class SearchView: UIView {
-    
+
     // MARK: - Components
     let contentCollectionView: UICollectionView = {
-        let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
-        return view
+        return UICollectionView(frame: .zero, collectionViewLayout: .init())
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,7 +29,7 @@ final class SearchView: UIView {
 
 // MARK: - SetUp
 private extension SearchView {
-    
+
     func setUpConstraints() {
         self.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in

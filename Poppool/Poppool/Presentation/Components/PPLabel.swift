@@ -8,15 +8,15 @@
 import UIKit
 
 class PPLabel: UILabel {
-    
+
     init(
-        style: UIFont.FontStyle, 
+        style: UIFont.FontStyle,
         fontSize: CGFloat,
         text: String = "",
         lineHeight: CGFloat = 1.2
     ) {
         super.init(frame: .zero)
-        self.font = .KorFont(style: style, size: fontSize)
+        self.font = .korFont(style: style, size: fontSize)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeight
         self.attributedText = NSMutableAttributedString(
@@ -24,7 +24,7 @@ class PPLabel: UILabel {
             attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
         )
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

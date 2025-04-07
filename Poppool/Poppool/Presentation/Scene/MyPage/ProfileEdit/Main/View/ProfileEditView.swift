@@ -10,21 +10,20 @@ import UIKit
 import SnapKit
 
 final class ProfileEditView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "프로필 설정", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "프로필 설정", font: .korFont(style: .regular, size: 15))
         return view
     }()
     let saveButton: PPButton = {
-        let button = PPButton(style: .primary, text: "저장", disabledText: "저장")
-        return button
+        return PPButton(style: .primary, text: "저장", disabledText: "저장")
     }()
-    
+
     private let scrollView: UIScrollView = UIScrollView()
     private let contentView: UIView = UIView()
-    
+
     let profileImageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 48
@@ -51,10 +50,9 @@ final class ProfileEditView: UIView {
         view.contentMode = .scaleAspectFit
         return view
     }()
-    
+
     private let nickNameTitleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 13, text: "별명")
-        return label
+        return PPLabel(style: .regular, fontSize: 13, text: "별명")
     }()
     let nickNameTextFieldTrailingView: UIStackView = {
         let view = UIStackView()
@@ -71,7 +69,7 @@ final class ProfileEditView: UIView {
     let nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "별명을 입력해주세요"
-        textField.font = .KorFont(style: .medium, size: 14)
+        textField.font = .korFont(style: .medium, size: 14)
         return textField
     }()
     let nickNameClearButton: UIButton = {
@@ -98,7 +96,7 @@ final class ProfileEditView: UIView {
         let attributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g1000 // 텍스트 색상
             ]
@@ -106,7 +104,7 @@ final class ProfileEditView: UIView {
         let disabledAttributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.KorFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g300 // 텍스트 색상
             ]
@@ -116,10 +114,9 @@ final class ProfileEditView: UIView {
         button.setAttributedTitle(disabledAttributedTitle, for: .disabled)
         return button
     }()
-    
+
     private let introTitleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 13, text: "자기소개")
-        return label
+        return PPLabel(style: .regular, fontSize: 13, text: "자기소개")
     }()
     let introTextTrailingView: UIView = {
         let view = UIView()
@@ -133,7 +130,7 @@ final class ProfileEditView: UIView {
         let view = UITextView()
         view.textContainerInset = .zero
         view.contentInset = .zero
-        view.font = .KorFont(style: .medium, size: 14)
+        view.font = .korFont(style: .medium, size: 14)
         return view
     }()
     let introTextCountLabel: PPLabel = {
@@ -143,38 +140,36 @@ final class ProfileEditView: UIView {
         return label
     }()
     let introDescriptionLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 12)
-        return label
+        return PPLabel(style: .medium, fontSize: 12)
     }()
     let introPlaceHolderLabel: PPLabel = {
         let label = PPLabel(style: .medium, fontSize: 14, text: "자기소개를 입력해주세요")
         label.textColor = .g200
         return label
     }()
-    
+
     private let customInfoTitlelabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 16, text: "맞춤정보")
-        return label
+        return PPLabel(style: .bold, fontSize: 16, text: "맞춤정보")
     }()
-    
+
     let categoryButton: ProfileEditListButton = {
         let button = ProfileEditListButton()
-        button.mainTitleLabel.setLineHeightText(text: "관심 카테고리", font: .KorFont(style: .regular, size: 15))
+        button.mainTitleLabel.setLineHeightText(text: "관심 카테고리", font: .korFont(style: .regular, size: 15))
         return button
     }()
-    
+
     let infoButton: ProfileEditListButton = {
         let button = ProfileEditListButton()
-        button.mainTitleLabel.setLineHeightText(text: "사용자 정보", font: .KorFont(style: .regular, size: 15))
+        button.mainTitleLabel.setLineHeightText(text: "사용자 정보", font: .korFont(style: .regular, size: 15))
         return button
     }()
-    
+
     // MARK: - init
     init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -182,7 +177,7 @@ final class ProfileEditView: UIView {
 
 // MARK: - SetUp
 private extension ProfileEditView {
-    
+
     func setUpConstraints() {
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
@@ -209,7 +204,7 @@ private extension ProfileEditView {
         setUpIntroView()
         setUpCustomInfoView()
     }
-    
+
     func setUpProfileImageView() {
         contentView.addSubview(profileImageView)
         profileImageView.snp.makeConstraints { make in
@@ -228,7 +223,7 @@ private extension ProfileEditView {
             make.center.equalToSuperview()
         }
     }
-    
+
     func setUpNickNameView() {
         contentView.addSubview(nickNameTitleLabel)
         nickNameTitleLabel.snp.makeConstraints { make in
@@ -261,7 +256,7 @@ private extension ProfileEditView {
             make.trailing.equalToSuperview().inset(24)
         }
     }
-    
+
     func setUpIntroView() {
         contentView.addSubview(introTitleLabel)
         introTitleLabel.snp.makeConstraints { make in
@@ -294,21 +289,21 @@ private extension ProfileEditView {
             make.leading.equalToSuperview().inset(20)
         }
     }
-    
+
     func setUpCustomInfoView() {
         contentView.addSubview(customInfoTitlelabel)
         customInfoTitlelabel.snp.makeConstraints { make in
             make.top.equalTo(introTextTrailingView.snp.bottom).offset(27)
             make.leading.equalToSuperview().inset(20)
         }
-        
+
         contentView.addSubview(categoryButton)
         categoryButton.snp.makeConstraints { make in
             make.top.equalTo(customInfoTitlelabel.snp.bottom).offset(32)
             make.leading.equalToSuperview().inset(22)
             make.trailing.equalToSuperview().inset(20)
         }
-        
+
         contentView.addSubview(infoButton)
         infoButton.snp.makeConstraints { make in
             make.top.equalTo(categoryButton.snp.bottom).offset(32)

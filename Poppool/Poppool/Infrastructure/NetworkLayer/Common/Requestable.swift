@@ -24,14 +24,14 @@ extension Requestable {
     /// - Returns: URLRequest 반환
     func getUrlRequest() throws -> URLRequest {
         let url = try url()
-        
+
         Logger.log(
             message: "\(url) URL 생성",
             category: .network,
             fileName: #file,
             line: #line
         )
-        
+
         var urlRequest = URLRequest(url: url)
         // httpBody
         if let bodyParameters = try bodyParameters?.toDictionary() {
@@ -46,7 +46,7 @@ extension Requestable {
         headers?.forEach { urlRequest.setValue($1, forHTTPHeaderField: $0) }
         return urlRequest
     }
-    
+
     /// APIEndpoint에서 전달받은 DTO를 URL로 변환하는 메서드
     /// - Returns: URL 반환
     func url() throws -> URL {
@@ -80,7 +80,7 @@ extension Requestable {
 }
 
 extension Encodable {
-    
+
     /// URL에 요청할 쿼리 데이터를 JSON 형식에 맞게 딕셔너리 구조로 변환하는 메서드
     /// - Returns: jsonData
     func toDictionary() throws -> [String: Any]? {

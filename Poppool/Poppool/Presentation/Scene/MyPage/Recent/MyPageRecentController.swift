@@ -7,22 +7,22 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class MyPageRecentController: BaseViewController, View {
-    
+
     typealias Reactor = MyPageRecentReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = MyPageRecentView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private var cellTapped: PublishSubject<Int> = .init()
 }
 
@@ -32,7 +32,7 @@ extension MyPageRecentController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -50,11 +50,11 @@ private extension MyPageRecentController {
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             DetailSimilarSectionCell.self,
             forCellWithReuseIdentifier: DetailSimilarSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             CommentListTitleSectionCell.self,
             forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers
@@ -74,7 +74,7 @@ extension MyPageRecentController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -82,7 +82,7 @@ extension MyPageRecentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, row) in
@@ -90,13 +90,13 @@ extension MyPageRecentController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.sections = state.sections
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
-                
+
             }
             .disposed(by: disposeBag)
     }
@@ -107,11 +107,11 @@ extension MyPageRecentController: UICollectionViewDelegate, UICollectionViewData
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -120,7 +120,7 @@ extension MyPageRecentController: UICollectionViewDelegate, UICollectionViewData
         guard let reactor = reactor else { return cell }
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentHeight = scrollView.contentSize.height
         let scrollViewHeight = scrollView.frame.size.height
@@ -129,7 +129,7 @@ extension MyPageRecentController: UICollectionViewDelegate, UICollectionViewData
             reactor?.action.onNext(.changePage)
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 3 { cellTapped.onNext(indexPath.row) }
     }

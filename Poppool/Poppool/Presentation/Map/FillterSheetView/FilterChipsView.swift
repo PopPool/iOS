@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class FilterChipsView: UIView {
     // MARK: - Components
@@ -63,7 +63,7 @@ final class FilterChipsView: UIView {
             make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().offset(-8)
-            make.height.equalTo(44)
+            make.height.greaterThanOrEqualTo(44).priority(.high)
         }
 
         emptyStateLabel.snp.makeConstraints { make in
@@ -97,7 +97,7 @@ final class FilterChipsView: UIView {
         let removedFilter = filters[index]
         filters.remove(at: index)
         updateUI()
-        
+
         // 콜백 호출
         onRemoveChip?(removedFilter)
     }

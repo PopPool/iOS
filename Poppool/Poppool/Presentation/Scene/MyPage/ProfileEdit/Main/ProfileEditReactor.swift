@@ -5,15 +5,15 @@
 //  Created by SeoJunYoung on 1/4/25.
 //
 
-import UIKit
 import PhotosUI
+import UIKit
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class ProfileEditReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
@@ -31,7 +31,7 @@ final class ProfileEditReactor: Reactor {
         case saveButtonTapped
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case loadView
         case moveToInfoEditScene(controller: BaseViewController)
@@ -40,39 +40,39 @@ final class ProfileEditReactor: Reactor {
         case moveToRecentScene(controller: BaseViewController)
         case changeNickNameState
     }
-    
+
     struct State {
         var originProfileData: GetMyProfileResponse?
         var saveButtonIsEnable: Bool = false
         var nickNameState: NickNameState = .myNickName
         var introState: IntroState = .validate
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var originProfileData: GetMyProfileResponse?
-    
+
     var currentImage: UIImage?
     var isChangeImage: Bool = false
     var currentImagePath: String?
-    
+
     var currentNickName: String?
     var nickNameIsActive: Bool = false
-    
+
     var currentIntro: String?
     var introIsActive: Bool = false
-    
+
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
     private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private let imageService = PreSignedService()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -124,7 +124,7 @@ final class ProfileEditReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
@@ -150,12 +150,12 @@ final class ProfileEditReactor: Reactor {
         case .changeNickNameState:
             newState.nickNameState = checkNickNameState(text: currentNickName, isActive: nickNameIsActive)
         }
-        
+
         let originNickName = originProfileData?.nickname ?? ""
         let currentNickName = currentNickName ?? ""
         let originIntro = originProfileData?.intro ?? ""
         let currentIntro = currentIntro ?? ""
-        
+
         if isChangeImage || originNickName != currentNickName || originIntro != currentIntro {
             if newState.nickNameState == .validate || newState.nickNameState == .validateActive || newState.nickNameState == .myNickName || newState.nickNameState == .myNickNameActive {
                 if newState.introState == .validate || newState.introState == .validateActive || newState.introState == .empty || newState.introState == .emptyActive {
@@ -169,10 +169,10 @@ final class ProfileEditReactor: Reactor {
         } else {
             newState.saveButtonIsEnable = false
         }
-        
+
         return newState
     }
-    
+
     func uploadS3() -> Observable<Mutation> {
         if let changeImage = currentImage {
             let newPath = "ProfileImage/\(UUID().uuidString).jpg"
@@ -206,7 +206,7 @@ final class ProfileEditReactor: Reactor {
             }
         }
     }
-    
+
     func editProfile() -> Observable<Mutation> {
         isChangeImage = false
         ToastMaker.createToast(message: "내용을 저장했어요")
@@ -219,7 +219,7 @@ final class ProfileEditReactor: Reactor {
         )
         .andThen(Observable.just(.loadView))
     }
-    
+
     func loadProfileData() -> Observable<Mutation> {
         return userAPIUseCase.getMyProfile()
             .withUnretained(self)
@@ -231,27 +231,27 @@ final class ProfileEditReactor: Reactor {
                 return .loadView
             }
     }
-    
+
     func checkNickNameState(text: String?, isActive: Bool) -> NickNameState {
         guard let text = text, let originNickName = originProfileData?.nickname else { return isActive ? .emptyActive : .empty }
         if originNickName == text { return isActive ? .myNickNameActive : .myNickName }
-        
+
         // textEmpty Check
         if text.isEmpty { return isActive ? .emptyActive : .empty }
-        
+
         // kor and end Check
         let pattern = "^[가-힣a-zA-Z\\s]+$" // 허용하는 문자만 검사
-        let regex = try! NSRegularExpression(pattern: pattern)
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return .empty }
         let range = NSRange(location: 0, length: text.utf16.count)
         if regex.firstMatch(in: text, options: [], range: range) == nil { return isActive ? .korAndEngActive : .korAndEng }
-        
+
         // textLength Check
-        
+
         if text.count < 2 { return isActive ? .shortLengthActive : .shortLength }
         if text.count > 10 { return isActive ? .longLengthActive : .longLength }
         return isActive ? .checkActive : .check
     }
-    
+
     func checkIntroState(text: String?, isActive: Bool) -> IntroState {
         guard let text = text else { return isActive ? .emptyActive : .empty }
         if text.isEmpty { return isActive ? .emptyActive : .empty }

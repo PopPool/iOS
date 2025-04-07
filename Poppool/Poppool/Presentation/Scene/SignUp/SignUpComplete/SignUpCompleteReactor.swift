@@ -6,27 +6,27 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class SignUpCompleteReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case completeButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case moveToHomeScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var nickName: String
         var categoryTitles: [String]
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
     var isFirstResponderCase: Bool
@@ -35,7 +35,7 @@ final class SignUpCompleteReactor: Reactor {
         self.initialState = State(nickName: nickName, categoryTitles: categoryTitles)
         self.isFirstResponderCase = isFirstResponderCase
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -43,7 +43,7 @@ final class SignUpCompleteReactor: Reactor {
             return Observable.just(.moveToHomeScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToHomeScene(let controller):

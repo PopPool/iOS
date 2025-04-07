@@ -7,43 +7,41 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class CancelableTagSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     var disposeBag = DisposeBag()
-    
+
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 11)
-        return label
+        return PPLabel(style: .medium, fontSize: 11)
     }()
-    
+
     let cancelButton: UIButton = {
-        let button = UIButton()
-        return button
+        return UIButton()
     }()
-    
+
     private let contentStackView: UIStackView = {
         let view = UIStackView()
         view.alignment = .center
         view.spacing = 2
         return view
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -56,7 +54,7 @@ private extension CancelableTagSectionCell {
         contentView.layer.cornerRadius = 15.5
         contentView.clipsToBounds = true
         contentView.layer.borderWidth = 1
-        
+
         contentView.addSubview(contentStackView)
         contentStackView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
@@ -65,7 +63,7 @@ private extension CancelableTagSectionCell {
         }
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(cancelButton)
-        
+
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
         }
@@ -82,23 +80,23 @@ extension CancelableTagSectionCell: Inputable {
         var isSelected: Bool = false
         var isCancelAble: Bool = true
     }
-    
+
     func injection(with input: Input) {
         let xmarkImage = input.isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")
         cancelButton.setImage(xmarkImage, for: .normal)
         if input.isSelected {
             contentView.backgroundColor = .blu500
-            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .bold, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .w100
             contentView.layer.borderColor = UIColor.blu500.cgColor
         } else {
             contentView.backgroundColor = .clear
-            titleLabel.setLineHeightText(text: input.title, font: .KorFont(style: .medium, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .g400
             contentView.layer.borderColor = UIColor.g200.cgColor
         }
         cancelButton.isHidden = !input.isCancelAble
-        
+
         if input.isCancelAble {
             contentStackView.snp.updateConstraints { make in
                 make.trailing.equalToSuperview().inset(8)

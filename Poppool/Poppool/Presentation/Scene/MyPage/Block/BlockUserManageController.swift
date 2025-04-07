@@ -7,20 +7,20 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class BlockUserManageController: BaseViewController, View {
-    
+
     typealias Reactor = BlockUserManageReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = BlockUserManageView()
-    
+
     private var sections: [any Sectionable] = []
 }
 
@@ -30,7 +30,7 @@ extension BlockUserManageController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -52,12 +52,12 @@ private extension BlockUserManageController {
         mainView.contentCollectionView.register(
             CommentListTitleSectionCell.self,
             forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             BlockUserListSectionCell.self,
             forCellWithReuseIdentifier: BlockUserListSectionCell.identifiers
         )
-        
+
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -75,12 +75,12 @@ extension BlockUserManageController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -98,11 +98,11 @@ extension BlockUserManageController: UICollectionViewDelegate, UICollectionViewD
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath

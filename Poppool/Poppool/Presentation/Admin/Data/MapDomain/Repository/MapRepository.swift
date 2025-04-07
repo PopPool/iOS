@@ -33,7 +33,6 @@ class DefaultMapRepository: MapRepository {
         self.provider = provider
     }
 
-
     func fetchStoresInBounds(
         northEastLat: Double,
         northEastLon: Double,
@@ -49,7 +48,7 @@ class DefaultMapRepository: MapRepository {
                 southWestLon: southWestLon,
                 categories: categories
             ),
-            interceptor: TokenInterceptor() // ← 토큰 누락 해결
+            interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
     }
@@ -63,11 +62,10 @@ class DefaultMapRepository: MapRepository {
                 query: query,
                 categories: categories
             ),
-            interceptor: TokenInterceptor() // ← 토큰 누락 해결
+            interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
     }
-
 
     func fetchCategories() -> Observable<[Category]> {
         Logger.log(message: "카테고리 매핑 요청을 시작합니다.", category: .network)

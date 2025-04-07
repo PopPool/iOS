@@ -10,17 +10,17 @@ import UIKit
 import RxSwift
 
 struct ImageBannerChildSection: Sectionable {
-    
+
     var currentPage: PublishSubject<Int> = .init()
-    
+
     typealias CellType = ImageBannerChildSectionCell
-    
+
     var inputDataList: [CellType.Input]
-    
+
     var supplementaryItems: [any SectionSupplementaryItemable]?
-    
+
     var decorationItems: [any SectionDecorationItemable]?
-    
+
     func setSection(section: Int, env: any NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),

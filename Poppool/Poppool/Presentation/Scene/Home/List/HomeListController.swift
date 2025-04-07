@@ -7,24 +7,24 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class HomeListController: BaseViewController, View {
-    
+
     typealias Reactor = HomeListReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = HomeListView()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private let pageChange: PublishSubject<Void> = .init()
-    
+
     private let cellTapped: PublishSubject<Int> = .init()
 }
 
@@ -33,9 +33,9 @@ extension HomeListController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
-        
+
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -49,13 +49,13 @@ private extension HomeListController {
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         if let layout = reactor?.compositionalLayout {
             mainView.contentCollectionView.collectionViewLayout = layout
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
-        
+
         mainView.contentCollectionView.register(
             HomeCardSectionCell.self,
             forCellWithReuseIdentifier: HomeCardSectionCell.identifiers
@@ -74,7 +74,7 @@ extension HomeListController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -82,13 +82,13 @@ extension HomeListController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         pageChange
             .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changePage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, row) in
@@ -96,7 +96,7 @@ extension HomeListController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -113,11 +113,11 @@ extension HomeListController: UICollectionViewDelegate, UICollectionViewDataSour
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -130,10 +130,10 @@ extension HomeListController: UICollectionViewDelegate, UICollectionViewDataSour
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
-        
+
         return cell
     }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentHeight = scrollView.contentSize.height
         let scrollViewHeight = scrollView.frame.size.height
@@ -142,7 +142,7 @@ extension HomeListController: UICollectionViewDelegate, UICollectionViewDataSour
             pageChange.onNext(())
         }
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 1 { cellTapped.onNext(indexPath.row)}
     }

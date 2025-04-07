@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SubLoginController: BaseViewController, View {
-    
+
     typealias Reactor = SubLoginReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SubLoginView()
 }
 
@@ -28,7 +28,7 @@ extension SubLoginController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let lastLogin = reactor?.userDefaultService.fetch(key: "lastLogin") {
@@ -62,7 +62,7 @@ extension SubLoginController {
             .map { Reactor.Action.viewWillAppear}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.xmarkButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -70,7 +70,7 @@ extension SubLoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.kakaoButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -78,7 +78,7 @@ extension SubLoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.inquiryButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -86,7 +86,7 @@ extension SubLoginController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.appleButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in

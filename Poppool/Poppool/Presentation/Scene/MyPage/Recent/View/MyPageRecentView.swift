@@ -10,14 +10,14 @@ import UIKit
 import SnapKit
 
 final class MyPageRecentView: UIView {
-    
+
     // MARK: - Components
     let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "최근 본 팝업", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "최근 본 팝업", font: .korFont(style: .regular, size: 15))
         return view
     }()
-    
+
     let contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
         view.backgroundColor = .g50
@@ -28,7 +28,7 @@ final class MyPageRecentView: UIView {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -36,13 +36,13 @@ final class MyPageRecentView: UIView {
 
 // MARK: - SetUp
 private extension MyPageRecentView {
-    
+
     func setUpConstraints() {
         self.addSubview(headerView)
         headerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        
+
         self.addSubview(contentCollectionView)
         contentCollectionView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)

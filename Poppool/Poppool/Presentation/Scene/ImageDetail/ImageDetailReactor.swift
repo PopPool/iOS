@@ -6,34 +6,34 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class ImageDetailReactor: Reactor {
-    
+
     // MARK: - Reactor
     enum Action {
         case backButtonTapped(controller: BaseViewController)
     }
-    
+
     enum Mutation {
         case moveToRecentScene(controller: BaseViewController)
     }
-    
+
     struct State {
         var imagePath: String?
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init(imagePath: String?) {
         self.initialState = State(imagePath: imagePath)
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -41,7 +41,7 @@ final class ImageDetailReactor: Reactor {
             return Observable.just(.moveToRecentScene(controller: controller))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToRecentScene(let controller):

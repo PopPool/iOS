@@ -10,29 +10,25 @@ import UIKit
 import SnapKit
 
 final class AgeSelectedView: UIView {
-    
+
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 18, text: "나이를 선택해주세요")
-        return label
+        return PPLabel(style: .bold, fontSize: 18, text: "나이를 선택해주세요")
     }()
-    
+
     let picker: PPPicker = {
         let ageRange = (0...100).map { "\($0)세"}
-        let picker = PPPicker(components: ageRange)
-        return picker
+        return PPPicker(components: ageRange)
     }()
-    
+
     let cancelButton: PPButton = {
-        let button = PPButton(style: .secondary, text: "취소")
-        return button
+        return PPButton(style: .secondary, text: "취소")
     }()
-    
+
     let completeButton: PPButton = {
-        let button = PPButton(style: .primary, text: "확인", disabledText: "확인")
-        return button
+        return PPButton(style: .primary, text: "확인", disabledText: "확인")
     }()
-    
+
     private let buttonStackView: UIStackView = {
         let view = UIStackView()
         view.distribution = .fillEqually
@@ -44,7 +40,7 @@ final class AgeSelectedView: UIView {
         super.init(frame: .zero)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -52,21 +48,21 @@ final class AgeSelectedView: UIView {
 
 // MARK: - SetUp
 private extension AgeSelectedView {
-    
+
     func setUpConstraints() {
         self.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(24)
             make.leading.trailing.equalToSuperview().inset(20)
         }
-        
+
         self.addSubview(picker)
         picker.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(208)
         }
-        
+
         self.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(picker.snp.bottom).offset(24)

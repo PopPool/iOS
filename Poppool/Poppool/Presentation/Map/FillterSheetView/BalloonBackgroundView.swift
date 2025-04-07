@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class BalloonBackgroundView: UIView {
 
@@ -13,9 +13,8 @@ final class BalloonBackgroundView: UIView {
         return view
     }()
 
-    // 기존 말풍선 UI: 서브 지역을 나열하는 CollectionView (서울/경기/부산용)
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewCompositionalLayout { section, env in
+        let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(30),
                 heightDimension: .absolute(30)
@@ -44,8 +43,8 @@ final class BalloonBackgroundView: UIView {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.tintColor = .blu500
-        iv.image = UIImage(named: "Marker") // 에셋에 추가된 Marker 이미지
-        iv.isHidden = true  // 기본은 숨김
+        iv.image = UIImage(named: "Marker")
+        iv.isHidden = true
         return iv
     }()
 
@@ -62,7 +61,7 @@ final class BalloonBackgroundView: UIView {
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textColor = UIColor.g400
         label.textAlignment = .center
-        label.numberOfLines = 2  // 두 줄 표시
+        label.numberOfLines = 2
         return label
     }()
 
@@ -88,6 +87,9 @@ final class BalloonBackgroundView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        self.isUserInteractionEnabled = true
+        containerView.isUserInteractionEnabled = true
+        collectionView.isUserInteractionEnabled = true
         setupLayout()
         setupCollectionView()
     }
@@ -97,11 +99,13 @@ final class BalloonBackgroundView: UIView {
     // MARK: - Setup
 
     private func setupLayout() {
+
         addSubview(containerView)
         containerView.snp.makeConstraints { make in
-                 make.left.right.bottom.equalToSuperview()
-                 make.top.equalToSuperview().offset(arrowHeight)
-             }
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().offset(arrowHeight)
+            make.bottom.equalToSuperview().priority(.high)
+        }
 
         containerView.addSubview(collectionView)
         containerView.addSubview(singleRegionIcon)
@@ -109,7 +113,8 @@ final class BalloonBackgroundView: UIView {
         containerView.addSubview(singleRegionDetailLabel)
 
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.left.right.equalToSuperview()
+            make.bottom.equalToSuperview().priority(.high)
         }
 
         singleRegionIcon.snp.makeConstraints { make in
@@ -140,43 +145,32 @@ final class BalloonBackgroundView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
 
-        let arrowWidth: CGFloat = 12  // 화살표 너비 조정
-        let arrowHeight: CGFloat = 8   // 화살표 높이 조정
+        let arrowWidth: CGFloat = 12
+        let arrowHeight: CGFloat = 8
 
-        // 화살표의 시작 x좌표 계산
         let arrowX = bounds.width * arrowPosition - (arrowWidth / 2)
 
-        // 경로 그리기
         let path = UIBezierPath()
 
-        // 1. 화살표 그리기
-        path.move(to: CGPoint(x: arrowX, y: arrowHeight))                         // 왼쪽 아래
-        path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))            // 상단 중앙
-        path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: arrowHeight))        // 오른쪽 아래
+        path.move(to: CGPoint(x: arrowX, y: arrowHeight))
+        path.addLine(to: CGPoint(x: arrowX + (arrowWidth / 2), y: 0))
+        path.addLine(to: CGPoint(x: arrowX + arrowWidth, y: arrowHeight))
 
-        // 2. 말풍선 본체 그리기
         let balloonRect = CGRect(x: 0, y: arrowHeight,
                                 width: bounds.width,
                                 height: bounds.height - arrowHeight)
 
-        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.minY))      // 오른쪽 상단
-        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.maxY))      // 오른쪽 하단
-        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.maxY))      // 왼쪽 하단
-        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.minY))      // 왼쪽 상단
+        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.minY))
+        path.addLine(to: CGPoint(x: balloonRect.maxX, y: balloonRect.maxY))
+        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.maxY))
+        path.addLine(to: CGPoint(x: balloonRect.minX, y: balloonRect.minY))
 
         path.close()
 
         UIColor.g50.setFill()
         path.fill()
 
-        // 그림자 설정
-//        layer.shadowPath = path.cgPath
-//        layer.shadowColor = UIColor.black.cgColor
-//        layer.shadowOpacity = 0.1
-//        layer.shadowOffset = CGSize(width: 0, height: 2)
-//        layer.shadowRadius = 4
     }
-
 
     // MARK: - Public
 
@@ -214,7 +208,6 @@ final class BalloonBackgroundView: UIView {
         }
     }
 
-
     private func setupTagSection() {
         let allKey = "\(mainRegionTitle)전체"
 
@@ -236,7 +229,6 @@ final class BalloonBackgroundView: UIView {
         )
     }
 
-
     func calculateHeight() -> CGFloat {
        if collectionView.isHidden {
            return 145
@@ -246,55 +238,44 @@ final class BalloonBackgroundView: UIView {
 
        collectionView.layoutIfNeeded()
 
-       print("실제 contentSize 높이: \(collectionView.collectionViewLayout.collectionViewContentSize.height)")
-
        let balloonWidth = self.bounds.width
        let horizontalSpacing: CGFloat = 8
        let leftPadding: CGFloat = 20
        let rightPadding: CGFloat = 20
        let availableWidth = balloonWidth - leftPadding - rightPadding
 
-       print("사용 가능한 너비: \(availableWidth)")
-
        var currentRowWidth: CGFloat = 0
        var numberOfRows: Int = 1
 
        for input in inputDataList {
            let buttonWidth = calculateButtonWidth(for: input.title ?? "", font: .systemFont(ofSize: 12), isSelected: input.isSelected ?? false)
-           print("버튼 너비 [\(input.title ?? "")]: \(buttonWidth)")
 
            let widthWithSpacing = currentRowWidth == 0 ? buttonWidth : buttonWidth + horizontalSpacing
 
            if currentRowWidth + widthWithSpacing > availableWidth {
                numberOfRows += 1
                currentRowWidth = buttonWidth
-               print("새로운 줄 시작: \(numberOfRows)번째 줄")
            } else {
                currentRowWidth += widthWithSpacing
-               print("현재 줄 너비: \(currentRowWidth)")
            }
        }
 
        let itemHeight: CGFloat = 36
        let interGroupSpacing: CGFloat = 8
-       let verticalInset: CGFloat = 20 + 20  // top: 20, bottom: 20
-       let totalHeight = max(
+       let verticalInset: CGFloat = 20 + 20
+       return max(
            (itemHeight * CGFloat(numberOfRows)) +
            (interGroupSpacing * CGFloat(numberOfRows - 1)) +
            verticalInset,
            36
        )
-
-       print("계산된 최종 높이: \(totalHeight)")
-       return totalHeight
     }
     private func calculateButtonWidth(for text: String, font: UIFont, isSelected: Bool) -> CGFloat {
         let textWidth = (text as NSString).size(withAttributes: [.font: font]).width
         let iconWidth: CGFloat = isSelected ? 16 : 0
         let iconGap: CGFloat = isSelected ? 4 : 0
         let horizontalPadding: CGFloat = 24
-        let calculatedWidth = textWidth + iconWidth + iconGap + horizontalPadding
-        return calculatedWidth
+        return textWidth + iconWidth + iconGap + horizontalPadding
     }
 }
 

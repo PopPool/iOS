@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CommentUserBlockController: BaseViewController, View {
-    
+
     typealias Reactor = CommentUserBlockReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CommentUserBlockView()
 }
 
@@ -48,18 +48,18 @@ extension CommentUserBlockController {
             .map { Reactor.Action.stopButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.blockButton.rx.tap
             .map { Reactor.Action.continueButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.mainView.titleLabel.setLineHeightText(
                     text: "\(state.nickName ?? "")님을 차단할까요?",
-                    font: .KorFont(style: .bold, size: 18)
+                    font: .korFont(style: .bold, size: 18)
                 )
             }
             .disposed(by: disposeBag)

@@ -7,30 +7,29 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class MyPageLogoutSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     let logoutButton: PPButton = {
-        let button = PPButton(style: .secondary, text: "로그아웃")
-        return button
+        return PPButton(style: .secondary, text: "로그아웃")
     }()
-    
+
     var disposeBag = DisposeBag()
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -51,7 +50,7 @@ extension MyPageLogoutSectionCell: Inputable {
     struct Input {
 
     }
-    
+
     func injection(with input: Input) {
 
     }

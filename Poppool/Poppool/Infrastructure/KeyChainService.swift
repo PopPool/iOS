@@ -18,10 +18,10 @@ final class KeyChainService {
         case unhandledError(status: OSStatus) // 예상치 못한 OSStatus 오류가 발생했을 때 발생
         case dataConversionError(message: String) // 데이터 변환 중 오류가 발생했을 때 발생
     }
-    
+
     // KeyChain 서비스 이름
     private let service = "keyChain"
-    
+
     /// KeyChain에서 특정 타입의 토큰을 가져오는 메서드
     /// - Parameter type: 가져오려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Returns: 가져온 토큰을 담은 `Single<String>`
@@ -34,11 +34,11 @@ final class KeyChainService {
             kSecReturnData: true,  // CFData 타입으로 불러오라는 의미
             kSecMatchLimit: kSecMatchLimitOne // 중복되는 경우 하나의 값만 가져오라는 의미
         ]
-        
+
         // 2. Read
         var dataTypeRef: AnyObject?
         let status = SecItemCopyMatching(keyChainQuery, &dataTypeRef)
-        
+
         // 3. Result
         if status == errSecItemNotFound {
             return .failure(KeyChainError.noValueFound(message: "No value found for the specified key."))
@@ -72,7 +72,7 @@ final class KeyChainService {
         guard let convertValue = value.data(using: .utf8, allowLossyConversion: false) else {
             return .failure(KeyChainError.dataConversionError(message: "Failed to convert value to Data."))
         }
-        
+
         // 1. query 작성
         let keyChainQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
@@ -80,11 +80,11 @@ final class KeyChainService {
             kSecAttrAccount: type.rawValue,
             kSecValueData: convertValue
         ]
-        
+
         // 2. Delete
         // KeyChain은 Key값에 중복이 생기면 저장할 수 없기 때문에 먼저 Delete
         SecItemDelete(keyChainQuery)
-        
+
         // 3. Create
         let status = SecItemAdd(keyChainQuery, nil)
         if status == errSecSuccess {
@@ -99,7 +99,7 @@ final class KeyChainService {
             return .failure(KeyChainError.unhandledError(status: status))
         }
     }
-    
+
     /// KeyChain에서 특정 타입의 토큰을 삭제하는 메서드
     /// - Parameter type: 삭제하려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Returns: 완료 시 `Completable`
@@ -110,10 +110,10 @@ final class KeyChainService {
             kSecAttrService: self.service,
             kSecAttrAccount: type.rawValue
         ]
-        
+
         // 2. Delete
         let status = SecItemDelete(keyChainQuery)
-        
+
         if status == errSecSuccess {
             Logger.log(
                 message: "Successfully deleted \(type.rawValue) from KeyChain",

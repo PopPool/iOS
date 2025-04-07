@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class SearchResultController: BaseViewController, View {
-    
+
     typealias Reactor = SearchResultReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SearchResultView()
     private var sections: [any Sectionable] = []
     private let cellTapped: PublishSubject<IndexPath> = .init()
@@ -30,7 +30,7 @@ extension SearchResultController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -45,7 +45,7 @@ private extension SearchResultController {
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
-        
+
         mainView.contentCollectionView.register(
             SearchTitleSectionCell.self,
             forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers
@@ -72,7 +72,7 @@ private extension SearchResultController {
 // MARK: - Methods
 extension SearchResultController {
     func bind(reactor: Reactor) {
-        
+
         cellTapped
             .withUnretained(self)
             .map({ (owner, indexPath) in
@@ -80,7 +80,7 @@ extension SearchResultController {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -103,11 +103,11 @@ extension SearchResultController: UICollectionViewDelegate, UICollectionViewData
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -122,7 +122,7 @@ extension SearchResultController: UICollectionViewDelegate, UICollectionViewData
         }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellTapped.onNext(indexPath)
     }

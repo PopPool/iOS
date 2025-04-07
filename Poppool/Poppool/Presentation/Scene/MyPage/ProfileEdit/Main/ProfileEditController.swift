@@ -5,24 +5,24 @@
 //  Created by SeoJunYoung on 1/4/25.
 //
 
-import UIKit
 import PhotosUI
+import UIKit
 
-import SnapKit
-import RxCocoa
-import RxSwift
 import ReactorKit
+import RxCocoa
 import RxGesture
+import RxSwift
+import SnapKit
 
 final class ProfileEditController: BaseViewController, View {
-    
+
     typealias Reactor = ProfileEditReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = ProfileEditView()
-    
+
     var isFirstResponse: Bool = true
 }
 
@@ -32,7 +32,7 @@ extension ProfileEditController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -53,60 +53,60 @@ private extension ProfileEditController {
 // MARK: - Methods
 extension ProfileEditController {
     func bind(reactor: Reactor) {
-        
+
         mainView.rx.tapGesture()
             .withUnretained(self)
             .subscribe { (owner, _) in
                 owner.mainView.endEditing(true)
             }
             .disposed(by: disposeBag)
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.nickNameTextField.rx.text
             .skip(1)
             .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changeNickName(nickName: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.nickNameTextField.rx.controlEvent(.editingDidBegin)
             .map { Reactor.Action.beginNickName }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.nickNameTextField.rx.controlEvent(.editingDidEnd)
             .map { Reactor.Action.endNickName }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.introTextView.rx.text
             .distinctUntilChanged()
             .skip(1)
             .map { Reactor.Action.changeIntro(intro: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.introTextView.rx.didBeginEditing
             .map { Reactor.Action.beginIntro }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.introTextView.rx.didEndEditing
             .map { Reactor.Action.endIntro }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.profileImageButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { (owner, _) in
                 owner.showActionSheet()
             })
             .disposed(by: disposeBag)
-        
+
         mainView.categoryButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -114,7 +114,7 @@ extension ProfileEditController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.infoButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -122,18 +122,17 @@ extension ProfileEditController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.saveButton.rx.tap
             .map { Reactor.Action.saveButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
-        
+
         mainView.nickNameDuplicatedCheckButton.rx.tap
             .map { Reactor.Action.nickNameCheckButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -141,18 +140,18 @@ extension ProfileEditController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 guard let originProfileData = state.originProfileData else { return }
-                
+
                 if owner.isFirstResponse {
                     owner.mainView.profileImageView.setPPImage(path: originProfileData.profileImageUrl)
                     owner.mainView.nickNameTextField.text = originProfileData.nickname
                     owner.mainView.introTextView.text = originProfileData.intro
                 }
-                
+
                 let categoryTitleList = originProfileData.interestCategoryList.map { $0.category }
                 let categoryTitle: String
                 if let firstTitle = categoryTitleList.first {
@@ -163,12 +162,11 @@ extension ProfileEditController {
                     categoryTitle = ""
                 }
                 owner.mainView.categoryButton.subTitleLabel
-                    .setLineHeightText(text: categoryTitle, font: .KorFont(style: .regular, size: 13), lineHeight: 1)
+                    .setLineHeightText(text: categoryTitle, font: .korFont(style: .regular, size: 13), lineHeight: 1)
                 let userInfoTitle = "\(originProfileData.gender ?? "")・\(originProfileData.age)세"
                 owner.mainView.infoButton.subTitleLabel
-                    .setLineHeightText(text: userInfoTitle, font: .KorFont(style: .regular, size: 13) ,lineHeight: 1)
-                
-                
+                    .setLineHeightText(text: userInfoTitle, font: .korFont(style: .regular, size: 13), lineHeight: 1)
+
                 // NickName TextField 설정
                 owner.mainView.nickNameTextFieldTrailingView.layer.borderColor = state.nickNameState.borderColor?.cgColor
                 owner.mainView.nickNameClearButton.isHidden = state.nickNameState.isHiddenClearButton
@@ -178,7 +176,7 @@ extension ProfileEditController {
                 owner.mainView.nickNameTextField.textColor = state.nickNameState.textFieldTextColor
                 owner.mainView.nickNameTextCountLabel.text = "\(owner.mainView.nickNameTextField.text?.count ?? 0) / 10자"
                 owner.mainView.nickNameDuplicatedCheckButton.isEnabled = state.nickNameState.duplicatedCheckButtonIsEnabled
-                
+
                 // Intro TextView 설정
                 owner.mainView.introTextCountLabel.text = "\(owner.mainView.introTextView.text?.count ?? 0) / 30자"
                 owner.mainView.introTextTrailingView.layer.borderColor = state.introState.borderColor?.cgColor
@@ -187,7 +185,7 @@ extension ProfileEditController {
                 owner.mainView.introTextCountLabel.textColor = state.introState.textColor
                 owner.mainView.introTextView.textColor = state.introState.textFieldTextColor
                 owner.mainView.introPlaceHolderLabel.isHidden = state.introState.placeHolderIsHidden
-                
+
                 owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable
                 owner.isFirstResponse = false
             }
@@ -199,7 +197,7 @@ extension ProfileEditController: PHPickerViewControllerDelegate, UIImagePickerCo
     func showActionSheet() {
         // ActionSheet 생성
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
+
         // 버튼 추가
         let takePhotoAction = UIAlertAction(title: "촬영하기", style: .default) { [weak self] _ in
             self?.showCamera()
@@ -212,32 +210,32 @@ extension ProfileEditController: PHPickerViewControllerDelegate, UIImagePickerCo
             self?.reactor?.action.onNext(.changeDefaultImage)
         }
         let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-        
+
         // 버튼 스타일 변경 (기본 이미지는 빨간색으로 표시)
         changeToDefaultImageAction.setValue(UIColor.red, forKey: "titleTextColor")
-        
+
         // 버튼 추가
         actionSheet.addAction(takePhotoAction)
         actionSheet.addAction(selectFromAlbumAction)
         actionSheet.addAction(changeToDefaultImageAction)
         actionSheet.addAction(cancelAction)
-        
+
         present(actionSheet, animated: true)
     }
-    
+
     func showCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             Logger.log(message: "카메라를 사용할 수 없습니다.", category: .error)
             return
         }
-        
+
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .camera
-        
+
         imagePicker.delegate = self
         present(imagePicker, animated: true)
     }
-    
+
     // MARK: - PHPicker 실행
     func showPHPicker() {
         var configuration = PHPickerConfiguration()
@@ -247,26 +245,26 @@ extension ProfileEditController: PHPickerViewControllerDelegate, UIImagePickerCo
         picker.delegate = self
         present(picker, animated: true)
     }
-    
+
     // MARK: - UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             handleSelectedImage(selectedImage)
         }
         picker.dismiss(animated: true)
     }
-    
+
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
-    
+
     // MARK: - PHPickerViewControllerDelegate
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        
+
         for result in results {
             if result.itemProvider.canLoadObject(ofClass: UIImage.self) {
-                result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
+                result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (image, _) in
                     if let selectedImage = image as? UIImage {
                         DispatchQueue.main.async {
                             self?.handleSelectedImage(selectedImage)
@@ -276,7 +274,7 @@ extension ProfileEditController: PHPickerViewControllerDelegate, UIImagePickerCo
             }
         }
     }
-    
+
     // MARK: - 이미지 처리
     func handleSelectedImage(_ image: UIImage) {
         // 선택한 이미지 처리

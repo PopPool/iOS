@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class FAQController: BaseViewController, View {
-    
+
     typealias Reactor = FAQReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = FAQView()
     private var sections: [any Sectionable] = []
 }
@@ -29,7 +29,7 @@ extension FAQController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -51,11 +51,11 @@ private extension FAQController {
         mainView.contentCollectionView.register(
             MyPageMyCommentTitleSectionCell.self,
             forCellWithReuseIdentifier: MyPageMyCommentTitleSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             MyPageListSectionCell.self,
             forCellWithReuseIdentifier: MyPageListSectionCell.identifiers
-        )        
+        )
         mainView.contentCollectionView.register(
             FAQDropdownSectionCell.self,
             forCellWithReuseIdentifier: FAQDropdownSectionCell.identifiers
@@ -78,12 +78,12 @@ extension FAQController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -99,11 +99,11 @@ extension FAQController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -118,7 +118,7 @@ extension FAQController: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? MyPageListSectionCell {
             reactor?.action.onNext(.mailInquiryCellTapped(controller: self))

@@ -7,32 +7,32 @@
 
 import UIKit
 
-import SnapKit
 import RxSwift
+import SnapKit
 
 final class SearchResultCountSectionCell: UICollectionViewCell {
-    
+
     // MARK: - Components
 
     var disposeBag = DisposeBag()
-    
+
     private let countLabel: PPLabel = {
         let label = PPLabel(style: .regular, fontSize: 13)
         label.textColor = .g600
         return label
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
@@ -54,7 +54,7 @@ extension SearchResultCountSectionCell: Inputable {
     struct Input {
         var count: Int
     }
-    
+
     func injection(with input: Input) {
         countLabel.text = "총 \(input.count)개를 찾았어요."
     }

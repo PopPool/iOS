@@ -5,11 +5,11 @@
 ////  Created by 김기현 on 1/14/25.
 ////
 //
-//import UIKit
-//import SnapKit
-//import Then
+// import UIKit
+// import SnapKit
+// import Then
 //
-//final class PopUpStoreRegisterView: UIView {
+// final class PopUpStoreRegisterView: UIView {
 //
 //    // MARK: - Callbacks (Closure)
 //    /// "이미지 추가" 버튼 탭
@@ -320,10 +320,10 @@
 //
 //        return row
 //    }
-//}
+// }
 //
 //// MARK: - UICollectionViewDataSource
-//extension PopUpStoreRegisterView: UICollectionViewDataSource {
+// extension PopUpStoreRegisterView: UICollectionViewDataSource {
 //    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return images.count
 //    }
@@ -347,15 +347,15 @@
 //        }
 //        return cell
 //    }
-//}
+// }
 //
 //// MARK: - UICollectionViewDelegateFlowLayout
-//extension PopUpStoreRegisterView: UICollectionViewDelegateFlowLayout {
+// extension PopUpStoreRegisterView: UICollectionViewDelegateFlowLayout {
 //    // 혹시 셀 사이즈/간격을 동적으로 조정하고 싶다면 여기서
-//}
+// }
 //
 //// MARK: - PopUpImageCell (같은 파일)
-//final class PopUpImageCell: UICollectionViewCell {
+// final class PopUpImageCell: UICollectionViewCell {
 //    static let identifier = "PopUpImageCell"
 //
 //    // 콜백
@@ -421,4 +421,4 @@
 //        thumbImageView.image = item.image
 //        mainCheckButton.backgroundColor = item.isMain ? .systemRed : .gray
 //    }
-//}
+// }

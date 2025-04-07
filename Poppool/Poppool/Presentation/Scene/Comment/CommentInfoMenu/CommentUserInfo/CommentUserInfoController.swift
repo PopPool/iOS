@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class CommentUserInfoController: BaseViewController, View {
-    
+
     typealias Reactor = CommentUserInfoReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = CommentUserInfoView()
 }
 
@@ -50,27 +50,27 @@ extension CommentUserInfoController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.normalCommentButton.rx.tap
             .map { _ in
                 Reactor.Action.normalButtonTapped
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.instaCommentButton.rx.tap
             .map { _ in
                 Reactor.Action.instaButtonTapped
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.mainView.titleLabel.setLineHeightText(
                     text: "\(state.nickName ?? "")님에 대해 더 알아보기",
-                    font: .KorFont(style: .bold, size: 18)
+                    font: .korFont(style: .bold, size: 18)
                 )
             }
             .disposed(by: disposeBag)

@@ -7,19 +7,19 @@
 
 import UIKit
 
-import SnapKit
+import PanModal
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
-import PanModal
+import SnapKit
 
 final class SearchCategoryController: BaseViewController, View {
-    
+
     typealias Reactor = SearchCategoryReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = SearchCategoryView()
     private var sections: [any Sectionable] = []
     private let cellTapped: PublishSubject<IndexPath> = .init()
@@ -59,12 +59,12 @@ extension SearchCategoryController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .map { Reactor.Action.cellTapped(indexPath: $0)}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.resetButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -72,7 +72,7 @@ extension SearchCategoryController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.closeButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -80,7 +80,7 @@ extension SearchCategoryController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.saveButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -88,7 +88,7 @@ extension SearchCategoryController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -105,11 +105,11 @@ extension SearchCategoryController: UICollectionViewDelegate, UICollectionViewDa
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
@@ -118,7 +118,7 @@ extension SearchCategoryController: UICollectionViewDelegate, UICollectionViewDa
         guard let reactor = reactor else { return cell }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellTapped.onNext(indexPath)
     }

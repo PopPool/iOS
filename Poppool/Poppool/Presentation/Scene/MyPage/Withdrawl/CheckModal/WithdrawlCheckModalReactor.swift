@@ -6,41 +6,41 @@
 //
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class WithdrawlCheckModalReactor: Reactor {
-    
+
     enum ModalState {
         case none
         case cancel
         case apply
     }
-    
+
     // MARK: - Reactor
     enum Action {
         case cancelButtonTapped
         case appleyButtonTapped
     }
-    
+
     enum Mutation {
         case setModalState(state: ModalState)
     }
-    
+
     struct State {
         var state: ModalState = .none
     }
-    
+
     // MARK: - properties
-    
+
     var initialState: State
     var disposeBag = DisposeBag()
-    
+
     // MARK: - init
     init() {
         self.initialState = State()
     }
-    
+
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
@@ -50,7 +50,7 @@ final class WithdrawlCheckModalReactor: Reactor {
             return Observable.just(.setModalState(state: .cancel))
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {

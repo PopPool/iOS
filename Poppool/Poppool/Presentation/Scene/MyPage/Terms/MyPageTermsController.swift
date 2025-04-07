@@ -7,24 +7,24 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class MyPageTermsController: BaseViewController, View {
-    
+
     typealias Reactor = MyPageTermsReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private let headerView: PPReturnHeaderView = {
         let view = PPReturnHeaderView()
-        view.headerLabel.setLineHeightText(text: "약관", font: .KorFont(style: .regular, size: 15))
+        view.headerLabel.setLineHeightText(text: "약관", font: .korFont(style: .regular, size: 15))
         return view
     }()
-    
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -38,15 +38,15 @@ final class MyPageTermsController: BaseViewController, View {
             return sections[section].getSection(section: section, env: env)
         }
     }()
-    
+
     private lazy var contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: self.compositionalLayout)
         view.backgroundColor = .g50
         return view
     }()
-    
+
     private var sections: [any Sectionable] = []
-    
+
     private let cellTapped: PublishSubject<IndexPath> = .init()
 }
 
@@ -56,7 +56,7 @@ extension MyPageTermsController {
         super.viewDidLoad()
         setUp()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
@@ -76,7 +76,7 @@ private extension MyPageTermsController {
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        
+
         contentCollectionView.delegate = self
         contentCollectionView.dataSource = self
         contentCollectionView.register(CommentListTitleSectionCell.self, forCellWithReuseIdentifier: CommentListTitleSectionCell.identifiers)
@@ -92,7 +92,7 @@ extension MyPageTermsController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -100,7 +100,7 @@ extension MyPageTermsController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         cellTapped
             .withUnretained(self)
             .map { (owner, indexPath) in
@@ -108,7 +108,7 @@ extension MyPageTermsController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -124,19 +124,18 @@ extension MyPageTermsController: UICollectionViewDelegate, UICollectionViewDataS
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return sections[section].dataCount
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
-        return cell
+        return sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellTapped.onNext(indexPath)
     }

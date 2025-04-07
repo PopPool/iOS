@@ -7,18 +7,18 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class MyPageNoticeDetailController: BaseViewController, View {
-    
+
     typealias Reactor = MyPageNoticeDetailReactor
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
-    
+
     private var mainView = MyPageNoticeDetailView()
 }
 
@@ -48,7 +48,7 @@ extension MyPageNoticeDetailController {
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         mainView.headerView.backButton.rx.tap
             .withUnretained(self)
             .map { (owner, _) in
@@ -56,13 +56,13 @@ extension MyPageNoticeDetailController {
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
-                owner.mainView.titleLabel.setLineHeightText(text: state.title, font: .KorFont(style: .bold, size: 18))
-                owner.mainView.dateLabel.setLineHeightText(text: state.date, font: .EngFont(style: .regular, size: 14))
-                owner.mainView.contentLabel.setLineHeightText(text: state.content, font: .KorFont(style: .regular, size: 14))
+                owner.mainView.titleLabel.setLineHeightText(text: state.title, font: .korFont(style: .bold, size: 18))
+                owner.mainView.dateLabel.setLineHeightText(text: state.date, font: .engFont(style: .regular, size: 14))
+                owner.mainView.contentLabel.setLineHeightText(text: state.content, font: .korFont(style: .regular, size: 14))
             }
             .disposed(by: disposeBag)
     }
