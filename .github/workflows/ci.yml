@@ -2,13 +2,13 @@ name: CI
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main, develop, 'release/*']
 
 jobs:
   autocorrect:
     name: 🤖 Autocorrect Workflow
     runs-on: macos-15  # 최신 macOS 15 환경에서 실행
-    if: github.actor != 'github-actions[bot]'  # Actions 봇 커밋은 무시
+    if: github.actor != 'github-actions[bot]'&& github.base_ref == 'develop' # Actions 봇 커밋은 무시 && develop에서만 자동 수정 진행
 
     steps:
       - name: Checkout Repository  # 저장소 코드 체크아웃
