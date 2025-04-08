@@ -1,13 +1,5 @@
-//
-//  HomePopularCardSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/30/24.
-//
-
 import UIKit
 
-import Kingfisher
 import RxSwift
 import SnapKit
 

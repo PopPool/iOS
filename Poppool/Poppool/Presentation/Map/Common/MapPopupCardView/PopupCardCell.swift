@@ -1,6 +1,6 @@
-import Kingfisher
-import SnapKit
 import UIKit
+
+import SnapKit
 
 final class PopupCardCell: UICollectionViewCell {
     static let identifier = "PopupCardCell"
