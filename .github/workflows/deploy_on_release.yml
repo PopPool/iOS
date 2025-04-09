@@ -86,6 +86,10 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist .github/secrets/ExportOptions.plist -exportPath . -allowProvisioningUpdates
       
+      - name: 🔍 Check final CFBundleVersion
+        run: |
+          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist
+      
       - name: 🚀 Upload app to TestFlight   # TestFlight에 아카이브된 앱 등록
         uses: apple-actions/upload-testflight-build@v1
         with:
