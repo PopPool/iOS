@@ -78,17 +78,6 @@ jobs:
             cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
           done
           
-      - name: 🔢 Set Build Number # 빌드 번호 자동 수정
-        run: |
-          BUILD_NUMBER=$(date +%Y%m%d%H%M)
-          PLIST_PATH="Poppool/Poppool/Resource/Info.plist"
-          
-          if /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$PLIST_PATH"; then
-            /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$PLIST_PATH"
-          else
-            /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string $BUILD_NUMBER" "$PLIST_PATH"
-          fi
-          
       - name: ⬇️ Archive app # 빌드 및 아카이브
         run: |
           xcodebuild clean archive -project $XC_PROJECT -scheme $XC_SCHEME -configuration release -archivePath $XC_ARCHIVE
