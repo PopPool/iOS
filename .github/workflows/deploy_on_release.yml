@@ -1,0 +1,139 @@
+name: Distribution to TestFlight
+
+on:
+  pull_request:
+    branches: [ release/* ]
+
+jobs:
+  deploy:
+    name: 🚀 Distribution to TestFlight Workflow
+    runs-on: macos-15  # 최신 macOS 15 환경에서 실행
+    env:
+      # app archive 및 export 에 쓰일 환경 변수 설정
+      XC_PROJECT: Poppool/Poppool.xcodeproj
+      XC_SCHEME: Poppool
+      XC_ARCHIVE: Poppool.xcarchive
+      
+      # certificate
+      ENCRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/certification.p12.gpg' }}
+      DECRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/certification.p12' }}
+      CERT_ENCRYPTION_KEY: ${{ secrets.CERT_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
+      
+      # provisioning
+      ENCRYPTED_PROVISION_FILE_PATH: '.github/secrets/PoppoolGitHubAction.mobileprovision.gpg'
+      DECRYPTED_PROVISION_FILE_PATH: '.github/secrets/PoppoolGitHubAction.mobileprovision'
+      PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
+      
+      # certification export key
+      CERT_EXPORT_KEY: ${{ secrets.CERT_EXPORT_PWD }}
+      
+      KEYCHAIN: ${{ 'test.keychain' }}
+    
+    steps:
+      - name: Checkout Repository  # 저장소 코드 체크아웃
+        uses: actions/checkout@v4
+      
+      - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: "#️⃣ Set Build Number" # 자동 빌드 넘버 세팅
+        run: |
+          BUILD_NUMBER=$(TZ=Asia/Seoul date +%y%m%d.%H%M)
+          cd Poppool
+          agvtool new-version -all "$BUILD_NUMBER"
+        
+      - name: ⚙️ Generate xcconfig # 빌드에 필요한 xcconfig 생성
+        run: |
+          echo "POPPOOL_BASE_URL=${POPPOOL_BASE_URL}" > Poppool/Poppool/Resource/Debug.xcconfig
+          echo "POPPOOL_S3_BASE_URL=${POPPOOL_S3_BASE_URL}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "POPPOOL_API_KEY=${POPPOOL_API_KEY}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "KAKAO_AUTH_APP_KEY=${KAKAO_AUTH_APP_KEY}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "NAVER_MAP_CLIENT_ID=${NAVER_MAP_CLIENT_ID}" >> Poppool/Poppool/Resource/Debug.xcconfig
+        env:
+          POPPOOL_BASE_URL: ${{ secrets.POPPOOL_BASE_URL }}
+          POPPOOL_S3_BASE_URL: ${{ secrets.POPPOOL_S3_BASE_URL }}
+          POPPOOL_API_KEY: ${{ secrets.POPPOOL_API_KEY }}
+          KAKAO_AUTH_APP_KEY: ${{ secrets.KAKAO_AUTH_APP_KEY }}
+          NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
+          
+      - name: 🔑 Configure Keychain # 키체인 초기화 -> 임시 키체인 생성
+        run: |
+          security create-keychain -p "" "$KEYCHAIN"
+          security list-keychains -s "$KEYCHAIN"
+          security default-keychain -s "$KEYCHAIN"
+          security unlock-keychain -p "" "$KEYCHAIN"
+          security set-keychain-settings
+
+      - name : ©️ Configure Code Signing # 코드 사이닝 추가
+        run: |
+          # certificate 복호화
+          gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
+          
+          # provisioning 복호화
+          gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_PROVISION_FILE_PATH"
+          
+          # security를 사용하여 인증서와 개인 키를 새로 만든 키 체인으로 가져옴
+          security import "$DECRYPTED_CERT_FILE_PATH" -k "$KEYCHAIN" -P "$CERT_EXPORT_KEY" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
+          
+          # Xcode에서 찾을 수 있는 프로비저닝 프로필 설치하기 위해 우선 프로비저닝 디렉토리를 생성
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          
+          # 디버깅 용 echo 명령어
+          echo `ls .github/secrets/*.mobileprovision`
+            # 모든 프로비저닝 프로파일을 rename 하고 위에서 만든 디렉토리로 복사하는 과정
+            for PROVISION in `ls .github/secrets/*.mobileprovision`
+            do
+              UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+            cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+          done
+          
+      - name: ⬇️ Archive app # 빌드 및 아카이브
+        run: |
+          xcodebuild clean archive -project $XC_PROJECT -scheme $XC_SCHEME -configuration release -archivePath $XC_ARCHIVE
+          
+      - name: ⬆️ Export app # export 를 통해 ipa 파일 만듦
+        run: |
+          xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist .github/secrets/ExportOptions.plist -exportPath . -allowProvisioningUpdates
+      
+      - name: 🚀 Upload app to TestFlight   # TestFlight에 아카이브된 앱 등록
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: 'Poppool.ipa'
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      
+      - name: 📣 Notify to Discord
+        if: success()
+        run: |
+          MARKETING_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist)
+          BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist)
+
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{
+            \"embeds\": [
+              {
+                \"title\": \"🚀 TestFlight 배포 완료\",
+                \"description\": \"Poppool 앱이 성공적으로 TestFlight에 업로드되었습니다!\",
+                \"color\": 3066993,
+                \"fields\": [
+                  {
+                    \"name\": \"🏷️ 마케팅 버전\",
+                    \"value\": \"$MARKETING_VERSION\",
+                    \"inline\": true
+                  },
+                  {
+                    \"name\": \"🛠️ 빌드 번호\",
+                    \"value\": \"$BUNDLE_VERSION\",
+                    \"inline\": true
+                  }
+                ],
+                \"footer\": {
+                  \"text\": \"TestFlight에서 위 버전을 설치하세요\"
+                }
+              }
+            ]
+          }" \
+          ${{ secrets.TESTFLIGHT_WEBHOOK_URL }}
