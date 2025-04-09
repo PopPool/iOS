@@ -3359,7 +3359,6 @@
 				BD9103652CF6149D00BBCCAE /* HomeAPIEndpoint.swift in Sources */,
 				086DD8E32CFF356300B97D3B /* HomeCardGridSection.swift in Sources */,
 				0841BABE2CFB5AA600049E31 /* Date?+.swift in Sources */,
-				083A258D2CF361F90099B58E /* ConventionCollectionViewCell.swift in Sources */,
 				08CFD3922D9BDE99004CDD50 /* DiskStorage.swift in Sources */,
 				4E685EE12D12CEB6001EF91C /* StoreListReactor.swift in Sources */,
 				4E685EE52D12CEB6001EF91C /* MapMarker.swift in Sources */,
@@ -3676,6 +3675,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -3706,7 +3706,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -3732,7 +3732,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = poppoolProvisioningProfile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PoppoolGitHubAction;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -3750,7 +3750,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -3776,7 +3776,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = poppoolProvisioningProfile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PoppoolGitHubAction;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

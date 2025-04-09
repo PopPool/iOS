@@ -36,6 +36,16 @@ jobs:
       - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
         
+      - name: ⚙️ Generate xcconfig
+        run: |
+          cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig
+          KAKAO_AUTH_APP_KEY=${{ secrets.KAKAO_AUTH_APP_KEY }}
+          NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}
+          POPPOOL_BASE_URL=${{ secrets.POPPOOL_BASE_URL }}
+          POPPOOL_S3_BASE_URL=${{ secrets.POPPOOL_S3_BASE_URL }}
+          POPPOOL_API_KEY=${{ secrets.POPPOOL_API_KEY }}
+          EOF
+        
       - name: 🔑 Configure Keychain # 키체인 초기화 -> 임시 키체인 생성
         run: |
           security create-keychain -p "" "$KEYCHAIN"
