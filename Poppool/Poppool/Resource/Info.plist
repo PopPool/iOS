@@ -13,8 +13,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>2025040911</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>KAKAO_AUTH_APP_KEY</key>
@@ -65,9 +63,5 @@
 			</array>
 		</dict>
 	</dict>
-	<key>buildCount</key>
-	<string>11</string>
-	<key>buildDay</key>
-	<string>20250409</string>
 </dict>
 </plist>

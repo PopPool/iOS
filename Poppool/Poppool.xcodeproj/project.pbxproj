@@ -2992,7 +2992,6 @@
 			buildConfigurationList = BDCA41E72CF35AC2005EECF6 /* Build configuration list for PBXNativeTarget "Poppool" */;
 			buildPhases = (
 				05229DCF2D99507C00D88E73 /* Run SwiftLint */,
-				051E7D992DA6A23600F92DA8 /* Run Bump build version */,
 				BDCA41B92CF35AC0005EECF6 /* Sources */,
 				BDCA41BA2CF35AC0005EECF6 /* Frameworks */,
 				BDCA41BB2CF35AC0005EECF6 /* Resources */,
@@ -3101,24 +3100,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		051E7D992DA6A23600F92DA8 /* Run Bump build version */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Bump build version";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "buildDay=$(/usr/libexec/PlistBuddy -c \"Print buildDay\" \"$INFOPLIST_FILE\")\nbuildCount=$(/usr/libexec/PlistBuddy -c \"Print buildCount\" \"$INFOPLIST_FILE\")\ntoday=$(date +%Y%m%d)\n\nif [ x$buildDay == x ]; then\n    buildDay=${today}\n    buildCount=1\n    buildNumber=${buildDay}${buildCount}\n\n    /usr/libexec/PlistBuddy -c \"Add :buildDay string $buildDay\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Add :buildCount string $buildCount\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\nelif [ $buildDay != $today ]; then\n    buildDay=${today}\n    buildCount=1\n    buildNumber=${buildDay}${buildCount}\n\n    /usr/libexec/PlistBuddy -c \"Set :buildDay $buildDay\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Set :buildCount $buildCount\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\nelse\n    buildCount=$(($buildCount + 1))\n    buildNumber=${buildDay}${buildCount}\n\n    /usr/libexec/PlistBuddy -c \"Set :buildDay $buildDay\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Set :buildCount $buildCount\" \"$INFOPLIST_FILE\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n\nfi\n";
-		};
 		05229DCF2D99507C00D88E73 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

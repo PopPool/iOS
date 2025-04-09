@@ -78,6 +78,11 @@ jobs:
             cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
           done
           
+      - name: 🔢 Set Build Number to datetime
+        run: |
+          BUILD_NUMBER=$(date +%Y%m%d%H%M)
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" Poppool/Poppool/ResourceInfo.plist
+          
       - name: ⬇️ Archive app # 빌드 및 아카이브
         run: |
           xcodebuild clean archive -project $XC_PROJECT -scheme $XC_SCHEME -configuration release -archivePath $XC_ARCHIVE
