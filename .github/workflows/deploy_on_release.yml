@@ -20,7 +20,7 @@ jobs:
       CERT_ENCRYPTION_KEY: ${{ secrets.CERT_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       
       # provisioning
-      ENCRYPTED_PROVISION_FILE_PATH: '.github/secrets/Poppool.mobileprovision.gpg'
+      ENCRYPTED_PROVISION_FILE_PATH: '.github/secrets/PoppoolGithubActions.mobileprovision.gpg'
       DECRYPTED_PROVISION_FILE_PATH: '.github/secrets/PoppoolGithubActions.mobileprovision'
       PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       
