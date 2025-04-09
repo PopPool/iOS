@@ -9,13 +9,10 @@ jobs:
     name: 🚀 Distribution to TestFlight Workflow
     runs-on: macos-15  # 최신 macOS 15 환경에서 실행
     env:
-      ## 프로젝트 이름을 변수로 설정
-      PROJECT_NAME: Poppool
-      
       # app archive 및 export 에 쓰일 환경 변수 설정
-      XC_PROJECT: ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.xcodeproj
-      XC_SCHEME: ${{ env.PROJECT_NAME }}
-      XC_ARCHIVE: ${{ env.PROJECT_NAME }}.xcarchive
+      XC_PROJECT: Poppool/Poppool.xcodeproj
+      XC_SCHEME: Poppool
+      XC_ARCHIVE: Poppool.xcarchive
       
       # certificate
       ENCRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/certification.p12.gpg' }}
@@ -23,8 +20,8 @@ jobs:
       CERT_ENCRYPTION_KEY: ${{ secrets.CERT_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       
       # provisioning
-      ENCRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/' }}${{ env.PROJECT_NAME }}GithubActions.mobileprovision.gpg
-      DECRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/' }}${{ env.PROJECT_NAME }}GithubActions.mobileprovision
+      ENCRYPTED_PROVISION_FILE_PATH: '.github/secrets/Poppool.mobileprovision.gpg'
+      DECRYPTED_PROVISION_FILE_PATH: '.github/secrets/PoppoolGithubActions.mobileprovision'
       PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       
       # certification export key
