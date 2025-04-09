@@ -84,7 +84,7 @@ jobs:
           
       - name: ⬆️ Export app # export 를 통해 ipa 파일 만듦
         run: |
-          xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist ExportOptions.plist -exportPath . -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist .github/secrets/ExportOptions.plist -exportPath . -allowProvisioningUpdates
       
       - name: 🚀 Upload app to TestFlight   # TestFlight에 아카이브된 앱 등록
         uses: apple-actions/upload-testflight-build@v1
