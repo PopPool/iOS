@@ -2,16 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>KAKAO_AUTH_APP_KEY</key>
-	<string>${KAKAO_AUTH_APP_KEY}</string>
-	<key>POPPOOL_BASE_URL</key>
-	<string>${POPPOOL_BASE_URL}</string>
-	<key>POPPOOL_S3_BASE_URL</key>
-	<string>${POPPOOL_S3_BASE_URL}</string>
-	<key>POPPOOL_API_KEY</key>
-	<string>${POPPOOL_API_KEY}</string>
-	<key>NAVER_MAP_CLIENT_ID</key>
-	<string>${NAVER_MAP_CLIENT_ID}</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -23,8 +13,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>20250409004</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>KAKAO_AUTH_APP_KEY</key>
+	<string>${KAKAO_AUTH_APP_KEY}</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>instagram</string>
@@ -35,6 +29,14 @@
 		<string>kakaokompassauth</string>
 		<string>kakaotalk</string>
 	</array>
+	<key>NAVER_MAP_CLIENT_ID</key>
+	<string>${NAVER_MAP_CLIENT_ID}</string>
+	<key>POPPOOL_API_KEY</key>
+	<string>${POPPOOL_API_KEY}</string>
+	<key>POPPOOL_BASE_URL</key>
+	<string>${POPPOOL_BASE_URL}</string>
+	<key>POPPOOL_S3_BASE_URL</key>
+	<string>${POPPOOL_S3_BASE_URL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GothicA1-Bold.ttf</string>
@@ -63,5 +65,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>buildCount</key>
+	<string>4</string>
+	<key>buildDay</key>
+	<string>20250409</string>
 </dict>
 </plist>

@@ -2992,6 +2992,7 @@
 			buildConfigurationList = BDCA41E72CF35AC2005EECF6 /* Build configuration list for PBXNativeTarget "Poppool" */;
 			buildPhases = (
 				05229DCF2D99507C00D88E73 /* Run SwiftLint */,
+				051E7D992DA6A23600F92DA8 /* Run Bump build version */,
 				BDCA41B92CF35AC0005EECF6 /* Sources */,
 				BDCA41BA2CF35AC0005EECF6 /* Frameworks */,
 				BDCA41BB2CF35AC0005EECF6 /* Resources */,
@@ -3100,6 +3101,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		051E7D992DA6A23600F92DA8 /* Run Bump build version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Bump build version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\n\nINFO_PLIST=\"$INFOPLIST_FILE\"\n\n# 기존 값 가져오기\nbuildDay=$(/usr/libexec/PlistBuddy -c \"Print buildDay\" \"$INFO_PLIST\" 2>/dev/null)\nbuildCount=$(/usr/libexec/PlistBuddy -c \"Print buildCount\" \"$INFO_PLIST\" 2>/dev/null)\ntoday=$(date +%Y%m%d)\n\n# 첫 실행 또는 키 없음\nif [ -z \"$buildDay\" ]; then\n  buildDay=$today\n  buildCount=1\nelse\n  if [ \"$buildDay\" != \"$today\" ]; then\n    buildDay=$today\n    buildCount=1\n  else\n    buildCount=$((buildCount + 1))\n  fi\nfi\n\nprintf -v zeroPadBuildCount \"%03d\" $buildCount\nbuildNumber=\"${buildDay}${zeroPadBuildCount}\"\n\n# Info.plist 업데이트\n/usr/libexec/PlistBuddy -c \"Delete buildDay\" \"$INFO_PLIST\" 2>/dev/null\n/usr/libexec/PlistBuddy -c \"Add buildDay string $buildDay\" \"$INFO_PLIST\"\n\n/usr/libexec/PlistBuddy -c \"Delete buildCount\" \"$INFO_PLIST\" 2>/dev/null\n/usr/libexec/PlistBuddy -c \"Add buildCount string $buildCount\" \"$INFO_PLIST\"\n\n/usr/libexec/PlistBuddy -c \"Delete CFBundleVersion\" \"$INFO_PLIST\" 2>/dev/null\n/usr/libexec/PlistBuddy -c \"Add CFBundleVersion string $buildNumber\" \"$INFO_PLIST\"\n\necho \"✅ CFBundleVersion set to $buildNumber\"\n";
+		};
 		05229DCF2D99507C00D88E73 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
