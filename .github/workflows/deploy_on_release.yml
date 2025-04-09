@@ -81,7 +81,7 @@ jobs:
       - name: 🔢 Bump Build Number
         run: |
           BUILD_NUMBER=$(date +%s)
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" Poppool/Poppool/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" Poppool/Poppool/Resource/Info.plist
           
       - name: ⬇️ Archive app # 빌드 및 아카이브
         run: |
