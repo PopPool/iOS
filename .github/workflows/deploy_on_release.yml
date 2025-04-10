@@ -36,13 +36,13 @@ jobs:
       - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
 
-      - name: "#️⃣ Set Build Number"
+      - name: "#️⃣ Set Build Number" # 자동 빌드 넘버 세팅
         run: |
           BUILD_NUMBER=$(TZ=Asia/Seoul date +%y%m%d.%H%M)
           cd Poppool
           agvtool new-version -all "$BUILD_NUMBER"
         
-      - name: ⚙️ Generate xcconfig
+      - name: ⚙️ Generate xcconfig # 빌드에 필요한 xcconfig 생성
         run: |
           echo "POPPOOL_BASE_URL=${POPPOOL_BASE_URL}" > Poppool/Poppool/Resource/Debug.xcconfig
           echo "POPPOOL_S3_BASE_URL=${POPPOOL_S3_BASE_URL}" >> Poppool/Poppool/Resource/Debug.xcconfig
@@ -55,11 +55,6 @@ jobs:
           POPPOOL_API_KEY: ${{ secrets.POPPOOL_API_KEY }}
           KAKAO_AUTH_APP_KEY: ${{ secrets.KAKAO_AUTH_APP_KEY }}
           NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
-
-      - name: 🔒 Verify xcconfig keys (masked)
-        run: |
-          echo "Masked xcconfig preview:"
-          awk -F= '{prefix=substr($2, 1, 8); masked="****************"; print $1 "=" prefix masked}' Poppool/Poppool/Resource/Debug.xcconfig
           
       - name: 🔑 Configure Keychain # 키체인 초기화 -> 임시 키체인 생성
         run: |
@@ -69,7 +64,7 @@ jobs:
           security unlock-keychain -p "" "$KEYCHAIN"
           security set-keychain-settings
 
-      - name : ©️ Configure Code Signing
+      - name : ©️ Configure Code Signing # 코드 사이닝 추가
         run: |
           # certificate 복호화
           gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
@@ -101,10 +96,6 @@ jobs:
         run: |
           xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist .github/secrets/ExportOptions.plist -exportPath . -allowProvisioningUpdates
       
-      - name: 🔍 Check final CFBundleVersion
-        run: |
-          /usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist
-      
       - name: 🚀 Upload app to TestFlight   # TestFlight에 아카이브된 앱 등록
         uses: apple-actions/upload-testflight-build@v1
         with:
@@ -124,9 +115,24 @@ jobs:
           -d "{
             \"embeds\": [
               {
-                \"title\": \"## 🚀 TestFlight 배포 완료\",
-                \"description\": \"v$MARKETING_VERSION ($BUNDLE_VERSION)\",
-                \"color\": 3066993
+                \"title\": \"🚀 TestFlight 배포 완료\",
+                \"description\": \"Poppool 앱이 성공적으로 TestFlight에 업로드되었습니다!\",
+                \"color\": 3066993,
+                \"fields\": [
+                  {
+                    \"name\": \"🏷️ 마케팅 버전\",
+                    \"value\": \"$MARKETING_VERSION\",
+                    \"inline\": true
+                  },
+                  {
+                    \"name\": \"🛠️ 빌드 번호\",
+                    \"value\": \"$BUNDLE_VERSION\",
+                    \"inline\": true
+                  }
+                ],
+                \"footer\": {
+                  \"text\": \"TestFlight에서 위 버전을 설치하세요\"
+                }
               }
             ]
           }" \
