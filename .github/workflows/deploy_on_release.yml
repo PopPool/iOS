@@ -35,17 +35,21 @@ jobs:
       
       - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
-        
-        # 추후에 자동 빌드 넘버링 추가가 필요(뭔 짓을 해도 안돼서 포기... ㅠㅠ)
+
+      - name: "#️⃣ Set Build Number"
+        run: |
+          BUILD_NUMBER=$(date +%y%m%d.%H%M)
+          cd Poppool
+          agvtool new-version -all "$BUILD_NUMBER"
         
       - name: ⚙️ Generate xcconfig
         run: |
           cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig
-          KAKAO_AUTH_APP_KEY=${{ secrets.KAKAO_AUTH_APP_KEY }}
-          NAVER_MAP_CLIENT_ID=${{ secrets.NAVER_MAP_CLIENT_ID }}
-          POPPOOL_BASE_URL=${{ secrets.POPPOOL_BASE_URL }}
-          POPPOOL_S3_BASE_URL=${{ secrets.POPPOOL_S3_BASE_URL }}
-          POPPOOL_API_KEY=${{ secrets.POPPOOL_API_KEY }}
+          POPPOOL_BASE_URL = ${{ secrets.POPPOOL_BASE_URL }}
+          POPPOOL_S3_BASE_URL = ${{ secrets.POPPOOL_S3_BASE_URL }}
+          POPPOOL_API_KEY = ${{ secrets.POPPOOL_API_KEY }}
+          KAKAO_AUTH_APP_KEY = ${{ secrets.KAKAO_AUTH_APP_KEY }}
+          NAVER_MAP_CLIENT_ID = ${{ secrets.NAVER_MAP_CLIENT_ID }}
           EOF
         
       - name: 🔑 Configure Keychain # 키체인 초기화 -> 임시 키체인 생성
@@ -111,18 +115,8 @@ jobs:
           -d "{
             \"embeds\": [
               {
-                \"title\": \"🚀 TestFlight 배포 완료!\",
-                \"description\": \"앱이 성공적으로 업로드되었습니다.\",
-                \"fields\": [
-                  {
-                    \"name\": \"🔖 마케팅 버전 (CFBundleShortVersionString)\",
-                    \"value\": \"$MARKETING_VERSION\"
-                  },
-                  {
-                    \"name\": \"📦 빌드 버전 (CFBundleVersion)\",
-                    \"value\": \"$BUNDLE_VERSION\"
-                  }
-                ],
+                \"title\": \"## 🚀 TestFlight 배포 완료\",
+                \"description\": \"v$MARKETING_VERSION ($BUNDLE_VERSION)\",
                 \"color\": 3066993
               }
             ]
