@@ -38,20 +38,29 @@ jobs:
 
       - name: "#️⃣ Set Build Number"
         run: |
-          BUILD_NUMBER=$(date +%y%m%d.%H%M)
+          BUILD_NUMBER=$(TZ=Asia/Seoul date +%y%m%d.%H%M)
           cd Poppool
           agvtool new-version -all "$BUILD_NUMBER"
         
       - name: ⚙️ Generate xcconfig
         run: |
-          cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig
-          POPPOOL_BASE_URL = ${{ secrets.POPPOOL_BASE_URL }}
-          POPPOOL_S3_BASE_URL = ${{ secrets.POPPOOL_S3_BASE_URL }}
-          POPPOOL_API_KEY = ${{ secrets.POPPOOL_API_KEY }}
-          KAKAO_AUTH_APP_KEY = ${{ secrets.KAKAO_AUTH_APP_KEY }}
-          NAVER_MAP_CLIENT_ID = ${{ secrets.NAVER_MAP_CLIENT_ID }}
-          EOF
-        
+          echo "POPPOOL_BASE_URL=${POPPOOL_BASE_URL}" > Poppool/Poppool/Resource/Debug.xcconfig
+          echo "POPPOOL_S3_BASE_URL=${POPPOOL_S3_BASE_URL}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "POPPOOL_API_KEY=${POPPOOL_API_KEY}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "KAKAO_AUTH_APP_KEY=${KAKAO_AUTH_APP_KEY}" >> Poppool/Poppool/Resource/Debug.xcconfig
+          echo "NAVER_MAP_CLIENT_ID=${NAVER_MAP_CLIENT_ID}" >> Poppool/Poppool/Resource/Debug.xcconfig
+        env:
+          POPPOOL_BASE_URL: ${{ secrets.POPPOOL_BASE_URL }}
+          POPPOOL_S3_BASE_URL: ${{ secrets.POPPOOL_S3_BASE_URL }}
+          POPPOOL_API_KEY: ${{ secrets.POPPOOL_API_KEY }}
+          KAKAO_AUTH_APP_KEY: ${{ secrets.KAKAO_AUTH_APP_KEY }}
+          NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
+
+      - name: 🔒 Verify xcconfig keys (masked)
+        run: |
+          echo "Masked xcconfig preview:"
+          awk -F= '{prefix=substr($2, 1, 8); masked="****************"; print $1 "=" prefix masked}' Poppool/Poppool/Resource/Debug.xcconfig
+          
       - name: 🔑 Configure Keychain # 키체인 초기화 -> 임시 키체인 생성
         run: |
           security create-keychain -p "" "$KEYCHAIN"
