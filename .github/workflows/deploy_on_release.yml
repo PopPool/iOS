@@ -36,6 +36,9 @@ jobs:
       - name: 🛠️ Set up Xcode  # Xcode 16.2 선택
         run: sudo xcode-select -s /Applications/Xcode_16.2.app
         
+      - name: 📈 Bump Bundle Version   # agvtool을 사용하여 번들 버전을 자동 증가시킴
+        run: agvtool next-version
+        
       - name: ⚙️ Generate xcconfig
         run: |
           cat <<EOF > Poppool/Poppool/Resource/Debug.xcconfig

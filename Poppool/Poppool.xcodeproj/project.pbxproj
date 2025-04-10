@@ -2991,7 +2991,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BDCA41E72CF35AC2005EECF6 /* Build configuration list for PBXNativeTarget "Poppool" */;
 			buildPhases = (
-				051E7DD22DA6DD8100F92DA8 /* Run Build Bump Script */,
 				05229DCF2D99507C00D88E73 /* Run SwiftLint */,
 				BDCA41B92CF35AC0005EECF6 /* Sources */,
 				BDCA41BA2CF35AC0005EECF6 /* Frameworks */,
@@ -3101,24 +3100,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		051E7DD22DA6DD8100F92DA8 /* Run Build Bump Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Build Bump Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\n\n# Only run during Archive\nif [ \"$ACTION\" != \"install\" ]; then\n  echo \"Skipping build number bump (not archiving).\"\n  exit 0\nfi\n\n# Get current date in YYMMDD format\ncurrentDate=$(date +%y%m%d)\n\n# Path to Info.plist\nplistPath=\"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n# Get current build number from plist\ncurrentBuild=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$plistPath\" 2>/dev/null)\n\n# Extract previous date and count if formatted correctly\nif [[ \"$currentBuild\" == *\".\"* ]]; then\n  previousDate=$(echo \"$currentBuild\" | cut -d '.' -f 1)\n  previousCount=$(echo \"$currentBuild\" | cut -d '.' -f 2)\nelse\n  previousDate=\"\"\n  previousCount=0\nfi\n\n# If the date has changed, reset count to 1, otherwise increment\nif [[ \"$previousDate\" == \"$currentDate\" ]]; then\n  newCount=$((previousCount + 1))\nelse\n  newCount=1\nfi\n\n# Combine into new build number\nnewBuild=\"${currentDate}.${newCount}\"\n\n# Set new build number in plist\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $newBuild\" \"$plistPath\"\n\necho \"Build number set to $newBuild\"\n";
-		};
 		05229DCF2D99507C00D88E73 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -3727,6 +3708,7 @@
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -3759,6 +3741,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -3771,6 +3754,7 @@
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -3803,6 +3787,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
