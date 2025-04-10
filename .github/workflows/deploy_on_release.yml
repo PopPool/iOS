@@ -102,3 +102,32 @@ jobs:
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      
+      - name: 📣 Notify to Discord
+        if: success()
+        run: |
+          MARKETING_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist)
+          BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" Poppool.xcarchive/Products/Applications/Poppool.app/Info.plist)
+
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{
+            \"embeds\": [
+              {
+                \"title\": \"🚀 TestFlight 배포 완료!\",
+                \"description\": \"앱이 성공적으로 업로드되었습니다.\",
+                \"fields\": [
+                  {
+                    \"name\": \"🔖 마케팅 버전 (CFBundleShortVersionString)\",
+                    \"value\": \"$MARKETING_VERSION\"
+                  },
+                  {
+                    \"name\": \"📦 빌드 버전 (CFBundleVersion)\",
+                    \"value\": \"$BUNDLE_VERSION\"
+                  }
+                ],
+                \"color\": 3066993
+              }
+            ]
+          }" \
+          ${{ secrets.TESTFLIGHT_WEBHOOK_URL }}
