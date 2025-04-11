@@ -429,6 +429,7 @@
 		4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */; };
 		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
 		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
+		4EEA13072DA7CDDA00775256 /* PopUpImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA13062DA7CDDA00775256 /* PopUpImagesCollectionView.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
 		4EECA3942D56770B00A07CCA /* MapPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */; };
@@ -891,6 +892,7 @@
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
 		4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionBottomSheet.swift; sourceTree = "<group>"; };
 		4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideReactor.swift; sourceTree = "<group>"; };
+		4EEA13062DA7CDDA00775256 /* PopUpImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpImagesCollectionView.swift; sourceTree = "<group>"; };
 		4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedImage.swift; sourceTree = "<group>"; };
 		4EED9BAB2D22730400B288E7 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
@@ -2736,6 +2738,7 @@
 				4E9C12802D2BE0A6006744D6 /* PopUpStoreRegisterViewController.swift */,
 				4E643FC02D738D7F0046AF29 /* PopUpStoreRegisterReactor.swift */,
 				4E643FC22D738D930046AF29 /* PopUpStoreRegisterView.swift */,
+				4EEA13062DA7CDDA00775256 /* PopUpImagesCollectionView.swift */,
 			);
 			path = AdminRegister;
 			sourceTree = "<group>";
@@ -3165,6 +3168,7 @@
 				086DD9362D00963900B97D3B /* SearchTitleSection.swift in Sources */,
 				086F89D92D1E79E200CA4FC9 /* GetOtherUserCommentListRequestDTO.swift in Sources */,
 				083C864F2D0DD3A6003F441C /* AddCommentImageSection.swift in Sources */,
+				4EEA13072DA7CDDA00775256 /* PopUpImagesCollectionView.swift in Sources */,
 				08B191372CF366680057BC04 /* UICollectionViewCell+.swift in Sources */,
 				083A25B42CF362670099B58E /* Responsable.swift in Sources */,
 				08CBEA0D2D38ED0D00248007 /* CountButtonView.swift in Sources */,
@@ -3706,7 +3710,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -3732,7 +3736,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PoppoolGitHubAction;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = poppoolProvisioningProfile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -3751,7 +3755,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Poppool/Poppool.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -3777,7 +3781,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PoppoolGitHubAction;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = poppoolProvisioningProfile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

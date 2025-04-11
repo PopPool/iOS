@@ -15,6 +15,9 @@ final class PopUpStoreRegisterReactor: Reactor {
     private let isEditMode: Bool
     private let editingStoreId: Int64?
 
+    private var disposeBag = DisposeBag()
+
+
     init(adminUseCase: AdminUseCase, presignedService: PreSignedService, editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil) {
         self.adminUseCase = adminUseCase
         self.presignedService = presignedService
@@ -141,6 +144,8 @@ final class PopUpStoreRegisterReactor: Reactor {
             // 폼 데이터 업데이트 액션
         case let .updateName(name):
             return .just(.setName(name))
+
+
 
         case let .updateAddress(address):
             return .just(.setAddress(address))
@@ -396,24 +401,76 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     // 폼 유효성 검사
     private func validateForm(state: State) -> Bool {
-        // 필수 필드 검사
-        guard !state.name.isEmpty,
-              !state.address.isEmpty,
-              !state.lat.isEmpty,
-              !state.lon.isEmpty,
-              !state.description.isEmpty,
-              !state.category.isEmpty,
-              !state.images.isEmpty,
-              state.images.contains(where: { $0.isMain }),
-              state.selectedStartDate != nil,
-              state.selectedEndDate != nil else {
+        Logger.log(message: "폼 유효성 검사 시작", category: .debug)
+
+        // 이름 필드 검사
+        guard !state.name.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 이름 비어있음", category: .debug)
+            return false
+        }
+
+        // 주소 필드 검사
+        guard !state.address.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 주소 비어있음", category: .debug)
+            return false
+        }
+
+        // 위도/경도 필드 검사
+        guard !state.lat.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 위도 비어있음", category: .debug)
+            return false
+        }
+
+        guard !state.lon.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 경도 비어있음", category: .debug)
+            return false
+        }
+
+        // 설명 필드 검사
+        guard !state.description.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 설명 비어있음", category: .debug)
+            return false
+        }
+
+        // 카테고리 필드 검사
+        guard !state.category.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 카테고리 비어있음", category: .debug)
+            return false
+        }
+
+        // 이미지 검사
+        guard !state.images.isEmpty else {
+            Logger.log(message: "유효성 검사 실패: 이미지 없음", category: .debug)
+            return false
+        }
+
+        // 대표 이미지 검사
+        guard state.images.contains(where: { $0.isMain }) else {
+            Logger.log(message: "유효성 검사 실패: 대표 이미지 없음", category: .debug)
+            return false
+        }
+
+        // 날짜 검사
+        guard state.selectedStartDate != nil else {
+            Logger.log(message: "유효성 검사 실패: 시작 날짜 없음", category: .debug)
+            return false
+        }
+
+        guard state.selectedEndDate != nil else {
+            Logger.log(message: "유효성 검사 실패: 종료 날짜 없음", category: .debug)
             return false
         }
 
         // 위도/경도 유효성 검사
         guard let latVal = Double(state.lat),
-              let lonVal = Double(state.lon),
-              latVal != 0 || lonVal != 0 else {
+              let lonVal = Double(state.lon) else {
+            Logger.log(message: "유효성 검사 실패: 위도/경도 형식 오류", category: .debug)
+            return false
+        }
+
+        // 위도/경도 값이 유효한지 검사
+        guard latVal != 0 || lonVal != 0 else {
+            Logger.log(message: "유효성 검사 실패: 위도/경도 값이 모두 0", category: .debug)
             return false
         }
 
@@ -421,14 +478,19 @@ final class PopUpStoreRegisterReactor: Reactor {
         if let startDate = state.selectedStartDate,
            let endDate = state.selectedEndDate,
            startDate > endDate {
+            Logger.log(message: "유효성 검사 실패: 시작일이 종료일보다 늦음", category: .debug)
             return false
         }
 
+        Logger.log(message: "유효성 검사 성공", category: .debug)
         return true
     }
 
+
     // 주소 지오코딩
     private func geocodeAddress(address: String) -> Observable<CLLocation?> {
+        Logger.log(message: "지오코딩 함수 호출: \(address)", category: .debug)
+
         return Observable.create { observer in
             let geocoder = CLGeocoder()
             let fullAddress = "\(address), Korea"
@@ -470,7 +532,7 @@ final class PopUpStoreRegisterReactor: Reactor {
                     Logger.log(message: "S3에서 이미지 삭제 실패: \(error.localizedDescription)", category: .error)
                 }
             )
-            .disposed(by: DisposeBag())
+        .disposed(by: disposeBag)
     }
 
     // 카테고리 ID 매핑
