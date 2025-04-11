@@ -399,7 +399,7 @@ private extension PopUpRegisterView {
 
         // 작성자 및 작성시간
         let currentTime = self.getCurrentFormattedTime()
-
+        
         self.writerLabel = self.makeSimpleLabel("")
         let timeLabel = self.makeSimpleLabel(currentTime)
 
