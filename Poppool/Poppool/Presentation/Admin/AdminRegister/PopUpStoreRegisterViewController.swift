@@ -35,6 +35,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         self.reactor = reactor
         self.mainView.accountIdLabel.text = nickname + "님"
+        self.mainView.writerLabel.text = nickname
 
         if editingStore != nil {
             self.mainView.pageTitleLabel.text = "팝업스토어 수정"
@@ -101,7 +102,7 @@ private extension PopUpStoreRegisterViewController {
                 (self?.reactor as? PopUpStoreRegisterReactor)?.action.onNext(action)
             })
             .disposed(by: self.disposeBag)
-        
+
         self.mainView.categoryButton.rx.tap
             .bind { [weak self] in
                 self?.showCategoryPicker()

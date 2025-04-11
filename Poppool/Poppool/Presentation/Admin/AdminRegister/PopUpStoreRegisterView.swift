@@ -88,7 +88,7 @@ final class PopUpRegisterView: UIView {
         $0.spacing = 0
     }
 
-    // 폼 필드들
+
     let nameField = UITextField().then {
         $0.placeholder = "팝업스토어 이름을 입력해 주세요."
         $0.font = UIFont.systemFont(ofSize: 14)
@@ -184,7 +184,6 @@ final class PopUpRegisterView: UIView {
         $0.isScrollEnabled = true
     }
 
-    // 저장 버튼
     let saveButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("저장", for: .normal)
@@ -326,7 +325,6 @@ private extension PopUpRegisterView {
             make.edges.equalToSuperview()
         }
 
-        // 저장 버튼
         self.saveButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
             make.bottom.equalTo(self.safeAreaLayoutGuide).offset(-16)
@@ -342,13 +340,10 @@ private extension PopUpRegisterView {
     }
 
     func setupFormRows() {
-        // 이름 필드 추가
         self.addFormRow(leftTitle: "이름", rightView: self.nameField)
 
-        // 카테고리 버튼 추가
         self.addFormRow(leftTitle: "카테고리", rightView: self.categoryButton)
 
-        // 위치 필드 추가 (주소, 위도, 경도)
         let latLabel = self.makePlainLabel("위도")
         let lonLabel = self.makePlainLabel("경도")
 
@@ -402,11 +397,12 @@ private extension PopUpRegisterView {
 
         // 작성자 및 작성시간
         let currentTime = self.getCurrentFormattedTime()
-        let writerLbl = self.makeSimpleLabel("")
-        let timeLbl = self.makeSimpleLabel(currentTime)
+        
+        self.writerLabel = self.makeSimpleLabel("")
+        let timeLabel = self.makeSimpleLabel(currentTime)
 
-        self.addFormRow(leftTitle: "작성자", rightView: writerLbl)
-        self.addFormRow(leftTitle: "작성시간", rightView: timeLbl)
+        self.addFormRow(leftTitle: "작성자", rightView: writerLabel)
+        self.addFormRow(leftTitle: "작성시간", rightView: timeLabel)
 
         // 상태값
         let statusLbl = self.makeSimpleLabel("진행")
@@ -416,7 +412,6 @@ private extension PopUpRegisterView {
         self.addFormRow(leftTitle: "설명", rightView: self.descriptionTextView, rowHeight: nil, totalHeight: 120)
     }
 
-    // 폼 행 추가 헬퍼 메서드
     func addFormRow(leftTitle: String, rightView: UIView, rowHeight: CGFloat? = 36, totalHeight: CGFloat? = nil) {
         let row = UIView()
         row.backgroundColor = .white
