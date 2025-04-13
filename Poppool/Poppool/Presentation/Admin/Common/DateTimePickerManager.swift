@@ -77,6 +77,7 @@ final class DateTimePickerManager {
         let alert1 = UIAlertController(title: "시작시간 선택", message: nil, preferredStyle: .actionSheet)
         let dp1 = UIDatePicker()
         dp1.datePickerMode = .time
+        dp1.minuteInterval = 15
         dp1.preferredDatePickerStyle = .wheels
 
         alert1.view.addSubview(dp1)
@@ -107,6 +108,7 @@ final class DateTimePickerManager {
         let alert2 = UIAlertController(title: "종료시간 선택", message: nil, preferredStyle: .actionSheet)
         let dp2 = UIDatePicker()
         dp2.datePickerMode = .time
+        dp2.minuteInterval = 15
         dp2.preferredDatePickerStyle = .wheels
 
         alert2.view.addSubview(dp2)
