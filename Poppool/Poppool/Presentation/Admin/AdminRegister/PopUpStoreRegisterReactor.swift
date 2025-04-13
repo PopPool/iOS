@@ -6,7 +6,6 @@ import ReactorKit
 import RxCocoa
 import RxSwift
 
-
 final class PopUpStoreRegisterReactor: Reactor {
 
     // MARK: - Properties
@@ -16,7 +15,6 @@ final class PopUpStoreRegisterReactor: Reactor {
     private let editingStoreId: Int64?
 
     private var disposeBag = DisposeBag()
-
 
     init(adminUseCase: AdminUseCase, presignedService: PreSignedService, editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil) {
         self.adminUseCase = adminUseCase
@@ -145,8 +143,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         case let .updateName(name):
             return .just(.setName(name))
 
-
-
         case let .updateAddress(address):
             return .just(.setAddress(address))
 
@@ -207,8 +203,6 @@ final class PopUpStoreRegisterReactor: Reactor {
                         .just(lonMutation)
                     ])
                 }
-
-
 
             // 스토어 상세 정보 로드 (수정 모드)
         case let .loadStoreDetail(storeId):
@@ -486,7 +480,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         return true
     }
 
-
     // 주소 지오코딩
     private func geocodeAddress(address: String) -> Observable<CLLocation?> {
         Logger.log(message: "지오코딩 함수 호출: \(address)", category: .debug)
@@ -652,7 +645,7 @@ final class PopUpStoreRegisterReactor: Reactor {
                         dispatchGroup.enter()
 
                         if let imageURL = self.presignedService.fullImageURL(from: imageData.imageUrl) {
-                            URLSession.shared.dataTask(with: imageURL) { data, response, error in
+                            URLSession.shared.dataTask(with: imageURL) { data, _, error in
                                 defer { dispatchGroup.leave() }
 
                                 if let error = error {
@@ -731,7 +724,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         .asObservable() // Single을 Observable로 변환
         .map { _ in updatedImages.map { $0.filePath } }
     }
-
 
     // 신규 스토어 등록
     private func createStore() -> Observable<Mutation> {
@@ -812,7 +804,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         .asObservable()
         .map { _ in updatedImages.map { $0.filePath } }
     }
-
 
     // 스토어 정보 업데이트
     private func updateStoreInfo(_ newImagePaths: [String]?) -> Observable<Mutation> {
@@ -905,4 +896,3 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     }
 }
-

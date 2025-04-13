@@ -88,7 +88,6 @@ final class PopUpRegisterView: UIView {
         $0.spacing = 0
     }
 
-
     let nameField = UITextField().then {
         $0.placeholder = "팝업스토어 이름을 입력해 주세요."
         $0.font = UIFont.systemFont(ofSize: 14)
@@ -397,7 +396,7 @@ private extension PopUpRegisterView {
 
         // 작성자 및 작성시간
         let currentTime = self.getCurrentFormattedTime()
-        
+
         self.writerLabel = self.makeSimpleLabel("")
         let timeLabel = self.makeSimpleLabel(currentTime)
 

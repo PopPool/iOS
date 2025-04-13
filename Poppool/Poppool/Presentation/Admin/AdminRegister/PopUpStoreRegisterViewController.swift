@@ -1,11 +1,11 @@
-import UIKit
 import CoreLocation
 import PhotosUI
+import UIKit
 
-import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
+import SnapKit
 
 final class PopUpStoreRegisterViewController: BaseViewController {
 
@@ -319,7 +319,6 @@ extension PopUpStoreRegisterViewController {
 // MARK: - ReactorKit Binding
 extension PopUpStoreRegisterViewController: View {
     typealias Reactor = PopUpStoreRegisterReactor
-
 
     func bind(reactor: Reactor) {
         // MARK: - Input (View -> Reactor)
