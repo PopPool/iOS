@@ -18,7 +18,8 @@ final class PopUpRegisterView: UIView {
 
     // 네비게이션 영역
     let navigationContainer = UIView()
-
+    var writerLabel: UILabel!
+    
     let logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "image_login_logo")
@@ -87,6 +88,7 @@ final class PopUpRegisterView: UIView {
         $0.axis = .vertical
         $0.spacing = 0
     }
+
 
     let nameField = UITextField().then {
         $0.placeholder = "팝업스토어 이름을 입력해 주세요."
@@ -300,7 +302,9 @@ private extension PopUpRegisterView {
         }
 
         // 이미지 영역
-        let buttonStack = self.contentView.subviews.first as! UIStackView
+        guard let buttonStack = contentView.subviews.first as? UIStackView else {
+            return
+        }
         buttonStack.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview().inset(16)
@@ -396,7 +400,7 @@ private extension PopUpRegisterView {
 
         // 작성자 및 작성시간
         let currentTime = self.getCurrentFormattedTime()
-
+        
         self.writerLabel = self.makeSimpleLabel("")
         let timeLabel = self.makeSimpleLabel(currentTime)
 
