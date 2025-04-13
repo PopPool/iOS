@@ -16,6 +16,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     var completionHandler: (() -> Void)?
     var disposeBag = DisposeBag()
 
+    
     private var mainView: PopUpRegisterView
 
     // MARK: - Initializer
@@ -283,12 +284,10 @@ extension PopUpStoreRegisterViewController {
     }
 
     private func showLoadingIndicator() {
-        // 로딩 인디케이터 표시 로직 구현
-        // 예: Activity Indicator 또는 커스텀 로딩 뷰 표시
+
     }
 
     private func hideLoadingIndicator() {
-        // 로딩 인디케이터 숨김 로직 구현
     }
 
     private func showSuccessAlert(isUpdate: Bool) {
@@ -322,7 +321,6 @@ extension PopUpStoreRegisterViewController: View {
 
     func bind(reactor: Reactor) {
         // MARK: - Input (View -> Reactor)
-        // 텍스트 필드 바인딩
         self.mainView.nameField.rx.text.orEmpty
             .distinctUntilChanged()
             .map { Reactor.Action.updateName($0) }
