@@ -18,6 +18,7 @@ final class PopUpRegisterView: UIView {
 
     // 네비게이션 영역
     let navigationContainer = UIView()
+    var writerLabel: UILabel!
 
     let logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -300,7 +301,9 @@ private extension PopUpRegisterView {
         }
 
         // 이미지 영역
-        let buttonStack = self.contentView.subviews.first as! UIStackView
+        guard let buttonStack = contentView.subviews.first as? UIStackView else {
+            return
+        }
         buttonStack.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.left.right.equalToSuperview().inset(16)

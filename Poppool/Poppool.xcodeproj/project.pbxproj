@@ -461,7 +461,6 @@
 		BD9103932CF6166800BBCCAE /* SplashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9103902CF6166800BBCCAE /* SplashController.swift */; };
 		BDCA41C12CF35AC0005EECF6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCA41C02CF35AC0005EECF6 /* AppDelegate.swift */; };
 		BDCA41C32CF35AC0005EECF6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCA41C22CF35AC0005EECF6 /* SceneDelegate.swift */; };
-		BDCA41C52CF35AC0005EECF6 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCA41C42CF35AC0005EECF6 /* TestViewController.swift */; };
 		BDCA41CA2CF35AC1005EECF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BDCA41C92CF35AC1005EECF6 /* Assets.xcassets */; };
 		BDCA41CD2CF35AC1005EECF6 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BDCA41CC2CF35AC1005EECF6 /* Base */; };
 		BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA41F12CF35D0D005EECF6 /* SnapKit */; };
@@ -924,7 +923,6 @@
 		BDCA41BD2CF35AC0005EECF6 /* Poppool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poppool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDCA41C02CF35AC0005EECF6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BDCA41C22CF35AC0005EECF6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		BDCA41C42CF35AC0005EECF6 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		BDCA41C92CF35AC1005EECF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BDCA41CC2CF35AC1005EECF6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BDCA41CE2CF35AC1005EECF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -961,6 +959,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05FBCABE2DABE79A00215BE6 /* AdminAPI */ = {
+			isa = PBXGroup;
+			children = (
+				05FBCABF2DABE7AC00215BE6 /* ResponseDTO */,
+				4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */,
+			);
+			path = AdminAPI;
+			sourceTree = "<group>";
+		};
+		05FBCABF2DABE7AC00215BE6 /* ResponseDTO */ = {
+			isa = PBXGroup;
+			children = (
+				4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */,
+				4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */,
+			);
+			path = ResponseDTO;
+			sourceTree = "<group>";
+		};
+		05FBCAC02DABEB1100215BE6 /* MapAPI */ = {
+			isa = PBXGroup;
+			children = (
+				4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */,
+				4E685EBA2D12CEB6001EF91C /* MapAPIEndpoint.swift */,
+				05FBCAC12DABEB3B00215BE6 /* ResponseDTO */,
+			);
+			path = MapAPI;
+			sourceTree = "<group>";
+		};
+		05FBCAC12DABEB3B00215BE6 /* ResponseDTO */ = {
+			isa = PBXGroup;
+			children = (
+				4E685EBC2D12CEB6001EF91C /* MapPopUpStoreDTO.swift */,
+				4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */,
+			);
+			path = ResponseDTO;
+			sourceTree = "<group>";
+		};
 		0818988C2D295DAD0067BF01 /* MyPageLogoutSection */ = {
 			isa = PBXGroup;
 			children = (
@@ -1339,7 +1374,6 @@
 			children = (
 				BDCA41C02CF35AC0005EECF6 /* AppDelegate.swift */,
 				BDCA41C22CF35AC0005EECF6 /* SceneDelegate.swift */,
-				BDCA41C42CF35AC0005EECF6 /* TestViewController.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1363,8 +1397,6 @@
 		083A256D2CF3613C0099B58E /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				4E755B1B2D2B9ABF00ADFB21 /* Admin */,
-				4E685ECD2D12CEB6001EF91C /* Map */,
 				08B1915F2CF430D40057BC04 /* Components */,
 				083A25C22CF3635B0099B58E /* Scene */,
 				083A259D2CF3620B0099B58E /* Utills */,
@@ -1407,6 +1439,7 @@
 				083A25982CF362090099B58E /* Interfaces */,
 				083A25812CF361EF0099B58E /* Controllers */,
 				08CBEA382D3FABD300248007 /* ToastMaker */,
+				4EDDEFB22D2D284B00CFAFA5 /* Common */,
 			);
 			path = Utills;
 			sourceTree = "<group>";
@@ -1525,6 +1558,8 @@
 				BD9103912CF6166800BBCCAE /* Splash */,
 				083C86092D073A08003F441C /* Detail */,
 				083C86332D0C7EDB003F441C /* Comment */,
+				4E755B1B2D2B9ABF00ADFB21 /* Admin */,
+				4E685ECD2D12CEB6001EF91C /* Map */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -2644,34 +2679,6 @@
 			path = FillterSheetView;
 			sourceTree = "<group>";
 		};
-		4E685EB72D12CEB6001EF91C /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				4E685EB62D12CEB6001EF91C /* MapRepository.swift */,
-			);
-			path = Repository;
-			sourceTree = "<group>";
-		};
-		4E685EB92D12CEB6001EF91C /* UseCase */ = {
-			isa = PBXGroup;
-			children = (
-				4E685EB82D12CEB6001EF91C /* MapUseCase.swift */,
-			);
-			path = UseCase;
-			sourceTree = "<group>";
-		};
-		4E685EBD2D12CEB6001EF91C /* MapDomain */ = {
-			isa = PBXGroup;
-			children = (
-				4E685EB72D12CEB6001EF91C /* Repository */,
-				4E685EB92D12CEB6001EF91C /* UseCase */,
-				4E685EBA2D12CEB6001EF91C /* MapAPIEndpoint.swift */,
-				4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */,
-				4E685EBC2D12CEB6001EF91C /* MapPopUpStoreDTO.swift */,
-			);
-			path = MapDomain;
-			sourceTree = "<group>";
-		};
 		4E685EC02D12CEB6001EF91C /* MapPopupCardView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2699,7 +2706,7 @@
 				4EC23F432D6F7E6D00558673 /* MapView */,
 				4E685EB52D12CEB6001EF91C /* FillterSheetView */,
 				4E685EC52D12CEB6001EF91C /* StoreListView */,
-				4EED9BAA2D2272F500B288E7 /* Common */,
+				4E685EC02D12CEB6001EF91C /* MapPopupCardView */,
 				4EE5A3D12D40E3B100A2469A /* FindMap */,
 			);
 			path = Map;
@@ -2708,8 +2715,6 @@
 		4E755B1B2D2B9ABF00ADFB21 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
-				4E9C127F2D2BD01F006744D6 /* Domain */,
-				4E9C127B2D2BCFE4006744D6 /* Data */,
 				4E755B222D2B9C5D00ADFB21 /* AdminViewController.swift */,
 				4E755B242D2B9C6C00ADFB21 /* AdminView.swift */,
 				4E755B262D2B9C7C00ADFB21 /* AdminStoreCell.swift */,
@@ -2717,7 +2722,6 @@
 				4E9405302D6F7C790002B590 /* AdminRegister */,
 				4E94052F2D6F7C670002B590 /* AdminBottomSheet */,
 				4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */,
-				4EDDEFB22D2D284B00CFAFA5 /* Common */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -2743,60 +2747,12 @@
 			path = AdminRegister;
 			sourceTree = "<group>";
 		};
-		4E9C127B2D2BCFE4006744D6 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				4E685EBD2D12CEB6001EF91C /* MapDomain */,
-				4E9C127E2D2BD012006744D6 /* Remote */,
-				4E9C127D2D2BD007006744D6 /* Repository */,
-				4E9C127C2D2BCFF1006744D6 /* DTO */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		4E9C127C2D2BCFF1006744D6 /* DTO */ = {
-			isa = PBXGroup;
-			children = (
-				4E755B1C2D2B9AD300ADFB21 /* GetAdminPopUpStoreListResponseDTO.swift */,
-				4E755B202D2B9BAB00ADFB21 /* AdminResponseDTO.swift */,
-			);
-			path = DTO;
-			sourceTree = "<group>";
-		};
-		4E9C127D2D2BD007006744D6 /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */,
-			);
-			path = Repository;
-			sourceTree = "<group>";
-		};
-		4E9C127E2D2BD012006744D6 /* Remote */ = {
-			isa = PBXGroup;
-			children = (
-				4E755B1E2D2B9AE500ADFB21 /* AdminAPIEndpoint.swift */,
-			);
-			path = Remote;
-			sourceTree = "<group>";
-		};
-		4E9C127F2D2BD01F006744D6 /* Domain */ = {
-			isa = PBXGroup;
-			children = (
-				4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */,
-			);
-			path = Domain;
-			sourceTree = "<group>";
-		};
 		4EA2C93B2D424D2600F4D97C /* MapGuideView */ = {
 			isa = PBXGroup;
 			children = (
 				4E6A066F2D42A96100B2A658 /* FullScreenMapViewController.swift */,
-				4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */,
-				4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */,
-				4EA2C9402D424D8400F4D97C /* GetPopUpDirectionResponseDTO.swift */,
 				4E9790C42D40E13500210499 /* MapGuideViewController.swift */,
 				4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */,
-				4EA2C9422D424DF900F4D97C /* FindDirectionEndPoint.swift */,
 			);
 			path = MapGuideView;
 			sourceTree = "<group>";
@@ -2817,6 +2773,15 @@
 		4EDDEFB22D2D284B00CFAFA5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */,
+				4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */,
+				4EED9BAB2D22730400B288E7 /* FilterType.swift */,
+				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
+				4E685EC62D12CEB6001EF91C /* MapFilterChips.swift */,
+				4E9A465F2D55D1270010578A /* MapUtilities.swift */,
+				4E6C07092D4B6E81008A962A /* ClusteringManager.swift */,
+				4E6C07072D4B6E74008A962A /* ClusteringModels.swift */,
+				4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */,
 				4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */,
 				4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */,
 			);
@@ -2829,23 +2794,6 @@
 				4EA2C93B2D424D2600F4D97C /* MapGuideView */,
 			);
 			path = FindMap;
-			sourceTree = "<group>";
-		};
-		4EED9BAA2D2272F500B288E7 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */,
-				4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */,
-				4EED9BAB2D22730400B288E7 /* FilterType.swift */,
-				4E6C07052D4B6E56008A962A /* RegionDefinitions.swift */,
-				4E685EC62D12CEB6001EF91C /* MapFilterChips.swift */,
-				4E9A465F2D55D1270010578A /* MapUtilities.swift */,
-				4E6C07092D4B6E81008A962A /* ClusteringManager.swift */,
-				4E6C07072D4B6E74008A962A /* ClusteringModels.swift */,
-				4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */,
-				4E685EC02D12CEB6001EF91C /* MapPopupCardView */,
-			);
-			path = Common;
 			sourceTree = "<group>";
 		};
 		BD9103502CF6149D00BBCCAE /* AuthAPI */ = {
@@ -2869,12 +2817,14 @@
 		BD91035A2CF6149D00BBCCAE /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				4E755B2E2D2BA7FB00ADFB21 /* AdminRepository.swift */,
 				BD9103572CF6149D00BBCCAE /* AuthAPIRepositoryImpl.swift */,
 				BD9103582CF6149D00BBCCAE /* HomeAPIRepository.swift */,
 				BD9103592CF6149D00BBCCAE /* SignUpRepositoryImpl.swift */,
 				086DD8D92CFF194700B97D3B /* UserAPIRepositoryImpl.swift */,
 				089952522D033C940022AEF9 /* PopUpAPIRepositoryImpl.swift */,
 				083C86772D0EE382003F441C /* CommentAPIRepository.swift */,
+				4E685EB62D12CEB6001EF91C /* MapRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -2894,6 +2844,8 @@
 			isa = PBXGroup;
 			children = (
 				08DC62102CF8B446002A2F44 /* SortedRequestDTO.swift */,
+				05FBCAC02DABEB1100215BE6 /* MapAPI */,
+				05FBCABE2DABE79A00215BE6 /* AdminAPI */,
 				083C86712D0EE2A3003F441C /* CommentAPI */,
 				089952472D033A0E0022AEF9 /* PopUpAPI */,
 				086DD8D42CFF181500B97D3B /* UserAPI */,
@@ -2911,8 +2863,11 @@
 				BD9103722CF614A900BBCCAE /* SignUpAPIUseCaseImpl.swift */,
 				BD9103742CF614A900BBCCAE /* AuthAPIUseCaseImpl.swift */,
 				086DD8DD2CFF19C400B97D3B /* UserAPIUseCaseImpl.swift */,
+				4EA2C93E2D424D7400F4D97C /* MapDirectionUseCase.swift */,
 				089952542D033D480022AEF9 /* PopUpAPIUseCaseImpl.swift */,
 				083C86792D0EE3BB003F441C /* CommentAPIUseCaseImpl.swift */,
+				4E755B2A2D2BA76E00ADFB21 /* AdminUseCase.swift */,
+				4E685EB82D12CEB6001EF91C /* MapUseCase.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -2923,6 +2878,7 @@
 				08CBEA042D38990600248007 /* AuthAPI */,
 				086F89DE2D1E7CBE00CA4FC9 /* UserAPI */,
 				BD9103762CF614A900BBCCAE /* BannerPopUpStore.swift */,
+				4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */,
 				BD9103772CF614A900BBCCAE /* Category.swift */,
 				BD9103782CF614A900BBCCAE /* GetHomeInfoResponse.swift */,
 				BD9103792CF614A900BBCCAE /* PopUpStoreResponse.swift */,
@@ -2934,6 +2890,7 @@
 		BD91037F2CF614A900BBCCAE /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				4EA2C93C2D424D3300F4D97C /* MapDirectionRepository.swift */,
 				BD91037C2CF614A900BBCCAE /* AuthRepository.swift */,
 			);
 			path = Repository;
@@ -3238,7 +3195,6 @@
 				0841BAB82CFAC41300049E31 /* SectionBackGroundDecorationView.swift in Sources */,
 				086F89F52D2269E300CA4FC9 /* MyPageReactor.swift in Sources */,
 				089952682D046CD80022AEF9 /* SearchResultReactor.swift in Sources */,
-				BDCA41C52CF35AC0005EECF6 /* TestViewController.swift in Sources */,
 				086DD9402D01EEEB00B97D3B /* SearchCountTitleSection.swift in Sources */,
 				083C864C2D0DCF9B003F441C /* AddCommentDescriptionSectionCell.swift in Sources */,
 				086DD8CE2CFDFEB000B97D3B /* HomeListView.swift in Sources */,
