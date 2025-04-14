@@ -7,8 +7,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        KakaoSDK.initSDK(appKey: KeyPath.kakaoAuthAppKey)
-        NMFAuthManager.shared().clientId = KeyPath.naverMapClientID
+        KakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppKey)
+        NMFAuthManager.shared().clientId = Secrets.naverMapClientID
 
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()

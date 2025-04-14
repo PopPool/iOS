@@ -13,7 +13,7 @@ struct HomeAPIEndpoint {
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/home",
             method: .get,
             queryParameters: request
@@ -24,7 +24,7 @@ struct HomeAPIEndpoint {
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/home/popular/popup-stores",
             method: .get,
             queryParameters: request
@@ -35,7 +35,7 @@ struct HomeAPIEndpoint {
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/home/new/popup-stores",
             method: .get,
             queryParameters: request
@@ -46,7 +46,7 @@ struct HomeAPIEndpoint {
         request: SortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/home/custom/popup-stores",
             method: .get,
             queryParameters: request

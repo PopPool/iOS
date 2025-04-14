@@ -1,6 +1,6 @@
 import Foundation
 
-enum KeyPath {
+enum Secrets {
     static var kakaoAuthAppKey: String {
         return getValue(forKey: "KAKAO_AUTH_APP_KEY")
     }

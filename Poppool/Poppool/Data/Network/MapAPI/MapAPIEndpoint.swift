@@ -26,7 +26,7 @@ struct MapAPIEndpoint {
         )
 
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/locations/popup-stores",
             method: .get,
             queryParameters: params
@@ -44,7 +44,7 @@ struct MapAPIEndpoint {
         )
 
         return Endpoint(
-            baseURL: KeyPath.popPoolBaseURL,
+            baseURL: Secrets.popPoolBaseURL,
             path: "/locations/search",
             method: .get,
             queryParameters: params
