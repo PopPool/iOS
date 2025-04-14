@@ -3,7 +3,8 @@ import Foundation
 import RxSwift
 
 // MARK: - Implementation
-class MapRepositoryImpl: MapRepository {
+final class MapRepositoryImpl: MapRepository {
+    
     private let provider: Provider
 
     init(provider: Provider) {

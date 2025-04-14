@@ -4,9 +4,8 @@ import RxSwift
 
 final class AuthAPIRepositoryImpl: AuthAPIRepository {
 
-    var provider: Provider
-
-    var tokenInterceptor = TokenInterceptor()
+    private let provider: Provider
+    private let tokenInterceptor = TokenInterceptor()
 
     init(provider: Provider) {
         self.provider = provider

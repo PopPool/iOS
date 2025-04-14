@@ -4,7 +4,7 @@ import RxSwift
 
 final class SignUpRepositoryImpl: SignUpRepository {
 
-    var provider: Provider
+    private let provider: Provider
 
     init(provider: Provider) {
         self.provider = provider
