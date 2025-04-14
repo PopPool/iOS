@@ -275,7 +275,7 @@ final class MyPageReactor: Reactor {
             let adminVC = AdminViewController(nickname: nickname)
             adminVC.reactor = AdminReactor(
                 useCase: DefaultAdminUseCase(
-                    repository: DefaultAdminRepository(provider: ProviderImpl())
+                    repository: AdminRepositoryImpl(provider: ProviderImpl())
                 )
             )
             controller.navigationController?.pushViewController(adminVC, animated: true)
