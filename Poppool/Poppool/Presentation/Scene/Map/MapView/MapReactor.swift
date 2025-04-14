@@ -350,15 +350,6 @@ final class MapReactor: Reactor {
                 updatedStores.insert(selectedStore, at: 0) // 🔥 선택된 마커를 캐러셀의 첫 번째로 설정
             }
 
-            Logger.log(
-                message: """
-                Updated viewport stores:
-                - Total: \(updatedStores.count)
-                - Selected Store: \(state.selectedStore?.name ?? "None")
-                """,
-                category: .debug
-            )
-
             newState.viewportStores = updatedStores
 
         case let .setSelectedStore(store):

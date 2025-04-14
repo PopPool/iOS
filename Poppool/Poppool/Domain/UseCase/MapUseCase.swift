@@ -44,7 +44,7 @@ class DefaultMapUseCase: MapUseCase {
             northEastLon: northEastLon,
             southWestLat: southWestLat,
             southWestLon: southWestLon,
-            categories: categories  // ← 그대로 넘긴다
+            categories: categories
         )
         .map { $0.map { $0.toDomain() } }
     }

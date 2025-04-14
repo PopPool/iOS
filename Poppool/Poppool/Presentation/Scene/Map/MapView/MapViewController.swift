@@ -48,7 +48,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private var filterChipsTopY: CGFloat = 0
     private var filterContainerBottomY: CGFloat {
         let frameInView = mainView.filterChips.convert(mainView.filterChips.bounds, to: view)
-        return frameInView.maxY // 필터 컨테이너의 바닥 높이
+        return frameInView.maxY
     }
 
     enum ModalState {
@@ -89,7 +89,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         if let reactor = self.reactor {
             reactor.action.onNext(.fetchCategories)
 
-            // 한국 전체 영역에 대한 경계값 설정
             let koreaRegion = (
                 northEast: NMGLatLng(lat: 38.0, lng: 132.0),
                 southWest: NMGLatLng(lat: 33.0, lng: 124.0)
@@ -194,13 +193,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     }
 
     private func configureTooltip(for marker: NMFMarker, stores: [MapPopUpStore]) {
-        Logger.log(message: """
-            툴팁 설정:
-            - 현재 캐러셀 스토어: \(currentCarouselStores.map { $0.name })
-            - 마커 스토어: \(stores.map { $0.name })
-            """, category: .debug)
 
-        // 기존 툴팁 제거
         self.currentTooltipView?.removeFromSuperview()
 
         let tooltipView = MarkerTooltipView()
@@ -217,11 +210,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             self.updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: stores.count)
             tooltipView.selectStore(at: index)
 
-            Logger.log(message: """
-                툴팁 선택:
-                - 선택된 스토어: \(stores[index].name)
-                - 툴팁 인덱스: \(index)
-                """, category: .debug)
+
         }
 
         let markerPoint = self.mainView.mapView.projection.point(from: marker.position)
@@ -272,8 +261,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         setupPanAndSwipeGestures()
 
         let mapViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapViewTap(_:)))
-//        mapViewTapGesture.cancelsTouchesInView = false  // 중요: 다른 터치 이벤트를 방해하지 않음
-        mapViewTapGesture.delaysTouchesBegan = false    // 터치 지연 없음
+        mapViewTapGesture.delaysTouchesBegan = false
         mainView.mapView.addGestureRecognizer(mapViewTapGesture)
         mapViewTapGesture.delegate = self
     }
@@ -284,7 +272,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                Logger.log(message: "⬆️ 위로 스와이프 감지", category: .debug)
                 switch owner.modalState {
                 case .bottom:
                     owner.animateToState(.middle)
@@ -300,7 +287,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             .skip(1)
             .withUnretained(self)
             .subscribe { owner, _ in
-                Logger.log(message: "⬇️ 아래로 스와이프 감지됨", category: .debug)
                 switch owner.modalState {
                 case .top:
                     owner.animateToState(.middle)
@@ -330,7 +316,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         mainView.listButton.rx.tap
             .withUnretained(self)
             .subscribe { owner, _ in
-                owner.animateToState(.middle) // 버튼 눌렀을 때 상태를 middle로 변경
+                owner.animateToState(.middle)
             }
             .disposed(by: disposeBag)
 
@@ -382,7 +368,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             // 필터 제거 액션
             self.reactor?.action.onNext(.clearFilters(.category))
 
-            // 현재 뷰포트의 바운드로 마커 업데이트 요청
             let bounds = self.getVisibleBounds()
             self.reactor?.action.onNext(.viewportChanged(
                 northEastLat: bounds.northEast.lat,
@@ -402,7 +387,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             reactor.state.map { $0.selectedLocationFilters }.distinctUntilChanged(),
             reactor.state.map { $0.selectedCategoryFilters }.distinctUntilChanged()
         ) { locationFilters, categoryFilters -> (String, String) in
-            // 지역 필터 텍스트 포맷팅
             let locationText: String
             if locationFilters.isEmpty {
                 locationText = "지역선택"
@@ -411,8 +395,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             } else {
                 locationText = locationFilters[0]
             }
-
-            // 카테고리 필터 텍스트 포맷팅
             let categoryText: String
             if categoryFilters.isEmpty {
                 categoryText = "카테고리"
@@ -482,14 +464,12 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             .bind { [weak self] results in
                 guard let self = self else { return }
 
-                // 이전 선택된 마커, 툴팁, 캐러셀 초기화
                 self.clearAllMarkers()
                 self.storeListViewController.reactor?.action.onNext(.setStores([]))
                 self.carouselView.updateCards([])
                 self.carouselView.isHidden = true
                 self.resetSelectedMarker()  // 추가된 부분
 
-                // 결과가 없으면 스토어 카드 숨김 후 종료
                 if results.isEmpty {
                     self.mainView.setStoreCardHidden(true, animated: true)
                     return
@@ -546,9 +526,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         // 중요: 마커에 직접 터치 핸들러 추가
         marker.touchHandler = { [weak self] (_) -> Bool in
             guard let self = self else { return false }
-
-            Logger.log(message: "마커 터치됨! 위치: \(marker.position), 스토어: \(store.name)", category: .debug)
-
             // 단일 스토어 마커 처리
             return self.handleSingleStoreTap(marker, store: store)
         }
@@ -584,7 +561,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     @objc private func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
         // 리스트뷰가 현재 보이는 상태(중간 또는 상단)일 때만 내림
         if modalState == .middle || modalState == .top {
-            Logger.log(message: "맵뷰 탭 감지: 리스트뷰 내림", category: .debug)
             animateToState(.bottom)
         }
     }
@@ -618,10 +594,9 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 let middleY = view.frame.height * 0.3 // 중간 지점 기준 높이
                 let targetState: ModalState
 
-                // 속도와 위치를 기반으로 상태 결정
-                if velocity.y > 500 { // 아래로 빠르게 드래그
+                if velocity.y > 500 {
                     targetState = .bottom
-                } else if velocity.y < -500 { // 위로 빠르게 드래그
+                } else if velocity.y < -500 {
                     targetState = .top
                 } else if currentOffset < middleY * 0.7 {
                     targetState = .top
@@ -717,7 +692,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             self.view.layoutIfNeeded()
         }) { _ in
             self.modalState = state
-            Logger.log(message: ". 현재 상태: \(state)", category: .debug)
         }
     }
 
@@ -741,7 +715,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                                     count: count,
                                     isMultiMarker: false)
         markerView.injection(with: input)
-        // 프레임이 설정되어 있지 않다면 적당한 크기로 지정 (예: 80x32)
         if markerView.frame == .zero {
             markerView.frame = CGRect(x: 0, y: 0, width: 80, height: 32)
         }
@@ -751,8 +724,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private func updateMapWithClustering() {
         let currentZoom = mainView.mapView.zoomLevel
         let level = MapZoomLevel.getLevel(from: Float(currentZoom))
-        // 클러스터 처리 시 현재 스토어 목록(currentStores)을 사용
-        Logger.log(message: "현재 줌 레벨: \(currentZoom), 모드: \(level), 스토어 수: \(currentStores.count)", category: .debug)
 
         CATransaction.begin()
         CATransaction.setDisableActions(true)
@@ -787,8 +758,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                         // 직접 터치 핸들러 추가
                         marker.touchHandler = { [weak self] (_) -> Bool in
                             guard let self = self else { return false }
-
-                            print("개별 마커 터치됨! 스토어: \(store.name)")
                             return self.handleSingleStoreTap(marker, store: store)
                         }
 
@@ -813,8 +782,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                         // 직접 터치 핸들러 추가
                         marker.touchHandler = { [weak self] (_) -> Bool in
                             guard let self = self else { return false }
-
-                            print("마이크로 클러스터 마커 터치됨! 스토어 수: \(storeGroup.count)개")
                             return self.handleMicroClusterTap(marker, storeArray: storeGroup)
                         }
 
@@ -848,7 +815,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 var marker: NMFMarker
                 if let existingMarker = clusterMarkerDictionary[clusterKey] {
                     marker = existingMarker
-                    // 위치 업데이트가 필요하면 수정
                     if marker.position.lat != cluster.cluster.coordinate.lat ||
                         marker.position.lng != cluster.cluster.coordinate.lng {
                         marker.position = NMGLatLng(lat: cluster.cluster.coordinate.lat, lng: cluster.cluster.coordinate.lng)
@@ -859,17 +825,14 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 }
 
                 marker.position = NMGLatLng(lat: cluster.cluster.coordinate.lat, lng: cluster.cluster.coordinate.lng)
-                marker.userInfo = ["clusterData": cluster]  // 중요: userInfo에 cluster 객체를 직접 저장
+                marker.userInfo = ["clusterData": cluster]
 
-                // 여기서 커스텀 클러스터 마커 뷰를 이미지로 변환하여 적용합니다.
                 if let clusterImage = createClusterMarkerImage(regionName: cluster.cluster.name, count: cluster.storeCount) {
                     marker.iconImage = NMFOverlayImage(image: clusterImage)
                 } else {
-                    // 기본 에셋 fallback (원하는 경우)
                     marker.iconImage = NMFOverlayImage(name: "cluster_marker")
                 }
 
-                // 터치 핸들러 추가 - userInfo에서 클러스터 데이터를 직접 가져오기
                 marker.touchHandler = { [weak self] (overlay) -> Bool in
                     guard let self = self,
                           let tappedMarker = overlay as? NMFMarker,
@@ -1018,7 +981,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             currentFilterBottomSheet = nil
         }
 
-        // 기본 마커
     private func addMarkers(for stores: [MapPopUpStore]) {
         markerDictionary.values.forEach { $0.mapView = nil }
         markerDictionary.removeAll()
@@ -1033,8 +995,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             // 직접 터치 핸들러 추가
             marker.touchHandler = { [weak self] (_) -> Bool in
                 guard let self = self else { return false }
-
-                print("검색 결과 마커 터치됨! 스토어: \(store.name)")
                 return self.handleSingleStoreTap(marker, store: store)
             }
 
@@ -1096,13 +1056,13 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 locationManager.requestWhenInUseAuthorization()
             case .authorizedWhenInUse, .authorizedAlways:
                 locationManager.startUpdatingLocation()
-                mainView.mapView.positionMode = .direction  // 내 위치 트래킹 모드 활성화
+                mainView.mapView.positionMode = .direction
             case .denied, .restricted:
                 Logger.log(
                     message: "위치 서비스가 비활성화되었습니다. 설정에서 권한을 확인해주세요.",
                     category: .error
                 )
-                mainView.mapView.positionMode = .disabled  // 내 위치 트래킹 모드 비활성화
+                mainView.mapView.positionMode = .disabled
             @unknown default:
                 break
             }
@@ -1111,14 +1071,11 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         private func updateTooltipPosition() {
             guard let marker = currentMarker, let tooltip = currentTooltipView else { return }
 
-            // 마커 위치를 화면 좌표로 변환
             let markerPoint = mainView.mapView.projection.point(from: marker.position)
             var markerCenter = markerPoint
 
-            // 마커 높이 고려 (네이버 마커는 크기가 다를 수 있음)
-            markerCenter.y = markerPoint.y - 20 // 마커 이미지 높이의 절반 정도
+            markerCenter.y = markerPoint.y - 20
 
-            // 오프셋 값 (디자인에 맞게 조정)
             let offsetX: CGFloat = -10
             let offsetY: CGFloat = -10
 
@@ -1134,7 +1091,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 updateMarkerStyle(marker: currentMarker, selected: false, isCluster: false)
             }
 
-            // 툴팁 제거
             currentTooltipView?.removeFromSuperview()
             currentTooltipView = nil
             currentTooltipStores = []
@@ -1148,7 +1104,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
     private func updateMarkersForCluster(stores: [MapPopUpStore]) {
-        // 전체 개별 및 클러스터 마커 제거
         for marker in individualMarkerDictionary.values {
             marker.mapView = nil
         }
@@ -1159,7 +1114,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
         clusterMarkerDictionary.removeAll()
 
-        // 클러스터에 포함된 스토어들만 새 마커 추가
         for store in stores {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
@@ -1168,11 +1122,9 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
             updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
-            // 직접 터치 핸들러 추가
             marker.touchHandler = { [weak self] (_) -> Bool in
                 guard let self = self else { return false }
 
-                print("클러스터 내 마커 터치됨! 스토어: \(store.name)")
                 return self.handleSingleStoreTap(marker, store: store)
             }
 
@@ -1182,7 +1134,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     }
 
         private func findMarkerForStore(for store: MapPopUpStore) -> NMFMarker? {
-            // individualMarkerDictionary에 저장된 모든 마커를 순회
             for marker in individualMarkerDictionary.values {
                 if let singleStore = marker.userInfo["storeData"] as? MapPopUpStore, singleStore.id == store.id {
                     return marker
@@ -1203,7 +1154,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
         private func fetchStoreDetails(for stores: [MapPopUpStore]) {
-            // 빈 목록이면 처리하지 않음
             guard !stores.isEmpty else { return }
 
             // 먼저 기본 정보로 StoreItem 생성하여 순서 유지
@@ -1222,7 +1172,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             // 리스트에는 모든 스토어 정보 표시 (필터링된 모든 스토어)
             self.storeListViewController.reactor?.action.onNext(.setStores(initialStoreItems))
 
-            // 각 스토어의 상세 정보를 병렬로 가져와서 업데이트 (북마크 정보 등)
             stores.forEach { store in
                 self.popUpAPIUseCase.getPopUpDetail(
                     commentType: "NORMAL",
@@ -1241,12 +1190,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
         func bindViewport(reactor: MapReactor) {
-            // 카메라 이동 완료 시 이벤트 발생되는 Subject
             let cameraObservable = PublishSubject<Void>()
-
-            // NMFMapViewCameraDelegate 메서드에서 호출할 수 있도록 설정
-
-            // 카메라 변경 감지해서 액션 전달
             cameraObservable
                 .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
                 .map { [unowned self] _ -> MapReactor.Action in
@@ -1261,7 +1205,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
 
-            // 현재 뷰포트 내의 스토어 업데이트 - 초기 1회
             reactor.state
                    .map { $0.viewportStores }
                    .distinctUntilChanged()
@@ -1373,7 +1316,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
     private func findAndShowNearestStore(from location: CLLocation) {
             guard !currentStores.isEmpty else {
-                Logger.log(message: "현재위치 표기할 스토어가 없습니다", category: .debug)
                 return
             }
 
@@ -1386,7 +1328,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
             if let store = nearestStore, let marker = findMarkerForStore(for: store) {
-                // 카메라 이동 없이 선택된 마커만 업데이트
                 _ = handleSingleStoreTap(marker, store: store)
             }
             // 마커가 없다면 새로 생성
@@ -1413,7 +1354,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool {
             isMovingToMarker = true
 
-            // 이전 마커 선택 상태 해제
             if let previousMarker = currentMarker {
                 updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
             }
@@ -1476,18 +1416,14 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         // 리전 클러스터 탭 처리
     func handleRegionalClusterTap(_ marker: NMFMarker, clusterData: ClusterMarkerData) -> Bool {
-        print("handleRegionalClusterTap 함수 호출됨")
 
         let currentZoom = mainView.mapView.zoomLevel
         let currentLevel = MapZoomLevel.getLevel(from: Float(currentZoom))
 
-        // 디버깅
-        print("현재 줌 레벨: \(currentZoom), 모드: \(currentLevel)")
-        print("클러스터 정보: \(clusterData.cluster.name), 스토어 수: \(clusterData.storeCount)")
+
 
         switch currentLevel {
         case .city:  // 시 단위 클러스터
-            print("시 단위 클러스터 처리")
             let districtZoomLevel: Double = 10.0
             let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: districtZoomLevel)
             cameraUpdate.animation = .easeIn
@@ -1495,14 +1431,12 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             mainView.mapView.moveCamera(cameraUpdate)
 
         case .district:  // 구 단위 클러스터
-            print("구 단위 클러스터 처리")
             let detailedZoomLevel: Double = 12.0
             let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: detailedZoomLevel)
             cameraUpdate.animation = .easeIn
             cameraUpdate.animationDuration = 0.3
             mainView.mapView.moveCamera(cameraUpdate)
             default:
-            print("기타 레벨 클러스터 처리")
         }
 
         // 클러스터에 포함된 스토어들만 표시하도록 마커 업데이트
@@ -1576,7 +1510,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
         private func showNoMarkersToast() {
-            // 디자인 예정이므로 임시 구현
             Logger.log(message: "현재 지도 영역에 표시할 마커가 없습니다", category: .debug)
         }
     }
@@ -1605,32 +1538,25 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     // MARK: - NMFMapViewTouchDelegate
     extension MapViewController {
         // 마커 탭 이벤트 처리
-        // 마커 탭 이벤트 처리
         func mapView(_ mapView: NMFMapView, didTap marker: NMFMarker) -> Bool {
-            Logger.log(message: "didTapMarker 호출됨: \(marker.position), userInfo: \(marker.userInfo)", category: .debug)
 
             // 클러스터 마커 확인
             if let clusterData = marker.userInfo["clusterData"] as? ClusterMarkerData {
-                Logger.log(message: "클러스터 데이터 감지: \(clusterData.cluster.name), 스토어 수: \(clusterData.storeCount)", category: .debug)
                 return handleRegionalClusterTap(marker, clusterData: clusterData)
             }
             // 마이크로 클러스터 또는 단일 스토어 마커 확인
             else if let storeArray = marker.userInfo["storeData"] as? [MapPopUpStore] {
                 if storeArray.count > 1 {
-                    Logger.log(message: "마이크로 클러스터 감지: \(storeArray.count)개 스토어", category: .debug)
                     return handleMicroClusterTap(marker, storeArray: storeArray)
                 } else if let singleStore = storeArray.first {
-                    Logger.log(message: "단일 스토어 감지: \(singleStore.name)", category: .debug)
                     return handleSingleStoreTap(marker, store: singleStore)
                 }
             }
             // 단일 스토어 마커 (배열이 아닌 경우) 확인
             else if let singleStore = marker.userInfo["storeData"] as? MapPopUpStore {
-                Logger.log(message: "단일 스토어 감지: \(singleStore.name)", category: .debug)
                 return handleSingleStoreTap(marker, store: singleStore)
             }
 
-            Logger.log(message: "인식할 수 없는 마커 타입", category: .error)
             return false
         }
 
@@ -1717,7 +1643,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
     // MARK: - UIGestureRecognizerDelegate
     extension MapViewController {
-        // 맵뷰의 다른 제스처와 충돌하지 않도록 함
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             // 맵의 내장 제스처와 동시 인식 허용
             return true
@@ -1725,7 +1650,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         // 리스트뷰가 보일 때만 커스텀 탭 제스처 허용
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-            // 터치가 리스트뷰 영역에 있으면 커스텀 제스처 트리거하지 않음
             let touchPoint = touch.location(in: view)
 
             // 리스트뷰가 보이고 터치가 리스트뷰 위에 있으면 탭 처리하지 않음
