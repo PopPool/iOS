@@ -48,7 +48,7 @@ final class NormalCommentEditReactor: Reactor {
     private var popUpName: String
     private var originComment: DetailCommentSection.CellType.Input
 
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
+    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
     private let imageService = PreSignedService()
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {

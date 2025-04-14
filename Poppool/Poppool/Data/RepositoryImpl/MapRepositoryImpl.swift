@@ -1,32 +1,9 @@
-//
-//  MapRepository.swift
-//  Poppool
-//
-//  Created by 김기현 on 12/3/24.
-//
-
 import Foundation
+
 import RxSwift
 
-protocol MapRepository {
-    func fetchStoresInBounds(
-        northEastLat: Double,
-        northEastLon: Double,
-        southWestLat: Double,
-        southWestLon: Double,
-        categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
-
-    func searchStores(
-        query: String,
-        categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
-
-    func fetchCategories() -> Observable<[Category]>
-}
-
 // MARK: - Implementation
-class DefaultMapRepository: MapRepository {
+class MapRepositoryImpl: MapRepository {
     private let provider: Provider
 
     init(provider: Provider) {

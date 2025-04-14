@@ -11,9 +11,9 @@ import RxSwift
 
 final class CommentAPIUseCaseImpl {
 
-    var repository: CommentAPIRepository
+    var repository: CommentAPIRepositoryImpl
 
-    init(repository: CommentAPIRepository) {
+    init(repository: CommentAPIRepositoryImpl) {
         self.repository = repository
     }
 

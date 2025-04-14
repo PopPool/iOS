@@ -1,15 +1,8 @@
-//
-//  CommentAPIRepository.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/15/24.
-//
-
 import Foundation
 
 import RxSwift
 
-final class CommentAPIRepository {
+final class CommentAPIRepositoryImpl: CommentAPIRepository {
 
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()

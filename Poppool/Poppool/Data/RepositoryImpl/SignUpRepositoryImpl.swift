@@ -1,14 +1,8 @@
-//
-//  SignUpRepositoryImpl.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class SignUpRepositoryImpl {
+final class SignUpRepositoryImpl: SignUpRepository {
 
     var provider: Provider
 

@@ -1,14 +1,8 @@
-//
-//  HomeAPIRepository.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class HomeAPIRepository {
+final class HomeAPIRepositoryImpl: HomeAPIRepository {
 
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()

@@ -1,15 +1,8 @@
-//
-//  UserAPIRepositoryImpl.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/3/24.
-//
-
 import Foundation
 
 import RxSwift
 
-final class UserAPIRepositoryImpl {
+final class UserAPIRepositoryImpl: UserAPIRepository {
 
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()

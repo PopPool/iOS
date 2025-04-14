@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 final class HomeAPIUseCaseImpl {
-    var repository = HomeAPIRepository(provider: ProviderImpl())
+    var repository = HomeAPIRepositoryImpl(provider: ProviderImpl())
 
     func fetchHome(
         page: Int32?,

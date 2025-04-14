@@ -47,7 +47,7 @@ final class MapGuideReactor: Reactor {
     // MARK: - Init
     init(
         popUpStoreId: Int64,
-        repository: MapDirectionRepository = DefaultMapDirectionRepository(provider: ProviderImpl())
+        repository: MapDirectionRepository = MapDirectionRepositoryImpl(provider: ProviderImpl())
     ) {
         self.popUpStoreId = popUpStoreId
         self.directionRepository = repository

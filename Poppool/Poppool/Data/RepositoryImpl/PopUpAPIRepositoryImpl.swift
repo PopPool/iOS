@@ -1,15 +1,8 @@
-//
-//  PopUpAPIRepositoryImpl.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
-
 import Foundation
 
 import RxSwift
 
-struct PopUpAPIRepositoryImpl {
+final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 

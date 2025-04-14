@@ -1,18 +1,8 @@
-//
-//  MapDirectionRepository.swift
-//  Poppool
-//
-//  Created by 김기현 on 1/23/25.
-//
-
 import Foundation
+
 import RxSwift
 
-protocol MapDirectionRepository {
-    func getPopUpDirection(popUpStoreId: Int64) -> Observable<GetPopUpDirectionResponseDTO>
-}
-
-final class DefaultMapDirectionRepository: MapDirectionRepository {
+final class MapDirectionRepositoryImpl: MapDirectionRepository {
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 

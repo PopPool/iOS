@@ -47,7 +47,7 @@ final class NormalCommentAddReactor: Reactor {
     private var popUpID: Int64
     private var popUpName: String
 
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
+    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
     private let imageService = PreSignedService()
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {

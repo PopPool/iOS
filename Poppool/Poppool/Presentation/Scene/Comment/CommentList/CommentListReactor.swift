@@ -51,7 +51,7 @@ final class CommentListReactor: Reactor {
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepository(provider: ProviderImpl()))
+    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in

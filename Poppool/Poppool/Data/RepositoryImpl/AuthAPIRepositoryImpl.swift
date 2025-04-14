@@ -1,14 +1,8 @@
-//
-//  AuthRepository.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class AuthAPIRepositoryImpl {
+final class AuthAPIRepositoryImpl: AuthAPIRepository {
 
     var provider: Provider
 
