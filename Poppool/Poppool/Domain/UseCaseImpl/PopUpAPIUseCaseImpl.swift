@@ -1,19 +1,12 @@
-//
-//  PopUpAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
-
 import Foundation
 
 import RxSwift
 
-final class PopUpAPIUseCaseImpl {
+final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
 
-    var repository: PopUpAPIRepositoryImpl
+    private let repository: PopUpAPIRepository
 
-    init(repository: PopUpAPIRepositoryImpl) {
+    init(repository: PopUpAPIRepository) {
         self.repository = repository
     }
 

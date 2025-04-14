@@ -173,7 +173,7 @@ final class MapGuideViewController: UIViewController, View {
 
                 let providerInstance = ProviderImpl()
                 let repositoryInstance = MapRepositoryImpl(provider: providerInstance)
-                let useCaseInstance = DefaultMapUseCase(repository: repositoryInstance)
+                let useCaseInstance = MapUseCaseImpl(repository: repositoryInstance)
                 let directionRepositoryInstance = MapDirectionRepositoryImpl(provider: providerInstance)
                 let mapReactorInstance = MapReactor(useCase: useCaseInstance, directionRepository: directionRepositoryInstance)
 

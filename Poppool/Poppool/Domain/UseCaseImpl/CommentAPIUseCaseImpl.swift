@@ -1,19 +1,12 @@
-//
-//  CommentAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/15/24.
-//
-
 import Foundation
 
 import RxSwift
 
-final class CommentAPIUseCaseImpl {
+final class CommentAPIUseCaseImpl: CommentAPIUseCase {
+    
+    private let repository: CommentAPIRepository
 
-    var repository: CommentAPIRepositoryImpl
-
-    init(repository: CommentAPIRepositoryImpl) {
+    init(repository: CommentAPIRepository) {
         self.repository = repository
     }
 

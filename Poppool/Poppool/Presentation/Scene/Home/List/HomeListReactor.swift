@@ -43,7 +43,7 @@ final class HomeListReactor: Reactor {
     var disposeBag = DisposeBag()
     var popUpType: HomePopUpType
 
-    private let homeAPIUseCase = HomeAPIUseCaseImpl()
+    private let homeAPIUseCase = HomeAPIUseCaseImpl(repository: HomeAPIRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
 

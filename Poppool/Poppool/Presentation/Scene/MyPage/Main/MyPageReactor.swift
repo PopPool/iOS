@@ -274,7 +274,7 @@ final class MyPageReactor: Reactor {
             let nickname = profileSection.inputDataList.first?.nickName ?? ""
             let adminVC = AdminViewController(nickname: nickname)
             adminVC.reactor = AdminReactor(
-                useCase: DefaultAdminUseCase(
+                useCase: AdminUseCaseImpl(
                     repository: AdminRepositoryImpl(provider: ProviderImpl())
                 )
             )

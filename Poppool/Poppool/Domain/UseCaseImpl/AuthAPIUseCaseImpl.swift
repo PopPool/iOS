@@ -1,18 +1,12 @@
-//
-//  AuthAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class AuthAPIUseCaseImpl {
+final class AuthAPIUseCaseImpl: AuthAPIUseCase {
 
-    var repository: AuthAPIRepositoryImpl
+    private let repository: AuthAPIRepository
 
-    init(repository: AuthAPIRepositoryImpl) {
+    init(repository: AuthAPIRepository) {
         self.repository = repository
     }
 

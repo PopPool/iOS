@@ -1,17 +1,11 @@
-//
-//  UserAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/3/24.
-//
+import Foundation
 
 import RxSwift
 
-final class UserAPIUseCaseImpl {
+final class UserAPIUseCaseImpl: UserAPIUseCase {
+    private let repository: UserAPIRepository
 
-    var repository: UserAPIRepositoryImpl
-
-    init(repository: UserAPIRepositoryImpl) {
+    init(repository: UserAPIRepository) {
         self.repository = repository
     }
 

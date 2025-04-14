@@ -1,15 +1,14 @@
-//
-//  HomeAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class HomeAPIUseCaseImpl {
-    var repository = HomeAPIRepositoryImpl(provider: ProviderImpl())
+final class HomeAPIUseCaseImpl: HomeAPIUseCase {
+
+    private let repository: HomeAPIRepository
+
+    init(repository: HomeAPIRepository) {
+        self.repository = repository
+    }
 
     func fetchHome(
         page: Int32?,

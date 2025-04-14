@@ -1,19 +1,14 @@
-//
-//  SignUpAPIUseCaseImpl.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
 import RxSwift
 
-final class SignUpAPIUseCaseImpl {
-    var repository: SignUpRepositoryImpl
+final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
+    private let repository: SignUpRepository
 
-    init(repository: SignUpRepositoryImpl) {
+    init(repository: SignUpRepository) {
         self.repository = repository
     }
+    
     func trySignUp(
         nickName: String,
         gender: String,
@@ -33,6 +28,7 @@ final class SignUpAPIUseCaseImpl {
             appleAuthorizationCode: appleAuthorizationCode
         )
     }
+    
     func checkNickName(nickName: String) -> Observable<Bool> {
         return repository.checkNickName(nickName: nickName)
     }
