@@ -30,7 +30,7 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size = CGSize(width: 200, height: 100) // 임시 높이로 시작
+        self.frame.size = CGSize(width: 200, height: 100) 
         setupLayout()
 //        setupGestures()
     }
@@ -71,15 +71,10 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
         // 기존 뷰 제거
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        print("🗨️ 툴팁 구성")
-        print("📋 입력받은 스토어: \(stores.map { $0.name })")
-
-        // stores 배열 순서대로 처리
         for (index, store) in stores.enumerated() {
             let rowContainer = createRow(for: store, at: index)
             stackView.addArrangedSubview(rowContainer)
 
-            // 구분선 추가 (마지막 아이템 제외)
             if index < stores.count - 1 {
                 let separator = createSeparator()
                 stackView.addArrangedSubview(separator)
@@ -89,7 +84,6 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
         // 레이아웃 업데이트
         layoutIfNeeded()
 
-        // 컨텐츠 크기에 맞게 높이 조정
         let height = stackView.systemLayoutSizeFitting(
             CGSize(width: 200, height: UIView.layoutFittingCompressedSize.height)
         ).height + 24
@@ -156,10 +150,6 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     @objc private func handleRowTap(_ gesture: UITapGestureRecognizer) {
         guard let row = gesture.view else { return }
         let index = row.tag
-
-        print("🗨️ 툴팁 탭")
-        print("👆 탭된 인덱스: \(index)")
-
         gesture.cancelsTouchesInView = true
         selectStore(at: index)
         onStoreSelected?(index)
@@ -186,11 +176,9 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
             else { continue }
 
             if row.tag == index {
-                // 선택된 행
                 label.font = .boldSystemFont(ofSize: 12)
                 bulletView.backgroundColor = .jd500
             } else {
-                // 선택되지 않은 행
                 label.font = .systemFont(ofSize: 12)
                 bulletView.backgroundColor = .clear
             }

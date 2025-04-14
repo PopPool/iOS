@@ -1420,8 +1420,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         let currentZoom = mainView.mapView.zoomLevel
         let currentLevel = MapZoomLevel.getLevel(from: Float(currentZoom))
 
-
-
         switch currentLevel {
         case .city:  // 시 단위 클러스터
             let districtZoomLevel: Double = 10.0
@@ -1436,7 +1434,9 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             cameraUpdate.animation = .easeIn
             cameraUpdate.animationDuration = 0.3
             mainView.mapView.moveCamera(cameraUpdate)
-            default:
+        default:
+            print("기타 레벨 클러스터 처리")
+
         }
 
         // 클러스터에 포함된 스토어들만 표시하도록 마커 업데이트

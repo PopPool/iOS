@@ -9,9 +9,6 @@ final class StoreListReactor: Reactor {
     private let popUpAPIUseCase: PopUpAPIUseCaseImpl
     private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
-//    private var currentPage = 0
-//    private let pageSize = 10
-//    private var hasMorePages = true
 
     enum Action {
         case syncBookmarkStatus(storeId: Int64, isBookmarked: Bool)
@@ -76,13 +73,12 @@ final class StoreListReactor: Reactor {
 
             // Int64 → Int32 변환 필요
             guard let idInt32 = Int32(exactly: store.id) else {
-                Logger.log(message: "ID 값이 Int32 범위를 초과했습니다: \(store.id)", category: .error)
                 return .empty()
             }
 
             return popUpAPIUseCase.getPopUpDetail(
                 commentType: "NORMAL",
-                popUpStoredId: Int64(idInt32) // Int32 → Int64 변환
+                popUpStoredId: Int64(idInt32)
             )
             .flatMap { detail -> Observable<Mutation> in
                 if detail.bookmarkYn != store.isBookmarked {

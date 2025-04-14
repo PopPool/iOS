@@ -54,8 +54,6 @@ class MapFilterChips: UIView {
 
    // MARK: - Update State
    func update(locationText: String?, categoryText: String?) {
-       print("Updating chips - locationText: \(String(describing: locationText)), categoryText: \(String(describing: categoryText))")
-
        updateChip(button: locationChip, text: locationText, placeholder: "지역선택", onClear: onRemoveLocation)
        updateChip(button: categoryChip, text: categoryText, placeholder: "카테고리", onClear: onRemoveCategory)
    }

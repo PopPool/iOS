@@ -71,14 +71,11 @@ final class MapSearchInput: UIView, View {
     }
 
     func bind(reactor: MapReactor) {
-        // 텍스트필드 입력 로그 (필요 시 확인)
         searchTextField.rx.text.orEmpty
             .subscribe(onNext: { text in
-                print("[DEBUG] TextField Input: \(text)")
             })
             .disposed(by: disposeBag)
 
-        // Reactor의 선택된 위치 필터를 텍스트필드에 바인딩 (없으면 기본 문구)
         reactor.state
             .map { $0.selectedLocationFilters.first ?? "팝업스토어명을 입력해보세요" }
             .distinctUntilChanged()
@@ -92,14 +89,12 @@ final class MapSearchInput: UIView, View {
 
     // MARK: - Gesture Setup
     private func setupGesture() {
-        // containerView에 탭 제스처를 추가하여 화면 전환 트리거
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
         containerView.addGestureRecognizer(tapGesture)
         containerView.isUserInteractionEnabled = true
     }
 
     @objc private func handleTapGesture() {
-        // onSearch 클로저를 호출해서 화면 전환을 진행
         onSearch?(searchTextField.text ?? "")
     }
 }

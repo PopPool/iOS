@@ -287,6 +287,7 @@
 //        return true
 //    }
 //
+//    
 //    func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
 //        if currentMarker == marker {
 //            currentTooltipView?.removeFromSuperview()
