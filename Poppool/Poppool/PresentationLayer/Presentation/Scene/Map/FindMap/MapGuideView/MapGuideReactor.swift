@@ -42,15 +42,15 @@ final class MapGuideReactor: Reactor {
     let initialState: State
 
     private let popUpStoreId: Int64
-    private let directionRepository: MapDirectionRepository
+    private let mapDirectionRepository: MapDirectionRepository
 
     // MARK: - Init
     init(
         popUpStoreId: Int64,
-        repository: MapDirectionRepository = MapDirectionRepositoryImpl(provider: ProviderImpl())
+        mapDirectionRepository: MapDirectionRepository
     ) {
         self.popUpStoreId = popUpStoreId
-        self.directionRepository = repository
+        self.mapDirectionRepository = mapDirectionRepository
         self.initialState = State()
     }
 
@@ -70,7 +70,7 @@ final class MapGuideReactor: Reactor {
             return Observable.just(.navigateBack)
 
         case .viewDidLoad(let id):
-            return directionRepository.getPopUpDirection(popUpStoreId: id)
+            return mapDirectionRepository.getPopUpDirection(popUpStoreId: id)
                 .map { response -> [Mutation] in
                     return [
                         .setMap(CLLocationCoordinate2D(latitude: response.latitude, longitude: response.longitude)),

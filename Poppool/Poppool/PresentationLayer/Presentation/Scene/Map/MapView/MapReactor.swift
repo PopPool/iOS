@@ -65,11 +65,11 @@ final class MapReactor: Reactor {
 
     let initialState: State
     private let mapUseCase: MapUseCase
-    private let directionRepository: MapDirectionRepository
+    private let mapDirectionRepository: MapDirectionRepository
 
-    init(mapUseCase: MapUseCase, directionRepository: MapDirectionRepository) {
+    init(mapUseCase: MapUseCase, mapDirectionRepository: MapDirectionRepository) {
         self.mapUseCase = mapUseCase
-        self.directionRepository = directionRepository
+        self.mapDirectionRepository = mapDirectionRepository
         self.initialState = State()
     }
     private func store(_ store: MapPopUpStore, matches filter: String) -> Bool {
@@ -215,7 +215,7 @@ final class MapReactor: Reactor {
             }
 
         case .viewDidLoad(let id):
-            return directionRepository.getPopUpDirection(popUpStoreId: id)
+            return mapDirectionRepository.getPopUpDirection(popUpStoreId: id)
                 .do(
                     onNext: { _ in
                     },

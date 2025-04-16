@@ -174,11 +174,9 @@ final class MapGuideViewController: UIViewController, View {
                 let providerInstance = ProviderImpl()
                 @Dependency var mapUseCase: MapUseCase
 
-                // FIXME: Respository를 UseCase를 태우도록 변경 필요!!
-                let directionRepositoryInstance = MapDirectionRepositoryImpl(provider: providerInstance)
                 let mapReactorInstance = MapReactor(
                     mapUseCase: mapUseCase,
-                    directionRepository: directionRepositoryInstance
+                    mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
                 )
 
                 if let selectedStore = strongSelf.currentCarouselStoreList.first {

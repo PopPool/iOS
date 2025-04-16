@@ -175,7 +175,10 @@ final class DetailReactor: Reactor {
             ToastMaker.createToast(message: "주소를 복사했어요")
         case .moveToAddressScene(let controller):
             let mapGuideController = MapGuideViewController(popUpStoreId: popUpID)
-            let reactor = MapGuideReactor(popUpStoreId: popUpID)
+            let reactor = MapGuideReactor(
+                popUpStoreId: popUpID,
+                mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
+            )
             mapGuideController.reactor = reactor
 
             mapGuideController.modalPresentationStyle = .overCurrentContext
