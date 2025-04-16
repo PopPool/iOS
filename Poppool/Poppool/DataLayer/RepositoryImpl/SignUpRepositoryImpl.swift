@@ -15,7 +15,7 @@ final class SignUpRepositoryImpl: SignUpRepository {
         return provider.requestData(with: endPoint, interceptor: TokenInterceptor())
     }
 
-    func fetchCategoryList() -> Observable<[Category]> {
+    func fetchCategoryList() -> Observable<[CategoryResponse]> {
         let endPoint = SignUpAPIEndpoint.signUp_getCategoryList()
         return provider.requestData(with: endPoint, interceptor: TokenInterceptor()).map { responseDTO in
             return responseDTO.categoryResponseList.map({ $0.toDomain() })

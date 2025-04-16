@@ -15,5 +15,5 @@ struct GetMyProfileResponse {
     var intro: String?
     var gender: String?
     var age: Int32
-    var interestCategoryList: [Category]
+    var interestCategoryList: [CategoryResponse]
 }

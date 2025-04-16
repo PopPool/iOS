@@ -24,5 +24,5 @@ protocol MapRepository {
         categories: [Int64]
     ) -> Observable<[MapPopUpStoreDTO]>
 
-    func fetchCategories() -> Observable<[Category]>
+    func fetchCategories() -> Observable<[CategoryResponse]>
 }

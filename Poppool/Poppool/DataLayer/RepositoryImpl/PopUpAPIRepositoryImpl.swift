@@ -3,7 +3,7 @@ import Foundation
 import RxSwift
 
 final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
-    
+
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 

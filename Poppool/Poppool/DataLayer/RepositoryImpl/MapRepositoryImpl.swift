@@ -45,7 +45,7 @@ final class MapRepositoryImpl: MapRepository {
         .map { $0.popUpStoreList }
     }
 
-    func fetchCategories() -> Observable<[Category]> {
+    func fetchCategories() -> Observable<[CategoryResponse]> {
         Logger.log(message: "카테고리 매핑 요청을 시작합니다.", category: .network)
 
         return provider.requestData(

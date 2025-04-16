@@ -19,7 +19,7 @@ struct CategoryResponseDTO: Codable {
 }
 
 extension CategoryResponseDTO {
-    func toDomain() -> Category {
-        return Category(categoryId: categoryId, category: categoryName)
+    func toDomain() -> CategoryResponse {
+        return CategoryResponse(categoryId: categoryId, category: categoryName)
     }
 }

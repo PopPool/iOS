@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Category {
+struct CategoryResponse {
     let categoryId: Int64
     let category: String
 }

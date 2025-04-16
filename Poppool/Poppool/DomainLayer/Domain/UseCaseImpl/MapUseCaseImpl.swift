@@ -10,7 +10,7 @@ final class MapUseCaseImpl: MapUseCase {
         self.repository = repository
     }
 
-    func fetchCategories() -> Observable<[Category]> {
+    func fetchCategories() -> Observable<[CategoryResponse]> {
         return repository.fetchCategories()
     }
 

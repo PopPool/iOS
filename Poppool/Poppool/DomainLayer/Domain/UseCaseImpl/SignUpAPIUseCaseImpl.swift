@@ -33,7 +33,7 @@ final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
         return repository.checkNickName(nickName: nickName)
     }
 
-    func fetchCategoryList() -> Observable<[Category]> {
+    func fetchCategoryList() -> Observable<[CategoryResponse]> {
         return repository.fetchCategoryList()
     }
 }

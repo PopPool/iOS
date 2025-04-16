@@ -15,5 +15,5 @@ protocol SignUpAPIUseCase {
     
     func checkNickName(nickName: String) -> Observable<Bool>
     
-    func fetchCategoryList() -> Observable<[Category]>
+    func fetchCategoryList() -> Observable<[CategoryResponse]>
 }
