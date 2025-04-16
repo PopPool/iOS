@@ -32,10 +32,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private var markerDictionary: [Int64: NMFMarker] = [:]
     private var individualMarkerDictionary: [Int64: NMFMarker] = [:]
     private var clusterMarkerDictionary: [String: NMFMarker] = [:]
-    // FIXME: Reactor 이용해서 처리하도록 수정
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(
-        repository: PopUpAPIRepositoryImpl(provider: ProviderImpl())
-    )
+    @Dependency private var popUpAPIUseCase: PopUpAPIUseCase
     private let clusteringManager = ClusteringManager()
     var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
@@ -43,9 +40,15 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     var currentMarker: NMFMarker?
-    private let storeListReactor = StoreListReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+    private let storeListReactor = StoreListReactor(
+        userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+    )
     private let storeListViewController = StoreListViewController(
-        reactor: StoreListReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+        reactor: StoreListReactor(
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+            popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+        )
     )
     private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
@@ -1235,7 +1238,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             stores.forEach { store in
                 self.popUpAPIUseCase.getPopUpDetail(
                     commentType: "NORMAL",
-                    popUpStoredId: store.id
+                    popUpStoredId: store.id,
+                    isViewCount: true
                 )
                 .asObservable()
                 .observe(on: MainScheduler.instance)
