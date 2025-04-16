@@ -19,7 +19,7 @@ final class SplashController: BaseViewController {
 
     private var mainView = SplashView()
     private let authAPIUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
-    private let keyChainService = KeyChainService()
+    @Dependency private var keyChainService: KeyChainService
 
     private var rootViewController: UIViewController?
 }

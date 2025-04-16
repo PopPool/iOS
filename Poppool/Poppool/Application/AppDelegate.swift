@@ -13,11 +13,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()
 
+        self.registerDependencies()
+
         return true
     }
 
     // MARK: UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+}
+
+// MARK: - Dependency
+extension AppDelegate {
+    /// 의존성 등록을 위한 메서드
+    private func registerDependencies() {
+        // MARK: Register Service
+        DIContainer.register(KeyChainService.self) { return KeyChainService() }
     }
 }

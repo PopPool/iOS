@@ -58,7 +58,7 @@ final class WithdrawlReasonReactor: Reactor {
     private var reasonSection = WithdrawlCheckSection(inputDataList: [])
     private var spacing156Section = SpacingSection(inputDataList: [.init(spacing: 156)])
     private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    private let keyChainService = KeyChainService()
+    @Dependency private var keyChainService: KeyChainService
     private let userDefaultService = UserDefaultService()
     // MARK: - init
     init() {

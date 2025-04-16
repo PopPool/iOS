@@ -184,9 +184,9 @@ final class MyPageReactor: Reactor {
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .logout:
-            let service = KeyChainService()
-            _ = service.deleteToken(type: .accessToken)
-            _ = service.deleteToken(type: .refreshToken)
+            @Dependency var keyChainService: KeyChainService
+            _ = keyChainService.deleteToken(type: .accessToken)
+            _ = keyChainService.deleteToken(type: .refreshToken)
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)

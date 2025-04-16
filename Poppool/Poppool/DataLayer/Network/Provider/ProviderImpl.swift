@@ -118,7 +118,7 @@ final class ProviderImpl: Provider {
                         accessToken = accessToken.replacingOccurrences(of: "Bearer ", with: "")
                         refreshToken = refreshToken.replacingOccurrences(of: "Bearer ", with: "")
 
-                        let keyChainService = KeyChainService()
+                        @Dependency var keyChainService: KeyChainService
                         keyChainService.saveToken(type: .accessToken, value: accessToken)
                         keyChainService.saveToken(type: .refreshToken, value: refreshToken)
                     }

@@ -41,7 +41,7 @@ final class SubLoginReactor: Reactor {
     private let kakaoLoginService = KakaoLoginService()
     private var appleLoginService = AppleLoginService()
     private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
-    private let keyChainService = KeyChainService()
+    @Dependency private var keyChainService: KeyChainService
     let userDefaultService = UserDefaultService()
 
     // MARK: - init
