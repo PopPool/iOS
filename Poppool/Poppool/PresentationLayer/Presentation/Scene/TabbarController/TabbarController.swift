@@ -201,7 +201,10 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         mapController.reactor = MapReactor(mapUseCase: mapUseCase, directionRepository: directionRepository)
 
         let homeController = HomeController()
-        homeController.reactor = HomeReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+        homeController.reactor = HomeReactor(
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+            homeAPIUseCase: DIContainer.resolve(HomeAPIUseCase.self)
+        )
 
         let myPageController = MyPageController()
         myPageController.reactor = MyPageReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))

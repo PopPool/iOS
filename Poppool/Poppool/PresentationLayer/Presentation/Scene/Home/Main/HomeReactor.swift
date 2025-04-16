@@ -39,7 +39,7 @@ final class HomeReactor: Reactor {
 
     var disposeBag = DisposeBag()
 
-    private let homeApiUseCase = HomeAPIUseCaseImpl(repository: HomeAPIRepositoryImpl(provider: ProviderImpl()))
+    private let homeAPIUseCase: HomeAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
     private let userDefaultService = UserDefaultService()
 
@@ -84,8 +84,12 @@ final class HomeReactor: Reactor {
     private var spaceGray24Section = SpacingSection(inputDataList: [.init(spacing: 24, backgroundColor: .g700)])
 
     // MARK: - init
-    init(userAPIUseCase: UserAPIUseCase) {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        homeAPIUseCase: HomeAPIUseCase
+    ) {
         self.userAPIUseCase = userAPIUseCase
+        self.homeAPIUseCase = homeAPIUseCase
         self.initialState = State()
     }
 
@@ -95,7 +99,7 @@ final class HomeReactor: Reactor {
         case .changeIndicatorColor(let controller, let row):
             return Observable.just(.skip)
         case .viewWillAppear:
-            return homeApiUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
+            return homeAPIUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
                 .withUnretained(self)
                 .map { (owner, response) in
                     owner.setBannerSection(response: response)
@@ -285,7 +289,8 @@ final class HomeReactor: Reactor {
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(
                     popUpType: .curation,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 4:
@@ -302,7 +307,8 @@ final class HomeReactor: Reactor {
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(
                     popUpType: .popular,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:
@@ -319,7 +325,8 @@ final class HomeReactor: Reactor {
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(
                     popUpType: .new,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 14:
@@ -352,7 +359,8 @@ final class HomeReactor: Reactor {
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(
                     popUpType: .popular,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 4:
@@ -369,7 +377,8 @@ final class HomeReactor: Reactor {
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(
                     popUpType: .new,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:

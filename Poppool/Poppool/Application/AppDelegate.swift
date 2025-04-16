@@ -41,6 +41,7 @@ extension AppDelegate {
         DIContainer.register(UserAPIRepository.self) { return UserAPIRepositoryImpl(provider: provider) }
         DIContainer.register(PopUpAPIRepository.self) { return PopUpAPIRepositoryImpl(provider: provider) }
         DIContainer.register(CommentAPIRepository.self) { return CommentAPIRepositoryImpl(provider: provider) }
+        DIContainer.register(HomeAPIRepository.self) { return HomeAPIRepositoryImpl(provider: provider) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
@@ -48,6 +49,7 @@ extension AppDelegate {
         @Dependency var userAPIRepository: UserAPIRepository
         @Dependency var popUpAPIRepository: PopUpAPIRepository
         @Dependency var commentAPIRepository: CommentAPIRepository
+        @Dependency var homeAPIRepository: HomeAPIRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
@@ -55,5 +57,6 @@ extension AppDelegate {
         DIContainer.register(UserAPIUseCase.self) { return UserAPIUseCaseImpl(repository: userAPIRepository) }
         DIContainer.register(PopUpAPIUseCase.self) { return PopUpAPIUseCaseImpl(repository: popUpAPIRepository) }
         DIContainer.register(CommentAPIUseCase.self) { return CommentAPIUseCaseImpl(repository: commentAPIRepository) }
+        DIContainer.register(HomeAPIUseCase.self) { return HomeAPIUseCaseImpl(repository: homeAPIRepository) }
     }
 }

@@ -43,7 +43,7 @@ final class HomeListReactor: Reactor {
     var disposeBag = DisposeBag()
     var popUpType: HomePopUpType
 
-    private let homeAPIUseCase = HomeAPIUseCaseImpl(repository: HomeAPIRepositoryImpl(provider: ProviderImpl()))
+    private let homeAPIUseCase: HomeAPIUseCase
     private let userDefaultService = UserDefaultService()
     private let userAPIUseCase: UserAPIUseCase
 
@@ -72,11 +72,13 @@ final class HomeListReactor: Reactor {
     // MARK: - init
     init(
         popUpType: HomePopUpType,
-        userAPIUseCase: UserAPIUseCase
+        userAPIUseCase: UserAPIUseCase,
+        homeAPIUseCase: HomeAPIUseCase
     ) {
         self.initialState = State(popUpType: popUpType)
         self.popUpType = popUpType
         self.userAPIUseCase = userAPIUseCase
+        self.homeAPIUseCase = homeAPIUseCase
     }
 
     // MARK: - Reactor Methods

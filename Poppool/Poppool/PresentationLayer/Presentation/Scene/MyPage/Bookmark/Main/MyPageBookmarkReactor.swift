@@ -203,7 +203,8 @@ final class MyPageBookmarkReactor: Reactor {
             let nextController = HomeListController()
             nextController.reactor = HomeListReactor(
                 popUpType: .curation,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                homeAPIUseCase: DIContainer.resolve(HomeAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
