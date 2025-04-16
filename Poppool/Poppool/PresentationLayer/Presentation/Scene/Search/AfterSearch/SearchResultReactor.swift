@@ -131,7 +131,8 @@ final class SearchResultReactor: Reactor {
             nextController.reactor = DetailReactor(
                 popUpID: searchListSection.inputDataList[indexPath.row].id,
                 userAPIUseCase: userAPIUseCase,
-                popUpAPIUseCase: popUpAPIUseCase
+                popUpAPIUseCase: popUpAPIUseCase,
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }

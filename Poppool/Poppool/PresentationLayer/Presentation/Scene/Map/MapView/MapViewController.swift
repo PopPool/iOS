@@ -122,7 +122,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             detailController.reactor = DetailReactor(
                 popUpID: Int64(store.id),
                 userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
-                popUpAPIUseCase: self?.popUpAPIUseCase ?? DIContainer.resolve(PopUpAPIUseCase.self)
+                popUpAPIUseCase: self?.popUpAPIUseCase ?? DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
             )
 
             self?.navigationController?.isNavigationBarHidden = false

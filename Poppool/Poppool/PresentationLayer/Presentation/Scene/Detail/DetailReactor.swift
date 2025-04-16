@@ -60,7 +60,7 @@ final class DetailReactor: Reactor {
     private var imageService = PreSignedService()
     private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let commentAPIUseCase: CommentAPIUseCase
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -97,11 +97,13 @@ final class DetailReactor: Reactor {
     init(
         popUpID: Int64,
         userAPIUseCase: UserAPIUseCase,
-        popUpAPIUseCase: PopUpAPIUseCase
+        popUpAPIUseCase: PopUpAPIUseCase,
+        commentAPIUseCase: CommentAPIUseCase
     ) {
         self.popUpID = popUpID
         self.userAPIUseCase = userAPIUseCase
         self.popUpAPIUseCase = popUpAPIUseCase
+        self.commentAPIUseCase = commentAPIUseCase
         self.initialState = State()
     }
 
@@ -151,7 +153,11 @@ final class DetailReactor: Reactor {
         case .moveToCommentTypeSelectedScene(let controller):
             if isLogin {
                 let commentController = NormalCommentAddController()
-                commentController.reactor = NormalCommentAddReactor(popUpID: popUpID, popUpName: popUpName ?? "")
+                commentController.reactor = NormalCommentAddReactor(
+                    popUpID: popUpID,
+                    popUpName: popUpName ?? "",
+                    commentAPIUseCase: commentAPIUseCase
+                )
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
                 let loginController = SubLoginController()
@@ -181,7 +187,8 @@ final class DetailReactor: Reactor {
                     popUpID: popUpID,
                     popUpName: popUpName,
                     userAPIUseCase: userAPIUseCase,
-                    popUpAPIUseCase: popUpAPIUseCase
+                    popUpAPIUseCase: popUpAPIUseCase,
+                    commentAPIUseCase: commentAPIUseCase
                 )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
@@ -212,7 +219,8 @@ final class DetailReactor: Reactor {
             nextController.reactor = DetailReactor(
                 popUpID: id,
                 userAPIUseCase: userAPIUseCase,
-                popUpAPIUseCase: popUpAPIUseCase
+                popUpAPIUseCase: popUpAPIUseCase,
+                commentAPIUseCase: commentAPIUseCase
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
@@ -523,7 +531,12 @@ extension DetailReactor {
                     owner.dismiss(animated: true) { [weak controller] in
                         guard let popUpName = self.popUpName else { return }
                         let editController = NormalCommentEditController()
-                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        editController.reactor = NormalCommentEditReactor(
+                            popUpID: self.popUpID,
+                            popUpName: popUpName,
+                            comment: comment,
+                            commentAPIUseCase: self.commentAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }
                 case .cancel:

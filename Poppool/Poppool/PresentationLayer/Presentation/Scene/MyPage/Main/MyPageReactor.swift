@@ -258,7 +258,8 @@ final class MyPageReactor: Reactor {
             nextController.reactor = DetailReactor(
                 popUpID: popUpID,
                 userAPIUseCase: userAPIUseCase,
-                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
 

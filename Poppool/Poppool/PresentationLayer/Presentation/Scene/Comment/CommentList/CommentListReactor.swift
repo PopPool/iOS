@@ -51,7 +51,7 @@ final class CommentListReactor: Reactor {
     private var imageService = PreSignedService()
     private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let commentAPIUseCase: CommentAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -77,13 +77,15 @@ final class CommentListReactor: Reactor {
         popUpID: Int64,
         popUpName: String?,
         userAPIUseCase: UserAPIUseCase,
-        popUpAPIUseCase: PopUpAPIUseCase
+        popUpAPIUseCase: PopUpAPIUseCase,
+        commentAPIUseCase: CommentAPIUseCase
     ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
         self.userAPIUseCase = userAPIUseCase
         self.popUpAPIUseCase = popUpAPIUseCase
+        self.commentAPIUseCase = commentAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -311,7 +313,12 @@ final class CommentListReactor: Reactor {
                     owner.dismiss(animated: true) { [weak controller] in
                         guard let popUpName = self.popUpName else { return }
                         let editController = NormalCommentEditController()
-                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        editController.reactor = NormalCommentEditReactor(
+                            popUpID: self.popUpID,
+                            popUpName: popUpName,
+                            comment: comment,
+                            commentAPIUseCase: self.commentAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }
                 case .cancel:

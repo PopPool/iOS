@@ -182,7 +182,8 @@ final class MyPageBookmarkReactor: Reactor {
             nextController.reactor = DetailReactor(
                 popUpID: listSection.inputDataList[row].id,
                 userAPIUseCase: userAPIUseCase,
-                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .presentModal(let controller):
