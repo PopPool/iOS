@@ -430,7 +430,6 @@
 		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
 		4EE5A3D32D40E4A600A2469A /* MapGuideReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */; };
 		4EEA13072DA7CDDA00775256 /* PopUpImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA13062DA7CDDA00775256 /* PopUpImagesCollectionView.swift */; };
-		4EEA13142DABB0D900775256 /* MapViewController+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA13132DABB0D900775256 /* MapViewController+Handlers.swift */; };
 		4EEA1D8F2D352012003E7DE9 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */; };
 		4EEA1D912D352027003E7DE9 /* ExtendedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */; };
 		4EECA3942D56770B00A07CCA /* MapPopUpStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E685EBB2D12CEB6001EF91C /* MapPopUpStore.swift */; };
@@ -893,7 +892,6 @@
 		4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionBottomSheet.swift; sourceTree = "<group>"; };
 		4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideReactor.swift; sourceTree = "<group>"; };
 		4EEA13062DA7CDDA00775256 /* PopUpImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpImagesCollectionView.swift; sourceTree = "<group>"; };
-		4EEA13132DABB0D900775256 /* MapViewController+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController+Handlers.swift"; sourceTree = "<group>"; };
 		4EEA1D8E2D352012003E7DE9 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		4EEA1D902D352027003E7DE9 /* ExtendedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedImage.swift; sourceTree = "<group>"; };
 		4EED9BAB2D22730400B288E7 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
@@ -2768,7 +2766,6 @@
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
-				4EEA13132DABB0D900775256 /* MapViewController+Handlers.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -3432,7 +3429,6 @@
 				088DE2582D144B0F0030FA9E /* DetailCommentProfileView.swift in Sources */,
 				0818989E2D2BAA610067BF01 /* WithdrawlCheckModalController.swift in Sources */,
 				081898902D295DC80067BF01 /* MyPageLogoutSectionCell.swift in Sources */,
-				4EEA13142DABB0D900775256 /* MapViewController+Handlers.swift in Sources */,
 				081898EE2D33A39D0067BF01 /* MyCommentSortedModalController.swift in Sources */,
 				081898AA2D2CEA2F0067BF01 /* WithdrawlCheckSectionCell.swift in Sources */,
 				086DD8CC2CFDFEA800B97D3B /* HomeListController.swift in Sources */,
