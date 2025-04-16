@@ -21,13 +21,13 @@ import Foundation
 /// ```
 public final class DIContainer {
     private static let container = DIContainer()
-    
+
     private var registrations: [ObjectIdentifier: () -> Any] = [:]
-    
+
     private let resolveQueue = DispatchQueue(label: "resolveQueue")
-    
+
     private init() {}
-    
+
     /// 의존성을 등록합니다.
     /// - Parameters:
     ///   - type: 등록할 프로토콜 또는 클래스 타입
@@ -38,14 +38,14 @@ public final class DIContainer {
     ) {
         container.register(type, implementation)
     }
-    
+
     /// 의존성을 꺼내옵니다.
     /// - Parameter type: 요청할 타입
     /// - Returns: 등록된 타입의 인스턴스
     public static func resolve<T>(_ type: T.Type) -> T {
         return container.resolve(type)
     }
-    
+
     private func register<T>(
         _ type: T.Type,
         _ implementation: @escaping () -> T
@@ -53,7 +53,7 @@ public final class DIContainer {
         let key = ObjectIdentifier(type)
         registrations[key] = { implementation() }
     }
-    
+
     private func resolve<T>(_ type: T.Type) -> T {
         let key = ObjectIdentifier(type)
 
@@ -61,7 +61,7 @@ public final class DIContainer {
             guard let registration = registrations[key],
                   let instance = registration() as? T
             else { fatalError("\(type) does not registered") }
-            
+
             return instance
         }
     }
