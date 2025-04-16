@@ -193,7 +193,10 @@ final class SearchReactor: Reactor {
         case .moveToCategoryScene(let controller):
             let categoryIDList = searchCategorySection.inputDataList.compactMap { $0.id }
             let nextController = SearchCategoryController()
-            nextController.reactor = SearchCategoryReactor(originCategoryList: categoryIDList)
+            nextController.reactor = SearchCategoryReactor(
+                originCategoryList: categoryIDList,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.presentPanModal(nextController)
             nextController.reactor?.state
                 .withUnretained(self)

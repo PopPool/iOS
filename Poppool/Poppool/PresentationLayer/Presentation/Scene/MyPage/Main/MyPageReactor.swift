@@ -181,7 +181,10 @@ final class MyPageReactor: Reactor {
 
         case .moveToProfileEditScene(let controller):
             let nextController = ProfileEditController()
-            nextController.reactor = ProfileEditReactor(userAPIUseCase: userAPIUseCase)
+            nextController.reactor = ProfileEditReactor(
+                userAPIUseCase: userAPIUseCase,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .logout:

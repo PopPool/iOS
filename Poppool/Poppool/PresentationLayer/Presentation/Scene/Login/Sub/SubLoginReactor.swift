@@ -72,7 +72,11 @@ final class SubLoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: false, authrizationCode: authrizationCode)
+            signUpController.reactor = SignUpMainReactor(
+                isFirstResponderCase: false,
+                authrizationCode: authrizationCode,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .dismissScene(let controller):
             controller.dismiss(animated: true)

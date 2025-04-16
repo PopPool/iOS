@@ -39,11 +39,14 @@ final class SignUpStep2Reactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
+    private let signUpAPIUseCase: SignUpAPIUseCase
     private var nickName: String?
 
     // MARK: - init
-    init() {
+    init(
+        signUpAPIUseCase: SignUpAPIUseCase
+    ) {
+        self.signUpAPIUseCase = signUpAPIUseCase
         self.initialState = State()
     }
 

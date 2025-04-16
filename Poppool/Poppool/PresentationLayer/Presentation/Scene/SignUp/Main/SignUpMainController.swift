@@ -31,13 +31,17 @@ final class SignUpMainController: BaseTabmanController, View {
 
     var step2Controller: SignUpStep2Controller = {
         let controller = SignUpStep2Controller()
-        controller.reactor = SignUpStep2Reactor()
+        controller.reactor = SignUpStep2Reactor(
+            signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+        )
         return controller
     }()
 
     var step3Controller: SignUpStep3Controller = {
         let controller = SignUpStep3Controller()
-        controller.reactor = SignUpStep3Reactor()
+        controller.reactor = SignUpStep3Reactor(
+            signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+        )
         return controller
     }()
 

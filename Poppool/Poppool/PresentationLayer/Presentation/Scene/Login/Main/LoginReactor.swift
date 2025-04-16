@@ -74,7 +74,11 @@ final class LoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let controller):
             let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(isFirstResponderCase: true, authrizationCode: authrizationCode)
+            signUpController.reactor = SignUpMainReactor(
+                isFirstResponderCase: true,
+                authrizationCode: authrizationCode,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(signUpController, animated: true)
         case .moveToHomeScene(let controller):
             let homeTabbar = WaveTabBarController()

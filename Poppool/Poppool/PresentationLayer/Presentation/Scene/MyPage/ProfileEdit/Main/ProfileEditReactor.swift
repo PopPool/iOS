@@ -65,12 +65,16 @@ final class ProfileEditReactor: Reactor {
     var introIsActive: Bool = false
 
     private let userAPIUseCase: UserAPIUseCase
-    private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
+    private let signUpAPIUseCase: SignUpAPIUseCase
     private let imageService = PreSignedService()
 
     // MARK: - init
-    init(userAPIUseCase: UserAPIUseCase) {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        signUpAPIUseCase: SignUpAPIUseCase
+    ) {
         self.userAPIUseCase = userAPIUseCase
+        self.signUpAPIUseCase = signUpAPIUseCase
         self.initialState = State()
     }
 
@@ -136,7 +140,8 @@ final class ProfileEditReactor: Reactor {
             let nextController = CategoryEditModalController()
             nextController.reactor = CategoryEditModalReactor(
                 selectedID: newState.originProfileData?.interestCategoryList.map { $0.categoryId } ?? [],
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                signUpAPIUseCase: signUpAPIUseCase
             )
             controller.presentPanModal(nextController)
         case .moveToInfoEditScene(let controller):
