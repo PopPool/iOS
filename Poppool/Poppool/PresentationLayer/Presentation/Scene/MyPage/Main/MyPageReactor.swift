@@ -272,11 +272,12 @@ final class MyPageReactor: Reactor {
         case .moveToAdminScene(let controller):
             // 관리자 VC
             let nickname = profileSection.inputDataList.first?.nickName ?? ""
-            let adminVC = AdminViewController(nickname: nickname)
+            let adminVC = AdminViewController(
+                nickname: nickname,
+                adminUseCase: DIContainer.resolve(AdminUseCase.self)
+            )
             adminVC.reactor = AdminReactor(
-                useCase: AdminUseCaseImpl(
-                    repository: AdminRepositoryImpl(provider: ProviderImpl())
-                )
+                adminUseCase: DIContainer.resolve(AdminUseCase.self)
             )
             controller.navigationController?.pushViewController(adminVC, animated: true)
         }

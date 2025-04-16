@@ -16,7 +16,10 @@ final class AdminViewController: BaseViewController, View {
     private let adminUseCase: AdminUseCase
 
     // MARK: - Init
-    init(nickname: String, adminUseCase: AdminUseCase = AdminUseCaseImpl(repository: AdminRepositoryImpl(provider: ProviderImpl()))) {
+    init(
+        nickname: String,
+        adminUseCase: AdminUseCase
+    ) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
         self.mainView = AdminView(frame: .zero)
