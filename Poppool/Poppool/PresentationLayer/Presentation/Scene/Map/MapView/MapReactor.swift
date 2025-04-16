@@ -64,11 +64,11 @@ final class MapReactor: Reactor {
     }
 
     let initialState: State
-    private let useCase: MapUseCase
+    private let mapUseCase: MapUseCase
     private let directionRepository: MapDirectionRepository
 
-    init(useCase: MapUseCase, directionRepository: MapDirectionRepository) {
-        self.useCase = useCase
+    init(mapUseCase: MapUseCase, directionRepository: MapDirectionRepository) {
+        self.mapUseCase = mapUseCase
         self.directionRepository = directionRepository
         self.initialState = State()
     }
@@ -90,7 +90,7 @@ final class MapReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .fetchCategories:
-            return useCase.fetchCategories()
+            return mapUseCase.fetchCategories()
                 .map { categories in
                     let mapping = categories.reduce(into: [String: Int64]()) { dict, category in
                         dict[category.category] = category.categoryId
@@ -107,7 +107,7 @@ final class MapReactor: Reactor {
             return .concat([
                 .just(.setSearchResults([])),
                 .just(.setLoading(true)),
-                useCase.searchStores(query: query, categories: categoryIDs)
+                mapUseCase.searchStores(query: query, categories: categoryIDs)
                     .flatMap { results -> Observable<Mutation> in
                         if results.isEmpty {
                             return .just(.setToastMessage("검색 결과가 없습니다."))
@@ -124,7 +124,7 @@ final class MapReactor: Reactor {
 
             return .concat([
                 .just(.setLoading(true)),
-                useCase.fetchStoresInBounds(
+                mapUseCase.fetchStoresInBounds(
                     northEastLat: northEastLat,
                     northEastLon: northEastLon,
                     southWestLat: southWestLat,
@@ -185,7 +185,7 @@ final class MapReactor: Reactor {
                 .compactMap { currentState.categoryMapping[$0] }
             return Observable.concat([
                 Observable.just(.setLoading(true)),
-                useCase.fetchStoresInBounds(
+                mapUseCase.fetchStoresInBounds(
                     northEastLat: northEastLat,
                     northEastLon: northEastLon,
                     southWestLat: southWestLat,
@@ -260,7 +260,7 @@ final class MapReactor: Reactor {
 
             return .concat([
                 .just(.setLoading(true)),
-                useCase.fetchStoresInBounds(
+                mapUseCase.fetchStoresInBounds(
                     northEastLat: koreaRegion.northEast.lat,
                     northEastLon: koreaRegion.northEast.lon,
                     southWestLat: koreaRegion.southWest.lat,
