@@ -76,14 +76,10 @@ final class AdminStoreCell: UITableViewCell {
 
     // MARK: - Configure
     func configure(with store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-//        Logger.log(message: "셀 데이터 바인딩: \(store)", category: .debug)
-
         titleLabel.text = store.name
         categoryLabel.text = store.categoryName
         statusChip.text = "운영"
-
         let imagePath = store.mainImageUrl.replacingOccurrences(of: KeyPath.popPoolS3BaseURL, with: "")
-//        Logger.log(message: "이미지 경로: \(imagePath)", category: .debug)
         storeImageView.setPPImage(path: imagePath)
     }
 }

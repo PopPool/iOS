@@ -71,10 +71,11 @@ final class MapSearchInput: UIView, View {
     }
 
     func bind(reactor: MapReactor) {
-        searchTextField.rx.text.orEmpty
-            .subscribe(onNext: { _ in
-            })
-            .disposed(by: disposeBag)
+        ///TODO : 검색 재활성화시 사용
+//        searchTextField.rx.text.orEmpty
+//            .subscribe(onNext: { _ in
+//            })
+//            .disposed(by: disposeBag)
 
         reactor.state
             .map { $0.selectedLocationFilters.first ?? "팝업스토어명을 입력해보세요" }

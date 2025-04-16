@@ -282,13 +282,6 @@ extension PopUpStoreRegisterViewController {
         self.mainView.timeButton.setTitle("\(startString) ~ \(endString)", for: .normal)
     }
 
-    private func showLoadingIndicator() {
-
-    }
-
-    private func hideLoadingIndicator() {
-    }
-
     private func showSuccessAlert(isUpdate: Bool) {
         let message = isUpdate ? "팝업스토어가 성공적으로 수정되었습니다." : "팝업스토어가 성공적으로 등록되었습니다."
         let alert = UIAlertController(
