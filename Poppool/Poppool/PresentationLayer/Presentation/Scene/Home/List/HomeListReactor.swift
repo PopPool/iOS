@@ -150,7 +150,8 @@ final class HomeListReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(
                 popUpID: cardSections.inputDataList[row].id,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }

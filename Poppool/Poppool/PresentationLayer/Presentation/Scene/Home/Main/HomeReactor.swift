@@ -275,7 +275,8 @@ final class HomeReactor: Reactor {
                     let controller = DetailController()
                     controller.reactor = DetailReactor(
                         popUpID: id,
-                        userAPIUseCase: userAPIUseCase
+                        userAPIUseCase: userAPIUseCase,
+                        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                     )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
@@ -291,7 +292,8 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(
                     popUpID: id,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
@@ -306,7 +308,8 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(
                     popUpID: id,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 12:
@@ -321,7 +324,8 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(
                     popUpID: id,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:
@@ -334,7 +338,8 @@ final class HomeReactor: Reactor {
                     let controller = DetailController()
                     controller.reactor = DetailReactor(
                         popUpID: id,
-                        userAPIUseCase: userAPIUseCase
+                        userAPIUseCase: userAPIUseCase,
+                        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                     )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
@@ -350,7 +355,8 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(
                     popUpID: id,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
@@ -365,7 +371,8 @@ final class HomeReactor: Reactor {
                 let controller = DetailController()
                 controller.reactor = DetailReactor(
                     popUpID: id,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:

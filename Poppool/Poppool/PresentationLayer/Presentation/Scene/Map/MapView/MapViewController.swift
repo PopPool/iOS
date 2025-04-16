@@ -32,8 +32,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private var markerDictionary: [Int64: NMFMarker] = [:]
     private var individualMarkerDictionary: [Int64: NMFMarker] = [:]
     private var clusterMarkerDictionary: [String: NMFMarker] = [:]
+    // FIXME: Reactor 이용해서 처리하도록 수정
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(
-        repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+        repository: PopUpAPIRepositoryImpl(provider: ProviderImpl())
+    )
     private let clusteringManager = ClusteringManager()
     var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
@@ -119,7 +121,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             let detailController = DetailController()
             detailController.reactor = DetailReactor(
                 popUpID: Int64(store.id),
-                userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self)
+                userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+                popUpAPIUseCase: self?.popUpAPIUseCase ?? DIContainer.resolve(PopUpAPIUseCase.self)
             )
 
             self?.navigationController?.isNavigationBarHidden = false

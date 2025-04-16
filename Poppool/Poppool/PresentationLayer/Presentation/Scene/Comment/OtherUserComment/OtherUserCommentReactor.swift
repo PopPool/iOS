@@ -109,7 +109,8 @@ final class OtherUserCommentReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(
                 popUpID: id,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }

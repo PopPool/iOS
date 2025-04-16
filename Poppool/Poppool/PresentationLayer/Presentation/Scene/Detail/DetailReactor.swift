@@ -58,7 +58,7 @@ final class DetailReactor: Reactor {
     private var isFirstRequest: Bool = true
 
     private var imageService = PreSignedService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -96,10 +96,12 @@ final class DetailReactor: Reactor {
     // MARK: - init
     init(
         popUpID: Int64,
-        userAPIUseCase: UserAPIUseCase
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
     ) {
         self.popUpID = popUpID
         self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
         self.initialState = State()
     }
 
@@ -178,7 +180,8 @@ final class DetailReactor: Reactor {
                 nextController.reactor = CommentListReactor(
                     popUpID: popUpID,
                     popUpName: popUpName,
-                    userAPIUseCase: userAPIUseCase
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: popUpAPIUseCase
                 )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
@@ -208,7 +211,8 @@ final class DetailReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(
                 popUpID: id,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: popUpAPIUseCase
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):

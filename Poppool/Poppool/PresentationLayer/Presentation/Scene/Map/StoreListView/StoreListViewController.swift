@@ -118,7 +118,8 @@ final class StoreListViewController: UIViewController, View {
                 let detailController = DetailController()
                 detailController.reactor = DetailReactor(
                     popUpID: Int64(store.id),
-                    userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self)
+                    userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
                 )
 
                 owner.navigationController?.isNavigationBarHidden = false

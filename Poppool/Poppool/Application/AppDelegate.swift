@@ -39,15 +39,18 @@ extension AppDelegate {
         DIContainer.register(MapRepository.self) { return MapRepositoryImpl(provider: provider) }
         DIContainer.register(AdminRepository.self) { return AdminRepositoryImpl(provider: provider) }
         DIContainer.register(UserAPIRepository.self) { return UserAPIRepositoryImpl(provider: provider) }
+        DIContainer.register(PopUpAPIRepository.self) { return PopUpAPIRepositoryImpl(provider: provider) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
         @Dependency var adminRepository: AdminRepository
         @Dependency var userAPIRepository: UserAPIRepository
+        @Dependency var popUpAPIRepository: PopUpAPIRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
         DIContainer.register(AdminUseCase.self) { return AdminUseCaseImpl(repository: adminRepository) }
         DIContainer.register(UserAPIUseCase.self) { return UserAPIUseCaseImpl(repository: userAPIRepository) }
+        DIContainer.register(PopUpAPIUseCase.self) { return PopUpAPIUseCaseImpl(repository: popUpAPIRepository) }
     }
 }

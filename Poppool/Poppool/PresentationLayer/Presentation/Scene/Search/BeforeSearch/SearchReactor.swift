@@ -58,7 +58,7 @@ final class SearchReactor: Reactor {
     private var isLoading: Bool = false
 
     let userDefaultService = UserDefaultService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -91,8 +91,12 @@ final class SearchReactor: Reactor {
     private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
 
     // MARK: - init
-    init(userAPIUseCase: UserAPIUseCase) {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
+    ) {
         self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
         self.initialState = State()
     }
 
@@ -222,7 +226,8 @@ final class SearchReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(
                 popUpID: searchListSection.inputDataList[indexPath.row].id,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: popUpAPIUseCase
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .setSearchKeyWord(let text):

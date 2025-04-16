@@ -257,7 +257,8 @@ final class MyPageReactor: Reactor {
             let popUpID = commentSection.inputDataList[row].popUpID
             nextController.reactor = DetailReactor(
                 popUpID: popUpID,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
 

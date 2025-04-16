@@ -49,7 +49,7 @@ final class CommentListReactor: Reactor {
     private var appendDataIsEmpty: Bool = false
 
     private var imageService = PreSignedService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
 
@@ -76,12 +76,14 @@ final class CommentListReactor: Reactor {
     init(
         popUpID: Int64,
         popUpName: String?,
-        userAPIUseCase: UserAPIUseCase
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
     ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
         self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
     }
 
     // MARK: - Reactor Methods

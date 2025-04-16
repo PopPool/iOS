@@ -109,7 +109,8 @@ final class MyCommentReactor: Reactor {
             let nextController = DetailController()
             nextController.reactor = DetailReactor(
                 popUpID: popUpID,
-                userAPIUseCase: userAPIUseCase
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
