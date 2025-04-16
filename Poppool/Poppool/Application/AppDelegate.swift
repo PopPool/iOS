@@ -29,6 +29,15 @@ extension AppDelegate {
     /// 의존성 등록을 위한 메서드
     private func registerDependencies() {
         // MARK: Register Service
+        DIContainer.register(Provider.self) { return ProviderImpl() }
         DIContainer.register(KeyChainService.self) { return KeyChainService() }
+
+        // MARK: Resolve service
+
+        // MARK: Register repository
+
+        // MARK: Resolve repository
+
+        // MARK: Register UseCase
     }
 }

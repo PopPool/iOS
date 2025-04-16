@@ -25,7 +25,7 @@ class PreSignedService {
 
     let tokenInterceptor = TokenInterceptor()
 
-    let provider = ProviderImpl()
+    @Dependency private var provider: Provider
 
     let disposeBag = DisposeBag()
 
@@ -204,7 +204,6 @@ private extension PreSignedService {
 
     func getUploadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
         Logger.log(message: "Presigned URL 생성 요청 데이터: \(request)", category: .debug)
-        let provider = ProviderImpl()
         let endPoint = PreSignedAPIEndPoint.presigned_upload(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
             .do(onNext: { response in
@@ -215,7 +214,6 @@ private extension PreSignedService {
     }
 
     func getDownloadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
-        let provider = ProviderImpl()
         let endPoint = PreSignedAPIEndPoint.presigned_download(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
     }
