@@ -30,7 +30,7 @@ final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size = CGSize(width: 200, height: 100) 
+        self.frame.size = CGSize(width: 200, height: 100)
         setupLayout()
 //        setupGestures()
     }

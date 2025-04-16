@@ -16,7 +16,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     var completionHandler: (() -> Void)?
     var disposeBag = DisposeBag()
 
-    
     private var mainView: PopUpRegisterView
 
     // MARK: - Initializer

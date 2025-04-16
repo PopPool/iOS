@@ -143,8 +143,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         case let .updateName(name):
             return .just(.setName(name))
 
-
-
         case let .updateAddress(address):
             return .just(.setAddress(address))
 
@@ -481,7 +479,6 @@ final class PopUpStoreRegisterReactor: Reactor {
         Logger.log(message: "유효성 검사 성공", category: .debug)
         return true
     }
-
 
     // 주소 지오코딩
     private func geocodeAddress(address: String) -> Observable<CLLocation?> {

@@ -210,7 +210,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             self.updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: stores.count)
             tooltipView.selectStore(at: index)
 
-
         }
 
         let markerPoint = self.mainView.mapView.projection.point(from: marker.position)

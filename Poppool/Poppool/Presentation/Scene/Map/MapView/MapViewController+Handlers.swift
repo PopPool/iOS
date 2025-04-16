@@ -1,8 +1,8 @@
-//import UIKit
-//import NMapsMap
-//import ReactorKit
+// import UIKit
+// import NMapsMap
+// import ReactorKit
 //
-//extension MapViewController {
+// extension MapViewController {
 //
 //    // MARK: - Marker Style Handler
 //    func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int = 1, regionName: String = "") {
@@ -341,4 +341,4 @@
 //    private func showNoMarkersToast() {
 //        Logger.log(message: "현재 지도 영역에 표시할 마커가 없습니다", category: .debug)
 //    }
-//}
+// }

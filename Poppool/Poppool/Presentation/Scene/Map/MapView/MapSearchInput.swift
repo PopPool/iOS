@@ -72,7 +72,7 @@ final class MapSearchInput: UIView, View {
 
     func bind(reactor: MapReactor) {
         searchTextField.rx.text.orEmpty
-            .subscribe(onNext: { text in
+            .subscribe(onNext: { _ in
             })
             .disposed(by: disposeBag)
 

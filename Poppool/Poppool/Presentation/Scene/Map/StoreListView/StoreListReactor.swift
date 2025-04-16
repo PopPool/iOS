@@ -9,7 +9,6 @@ final class StoreListReactor: Reactor {
     private let popUpAPIUseCase: PopUpAPIUseCaseImpl
     private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
-
     enum Action {
         case syncBookmarkStatus(storeId: Int64, isBookmarked: Bool)
         case didSelectItem(Int)
