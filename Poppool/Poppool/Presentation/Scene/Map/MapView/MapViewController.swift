@@ -8,18 +8,24 @@ import RxSwift
 import SnapKit
 import UIKit
 
-class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, UIGestureRecognizerDelegate {
-    typealias Reactor = MapReactor
+struct CoordinateKey: Hashable {
+    let lat: Int
+    let lng: Int
 
-    fileprivate struct CoordinateKey: Hashable {
-        let lat: Int
-        let lng: Int
-
-        init(latitude: Double, longitude: Double) {
-            self.lat = Int(latitude * 1_000_00)
-            self.lng = Int(longitude * 1_000_00)
-        }
+    init(latitude: Double, longitude: Double) {
+        self.lat = Int(latitude * 1_000_00)
+        self.lng = Int(longitude * 1_000_00)
     }
+}
+
+class MapViewController: BaseViewController, View,
+                        CLLocationManagerDelegate,
+                        NMFMapViewTouchDelegate,
+                        NMFMapViewCameraDelegate,
+                        UIGestureRecognizerDelegate
+
+{
+    typealias Reactor = MapReactor
 
     var currentTooltipView: UIView?
     var currentTooltipStores: [MapPopUpStore] = []
@@ -29,12 +35,12 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private var storeDetailsCache: [Int64: StoreItem] = [:]
     var isMovingToMarker = false
     var currentCarouselStores: [MapPopUpStore] = []
-    private var markerDictionary: [Int64: NMFMarker] = [:]
-    private var individualMarkerDictionary: [Int64: NMFMarker] = [:]
-    private var clusterMarkerDictionary: [String: NMFMarker] = [:]
+    var markerDictionary: [Int64: NMFMarker] = [:]
+    var individualMarkerDictionary: [Int64: NMFMarker] = [:]
+    var clusterMarkerDictionary: [String: NMFMarker] = [:]
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(
         repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let clusteringManager = ClusteringManager()
+    var clusteringManager = ClusteringManager()
     var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
     let mainView = MapView()
@@ -42,11 +48,11 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private let locationManager = CLLocationManager()
     var currentMarker: NMFMarker?
     private let storeListReactor = StoreListReactor()
-    private let storeListViewController = StoreListViewController(reactor: StoreListReactor())
-    private var listViewTopConstraint: Constraint?
+    var storeListViewController = StoreListViewController(reactor: StoreListReactor())
+    var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
-    private var filterContainerBottomY: CGFloat {
+    var filterContainerBottomY: CGFloat {
         let frameInView = mainView.filterChips.convert(mainView.filterChips.bounds, to: view)
         return frameInView.maxY
     }
@@ -57,7 +63,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         case bottom
     }
 
-    private var modalState: ModalState = .bottom
+    var modalState: ModalState = .bottom
     private let idleSubject = PublishSubject<Void>()
 
     // MARK: - Lifecycle
@@ -192,41 +198,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             .disposed(by: disposeBag)
     }
 
-    private func configureTooltip(for marker: NMFMarker, stores: [MapPopUpStore]) {
-
-        self.currentTooltipView?.removeFromSuperview()
-
-        let tooltipView = MarkerTooltipView()
-        tooltipView.configure(with: stores)
-
-        tooltipView.selectStore(at: 0)
-
-        tooltipView.onStoreSelected = { [weak self] index in
-            guard let self = self, index < stores.count else { return }
-            self.currentCarouselStores = stores
-            self.carouselView.updateCards(stores)
-            self.carouselView.scrollToCard(index: index)
-
-            self.updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: stores.count)
-            tooltipView.selectStore(at: index)
-
-        }
-
-        let markerPoint = self.mainView.mapView.projection.point(from: marker.position)
-        let markerHeight: CGFloat = 32
-
-        tooltipView.frame = CGRect(
-            x: markerPoint.x,
-            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
-            width: tooltipView.frame.width,
-            height: tooltipView.frame.height
-        )
-
-        self.mainView.addSubview(tooltipView)
-        self.currentTooltipView = tooltipView
-        self.currentTooltipStores = stores
-        self.currentTooltipCoordinate = marker.position
-    }
 
     // MARK: - Setup
     private func setUp() {
@@ -533,167 +504,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         markerDictionary[store.id] = marker
     }
 
-    func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int = 1, regionName: String = "") {
-        if selected {
-            marker.width = 44
-            marker.height = 44
-            marker.iconImage = NMFOverlayImage(name: "TapMarker")
-        } else if isCluster {
-            marker.width = 36
-            marker.height = 36
-            marker.iconImage = NMFOverlayImage(name: "cluster_marker")
-        } else {
-            marker.width = 32
-            marker.height = 32
-            marker.iconImage = NMFOverlayImage(name: "Marker")
-        }
-
-        if count > 1 {
-            marker.captionText = "\(count)"
-        } else {
-            marker.captionText = ""
-        }
-
-        marker.anchor = CGPoint(x: 0.5, y: 1.0)
-    }
-
-    @objc private func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
-        // 리스트뷰가 현재 보이는 상태(중간 또는 상단)일 때만 내림
-        if modalState == .middle || modalState == .top {
-            animateToState(.bottom)
-        }
-    }
-
-    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
-        let translation = gesture.translation(in: view)
-        let velocity = gesture.velocity(in: view)
-
-        switch gesture.state {
-        case .changed:
-            if let constraint = listViewTopConstraint {
-                let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
-                let newOffset = currentOffset + translation.y
-
-                // 오프셋 제한 범위 설정
-                let minOffset: CGFloat = filterContainerBottomY // 필터 컨테이너 바닥 제한
-                let maxOffset: CGFloat = view.frame.height // 최하단 제한
-                let clampedOffset = min(max(newOffset, minOffset), maxOffset)
-
-                constraint.update(offset: clampedOffset)
-                gesture.setTranslation(.zero, in: view)
-
-                if modalState == .top {
-                    adjustMapViewAlpha(for: clampedOffset, minOffset: minOffset, maxOffset: maxOffset)
-                }
-            }
-
-        case .ended:
-            if let constraint = listViewTopConstraint {
-                let currentOffset = constraint.layoutConstraints.first?.constant ?? 0
-                let middleY = view.frame.height * 0.3 // 중간 지점 기준 높이
-                let targetState: ModalState
-
-                if velocity.y > 500 {
-                    targetState = .bottom
-                } else if velocity.y < -500 {
-                    targetState = .top
-                } else if currentOffset < middleY * 0.7 {
-                    targetState = .top
-                } else if currentOffset < view.frame.height * 0.7 {
-                    targetState = .middle
-                } else {
-                    targetState = .bottom
-                }
-
-                animateToState(targetState)
-            }
-
-        default:
-            break
-        }
-    }
-
-    private func adjustMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
-        let middleOffset = view.frame.height * 0.3
-
-        if offset <= minOffset {
-            mainView.mapView.alpha = 0 // 탑에서는 완전히 숨김
-        } else if offset >= maxOffset {
-            mainView.mapView.alpha = 1 // 바텀에서는 완전히 보임
-        } else if offset <= middleOffset {
-            let progress = (offset - minOffset) / (middleOffset - minOffset)
-            mainView.mapView.alpha = progress
-        } else {
-            mainView.mapView.alpha = 1
-        }
-    }
-
-    private func updateMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat) {
-        let progress = (maxOffset - offset) / (maxOffset - minOffset)
-        mainView.mapView.alpha = max(0, min(progress, 1))
-    }
-
-    private func animateToState(_ state: ModalState) {
-        guard modalState != state else { return }
-        self.view.layoutIfNeeded()
-
-        UIView.animate(withDuration: 0.3, animations: {
-            switch state {
-            case .top:
-                let filterChipsFrame = self.mainView.filterChips.convert(
-                    self.mainView.filterChips.bounds,
-                    to: self.view
-                )
-                self.mainView.mapView.alpha = 0 // 탑 상태에서는 숨김
-                self.storeListViewController.setGrabberHandleVisible(false)
-                self.listViewTopConstraint?.update(offset: filterChipsFrame.maxY)
-                self.mainView.searchInput.setBackgroundColor(.g50)
-
-            case .middle:
-                self.storeListViewController.setGrabberHandleVisible(true)
-                let offset = max(self.view.frame.height * 0.3, self.filterContainerBottomY)
-                self.listViewTopConstraint?.update(offset: offset)
-                self.storeListViewController.mainView.layer.cornerRadius = 20
-                self.storeListViewController.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                self.mainView.mapView.alpha = 1
-                self.mainView.mapView.isHidden = false
-                self.mainView.searchInput.setBackgroundColor(.white)
-
-                if let reactor = self.reactor {
-                    reactor.action.onNext(.fetchAllStores)
-
-                    reactor.state
-                        .map { $0.viewportStores }
-                        .distinctUntilChanged()
-                        .filter { !$0.isEmpty }
-                        .take(1)
-                        .observe(on: MainScheduler.instance)
-                        .subscribe(onNext: { [weak self] stores in
-                            guard let self = self else { return }
-                            self.fetchStoreDetails(for: stores)
-
-                            Logger.log(
-                                message: "✅ 전체 스토어 목록으로 리스트뷰 업데이트: \(stores.count)개",
-                                category: .debug
-                            )
-                        })
-                        .disposed(by: self.disposeBag)
-                }
-
-            case .bottom:
-                self.storeListViewController.setGrabberHandleVisible(true)
-                self.listViewTopConstraint?.update(offset: self.view.frame.height)
-                self.mainView.mapView.alpha = 1
-                self.mainView.mapView.isHidden = false
-                self.mainView.searchInput.setBackgroundColor(.white)
-            }
-
-            self.view.layoutIfNeeded()
-        }) { _ in
-            self.modalState = state
-        }
-    }
-
     func imageFromView(_ view: UIView) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
         defer { UIGraphicsEndImageContext() }
@@ -720,145 +530,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         return imageFromView(markerView)
     }
         // MARK: - Clustering
-    private func updateMapWithClustering() {
-        let currentZoom = mainView.mapView.zoomLevel
-        let level = MapZoomLevel.getLevel(from: Float(currentZoom))
-
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-
-        switch level {
-        case .detailed:
-            // 상세 레벨에서는 개별 마커를 사용합니다.
-            let newStoreIds = Set(currentStores.map { $0.id })
-            let groupedDict = groupStoresByExactLocation(currentStores)
-
-            // 클러스터 마커 제거
-            clusterMarkerDictionary.values.forEach { $0.mapView = nil }
-            clusterMarkerDictionary.removeAll()
-
-            // 그룹별로 개별 마커 생성/업데이트
-            for (coordinate, storeGroup) in groupedDict {
-                if storeGroup.count == 1, let store = storeGroup.first {
-                    if let existingMarker = individualMarkerDictionary[store.id] {
-                        if existingMarker.position.lat != store.latitude ||
-                            existingMarker.position.lng != store.longitude {
-                            existingMarker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                        }
-                        let isSelected = (existingMarker == currentMarker)
-                        updateMarkerStyle(marker: existingMarker, selected: isSelected, isCluster: false)
-                    } else {
-                        let marker = NMFMarker()
-                        marker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                        marker.userInfo = ["storeData": store]
-                        marker.anchor = CGPoint(x: 0.5, y: 1.0)
-                        updateMarkerStyle(marker: marker, selected: false, isCluster: false)
-
-                        // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (_) -> Bool in
-                            guard let self = self else { return false }
-                            return self.handleSingleStoreTap(marker, store: store)
-                        }
-
-                        marker.mapView = mainView.mapView
-                        individualMarkerDictionary[store.id] = marker
-                    }
-                } else {
-                    // 여러 스토어가 동일 위치에 있으면 단일 마커로 표시하면서 count 갱신
-                    guard let firstStore = storeGroup.first else { continue }
-                    let markerKey = firstStore.id
-                    if let existingMarker = individualMarkerDictionary[markerKey] {
-                        existingMarker.userInfo = ["storeData": storeGroup]
-                        let isSelected = (existingMarker == currentMarker)
-                        updateMarkerStyle(marker: existingMarker, selected: isSelected, isCluster: false, count: storeGroup.count)
-                    } else {
-                        let marker = NMFMarker()
-                        marker.position = NMGLatLng(lat: firstStore.latitude, lng: firstStore.longitude)
-                        marker.userInfo = ["storeData": storeGroup]
-                        marker.anchor = CGPoint(x: 0.5, y: 1.0)
-                        updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeGroup.count)
-
-                        // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (_) -> Bool in
-                            guard let self = self else { return false }
-                            return self.handleMicroClusterTap(marker, storeArray: storeGroup)
-                        }
-
-                        marker.mapView = mainView.mapView
-                        individualMarkerDictionary[markerKey] = marker
-                    }
-                }
-            }
-
-            // 기존에 보이지 않는 개별 마커 제거
-            individualMarkerDictionary = individualMarkerDictionary.filter { id, marker in
-                if newStoreIds.contains(id) {
-                    return true
-                } else {
-                    marker.mapView = nil
-                    return false
-                }
-            }
-
-        case .district, .city, .country:
-            // 개별 마커 숨기기
-            individualMarkerDictionary.values.forEach { $0.mapView = nil }
-            individualMarkerDictionary.removeAll()
-
-            // 클러스터 생성
-            let clusters = clusteringManager.clusterStores(currentStores, at: Float(currentZoom))
-            let activeClusterKeys = Set(clusters.map { $0.cluster.name })
-
-            for cluster in clusters {
-                let clusterKey = cluster.cluster.name
-                var marker: NMFMarker
-                if let existingMarker = clusterMarkerDictionary[clusterKey] {
-                    marker = existingMarker
-                    if marker.position.lat != cluster.cluster.coordinate.lat ||
-                        marker.position.lng != cluster.cluster.coordinate.lng {
-                        marker.position = NMGLatLng(lat: cluster.cluster.coordinate.lat, lng: cluster.cluster.coordinate.lng)
-                    }
-                } else {
-                    marker = NMFMarker()
-                    clusterMarkerDictionary[clusterKey] = marker
-                }
-
-                marker.position = NMGLatLng(lat: cluster.cluster.coordinate.lat, lng: cluster.cluster.coordinate.lng)
-                marker.userInfo = ["clusterData": cluster]
-
-                if let clusterImage = createClusterMarkerImage(regionName: cluster.cluster.name, count: cluster.storeCount) {
-                    marker.iconImage = NMFOverlayImage(image: clusterImage)
-                } else {
-                    marker.iconImage = NMFOverlayImage(name: "cluster_marker")
-                }
-
-                marker.touchHandler = { [weak self] (overlay) -> Bool in
-                    guard let self = self,
-                          let tappedMarker = overlay as? NMFMarker,
-                          let clusterData = tappedMarker.userInfo["clusterData"] as? ClusterMarkerData else {
-                        return false
-                    }
-
-                    return self.handleRegionalClusterTap(tappedMarker, clusterData: clusterData)
-                }
-
-                marker.captionText = ""
-                marker.anchor = CGPoint(x: 0.5, y: 0.5)
-                marker.mapView = mainView.mapView
-            }
-
-            // 활성 클러스터가 아닌 마커 제거
-            for (key, marker) in clusterMarkerDictionary {
-                if !activeClusterKeys.contains(key) {
-                    marker.mapView = nil
-                    clusterMarkerDictionary.removeValue(forKey: key)
-                }
-            }
-        }
-
-        CATransaction.commit()
-    }
-
+   
         private func clearAllMarkers() {
             individualMarkerDictionary.values.forEach { $0.mapView = nil }
             individualMarkerDictionary.removeAll()
@@ -870,7 +542,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             markerDictionary.removeAll()
         }
 
-        private func groupStoresByExactLocation(_ stores: [MapPopUpStore]) -> [CoordinateKey: [MapPopUpStore]] {
+        func groupStoresByExactLocation(_ stores: [MapPopUpStore]) -> [CoordinateKey: [MapPopUpStore]] {
             var dict = [CoordinateKey: [MapPopUpStore]]()
             for store in stores {
                 let key = CoordinateKey(latitude: store.latitude, longitude: store.longitude)
@@ -1038,15 +710,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             )
         }
 
-        // 현재 보이는 지도 영역의 경계를 가져오는 함수
-        private func getVisibleBounds() -> (northEast: NMGLatLng, southWest: NMGLatLng) {
-            let mapBounds = mainView.mapView.contentBounds
-
-            let northEast = NMGLatLng(lat: mapBounds.northEastLat, lng: mapBounds.northEastLng)
-            let southWest = NMGLatLng(lat: mapBounds.southWestLat, lng: mapBounds.southWestLng)
-
-            return (northEast: northEast, southWest: southWest)
-        }
 
         // MARK: - Location
         private func checkLocationAuthorization() {
@@ -1067,22 +730,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             }
         }
 
-        private func updateTooltipPosition() {
-            guard let marker = currentMarker, let tooltip = currentTooltipView else { return }
-
-            let markerPoint = mainView.mapView.projection.point(from: marker.position)
-            var markerCenter = markerPoint
-
-            markerCenter.y = markerPoint.y - 20
-
-            let offsetX: CGFloat = -10
-            let offsetY: CGFloat = -10
-
-            tooltip.frame.origin = CGPoint(
-                x: markerCenter.x + offsetX,
-                y: markerCenter.y - tooltip.frame.height - offsetY
-            )
-        }
 
         private func resetSelectedMarker() {
             if let currentMarker = currentMarker {
@@ -1102,35 +749,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             self.currentMarker = nil
         }
 
-    private func updateMarkersForCluster(stores: [MapPopUpStore]) {
-        for marker in individualMarkerDictionary.values {
-            marker.mapView = nil
-        }
-        individualMarkerDictionary.removeAll()
-
-        for marker in clusterMarkerDictionary.values {
-            marker.mapView = nil
-        }
-        clusterMarkerDictionary.removeAll()
-
-        for store in stores {
-            let marker = NMFMarker()
-            marker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
-            marker.userInfo = ["storeData": store]
-            marker.anchor = CGPoint(x: 0.5, y: 1.0)
-
-            updateMarkerStyle(marker: marker, selected: false, isCluster: false)
-
-            marker.touchHandler = { [weak self] (_) -> Bool in
-                guard let self = self else { return false }
-
-                return self.handleSingleStoreTap(marker, store: store)
-            }
-
-            marker.mapView = mainView.mapView
-            individualMarkerDictionary[store.id] = marker
-        }
-    }
 
         private func findMarkerForStore(for store: MapPopUpStore) -> NMFMarker? {
             for marker in individualMarkerDictionary.values {
@@ -1152,7 +770,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             return nil
         }
 
-        private func fetchStoreDetails(for stores: [MapPopUpStore]) {
+        func fetchStoreDetails(for stores: [MapPopUpStore]) {
             guard !stores.isEmpty else { return }
 
             // 먼저 기본 정보로 StoreItem 생성하여 순서 유지
@@ -1349,168 +967,6 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             }
         }
 
-        // MARK: - Marker Handling
-        func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool {
-            isMovingToMarker = true
-
-            if let previousMarker = currentMarker {
-                updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
-            }
-
-            // 새 마커 선택 상태로 설정
-            updateMarkerStyle(marker: marker, selected: true, isCluster: false)
-            currentMarker = marker
-
-            // 캐러셀에 표시할 스토어 확인
-            if currentCarouselStores.isEmpty || !currentCarouselStores.contains(where: { $0.id == store.id }) {
-                // 현재 뷰포트의 모든 스토어를 가져오기
-                let bounds = getVisibleBounds()
-
-                let visibleStores = currentStores.filter { store in
-                    let storePosition = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                    return NMGLatLngBounds(southWest: bounds.southWest, northEast: bounds.northEast).contains(storePosition)
-                }
-
-                if !visibleStores.isEmpty {
-                    // 뷰포트의 모든 스토어를 캐러셀에 표시
-                    currentCarouselStores = visibleStores
-                    carouselView.updateCards(visibleStores)
-
-                    // 선택한 스토어의 인덱스를 찾아 스크롤
-                    if let index = visibleStores.firstIndex(where: { $0.id == store.id }) {
-                        carouselView.scrollToCard(index: index)
-                    }
-                } else {
-                    // 뷰포트에 다른 스토어가 없는 경우, 선택한 스토어만 표시
-                    currentCarouselStores = [store]
-                    carouselView.updateCards([store])
-                }
-            } else {
-                // 캐러셀에 이미 해당 스토어가 있는 경우, 해당 위치로 스크롤
-                if let index = currentCarouselStores.firstIndex(where: { $0.id == store.id }) {
-                    carouselView.scrollToCard(index: index)
-                }
-            }
-
-            carouselView.isHidden = false
-            mainView.setStoreCardHidden(false, animated: true)
-
-            // 툴팁 처리
-            if let storeArray = marker.userInfo["storeData"] as? [MapPopUpStore], storeArray.count > 1 {
-                // 마이크로 클러스터인 경우 툴팁 표시
-                configureTooltip(for: marker, stores: storeArray)
-                // 해당 스토어의 툴팁 인덱스 선택
-                if let index = storeArray.firstIndex(where: { $0.id == store.id }) {
-                    (currentTooltipView as? MarkerTooltipView)?.selectStore(at: index)
-                }
-            } else {
-                // 단일 마커인 경우 툴팁 제거
-                currentTooltipView?.removeFromSuperview()
-                currentTooltipView = nil
-            }
-
-            isMovingToMarker = false
-            return true
-        }
-
-        // 리전 클러스터 탭 처리
-    func handleRegionalClusterTap(_ marker: NMFMarker, clusterData: ClusterMarkerData) -> Bool {
-
-        let currentZoom = mainView.mapView.zoomLevel
-        let currentLevel = MapZoomLevel.getLevel(from: Float(currentZoom))
-
-        switch currentLevel {
-        case .city:  // 시 단위 클러스터
-            let districtZoomLevel: Double = 10.0
-            let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: districtZoomLevel)
-            cameraUpdate.animation = .easeIn
-            cameraUpdate.animationDuration = 0.3
-            mainView.mapView.moveCamera(cameraUpdate)
-
-        case .district:  // 구 단위 클러스터
-            let detailedZoomLevel: Double = 12.0
-            let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: detailedZoomLevel)
-            cameraUpdate.animation = .easeIn
-            cameraUpdate.animationDuration = 0.3
-            mainView.mapView.moveCamera(cameraUpdate)
-        default:
-            print("기타 레벨 클러스터 처리")
-
-        }
-
-        // 클러스터에 포함된 스토어들만 표시하도록 마커 업데이트
-        updateMarkersForCluster(stores: clusterData.cluster.stores)
-
-        // 캐러셀 업데이트
-        carouselView.updateCards(clusterData.cluster.stores)
-        carouselView.isHidden = false
-        self.currentCarouselStores = clusterData.cluster.stores
-
-        return true
-    }
-
-        // 마이크로 클러스터 탭 처리
-        func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
-            // 이미 선택된 마커를 다시 탭할 때
-            if currentMarker == marker {
-                // 툴팁과 캐러셀만 숨기고, 마커의 선택 상태는 유지
-                currentTooltipView?.removeFromSuperview()
-                currentTooltipView = nil
-                currentTooltipStores = []
-                currentTooltipCoordinate = nil
-
-                carouselView.isHidden = true
-                carouselView.updateCards([])
-                currentCarouselStores = []
-
-                // 마커 상태 업데이트
-                updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeArray.count)
-
-                currentMarker = nil
-                isMovingToMarker = false
-                return false
-            }
-
-            isMovingToMarker = true
-
-            currentTooltipView?.removeFromSuperview()
-            currentTooltipView = nil
-
-            if let previousMarker = currentMarker {
-                updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
-            }
-
-            updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: storeArray.count)
-            currentMarker = marker
-
-            currentCarouselStores = storeArray
-            carouselView.updateCards(storeArray)
-            carouselView.isHidden = false
-            carouselView.scrollToCard(index: 0)
-
-            mainView.setStoreCardHidden(false, animated: true)
-
-            // 지도 이동
-            let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position)
-            cameraUpdate.animation = .easeIn
-            cameraUpdate.animationDuration = 0.3
-            mainView.mapView.moveCamera(cameraUpdate)
-
-            // 툴팁 생성
-            if storeArray.count > 1 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                    guard let self = self else { return }
-                    self.configureTooltip(for: marker, stores: storeArray)
-                    self.isMovingToMarker = false
-                }
-            }
-
-            return true
-        }
-
-        private func showNoMarkersToast() {
-            Logger.log(message: "현재 지도 영역에 표시할 마커가 없습니다", category: .debug)
-        }
     }
 
     // MARK: - CLLocationManagerDelegate
