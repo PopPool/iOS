@@ -172,10 +172,10 @@ final class MapGuideViewController: UIViewController, View {
                 guard let strongSelf = self else { return }
 
                 let providerInstance = ProviderImpl()
-                let repositoryInstance = MapRepositoryImpl(provider: providerInstance)
-                let useCaseInstance = MapUseCaseImpl(repository: repositoryInstance)
+                @Dependency var mapUseCase: MapUseCase
+
                 let directionRepositoryInstance = MapDirectionRepositoryImpl(provider: providerInstance)
-                let mapReactorInstance = MapReactor(useCase: useCaseInstance, directionRepository: directionRepositoryInstance)
+                let mapReactorInstance = MapReactor(useCase: mapUseCase, directionRepository: directionRepositoryInstance)
 
                 if let selectedStore = strongSelf.currentCarouselStoreList.first {
                     mapReactorInstance.action.onNext(.didSelectItem(selectedStore))

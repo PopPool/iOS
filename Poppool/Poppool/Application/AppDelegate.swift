@@ -33,11 +33,15 @@ extension AppDelegate {
         DIContainer.register(KeyChainService.self) { return KeyChainService() }
 
         // MARK: Resolve service
+        @Dependency var provider: Provider
 
         // MARK: Register repository
+        DIContainer.register(MapRepository.self) { return MapRepositoryImpl(provider: provider) }
 
         // MARK: Resolve repository
+        @Dependency var mapRepository: MapRepository
 
         // MARK: Register UseCase
+        DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
     }
 }

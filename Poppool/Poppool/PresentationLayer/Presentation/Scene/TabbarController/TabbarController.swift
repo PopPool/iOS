@@ -196,7 +196,7 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
         let provider = ProviderImpl()
 
         let mapController = MapViewController()
-        let mapUseCase = MapUseCaseImpl(repository: MapRepositoryImpl(provider: provider))
+        @Dependency var mapUseCase: MapUseCase
         let directionRepository = MapDirectionRepositoryImpl(provider: provider)
         mapController.reactor = MapReactor(useCase: mapUseCase, directionRepository: directionRepository)
 
