@@ -171,11 +171,8 @@ final class MapGuideViewController: UIViewController, View {
             .subscribe(onNext: { [weak self] in
                 guard let strongSelf = self else { return }
 
-                let providerInstance = ProviderImpl()
-                @Dependency var mapUseCase: MapUseCase
-
                 let mapReactorInstance = MapReactor(
-                    mapUseCase: mapUseCase,
+                    mapUseCase: DIContainer.resolve(MapUseCase.self),
                     mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
                 )
 

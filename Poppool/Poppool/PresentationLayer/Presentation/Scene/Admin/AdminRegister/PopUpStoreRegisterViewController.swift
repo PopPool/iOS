@@ -11,7 +11,6 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
     // MARK: - Properties
     private var pickerViewController: PHPickerViewController?
-    private let adminUseCase: AdminUseCase
     private let nickname: String
     var completionHandler: (() -> Void)?
     var disposeBag = DisposeBag()
@@ -21,18 +20,16 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     // MARK: - Initializer
     init(
         nickname: String,
-        adminUseCase: AdminUseCase,
         editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil
     ) {
         self.nickname = nickname
-        self.adminUseCase = adminUseCase
         self.mainView = PopUpRegisterView()
 
         super.init()
 
         let presignedService = PreSignedService()
         let reactor = PopUpStoreRegisterReactor(
-            adminUseCase: adminUseCase,
+            adminUseCase: DIContainer.resolve(AdminUseCase.self),
             presignedService: presignedService,
             editingStore: editingStore
         )

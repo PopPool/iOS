@@ -193,14 +193,11 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
     func addSomeTabItems() {
-        let provider = ProviderImpl()
-
         let mapController = MapViewController()
-        @Dependency var mapUseCase: MapUseCase
-        @Dependency var mapDirectionRepository: MapDirectionRepository
+
         mapController.reactor = MapReactor(
-            mapUseCase: mapUseCase,
-            mapDirectionRepository: mapDirectionRepository
+            mapUseCase: DIContainer.resolve(MapUseCase.self),
+            mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
         )
 
         let homeController = HomeController()

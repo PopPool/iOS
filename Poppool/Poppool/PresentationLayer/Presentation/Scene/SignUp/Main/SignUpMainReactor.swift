@@ -60,7 +60,7 @@ final class SignUpMainReactor: Reactor {
 
     private var authrizationCode: String?
 
-    private var signUpAPIUseCase: SignUpAPIUseCase
+    private let signUpAPIUseCase: SignUpAPIUseCase
     private let userDefaultService = UserDefaultService()
     var isFirstResponderCase: Bool
 
