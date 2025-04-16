@@ -1,10 +1,3 @@
-//
-//  SplashController.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import UIKit
 
 import ReactorKit
@@ -18,7 +11,8 @@ final class SplashController: BaseViewController {
     var disposeBag = DisposeBag()
 
     private var mainView = SplashView()
-    private let authAPIUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
+    // //FIXME: Reactor 태워서 UseCase 처리하도록 수정
+    @Dependency private var authAPIUseCase: AuthAPIUseCase
     @Dependency private var keyChainService: KeyChainService
 
     private var rootViewController: UIViewController?
@@ -65,7 +59,9 @@ private extension SplashController {
             }, onError: { [weak self] _ in
                 guard let self = self else { return }
                 let loginViewController = LoginController()
-                loginViewController.reactor = LoginReactor()
+                loginViewController.reactor = LoginReactor(
+                    authAPIUseCase: authAPIUseCase
+                )
                 let loginNavigationController = UINavigationController(rootViewController: loginViewController)
                 rootViewController = loginNavigationController
             })

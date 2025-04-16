@@ -40,12 +40,15 @@ final class LoginReactor: Reactor {
 
     private let kakaoLoginService = KakaoLoginService()
     private var appleLoginService = AppleLoginService()
-    private let authApiUseCase = AuthAPIUseCaseImpl(repository: AuthAPIRepositoryImpl(provider: ProviderImpl()))
+    private let authAPIUseCase: AuthAPIUseCase
     @Dependency private var keyChainService: KeyChainService
     let userDefaultService = UserDefaultService()
 
     // MARK: - init
-    init() {
+    init(
+        authAPIUseCase: AuthAPIUseCase
+    ) {
+        self.authAPIUseCase = authAPIUseCase
         self.initialState = State()
     }
 
@@ -93,7 +96,7 @@ final class LoginReactor: Reactor {
         return kakaoLoginService.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
-                return owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "kakao")
+                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in
@@ -121,7 +124,7 @@ final class LoginReactor: Reactor {
             .withUnretained(self)
             .flatMap { owner, response in
                 owner.authrizationCode = response.authorizationCode
-                return owner.authApiUseCase.postTryLogin(userCredential: response, socialType: "apple")
+                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
             .map { [weak controller] (owner, loginResponse) in

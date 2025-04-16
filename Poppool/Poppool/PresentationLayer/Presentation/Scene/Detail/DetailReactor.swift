@@ -161,7 +161,9 @@ final class DetailReactor: Reactor {
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
                 let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor()
+                loginController.reactor = SubLoginReactor(
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
@@ -193,7 +195,9 @@ final class DetailReactor: Reactor {
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
                 let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor()
+                loginController.reactor = SubLoginReactor(
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
@@ -227,7 +231,9 @@ final class DetailReactor: Reactor {
             controller.navigationController?.popViewController(animated: true)
         case .moveToLoginScene(let controller):
             let loginController = SubLoginController()
-            loginController.reactor = SubLoginReactor()
+            loginController.reactor = SubLoginReactor(
+                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+            )
             let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
