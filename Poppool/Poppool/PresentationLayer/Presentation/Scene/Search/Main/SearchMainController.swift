@@ -25,13 +25,13 @@ final class SearchMainController: BaseTabmanController, View {
 
     var beforeController: SearchController = {
         let controller = SearchController()
-        controller.reactor = SearchReactor()
+        controller.reactor = SearchReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
         return controller
     }()
 
     var afterController: SearchResultController = {
         let controller = SearchResultController()
-        controller.reactor = SearchResultReactor()
+        controller.reactor = SearchResultReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
         return controller
     }()
 

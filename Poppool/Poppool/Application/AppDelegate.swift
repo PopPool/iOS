@@ -38,13 +38,16 @@ extension AppDelegate {
         // MARK: Register repository
         DIContainer.register(MapRepository.self) { return MapRepositoryImpl(provider: provider) }
         DIContainer.register(AdminRepository.self) { return AdminRepositoryImpl(provider: provider) }
+        DIContainer.register(UserAPIRepository.self) { return UserAPIRepositoryImpl(provider: provider) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
         @Dependency var adminRepository: AdminRepository
+        @Dependency var userAPIRepository: UserAPIRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
         DIContainer.register(AdminUseCase.self) { return AdminUseCaseImpl(repository: adminRepository) }
+        DIContainer.register(UserAPIUseCase.self) { return UserAPIUseCaseImpl(repository: userAPIRepository) }
     }
 }

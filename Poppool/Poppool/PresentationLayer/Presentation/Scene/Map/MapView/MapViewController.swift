@@ -41,8 +41,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     var currentMarker: NMFMarker?
-    private let storeListReactor = StoreListReactor()
-    private let storeListViewController = StoreListViewController(reactor: StoreListReactor())
+    private let storeListReactor = StoreListReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+    private let storeListViewController = StoreListViewController(
+        reactor: StoreListReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+    )
     private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
@@ -115,7 +117,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         carouselView.onCardTapped = { [weak self] store in
             let detailController = DetailController()
-            detailController.reactor = DetailReactor(popUpID: Int64(store.id))
+            detailController.reactor = DetailReactor(
+                popUpID: Int64(store.id),
+                userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self)
+            )
 
             self?.navigationController?.isNavigationBarHidden = false
             self?.navigationController?.tabBarController?.tabBar.isHidden = false

@@ -34,7 +34,7 @@ final class MyPageNoticeReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -54,7 +54,8 @@ final class MyPageNoticeReactor: Reactor {
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -85,7 +86,10 @@ final class MyPageNoticeReactor: Reactor {
             newState.sections = getSection()
         case .moveToDetailScene(let controller, let row):
             let nextController = MyPageNoticeDetailController()
-            nextController.reactor = MyPageNoticeDetailReactor(noticeID: listSection.inputDataList[row].noticeID)
+            nextController.reactor = MyPageNoticeDetailReactor(
+                noticeID: listSection.inputDataList[row].noticeID,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)

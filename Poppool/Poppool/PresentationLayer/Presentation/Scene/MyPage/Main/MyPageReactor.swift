@@ -45,7 +45,7 @@ final class MyPageReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -103,7 +103,8 @@ final class MyPageReactor: Reactor {
     var isAdmin: Bool = false
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -180,7 +181,7 @@ final class MyPageReactor: Reactor {
 
         case .moveToProfileEditScene(let controller):
             let nextController = ProfileEditController()
-            nextController.reactor = ProfileEditReactor()
+            nextController.reactor = ProfileEditReactor(userAPIUseCase: userAPIUseCase)
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .logout:
@@ -207,7 +208,7 @@ final class MyPageReactor: Reactor {
                         case .apply:
                             nextController.dismiss(animated: true) {
                                 let reasonController = WithdrawlReasonController()
-                                reasonController.reactor = WithdrawlReasonReactor()
+                                reasonController.reactor = WithdrawlReasonReactor(userAPIUseCase: self.userAPIUseCase)
                                 controller?.navigationController?.pushViewController(reasonController, animated: true)
                             }
                         case .cancel:
@@ -220,12 +221,12 @@ final class MyPageReactor: Reactor {
 
             case "차단한 사용자 관리":
                 let nextController = BlockUserManageController()
-                nextController.reactor = BlockUserManageReactor()
+                nextController.reactor = BlockUserManageReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "공지사항":
                 let nextController = MyPageNoticeController()
-                nextController.reactor = MyPageNoticeReactor()
+                nextController.reactor = MyPageNoticeReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "고객문의":
@@ -235,12 +236,12 @@ final class MyPageReactor: Reactor {
 
             case "찜한 팝업":
                 let nextController = MyPageBookmarkController()
-                nextController.reactor = MyPageBookmarkReactor()
+                nextController.reactor = MyPageBookmarkReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "최근 본 팝업":
                 let nextController = MyPageRecentController()
-                nextController.reactor = MyPageRecentReactor()
+                nextController.reactor = MyPageRecentReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "약관":
@@ -254,7 +255,10 @@ final class MyPageReactor: Reactor {
         case .moveToPopUpDetailScene(let controller, let row):
             let nextController = DetailController()
             let popUpID = commentSection.inputDataList[row].popUpID
-            nextController.reactor = DetailReactor(popUpID: popUpID)
+            nextController.reactor = DetailReactor(
+                popUpID: popUpID,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .moveToLoginScene(let controller):
@@ -266,7 +270,7 @@ final class MyPageReactor: Reactor {
 
         case .moveToMyCommentScene(let controller):
             let nextController = MyCommentController()
-            nextController.reactor = MyCommentReactor()
+            nextController.reactor = MyCommentReactor(userAPIUseCase: userAPIUseCase)
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .moveToAdminScene(let controller):

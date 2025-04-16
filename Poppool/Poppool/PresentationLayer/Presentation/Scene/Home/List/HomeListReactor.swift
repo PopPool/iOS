@@ -45,7 +45,7 @@ final class HomeListReactor: Reactor {
 
     private let homeAPIUseCase = HomeAPIUseCaseImpl(repository: HomeAPIRepositoryImpl(provider: ProviderImpl()))
     private let userDefaultService = UserDefaultService()
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     private var isLoading: Bool = false
     private var totalPage: Int32 = 0
@@ -70,9 +70,13 @@ final class HomeListReactor: Reactor {
     private var cardSections = HomeCardGridSection(inputDataList: [])
 
     // MARK: - init
-    init(popUpType: HomePopUpType) {
+    init(
+        popUpType: HomePopUpType,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.initialState = State(popUpType: popUpType)
         self.popUpType = popUpType
+        self.userAPIUseCase = userAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -144,7 +148,10 @@ final class HomeListReactor: Reactor {
             isLoading = false
         case .moveToDetailScene(let controller, let row):
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: cardSections.inputDataList[row].id)
+            nextController.reactor = DetailReactor(
+                popUpID: cardSections.inputDataList[row].id,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState

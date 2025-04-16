@@ -59,7 +59,7 @@ final class DetailReactor: Reactor {
 
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -94,8 +94,12 @@ final class DetailReactor: Reactor {
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private var spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
     // MARK: - init
-    init(popUpID: Int64) {
+    init(
+        popUpID: Int64,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.popUpID = popUpID
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -171,7 +175,11 @@ final class DetailReactor: Reactor {
         case .moveToCommentTotalScene(let controller):
             if isLogin {
                 let nextController = CommentListController()
-                nextController.reactor = CommentListReactor(popUpID: popUpID, popUpName: popUpName)
+                nextController.reactor = CommentListReactor(
+                    popUpID: popUpID,
+                    popUpName: popUpName,
+                    userAPIUseCase: userAPIUseCase
+                )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
                 let loginController = SubLoginController()
@@ -190,12 +198,18 @@ final class DetailReactor: Reactor {
         case .showCommentDetailScene(let controller, let indexPath):
             let comment = commentSection.inputDataList[indexPath.row]
             let nextController = CommentDetailController()
-            nextController.reactor = CommentDetailReactor(comment: comment)
+            nextController.reactor = CommentDetailReactor(
+                comment: comment,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.presentPanModal(nextController)
         case .moveToDetailScene(let controller, let indexPath):
             let id = similarSection.inputDataList[indexPath.row].id
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: id)
+            nextController.reactor = DetailReactor(
+                popUpID: id,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
@@ -436,7 +450,10 @@ extension DetailReactor {
                 case .normal:
                     owner.dismiss(animated: true) { [weak controller] in
                         let otherUserCommentController = OtherUserCommentController()
-                        otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
+                        otherUserCommentController.reactor = OtherUserCommentReactor(
+                            commenterID: comment.creator,
+                            userAPIUseCase: self.userAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(otherUserCommentController, animated: true)
                     }
                 case .block:

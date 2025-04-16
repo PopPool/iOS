@@ -50,7 +50,7 @@ final class CommentListReactor: Reactor {
 
     private var imageService = PreSignedService()
     private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -73,10 +73,15 @@ final class CommentListReactor: Reactor {
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     // MARK: - init
-    init(popUpID: Int64, popUpName: String?) {
+    init(
+        popUpID: Int64,
+        popUpName: String?,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
+        self.userAPIUseCase = userAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -188,7 +193,10 @@ final class CommentListReactor: Reactor {
         case .presentDetailScene(let controller, let row):
             let comment = commentSection.inputDataList[row]
             let nextController = CommentDetailController()
-            nextController.reactor = CommentDetailReactor(comment: comment)
+            nextController.reactor = CommentDetailReactor(
+                comment: comment,
+                userAPIUseCase: userAPIUseCase
+            )
             nextController.mainView.likeButton.rx.tap
                 .map { Action.detailSceneLikeButtonTapped(row: row)}
                 .bind(to: action)
@@ -233,7 +241,10 @@ final class CommentListReactor: Reactor {
                 case .normal:
                     owner.dismiss(animated: true) { [weak controller] in
                         let otherUserCommentController = OtherUserCommentController()
-                        otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
+                        otherUserCommentController.reactor = OtherUserCommentReactor(
+                            commenterID: comment.creator,
+                            userAPIUseCase: self.userAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(otherUserCommentController, animated: true)
                     }
                 case .block:

@@ -64,12 +64,13 @@ final class ProfileEditReactor: Reactor {
     var currentIntro: String?
     var introIsActive: Bool = false
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
     private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
     private let imageService = PreSignedService()
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -133,11 +134,18 @@ final class ProfileEditReactor: Reactor {
             newState.introState = checkIntroState(text: currentIntro, isActive: introIsActive)
         case .moveToCategoryEditScene(let controller):
             let nextController = CategoryEditModalController()
-            nextController.reactor = CategoryEditModalReactor(selectedID: newState.originProfileData?.interestCategoryList.map { $0.categoryId } ?? [])
+            nextController.reactor = CategoryEditModalReactor(
+                selectedID: newState.originProfileData?.interestCategoryList.map { $0.categoryId } ?? [],
+                userAPIUseCase: userAPIUseCase
+            )
             controller.presentPanModal(nextController)
         case .moveToInfoEditScene(let controller):
             let nextController = InfoEditModalController()
-            nextController.reactor = InfoEditModalReactor(age: originProfileData?.age ?? 0, gender: originProfileData?.gender)
+            nextController.reactor = InfoEditModalReactor(
+                age: originProfileData?.age ?? 0,
+                gender: originProfileData?.gender,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.presentPanModal(nextController)
         case .isValidateNickName(let isValidate):
             if isValidate {

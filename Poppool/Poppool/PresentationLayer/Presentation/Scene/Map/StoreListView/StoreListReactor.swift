@@ -5,7 +5,7 @@ import RxSwift
 
 final class StoreListReactor: Reactor {
     // MARK: - Reactor
-    private let userAPIUseCase: UserAPIUseCaseImpl
+    private let userAPIUseCase: UserAPIUseCase
     private let popUpAPIUseCase: PopUpAPIUseCaseImpl
     private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
@@ -48,7 +48,7 @@ final class StoreListReactor: Reactor {
     var initialState: State
 
     init(
-        userAPIUseCase: UserAPIUseCaseImpl = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl())),
+        userAPIUseCase: UserAPIUseCase,
         popUpAPIUseCase: PopUpAPIUseCaseImpl = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
     ) {
         self.userAPIUseCase = userAPIUseCase

@@ -53,12 +53,16 @@ final class CategoryEditModalReactor: Reactor {
     }()
 
     private var signUpUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
-    private var userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private var userAPIUseCase: UserAPIUseCase
     private var tagSection = TagSection(inputDataList: [])
 
     // MARK: - init
-    init(selectedID: [Int64]) {
+    init(
+        selectedID: [Int64],
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.originSelectedID = selectedID
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State(originSelectedID: selectedID)
     }
 
