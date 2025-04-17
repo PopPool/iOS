@@ -3,8 +3,8 @@ import Foundation
 import RxSwift
 
 protocol HomeAPIRepository {
-    func fetchHome(request: SortedRequestDTO) -> Observable<GetHomeInfoResponse>
-    func fetchCustomPopUp(request: SortedRequestDTO) -> Observable<GetHomeInfoResponse>
-    func fetchNewPopUp(request: SortedRequestDTO) -> Observable<GetHomeInfoResponse>
-    func fetchPopularPopUp(request: SortedRequestDTO) -> Observable<GetHomeInfoResponse>
+    func fetchHome(page: Int32?, size: Int32?, sort: String?) -> Observable<GetHomeInfoResponse>
+    func fetchCustomPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetHomeInfoResponse>
+    func fetchNewPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetHomeInfoResponse>
+    func fetchPopularPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetHomeInfoResponse>
 }

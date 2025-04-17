@@ -15,7 +15,7 @@ final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         size: Int32?,
         sort: String?
     ) -> Observable<GetHomeInfoResponse> {
-        return repository.fetchHome(request: .init(page: page, size: size, sort: sort))
+        return repository.fetchHome(page: page, size: size, sort: sort)
     }
 
     func fetchCustomPopUp(
@@ -23,7 +23,7 @@ final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         size: Int32?,
         sort: String?
     ) -> Observable<GetHomeInfoResponse> {
-        return repository.fetchCustomPopUp(request: .init(page: page, size: size, sort: sort))
+        return repository.fetchCustomPopUp(page: page, size: size, sort: sort)
     }
 
     func fetchNewPopUp(
@@ -31,7 +31,7 @@ final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         size: Int32?,
         sort: String?
     ) -> Observable<GetHomeInfoResponse> {
-        return repository.fetchNewPopUp(request: .init(page: page, size: size, sort: sort))
+        return repository.fetchNewPopUp(page: page, size: size, sort: sort)
     }
 
     func fetchPopularPopUp(
@@ -39,6 +39,6 @@ final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         size: Int32?,
         sort: String?
     ) -> Observable<GetHomeInfoResponse> {
-        return repository.fetchPopularPopUp(request: .init(page: page, size: size, sort: sort))
+        return repository.fetchPopularPopUp(page: page, size: size, sort: sort)
     }
 }
