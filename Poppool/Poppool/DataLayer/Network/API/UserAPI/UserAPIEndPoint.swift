@@ -151,7 +151,7 @@ struct UserAPIEndPoint {
         )
     }
 
-    static func getBlockUserList(request: GetBlockUserListRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
+    static func getBlockUserList(request: SortedRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
             path: "/users/blocked",

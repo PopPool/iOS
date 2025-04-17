@@ -10,27 +10,27 @@ final class UserAPIUseCaseImpl: UserAPIUseCase {
     }
 
     func postBookmarkPopUp(popUpID: Int64) -> Completable {
-        return repository.postBookmarkPopUp(request: .init(popUpStoreId: popUpID))
+        return repository.postBookmarkPopUp(popUpStoreId: popUpID)
     }
 
     func deleteBookmarkPopUp(popUpID: Int64) -> Completable {
-        return repository.deleteBookmarkPopUp(request: .init(popUpStoreId: popUpID))
+        return repository.deleteBookmarkPopUp(popUpStoreId: popUpID)
     }
 
     func postCommentLike(commentId: Int64) -> Completable {
-        return repository.postCommentLike(request: .init(commentId: commentId))
+        return repository.postCommentLike(commentId: commentId)
     }
 
     func deleteCommentLike(commentId: Int64) -> Completable {
-        return repository.deleteCommentLike(request: .init(commentId: commentId))
+        return repository.deleteCommentLike(commentId: commentId)
     }
 
     func postUserBlock(blockedUserId: String?) -> Completable {
-        return repository.postUserBlock(request: .init(blockedUserId: blockedUserId))
+        return repository.postUserBlock(blockedUserId: blockedUserId)
     }
 
     func deleteUserBlock(blockedUserId: String?) -> Completable {
-        return repository.deleteUserBlock(request: .init(blockedUserId: blockedUserId))
+        return repository.deleteUserBlock(blockedUserId: blockedUserId)
     }
 
     func getOtherUserCommentedPopUpList(
@@ -41,18 +41,16 @@ final class UserAPIUseCaseImpl: UserAPIUseCase {
         sort: String?
     ) -> Observable<GetOtherUserCommentedPopUpListResponse> {
         return repository.getOtherUserCommentList(
-            request: .init(
-                commenterId: commenterId,
-                commentType: commentType,
-                page: page,
-                size: size,
-                sort: sort)
+            commenterId: commenterId,
+            commentType: commentType,
+            page: page,
+            size: size,
+            sort: sort
         )
-        .map { $0.toDomain() }
     }
 
     func getMyPage() -> Observable<GetMyPageResponse> {
-        return repository.getMyPage().map { $0.toDomain() }
+        return repository.getMyPage()
     }
 
     func postLogout() -> Completable {
@@ -60,19 +58,19 @@ final class UserAPIUseCaseImpl: UserAPIUseCase {
     }
 
     func getWithdrawlList() -> Observable<GetWithdrawlListResponse> {
-        return repository.getWithdrawlList().map { $0.toDomain() }
+        return repository.getWithdrawlList()
     }
 
     func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
-        return repository.postWithdrawl(request: .init(checkedSurveyList: surveyList.map { .init(id: $0.id, survey: $0.survey)}))
+        return repository.postWithdrawl(list: surveyList.map { ($0.id, $0.survey)})
     }
 
     func getMyProfile() -> Observable<GetMyProfileResponse> {
-        return repository.getMyProfile().map { $0.toDomain() }
+        return repository.getMyProfile()
     }
 
     func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
-        return repository.putUserTailoredInfo(request: .init(gender: gender, age: age))
+        return repository.putUserTailoredInfo(gender: gender, age: age)
     }
 
     func putUserCategory(
@@ -81,39 +79,37 @@ final class UserAPIUseCaseImpl: UserAPIUseCase {
         interestCategoriesToKeep: [Int64]
     ) -> Completable {
         return repository.putUserCategory(
-            request: .init(
-                interestCategoriesToAdd: interestCategoriesToAdd,
-                interestCategoriesToDelete: interestCategoriesToDelete,
-                interestCategoriesToKeep: interestCategoriesToKeep
-            )
+            interestCategoriesToAdd: interestCategoriesToAdd,
+            interestCategoriesToDelete: interestCategoriesToDelete,
+            interestCategoriesToKeep: interestCategoriesToKeep
         )
     }
 
     func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
-        return repository.putUserProfile(request: .init(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro))
+        return repository.putUserProfile(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro)
     }
 
     func getMyCommentedPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetMyCommentedPopUpResponse> {
-        return repository.getMyCommentedPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+        return repository.getMyCommentedPopUp(page: page, size: size, sort: sort)
     }
 
     func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
-        return repository.getBlockUserList(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+        return repository.getBlockUserList(page: page, size: size, sort: sort)
     }
 
     func getNoticeList() -> Observable<GetNoticeListResponse> {
-        return repository.getNoticeList().map { $0.toDomain() }
+        return repository.getNoticeList()
     }
 
     func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
-        return repository.getNoticeDetail(noticeID: noticeID).map { $0.toDomain() }
+        return repository.getNoticeDetail(noticeID: noticeID)
     }
 
     func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
-        return repository.getRecentPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+        return repository.getRecentPopUp(page: page, size: size, sort: sort)
     }
 
     func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
-        return repository.getBookmarkPopUp(request: .init(page: page, size: size, sort: sort)).map { $0.toDomain() }
+        return repository.getBookmarkPopUp(page: page, size: size, sort: sort)
     }
 }
