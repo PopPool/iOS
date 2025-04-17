@@ -44,6 +44,7 @@ extension AppDelegate {
         DIContainer.register(HomeAPIRepository.self) { return HomeAPIRepositoryImpl(provider: provider) }
         DIContainer.register(AuthAPIRepository.self) { return AuthAPIRepositoryImpl(provider: provider) }
         DIContainer.register(SignUpRepository.self) { return SignUpRepositoryImpl(provider: provider) }
+        DIContainer.register(MapDirectionRepository.self) { return MapDirectionRepositoryImpl(provider: provider) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
