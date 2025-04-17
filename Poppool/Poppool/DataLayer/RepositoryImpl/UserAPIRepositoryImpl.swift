@@ -114,13 +114,13 @@ final class UserAPIRepositoryImpl: UserAPIRepository {
         size: Int32?,
         sort: String?
     ) -> Observable<GetMyCommentedPopUpResponse> {
-        let request = SortedRequestDTO(page: page, size: size, sort: sort)
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getMyCommentedPopUp(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
     func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
-        let request = SortedRequestDTO(page: page, size: size, sort: sort)
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getBlockUserList(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
@@ -136,13 +136,13 @@ final class UserAPIRepositoryImpl: UserAPIRepository {
     }
 
     func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
-        let request = SortedRequestDTO(page: page, size: size, sort: sort)
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getRecentPopUp(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
     func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
-        let request = SortedRequestDTO(page: page, size: size, sort: sort)
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getBookmarkPopUp(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
