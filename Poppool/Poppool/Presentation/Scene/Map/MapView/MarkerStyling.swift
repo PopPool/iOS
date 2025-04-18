@@ -22,6 +22,7 @@ struct DefaultMarkerStyler: MarkerStyling {
         // MapMarker 인스턴스 생성
         let markerView = MapMarker()
 
+        // 마커 뷰에 속성 주입
         markerView.injection(with: MapMarker.Input(
             isSelected: selected,
             isCluster: isCluster,
@@ -32,6 +33,7 @@ struct DefaultMarkerStyler: MarkerStyling {
 
         markerView.backgroundColor = .clear
 
+        // 레이아웃 업데이트
         markerView.layoutIfNeeded()
         let fittingSize = markerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         markerView.frame = CGRect(origin: .zero, size: fittingSize)
@@ -59,6 +61,7 @@ struct DefaultMarkerStyler: MarkerStyling {
 
         marker.captionText = ""
 
+        // 마커 앵커 설정
         marker.anchor = CGPoint(x: 0.5, y: 1.0)
     }
 

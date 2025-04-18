@@ -2,36 +2,44 @@ import UIKit
 import NMapsMap
 import ReactorKit
 
-extension MapViewController {
+extension MapViewController: MapInteractionHandling {
 
     // MARK: - Marker Style Handler
     func updateMarkerStyle(
-           marker: NMFMarker,
-           selected: Bool,
-           isCluster: Bool,
-           count: Int = 1,
-           regionName: String = ""
-       ) {
-           markerStyler.applyStyle(
-               to: marker,
-               selected: selected,
-               isCluster: isCluster,
-               count: count,
-               regionName: regionName
-           )
-       }
-    // MARK: - Map Tap Handler
+        marker: NMFMarker,
+        selected: Bool,
+        isCluster: Bool,
+        count: Int = 1,
+        regionName: String = ""
+    ) {
+        if selected {
+            marker.width = 44
+            marker.height = 44
+            marker.iconImage = NMFOverlayImage(name: "TapMarker")
+        } else if isCluster {
+            marker.width = 36
+            marker.height = 36
+            marker.iconImage = NMFOverlayImage(name: "cluster_marker")
+        } else {
+            marker.width = 32
+            marker.height = 32
+            marker.iconImage = NMFOverlayImage(name: "Marker")
+        }
+
+        marker.captionText = ""
+
+        marker.anchor = CGPoint(x: 0.5, y: 1.0)
+
+
+    }
     @objc func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
-        // 리스트 뷰가 보이는 상태가 아닌 경우에만 처리
         guard !isMovingToMarker else { return }
 
-        // 선택된 마커 해제
         if let currentMarker = self.currentMarker {
             updateMarkerStyle(marker: currentMarker, selected: false, isCluster: false)
             self.currentMarker = nil
         }
 
-        // 툴팁 제거 및 관련 상태 초기화
         currentTooltipView?.removeFromSuperview()
         currentTooltipView = nil
         currentTooltipStores = []

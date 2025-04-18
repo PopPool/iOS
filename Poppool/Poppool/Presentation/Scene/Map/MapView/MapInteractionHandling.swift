@@ -15,7 +15,6 @@ protocol MapInteractionHandling: AnyObject {
         var clusterMarkerDictionary: [String: NMFMarker] { get set }
         var clusteringManager: ClusteringManager { get }
 
-    // 마커 관련 메서드
     func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int, regionName: String)
     func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool
     func handleRegionalClusterTap(_ marker: NMFMarker, clusterData: ClusterMarkerData) -> Bool
