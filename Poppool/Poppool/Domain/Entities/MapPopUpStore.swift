@@ -3,7 +3,7 @@ import NMapsMap
 
 // TODO: 프레젠테이션
 
-// MARK: -  ddd
+// MARK: - ddd
 
 // FIXME: 엔티티 
 struct MapPopUpStore: Equatable {
@@ -20,7 +20,7 @@ struct MapPopUpStore: Equatable {
     let markerSnippet: String
     let mainImageUrl: String?
 
-    //TODO:
+    // TODO:
     var nmgCoordinate: NMGLatLng {
         NMGLatLng(lat: latitude, lng: longitude)
     }
