@@ -71,7 +71,7 @@ final class MapSearchInput: UIView, View {
     }
 
     func bind(reactor: MapReactor) {
-        ///TODO : 검색 재활성화시 사용
+        /// TODO : 검색 재활성화시 사용
 //        searchTextField.rx.text.orEmpty
 //            .subscribe(onNext: { _ in
 //            })
