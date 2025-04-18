@@ -46,7 +46,7 @@ class MapViewController: BaseViewController, View,
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     var currentMarker: NMFMarker?
-    private let storeListReactor = StoreListReactor()
+//    private let storeListReactor = StoreListReactor()
     var storeListViewController = StoreListViewController(reactor: StoreListReactor())
     var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?

@@ -1,6 +1,11 @@
 import Foundation
 import NMapsMap
 
+// TODO: 프레젠테이션
+
+// MARK: -  ddd
+
+// FIXME: 엔티티 
 struct MapPopUpStore: Equatable {
     let id: Int64
     let category: String
@@ -15,6 +20,7 @@ struct MapPopUpStore: Equatable {
     let markerSnippet: String
     let mainImageUrl: String?
 
+    //TODO:
     var nmgCoordinate: NMGLatLng {
         NMGLatLng(lat: latitude, lng: longitude)
     }
