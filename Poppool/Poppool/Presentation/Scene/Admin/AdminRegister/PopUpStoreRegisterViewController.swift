@@ -362,18 +362,7 @@ extension PopUpStoreRegisterViewController: View {
             })
             .disposed(by: self.disposeBag)
 
-        // 로딩 상태
-        reactor.state.map { $0.isLoading }
-            .distinctUntilChanged()
-            .bind(onNext: { [weak self] isLoading in
-                if isLoading {
-                    self?.showLoadingIndicator()
-                } else {
-                    self?.hideLoadingIndicator()
-                }
-            })
-            .disposed(by: self.disposeBag)
-
+        
         // 에러 메시지
         reactor.state.map { $0.errorMessage }
             .distinctUntilChanged()
