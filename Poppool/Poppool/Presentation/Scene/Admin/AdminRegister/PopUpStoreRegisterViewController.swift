@@ -362,7 +362,6 @@ extension PopUpStoreRegisterViewController: View {
             })
             .disposed(by: self.disposeBag)
 
-        
         // 에러 메시지
         reactor.state.map { $0.errorMessage }
             .distinctUntilChanged()
