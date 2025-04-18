@@ -5,25 +5,21 @@ import ReactorKit
 extension MapViewController {
 
     // MARK: - Marker Style Handler
-    func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int = 1, regionName: String = "") {
-        if selected {
-            marker.width = 44
-            marker.height = 44
-            marker.iconImage = NMFOverlayImage(name: "TapMarker")
-        } else if isCluster {
-            marker.width = 36
-            marker.height = 36
-            marker.iconImage = NMFOverlayImage(name: "cluster_marker")
-        } else {
-            marker.width = 32
-            marker.height = 32
-            marker.iconImage = NMFOverlayImage(name: "Marker")
-        }
-
-        marker.captionText = (count > 1) ? "\(count)" : ""
-        marker.anchor = CGPoint(x: 0.5, y: 1.0)
-    }
-
+    func updateMarkerStyle(
+           marker: NMFMarker,
+           selected: Bool,
+           isCluster: Bool,
+           count: Int = 1,
+           regionName: String = ""
+       ) {
+           markerStyler.applyStyle(
+               to: marker,
+               selected: selected,
+               isCluster: isCluster,
+               count: count,
+               regionName: regionName
+           )
+       }
     // MARK: - Map Tap Handler
     @objc func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
         // 리스트 뷰가 보이는 상태가 아닌 경우에만 처리
@@ -318,9 +314,9 @@ extension MapViewController {
                         updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
                         // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (_) -> Bool in
-                            guard let self = self else { return false }
-                            return self.handleSingleStoreTap(marker, store: store)
+                        marker.touchHandler = { [weak self] overlay in
+                            guard let self = self, let tappedMarker = overlay as? NMFMarker else { return false }
+                            return self.handleSingleStoreTap(tappedMarker, store: store)
                         }
 
                         marker.mapView = mainView.mapView
@@ -342,9 +338,9 @@ extension MapViewController {
                         updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeGroup.count)
 
                         // 직접 터치 핸들러 추가
-                        marker.touchHandler = { [weak self] (_) -> Bool in
-                            guard let self = self else { return false }
-                            return self.handleMicroClusterTap(marker, storeArray: storeGroup)
+                        marker.touchHandler = { [weak self] overlay in
+                            guard let self = self, let tappedMarker = overlay as? NMFMarker else { return false }
+                            return self.handleMicroClusterTap(tappedMarker, storeArray: storeGroup)
                         }
 
                         marker.mapView = mainView.mapView

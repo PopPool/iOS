@@ -98,9 +98,12 @@ extension MapViewController {
 
             updateMarkerStyle(marker: marker, selected: false, isCluster: false)
 
-            marker.touchHandler = { [weak self] (_) -> Bool in
-                guard let self = self else { return false }
-                return self.handleSingleStoreTap(marker, store: store)
+            marker.touchHandler = { [weak self] overlay in
+                guard let self = self,
+                      let tappedMarker = overlay as? NMFMarker,
+                      let storeData    = tappedMarker.userInfo["storeData"] as? MapPopUpStore
+                else { return false }
+                return self.handleSingleStoreTap(tappedMarker, store: storeData)
             }
 
             marker.mapView = mainView.mapView

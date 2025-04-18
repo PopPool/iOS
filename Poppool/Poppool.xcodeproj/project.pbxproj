@@ -426,9 +426,10 @@
 		4EAB809D2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */; };
 		4EAB809F2D3F8EF50041AF30 /* ViewportBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */; };
 		4EC63FB22DB2147C0053B12D /* MapUIHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FB12DB2147C0053B12D /* MapUIHandling.swift */; };
-		4EC63FB62DB214840053B12D /* MapViewController+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FB32DB214840053B12D /* MapViewController+Handlers.swift */; };
 		4EC63FB72DB214840053B12D /* MapViewController+InteractionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FB42DB214840053B12D /* MapViewController+InteractionHandling.swift */; };
 		4EC63FB82DB214840053B12D /* MapViewController+UIHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FB52DB214840053B12D /* MapViewController+UIHandling.swift */; };
+		4EC63FBA2DB21B930053B12D /* MapInteractionHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FB92DB21B930053B12D /* MapInteractionHandling.swift */; };
+		4EC63FBC2DB222F60053B12D /* MarkerStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC63FBB2DB222F60053B12D /* MarkerStyling.swift */; };
 		4EDDEFB42D2D285900CFAFA5 /* DateTimePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */; };
 		4EDE57032D5E70650014D924 /* LocationPermissionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */; };
 		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
@@ -893,9 +894,10 @@
 		4EAB809C2D3F78AA0041AF30 /* NMFMapViewDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NMFMapViewDelegateProxy.swift; sourceTree = "<group>"; };
 		4EAB809E2D3F8EF50041AF30 /* ViewportBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewportBounds.swift; sourceTree = "<group>"; };
 		4EC63FB12DB2147C0053B12D /* MapUIHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapUIHandling.swift; sourceTree = "<group>"; };
-		4EC63FB32DB214840053B12D /* MapViewController+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController+Handlers.swift"; sourceTree = "<group>"; };
 		4EC63FB42DB214840053B12D /* MapViewController+InteractionHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController+InteractionHandling.swift"; sourceTree = "<group>"; };
 		4EC63FB52DB214840053B12D /* MapViewController+UIHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewController+UIHandling.swift"; sourceTree = "<group>"; };
+		4EC63FB92DB21B930053B12D /* MapInteractionHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInteractionHandling.swift; sourceTree = "<group>"; };
+		4EC63FBB2DB222F60053B12D /* MarkerStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerStyling.swift; sourceTree = "<group>"; };
 		4EDDEFB32D2D285900CFAFA5 /* DateTimePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimePickerManager.swift; sourceTree = "<group>"; };
 		4EDE57022D5E70650014D924 /* LocationPermissionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionBottomSheet.swift; sourceTree = "<group>"; };
 		4EE5A3D22D40E4A600A2469A /* MapGuideReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGuideReactor.swift; sourceTree = "<group>"; };
@@ -2772,9 +2774,10 @@
 				4E685EC72D12CEB6001EF91C /* MapMarker.swift */,
 				4E685EC82D12CEB6001EF91C /* MapReactor.swift */,
 				4E685EC92D12CEB6001EF91C /* MapSearchInput.swift */,
-				4EC63FB32DB214840053B12D /* MapViewController+Handlers.swift */,
 				4EC63FB42DB214840053B12D /* MapViewController+InteractionHandling.swift */,
+				4EC63FBB2DB222F60053B12D /* MarkerStyling.swift */,
 				4EC63FB52DB214840053B12D /* MapViewController+UIHandling.swift */,
+				4EC63FB92DB21B930053B12D /* MapInteractionHandling.swift */,
 				4EC63FB12DB2147C0053B12D /* MapUIHandling.swift */,
 				4E685ECB2D12CEB6001EF91C /* MapView.swift */,
 				4E685ECC2D12CEB6001EF91C /* MapViewController.swift */,
@@ -3254,6 +3257,7 @@
 				082197B22D4E4E200054094A /* NormalCommentEditController.swift in Sources */,
 				081899502D363E5C0067BF01 /* BookMarkPopUpViewTypeModalView.swift in Sources */,
 				081899452D35FEA10067BF01 /* RecentPopUpSection.swift in Sources */,
+				4EC63FBA2DB21B930053B12D /* MapInteractionHandling.swift in Sources */,
 				083A259A2CF362090099B58E /* SectionDecorationItem.swift in Sources */,
 				BD9103892CF614A900BBCCAE /* PopUpStoreResponse.swift in Sources */,
 				086F89C72D1E348400CA4FC9 /* CommentUserInfoReactor.swift in Sources */,
@@ -3284,7 +3288,6 @@
 				BD9103642CF6149D00BBCCAE /* GetHomeInfoResponseDTO.swift in Sources */,
 				081898E22D338FA40067BF01 /* ListCountButtonSectionCell.swift in Sources */,
 				08A2E47D2D1B06B000102313 /* ImageDetailReactor.swift in Sources */,
-				4EC63FB62DB214840053B12D /* MapViewController+Handlers.swift in Sources */,
 				4EC63FB72DB214840053B12D /* MapViewController+InteractionHandling.swift in Sources */,
 				4EC63FB82DB214840053B12D /* MapViewController+UIHandling.swift in Sources */,
 				08B191B42CF609260057BC04 /* KakaoLoginService.swift in Sources */,
@@ -3362,6 +3365,7 @@
 				081898B02D2CFCA40067BF01 /* GetWithdrawlListResponse.swift in Sources */,
 				083C86692D0ECB47003F441C /* InstaGuideSection.swift in Sources */,
 				081899392D35F11F0067BF01 /* MyPageRecentView.swift in Sources */,
+				4EC63FBC2DB222F60053B12D /* MarkerStyling.swift in Sources */,
 				088DE24C2D12F33B0030FA9E /* DetailInfoSectionCell.swift in Sources */,
 				083C86762D0EE2CF003F441C /* PostCommentRequestDTO.swift in Sources */,
 				083C861E2D08737F003F441C /* GetPopUpDetailResponseDTO.swift in Sources */,

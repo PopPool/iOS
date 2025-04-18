@@ -32,6 +32,7 @@ class MapViewController: BaseViewController, View,
     var currentTooltipCoordinate: NMGLatLng?
 
     // MARK: - Properties
+    var markerStyler: MarkerStyling = DefaultMarkerStyler()
     private var storeDetailsCache: [Int64: StoreItem] = [:]
     var isMovingToMarker = false
     var currentCarouselStores: [MapPopUpStore] = []
@@ -493,11 +494,13 @@ class MapViewController: BaseViewController, View,
         // 마커 스타일 설정
         updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: 1)
 
-        // 중요: 마커에 직접 터치 핸들러 추가
-        marker.touchHandler = { [weak self] (_) -> Bool in
-            guard let self = self else { return false }
-            // 단일 스토어 마커 처리
-            return self.handleSingleStoreTap(marker, store: store)
+        // 수정
+        marker.touchHandler = { [weak self] overlay in
+            guard let self = self,
+                  let tappedMarker = overlay as? NMFMarker,
+                  let storeData    = tappedMarker.userInfo["storeData"] as? MapPopUpStore
+            else { return false }
+            return self.handleSingleStoreTap(tappedMarker, store: storeData)
         }
 
         marker.mapView = mainView.mapView
@@ -516,8 +519,7 @@ class MapViewController: BaseViewController, View,
 
     // MARK: - Helper: 클러스터용 커스텀 마커 이미지 생성 (MapMarker를 사용)
     func createClusterMarkerImage(regionName: String, count: Int) -> UIImage? {
-        // MapMarker의 입력값에 클러스터 상태를 전달합니다.
-        let markerView = MapMarker()  // 기존 커스텀 뷰, 네이버맵용으로도 사용 가능하도록 구현됨.
+        let markerView = MapMarker()
         let input = MapMarker.Input(isSelected: false,
                                     isCluster: true,
                                     regionName: regionName,
@@ -530,7 +532,6 @@ class MapViewController: BaseViewController, View,
         return imageFromView(markerView)
     }
         // MARK: - Clustering
-   
         private func clearAllMarkers() {
             individualMarkerDictionary.values.forEach { $0.mapView = nil }
             individualMarkerDictionary.removeAll()
@@ -662,19 +663,18 @@ class MapViewController: BaseViewController, View,
             marker.userInfo = ["storeData": store]
 
             updateMarkerStyle(marker: marker, selected: false, isCluster: false)
-
-            // 직접 터치 핸들러 추가
-            marker.touchHandler = { [weak self] (_) -> Bool in
-                guard let self = self else { return false }
-                return self.handleSingleStoreTap(marker, store: store)
+            marker.touchHandler = { [weak self] overlay in
+                guard let self = self,
+                      let tappedMarker = overlay as? NMFMarker,
+                      let storeData    = tappedMarker.userInfo["storeData"] as? MapPopUpStore
+                else { return false }
+                return self.handleSingleStoreTap(tappedMarker, store: storeData)
             }
-
             marker.mapView = mainView.mapView
             markerDictionary[store.id] = marker
         }
     }
         private func updateListView(with results: [MapPopUpStore]) {
-            // MapPopUpStore 배열을 StoreItem 배열로 변환
             let storeItems = results.map { $0.toStoreItem() }
             storeListViewController.reactor?.action.onNext(.setStores(storeItems))
         }

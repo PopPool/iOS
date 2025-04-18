@@ -26,6 +26,8 @@ class FullScreenMapViewController: MapViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        // use full‑screen styler for marker appearance
+        self.markerStyler = FullScreenMarkerStyler()
         setupFullScreenUI()
         setupNavigation()
 //        configureInitialMapPosition()
@@ -107,12 +109,10 @@ class FullScreenMapViewController: MapViewController {
         mainView.mapView.moveCamera(cameraUpdate)
 
         if let existingMarker = initialMarker {
-            // 기존 마커가 맵뷰에 설정되어 있지 않으면 설정
             if existingMarker.mapView == nil {
                 existingMarker.mapView = mainView.mapView
             }
 
-            // 명시적으로 TapMarker 스타일 적용 (selected 매개변수는 무시됨)
             existingMarker.iconImage = NMFOverlayImage(name: "TapMarker")
             existingMarker.width = 44
             existingMarker.height = 44
@@ -120,7 +120,6 @@ class FullScreenMapViewController: MapViewController {
 
             currentMarker = existingMarker
         } else {
-            // 새 마커 생성 시에도 TapMarker 적용
             let marker = NMFMarker()
             marker.position = position
             marker.iconImage = NMFOverlayImage(name: "TapMarker")
@@ -158,65 +157,6 @@ class FullScreenMapViewController: MapViewController {
             .disposed(by: disposeBag)
     }
 
-    // 마커 스타일 업데이트 함수 - 항상 TapMarker로만 설정하도록 수정
-    private func fullScreenUpdateMarkerStyle(marker: NMFMarker, selected: Bool) {
-        // 선택 여부와 상관없이 항상 TapMarker
-        marker.width = 44
-        marker.height = 44
-        marker.iconImage = NMFOverlayImage(name: "TapMarker")
-        marker.anchor = CGPoint(x: 0.5, y: 1.0)
-    }
-
-    override func updateMarkerStyle(marker: NMFMarker, selected: Bool, isCluster: Bool, count: Int = 1, regionName: String = "") {
-        // 풀스크린 모드에서는 항상 TapMarker 스타일 적용
-        if isFullScreenMode && markerLocked {
-            marker.width = 44
-            marker.height = 44
-            marker.iconImage = NMFOverlayImage(name: "TapMarker")
-            marker.anchor = CGPoint(x: 0.5, y: 1.0)
-
-            if count > 1 {
-                marker.captionText = "\(count)"
-            } else {
-                marker.captionText = ""
-            }
-            return
-        }
-
-        super.updateMarkerStyle(marker: marker, selected: selected, isCluster: isCluster, count: count, regionName: regionName)
-    }
-
-    override func handleSingleStoreTap(_ marker: NMFMarker, store: MapPopUpStore) -> Bool {
-        isMovingToMarker = true
-        markerLocked = true
-
-        if let previousMarker = currentMarker, previousMarker != marker {
-            fullScreenUpdateMarkerStyle(marker: previousMarker, selected: false)
-        }
-
-        marker.iconImage = NMFOverlayImage(name: "TapMarker")
-        marker.width = 44
-        marker.height = 44
-        fullScreenUpdateMarkerStyle(marker: marker, selected: true)
-        currentMarker = marker
-
-        currentCarouselStores = [store]
-        carouselView.updateCards([store])
-        carouselView.isHidden = false
-        mainView.setStoreCardHidden(false, animated: true)
-
-        let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: 15.0)
-        cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 0.3
-        mainView.mapView.moveCamera(cameraUpdate)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.isMovingToMarker = false
-        }
-
-        return true
-    }
-
     // 맵뷰 탭 처리 오버라이드
     override func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         return
@@ -237,13 +177,5 @@ class FullScreenMapViewController: MapViewController {
             return
         }
         super.mapView(mapView, cameraIsChangingByReason: reason)
-    }
-
-    override func handleRegionalClusterTap(_ marker: NMFMarker, clusterData: ClusterMarkerData) -> Bool {
-        return false
-    }
-
-    override func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
-        return false
     }
 }
