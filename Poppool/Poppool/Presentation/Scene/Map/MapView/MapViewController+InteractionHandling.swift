@@ -1,6 +1,6 @@
-import UIKit
 import NMapsMap
 import ReactorKit
+import UIKit
 
 extension MapViewController: MapInteractionHandling {
 
@@ -29,7 +29,6 @@ extension MapViewController: MapInteractionHandling {
         marker.captionText = ""
 
         marker.anchor = CGPoint(x: 0.5, y: 1.0)
-
 
     }
     @objc func handleMapViewTap(_ gesture: UITapGestureRecognizer) {
@@ -278,7 +277,6 @@ extension MapViewController: MapInteractionHandling {
 
         return true
     }
-
 
     func getVisibleBounds() -> (northEast: NMGLatLng, southWest: NMGLatLng) {
         let mapBounds = mainView.mapView.contentBounds

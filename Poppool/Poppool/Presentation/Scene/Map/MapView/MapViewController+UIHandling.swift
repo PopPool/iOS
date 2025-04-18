@@ -1,6 +1,6 @@
-import UIKit
 import NMapsMap
 import ReactorKit
+import UIKit
 
 extension MapViewController {
 

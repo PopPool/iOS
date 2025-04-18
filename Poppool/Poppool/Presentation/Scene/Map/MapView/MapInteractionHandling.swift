@@ -1,6 +1,6 @@
-import UIKit
 import NMapsMap
 import SnapKit
+import UIKit
 
 protocol MapInteractionHandling: AnyObject {
     var mainView: MapView { get }

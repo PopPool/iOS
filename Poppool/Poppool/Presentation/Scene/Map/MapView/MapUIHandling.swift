@@ -1,6 +1,6 @@
-import UIKit
 import NMapsMap
 import SnapKit
+import UIKit
 
 /// 지도 UI 상태 및 애니메이션을 처리하는 프로토콜
 protocol MapUIHandling: AnyObject {
@@ -10,7 +10,6 @@ protocol MapUIHandling: AnyObject {
     var modalState: ModalState { get set }
     var listViewTopConstraint: Constraint? { get }
     var filterContainerBottomY: CGFloat { get }
-
 
     func animateToState(_ state: ModalState)
     func adjustMapViewAlpha(for offset: CGFloat, minOffset: CGFloat, maxOffset: CGFloat)

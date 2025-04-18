@@ -22,9 +22,7 @@ class MapViewController: BaseViewController, View,
                         CLLocationManagerDelegate,
                         NMFMapViewTouchDelegate,
                         NMFMapViewCameraDelegate,
-                        UIGestureRecognizerDelegate
-
-{
+                        UIGestureRecognizerDelegate {
     typealias Reactor = MapReactor
 
     var currentTooltipView: UIView?
@@ -198,7 +196,6 @@ class MapViewController: BaseViewController, View,
             })
             .disposed(by: disposeBag)
     }
-
 
     // MARK: - Setup
     private func setUp() {
@@ -710,7 +707,6 @@ class MapViewController: BaseViewController, View,
             )
         }
 
-
         // MARK: - Location
         private func checkLocationAuthorization() {
             switch locationManager.authorizationStatus {
@@ -730,7 +726,6 @@ class MapViewController: BaseViewController, View,
             }
         }
 
-
         private func resetSelectedMarker() {
             if let currentMarker = currentMarker {
                 // 마커 스타일 업데이트
@@ -748,7 +743,6 @@ class MapViewController: BaseViewController, View,
             // 현재 마커 참조 제거
             self.currentMarker = nil
         }
-
 
         private func findMarkerForStore(for store: MapPopUpStore) -> NMFMarker? {
             for marker in individualMarkerDictionary.values {
