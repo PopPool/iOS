@@ -47,7 +47,7 @@ final class NormalCommentAddReactor: Reactor {
     private var popUpID: Int64
     private var popUpName: String
 
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let commentAPIUseCase: CommentAPIUseCase
     private let imageService = PreSignedService()
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -74,10 +74,15 @@ final class NormalCommentAddReactor: Reactor {
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private let spacing32Section = SpacingSection(inputDataList: [.init(spacing: 32)])
     // MARK: - init
-    init(popUpID: Int64, popUpName: String) {
+    init(
+        popUpID: Int64,
+        popUpName: String,
+        commentAPIUseCase: CommentAPIUseCase
+    ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
+        self.commentAPIUseCase = commentAPIUseCase
     }
 
     // MARK: - Reactor Methods

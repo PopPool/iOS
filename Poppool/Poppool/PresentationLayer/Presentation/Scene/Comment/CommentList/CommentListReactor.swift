@@ -49,9 +49,9 @@ final class CommentListReactor: Reactor {
     private var appendDataIsEmpty: Bool = false
 
     private var imageService = PreSignedService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
+    private let commentAPIUseCase: CommentAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -73,10 +73,19 @@ final class CommentListReactor: Reactor {
     private let spacing24Section = SpacingSection(inputDataList: [.init(spacing: 24)])
     private let spacing28Section = SpacingSection(inputDataList: [.init(spacing: 28)])
     // MARK: - init
-    init(popUpID: Int64, popUpName: String?) {
+    init(
+        popUpID: Int64,
+        popUpName: String?,
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase,
+        commentAPIUseCase: CommentAPIUseCase
+    ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
+        self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
+        self.commentAPIUseCase = commentAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -188,7 +197,10 @@ final class CommentListReactor: Reactor {
         case .presentDetailScene(let controller, let row):
             let comment = commentSection.inputDataList[row]
             let nextController = CommentDetailController()
-            nextController.reactor = CommentDetailReactor(comment: comment)
+            nextController.reactor = CommentDetailReactor(
+                comment: comment,
+                userAPIUseCase: userAPIUseCase
+            )
             nextController.mainView.likeButton.rx.tap
                 .map { Action.detailSceneLikeButtonTapped(row: row)}
                 .bind(to: action)
@@ -233,7 +245,10 @@ final class CommentListReactor: Reactor {
                 case .normal:
                     owner.dismiss(animated: true) { [weak controller] in
                         let otherUserCommentController = OtherUserCommentController()
-                        otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
+                        otherUserCommentController.reactor = OtherUserCommentReactor(
+                            commenterID: comment.creator,
+                            userAPIUseCase: self.userAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(otherUserCommentController, animated: true)
                     }
                 case .block:
@@ -298,7 +313,12 @@ final class CommentListReactor: Reactor {
                     owner.dismiss(animated: true) { [weak controller] in
                         guard let popUpName = self.popUpName else { return }
                         let editController = NormalCommentEditController()
-                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        editController.reactor = NormalCommentEditReactor(
+                            popUpID: self.popUpID,
+                            popUpName: popUpName,
+                            comment: comment,
+                            commentAPIUseCase: self.commentAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }
                 case .cancel:

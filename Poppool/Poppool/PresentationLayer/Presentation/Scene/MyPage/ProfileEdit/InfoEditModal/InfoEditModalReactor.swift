@@ -48,11 +48,16 @@ final class InfoEditModalReactor: Reactor {
     var currentAge: Int32 = 0
     var currentGender: String?
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
     // MARK: - init
-    init(age: Int32, gender: String?) {
+    init(
+        age: Int32,
+        gender: String?,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.originAge = age
         self.originGender = gender
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State(age: age, gender: gender)
     }
 

@@ -42,7 +42,7 @@ final class MyPageRecentReactor: Reactor {
     private var currentPage: Int32 = 0
     private var size: Int32 = 100
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -63,7 +63,8 @@ final class MyPageRecentReactor: Reactor {
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -125,7 +126,12 @@ final class MyPageRecentReactor: Reactor {
             controller.navigationController?.popViewController(animated: true)
         case .moveToDetailScene(let controller, let row):
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: listSection.inputDataList[row].id)
+            nextController.reactor = DetailReactor(
+                popUpID: listSection.inputDataList[row].id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState

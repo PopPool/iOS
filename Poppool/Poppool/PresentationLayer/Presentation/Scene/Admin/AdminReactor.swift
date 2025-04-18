@@ -31,10 +31,10 @@ final class AdminReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private let useCase: AdminUseCase
+    private let adminUseCase: AdminUseCase
 
-    init(useCase: AdminUseCase) {
-        self.useCase = useCase
+    init(adminUseCase: AdminUseCase) {
+        self.adminUseCase = adminUseCase
         self.initialState = State()
     }
 
@@ -43,7 +43,7 @@ final class AdminReactor: Reactor {
         case .viewDidLoad, .reloadData:
             return .concat([
                 .just(.setIsLoading(true)),
-                useCase.fetchStoreList(query: nil, page: 0, size: 100)
+                adminUseCase.fetchStoreList(query: nil, page: 0, size: 100)
                     .map { .setStores($0.popUpStoreList ?? []) }, // ✅ nil 방지
                 .just(.setIsLoading(false))
             ])
@@ -51,7 +51,7 @@ final class AdminReactor: Reactor {
         case let .updateSearchQuery(query):
             return .concat([
                 .just(.setIsLoading(true)),
-                useCase.fetchStoreList(query: query, page: 0, size: 100)
+                adminUseCase.fetchStoreList(query: query, page: 0, size: 100)
                     .do(onNext: { response in
                         Logger.log(message: "조회 성공 - 응답 데이터: \(response)", category: .info)
                     }, onError: { error in

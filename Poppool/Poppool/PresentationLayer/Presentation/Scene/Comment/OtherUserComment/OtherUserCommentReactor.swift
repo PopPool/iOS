@@ -38,7 +38,7 @@ final class OtherUserCommentReactor: Reactor {
     var disposeBag = DisposeBag()
 
     private let commenterID: String?
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -58,9 +58,13 @@ final class OtherUserCommentReactor: Reactor {
     private var popUpSection = MyCommentedPopUpGridSection(inputDataList: [])
 
     // MARK: - init
-    init(commenterID: String?) {
+    init(
+        commenterID: String?,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.initialState = State()
         self.commenterID = commenterID
+        self.userAPIUseCase = userAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -103,7 +107,12 @@ final class OtherUserCommentReactor: Reactor {
         case .moveToDetailScene(let controller, let row):
             let id = popUpSection.inputDataList[row].popUpID
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: id)
+            nextController.reactor = DetailReactor(
+                popUpID: id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState

@@ -37,10 +37,14 @@ final class MyPageNoticeDetailReactor: Reactor {
     var content: String?
     var noticeID: Int64
 
-    let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    let userAPIUseCase: UserAPIUseCase
     // MARK: - init
-    init(noticeID: Int64) {
+    init(
+        noticeID: Int64,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.noticeID = noticeID
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 

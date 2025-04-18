@@ -58,8 +58,8 @@ final class SearchReactor: Reactor {
     private var isLoading: Bool = false
 
     let userDefaultService = UserDefaultService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -91,7 +91,12 @@ final class SearchReactor: Reactor {
     private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
 
     // MARK: - init
-    init() {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
+    ) {
+        self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
         self.initialState = State()
     }
 
@@ -188,7 +193,10 @@ final class SearchReactor: Reactor {
         case .moveToCategoryScene(let controller):
             let categoryIDList = searchCategorySection.inputDataList.compactMap { $0.id }
             let nextController = SearchCategoryController()
-            nextController.reactor = SearchCategoryReactor(originCategoryList: categoryIDList)
+            nextController.reactor = SearchCategoryReactor(
+                originCategoryList: categoryIDList,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.presentPanModal(nextController)
             nextController.reactor?.state
                 .withUnretained(self)
@@ -219,7 +227,12 @@ final class SearchReactor: Reactor {
                 .disposed(by: nextController.disposeBag)
         case .moveToDetailScene(let controller, let indexPath):
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: searchListSection.inputDataList[indexPath.row].id)
+            nextController.reactor = DetailReactor(
+                popUpID: searchListSection.inputDataList[indexPath.row].id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: popUpAPIUseCase,
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .setSearchKeyWord(let text):
             newState.searchKeyWord = text

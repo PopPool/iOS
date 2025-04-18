@@ -39,8 +39,8 @@ final class HomeReactor: Reactor {
 
     var disposeBag = DisposeBag()
 
-    private let homeApiUseCase = HomeAPIUseCaseImpl(repository: HomeAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let homeAPIUseCase: HomeAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
     private let userDefaultService = UserDefaultService()
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -84,7 +84,12 @@ final class HomeReactor: Reactor {
     private var spaceGray24Section = SpacingSection(inputDataList: [.init(spacing: 24, backgroundColor: .g700)])
 
     // MARK: - init
-    init() {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        homeAPIUseCase: HomeAPIUseCase
+    ) {
+        self.userAPIUseCase = userAPIUseCase
+        self.homeAPIUseCase = homeAPIUseCase
         self.initialState = State()
     }
 
@@ -94,7 +99,7 @@ final class HomeReactor: Reactor {
         case .changeIndicatorColor(let controller, let row):
             return Observable.just(.skip)
         case .viewWillAppear:
-            return homeApiUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
+            return homeAPIUseCase.fetchHome(page: 0, size: 6, sort: "viewCount,desc")
                 .withUnretained(self)
                 .map { (owner, response) in
                     owner.setBannerSection(response: response)
@@ -272,35 +277,67 @@ final class HomeReactor: Reactor {
             case 0:
                 if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
                     let controller = DetailController()
-                    controller.reactor = DetailReactor(popUpID: id)
+                    controller.reactor = DetailReactor(
+                        popUpID: id,
+                        userAPIUseCase: userAPIUseCase,
+                        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
             case 2:
                 let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .curation)
+                controller.reactor = HomeListReactor(
+                    popUpType: .curation,
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 4:
                 let id = curationSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
-                controller.reactor = DetailReactor(popUpID: id)
+                controller.reactor = DetailReactor(
+                    popUpID: id,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
                 let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .popular)
+                controller.reactor = HomeListReactor(
+                    popUpType: .popular,
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:
                 let id = popularSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
-                controller.reactor = DetailReactor(popUpID: id)
+                controller.reactor = DetailReactor(
+                    popUpID: id,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 12:
                 let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .new)
+                controller.reactor = HomeListReactor(
+                    popUpType: .new,
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 14:
                 let id = newSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
-                controller.reactor = DetailReactor(popUpID: id)
+                controller.reactor = DetailReactor(
+                    popUpID: id,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:
                 break
@@ -310,26 +347,49 @@ final class HomeReactor: Reactor {
             case 0:
                 if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
                     let controller = DetailController()
-                    controller.reactor = DetailReactor(popUpID: id)
+                    controller.reactor = DetailReactor(
+                        popUpID: id,
+                        userAPIUseCase: userAPIUseCase,
+                        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
             case 2:
                 let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .popular)
+                controller.reactor = HomeListReactor(
+                    popUpType: .popular,
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 4:
                 let id = popularSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
-                controller.reactor = DetailReactor(popUpID: id)
+                controller.reactor = DetailReactor(
+                    popUpID: id,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
                 let controller = HomeListController()
-                controller.reactor = HomeListReactor(popUpType: .new)
+                controller.reactor = HomeListReactor(
+                    popUpType: .new,
+                    userAPIUseCase: userAPIUseCase,
+                    homeAPIUseCase: homeAPIUseCase
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 9:
                 let id = newSection.inputDataList[indexPath.row].id
                 let controller = DetailController()
-                controller.reactor = DetailReactor(popUpID: id)
+                controller.reactor = DetailReactor(
+                    popUpID: id,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:
                 break

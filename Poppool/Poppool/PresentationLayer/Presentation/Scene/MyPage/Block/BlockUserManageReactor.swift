@@ -35,7 +35,7 @@ final class BlockUserManageReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -56,7 +56,8 @@ final class BlockUserManageReactor: Reactor {
     private var spcing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 

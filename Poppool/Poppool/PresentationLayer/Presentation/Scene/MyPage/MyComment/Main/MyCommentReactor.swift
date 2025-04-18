@@ -37,7 +37,7 @@ final class MyCommentReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -59,7 +59,8 @@ final class MyCommentReactor: Reactor {
     private var spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -106,7 +107,12 @@ final class MyCommentReactor: Reactor {
         case .moveToDetailScene(let controller, let row):
             let popUpID = listSection.inputDataList[row].popUpID
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: popUpID)
+            nextController.reactor = DetailReactor(
+                popUpID: popUpID,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)

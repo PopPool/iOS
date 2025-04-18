@@ -16,7 +16,10 @@ final class AdminViewController: BaseViewController, View {
     private let adminUseCase: AdminUseCase
 
     // MARK: - Init
-    init(nickname: String, adminUseCase: AdminUseCase = AdminUseCaseImpl(repository: AdminRepositoryImpl(provider: ProviderImpl()))) {
+    init(
+        nickname: String,
+        adminUseCase: AdminUseCase
+    ) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
         self.mainView = AdminView(frame: .zero)
@@ -169,7 +172,6 @@ final class AdminViewController: BaseViewController, View {
     private func editStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
         let registerVC = PopUpStoreRegisterViewController(
             nickname: nickname,
-            adminUseCase: adminUseCase,
             editingStore: store
         )
 
@@ -245,10 +247,7 @@ final class AdminViewController: BaseViewController, View {
         mainView.registerButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let registerVC = PopUpStoreRegisterViewController(
-                    nickname: self.nickname,
-                    adminUseCase: self.adminUseCase
-                )
+                let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname)
 
                 registerVC.completionHandler = { [weak self] in
                     self?.reactor?.action.onNext(.reloadData)

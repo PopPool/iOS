@@ -60,15 +60,20 @@ final class SignUpMainReactor: Reactor {
 
     private var authrizationCode: String?
 
-    private var signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
+    private let signUpAPIUseCase: SignUpAPIUseCase
     private let userDefaultService = UserDefaultService()
     var isFirstResponderCase: Bool
 
     // MARK: - init
-    init(isFirstResponderCase: Bool, authrizationCode: String?) {
+    init(
+        isFirstResponderCase: Bool,
+        authrizationCode: String?,
+        signUpAPIUseCase: SignUpAPIUseCase
+    ) {
         self.initialState = State()
         self.authrizationCode = authrizationCode
         self.isFirstResponderCase = isFirstResponderCase
+        self.signUpAPIUseCase = signUpAPIUseCase
     }
 
     // MARK: - Reactor Methods
@@ -121,8 +126,6 @@ final class SignUpMainReactor: Reactor {
             guard let socialType = userDefaultService.fetch(key: "socialType"),
                   let nickName = newState.nickName,
                   let gender = newState.gender else { return newState }
-
-            signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
 
             signUpAPIUseCase.trySignUp(
                 nickName: nickName,
