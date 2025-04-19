@@ -17,12 +17,12 @@ protocol MapRepository {
         southWestLat: Double,
         southWestLon: Double,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
+    ) -> Observable<[MapPopUpStore]>
 
     func searchStores(
         query: String,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
+    ) -> Observable<[MapPopUpStore]>
 
     func fetchCategories() -> Observable<[CategoryResponse]>
 }

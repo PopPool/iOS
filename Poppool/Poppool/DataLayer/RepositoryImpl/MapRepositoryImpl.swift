@@ -2,9 +2,8 @@ import Foundation
 
 import RxSwift
 
-// MARK: - Implementation
 final class MapRepositoryImpl: MapRepository {
-    
+
     private let provider: Provider
 
     init(provider: Provider) {
@@ -17,7 +16,7 @@ final class MapRepositoryImpl: MapRepository {
         southWestLat: Double,
         southWestLon: Double,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]> {
+    ) -> Observable<[MapPopUpStore]> {
         return provider.requestData(
             with: MapAPIEndpoint.locations_fetchStoresInBounds(
                 northEastLat: northEastLat,
@@ -29,12 +28,30 @@ final class MapRepositoryImpl: MapRepository {
             interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
+        .map { dtoList in
+            dtoList.map { dto -> MapPopUpStore in
+                return MapPopUpStore(
+                    id: dto.id,
+                    category: dto.categoryName,
+                    name: dto.name,
+                    address: dto.address,
+                    startDate: dto.startDate,
+                    endDate: dto.endDate,
+                    latitude: dto.latitude,
+                    longitude: dto.longitude,
+                    markerId: dto.id,
+                    markerTitle: dto.markerTitle ?? dto.name,
+                    markerSnippet: dto.markerSnippet ?? "",
+                    mainImageUrl: dto.mainImageUrl
+                )
+            }
+        }
     }
 
     func searchStores(
         query: String,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]> {
+    ) -> Observable<[MapPopUpStore]> {
         return provider.requestData(
             with: MapAPIEndpoint.locations_searchStores(
                 query: query,
@@ -43,10 +60,28 @@ final class MapRepositoryImpl: MapRepository {
             interceptor: TokenInterceptor()
         )
         .map { $0.popUpStoreList }
+        .map { dtoList in
+            dtoList.map { dto -> MapPopUpStore in
+                return MapPopUpStore(
+                    id: dto.id,
+                    category: dto.categoryName,
+                    name: dto.name,
+                    address: dto.address,
+                    startDate: dto.startDate,
+                    endDate: dto.endDate,
+                    latitude: dto.latitude,
+                    longitude: dto.longitude,
+                    markerId: dto.id,
+                    markerTitle: dto.markerTitle ?? dto.name,
+                    markerSnippet: dto.markerSnippet ?? "",
+                    mainImageUrl: dto.mainImageUrl
+                )
+            }
+        }
     }
 
     func fetchCategories() -> Observable<[CategoryResponse]> {
-        Logger.log(message: "카테고리 매핑 요청을 시작합니다.", category: .network)
+        Logger.log(message: "카테고리 목록 요청을 시작합니다.", category: .network)
 
         return provider.requestData(
             with: SignUpAPIEndpoint.signUp_getCategoryList(),
@@ -54,26 +89,19 @@ final class MapRepositoryImpl: MapRepository {
         )
         .do(onNext: { responseDTO in
             Logger.log(
-                message: """
-                카테고리 매핑 응답:
-                - Response: \(responseDTO)
-                - categoryResponseList: \(responseDTO.categoryResponseList)
-                """,
+                message: "카테고리 목록 응답 성공",
                 category: .debug
             )
         })
         .map { responseDTO in
-            let categories = responseDTO.categoryResponseList.map { $0.toDomain() }
-            Logger.log(message: "매핑된 카테고리 데이터: \(categories)", category: .debug)
-            return categories
+            responseDTO.categoryResponseList.map { $0.toDomain() }
         }
         .catch { error in
             Logger.log(
-                message: "카테고리 매핑 요청 실패: \(error.localizedDescription)",
+                message: "카테고리 목록 요청 실패: \(error.localizedDescription)",
                 category: .error
             )
             throw error
         }
     }
-
 }
