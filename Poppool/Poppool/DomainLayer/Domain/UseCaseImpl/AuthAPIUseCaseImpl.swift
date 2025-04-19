@@ -1,5 +1,4 @@
 import Foundation
-
 import RxSwift
 
 final class AuthAPIUseCaseImpl: AuthAPIUseCase {
@@ -15,7 +14,6 @@ final class AuthAPIUseCaseImpl: AuthAPIUseCase {
     }
 
     func postTokenReissue() -> Observable<PostTokenReissueResponse> {
-        let endPoint = AuthAPIEndPoint.postTokenReissue()
-        return repository.postTokenReissue().map { $0.toDomain() }
+        return repository.postTokenReissue()
     }
 }
