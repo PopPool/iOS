@@ -1,16 +1,18 @@
 import Foundation
-
 import RxSwift
 
 protocol AdminUseCase {
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<GetAdminPopUpStoreListResponseDTO>
-    func fetchStoreDetail(id: Int64) -> Observable<GetAdminPopUpStoreDetailResponseDTO>
-    func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse>
-    func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse>
-    func deleteStore(id: Int64) -> Observable<EmptyResponse>
 
-    // Notice
-    func createNotice(request: CreateNoticeRequestDTO) -> Observable<EmptyResponse>
-    func updateNotice(id: Int64, request: UpdateNoticeRequestDTO) -> Observable<EmptyResponse>
-    func deleteNotice(id: Int64) -> Observable<EmptyResponse>
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]>
+    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail>
+
+    func createStore(params: CreateStoreParams) -> Completable
+
+    func updateStore(params: UpdateStoreParams) -> Completable
+
+    func deleteStore(id: Int64) -> Completable
+
+    func createNotice(params: CreateNoticeParams) -> Completable
+    func updateNotice(params: UpdateNoticeParams) -> Completable
+    func deleteNotice(id: Int64) -> Completable
 }

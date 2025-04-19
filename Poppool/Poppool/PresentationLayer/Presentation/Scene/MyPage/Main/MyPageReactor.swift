@@ -263,21 +263,18 @@ final class MyPageReactor: Reactor {
             let navigationController = UINavigationController(rootViewController: nextController)
             navigationController.modalPresentationStyle = .fullScreen
             controller.present(navigationController, animated: true)
-
         case .moveToMyCommentScene(let controller):
             let nextController = MyCommentController()
             nextController.reactor = MyCommentReactor()
             controller.navigationController?.pushViewController(nextController, animated: true)
-
         case .moveToAdminScene(let controller):
             // 관리자 VC
             let nickname = profileSection.inputDataList.first?.nickName ?? ""
-            let adminVC = AdminViewController(nickname: nickname)
-            adminVC.reactor = AdminReactor(
-                useCase: AdminUseCaseImpl(
-                    repository: AdminRepositoryImpl(provider: ProviderImpl())
-                )
+            let adminUseCase = AdminUseCaseImpl(
+                repository: AdminRepositoryImpl(provider: ProviderImpl())
             )
+            let adminVC = AdminViewController(nickname: nickname, adminUseCase: adminUseCase)
+            adminVC.reactor = AdminReactor(useCase: adminUseCase)
             controller.navigationController?.pushViewController(adminVC, animated: true)
         }
 

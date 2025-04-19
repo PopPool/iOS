@@ -16,7 +16,7 @@ final class AdminViewController: BaseViewController, View {
     private let adminUseCase: AdminUseCase
 
     // MARK: - Init
-    init(nickname: String, adminUseCase: AdminUseCase = AdminUseCaseImpl(repository: AdminRepositoryImpl(provider: ProviderImpl()))) {
+    init(nickname: String, adminUseCase: AdminUseCase) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
         self.mainView = AdminView(frame: .zero)
@@ -122,7 +122,6 @@ final class AdminViewController: BaseViewController, View {
 
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
 
-        // iPad support
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = mainView.menuButton
             popoverController.sourceRect = mainView.menuButton.bounds
@@ -151,7 +150,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func showDeleteConfirmation(for store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+    private func showDeleteConfirmation(for store: AdminStore) {
         let alert = UIAlertController(
             title: "삭제 확인",
             message: "\(store.name)을(를) 삭제하시겠습니까?",
@@ -166,22 +165,43 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func editStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
-        let registerVC = PopUpStoreRegisterViewController(
-            nickname: nickname,
-            adminUseCase: adminUseCase,
-            editingStore: store
-        )
-
-        // 수정할 때도 completionHandler 추가
-        registerVC.completionHandler = { [weak self] in
-            self?.reactor?.action.onNext(.reloadData)
-        }
-
-        navigationController?.pushViewController(registerVC, animated: true)
+    private func editStore(_ store: AdminStore) {
+        adminUseCase.fetchStoreDetail(id: store.id)
+            .observe(on: MainScheduler.instance)
+            .subscribe(
+                onNext: { [weak self] storeDetail in
+                    guard let self = self else { return }
+                    let updateParams = UpdateStoreParams(
+                        id: storeDetail.id,
+                        name: storeDetail.name,
+                        categoryId: storeDetail.categoryId,
+                        desc: storeDetail.description,
+                        address: storeDetail.address,
+                        startDate: storeDetail.startDate,
+                        endDate: storeDetail.endDate,
+                        mainImageUrl: storeDetail.mainImageUrl,
+                        imageUrlList: storeDetail.images.map { $0.imageUrl },
+                        imagesToDelete: [],
+                        latitude: storeDetail.latitude,
+                        longitude: storeDetail.longitude,
+                        markerTitle: storeDetail.markerTitle,
+                        markerSnippet: storeDetail.markerSnippet,
+                        startDateBeforeEndDate: true
+                    )
+                    let registerVC = PopUpStoreRegisterViewController(
+                        nickname: self.nickname,
+                        adminUseCase: self.adminUseCase
+                    )
+                    self.navigationController?.pushViewController(registerVC, animated: true)
+                },
+                onError: { [weak self] error in
+                    self?.showErrorAlert(message: "스토어 정보 조회 실패: \(error.localizedDescription)")
+                }
+            )
+            .disposed(by: disposeBag)
     }
 
-    private func deleteStore(_ store: GetAdminPopUpStoreListResponseDTO.PopUpStore) {
+    private func deleteStore(_ store: AdminStore) {
         // 먼저 스토어 상세 정보를 가져와 모든 이미지 URL을 확인
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
@@ -194,7 +214,7 @@ final class AdminViewController: BaseViewController, View {
                     allImageUrls.append(storeDetail.mainImageUrl)
 
                     // 다른 모든 이미지 URL 추가
-                    let otherImageUrls = storeDetail.imageList.map { $0.imageUrl }
+                    let otherImageUrls = storeDetail.images.map { $0.imageUrl }
                     allImageUrls.append(contentsOf: otherImageUrls)
 
                     allImageUrls = Array(Set(allImageUrls))
@@ -206,7 +226,7 @@ final class AdminViewController: BaseViewController, View {
                         .andThen(self.adminUseCase.deleteStore(id: store.id))
                         .observe(on: MainScheduler.instance)
                         .subscribe(
-                            onNext: { [weak self] _ in
+                            onCompleted: { [weak self] in
                                 self?.reactor?.action.onNext(.reloadData)
                                 ToastMaker.createToast(message: "삭제되었습니다")
                             },
@@ -277,7 +297,13 @@ final class AdminViewController: BaseViewController, View {
                 cellIdentifier: AdminStoreCell.identifier,
                 cellType: AdminStoreCell.self
             )) { _, item, cell in
-                cell.configure(with: item)
+                let dto = GetAdminPopUpStoreListResponseDTO.PopUpStore(
+                    id: item.id,
+                    name: item.name,
+                    categoryName: item.categoryName,
+                    mainImageUrl: item.mainImageUrl
+                )
+                cell.configure(with: dto)
             }
             .disposed(by: disposeBag)
     }

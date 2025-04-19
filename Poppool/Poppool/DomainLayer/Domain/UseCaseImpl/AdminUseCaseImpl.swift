@@ -1,5 +1,4 @@
 import Foundation
-
 import RxSwift
 
 final class AdminUseCaseImpl: AdminUseCase {
@@ -10,53 +9,52 @@ final class AdminUseCaseImpl: AdminUseCase {
         self.repository = repository
     }
 
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<GetAdminPopUpStoreListResponseDTO> {
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
         return repository.fetchStoreList(query: query, page: page, size: size)
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<GetAdminPopUpStoreDetailResponseDTO> {
+    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
         return repository.fetchStoreDetail(id: id)
     }
 
-    func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
-        Logger.log(message: "createStore 호출 - 요청 데이터: \(request)", category: .debug)
-        return repository.createStore(request: request)
-            .do(onNext: { _ in
-                Logger.log(message: "createStore 성공", category: .info)
-            }, onError: { error in
+    func createStore(params: CreateStoreParams) -> Completable {
+        Logger.log(message: "createStore 호출 - 스토어명: \(params.name)", category: .debug)
+        return repository.createStore(params: params)
+            .do(onError: { error in
                 Logger.log(message: "createStore 실패 - Error: \(error)", category: .error)
+            }, onCompleted: {
+                Logger.log(message: "createStore 성공", category: .info)
             })
     }
 
-    func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
+    func updateStore(params: UpdateStoreParams) -> Completable {
         Logger.log(message: """
             Updating store with location:
-            Latitude: \(request.location.latitude)
-            Longitude: \(request.location.longitude)
+            Latitude: \(params.latitude)
+            Longitude: \(params.longitude)
             """, category: .debug)
-
-        return repository.updateStore(request: request)
-            .do(onNext: { _ in
-                Logger.log(message: "Store update successful", category: .debug)
-            }, onError: { error in
+        return repository.updateStore(params: params)
+            .do(onError: { error in
                 Logger.log(message: "Store update failed: \(error)", category: .error)
+            }, onCompleted: {
+                Logger.log(message: "Store update successful", category: .debug)
             })
     }
 
-    func deleteStore(id: Int64) -> Observable<EmptyResponse> {
+    func deleteStore(id: Int64) -> Completable {
         return repository.deleteStore(id: id)
     }
 
     // Notice
-    func createNotice(request: CreateNoticeRequestDTO) -> Observable<EmptyResponse> {
-        return repository.createNotice(request: request)
+    func createNotice(params: CreateNoticeParams) -> Completable {
+        return repository.createNotice(params: params)
     }
 
-    func updateNotice(id: Int64, request: UpdateNoticeRequestDTO) -> Observable<EmptyResponse> {
-        return repository.updateNotice(id: id, request: request)
+    func updateNotice(params: UpdateNoticeParams) -> Completable {
+        return repository.updateNotice(params: params)
     }
 
-    func deleteNotice(id: Int64) -> Observable<EmptyResponse> {
+    func deleteNotice(id: Int64) -> Completable {
         return repository.deleteNotice(id: id)
     }
 }

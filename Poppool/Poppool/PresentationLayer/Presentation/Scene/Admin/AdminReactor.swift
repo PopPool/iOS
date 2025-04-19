@@ -14,18 +14,18 @@ final class AdminReactor: Reactor {
     }
 
     enum Mutation {
-        case setStores([GetAdminPopUpStoreListResponseDTO.PopUpStore])
+        case setStores([AdminStore])
         case setIsLoading(Bool)
         case navigateToRegister(Bool)
-        case navigateToEdit(GetAdminPopUpStoreListResponseDTO.PopUpStore) // ✅ 수정 데이터 추가
+        case navigateToEdit(AdminStore) // ✅ 수정 데이터 추가
 
     }
 
     struct State {
-        var storeList: [GetAdminPopUpStoreListResponseDTO.PopUpStore] = []
+        var storeList: [AdminStore] = []
         var isLoading: Bool = false
         var shouldNavigateToRegister: Bool = false
-        var selectedStoreForEdit: GetAdminPopUpStoreListResponseDTO.PopUpStore? // ✅ 추가
+        var selectedStoreForEdit: AdminStore? // ✅ 추가
 
     }
 
@@ -44,7 +44,7 @@ final class AdminReactor: Reactor {
             return .concat([
                 .just(.setIsLoading(true)),
                 useCase.fetchStoreList(query: nil, page: 0, size: 100)
-                    .map { .setStores($0.popUpStoreList ?? []) }, // ✅ nil 방지
+                    .map { .setStores($0) }, // ✅ nil 방지
                 .just(.setIsLoading(false))
             ])
 
@@ -57,7 +57,7 @@ final class AdminReactor: Reactor {
                     }, onError: { error in
                         Logger.log(message: "조회 실패 - 에러: \(error.localizedDescription)", category: .error)
                     })
-                    .map { .setStores($0.popUpStoreList ?? []) }, // ✅ nil 방지
+                    .map { .setStores($0) }, // ✅ nil 방지
                 .just(.setIsLoading(false))
             ])
 

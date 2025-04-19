@@ -85,7 +85,7 @@ final class PopUpStoreRegisterReactor: Reactor {
         case addDeletedImage(id: Int64, path: String)
 
         // 기존 스토어 데이터 설정
-        case setStoreDetail(GetAdminPopUpStoreDetailResponseDTO)
+        case setStoreDetail(AdminStoreDetail)
         case setOriginalImageIds([String: Int64])
 
         // UI 상태 관리
@@ -357,7 +357,7 @@ final class PopUpStoreRegisterReactor: Reactor {
             newState.address = storeDetail.address
             newState.lat = String(storeDetail.latitude)
             newState.lon = String(storeDetail.longitude)
-            newState.description = storeDetail.desc
+            newState.description = storeDetail.description
 
             // 날짜 파싱
             let isoFormatter = ISO8601DateFormatter()
@@ -615,7 +615,7 @@ final class PopUpStoreRegisterReactor: Reactor {
 
                 // 이미지 ID 매핑 초기화 및 설정
                 var originalImageIds: [String: Int64] = [:]
-                for image in storeDetail.imageList {
+                for image in storeDetail.images {
                     originalImageIds[image.imageUrl] = image.id
                 }
 
@@ -629,7 +629,7 @@ final class PopUpStoreRegisterReactor: Reactor {
                 let dispatchGroup = DispatchGroup()
 
                 let imageObservable = Observable<Mutation>.create { observer in
-                    for imageData in storeDetail.imageList {
+                    for imageData in storeDetail.images {
                         // 중복 이미지 건너뛰기
                         if loadedImageUrls.contains(imageData.imageUrl) {
                             continue
@@ -742,7 +742,7 @@ final class PopUpStoreRegisterReactor: Reactor {
                     return false
                 } ?? imagePaths.first ?? ""
 
-                let request = CreatePopUpStoreRequestDTO(
+                let params = CreateStoreParams(
                     name: state.name,
                     categoryId: state.categoryId,
                     desc: state.description,
@@ -758,8 +758,8 @@ final class PopUpStoreRegisterReactor: Reactor {
                     startDateBeforeEndDate: true
                 )
 
-                return self.adminUseCase.createStore(request: request)
-                    .map { _ in .setSuccess(true) }
+                return self.adminUseCase.createStore(params: params)
+                    .andThen(Observable.just(.setSuccess(true)))
             }
     }
 
@@ -856,43 +856,26 @@ final class PopUpStoreRegisterReactor: Reactor {
             mainImage = ""
         }
 
-        // 업데이트 요청 생성
-        let request = UpdatePopUpStoreRequestDTO(
-            popUpStore: .init(
-                id: storeId,
-                name: state.name,
-                categoryId: state.categoryId,
-                desc: state.description,
-                address: state.address,
-                startDate: dates.startDate,
-                endDate: dates.endDate,
-                mainImageUrl: mainImage,
-                bannerYn: !mainImage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                imageUrl: allPaths,
-                startDateBeforeEndDate: true
-            ),
-            location: .init(
-                latitude: Double(state.lat) ?? 0,
-                longitude: Double(state.lon) ?? 0,
-                markerTitle: state.markerTitle,
-                markerSnippet: state.markerSnippet
-            ),
-            imagesToAdd: newImagePaths ?? [],
-            imagesToDelete: state.deletedImageIds
+        let params = UpdateStoreParams(
+            id: storeId,
+            name: state.name,
+            categoryId: state.categoryId,
+            desc: state.description,
+            address: state.address,
+            startDate: dates.startDate,
+            endDate: dates.endDate,
+            mainImageUrl: mainImage,
+            imageUrlList: allPaths,
+            imagesToDelete: state.deletedImageIds,
+            latitude: Double(state.lat) ?? 0,
+            longitude: Double(state.lon) ?? 0,
+            markerTitle: state.markerTitle,
+            markerSnippet: state.markerSnippet,
+            startDateBeforeEndDate: true
         )
 
-        // 서버에 스토어 정보 업데이트 요청
-        return adminUseCase.updateStore(request: request)
-            .flatMap { [weak self] _ -> Observable<Mutation> in
-                guard let self = self else { return .empty() }
-
-                // S3에서 삭제된 이미지 제거
-                if !state.deletedImagePaths.isEmpty {
-                    self.deleteImagesFromS3(state.deletedImagePaths)
-                }
-
-                return .just(.setSuccess(true))
-            }
+        return self.adminUseCase.updateStore(params: params)
+            .andThen(Observable.just(.setSuccess(true)))
 
     }
 }
