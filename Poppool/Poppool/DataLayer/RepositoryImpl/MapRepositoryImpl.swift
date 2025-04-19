@@ -27,25 +27,7 @@ final class MapRepositoryImpl: MapRepository {
             ),
             interceptor: TokenInterceptor()
         )
-        .map { $0.popUpStoreList }
-        .map { dtoList in
-            dtoList.map { dto -> MapPopUpStore in
-                return MapPopUpStore(
-                    id: dto.id,
-                    category: dto.categoryName,
-                    name: dto.name,
-                    address: dto.address,
-                    startDate: dto.startDate,
-                    endDate: dto.endDate,
-                    latitude: dto.latitude,
-                    longitude: dto.longitude,
-                    markerId: dto.id,
-                    markerTitle: dto.markerTitle ?? dto.name,
-                    markerSnippet: dto.markerSnippet ?? "",
-                    mainImageUrl: dto.mainImageUrl
-                )
-            }
-        }
+        .map { $0.popUpStoreList.map(MapDomainModelConverter.convert) }
     }
 
     func searchStores(
@@ -59,25 +41,7 @@ final class MapRepositoryImpl: MapRepository {
             ),
             interceptor: TokenInterceptor()
         )
-        .map { $0.popUpStoreList }
-        .map { dtoList in
-            dtoList.map { dto -> MapPopUpStore in
-                return MapPopUpStore(
-                    id: dto.id,
-                    category: dto.categoryName,
-                    name: dto.name,
-                    address: dto.address,
-                    startDate: dto.startDate,
-                    endDate: dto.endDate,
-                    latitude: dto.latitude,
-                    longitude: dto.longitude,
-                    markerId: dto.id,
-                    markerTitle: dto.markerTitle ?? dto.name,
-                    markerSnippet: dto.markerSnippet ?? "",
-                    mainImageUrl: dto.mainImageUrl
-                )
-            }
-        }
+        .map { $0.popUpStoreList.map(MapDomainModelConverter.convert) }
     }
 
     func fetchCategories() -> Observable<[CategoryResponse]> {
