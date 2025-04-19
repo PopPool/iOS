@@ -501,7 +501,17 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 self.addMarkers(for: results)
 
                 // 스토어 리스트 업데이트
-                let storeItems = results.map { $0.toStoreItem() }
+                let storeItems = results.map { store in
+                    StoreItem(
+                        id: store.id,
+                        thumbnailURL: store.mainImageUrl ?? "",
+                        category: store.category,
+                        title: store.name,
+                        location: store.address,
+                        dateRange: "\(store.startDate) ~ \(store.endDate)",
+                        isBookmarked: false
+                    )
+                }
                 self.storeListViewController.reactor?.action.onNext(.setStores(storeItems))
 
                 // 캐러셀 업데이트
@@ -1044,7 +1054,17 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     }
         private func updateListView(with results: [MapPopUpStore]) {
             // MapPopUpStore 배열을 StoreItem 배열로 변환
-            let storeItems = results.map { $0.toStoreItem() }
+        let storeItems = results.map { store in
+            StoreItem(
+                id: store.id,
+                thumbnailURL: store.mainImageUrl ?? "",
+                category: store.category,
+                title: store.name,
+                location: store.address,
+                dateRange: "\(store.startDate) ~ \(store.endDate)",
+                isBookmarked: false
+            )
+        }
             storeListViewController.reactor?.action.onNext(.setStores(storeItems))
         }
 

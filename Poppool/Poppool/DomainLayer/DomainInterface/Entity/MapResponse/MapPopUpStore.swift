@@ -1,5 +1,4 @@
 import Foundation
-import NMapsMap
 
 struct MapPopUpStore: Equatable {
     let id: Int64
@@ -14,29 +13,4 @@ struct MapPopUpStore: Equatable {
     let markerTitle: String
     let markerSnippet: String
     let mainImageUrl: String?
-
-    var nmgCoordinate: NMGLatLng {
-        NMGLatLng(lat: latitude, lng: longitude)
-    }
-
-    func toMarkerInput() -> MapMarker.Input {
-        return MapMarker.Input(
-            isSelected: false,
-            isCluster: false,
-            regionName: self.markerTitle,
-            count: 0
-        )
-    }
-
-    func toStoreItem() -> StoreItem {
-        return StoreItem(
-            id: id,
-            thumbnailURL: mainImageUrl ?? "",
-            category: category,
-            title: name,
-            location: address,
-            dateRange: "\(startDate) ~ \(endDate)",
-            isBookmarked: false
-        )
-    }
 }
