@@ -2,7 +2,7 @@ import Foundation
 
 import UIKit
 
-extension UIFont {
+public extension UIFont {
     static func korFont(style: FontStyle, size: CGFloat) -> UIFont? {
         return UIFont(name: "GothicA1\(style.rawValue)", size: size)
     }
