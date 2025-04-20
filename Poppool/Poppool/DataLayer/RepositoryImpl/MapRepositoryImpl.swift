@@ -51,7 +51,7 @@ final class MapRepositoryImpl: MapRepository {
             with: SignUpAPIEndpoint.signUp_getCategoryList(),
             interceptor: TokenInterceptor()
         )
-        .do(onNext: { responseDTO in
+        .do(onNext: { _ in
             Logger.log(
                 message: "카테고리 목록 응답 성공",
                 category: .debug

@@ -1,5 +1,5 @@
-import Foundation
 import Alamofire
+import Foundation
 import RxSwift
 
 final class AdminRepositoryImpl: AdminRepository {

@@ -12,8 +12,8 @@ protocol SignUpAPIUseCase {
         interests: [Int64],
         appleAuthorizationCode: String?
     ) -> Completable
-    
+
     func checkNickName(nickName: String) -> Observable<Bool>
-    
+
     func fetchCategoryList() -> Observable<[CategoryResponse]>
 }
