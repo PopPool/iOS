@@ -1,12 +1,8 @@
-//
-//  NormalCommentAddReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/14/24.
-//
-
 import PhotosUI
 import UIKit
+
+import Infrastructure
+import DomainInterface
 
 import ReactorKit
 import RxCocoa
@@ -48,7 +44,7 @@ final class NormalCommentAddReactor: Reactor {
     private var popUpName: String
 
     private let commentAPIUseCase: CommentAPIUseCase
-    private let imageService = PreSignedService()
+    private let preSignedUseCase: PreSignedUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -77,12 +73,14 @@ final class NormalCommentAddReactor: Reactor {
     init(
         popUpID: Int64,
         popUpName: String,
-        commentAPIUseCase: CommentAPIUseCase
+        commentAPIUseCase: CommentAPIUseCase,
+        preSignedUseCase: PreSignedUseCase
     ) {
         self.initialState = State()
         self.popUpID = popUpID
         self.popUpName = popUpName
         self.commentAPIUseCase = commentAPIUseCase
+        self.preSignedUseCase = preSignedUseCase
     }
 
     // MARK: - Reactor Methods
@@ -160,20 +158,25 @@ final class NormalCommentAddReactor: Reactor {
                 let uuid = UUID().uuidString
                 let pathList = images.map { "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg" }
 
-                imageService.tryUpload(datas: images.map { .init(filePath: "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg", image: $0.element)})
-                    .subscribe(onSuccess: { [weak self] _ in
-                        guard let self = self else { return }
-                        self.commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: pathList)
-                            .subscribe(onDisposed: {
-                                controller.navigationController?.popViewController(animated: true) {
-                                    DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                        ToastMaker.createToast(message: "코멘트 작성을 완료했어요")
-                                    }
+                preSignedUseCase.tryUpload(presignedURLRequest: images.map {
+                    return (
+                        filePath: "PopUpComment/\(popUpName)/\(uuid)/\($0.offset).jpg",
+                        image: $0.element
+                    )
+                })
+                .subscribe(onSuccess: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.commentAPIUseCase.postCommentAdd(popUpStoreId: self.popUpID, content: newState.text, commentType: "NORMAL", imageUrlList: pathList)
+                        .subscribe(onDisposed: {
+                            controller.navigationController?.popViewController(animated: true) {
+                                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                    ToastMaker.createToast(message: "코멘트 작성을 완료했어요")
                                 }
-                            })
-                            .disposed(by: disposeBag)
-                    })
-                    .disposed(by: disposeBag)
+                            }
+                        })
+                        .disposed(by: disposeBag)
+                })
+                .disposed(by: disposeBag)
             }
 
         }

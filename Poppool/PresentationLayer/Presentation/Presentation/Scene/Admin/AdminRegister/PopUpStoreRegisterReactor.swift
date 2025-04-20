@@ -1,6 +1,7 @@
 import UIKit
-
 import CoreLocation
+
+import DomainInterface
 
 import ReactorKit
 import RxCocoa
@@ -10,7 +11,7 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     // MARK: - Properties
     private let adminUseCase: AdminUseCase
-    private let presignedService: PreSignedService
+    private let preSignedUseCase: PreSignedUseCase
     private let isEditMode: Bool
     private let editingStoreId: Int64?
 
@@ -18,11 +19,11 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     init(
         adminUseCase: AdminUseCase,
-        presignedService: PreSignedService,
+        preSignedUseCase: PreSignedUseCase,
         editingStore: AdminStore? = nil
     ) {
         self.adminUseCase = adminUseCase
-        self.presignedService = presignedService
+        self.preSignedUseCase = preSignedUseCase
         self.isEditMode = editingStore != nil
         self.editingStoreId = editingStore?.id
 
@@ -520,7 +521,7 @@ final class PopUpStoreRegisterReactor: Reactor {
     private func deleteImagesFromS3(_ imagePaths: [String]) {
         guard !imagePaths.isEmpty else { return }
 
-        presignedService.tryDelete(targetPaths: .init(objectKeyList: imagePaths))
+        preSignedUseCase.tryDelete(objectKeyList: imagePaths)
             .subscribe(
                 onCompleted: {
                     Logger.log(message: "S3에서 모든 이미지 삭제 성공: \(imagePaths.count)개", category: .info)
@@ -648,7 +649,7 @@ final class PopUpStoreRegisterReactor: Reactor {
 
                         dispatchGroup.enter()
 
-                        if let imageURL = self.presignedService.fullImageURL(from: imageData.imageUrl) {
+                        if let imageURL = self.preSignedUseCase.fullImageURL(from: imageData.imageUrl) {
                             URLSession.shared.dataTask(with: imageURL) { data, _, error in
                                 defer { dispatchGroup.leave() }
 
@@ -722,8 +723,8 @@ final class PopUpStoreRegisterReactor: Reactor {
                 isMain: image.isMain)
         }
 
-        return presignedService.tryUpload(datas: updatedImages.map {
-            PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
+        return preSignedUseCase.tryUpload(presignedURLRequest: updatedImages.map {
+            return (filePath: $0.filePath, image: $0.image)
         })
         .asObservable() // Single을 Observable로 변환
         .map { _ in updatedImages.map { $0.filePath } }
@@ -802,8 +803,8 @@ final class PopUpStoreRegisterReactor: Reactor {
                 isMain: image.isMain)
         }
 
-        return presignedService.tryUpload(datas: updatedImages.map {
-            PreSignedService.PresignedURLRequest(filePath: $0.filePath, image: $0.image)
+        return preSignedUseCase.tryUpload(presignedURLRequest: updatedImages.map {
+            return (filePath: $0.filePath, image: $0.image)
         })
         .asObservable()
         .map { _ in updatedImages.map { $0.filePath } }

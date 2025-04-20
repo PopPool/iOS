@@ -1,11 +1,7 @@
-//
-//  CommentListReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/25/24.
-//
-
 import UIKit
+
+import Infrastructure
+import DomainInterface
 
 import ReactorKit
 import RxCocoa
@@ -48,7 +44,7 @@ final class CommentListReactor: Reactor {
     private var page: Int32 = 0
     private var appendDataIsEmpty: Bool = false
 
-    private var imageService = PreSignedService()
+    private let preSignedUseCase: PreSignedUseCase
     private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase: CommentAPIUseCase
@@ -78,7 +74,8 @@ final class CommentListReactor: Reactor {
         popUpName: String?,
         userAPIUseCase: UserAPIUseCase,
         popUpAPIUseCase: PopUpAPIUseCase,
-        commentAPIUseCase: CommentAPIUseCase
+        commentAPIUseCase: CommentAPIUseCase,
+        preSignedUseCase: PreSignedUseCase
     ) {
         self.initialState = State()
         self.popUpID = popUpID
@@ -86,6 +83,7 @@ final class CommentListReactor: Reactor {
         self.userAPIUseCase = userAPIUseCase
         self.popUpAPIUseCase = popUpAPIUseCase
         self.commentAPIUseCase = commentAPIUseCase
+        self.preSignedUseCase = preSignedUseCase
     }
 
     // MARK: - Reactor Methods
@@ -287,7 +285,6 @@ final class CommentListReactor: Reactor {
     func showMyCommentMenu(controller: BaseViewController, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentMyMenuController()
         nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
-        imageService = PreSignedService()
         controller.presentPanModal(nextController)
 
         nextController.reactor?.state
@@ -304,10 +301,10 @@ final class CommentListReactor: Reactor {
                         .disposed(by: self.disposeBag)
 
                     let commentList = comment.imageList.compactMap { $0 }
-                    self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
-                        .subscribe {
+                    self.preSignedUseCase.tryDelete(objectKeyList: commentList)
+                        .subscribe(onDisposed:  {
                             Logger.log(message: "S3 Image Delete 완료", category: .info)
-                        }
+                        })
                         .disposed(by: self.disposeBag)
                 case .edit:
                     owner.dismiss(animated: true) { [weak controller] in

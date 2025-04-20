@@ -1,5 +1,8 @@
 import UIKit
 
+import Infrastructure
+import DomainInterface
+
 import LinkPresentation
 import ReactorKit
 import RxCocoa
@@ -57,7 +60,7 @@ final class DetailReactor: Reactor {
     private var isLogin: Bool = false
     private var isFirstRequest: Bool = true
 
-    private var imageService = PreSignedService()
+    private var preSignedUseCase: PreSignedUseCase
     private let popUpAPIUseCase: PopUpAPIUseCase
     private let userAPIUseCase: UserAPIUseCase
     private let commentAPIUseCase: CommentAPIUseCase
@@ -98,12 +101,14 @@ final class DetailReactor: Reactor {
         popUpID: Int64,
         userAPIUseCase: UserAPIUseCase,
         popUpAPIUseCase: PopUpAPIUseCase,
-        commentAPIUseCase: CommentAPIUseCase
+        commentAPIUseCase: CommentAPIUseCase,
+        preSignedUseCase: PreSignedUseCase
     ) {
         self.popUpID = popUpID
         self.userAPIUseCase = userAPIUseCase
         self.popUpAPIUseCase = popUpAPIUseCase
         self.commentAPIUseCase = commentAPIUseCase
+        self.preSignedUseCase = preSignedUseCase
         self.initialState = State()
     }
 
@@ -513,7 +518,6 @@ extension DetailReactor {
     func showMyCommentMenu(controller: BaseViewController, indexPath: IndexPath, comment: DetailCommentSection.CellType.Input) {
         let nextController = CommentMyMenuController()
         nextController.reactor = CommentMyMenuReactor(nickName: comment.nickName)
-        imageService = PreSignedService()
         controller.presentPanModal(nextController)
 
         nextController.reactor?.state
@@ -530,10 +534,10 @@ extension DetailReactor {
                         .disposed(by: self.disposeBag)
 
                     let commentList = comment.imageList.compactMap { $0 }
-                    self.imageService.tryDelete(targetPaths: .init(objectKeyList: commentList))
-                        .subscribe {
+                    self.preSignedUseCase.tryDelete(objectKeyList: commentList)
+                        .subscribe(onDisposed:  {
                             Logger.log(message: "S3 Image Delete 완료", category: .info)
-                        }
+                        })
                         .disposed(by: self.disposeBag)
 
                 case .edit:

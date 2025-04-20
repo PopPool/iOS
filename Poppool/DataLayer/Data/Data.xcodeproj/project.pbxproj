@@ -102,6 +102,7 @@
 				Network/Interceptor/TokenInterceptor.swift,
 				Network/Provider/Provider.swift,
 				Network/Provider/ProviderImpl.swift,
+				Network/Service/PreSignedService.swift,
 				RepositoryImpl/AdminRepositoryImpl.swift,
 				RepositoryImpl/AuthAPIRepositoryImpl.swift,
 				RepositoryImpl/CommentAPIRepositoryImpl.swift,
@@ -109,6 +110,7 @@
 				RepositoryImpl/MapDirectionRepositoryImpl.swift,
 				RepositoryImpl/MapRepositoryImpl.swift,
 				RepositoryImpl/PopUpAPIRepositoryImpl.swift,
+				RepositoryImpl/PreSignedRepositoryImpl.swift,
 				RepositoryImpl/SignUpRepositoryImpl.swift,
 				RepositoryImpl/UserAPIRepositoryImpl.swift,
 			);

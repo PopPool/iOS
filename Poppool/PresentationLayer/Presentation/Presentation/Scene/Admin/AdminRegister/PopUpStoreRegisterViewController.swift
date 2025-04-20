@@ -27,10 +27,9 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         super.init()
 
-        let presignedService = PreSignedService()
         let reactor = PopUpStoreRegisterReactor(
             adminUseCase: DIContainer.resolve(AdminUseCase.self),
-            presignedService: presignedService,
+            preSignedUseCase: DIContainer.resolve(PreSignedUseCasae.self),
             editingStore: editingStore
         )
 

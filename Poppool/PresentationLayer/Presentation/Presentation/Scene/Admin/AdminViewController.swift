@@ -1,7 +1,11 @@
+import UIKit
+
+import Infrastructure
+import DomainInterface
+
 import ReactorKit
 import RxCocoa
 import RxSwift
-import UIKit
 
 final class AdminViewController: BaseViewController, View {
 
@@ -221,8 +225,8 @@ final class AdminViewController: BaseViewController, View {
 
                     Logger.log(message: "삭제할 이미지: \(allImageUrls.count)개", category: .debug)
 
-                    let imageService = PreSignedService()
-                    imageService.tryDelete(targetPaths: .init(objectKeyList: allImageUrls))
+                    @Dependency var preSignedUseCase: PreSignedUseCase
+                    preSignedUseCase.tryDelete(objectKeyList: allImageUrls)
                         .andThen(self.adminUseCase.deleteStore(id: store.id))
                         .observe(on: MainScheduler.instance)
                         .subscribe(

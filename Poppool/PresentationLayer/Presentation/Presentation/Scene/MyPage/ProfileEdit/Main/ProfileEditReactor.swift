@@ -1,12 +1,8 @@
-//
-//  ProfileEditReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/4/25.
-//
-
 import PhotosUI
 import UIKit
+
+import Infrastructure
+import DomainInterface
 
 import ReactorKit
 import RxCocoa
@@ -66,15 +62,17 @@ final class ProfileEditReactor: Reactor {
 
     private let userAPIUseCase: UserAPIUseCase
     private let signUpAPIUseCase: SignUpAPIUseCase
-    private let imageService = PreSignedService()
+    private let preSignedUseCase: PreSignedUseCase
 
     // MARK: - init
     init(
         userAPIUseCase: UserAPIUseCase,
-        signUpAPIUseCase: SignUpAPIUseCase
+        signUpAPIUseCase: SignUpAPIUseCase,
+        preSignedUseCase: PreSignedUseCase
     ) {
         self.userAPIUseCase = userAPIUseCase
         self.signUpAPIUseCase = signUpAPIUseCase
+        self.preSignedUseCase = preSignedUseCase
         self.initialState = State()
     }
 
@@ -191,14 +189,14 @@ final class ProfileEditReactor: Reactor {
             let newPath = "ProfileImage/\(UUID().uuidString).jpg"
             currentImagePath = newPath
             if originProfileData?.profileImageUrl == nil {
-                return imageService.tryUpload(datas: [.init(filePath: newPath, image: changeImage)])
+                return preSignedUseCase.tryUpload(presignedURLRequest: [(filePath: newPath, image: changeImage)])
                     .asObservable()
                     .map { .loadView }
             } else {
                 let deletePath = originProfileData?.profileImageUrl ?? ""
-                return imageService.tryDelete(targetPaths: .init(objectKeyList: [deletePath]))
+                return preSignedUseCase.tryDelete(objectKeyList: [deletePath])
                     .andThen(
-                        imageService.tryUpload(datas: [.init(filePath: newPath, image: changeImage)])
+                        preSignedUseCase.tryUpload(presignedURLRequest: [(filePath: newPath, image: changeImage)])
                         .asObservable()
                         .map { .loadView }
                     )
@@ -211,7 +209,7 @@ final class ProfileEditReactor: Reactor {
                 } else {
                     currentImagePath = nil
                     let deletePath = originProfileData?.profileImageUrl ?? ""
-                    return imageService.tryDelete(targetPaths: .init(objectKeyList: [deletePath]))
+                    return preSignedUseCase.tryDelete(objectKeyList: [deletePath])
                         .andThen(Observable.just(.loadView))
                 }
             } else {

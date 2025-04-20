@@ -56,8 +56,7 @@ final class HomeCardSectionCell: UICollectionViewCell {
         label.textColor = .w100
         return label
     }()
-
-    private let imageService = PreSignedService()
+    
     // MARK: - init
 
     override init(frame: CGRect) {

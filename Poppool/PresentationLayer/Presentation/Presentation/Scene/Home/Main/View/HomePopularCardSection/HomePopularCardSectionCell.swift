@@ -57,7 +57,6 @@ final class HomePopularCardSectionCell: UICollectionViewCell {
 
     let disposeBag = DisposeBag()
 
-    private let imageService = PreSignedService()
     // MARK: - init
 
     override init(frame: CGRect) {
