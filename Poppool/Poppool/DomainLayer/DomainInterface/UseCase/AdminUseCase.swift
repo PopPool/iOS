@@ -3,8 +3,8 @@ import RxSwift
 
 protocol AdminUseCase {
 
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]>
-    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail>
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[StoreResponse]>
+    func fetchStoreDetail(id: Int64) -> Observable<StoreDetailResponse>
 
     func createStore(params: CreateStoreParams) -> Completable
 

@@ -89,7 +89,7 @@ final class PopUpStoreRegisterReactor: Reactor {
         case addDeletedImage(id: Int64, path: String)
 
         // 기존 스토어 데이터 설정
-        case setStoreDetail(AdminStoreDetail)
+        case setStoreDetail(StoreDetailResponse)
         case setOriginalImageIds([String: Int64])
 
         // UI 상태 관리

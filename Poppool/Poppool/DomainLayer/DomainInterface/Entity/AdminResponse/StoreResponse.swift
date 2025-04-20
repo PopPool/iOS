@@ -1,6 +1,6 @@
 import Foundation
 
-struct AdminStore {
+struct StoreResponse {
     let id: Int64
     let name: String
     let categoryName: String

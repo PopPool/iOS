@@ -14,7 +14,7 @@ final class AdminRepositoryImpl: AdminRepository {
     }
 
     // MARK: - Store Methods
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[StoreResponse]> {
         let endpoint = AdminAPIEndpoint.fetchStoreList(
             query: query,
             page: page,
@@ -26,19 +26,19 @@ final class AdminRepositoryImpl: AdminRepository {
         )
         .map { response in
             response.popUpStoreList?.map {
-                AdminStore(id: $0.id, name: $0.name, categoryName: $0.categoryName, mainImageUrl: $0.mainImageUrl)
+                StoreResponse(id: $0.id, name: $0.name, categoryName: $0.categoryName, mainImageUrl: $0.mainImageUrl)
             } ?? []
         }
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
+    func fetchStoreDetail(id: Int64) -> Observable<StoreDetailResponse> {
        let endpoint = AdminAPIEndpoint.fetchStoreDetail(id: id)
        return provider.requestData(
            with: endpoint,
            interceptor: tokenInterceptor
        )
        .map { dto in
-           AdminStoreDetail(
+           StoreDetailResponse(
                id: dto.id,
                name: dto.name,
                categoryId: dto.categoryId,
@@ -52,7 +52,7 @@ final class AdminRepositoryImpl: AdminRepository {
                mainImageUrl: dto.mainImageUrl,
                bannerYn: dto.bannerYn,
                images: dto.imageList.map {
-                   AdminStoreDetail.StoreImage(
+                   StoreDetailResponse.StoreImage(
                        id: $0.id,
                        imageUrl: $0.imageUrl
                    )

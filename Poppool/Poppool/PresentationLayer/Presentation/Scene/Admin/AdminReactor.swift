@@ -14,18 +14,18 @@ final class AdminReactor: Reactor {
     }
 
     enum Mutation {
-        case setStores([AdminStore])
+        case setStores([StoreResponse])
         case setIsLoading(Bool)
         case navigateToRegister(Bool)
-        case navigateToEdit(AdminStore) // ✅ 수정 데이터 추가
+        case navigateToEdit(StoreResponse) // ✅ 수정 데이터 추가
 
     }
 
     struct State {
-        var storeList: [AdminStore] = []
+        var storeList: [StoreResponse] = []
         var isLoading: Bool = false
         var shouldNavigateToRegister: Bool = false
-        var selectedStoreForEdit: AdminStore? // ✅ 추가
+        var selectedStoreForEdit: StoreResponse? // ✅ 추가
 
     }
 

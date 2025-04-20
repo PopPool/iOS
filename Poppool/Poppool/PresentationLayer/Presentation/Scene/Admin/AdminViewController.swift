@@ -153,7 +153,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func showDeleteConfirmation(for store: AdminStore) {
+    private func showDeleteConfirmation(for store: StoreResponse) {
         let alert = UIAlertController(
             title: "삭제 확인",
             message: "\(store.name)을(를) 삭제하시겠습니까?",
@@ -168,7 +168,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func editStore(_ store: AdminStore) {
+    private func editStore(_ store: StoreResponse) {
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
@@ -201,7 +201,7 @@ final class AdminViewController: BaseViewController, View {
             .disposed(by: disposeBag)
     }
 
-    private func deleteStore(_ store: AdminStore) {
+    private func deleteStore(_ store: StoreResponse) {
         // 먼저 스토어 상세 정보를 가져와 모든 이미지 URL을 확인
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
@@ -294,13 +294,7 @@ final class AdminViewController: BaseViewController, View {
                 cellIdentifier: AdminStoreCell.identifier,
                 cellType: AdminStoreCell.self
             )) { _, store, cell in
-                let dto = GetAdminPopUpStoreListResponseDTO.PopUpStore(
-                    id: store.id,
-                    name: store.name,
-                    categoryName: store.categoryName,
-                    mainImageUrl: store.mainImageUrl
-                )
-                cell.configure(with: dto)
+                cell.configure(with:  store)
             }
             .disposed(by: disposeBag)
     }
