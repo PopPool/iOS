@@ -17,7 +17,7 @@ public final class AdminRepositoryImpl: AdminRepository {
     }
 
     // MARK: - Store Methods
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
+    public func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
         let endpoint = AdminAPIEndpoint.fetchStoreList(
             query: query,
             page: page,
@@ -34,7 +34,7 @@ public final class AdminRepositoryImpl: AdminRepository {
         }
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
+    public func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
        let endpoint = AdminAPIEndpoint.fetchStoreDetail(id: id)
        return provider.requestData(
            with: endpoint,
@@ -74,7 +74,7 @@ public final class AdminRepositoryImpl: AdminRepository {
        }
     }
 
-    func createStore(params: CreateStoreParams) -> Completable {
+    public func createStore(params: CreateStoreParams) -> Completable {
         let dto = CreatePopUpStoreRequestDTO(
             name: params.name,
             categoryId: params.categoryId,
@@ -94,7 +94,7 @@ public final class AdminRepositoryImpl: AdminRepository {
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func updateStore(params: UpdateStoreParams) -> Completable {
+    public func updateStore(params: UpdateStoreParams) -> Completable {
         let dto = UpdatePopUpStoreRequestDTO(
             popUpStore: UpdatePopUpStoreRequestDTO.PopUpStore(
                 id: params.id,
@@ -122,13 +122,13 @@ public final class AdminRepositoryImpl: AdminRepository {
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func deleteStore(id: Int64) -> Completable {
+    public func deleteStore(id: Int64) -> Completable {
         let endpoint = AdminAPIEndpoint.deleteStore(id: id)
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
     // MARK: - Notice Methods
-    func createNotice(params: CreateNoticeParams) -> Completable {
+    public func createNotice(params: CreateNoticeParams) -> Completable {
         let dto = CreateNoticeRequestDTO(
             title: params.title,
             content: params.content,
@@ -138,7 +138,7 @@ public final class AdminRepositoryImpl: AdminRepository {
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func updateNotice(params: UpdateNoticeParams) -> Completable {
+    public func updateNotice(params: UpdateNoticeParams) -> Completable {
         let dto = UpdateNoticeRequestDTO(
             title: params.title,
             content: params.content,
@@ -149,7 +149,7 @@ public final class AdminRepositoryImpl: AdminRepository {
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func deleteNotice(id: Int64) -> Completable {
+    public func deleteNotice(id: Int64) -> Completable {
         let endpoint = AdminAPIEndpoint.deleteNotice(id: id)
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }

@@ -13,7 +13,7 @@ public final class MapRepositoryImpl: MapRepository {
         self.provider = provider
     }
 
-    func fetchStoresInBounds(
+    public func fetchStoresInBounds(
         northEastLat: Double,
         northEastLon: Double,
         southWestLat: Double,
@@ -33,7 +33,7 @@ public final class MapRepositoryImpl: MapRepository {
         .map { $0.popUpStoreList.map { $0.toDomain() } }
     }
 
-    func searchStores(
+    public func searchStores(
         query: String,
         categories: [Int64]
     ) -> Observable<[MapPopUpStore]> {
@@ -47,7 +47,7 @@ public final class MapRepositoryImpl: MapRepository {
         .map { $0.popUpStoreList.map { $0.toDomain() } }
     }
 
-    func fetchCategories() -> Observable<[CategoryResponse]> {
+    public func fetchCategories() -> Observable<[CategoryResponse]> {
         Logger.log(message: "카테고리 목록 요청을 시작합니다.", category: .network)
 
         return provider.requestData(

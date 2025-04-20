@@ -12,19 +12,19 @@ public final class SignUpRepositoryImpl: SignUpRepository {
         self.provider = provider
     }
 
-    func checkNickName(nickName: String) -> Observable<Bool> {
+    public func checkNickName(nickName: String) -> Observable<Bool> {
         let endPoint = SignUpAPIEndpoint.signUp_checkNickName(with: .init(nickName: nickName))
         return provider.requestData(with: endPoint, interceptor: TokenInterceptor())
     }
 
-    func fetchCategoryList() -> Observable<[CategoryResponse]> {
+    public func fetchCategoryList() -> Observable<[CategoryResponse]> {
         let endPoint = SignUpAPIEndpoint.signUp_getCategoryList()
         return provider.requestData(with: endPoint, interceptor: TokenInterceptor()).map { responseDTO in
             return responseDTO.categoryResponseList.map({ $0.toDomain() })
         }
     }
 
-    func trySignUp(
+    public func trySignUp(
         nickName: String,
         gender: String,
         age: Int32,

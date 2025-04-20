@@ -1,11 +1,6 @@
-//
-//  PreSignedAPIEndPoint.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/29/24.
-//
-
 import Foundation
+
+import Infrastructure
 
 struct PreSignedAPIEndPoint {
     static func presigned_upload(request: PresignedURLRequestDTO) -> Endpoint<PreSignedURLResponseDTO> {

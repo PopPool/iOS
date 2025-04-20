@@ -69,15 +69,15 @@ public struct UpdateStoreParams {
 }
 
 public struct CreateNoticeParams {
-    let title: String
-    let content: String
-    let imageUrlList: [String]
+    public let title: String
+    public let content: String
+    public let imageUrlList: [String]
 }
 
 public struct UpdateNoticeParams {
-    let id: Int64
-    let title: String
-    let content: String
-    let imageUrlList: [String]
-    let imagesToDelete: [Int64]
+    public let id: Int64
+    public let title: String
+    public let content: String
+    public let imageUrlList: [String]
+    public let imagesToDelete: [Int64]
 }

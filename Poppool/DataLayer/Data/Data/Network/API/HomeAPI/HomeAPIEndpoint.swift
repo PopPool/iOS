@@ -1,5 +1,7 @@
 import Foundation
 
+import Infrastructure
+
 struct HomeAPIEndpoint {
 
     static func fetchHome(

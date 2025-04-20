@@ -13,13 +13,13 @@ public final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
         self.provider = provider
     }
 
-    func postBookmarkPopUp(popUpStoreId: Int64) -> Completable {
+    public func postBookmarkPopUp(popUpStoreId: Int64) -> Completable {
         let request = PostBookmarkPopUpRequestDTO(popUpStoreId: popUpStoreId)
         let endPoint = UserAPIEndPoint.postBookmarkPopUp(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func getClosePopUpList(
+    public func getClosePopUpList(
         categories: String?,
         page: Int32?,
         size: Int32?,
@@ -32,7 +32,7 @@ public final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getOpenPopUpList(
+    public func getOpenPopUpList(
         categories: String?,
         page: Int32?,
         size: Int32?,
@@ -45,7 +45,7 @@ public final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getSearchPopUpList(
+    public func getSearchPopUpList(
         categories: String?,
         page: Int32?,
         size: Int32?,
@@ -58,13 +58,13 @@ public final class PopUpAPIRepositoryImpl: PopUpAPIRepository {
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getPopUpDetail(commentType: String?, popUpStoreId: Int64, viewCountYn: Bool?) -> Observable<GetPopUpDetailResponse> {
+    public func getPopUpDetail(commentType: String?, popUpStoreId: Int64, viewCountYn: Bool?) -> Observable<GetPopUpDetailResponse> {
         let request = GetPopUpDetailRequestDTO(commentType: commentType, popUpStoreId: popUpStoreId, viewCountYn: viewCountYn)
         let endPoint = PopUpAPIEndPoint.getPopUpDetail(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getPopUpComment(commentType: String?, page: Int32?, size: Int32?, sort: String?, popUpStoreId: Int64) -> Observable<GetPopUpCommentResponse> {
+    public func getPopUpComment(commentType: String?, page: Int32?, size: Int32?, sort: String?, popUpStoreId: Int64) -> Observable<GetPopUpCommentResponse> {
         let request = GetPopUpCommentRequestDTO(commentType: commentType, page: page, size: size, sort: sort, popUpStoreId: popUpStoreId)
         let endPoint = PopUpAPIEndPoint.getPopUpComment(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }

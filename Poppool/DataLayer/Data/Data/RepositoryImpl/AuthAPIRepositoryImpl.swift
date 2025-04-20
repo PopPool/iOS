@@ -13,7 +13,7 @@ public final class AuthAPIRepositoryImpl: AuthAPIRepository {
         self.provider = provider
     }
 
-    func tryLogIn(userCredential: Encodable, socialType: String) -> Observable<LoginResponse> {
+    public func tryLogIn(userCredential: Encodable, socialType: String) -> Observable<LoginResponse> {
         let endPoint = AuthAPIEndPoint.auth_tryLogin(with: userCredential, path: socialType)
         return provider
             .requestData(with: endPoint, interceptor: nil)
@@ -22,7 +22,7 @@ public final class AuthAPIRepositoryImpl: AuthAPIRepository {
             }
     }
 
-    func postTokenReissue() -> Observable<PostTokenReissueResponse> {
+    public func postTokenReissue() -> Observable<PostTokenReissueResponse> {
         let endPoint = AuthAPIEndPoint.postTokenReissue()
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
             .map { responseDTO in
