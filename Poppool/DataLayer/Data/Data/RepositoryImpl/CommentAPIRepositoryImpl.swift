@@ -1,5 +1,7 @@
 import Foundation
 
+import DomainInterface
+
 import RxSwift
 
 final class CommentAPIRepositoryImpl: CommentAPIRepository {

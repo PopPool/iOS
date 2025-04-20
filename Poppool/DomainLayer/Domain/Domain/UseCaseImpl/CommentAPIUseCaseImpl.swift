@@ -1,4 +1,7 @@
 import Foundation
+
+import DomainInterface
+
 import RxSwift
 
 final class CommentAPIUseCaseImpl: CommentAPIUseCase {

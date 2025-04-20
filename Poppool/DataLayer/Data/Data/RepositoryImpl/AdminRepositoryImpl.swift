@@ -1,5 +1,8 @@
-import Alamofire
 import Foundation
+
+import DomainInterface
+
+import Alamofire
 import RxSwift
 
 final class AdminRepositoryImpl: AdminRepository {
