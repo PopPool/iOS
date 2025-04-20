@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol MapUseCase {
+public protocol MapUseCase {
     func fetchCategories() -> Observable<[CategoryResponse]>
     func fetchStoresInBounds(
         northEastLat: Double,

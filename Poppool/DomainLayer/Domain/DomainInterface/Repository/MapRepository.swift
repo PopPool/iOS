@@ -1,15 +1,8 @@
-//
-//  MapRepository.swift
-//  Poppool
-//
-//  Created by 송영훈 on 4/14/25.
-//
-
 import Foundation
 
 import RxSwift
 
-protocol MapRepository {
+public protocol MapRepository {
     func fetchStoresInBounds(
         northEastLat: Double,
         northEastLon: Double,

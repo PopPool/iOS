@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol PopUpAPIRepository {
+public protocol PopUpAPIRepository {
     func postBookmarkPopUp(popUpStoreId: Int64) -> Completable
 
     func getClosePopUpList(

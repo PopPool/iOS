@@ -2,6 +2,6 @@ import Foundation
 
 import RxSwift
 
-protocol MapDirectionRepository {
+public protocol MapDirectionRepository {
     func getPopUpDirection(popUpStoreId: Int64) -> Observable<GetPopUpDirectionResponseDTO>
 }

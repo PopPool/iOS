@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol SignUpRepository {
+public protocol SignUpRepository {
     func checkNickName(nickName: String) -> Observable<Bool>
     func fetchCategoryList() -> Observable<[CategoryResponse]>
     func trySignUp(

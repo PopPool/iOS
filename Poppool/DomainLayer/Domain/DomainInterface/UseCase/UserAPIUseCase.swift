@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol UserAPIUseCase {
+public protocol UserAPIUseCase {
     func postBookmarkPopUp(popUpID: Int64) -> Completable
     func deleteBookmarkPopUp(popUpID: Int64) -> Completable
     func postCommentLike(commentId: Int64) -> Completable

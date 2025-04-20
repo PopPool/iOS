@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol CommentAPIRepository {
+public protocol CommentAPIRepository {
   func postCommentAdd(
       popUpStoreId: Int64,
       content: String?,

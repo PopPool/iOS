@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol AdminRepository {
+public protocol AdminRepository {
     func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]>
     func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail>
 

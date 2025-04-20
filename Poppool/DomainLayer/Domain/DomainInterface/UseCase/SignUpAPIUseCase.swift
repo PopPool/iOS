@@ -2,7 +2,7 @@ import Foundation
 
 import RxSwift
 
-protocol SignUpAPIUseCase {
+public protocol SignUpAPIUseCase {
     func trySignUp(
         nickName: String,
         gender: String,

@@ -1,7 +1,8 @@
 import Foundation
+
 import RxSwift
 
-protocol AdminUseCase {
+public protocol AdminUseCase {
 
     func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]>
     func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail>
