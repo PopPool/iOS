@@ -1,13 +1,6 @@
-//
-//  GetMyPageResponse.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/30/24.
-//
-
 import Foundation
 
-struct GetMyPageResponse {
+public struct GetMyPageResponse {
     var nickname: String?
     var profileImageUrl: String?
     var intro: String?
@@ -17,7 +10,7 @@ struct GetMyPageResponse {
     var myCommentedPopUpList: [GetMyPagePopUpResponse]
 }
 
-struct GetMyPagePopUpResponse {
+public struct GetMyPagePopUpResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?
     var mainImageUrl: String?

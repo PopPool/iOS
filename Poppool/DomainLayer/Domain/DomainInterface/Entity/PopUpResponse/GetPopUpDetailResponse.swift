@@ -1,13 +1,6 @@
-//
-//  GetPopUpDetailResponse.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/10/24.
-//
-
 import Foundation
 
-struct GetPopUpDetailResponse {
+public struct GetPopUpDetailResponse {
     let name: String?
     let desc: String?
     let startDate: String?
@@ -25,12 +18,12 @@ struct GetPopUpDetailResponse {
     let similarPopUpStoreList: [GetPopUpDetailSimilarResponse]
 }
 
-struct GetPopUpDetailImageResponse {
+public struct GetPopUpDetailImageResponse {
     let id: Int64
     let imageUrl: String?
 }
 
-struct GetPopUpDetailCommentResponse {
+public struct GetPopUpDetailCommentResponse {
     let commentId: Int64
     let creator: String?
     let nickname: String?
@@ -44,7 +37,7 @@ struct GetPopUpDetailCommentResponse {
     let commentImageList: [GetPopUpDetailImageResponse]
 }
 
-struct GetPopUpDetailSimilarResponse {
+public struct GetPopUpDetailSimilarResponse {
     let id: Int64
     let name: String?
     let mainImageUrl: String?

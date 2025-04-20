@@ -1,19 +1,12 @@
-//
-//  GetRecentPopUpResponse.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/14/25.
-//
-
 import Foundation
 
-struct GetRecentPopUpResponse {
+public struct GetRecentPopUpResponse {
     var popUpInfoList: [GetRecentPopUpDataResponse]
     var totalPages: Int32
     var totalElements: Int32
 }
 
-struct GetRecentPopUpDataResponse {
+public struct GetRecentPopUpDataResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?
     var desc: String?
@@ -23,7 +16,8 @@ struct GetRecentPopUpDataResponse {
     var address: String?
     var closeYn: Bool
 }
-extension GetRecentPopUpDataResponse {
+
+public extension GetRecentPopUpDataResponse {
     func toStoreItem() -> StoreItem {
         return StoreItem(
             id: self.popUpStoreId,

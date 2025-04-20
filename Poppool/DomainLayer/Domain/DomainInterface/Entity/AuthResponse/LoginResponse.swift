@@ -1,13 +1,6 @@
-//
-//  LoginResponse.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
 
-struct LoginResponse {
+public struct LoginResponse {
     var userId: String
     var grantType: String
     var accessToken: String

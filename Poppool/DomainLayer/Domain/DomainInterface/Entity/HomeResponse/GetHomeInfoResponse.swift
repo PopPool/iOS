@@ -1,13 +1,6 @@
-//
-//  GetHomeInfoResponse.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
 
-struct GetHomeInfoResponse {
+public struct GetHomeInfoResponse {
     var bannerPopUpStoreList: [BannerPopUpStore]
     var nickname: String?
     var customPopUpStoreList: [PopUpStoreResponse]

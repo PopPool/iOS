@@ -1,13 +1,6 @@
-//
-//  GetMyProfileResponse.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/10/25.
-//
-
 import Foundation
 
-struct GetMyProfileResponse {
+public struct GetMyProfileResponse {
     var profileImageUrl: String?
     var nickname: String?
     var email: String?

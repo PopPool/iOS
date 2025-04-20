@@ -1,6 +1,6 @@
 import Foundation
 
-struct CreateStoreParams {
+public struct CreateStoreParams {
     let name: String
     let categoryId: Int64
     let desc: String
@@ -16,7 +16,7 @@ struct CreateStoreParams {
     let startDateBeforeEndDate: Bool
 }
 
-struct UpdateStoreParams {
+public struct UpdateStoreParams {
     let id: Int64
     let name: String
     let categoryId: Int64
@@ -34,13 +34,13 @@ struct UpdateStoreParams {
     let startDateBeforeEndDate: Bool
 }
 
-struct CreateNoticeParams {
+public struct CreateNoticeParams {
     let title: String
     let content: String
     let imageUrlList: [String]
 }
 
-struct UpdateNoticeParams {
+public struct UpdateNoticeParams {
     let id: Int64
     let title: String
     let content: String

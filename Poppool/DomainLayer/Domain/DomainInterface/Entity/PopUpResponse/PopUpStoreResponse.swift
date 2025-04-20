@@ -1,13 +1,6 @@
-//
-//  PopUpStoreResponse.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
 
-struct PopUpStoreResponse {
+public struct PopUpStoreResponse {
     let id: Int64
     let category: String?
     let name: String?

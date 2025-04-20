@@ -1,6 +1,6 @@
 import Foundation
 
-struct MapPopUpStore: Equatable {
+public struct MapPopUpStore: Equatable {
     let id: Int64
     let category: String
     let name: String

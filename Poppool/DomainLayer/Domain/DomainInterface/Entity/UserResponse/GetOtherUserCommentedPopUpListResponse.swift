@@ -1,17 +1,10 @@
-//
-//  GetOtherUserCommentedPopUpListResponse.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/27/24.
-//
-
 import Foundation
 
-struct GetOtherUserCommentedPopUpListResponse {
+public struct GetOtherUserCommentedPopUpListResponse {
     var popUpInfoList: [GetOtherUserCommentedPopUpResponse]
 }
 
-struct GetOtherUserCommentedPopUpResponse {
+public struct GetOtherUserCommentedPopUpResponse {
     var popUpStoreId: Int64
     var popUpStoreName: String?
     var desc: String?
