@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		05C1D8302DB53CE300508FFD /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */; };
+		05C1D8322DB53CE300508FFD /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */; };
+		05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; };
+		05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		058CC9182DB5383C0084221A /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +30,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */,
+				05C1D8322DB53CE300508FFD /* RxSwift-Dynamic in Frameworks */,
+				05C1D8302DB53CE300508FFD /* RxCocoa-Dynamic in Frameworks */,
+				05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +87,10 @@
 			);
 			name = Infrastructure;
 			packageProductDependencies = (
+				05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */,
+				05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */,
+				05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */,
+				05C1D8362DB53D3A00508FFD /* KakaoSDKUser */,
 			);
 			productName = Infrastructure;
 			productReference = 058CC9182DB5383C0084221A /* Infrastructure.framework */;
@@ -105,6 +120,10 @@
 			);
 			mainGroup = 058CC90E2DB5383C0084221A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */,
+				05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9192DB5383C0084221A /* Products */;
 			projectDirPath = "";
@@ -347,6 +366,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+		05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxCocoa-Dynamic";
+		};
+		05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxSwift-Dynamic";
+		};
+		05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		05C1D8362DB53D3A00508FFD /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 058CC90F2DB5383C0084221A /* Project object */;
 }
