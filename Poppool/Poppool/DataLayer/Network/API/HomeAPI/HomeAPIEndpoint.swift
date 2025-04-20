@@ -1,16 +1,9 @@
-//
-//  HomeRepositoryImpl.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
 
 struct HomeAPIEndpoint {
 
     static func fetchHome(
-        request: SortedRequestDTO
+        request: HomeSortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
@@ -21,7 +14,7 @@ struct HomeAPIEndpoint {
     }
 
     static func fetchPopularPopUp(
-        request: SortedRequestDTO
+        request: HomeSortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
@@ -32,7 +25,7 @@ struct HomeAPIEndpoint {
     }
 
     static func fetchNewPopUp(
-        request: SortedRequestDTO
+        request: HomeSortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
@@ -43,7 +36,7 @@ struct HomeAPIEndpoint {
     }
 
     static func fetchCustomPopUp(
-        request: SortedRequestDTO
+        request: HomeSortedRequestDTO
     ) -> Endpoint<GetHomeInfoResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,

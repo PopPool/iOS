@@ -8,7 +8,7 @@ final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
     init(repository: SignUpRepository) {
         self.repository = repository
     }
-    
+
     func trySignUp(
         nickName: String,
         gender: String,
@@ -28,7 +28,7 @@ final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
             appleAuthorizationCode: appleAuthorizationCode
         )
     }
-    
+
     func checkNickName(nickName: String) -> Observable<Bool> {
         return repository.checkNickName(nickName: nickName)
     }

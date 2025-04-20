@@ -11,44 +11,51 @@ final class UserAPIRepositoryImpl: UserAPIRepository {
         self.provider = provider
     }
 
-    func postBookmarkPopUp(request: PostBookmarkPopUpRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.postBookmarkPopUp(request: request)
+    func postBookmarkPopUp(popUpStoreId: Int64) -> Completable {
+        let endPoint = UserAPIEndPoint.postBookmarkPopUp(request: .init(popUpStoreId: popUpStoreId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func deleteBookmarkPopUp(request: PostBookmarkPopUpRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.deleteBookmarkPopUp(request: request)
+    func deleteBookmarkPopUp(popUpStoreId: Int64) -> Completable {
+        let endPoint = UserAPIEndPoint.deleteBookmarkPopUp(request: .init(popUpStoreId: popUpStoreId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func postCommentLike(request: CommentLikeRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.postCommentLike(request: request)
+    func postCommentLike(commentId: Int64) -> Completable {
+        let endPoint = UserAPIEndPoint.postCommentLike(request: .init(commentId: commentId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func deleteCommentLike(request: CommentLikeRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.deleteCommentLike(request: request)
+    func deleteCommentLike(commentId: Int64) -> Completable {
+        let endPoint = UserAPIEndPoint.deleteCommentLike(request: .init(commentId: commentId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func postUserBlock(request: PostUserBlockRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.postUserBlock(request: request)
+    func postUserBlock(blockedUserId: String?) -> Completable {
+        let endPoint = UserAPIEndPoint.postUserBlock(request: .init(blockedUserId: blockedUserId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func deleteUserBlock(request: PostUserBlockRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.deleteUserBlock(request: request)
+    func deleteUserBlock(blockedUserId: String?) -> Completable {
+        let endPoint = UserAPIEndPoint.deleteUserBlock(request: .init(blockedUserId: blockedUserId))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func getOtherUserCommentList(request: GetOtherUserCommentListRequestDTO) -> Observable<GetOtherUserCommentedPopUpListResponseDTO> {
+    func getOtherUserCommentList(
+        commenterId: String?,
+        commentType: String?,
+        page: Int32?,
+        size: Int32?,
+        sort: String?
+    ) -> Observable<GetOtherUserCommentedPopUpListResponse> {
+        let request = GetOtherUserCommentListRequestDTO(commenterId: commenterId, commentType: commentType, page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getOtherUserCommentPopUpList(request: request)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getMyPage() -> Observable<GetMyPageResponseDTO> {
+    func getMyPage() -> Observable<GetMyPageResponse> {
         let endPoint = UserAPIEndPoint.getMyPage()
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
     func postLogout() -> Completable {
@@ -56,63 +63,87 @@ final class UserAPIRepositoryImpl: UserAPIRepository {
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func getWithdrawlList() -> Observable<GetWithdrawlListResponseDTO> {
+    func getWithdrawlList() -> Observable<GetWithdrawlListResponse> {
         let endPoint = UserAPIEndPoint.getWithdrawlList()
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func postWithdrawl(request: PostWithdrawlListRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.postWithdrawl(request: request)
+    func postWithdrawl(list: [(Int64, String?)]) -> Completable {
+        let endPoint = UserAPIEndPoint.postWithdrawl(request: .init(checkedSurveyList: list.map { .init(id: $0.0, survey: $0.1)}))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func getMyProfile() -> Observable<GetMyProfileResponseDTO> {
+    func getMyProfile() -> Observable<GetMyProfileResponse> {
         let endPoint = UserAPIEndPoint.getMyProfile()
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func putUserTailoredInfo(request: PutUserTailoredInfoRequestDTO) -> Completable {
-        let endPoint = UserAPIEndPoint.putUserTailoredInfo(request: request)
+    func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
+        let endPoint = UserAPIEndPoint.putUserTailoredInfo(request: .init(gender: gender, age: age))
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func putUserCategory(request: PutUserCategoryRequestDTO) -> Completable {
+    func putUserCategory(
+        interestCategoriesToAdd: [Int64],
+        interestCategoriesToDelete: [Int64],
+        interestCategoriesToKeep: [Int64]
+    ) -> Completable {
+        let request = PutUserCategoryRequestDTO(
+            interestCategoriesToAdd: interestCategoriesToAdd,
+            interestCategoriesToDelete: interestCategoriesToDelete,
+            interestCategoriesToKeep: interestCategoriesToKeep
+        )
         let endPoint = UserAPIEndPoint.putUserCategory(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func putUserProfile(request: PutUserProfileRequestDTO) -> Completable {
+    func putUserProfile(
+        profileImageUrl: String?,
+        nickname: String?,
+        email: String?,
+        instagramId: String?,
+        intro: String?
+    ) -> Completable {
+        let request = PutUserProfileRequestDTO(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro)
         let endPoint = UserAPIEndPoint.putUserProfile(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func getMyCommentedPopUp(request: SortedRequestDTO) -> Observable<GetMyCommentedPopUpResponseDTO> {
+    func getMyCommentedPopUp(
+        page: Int32?,
+        size: Int32?,
+        sort: String?
+    ) -> Observable<GetMyCommentedPopUpResponse> {
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getMyCommentedPopUp(request: request)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getBlockUserList(request: GetBlockUserListRequestDTO) -> Observable<GetBlockUserListResponseDTO> {
+    func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getBlockUserList(request: request)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getNoticeList() -> Observable<GetNoticeListResponseDTO> {
+    func getNoticeList() -> Observable<GetNoticeListResponse> {
         let endPoint = UserAPIEndPoint.getNoticeList()
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponseDTO> {
+    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
         let endPoint = UserAPIEndPoint.getNoticeDetail(noticeID: noticeID)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getRecentPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+    func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getRecentPopUp(request: request)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 
-    func getBookmarkPopUp(request: SortedRequestDTO) -> Observable<GetRecentPopUpResponseDTO> {
+    func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+        let request = UserSortedRequestDTO(page: page, size: size, sort: sort)
         let endPoint = UserAPIEndPoint.getBookmarkPopUp(request: request)
-        return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+        return provider.requestData(with: endPoint, interceptor: tokenInterceptor).map { $0.toDomain() }
     }
 }

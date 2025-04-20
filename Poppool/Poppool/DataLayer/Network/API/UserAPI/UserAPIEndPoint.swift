@@ -142,7 +142,7 @@ struct UserAPIEndPoint {
         )
     }
 
-    static func getMyCommentedPopUp(request: SortedRequestDTO) -> Endpoint<GetMyCommentedPopUpResponseDTO> {
+    static func getMyCommentedPopUp(request: UserSortedRequestDTO) -> Endpoint<GetMyCommentedPopUpResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
             path: "/users/commented/popup",
@@ -151,7 +151,7 @@ struct UserAPIEndPoint {
         )
     }
 
-    static func getBlockUserList(request: GetBlockUserListRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
+    static func getBlockUserList(request: UserSortedRequestDTO) -> Endpoint<GetBlockUserListResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
             path: "/users/blocked",
@@ -176,7 +176,7 @@ struct UserAPIEndPoint {
         )
     }
 
-    static func getRecentPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
+    static func getRecentPopUp(request: UserSortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
             path: "/users/recent-popupstores",
@@ -185,7 +185,7 @@ struct UserAPIEndPoint {
         )
     }
 
-    static func getBookmarkPopUp(request: SortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
+    static func getBookmarkPopUp(request: UserSortedRequestDTO) -> Endpoint<GetRecentPopUpResponseDTO> {
         return Endpoint(
             baseURL: Secrets.popPoolBaseURL,
             path: "/users/bookmark-popupstores",
