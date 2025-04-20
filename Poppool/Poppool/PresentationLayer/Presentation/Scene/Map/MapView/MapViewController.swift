@@ -32,8 +32,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private var markerDictionary: [Int64: NMFMarker] = [:]
     private var individualMarkerDictionary: [Int64: NMFMarker] = [:]
     private var clusterMarkerDictionary: [String: NMFMarker] = [:]
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(
-        repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+    @Dependency private var popUpAPIUseCase: PopUpAPIUseCase
     private let clusteringManager = ClusteringManager()
     var currentStores: [MapPopUpStore] = []
     var disposeBag = DisposeBag()
@@ -41,8 +40,16 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     let carouselView = MapPopupCarouselView()
     private let locationManager = CLLocationManager()
     var currentMarker: NMFMarker?
-    private let storeListReactor = StoreListReactor()
-    private let storeListViewController = StoreListViewController(reactor: StoreListReactor())
+    private let storeListReactor = StoreListReactor(
+        userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+    )
+    private let storeListViewController = StoreListViewController(
+        reactor: StoreListReactor(
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+            popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
+        )
+    )
     private var listViewTopConstraint: Constraint?
     private var currentFilterBottomSheet: FilterBottomSheetViewController?
     private var filterChipsTopY: CGFloat = 0
@@ -115,7 +122,12 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
         carouselView.onCardTapped = { [weak self] store in
             let detailController = DetailController()
-            detailController.reactor = DetailReactor(popUpID: Int64(store.id))
+            detailController.reactor = DetailReactor(
+                popUpID: Int64(store.id),
+                userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+                popUpAPIUseCase: self?.popUpAPIUseCase ?? DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
 
             self?.navigationController?.isNavigationBarHidden = false
             self?.navigationController?.tabBarController?.tabBar.isHidden = false
@@ -1246,7 +1258,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             stores.forEach { store in
                 self.popUpAPIUseCase.getPopUpDetail(
                     commentType: "NORMAL",
-                    popUpStoredId: store.id
+                    popUpStoredId: store.id,
+                    isViewCount: true
                 )
                 .asObservable()
                 .observe(on: MainScheduler.instance)

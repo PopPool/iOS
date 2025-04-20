@@ -45,7 +45,7 @@ final class MyPageReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -103,7 +103,8 @@ final class MyPageReactor: Reactor {
     var isAdmin: Bool = false
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -180,13 +181,16 @@ final class MyPageReactor: Reactor {
 
         case .moveToProfileEditScene(let controller):
             let nextController = ProfileEditController()
-            nextController.reactor = ProfileEditReactor()
+            nextController.reactor = ProfileEditReactor(
+                userAPIUseCase: userAPIUseCase,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .logout:
-            let service = KeyChainService()
-            _ = service.deleteToken(type: .accessToken)
-            _ = service.deleteToken(type: .refreshToken)
+            @Dependency var keyChainService: KeyChainService
+            _ = keyChainService.deleteToken(type: .accessToken)
+            _ = keyChainService.deleteToken(type: .refreshToken)
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)
@@ -207,7 +211,7 @@ final class MyPageReactor: Reactor {
                         case .apply:
                             nextController.dismiss(animated: true) {
                                 let reasonController = WithdrawlReasonController()
-                                reasonController.reactor = WithdrawlReasonReactor()
+                                reasonController.reactor = WithdrawlReasonReactor(userAPIUseCase: self.userAPIUseCase)
                                 controller?.navigationController?.pushViewController(reasonController, animated: true)
                             }
                         case .cancel:
@@ -220,12 +224,12 @@ final class MyPageReactor: Reactor {
 
             case "차단한 사용자 관리":
                 let nextController = BlockUserManageController()
-                nextController.reactor = BlockUserManageReactor()
+                nextController.reactor = BlockUserManageReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "공지사항":
                 let nextController = MyPageNoticeController()
-                nextController.reactor = MyPageNoticeReactor()
+                nextController.reactor = MyPageNoticeReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "고객문의":
@@ -235,12 +239,12 @@ final class MyPageReactor: Reactor {
 
             case "찜한 팝업":
                 let nextController = MyPageBookmarkController()
-                nextController.reactor = MyPageBookmarkReactor()
+                nextController.reactor = MyPageBookmarkReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "최근 본 팝업":
                 let nextController = MyPageRecentController()
-                nextController.reactor = MyPageRecentReactor()
+                nextController.reactor = MyPageRecentReactor(userAPIUseCase: userAPIUseCase)
                 controller.navigationController?.pushViewController(nextController, animated: true)
 
             case "약관":
@@ -254,27 +258,32 @@ final class MyPageReactor: Reactor {
         case .moveToPopUpDetailScene(let controller, let row):
             let nextController = DetailController()
             let popUpID = commentSection.inputDataList[row].popUpID
-            nextController.reactor = DetailReactor(popUpID: popUpID)
+            nextController.reactor = DetailReactor(
+                popUpID: popUpID,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .moveToLoginScene(let controller):
             let nextController = SubLoginController()
-            nextController.reactor = SubLoginReactor()
+            nextController.reactor = SubLoginReactor(
+                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+            )
             let navigationController = UINavigationController(rootViewController: nextController)
             navigationController.modalPresentationStyle = .fullScreen
             controller.present(navigationController, animated: true)
         case .moveToMyCommentScene(let controller):
             let nextController = MyCommentController()
-            nextController.reactor = MyCommentReactor()
+            nextController.reactor = MyCommentReactor(userAPIUseCase: userAPIUseCase)
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToAdminScene(let controller):
             // 관리자 VC
             let nickname = profileSection.inputDataList.first?.nickName ?? ""
-            let adminUseCase = AdminUseCaseImpl(
-                repository: AdminRepositoryImpl(provider: ProviderImpl())
-            )
+            let adminUseCase = DIContainer.resolve(AdminUseCase.self)
             let adminVC = AdminViewController(nickname: nickname, adminUseCase: adminUseCase)
-            adminVC.reactor = AdminReactor(useCase: adminUseCase)
+            adminVC.reactor = AdminReactor(adminUseCase: adminUseCase)
             controller.navigationController?.pushViewController(adminVC, animated: true)
         }
 

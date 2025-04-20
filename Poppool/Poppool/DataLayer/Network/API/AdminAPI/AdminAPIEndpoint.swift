@@ -1,5 +1,7 @@
 import Foundation
 
+struct EmptyResponse: Decodable {}
+
 struct AdminAPIEndpoint {
 
     // MARK: - Store List

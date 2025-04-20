@@ -40,6 +40,3 @@ struct GetAdminPopUpStoreDetailResponseDTO: Decodable {
         let imageUrl: String
     }
 }
-
-// MARK: - Empty Response
-struct EmptyResponse: Decodable {}

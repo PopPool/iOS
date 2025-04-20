@@ -35,8 +35,8 @@ final class SearchResultReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private var popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private var popUpAPIUseCase: PopUpAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -59,7 +59,12 @@ final class SearchResultReactor: Reactor {
     private let spacing64Section = SpacingSection(inputDataList: [.init(spacing: 64)])
 
     // MARK: - init
-    init() {
+    init(
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
+    ) {
+        self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
         self.initialState = State()
     }
 
@@ -123,7 +128,12 @@ final class SearchResultReactor: Reactor {
             newState.isEmptyResult = true
         case .moveToDetailScene(let controller, let indexPath):
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: searchListSection.inputDataList[indexPath.row].id)
+            nextController.reactor = DetailReactor(
+                popUpID: searchListSection.inputDataList[indexPath.row].id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: popUpAPIUseCase,
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         return newState

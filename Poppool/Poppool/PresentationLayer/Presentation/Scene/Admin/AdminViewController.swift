@@ -16,7 +16,10 @@ final class AdminViewController: BaseViewController, View {
     private let adminUseCase: AdminUseCase
 
     // MARK: - Init
-    init(nickname: String, adminUseCase: AdminUseCase) {
+    init(
+        nickname: String,
+        adminUseCase: AdminUseCase
+    ) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
         self.mainView = AdminView(frame: .zero)
@@ -188,10 +191,7 @@ final class AdminViewController: BaseViewController, View {
                         markerSnippet: storeDetail.markerSnippet,
                         startDateBeforeEndDate: true
                     )
-                    let registerVC = PopUpStoreRegisterViewController(
-                        nickname: self.nickname,
-                        adminUseCase: self.adminUseCase
-                    )
+                    let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname)
                     self.navigationController?.pushViewController(registerVC, animated: true)
                 },
                 onError: { [weak self] error in
@@ -265,10 +265,7 @@ final class AdminViewController: BaseViewController, View {
         mainView.registerButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let registerVC = PopUpStoreRegisterViewController(
-                    nickname: self.nickname,
-                    adminUseCase: self.adminUseCase
-                )
+                let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname)
 
                 registerVC.completionHandler = { [weak self] in
                     self?.reactor?.action.onNext(.reloadData)
@@ -296,12 +293,12 @@ final class AdminViewController: BaseViewController, View {
             .bind(to: mainView.tableView.rx.items(
                 cellIdentifier: AdminStoreCell.identifier,
                 cellType: AdminStoreCell.self
-            )) { _, item, cell in
+            )) { _, store, cell in
                 let dto = GetAdminPopUpStoreListResponseDTO.PopUpStore(
-                    id: item.id,
-                    name: item.name,
-                    categoryName: item.categoryName,
-                    mainImageUrl: item.mainImageUrl
+                    id: store.id,
+                    name: store.name,
+                    categoryName: store.categoryName,
+                    mainImageUrl: store.mainImageUrl
                 )
                 cell.configure(with: dto)
             }

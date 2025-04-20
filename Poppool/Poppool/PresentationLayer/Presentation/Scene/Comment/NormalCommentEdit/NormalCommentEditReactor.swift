@@ -48,7 +48,7 @@ final class NormalCommentEditReactor: Reactor {
     private var popUpName: String
     private var originComment: DetailCommentSection.CellType.Input
 
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let commentAPIUseCase: CommentAPIUseCase
     private let imageService = PreSignedService()
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -76,11 +76,17 @@ final class NormalCommentEditReactor: Reactor {
     private let spacing32Section = SpacingSection(inputDataList: [.init(spacing: 32)])
 
     // MARK: - init
-    init(popUpID: Int64, popUpName: String, comment: DetailCommentSection.CellType.Input) {
+    init(
+        popUpID: Int64,
+        popUpName: String,
+        comment: DetailCommentSection.CellType.Input,
+        commentAPIUseCase: CommentAPIUseCase
+    ) {
         self.initialState = State(text: comment.comment)
         self.popUpID = popUpID
         self.popUpName = popUpName
         self.originComment = comment
+        self.commentAPIUseCase = commentAPIUseCase
         let imageList = zip(comment.imageList, comment.imageIDList)
         imageSection.inputDataList.append(contentsOf: imageList.map({ url, id in
                 .init(image: nil, isFirstCell: false, isEditCase: true, imageURL: url, imageID: id)
@@ -175,7 +181,7 @@ final class NormalCommentEditReactor: Reactor {
                             popUpStoreId: self.popUpID,
                             commentId: self.originComment.commentID,
                             content: newState.text,
-                            imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                            imageUrlList: (convertAddImages + convertKeepImages + convertDeleteImages).map { $0.imageUrl }
                         )
                         .subscribe { [weak self, weak controller] in
                             guard let self = self else { return }
@@ -193,7 +199,7 @@ final class NormalCommentEditReactor: Reactor {
                     popUpStoreId: self.popUpID,
                     commentId: self.originComment.commentID,
                     content: newState.text,
-                    imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                    imageUrlList: (convertAddImages + convertKeepImages + convertDeleteImages).map { $0.imageUrl }
                 )
                 .subscribe { [weak self, weak controller] in
                     guard let self = self else { return }

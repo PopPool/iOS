@@ -58,9 +58,9 @@ final class DetailReactor: Reactor {
     private var isFirstRequest: Bool = true
 
     private var imageService = PreSignedService()
-    private let popUpAPIUseCase = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
-    private let commentAPIUseCase = CommentAPIUseCaseImpl(repository: CommentAPIRepositoryImpl(provider: ProviderImpl()))
+    private let popUpAPIUseCase: PopUpAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
+    private let commentAPIUseCase: CommentAPIUseCase
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -94,8 +94,16 @@ final class DetailReactor: Reactor {
     private var spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
     private var spacing16GraySection = SpacingSection(inputDataList: [.init(spacing: 16, backgroundColor: .g50)])
     // MARK: - init
-    init(popUpID: Int64) {
+    init(
+        popUpID: Int64,
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase,
+        commentAPIUseCase: CommentAPIUseCase
+    ) {
         self.popUpID = popUpID
+        self.userAPIUseCase = userAPIUseCase
+        self.popUpAPIUseCase = popUpAPIUseCase
+        self.commentAPIUseCase = commentAPIUseCase
         self.initialState = State()
     }
 
@@ -145,11 +153,17 @@ final class DetailReactor: Reactor {
         case .moveToCommentTypeSelectedScene(let controller):
             if isLogin {
                 let commentController = NormalCommentAddController()
-                commentController.reactor = NormalCommentAddReactor(popUpID: popUpID, popUpName: popUpName ?? "")
+                commentController.reactor = NormalCommentAddReactor(
+                    popUpID: popUpID,
+                    popUpName: popUpName ?? "",
+                    commentAPIUseCase: commentAPIUseCase
+                )
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
                 let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor()
+                loginController.reactor = SubLoginReactor(
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
@@ -161,7 +175,10 @@ final class DetailReactor: Reactor {
             ToastMaker.createToast(message: "주소를 복사했어요")
         case .moveToAddressScene(let controller):
             let mapGuideController = MapGuideViewController(popUpStoreId: popUpID)
-            let reactor = MapGuideReactor(popUpStoreId: popUpID)
+            let reactor = MapGuideReactor(
+                popUpStoreId: popUpID,
+                mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
+            )
             mapGuideController.reactor = reactor
 
             mapGuideController.modalPresentationStyle = .overCurrentContext
@@ -171,11 +188,19 @@ final class DetailReactor: Reactor {
         case .moveToCommentTotalScene(let controller):
             if isLogin {
                 let nextController = CommentListController()
-                nextController.reactor = CommentListReactor(popUpID: popUpID, popUpName: popUpName)
+                nextController.reactor = CommentListReactor(
+                    popUpID: popUpID,
+                    popUpName: popUpName,
+                    userAPIUseCase: userAPIUseCase,
+                    popUpAPIUseCase: popUpAPIUseCase,
+                    commentAPIUseCase: commentAPIUseCase
+                )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
                 let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor()
+                loginController.reactor = SubLoginReactor(
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
@@ -190,18 +215,28 @@ final class DetailReactor: Reactor {
         case .showCommentDetailScene(let controller, let indexPath):
             let comment = commentSection.inputDataList[indexPath.row]
             let nextController = CommentDetailController()
-            nextController.reactor = CommentDetailReactor(comment: comment)
+            nextController.reactor = CommentDetailReactor(
+                comment: comment,
+                userAPIUseCase: userAPIUseCase
+            )
             controller.presentPanModal(nextController)
         case .moveToDetailScene(let controller, let indexPath):
             let id = similarSection.inputDataList[indexPath.row].id
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: id)
+            nextController.reactor = DetailReactor(
+                popUpID: id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: popUpAPIUseCase,
+                commentAPIUseCase: commentAPIUseCase
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
         case .moveToLoginScene(let controller):
             let loginController = SubLoginController()
-            loginController.reactor = SubLoginReactor()
+            loginController.reactor = SubLoginReactor(
+                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+            )
             let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
@@ -436,7 +471,10 @@ extension DetailReactor {
                 case .normal:
                     owner.dismiss(animated: true) { [weak controller] in
                         let otherUserCommentController = OtherUserCommentController()
-                        otherUserCommentController.reactor = OtherUserCommentReactor(commenterID: comment.creator)
+                        otherUserCommentController.reactor = OtherUserCommentReactor(
+                            commenterID: comment.creator,
+                            userAPIUseCase: self.userAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(otherUserCommentController, animated: true)
                     }
                 case .block:
@@ -502,7 +540,12 @@ extension DetailReactor {
                     owner.dismiss(animated: true) { [weak controller] in
                         guard let popUpName = self.popUpName else { return }
                         let editController = NormalCommentEditController()
-                        editController.reactor = NormalCommentEditReactor(popUpID: self.popUpID, popUpName: popUpName, comment: comment)
+                        editController.reactor = NormalCommentEditReactor(
+                            popUpID: self.popUpID,
+                            popUpName: popUpName,
+                            comment: comment,
+                            commentAPIUseCase: self.commentAPIUseCase
+                        )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }
                 case .cancel:

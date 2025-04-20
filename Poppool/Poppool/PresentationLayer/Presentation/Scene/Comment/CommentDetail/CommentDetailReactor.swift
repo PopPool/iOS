@@ -36,7 +36,7 @@ final class CommentDetailReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -58,8 +58,12 @@ final class CommentDetailReactor: Reactor {
     private let spacing16Section = SpacingSection(inputDataList: [.init(spacing: 16)])
 
     // MARK: - init
-    init(comment: DetailCommentSection.CellType.Input) {
+    init(
+        comment: DetailCommentSection.CellType.Input,
+        userAPIUseCase: UserAPIUseCase
+    ) {
         self.initialState = State(commentData: comment)
+        self.userAPIUseCase = userAPIUseCase
     }
 
     // MARK: - Reactor Methods

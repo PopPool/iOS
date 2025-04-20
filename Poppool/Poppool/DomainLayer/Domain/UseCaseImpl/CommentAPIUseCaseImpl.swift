@@ -1,5 +1,4 @@
 import Foundation
-
 import RxSwift
 
 final class CommentAPIUseCaseImpl: CommentAPIUseCase {
@@ -18,7 +17,8 @@ final class CommentAPIUseCaseImpl: CommentAPIUseCase {
         return repository.deleteComment(popUpStoreId: popUpStoreId, commentId: commentId)
     }
 
-    func editComment(popUpStoreId: Int64, commentId: Int64, content: String?, imageUrlList: [PutCommentImageDataRequestDTO]?) -> Completable {
-        return repository.editComment(popUpStoreId: popUpStoreId, commentId: commentId, content: content, imageUrlList: imageUrlList)
+    func editComment(popUpStoreId: Int64, commentId: Int64, content: String?, imageUrlList: [String?]?) -> Completable {
+        let dtoList: [PutCommentImageDataRequestDTO]? = imageUrlList?.compactMap { $0 }.map { PutCommentImageDataRequestDTO(imageUrl: $0) }
+        return repository.editComment(popUpStoreId: popUpStoreId, commentId: commentId, content: content, imageUrlList: dtoList)
     }
 }

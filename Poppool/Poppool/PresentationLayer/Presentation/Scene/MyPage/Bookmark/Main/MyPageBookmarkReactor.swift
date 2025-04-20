@@ -52,7 +52,7 @@ final class MyPageBookmarkReactor: Reactor {
     private var size: Int32 = 10
     private var viewType: String = "크게보기"
 
-    private let userAPIUseCase = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl()))
+    private let userAPIUseCase: UserAPIUseCase
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -74,7 +74,8 @@ final class MyPageBookmarkReactor: Reactor {
     private var spacing150Section = SpacingSection(inputDataList: [.init(spacing: 150)])
 
     // MARK: - init
-    init() {
+    init(userAPIUseCase: UserAPIUseCase) {
+        self.userAPIUseCase = userAPIUseCase
         self.initialState = State()
     }
 
@@ -178,7 +179,12 @@ final class MyPageBookmarkReactor: Reactor {
             controller.navigationController?.popViewController(animated: true)
         case .moveToDetailScene(let controller, let row):
             let nextController = DetailController()
-            nextController.reactor = DetailReactor(popUpID: listSection.inputDataList[row].id)
+            nextController.reactor = DetailReactor(
+                popUpID: listSection.inputDataList[row].id,
+                userAPIUseCase: userAPIUseCase,
+                popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .presentModal(let controller):
             let nextController = BookMarkPopUpViewTypeModalController()
@@ -195,7 +201,11 @@ final class MyPageBookmarkReactor: Reactor {
                 .disposed(by: nextController.disposeBag)
         case .moveToSuggestScene(let controller):
             let nextController = HomeListController()
-            nextController.reactor = HomeListReactor(popUpType: .curation)
+            nextController.reactor = HomeListReactor(
+                popUpType: .curation,
+                userAPIUseCase: userAPIUseCase,
+                homeAPIUseCase: DIContainer.resolve(HomeAPIUseCase.self)
+            )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
         newState.sections = getSection()
