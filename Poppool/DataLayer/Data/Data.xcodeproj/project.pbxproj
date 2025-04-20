@@ -34,9 +34,94 @@
 		05C1D6162DB53A5600508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		05C1D67A2DB53AB000508FFD /* Exceptions for "Data" folder in "Data" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Network/API/AdminAPI/AdminAPIEndpoint.swift,
+				Network/API/AdminAPI/ResponseDTO/AdminResponseDTO.swift,
+				Network/API/AdminAPI/ResponseDTO/GetAdminPopUpStoreListResponseDTO.swift,
+				Network/API/AuthAPI/AuthAPIEndPoint.swift,
+				Network/API/AuthAPI/ResponseDTO/LoginResponseDTO.swift,
+				Network/API/AuthAPI/ResponseDTO/PostTokenReissueResponseDTO.swift,
+				Network/API/CommentAPI/CommentAPIEndPoint.swift,
+				Network/API/CommentAPI/RequestDTO/DeleteCommentRequestDTO.swift,
+				Network/API/CommentAPI/RequestDTO/PostCommentRequestDTO.swift,
+				Network/API/CommentAPI/RequestDTO/PutCommentRequestDTO.swift,
+				Network/API/HomeAPI/HomeAPIEndpoint.swift,
+				Network/API/HomeAPI/RequestDTO/HomeSortedRequestDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/BannerPopUpStoreDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/GetHomeInfoResponseDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/PopUpStoreResponseDTO.swift,
+				Network/API/MapAPI/FindDirectionEndPoint.swift,
+				Network/API/MapAPI/MapAPIEndpoint.swift,
+				Network/API/MapAPI/ResponseDTO/GetPopUpDirectionResponseDTO.swift,
+				Network/API/MapAPI/ResponseDTO/MapPopUpStoreDTO.swift,
+				Network/API/PopUpAPI/PopUpAPIEndPoint.swift,
+				Network/API/PopUpAPI/RequestDTO/GetPopUpCommentRequestDTO.swift,
+				Network/API/PopUpAPI/RequestDTO/GetPopUpDetailRequestDTO.swift,
+				Network/API/PopUpAPI/RequestDTO/GetSearchPopUpListRequestDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetClosePopUpListResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetOpenPopUpListResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetPopUpCommentResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetPopUpDetailResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetSearchPopUpListResponseDTO.swift,
+				Network/API/PreSignedAPI/PreSignedAPIEndPoint.swift,
+				Network/API/PreSignedAPI/RequestDTO/PresignedURLRequestDTO.swift,
+				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLDTO.swift,
+				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLResponseDTO.swift,
+				Network/API/SignUpAPI/RequestDTO/CheckNickNameRequestDTO.swift,
+				Network/API/SignUpAPI/RequestDTO/SignUpRequestDTO.swift,
+				Network/API/SignUpAPI/ResponseDTO/GetCategoryListResponseDTO.swift,
+				Network/API/SignUpAPI/SignUpAPIEndpoint.swift,
+				Network/API/UserAPI/RequesetDTO/CommentLikeRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/GetMyCommentRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/GetOtherUserCommentListRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PostBookmarkPopUpRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PostUserBlockRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserCategoryRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserProfileRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserTailoredInfoRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/UserSortedRequestDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetBlockUserListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyCommentedPopUpResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyPageResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyProfileResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetNoticeDetailResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetNoticeListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetOtherUserCommentedPopUpListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetRecentPopUpResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetWithdrawlListResponseDTO.swift,
+				Network/API/UserAPI/UserAPIEndPoint.swift,
+				Network/Common/NetworkError.swift,
+				Network/Common/Requestable.swift,
+				Network/Common/Responsable.swift,
+				Network/EndPoint/Endpoint.swift,
+				Network/EndPoint/MultipartEndPoint.swift,
+				Network/EndPoint/RequestEndpoint.swift,
+				Network/Interceptor/TokenInterceptor.swift,
+				Network/Provider/Provider.swift,
+				Network/Provider/ProviderImpl.swift,
+				RepositoryImpl/AdminRepositoryImpl.swift,
+				RepositoryImpl/AuthAPIRepositoryImpl.swift,
+				RepositoryImpl/CommentAPIRepositoryImpl.swift,
+				RepositoryImpl/HomeAPIRepositoryImpl.swift,
+				RepositoryImpl/MapDirectionRepositoryImpl.swift,
+				RepositoryImpl/MapRepositoryImpl.swift,
+				RepositoryImpl/PopUpAPIRepositoryImpl.swift,
+				RepositoryImpl/SignUpRepositoryImpl.swift,
+				RepositoryImpl/UserAPIRepositoryImpl.swift,
+			);
+			target = 058CC8DB2DB5376A0084221A /* Data */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		05C1D05C2DB5387500508FFD /* Data */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				05C1D67A2DB53AB000508FFD /* Exceptions for "Data" folder in "Data" target */,
+			);
 			path = Data;
 			sourceTree = "<group>";
 		};
