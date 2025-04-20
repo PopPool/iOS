@@ -3,7 +3,22 @@ import Foundation
 import RxSwift
 
 protocol CommentAPIRepository {
-    func postCommentAdd(request: PostCommentRequestDTO) -> Completable
-    func deleteComment(request: DeleteCommentRequestDTO) -> Completable
-    func editComment(request: PutCommentRequestDTO) -> Completable
+  func postCommentAdd(
+      popUpStoreId: Int64,
+      content: String?,
+      commentType: String?,
+      imageUrlList: [String?]
+  ) -> Completable
+
+  func deleteComment(
+      popUpStoreId: Int64,
+      commentId: Int64
+  ) -> Completable
+
+  func editComment(
+      popUpStoreId: Int64,
+      commentId: Int64,
+      content: String?,
+      imageUrlList: [PutCommentImageDataRequestDTO]?
+  ) -> Completable
 }

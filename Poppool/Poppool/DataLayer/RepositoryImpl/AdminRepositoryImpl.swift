@@ -1,6 +1,5 @@
-import Foundation
-
 import Alamofire
+import Foundation
 import RxSwift
 
 final class AdminRepositoryImpl: AdminRepository {
@@ -15,7 +14,7 @@ final class AdminRepositoryImpl: AdminRepository {
     }
 
     // MARK: - Store Methods
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<GetAdminPopUpStoreListResponseDTO> {
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
         let endpoint = AdminAPIEndpoint.fetchStoreList(
             query: query,
             page: page,
@@ -25,131 +24,135 @@ final class AdminRepositoryImpl: AdminRepository {
             with: endpoint,
             interceptor: tokenInterceptor
         )
+        .map { response in
+            response.popUpStoreList?.map {
+                AdminStore(id: $0.id, name: $0.name, categoryName: $0.categoryName, mainImageUrl: $0.mainImageUrl)
+            } ?? []
+        }
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<GetAdminPopUpStoreDetailResponseDTO> {
+    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
        let endpoint = AdminAPIEndpoint.fetchStoreDetail(id: id)
        return provider.requestData(
            with: endpoint,
            interceptor: tokenInterceptor
        )
+       .map { dto in
+           AdminStoreDetail(
+               id: dto.id,
+               name: dto.name,
+               categoryId: dto.categoryId,
+               categoryName: dto.categoryName,
+               description: dto.desc,
+               address: dto.address,
+               startDate: dto.startDate,
+               endDate: dto.endDate,
+               createUserId: dto.createUserId,
+               createDateTime: dto.createDateTime,
+               mainImageUrl: dto.mainImageUrl,
+               bannerYn: dto.bannerYn,
+               images: dto.imageList.map {
+                   AdminStoreDetail.StoreImage(
+                       id: $0.id,
+                       imageUrl: $0.imageUrl
+                   )
+               },
+               latitude: dto.latitude,
+               longitude: dto.longitude,
+               markerTitle: dto.markerTitle,
+               markerSnippet: dto.markerSnippet
+           )
+       }
        .catch { error in
            if case .responseSerializationFailed = error as? AFError {
-               // 빈 데이터 응답시 기본값 반환
-               return Observable.just(GetAdminPopUpStoreDetailResponseDTO.empty)
+               return Observable.empty()
            }
            throw error
        }
     }
 
-    func createStore(request: CreatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
-        Logger.log(message: "createStore API 호출 시작", category: .info)
-        let endpoint = AdminAPIEndpoint.createStore(request: request)
-        Logger.log(message: "Request URL: \(endpoint.baseURL + endpoint.path)", category: .info)
-        Logger.log(message: "Request Body: \(request)", category: .info)
-
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
+    func createStore(params: CreateStoreParams) -> Completable {
+        let dto = CreatePopUpStoreRequestDTO(
+            name: params.name,
+            categoryId: params.categoryId,
+            desc: params.desc,
+            address: params.address,
+            startDate: params.startDate,
+            endDate: params.endDate,
+            mainImageUrl: params.mainImageUrl,
+            imageUrlList: params.imageUrlList,
+            latitude: params.latitude,
+            longitude: params.longitude,
+            markerTitle: params.markerTitle,
+            markerSnippet: params.markerSnippet,
+            startDateBeforeEndDate: params.startDateBeforeEndDate
         )
-        .catch { error -> Observable<EmptyResponse> in
-            if case .responseSerializationFailed(let reason) = error as? AFError,
-               case .inputDataNilOrZeroLength = reason {
-                // 빈 응답 데이터일 경우 성공으로 간주
-                Logger.log(message: "빈 응답 데이터 처리: 성공으로 간주", category: .info)
-                return Observable.just(EmptyResponse())
-            }
-            throw error
-        }
-        .do(
-            onNext: { _ in
-                Logger.log(message: "createStore API 호출 성공", category: .info)
-            },
-            onError: { error in
-                Logger.log(message: "createStore API 호출 실패: \(error)", category: .error)
-            }
-        )
+        let endpoint = AdminAPIEndpoint.createStore(request: dto)
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func updateStore(request: UpdatePopUpStoreRequestDTO) -> Observable<EmptyResponse> {
-        let endpoint = AdminAPIEndpoint.updateStore(request: request)
-
-        Logger.log(message: """
-            Store Update 요청:
-            URL: \(endpoint.baseURL + endpoint.path)
-            Method: PUT
-            Request: \(request)
-            """, category: .debug)
-
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
+    func updateStore(params: UpdateStoreParams) -> Completable {
+        let dto = UpdatePopUpStoreRequestDTO(
+            popUpStore: UpdatePopUpStoreRequestDTO.PopUpStore(
+                id: params.id,
+                name: params.name,
+                categoryId: params.categoryId,
+                desc: params.desc,
+                address: params.address,
+                startDate: params.startDate,
+                endDate: params.endDate,
+                mainImageUrl: params.mainImageUrl,
+                bannerYn: !params.mainImageUrl.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                imageUrl: params.imageUrlList.compactMap { $0 },
+                startDateBeforeEndDate: params.startDateBeforeEndDate
+            ),
+            location: UpdatePopUpStoreRequestDTO.Location(
+                latitude: params.latitude,
+                longitude: params.longitude,
+                markerTitle: params.markerTitle,
+                markerSnippet: params.markerSnippet
+            ),
+            imagesToAdd: params.imageUrlList.compactMap { $0 },
+            imagesToDelete: params.imagesToDelete
         )
-        .catch { error -> Observable<EmptyResponse> in
-            Logger.log(message: "Update Store Error 발생: \(error)", category: .error)
-
-            if let afError = error as? AFError {
-                switch afError {
-                case .responseSerializationFailed(let reason):
-                    Logger.log(message: "Serialization 실패 reason: \(reason)", category: .error)
-                    if case .inputDataNilOrZeroLength = reason {
-                        Logger.log(message: "빈 응답 데이터 - 성공으로 처리", category: .info)
-                        return Observable.just(EmptyResponse())
-                    }
-                default:
-                    Logger.log(message: "기타 AFError: \(afError)", category: .error)
-                }
-            }
-
-            throw error
-        }
-        .do(onNext: { _ in
-            Logger.log(message: "Store Update 성공", category: .info)
-        }, onError: { error in
-            Logger.log(message: "Store Update 최종 실패: \(error)", category: .error)
-        })
+        let endpoint = AdminAPIEndpoint.updateStore(request: dto)
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func deleteStore(id: Int64) -> Observable<EmptyResponse> {
-        Logger.log(message: "deleteStore API 호출 시작", category: .info)
+    func deleteStore(id: Int64) -> Completable {
         let endpoint = AdminAPIEndpoint.deleteStore(id: id)
         return provider.request(with: endpoint, interceptor: tokenInterceptor)
-            .andThen(Observable.just(EmptyResponse()))
-            .do(
-                onNext: { _ in
-                    Logger.log(message: "deleteStore API 호출 성공", category: .info)
-                },
-                onError: { error in
-                    Logger.log(message: "deleteStore API 호출 실패: \(error)", category: .error)
-                }
-            )
     }
 
     // MARK: - Notice Methods
-    func createNotice(request: CreateNoticeRequestDTO) -> Observable<EmptyResponse> {
-        let endpoint = AdminAPIEndpoint.createNotice(request: request)
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
+    func createNotice(params: CreateNoticeParams) -> Completable {
+        let dto = CreateNoticeRequestDTO(
+            title: params.title,
+            content: params.content,
+            imageUrlList: params.imageUrlList
         )
+        let endpoint = AdminAPIEndpoint.createNotice(request: dto)
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func updateNotice(id: Int64, request: UpdateNoticeRequestDTO) -> Observable<EmptyResponse> {
-        let endpoint = AdminAPIEndpoint.updateNotice(id: id, request: request)
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
+    func updateNotice(params: UpdateNoticeParams) -> Completable {
+        let dto = UpdateNoticeRequestDTO(
+            title: params.title,
+            content: params.content,
+            imageUrlList: params.imageUrlList,
+            imagesToDelete: params.imagesToDelete
         )
+        let endpoint = AdminAPIEndpoint.updateNotice(id: params.id, request: dto)
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 
-    func deleteNotice(id: Int64) -> Observable<EmptyResponse> {
+    func deleteNotice(id: Int64) -> Completable {
         let endpoint = AdminAPIEndpoint.deleteNotice(id: id)
-        return provider.requestData(
-            with: endpoint,
-            interceptor: tokenInterceptor
-        )
+        return provider.request(with: endpoint, interceptor: tokenInterceptor)
     }
 }
+
+// Helper extension - keeping this for utility purposes
 extension GetAdminPopUpStoreDetailResponseDTO {
    static var empty: GetAdminPopUpStoreDetailResponseDTO {
        return GetAdminPopUpStoreDetailResponseDTO(

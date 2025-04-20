@@ -11,18 +11,21 @@ final class CommentAPIRepositoryImpl: CommentAPIRepository {
         self.provider = provider
     }
 
-    func postCommentAdd(request: PostCommentRequestDTO) -> Completable {
-        let endPoint = CommentAPIEndPoint.postCommentAdd(request: request)
+    func postCommentAdd(popUpStoreId: Int64, content: String?, commentType: String?, imageUrlList: [String?]) -> Completable {
+        let requestDTO = PostCommentRequestDTO(popUpStoreId: popUpStoreId, content: content, commentType: commentType, imageUrlList: imageUrlList)
+        let endPoint = CommentAPIEndPoint.postCommentAdd(request: requestDTO)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func deleteComment(request: DeleteCommentRequestDTO) -> Completable {
-        let endPoint = CommentAPIEndPoint.deleteComment(request: request)
+    func deleteComment(popUpStoreId: Int64, commentId: Int64) -> Completable {
+        let requestDTO = DeleteCommentRequestDTO(popUpStoreId: popUpStoreId, commentId: commentId)
+        let endPoint = CommentAPIEndPoint.deleteComment(request: requestDTO)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 
-    func editComment(request: PutCommentRequestDTO) -> Completable {
-        let endPoint = CommentAPIEndPoint.editComment(request: request)
+    func editComment(popUpStoreId: Int64, commentId: Int64, content: String?, imageUrlList: [PutCommentImageDataRequestDTO]?) -> Completable {
+        let requestDTO = PutCommentRequestDTO(popUpStoreId: popUpStoreId, commentId: commentId, content: content, imageUrlList: imageUrlList)
+        let endPoint = CommentAPIEndPoint.editComment(request: requestDTO)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)
     }
 }

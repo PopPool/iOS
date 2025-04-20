@@ -29,11 +29,9 @@ struct MapPopUpStoreDTO: Codable {
             markerTitle: markerTitle,
             markerSnippet: markerSnippet,
             mainImageUrl: mainImageUrl
-
         )
     }
 }
-
 struct GetViewBoundPopUpStoreListResponse: Decodable {
     let popUpStoreList: [MapPopUpStoreDTO]
 }

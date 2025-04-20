@@ -181,7 +181,7 @@ final class NormalCommentEditReactor: Reactor {
                             popUpStoreId: self.popUpID,
                             commentId: self.originComment.commentID,
                             content: newState.text,
-                            imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                            imageUrlList: (convertAddImages + convertKeepImages + convertDeleteImages).map { $0.imageUrl }
                         )
                         .subscribe { [weak self, weak controller] in
                             guard let self = self else { return }
@@ -199,7 +199,7 @@ final class NormalCommentEditReactor: Reactor {
                     popUpStoreId: self.popUpID,
                     commentId: self.originComment.commentID,
                     content: newState.text,
-                    imageUrlList: convertAddImages + convertKeepImages + convertDeleteImages
+                    imageUrlList: (convertAddImages + convertKeepImages + convertDeleteImages).map { $0.imageUrl }
                 )
                 .subscribe { [weak self, weak controller] in
                     guard let self = self else { return }

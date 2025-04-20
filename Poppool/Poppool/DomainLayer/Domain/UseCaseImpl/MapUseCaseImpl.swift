@@ -21,15 +21,18 @@ final class MapUseCaseImpl: MapUseCase {
         southWestLon: Double,
         categories: [Int64]
     ) -> Observable<[MapPopUpStore]> {
-
         return repository.fetchStoresInBounds(
             northEastLat: northEastLat,
             northEastLon: northEastLon,
             southWestLat: southWestLat,
             southWestLon: southWestLon,
-            categories: categories  // ← 그대로 넘긴다
+            categories: categories
         )
-        .map { $0.map { $0.toDomain() } }
+        .do(onNext: { stores in
+            Logger.log(message: "맵 범위 내 스토어 \(stores.count)개 로드됨", category: .debug)
+        }, onError: { error in
+            Logger.log(message: "맵 범위 내 스토어 로드 실패: \(error)", category: .error)
+        })
     }
 
     func searchStores(
@@ -38,23 +41,28 @@ final class MapUseCaseImpl: MapUseCase {
     ) -> Observable<[MapPopUpStore]> {
         return repository.searchStores(
             query: query,
-            categories: categories.map { Int64($0) ?? 0 }
+            categories: categories
         )
-        .map { $0.map { $0.toDomain() } }
+        .do(onNext: { stores in
+            Logger.log(message: "'\(query)' 검색 결과 \(stores.count)개 로드됨", category: .debug)
+        }, onError: { error in
+            Logger.log(message: "스토어 검색 실패: \(error)", category: .error)
+        })
     }
+
     func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore] {
-           guard !selectedRegions.isEmpty else { return stores }
+        guard !selectedRegions.isEmpty else { return stores }
 
-           return stores.filter { store in
-               let components = store.address.components(separatedBy: " ")
-               guard components.count >= 2 else { return false }
+        return stores.filter { store in
+            let components = store.address.components(separatedBy: " ")
+            guard components.count >= 2 else { return false }
 
-               let mainRegion = components[0].replacingOccurrences(of: "특별시", with: "")
-                                           .replacingOccurrences(of: "광역시", with: "")
-               let subRegion = components[1]
+            let mainRegion = components[0].replacingOccurrences(of: "특별시", with: "")
+                                     .replacingOccurrences(of: "광역시", with: "")
+            let subRegion = components[1]
 
-               return selectedRegions.contains("\(mainRegion)전체") ||
-                      selectedRegions.contains(subRegion)
-           }
-       }
-   }
+            return selectedRegions.contains("\(mainRegion)전체") ||
+                   selectedRegions.contains(subRegion)
+        }
+    }
+}

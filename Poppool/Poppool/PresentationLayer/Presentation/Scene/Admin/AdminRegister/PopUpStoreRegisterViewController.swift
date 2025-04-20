@@ -20,7 +20,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
     // MARK: - Initializer
     init(
         nickname: String,
-        editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil
+        editingStore: AdminStore? = nil
     ) {
         self.nickname = nickname
         self.mainView = PopUpRegisterView()

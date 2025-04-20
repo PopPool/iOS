@@ -1,5 +1,4 @@
 import Foundation
-
 import RxSwift
 
 final class AuthAPIRepositoryImpl: AuthAPIRepository {
@@ -20,8 +19,11 @@ final class AuthAPIRepositoryImpl: AuthAPIRepository {
             }
     }
 
-    func postTokenReissue() -> Observable<PostTokenReissueResponseDTO> {
+    func postTokenReissue() -> Observable<PostTokenReissueResponse> {
         let endPoint = AuthAPIEndPoint.postTokenReissue()
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
+            .map { responseDTO in
+                return responseDTO.toDomain()
+            }
     }
 }

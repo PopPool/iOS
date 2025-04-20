@@ -5,7 +5,6 @@
 //  Created by 송영훈 on 4/14/25.
 //
 
-
 import Foundation
 
 import RxSwift
@@ -17,12 +16,12 @@ protocol MapRepository {
         southWestLat: Double,
         southWestLon: Double,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
+    ) -> Observable<[MapPopUpStore]>
 
     func searchStores(
         query: String,
         categories: [Int64]
-    ) -> Observable<[MapPopUpStoreDTO]>
+    ) -> Observable<[MapPopUpStore]>
 
     func fetchCategories() -> Observable<[CategoryResponse]>
 }
