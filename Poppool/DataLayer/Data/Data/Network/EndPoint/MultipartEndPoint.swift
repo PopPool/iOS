@@ -1,15 +1,10 @@
-//
-//  MultipartEndPoint.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 10/25/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 import Alamofire
 
-class MultipartEndPoint: URLRequestConvertible {
+public class MultipartEndPoint: URLRequestConvertible {
     var baseURL: String
     var path: String
     var method: HTTPMethod
@@ -36,7 +31,7 @@ class MultipartEndPoint: URLRequestConvertible {
         self.headers = headers
     }
 
-    func asURLRequest() throws -> URLRequest {
+    public func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL().appendingPathComponent(path)
         var request = URLRequest(url: url)
         Logger.log(message: "\(request) URL 생성", category: .network)

@@ -62,7 +62,7 @@ public final class KeyChainService {
     /// - Parameter type: 저장하려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Parameter value: 저장할 토큰의 값
     /// - Returns: 완료 시 `Completable`
-    func saveToken(type: TokenType, value: String) -> Result<Void, Error> {
+    public func saveToken(type: TokenType, value: String) -> Result<Void, Error> {
         // allowLossyConversion은 인코딩 과정에서 손실이 되는 것을 허용할 것인지 설정
         guard let convertValue = value.data(using: .utf8, allowLossyConversion: false) else {
             return .failure(KeyChainError.dataConversionError(message: "Failed to convert value to Data."))
@@ -123,7 +123,7 @@ public final class KeyChainService {
     }
 }
 
-enum TokenType: String {
+public enum TokenType: String {
     case accessToken // 액세스 토큰
     case refreshToken // 리프레시 토큰
 }

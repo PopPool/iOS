@@ -1,15 +1,8 @@
-//
-//  Endpoint.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/16/24.
-//
-
 import Foundation
 
 import Alamofire
 
-protocol RequesteResponsable: Requestable, Responsable where Response: Decodable {}
+public protocol RequesteResponsable: Requestable, Responsable where Response: Decodable {}
 
 class Endpoint<R: Decodable>: RequesteResponsable {
     typealias Response = R

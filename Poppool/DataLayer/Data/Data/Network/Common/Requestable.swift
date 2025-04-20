@@ -1,15 +1,10 @@
-//
-//  Requestable.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/16/24.
-//
-
 import Foundation
+
+import Infrastructure
 
 import Alamofire
 
-protocol Requestable {
+public protocol Requestable {
     var baseURL: String { get }
     var path: String { get }
     var method: HTTPMethod { get }

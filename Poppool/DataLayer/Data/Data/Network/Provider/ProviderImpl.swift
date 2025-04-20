@@ -12,7 +12,7 @@ public final class ProviderImpl: Provider {
 
     public init(timeoutTimer: Timer? = nil) { self.timeoutTimer = timeoutTimer }
 
-    func requestData<R: Decodable, E: RequesteResponsable>(
+    public func requestData<R: Decodable, E: RequesteResponsable>(
         with endpoint: E,
         interceptor: RequestInterceptor? = nil
     ) -> Observable<R> where R == E.Response {
@@ -87,7 +87,7 @@ public final class ProviderImpl: Provider {
         }
     }
 
-    func request<E: Requestable>(
+    public func request<E: Requestable>(
         with request: E,
         interceptor: RequestInterceptor? = nil
     ) -> Completable {
@@ -146,7 +146,7 @@ public final class ProviderImpl: Provider {
     }
 
     // multipart 업로드는 기존 코드와 동일
-    func uploadImages(
+    public func uploadImages(
         with request: MultipartEndPoint,
         interceptor: RequestInterceptor? = nil
     ) -> Completable {
