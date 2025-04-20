@@ -4,12 +4,12 @@ import DomainInterface
 
 import RxSwift
 
-final class MapDirectionRepositoryImpl: MapDirectionRepository {
+public final class MapDirectionRepositoryImpl: MapDirectionRepository {
 
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 
-    init(provider: Provider) {
+    public init(provider: Provider) {
         self.provider = provider
     }
 

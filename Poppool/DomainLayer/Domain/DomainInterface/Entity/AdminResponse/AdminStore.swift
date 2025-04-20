@@ -1,8 +1,8 @@
 import Foundation
 
 public struct AdminStore {
-    let id: Int64
-    let name: String
-    let categoryName: String
-    let mainImageUrl: String
+    public let id: Int64
+    public let name: String
+    public let categoryName: String
+    public let mainImageUrl: String
 }

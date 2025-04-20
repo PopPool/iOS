@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class AdminUseCaseImpl: AdminUseCase {
+public final class AdminUseCaseImpl: AdminUseCase {
 
     private let repository: AdminRepository
 
-    init(repository: AdminRepository) {
+    public init(repository: AdminRepository) {
         self.repository = repository
     }
 

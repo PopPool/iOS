@@ -1,7 +1,14 @@
+import UIKit
 import CoreLocation
+
+import Data
+import Domain
+import DomainInterface
+import Presentation
+import Infrastructure
+
 import KakaoSDKCommon
 import NMapsMap
-import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -45,6 +52,7 @@ extension AppDelegate {
         DIContainer.register(AuthAPIRepository.self) { return AuthAPIRepositoryImpl(provider: provider) }
         DIContainer.register(SignUpRepository.self) { return SignUpRepositoryImpl(provider: provider) }
         DIContainer.register(MapDirectionRepository.self) { return MapDirectionRepositoryImpl(provider: provider) }
+        DIContainer.register(PreSignedRepository.self) { return PreSignedRepositoryImpl() }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
@@ -55,6 +63,7 @@ extension AppDelegate {
         @Dependency var homeAPIRepository: HomeAPIRepository
         @Dependency var authAPIRepository: AuthAPIRepository
         @Dependency var signUpRepository: SignUpRepository
+        @Dependency var preSignedRepository: PreSignedRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
@@ -65,5 +74,6 @@ extension AppDelegate {
         DIContainer.register(HomeAPIUseCase.self) { return HomeAPIUseCaseImpl(repository: homeAPIRepository) }
         DIContainer.register(AuthAPIUseCase.self) { return AuthAPIUseCaseImpl(repository: authAPIRepository) }
         DIContainer.register(SignUpAPIUseCase.self) { return SignUpAPIUseCaseImpl(repository: signUpRepository) }
+        DIContainer.register(PreSignedUseCase.self) { return PreSignedUseCaseImpl(repository: preSignedRepository) }
     }
 }

@@ -4,12 +4,12 @@ import DomainInterface
 
 import RxSwift
 
-final class AuthAPIRepositoryImpl: AuthAPIRepository {
+public final class AuthAPIRepositoryImpl: AuthAPIRepository {
 
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 
-    init(provider: Provider) {
+    public init(provider: Provider) {
         self.provider = provider
     }
 

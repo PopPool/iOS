@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class SignUpRepositoryImpl: SignUpRepository {
+public final class SignUpRepositoryImpl: SignUpRepository {
 
     private let provider: Provider
 
-    init(provider: Provider) {
+    public init(provider: Provider) {
         self.provider = provider
     }
 

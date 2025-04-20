@@ -8,6 +8,8 @@ public final class PreSignedRepositoryImpl: PreSignedRepository {
 
     private let service = PreSignedService()
 
+    public init() { }
+
     public func tryUpload(presignedURLRequest: [(filePath: String, image: UIImage)]) -> Single<Void> {
         return service.tryUpload(datas: presignedURLRequest.map {
             PreSignedService.PresignedURLRequest(

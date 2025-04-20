@@ -1,16 +1,9 @@
-//
-//  Provider.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/16/24.
-//
-
 import Foundation
 
 import Alamofire
 import RxSwift
 
-protocol Provider {
+public protocol Provider {
 
     /// 네트워크 요청을 수행하고 결과를 반환하는 메서드
     /// - Parameters:

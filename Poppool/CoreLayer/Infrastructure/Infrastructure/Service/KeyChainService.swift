@@ -1,16 +1,9 @@
-//
-//  KeyChainService.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 9/2/24.
-//
-
 import Foundation
 import Security
 
 import RxSwift
 
-final class KeyChainService {
+public final class KeyChainService {
 
     // KeyChain에서 발생할 수 있는 오류를 정의
     enum KeyChainError: Error {
@@ -21,6 +14,8 @@ final class KeyChainService {
 
     // KeyChain 서비스 이름
     private let service = "keyChain"
+
+    public init() { }
 
     /// KeyChain에서 특정 타입의 토큰을 가져오는 메서드
     /// - Parameter type: 가져오려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)

@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
+public final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
 
     private let repository: PopUpAPIRepository
 
-    init(repository: PopUpAPIRepository) {
+    public init(repository: PopUpAPIRepository) {
         self.repository = repository
     }
 

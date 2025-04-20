@@ -1,26 +1,26 @@
 import Foundation
 
 public struct AdminStoreDetail {
-    let id: Int64
-    let name: String
-    let categoryId: Int64
-    let categoryName: String
-    let description: String
-    let address: String
-    let startDate: String
-    let endDate: String
-    let createUserId: String
-    let createDateTime: String
-    let mainImageUrl: String
-    let bannerYn: Bool
-    let images: [StoreImage]
-    let latitude: Double
-    let longitude: Double
-    let markerTitle: String
-    let markerSnippet: String
+    public let id: Int64
+    public let name: String
+    public let categoryId: Int64
+    public let categoryName: String
+    public let description: String
+    public let address: String
+    public let startDate: String
+    public let endDate: String
+    public let createUserId: String
+    public let createDateTime: String
+    public let mainImageUrl: String
+    public let bannerYn: Bool
+    public let images: [StoreImage]
+    public let latitude: Double
+    public let longitude: Double
+    public let markerTitle: String
+    public let markerSnippet: String
 
-    struct StoreImage {
-        let id: Int64
-        let imageUrl: String
+    public struct StoreImage {
+        public let id: Int64
+        public let imageUrl: String
     }
 }

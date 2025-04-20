@@ -4,10 +4,10 @@ import DomainInterface
 
 import RxSwift
 
-final class UserAPIUseCaseImpl: UserAPIUseCase {
+public final class UserAPIUseCaseImpl: UserAPIUseCase {
     private let repository: UserAPIRepository
 
-    init(repository: UserAPIRepository) {
+    public init(repository: UserAPIRepository) {
         self.repository = repository
     }
 

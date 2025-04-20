@@ -5,14 +5,14 @@ import DomainInterface
 import Alamofire
 import RxSwift
 
-final class AdminRepositoryImpl: AdminRepository {
+public final class AdminRepositoryImpl: AdminRepository {
 
     // MARK: - Properties
     private let provider: Provider
     private let tokenInterceptor = TokenInterceptor()
 
     // MARK: - Init
-    init(provider: Provider) {
+    public init(provider: Provider) {
         self.provider = provider
     }
 

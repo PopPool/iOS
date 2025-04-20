@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class MapUseCaseImpl: MapUseCase {
+public final class MapUseCaseImpl: MapUseCase {
 
     private let repository: MapRepository
 
-    init(repository: MapRepository) {
+    public init(repository: MapRepository) {
         self.repository = repository
     }
 

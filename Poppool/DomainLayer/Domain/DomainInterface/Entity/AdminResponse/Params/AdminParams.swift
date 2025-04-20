@@ -1,6 +1,22 @@
 import Foundation
 
 public struct CreateStoreParams {
+    public init(name: String, categoryId: Int64, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
+        self.name = name
+        self.categoryId = categoryId
+        self.desc = desc
+        self.address = address
+        self.startDate = startDate
+        self.endDate = endDate
+        self.mainImageUrl = mainImageUrl
+        self.imageUrlList = imageUrlList
+        self.latitude = latitude
+        self.longitude = longitude
+        self.markerTitle = markerTitle
+        self.markerSnippet = markerSnippet
+        self.startDateBeforeEndDate = startDateBeforeEndDate
+    }
+
     public let name: String
     public let categoryId: Int64
     public let desc: String
@@ -17,6 +33,24 @@ public struct CreateStoreParams {
 }
 
 public struct UpdateStoreParams {
+    public init(id: Int64, name: String, categoryId: Int64, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], imagesToDelete: [Int64], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
+        self.id = id
+        self.name = name
+        self.categoryId = categoryId
+        self.desc = desc
+        self.address = address
+        self.startDate = startDate
+        self.endDate = endDate
+        self.mainImageUrl = mainImageUrl
+        self.imageUrlList = imageUrlList
+        self.imagesToDelete = imagesToDelete
+        self.latitude = latitude
+        self.longitude = longitude
+        self.markerTitle = markerTitle
+        self.markerSnippet = markerSnippet
+        self.startDateBeforeEndDate = startDateBeforeEndDate
+    }
+
     public let id: Int64
     public let name: String
     public let categoryId: Int64

@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class AuthAPIUseCaseImpl: AuthAPIUseCase {
+public final class AuthAPIUseCaseImpl: AuthAPIUseCase {
 
     private let repository: AuthAPIRepository
 
-    init(repository: AuthAPIRepository) {
+    public init(repository: AuthAPIRepository) {
         self.repository = repository
     }
 

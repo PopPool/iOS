@@ -7,7 +7,7 @@ import RxSwift
 public final class PreSignedUseCaseImpl: PreSignedUseCase {
     private let repository: PreSignedRepository
 
-    init(repository: PreSignedRepository) {
+    public init(repository: PreSignedRepository) {
         self.repository = repository
     }
 

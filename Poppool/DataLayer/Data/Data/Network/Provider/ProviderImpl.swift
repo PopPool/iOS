@@ -1,11 +1,16 @@
-import Alamofire
 import Foundation
+
+import Infrastructure
+
+import Alamofire
 import RxSwift
 
-final class ProviderImpl: Provider {
+public final class ProviderImpl: Provider {
 
     private let disposeBag = DisposeBag()
     var timeoutTimer: Timer?
+
+    public init(timeoutTimer: Timer? = nil) { self.timeoutTimer = timeoutTimer }
 
     func requestData<R: Decodable, E: RequesteResponsable>(
         with endpoint: E,

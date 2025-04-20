@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class CommentAPIUseCaseImpl: CommentAPIUseCase {
+public final class CommentAPIUseCaseImpl: CommentAPIUseCase {
 
     private let repository: CommentAPIRepository
 
-    init(repository: CommentAPIRepository) {
+    public init(repository: CommentAPIRepository) {
         self.repository = repository
     }
 

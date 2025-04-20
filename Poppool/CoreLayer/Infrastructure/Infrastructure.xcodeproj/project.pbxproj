@@ -7,11 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0512596B2DB5629C001342A2 /* RxCocoa-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0512596D2DB5629E001342A2 /* RxSwift-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		05C1D8302DB53CE300508FFD /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */; };
 		05C1D8322DB53CE300508FFD /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */; };
 		05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; };
 		05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0512596C2DB5629C001342A2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0512596D2DB5629E001342A2 /* RxSwift-Dynamic in Embed Frameworks */,
+				0512596B2DB5629C001342A2 /* RxCocoa-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		058CC9182DB5383C0084221A /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,6 +94,7 @@
 				058CC9142DB5383C0084221A /* Sources */,
 				058CC9152DB5383C0084221A /* Frameworks */,
 				058CC9162DB5383C0084221A /* Resources */,
+				0512596C2DB5629C001342A2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -293,6 +311,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -325,6 +344,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

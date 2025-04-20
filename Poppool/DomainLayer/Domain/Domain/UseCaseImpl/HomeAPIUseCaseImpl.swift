@@ -4,11 +4,11 @@ import DomainInterface
 
 import RxSwift
 
-final class HomeAPIUseCaseImpl: HomeAPIUseCase {
+public final class HomeAPIUseCaseImpl: HomeAPIUseCase {
 
     private let repository: HomeAPIRepository
 
-    init(repository: HomeAPIRepository) {
+    public init(repository: HomeAPIRepository) {
         self.repository = repository
     }
 

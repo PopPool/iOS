@@ -5,11 +5,11 @@ import Infrastructure
 
 import RxSwift
 
-final class MapRepositoryImpl: MapRepository {
+public final class MapRepositoryImpl: MapRepository {
 
     private let provider: Provider
 
-    init(provider: Provider) {
+    public init(provider: Provider) {
         self.provider = provider
     }
 
