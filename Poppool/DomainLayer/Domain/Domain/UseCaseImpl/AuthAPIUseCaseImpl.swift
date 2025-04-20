@@ -12,11 +12,11 @@ public final class AuthAPIUseCaseImpl: AuthAPIUseCase {
         self.repository = repository
     }
 
-    func postTryLogin(userCredential: Encodable, socialType: String) -> Observable<LoginResponse> {
+    public func postTryLogin(userCredential: Encodable, socialType: String) -> Observable<LoginResponse> {
         return repository.tryLogIn(userCredential: userCredential, socialType: socialType)
     }
 
-    func postTokenReissue() -> Observable<PostTokenReissueResponse> {
+    public func postTokenReissue() -> Observable<PostTokenReissueResponse> {
         return repository.postTokenReissue()
     }
 }

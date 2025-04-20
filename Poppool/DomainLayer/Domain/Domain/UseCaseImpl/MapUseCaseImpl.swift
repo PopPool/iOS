@@ -1,6 +1,7 @@
 import Foundation
 
 import DomainInterface
+import Infrastructure
 
 import RxSwift
 
@@ -12,11 +13,11 @@ public final class MapUseCaseImpl: MapUseCase {
         self.repository = repository
     }
 
-    func fetchCategories() -> Observable<[CategoryResponse]> {
+    public func fetchCategories() -> Observable<[CategoryResponse]> {
         return repository.fetchCategories()
     }
 
-    func fetchStoresInBounds(
+    public func fetchStoresInBounds(
         northEastLat: Double,
         northEastLon: Double,
         southWestLat: Double,
@@ -37,7 +38,7 @@ public final class MapUseCaseImpl: MapUseCase {
         })
     }
 
-    func searchStores(
+    public func searchStores(
         query: String,
         categories: [Int64]
     ) -> Observable<[MapPopUpStore]> {
@@ -52,7 +53,7 @@ public final class MapUseCaseImpl: MapUseCase {
         })
     }
 
-    func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore] {
+    public func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore] {
         guard !selectedRegions.isEmpty else { return stores }
 
         return stores.filter { store in

@@ -12,7 +12,7 @@ public final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         self.repository = repository
     }
 
-    func fetchHome(
+    public func fetchHome(
         page: Int32?,
         size: Int32?,
         sort: String?
@@ -20,7 +20,7 @@ public final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         return repository.fetchHome(page: page, size: size, sort: sort)
     }
 
-    func fetchCustomPopUp(
+    public func fetchCustomPopUp(
         page: Int32?,
         size: Int32?,
         sort: String?
@@ -28,7 +28,7 @@ public final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         return repository.fetchCustomPopUp(page: page, size: size, sort: sort)
     }
 
-    func fetchNewPopUp(
+    public func fetchNewPopUp(
         page: Int32?,
         size: Int32?,
         sort: String?
@@ -36,7 +36,7 @@ public final class HomeAPIUseCaseImpl: HomeAPIUseCase {
         return repository.fetchNewPopUp(page: page, size: size, sort: sort)
     }
 
-    func fetchPopularPopUp(
+    public func fetchPopularPopUp(
         page: Int32?,
         size: Int32?,
         sort: String?

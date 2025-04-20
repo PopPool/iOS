@@ -12,7 +12,7 @@ public final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
         self.repository = repository
     }
 
-    func getSearchBottomPopUpList(isOpen: Bool, categories: [Int64], page: Int32?, size: Int32, sort: String?) -> Observable<GetSearchBottomPopUpListResponse> {
+    public func getSearchBottomPopUpList(isOpen: Bool, categories: [Int64], page: Int32?, size: Int32, sort: String?) -> Observable<GetSearchBottomPopUpListResponse> {
         var categoryString: String?
         if !categories.isEmpty {
             categoryString = categories.map { String($0) + "," }.reduce("", +)
@@ -24,15 +24,15 @@ public final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
         }
     }
 
-    func getSearchPopUpList(query: String?) -> Observable<GetSearchPopUpListResponse> {
+    public func getSearchPopUpList(query: String?) -> Observable<GetSearchPopUpListResponse> {
         return repository.getSearchPopUpList(categories: nil, page: nil, size: nil, sort: nil, query: query, sortCode: nil)
     }
 
-    func getPopUpDetail(commentType: String?, popUpStoredId: Int64, isViewCount: Bool? = true) -> Observable<GetPopUpDetailResponse> {
+    public func getPopUpDetail(commentType: String?, popUpStoredId: Int64, isViewCount: Bool? = true) -> Observable<GetPopUpDetailResponse> {
         return repository.getPopUpDetail(commentType: commentType, popUpStoreId: popUpStoredId, viewCountYn: isViewCount)
     }
 
-    func getPopUpComment(commentType: String?, page: Int32?, size: Int32?, sort: String?, popUpStoreId: Int64) -> Observable<GetPopUpCommentResponse> {
+    public func getPopUpComment(commentType: String?, page: Int32?, size: Int32?, sort: String?, popUpStoreId: Int64) -> Observable<GetPopUpCommentResponse> {
         return repository.getPopUpComment(commentType: commentType, page: page, size: size, sort: sort, popUpStoreId: popUpStoreId)
     }
 }

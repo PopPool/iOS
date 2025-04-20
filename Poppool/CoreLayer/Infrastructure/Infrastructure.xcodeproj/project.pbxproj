@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0512596B2DB5629C001342A2 /* RxCocoa-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		0512596D2DB5629E001342A2 /* RxSwift-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		05C1D8302DB53CE300508FFD /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */; };
-		05C1D8322DB53CE300508FFD /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */; };
+		05125B662DB56C21001342A2 /* KakaoSDKAuth in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		05125B672DB56C21001342A2 /* KakaoSDKUser in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */; };
+		05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B722DB56C5E001342A2 /* RxSwift-Dynamic */; };
 		05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; };
 		05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; };
 /* End PBXBuildFile section */
@@ -22,8 +22,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0512596D2DB5629E001342A2 /* RxSwift-Dynamic in Embed Frameworks */,
-				0512596B2DB5629C001342A2 /* RxCocoa-Dynamic in Embed Frameworks */,
+				05125B672DB56C21001342A2 /* KakaoSDKUser in Embed Frameworks */,
+				05125B662DB56C21001342A2 /* KakaoSDKAuth in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,9 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */,
 				05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */,
-				05C1D8322DB53CE300508FFD /* RxSwift-Dynamic in Frameworks */,
-				05C1D8302DB53CE300508FFD /* RxCocoa-Dynamic in Frameworks */,
+				05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */,
 				05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,10 +57,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05125B6A2DB56C32001342A2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		058CC90E2DB5383C0084221A = {
 			isa = PBXGroup;
 			children = (
 				058CC91A2DB5383C0084221A /* Infrastructure */,
+				05125B6A2DB56C32001342A2 /* Frameworks */,
 				058CC9192DB5383C0084221A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,10 +113,10 @@
 			);
 			name = Infrastructure;
 			packageProductDependencies = (
-				05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */,
-				05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */,
 				05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */,
 				05C1D8362DB53D3A00508FFD /* KakaoSDKUser */,
+				05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */,
+				05125B722DB56C5E001342A2 /* RxSwift-Dynamic */,
 			);
 			productName = Infrastructure;
 			productReference = 058CC9182DB5383C0084221A /* Infrastructure.framework */;
@@ -323,11 +331,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Infrastructure;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -356,11 +368,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Infrastructure;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -407,12 +423,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		05C1D82F2DB53CE300508FFD /* RxCocoa-Dynamic */ = {
+		05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = "RxCocoa-Dynamic";
 		};
-		05C1D8312DB53CE300508FFD /* RxSwift-Dynamic */ = {
+		05125B722DB56C5E001342A2 /* RxSwift-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = "RxSwift-Dynamic";

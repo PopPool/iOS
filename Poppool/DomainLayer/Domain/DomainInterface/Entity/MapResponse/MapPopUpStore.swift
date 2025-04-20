@@ -1,16 +1,16 @@
 import Foundation
 
 public struct MapPopUpStore: Equatable {
-    let id: Int64
-    let category: String
-    let name: String
-    let address: String
-    let startDate: String
-    let endDate: String
-    let latitude: Double
-    let longitude: Double
-    let markerId: Int64
-    let markerTitle: String
-    let markerSnippet: String
-    let mainImageUrl: String?
+    public let id: Int64
+    public let category: String
+    public let name: String
+    public let address: String
+    public let startDate: String
+    public let endDate: String
+    public let latitude: Double
+    public let longitude: Double
+    public let markerId: Int64
+    public let markerTitle: String
+    public let markerSnippet: String
+    public let mainImageUrl: String?
 }

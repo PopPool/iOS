@@ -1,6 +1,7 @@
 import Foundation
 
 import DomainInterface
+import Infrastructure
 
 import RxSwift
 
@@ -12,15 +13,15 @@ public final class AdminUseCaseImpl: AdminUseCase {
         self.repository = repository
     }
 
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
+    public func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
         return repository.fetchStoreList(query: query, page: page, size: size)
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
+    public func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
         return repository.fetchStoreDetail(id: id)
     }
 
-    func createStore(params: CreateStoreParams) -> Completable {
+    public func createStore(params: CreateStoreParams) -> Completable {
         Logger.log(message: "createStore 호출 - 스토어명: \(params.name)", category: .debug)
         return repository.createStore(params: params)
             .do(onError: { error in
@@ -30,7 +31,7 @@ public final class AdminUseCaseImpl: AdminUseCase {
             })
     }
 
-    func updateStore(params: UpdateStoreParams) -> Completable {
+    public func updateStore(params: UpdateStoreParams) -> Completable {
         Logger.log(message: """
             Updating store with location:
             Latitude: \(params.latitude)
@@ -44,20 +45,20 @@ public final class AdminUseCaseImpl: AdminUseCase {
             })
     }
 
-    func deleteStore(id: Int64) -> Completable {
+    public func deleteStore(id: Int64) -> Completable {
         return repository.deleteStore(id: id)
     }
 
     // Notice
-    func createNotice(params: CreateNoticeParams) -> Completable {
+    public func createNotice(params: CreateNoticeParams) -> Completable {
         return repository.createNotice(params: params)
     }
 
-    func updateNotice(params: UpdateNoticeParams) -> Completable {
+    public func updateNotice(params: UpdateNoticeParams) -> Completable {
         return repository.updateNotice(params: params)
     }
 
-    func deleteNotice(id: Int64) -> Completable {
+    public func deleteNotice(id: Int64) -> Completable {
         return repository.deleteNotice(id: id)
     }
 }

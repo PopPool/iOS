@@ -11,7 +11,7 @@ public final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
         self.repository = repository
     }
 
-    func trySignUp(
+    public func trySignUp(
         nickName: String,
         gender: String,
         age: Int32,
@@ -31,11 +31,11 @@ public final class SignUpAPIUseCaseImpl: SignUpAPIUseCase {
         )
     }
 
-    func checkNickName(nickName: String) -> Observable<Bool> {
+    public func checkNickName(nickName: String) -> Observable<Bool> {
         return repository.checkNickName(nickName: nickName)
     }
 
-    func fetchCategoryList() -> Observable<[CategoryResponse]> {
+    public func fetchCategoryList() -> Observable<[CategoryResponse]> {
         return repository.fetchCategoryList()
     }
 }

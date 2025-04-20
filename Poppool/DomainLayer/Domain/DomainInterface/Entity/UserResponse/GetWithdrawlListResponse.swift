@@ -5,6 +5,6 @@ public struct GetWithdrawlListResponse {
 }
 
 public struct GetWithdrawlListDataResponse {
-    var id: Int64
-    var survey: String?
+    public var id: Int64
+    public var survey: String?
 }

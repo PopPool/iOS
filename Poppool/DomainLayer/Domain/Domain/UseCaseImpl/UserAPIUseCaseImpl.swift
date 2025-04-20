@@ -11,31 +11,31 @@ public final class UserAPIUseCaseImpl: UserAPIUseCase {
         self.repository = repository
     }
 
-    func postBookmarkPopUp(popUpID: Int64) -> Completable {
+    public func postBookmarkPopUp(popUpID: Int64) -> Completable {
         return repository.postBookmarkPopUp(popUpStoreId: popUpID)
     }
 
-    func deleteBookmarkPopUp(popUpID: Int64) -> Completable {
+    public func deleteBookmarkPopUp(popUpID: Int64) -> Completable {
         return repository.deleteBookmarkPopUp(popUpStoreId: popUpID)
     }
 
-    func postCommentLike(commentId: Int64) -> Completable {
+    public func postCommentLike(commentId: Int64) -> Completable {
         return repository.postCommentLike(commentId: commentId)
     }
 
-    func deleteCommentLike(commentId: Int64) -> Completable {
+    public func deleteCommentLike(commentId: Int64) -> Completable {
         return repository.deleteCommentLike(commentId: commentId)
     }
 
-    func postUserBlock(blockedUserId: String?) -> Completable {
+    public func postUserBlock(blockedUserId: String?) -> Completable {
         return repository.postUserBlock(blockedUserId: blockedUserId)
     }
 
-    func deleteUserBlock(blockedUserId: String?) -> Completable {
+    public func deleteUserBlock(blockedUserId: String?) -> Completable {
         return repository.deleteUserBlock(blockedUserId: blockedUserId)
     }
 
-    func getOtherUserCommentedPopUpList(
+    public func getOtherUserCommentedPopUpList(
         commenterId: String?,
         commentType: String?,
         page: Int32?,
@@ -51,31 +51,31 @@ public final class UserAPIUseCaseImpl: UserAPIUseCase {
         )
     }
 
-    func getMyPage() -> Observable<GetMyPageResponse> {
+    public func getMyPage() -> Observable<GetMyPageResponse> {
         return repository.getMyPage()
     }
 
-    func postLogout() -> Completable {
+    public func postLogout() -> Completable {
         return repository.postLogout()
     }
 
-    func getWithdrawlList() -> Observable<GetWithdrawlListResponse> {
+    public func getWithdrawlList() -> Observable<GetWithdrawlListResponse> {
         return repository.getWithdrawlList()
     }
 
-    func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
+    public func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable {
         return repository.postWithdrawl(list: surveyList.map { ($0.id, $0.survey)})
     }
 
-    func getMyProfile() -> Observable<GetMyProfileResponse> {
+    public func getMyProfile() -> Observable<GetMyProfileResponse> {
         return repository.getMyProfile()
     }
 
-    func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
+    public func putUserTailoredInfo(gender: String?, age: Int32) -> Completable {
         return repository.putUserTailoredInfo(gender: gender, age: age)
     }
 
-    func putUserCategory(
+    public func putUserCategory(
         interestCategoriesToAdd: [Int64],
         interestCategoriesToDelete: [Int64],
         interestCategoriesToKeep: [Int64]
@@ -87,31 +87,31 @@ public final class UserAPIUseCaseImpl: UserAPIUseCase {
         )
     }
 
-    func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
+    public func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable {
         return repository.putUserProfile(profileImageUrl: profileImageUrl, nickname: nickname, email: email, instagramId: instagramId, intro: intro)
     }
 
-    func getMyCommentedPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetMyCommentedPopUpResponse> {
+    public func getMyCommentedPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetMyCommentedPopUpResponse> {
         return repository.getMyCommentedPopUp(page: page, size: size, sort: sort)
     }
 
-    func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
+    public func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse> {
         return repository.getBlockUserList(page: page, size: size, sort: sort)
     }
 
-    func getNoticeList() -> Observable<GetNoticeListResponse> {
+    public func getNoticeList() -> Observable<GetNoticeListResponse> {
         return repository.getNoticeList()
     }
 
-    func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
+    public func getNoticeDetail(noticeID: Int64) -> Observable<GetNoticeDetailResponse> {
         return repository.getNoticeDetail(noticeID: noticeID)
     }
 
-    func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+    public func getRecentPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
         return repository.getRecentPopUp(page: page, size: size, sort: sort)
     }
 
-    func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
+    public func getBookmarkPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetRecentPopUpResponse> {
         return repository.getBookmarkPopUp(page: page, size: size, sort: sort)
     }
 }
