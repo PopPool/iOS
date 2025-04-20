@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05C1D60B2DB53A4900508FFD /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6072DB53A4900508FFD /* Data.framework */; };
+		05C1D60C2DB53A4900508FFD /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6072DB53A4900508FFD /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05C1D60D2DB53A4900508FFD /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6082DB53A4900508FFD /* Domain.framework */; };
+		05C1D60E2DB53A4900508FFD /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6082DB53A4900508FFD /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05C1D60F2DB53A4900508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6092DB53A4900508FFD /* Infrastructure.framework */; };
+		05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6092DB53A4900508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; };
+		05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		082197A12D426DCB0054094A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 082197A02D426DCB0054094A /* Then */; };
 		083A25D02CF364B70099B58E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 083A25CF2CF364B70099B58E /* Alamofire */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
@@ -28,8 +36,29 @@
 		BDCA42102CF35FF5005EECF6 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = BDCA420F2CF35FF5005EECF6 /* Lottie */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		05C1D6132DB53A4900508FFD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */,
+				05C1D60E2DB53A4900508FFD /* Domain.framework in Embed Frameworks */,
+				05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */,
+				05C1D60C2DB53A4900508FFD /* Data.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		05229DD02D99519200D88E73 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		05C1D6072DB53A4900508FFD /* Data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C1D6082DB53A4900508FFD /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C1D6092DB53A4900508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C1D60A2DB53A4900508FFD /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDCA41BD2CF35AC0005EECF6 /* Poppool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poppool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -65,13 +94,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDCA41F82CF35D9A005EECF6 /* RxSwift in Frameworks */,
+				05C1D60F2DB53A4900508FFD /* Infrastructure.framework in Frameworks */,
 				BDCA420D2CF35FD2005EECF6 /* RxGesture in Frameworks */,
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
 				4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */,
+				05C1D60D2DB53A4900508FFD /* Domain.framework in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
 				4E1514302D994A3A00DFD08F /* KakaoSDKCommon in Frameworks */,
+				05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */,
+				05C1D60B2DB53A4900508FFD /* Data.framework in Frameworks */,
 				BDCA42102CF35FF5005EECF6 /* Lottie in Frameworks */,
 				BDCA41FE2CF35EE7005EECF6 /* ReactorKit in Frameworks */,
 				BDCA41F22CF35D0D005EECF6 /* SnapKit in Frameworks */,
@@ -89,11 +122,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05C1D6062DB53A4900508FFD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05C1D6072DB53A4900508FFD /* Data.framework */,
+				05C1D6082DB53A4900508FFD /* Domain.framework */,
+				05C1D6092DB53A4900508FFD /* Infrastructure.framework */,
+				05C1D60A2DB53A4900508FFD /* Presentation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BDCA41B42CF35AC0005EECF6 = {
 			isa = PBXGroup;
 			children = (
 				05229DD02D99519200D88E73 /* .swiftlint.yml */,
 				058789AD2DAD2E10004F81E2 /* Poppool */,
+				05C1D6062DB53A4900508FFD /* Frameworks */,
 				BDCA41BE2CF35AC0005EECF6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,6 +162,7 @@
 				BDCA41B92CF35AC0005EECF6 /* Sources */,
 				BDCA41BA2CF35AC0005EECF6 /* Frameworks */,
 				BDCA41BB2CF35AC0005EECF6 /* Resources */,
+				05C1D6132DB53A4900508FFD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
