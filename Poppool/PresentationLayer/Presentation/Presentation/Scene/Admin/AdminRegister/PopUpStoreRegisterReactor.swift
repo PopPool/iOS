@@ -1,6 +1,7 @@
 import UIKit
 import CoreLocation
 
+import Infrastructure
 import DomainInterface
 
 import ReactorKit

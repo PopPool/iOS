@@ -1,6 +1,7 @@
 import Foundation
 
 import DomainInterface
+import Infrastructure
 
 import RxSwift
 
