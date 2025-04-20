@@ -16,7 +16,7 @@ final class TokenInterceptor: RequestInterceptor {
         for session: Session,
         completion: @escaping (Result<URLRequest, any Error>) -> Void) {
             Logger.log(message: "TokenInterceptor Adapt Token", category: .network)
-            let keyChainService = KeyChainService()
+            @Dependency var keyChainService: KeyChainService
             var urlRequest = urlRequest
             let accessTokenResult = keyChainService.fetchToken(type: .accessToken)
             switch accessTokenResult {

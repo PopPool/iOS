@@ -265,10 +265,7 @@ final class AdminViewController: BaseViewController, View {
         mainView.registerButton.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                let registerVC = PopUpStoreRegisterViewController(
-                    nickname: self.nickname,
-                    adminUseCase: self.adminUseCase
-                )
+                let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname)
 
                 registerVC.completionHandler = { [weak self] in
                     self?.reactor?.action.onNext(.reloadData)

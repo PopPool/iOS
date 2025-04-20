@@ -92,7 +92,9 @@ extension ToastMaker {
             .withUnretained(currentVC)
             .subscribe(onNext: { (owner, _) in
                 let nextController = MyPageBookmarkController()
-                nextController.reactor = MyPageBookmarkReactor()
+                nextController.reactor = MyPageBookmarkReactor(
+                    userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self)
+                )
                 owner.navigationController?.pushViewController(nextController, animated: true)
             })
             .disposed(by: disposeBag)

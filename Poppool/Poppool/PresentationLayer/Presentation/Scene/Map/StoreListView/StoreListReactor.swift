@@ -5,8 +5,8 @@ import RxSwift
 
 final class StoreListReactor: Reactor {
     // MARK: - Reactor
-    private let userAPIUseCase: UserAPIUseCaseImpl
-    private let popUpAPIUseCase: PopUpAPIUseCaseImpl
+    private let userAPIUseCase: UserAPIUseCase
+    private let popUpAPIUseCase: PopUpAPIUseCase
     private let bookmarkStateRelay = PublishRelay<(Int64, Bool)>()
 
 //    private var currentPage = 0
@@ -48,8 +48,8 @@ final class StoreListReactor: Reactor {
     var initialState: State
 
     init(
-        userAPIUseCase: UserAPIUseCaseImpl = UserAPIUseCaseImpl(repository: UserAPIRepositoryImpl(provider: ProviderImpl())),
-        popUpAPIUseCase: PopUpAPIUseCaseImpl = PopUpAPIUseCaseImpl(repository: PopUpAPIRepositoryImpl(provider: ProviderImpl()))
+        userAPIUseCase: UserAPIUseCase,
+        popUpAPIUseCase: PopUpAPIUseCase
     ) {
         self.userAPIUseCase = userAPIUseCase
         self.popUpAPIUseCase = popUpAPIUseCase
@@ -82,7 +82,8 @@ final class StoreListReactor: Reactor {
 
             return popUpAPIUseCase.getPopUpDetail(
                 commentType: "NORMAL",
-                popUpStoredId: Int64(idInt32) // Int32 → Int64 변환
+                popUpStoredId: Int64(idInt32), // Int32 → Int64 변환
+                isViewCount: true
             )
             .flatMap { detail -> Observable<Mutation> in
                 if detail.bookmarkYn != store.isBookmarked {

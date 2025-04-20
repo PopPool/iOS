@@ -16,7 +16,11 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     private var disposeBag = DisposeBag()
 
-    init(adminUseCase: AdminUseCase, presignedService: PreSignedService, editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil) {
+    init(
+        adminUseCase: AdminUseCase,
+        presignedService: PreSignedService,
+        editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil
+    ) {
         self.adminUseCase = adminUseCase
         self.presignedService = presignedService
         self.isEditMode = editingStore != nil

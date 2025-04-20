@@ -34,7 +34,7 @@ final class SignUpStep3Reactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private let signUpAPIUseCase = SignUpAPIUseCaseImpl(repository: SignUpRepositoryImpl(provider: ProviderImpl()))
+    private let signUpAPIUseCase: SignUpAPIUseCase
     private var cetegoryIDList: [Int64] = []
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -54,7 +54,10 @@ final class SignUpStep3Reactor: Reactor {
     private var categorySection: TagSection = TagSection(inputDataList: [])
 
     // MARK: - init
-    init() {
+    init(
+        signUpAPIUseCase: SignUpAPIUseCase
+    ) {
+        self.signUpAPIUseCase = signUpAPIUseCase
         self.initialState = State()
     }
 

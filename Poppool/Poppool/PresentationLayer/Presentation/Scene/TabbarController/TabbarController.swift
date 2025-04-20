@@ -193,18 +193,21 @@ class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
     func addSomeTabItems() {
-        let provider = ProviderImpl()
-
         let mapController = MapViewController()
-        let mapUseCase = MapUseCaseImpl(repository: MapRepositoryImpl(provider: provider))
-        let directionRepository = MapDirectionRepositoryImpl(provider: provider)
-        mapController.reactor = MapReactor(useCase: mapUseCase, directionRepository: directionRepository)
+
+        mapController.reactor = MapReactor(
+            mapUseCase: DIContainer.resolve(MapUseCase.self),
+            mapDirectionRepository: DIContainer.resolve(MapDirectionRepository.self)
+        )
 
         let homeController = HomeController()
-        homeController.reactor = HomeReactor()
+        homeController.reactor = HomeReactor(
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+            homeAPIUseCase: DIContainer.resolve(HomeAPIUseCase.self)
+        )
 
         let myPageController = MyPageController()
-        myPageController.reactor = MyPageReactor()
+        myPageController.reactor = MyPageReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
 
         let iconSize = CGSize(width: 32, height: 32)
         // 탭바 아이템 생성
