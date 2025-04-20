@@ -1,11 +1,6 @@
-//
-//  GetPopUpDirectionResponseDTO.swift
-//  Poppool
-//
-//  Created by 김기현 on 1/23/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetPopUpDirectionResponseDTO: Decodable {
     let id: Int64
@@ -35,18 +30,4 @@ struct GetPopUpDirectionResponseDTO: Decodable {
             markerSnippet: markerSnippet
         )
     }
-}
-
-struct GetPopUpDirectionResponse {
-    let id: Int64
-    let categoryName: String
-    let name: String
-    let address: String
-    let startDate: String
-    let endDate: String
-    let latitude: Double
-    let longitude: Double
-    let markerId: Int64
-    let markerTitle: String
-    let markerSnippet: String
 }

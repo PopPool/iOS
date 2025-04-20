@@ -13,7 +13,7 @@ public final class MapDirectionRepositoryImpl: MapDirectionRepository {
         self.provider = provider
     }
 
-    func getPopUpDirection(popUpStoreId: Int64) -> Observable<GetPopUpDirectionResponseDTO> {
+    public func getPopUpDirection(popUpStoreId: Int64) -> Observable<GetPopUpDirectionResponse> {
         let endpoint = FindDirectionEndPoint.fetchDirection(popUpStoreId: popUpStoreId)
 //        print("🌎 [Repository]: 요청 생성 - \(endpoint)")
         return provider.requestData(with: endpoint, interceptor: TokenInterceptor())
