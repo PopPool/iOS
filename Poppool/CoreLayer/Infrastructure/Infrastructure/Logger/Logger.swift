@@ -1,14 +1,7 @@
-//
-//  Logger.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/9/24.
-//
-
 import Foundation
 
-struct Logger {
-    enum Level {
+public struct Logger {
+    public enum Level {
         case info
         case debug
         case network
@@ -55,12 +48,10 @@ struct Logger {
     static var isShowLine: Bool = false
     static var isShowLog: Bool = true
 
-    static private let noInputText = "Input is not found"
-
-    static func log(
+    public static func log(
         message: Any,
         category: Level,
-        fileName: String = noInputText,
+        fileName: String = "Input is not found",
         line: Int? = nil
     ) {
         if isShowLog {

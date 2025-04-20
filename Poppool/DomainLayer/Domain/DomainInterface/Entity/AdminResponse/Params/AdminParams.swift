@@ -1,37 +1,37 @@
 import Foundation
 
 public struct CreateStoreParams {
-    let name: String
-    let categoryId: Int64
-    let desc: String
-    let address: String
-    let startDate: String
-    let endDate: String
-    let mainImageUrl: String
-    let imageUrlList: [String?]
-    let latitude: Double
-    let longitude: Double
-    let markerTitle: String
-    let markerSnippet: String
-    let startDateBeforeEndDate: Bool
+    public let name: String
+    public let categoryId: Int64
+    public let desc: String
+    public let address: String
+    public let startDate: String
+    public let endDate: String
+    public let mainImageUrl: String
+    public let imageUrlList: [String?]
+    public let latitude: Double
+    public let longitude: Double
+    public let markerTitle: String
+    public let markerSnippet: String
+    public let startDateBeforeEndDate: Bool
 }
 
 public struct UpdateStoreParams {
-    let id: Int64
-    let name: String
-    let categoryId: Int64
-    let desc: String
-    let address: String
-    let startDate: String
-    let endDate: String
-    let mainImageUrl: String
-    let imageUrlList: [String?]
-    let imagesToDelete: [Int64]
-    let latitude: Double
-    let longitude: Double
-    let markerTitle: String
-    let markerSnippet: String
-    let startDateBeforeEndDate: Bool
+    public let id: Int64
+    public let name: String
+    public let categoryId: Int64
+    public let desc: String
+    public let address: String
+    public let startDate: String
+    public let endDate: String
+    public let mainImageUrl: String
+    public let imageUrlList: [String?]
+    public let imagesToDelete: [Int64]
+    public let latitude: Double
+    public let longitude: Double
+    public let markerTitle: String
+    public let markerSnippet: String
+    public let startDateBeforeEndDate: Bool
 }
 
 public struct CreateNoticeParams {
