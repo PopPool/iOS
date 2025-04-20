@@ -1,8 +1,8 @@
 import Foundation
 
 public struct PostTokenReissueResponse {
-    var accessToken: String?
-    var refreshToken: String?
-    var accessTokenExpiresAt: String?
-    var refreshTokenExpiresAt: String?
+    public var accessToken: String?
+    public var refreshToken: String?
+    public var accessTokenExpiresAt: String?
+    public var refreshTokenExpiresAt: String?
 }

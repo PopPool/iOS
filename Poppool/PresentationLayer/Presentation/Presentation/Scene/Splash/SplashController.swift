@@ -1,12 +1,19 @@
 import UIKit
 
+import Infrastructure
+import DomainInterface
+
 import ReactorKit
 import RxCocoa
 import RxSwift
 import SnapKit
 
-final class SplashController: BaseViewController {
+public final class SplashController: BaseViewController {
 
+    public override init() { }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
     // MARK: - Properties
     var disposeBag = DisposeBag()
 
@@ -20,7 +27,7 @@ final class SplashController: BaseViewController {
 
 // MARK: - Life Cycle
 extension SplashController {
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setUp()
         setRootview()

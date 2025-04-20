@@ -1,16 +1,11 @@
-//
-//  BaseViewController.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/9/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 import RxCocoa
 import RxSwift
 
-class BaseViewController: UIViewController {
+public class BaseViewController: UIViewController {
 
     var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
     var systemStatusBarDisposeBag = DisposeBag()
@@ -29,14 +24,14 @@ class BaseViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.isHidden = true
         systemStatusBarIsDarkBind()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         systemStatusBarIsDark.accept(systemStatusBarIsDark.value)
     }

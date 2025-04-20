@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIColor {
+public extension UIColor {
 
     // 무채색 컬러
     static let g50 = UIColor(hexCode: "F2F5F7")
