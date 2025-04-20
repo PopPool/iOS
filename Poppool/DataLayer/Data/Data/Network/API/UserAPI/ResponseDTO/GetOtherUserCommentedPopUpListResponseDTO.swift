@@ -1,11 +1,6 @@
-//
-//  GetOtherUserCommentedPopUpListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/27/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetOtherUserCommentedPopUpListResponseDTO: Decodable {
     var popUpInfoList: [GetOtherUserCommentedPopUpResponseDTO]

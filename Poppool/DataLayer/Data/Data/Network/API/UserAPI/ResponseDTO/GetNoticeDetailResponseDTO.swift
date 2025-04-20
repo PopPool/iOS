@@ -1,11 +1,6 @@
-//
-//  GetNoticeDetailResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/13/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetNoticeDetailResponseDTO: Decodable {
     var id: Int64

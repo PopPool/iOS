@@ -1,11 +1,6 @@
-//
-//  GetWithdrawlListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/7/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetWithdrawlListResponseDTO: Decodable {
     var withDrawlSurveyList: [GetWithdrawlListDataResponseDTO]

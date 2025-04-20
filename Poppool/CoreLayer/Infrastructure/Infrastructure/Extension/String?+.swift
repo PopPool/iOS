@@ -1,6 +1,6 @@
 import UIKit
 
-extension Optional where Wrapped == String {
+public extension Optional where Wrapped == String {
     /// ISO 8601 형식의 문자열을 `Date`로 변환하는 메서드
     func toDate() -> Date? {
         guard let self = self else { return nil } // 옵셔널 해제

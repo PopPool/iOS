@@ -1,11 +1,6 @@
-//
-//  GetCategoryListResponseDTO.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 // MARK: - GetCategoryListResponseDTO
 struct GetCategoryListResponseDTO: Codable {

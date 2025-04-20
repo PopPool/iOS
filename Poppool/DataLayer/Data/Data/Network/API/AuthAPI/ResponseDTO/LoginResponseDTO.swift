@@ -1,11 +1,6 @@
-//
-//  LoginResponseDTO.swift
-//  Poppool
-//
-//  Created by Porori on 11/25/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct LoginResponseDTO: Decodable {
     var userId: String

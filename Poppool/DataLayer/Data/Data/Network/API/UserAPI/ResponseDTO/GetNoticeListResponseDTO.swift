@@ -1,11 +1,6 @@
-//
-//  GetNoticeListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/13/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetNoticeListResponseDTO: Decodable {
     var noticeInfoList: [GetNoticeListDataResponseDTO]

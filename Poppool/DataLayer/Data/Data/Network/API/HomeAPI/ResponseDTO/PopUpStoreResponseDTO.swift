@@ -1,11 +1,6 @@
-//
-//  GetHomeInfoDataResponseDTO.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct PopUpStoreResponseDTO: Decodable {
     let id: Int64

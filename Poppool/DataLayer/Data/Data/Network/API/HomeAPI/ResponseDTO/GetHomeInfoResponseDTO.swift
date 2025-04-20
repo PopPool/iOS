@@ -1,11 +1,6 @@
-//
-//  GetHomeInfoResponseDTO.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetHomeInfoResponseDTO: Decodable {
     var bannerPopUpStoreList: [BannerPopUpStoreDTO]

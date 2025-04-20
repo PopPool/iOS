@@ -1,11 +1,7 @@
-//
-//  GetRecentPopUpResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/14/25.
-//
-
 import Foundation
+
+import DomainInterface
+import Infrastructure
 
 struct GetRecentPopUpResponseDTO: Decodable {
     var popUpInfoList: [GetRecentPopUpDataResponseDTO]

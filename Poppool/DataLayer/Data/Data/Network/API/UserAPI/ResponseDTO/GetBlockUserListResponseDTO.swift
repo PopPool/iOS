@@ -1,11 +1,6 @@
-//
-//  GetBlockUserListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/12/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetBlockUserListResponseDTO: Decodable {
     var blockedUserInfoList: [GetBlockUserListDataResponseDTO]

@@ -1,11 +1,6 @@
-//
-//  PostTokenReissueResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/16/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct PostTokenReissueResponseDTO: Decodable {
     var accessToken: String?

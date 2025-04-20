@@ -1,11 +1,8 @@
-//
-//  GetPopUpDetailResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/10/24.
-//
-
 import Foundation
+
+import DomainInterface
+import Infrastructure
+
 // MARK: - Main Model
 struct GetPopUpDetailResponseDTO: Decodable {
     let name: String?

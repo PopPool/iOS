@@ -1,5 +1,7 @@
 import Foundation
 
+import DomainInterface
+
 struct MapPopUpStoreDTO: Codable {
     let id: Int64
     let categoryName: String

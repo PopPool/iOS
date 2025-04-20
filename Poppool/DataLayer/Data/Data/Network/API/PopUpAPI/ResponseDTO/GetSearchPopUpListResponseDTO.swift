@@ -1,11 +1,6 @@
-//
-//  GetSearchPopUpListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/7/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetSearchPopUpListResponseDTO: Decodable {
     var popUpStoreList: [PopUpStoreResponseDTO]

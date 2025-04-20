@@ -1,11 +1,6 @@
-//
-//  BannerPopUpStoreDTO.swift
-//  Poppool
-//
-//  Created by Porori on 11/26/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct BannerPopUpStoreDTO: Decodable {
     var id: Int64

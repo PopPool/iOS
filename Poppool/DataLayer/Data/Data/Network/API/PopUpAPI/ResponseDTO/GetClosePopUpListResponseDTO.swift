@@ -1,11 +1,6 @@
-//
-//  GetClosePopUpListResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetClosePopUpListResponseDTO: Decodable {
     var closedPopUpStoreList: [PopUpStoreResponseDTO]

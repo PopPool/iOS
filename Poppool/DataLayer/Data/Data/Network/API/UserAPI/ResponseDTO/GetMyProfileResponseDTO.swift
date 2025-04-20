@@ -1,11 +1,6 @@
-//
-//  GetMyProfileResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/10/25.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetMyProfileResponseDTO: Decodable {
     var profileImageUrl: String?

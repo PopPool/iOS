@@ -1,11 +1,6 @@
-//
-//  GetMyPageResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/30/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetMyPageResponseDTO: Decodable {
     var nickname: String?

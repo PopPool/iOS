@@ -1,11 +1,6 @@
-//
-//  GetPopUpCommentResponseDTO.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/25/24.
-//
-
 import Foundation
+
+import DomainInterface
 
 struct GetPopUpCommentResponseDTO: Decodable {
     let commentList: [GetPopUpDetailCommentResponseDTO]

@@ -1,13 +1,6 @@
-//
-//  Date+.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/30/24.
-//
-
 import Foundation
 
-extension Optional where Wrapped == Date {
+public extension Optional where Wrapped == Date {
     /// `yyyy. MM. dd` 형식으로 날짜를 문자열로 변환합니다.
     /// - Parameter defaultString: 날짜가 nil일 경우 반환할 기본 문자열 (기본값: 빈 문자열 "")
     /// - Returns: 형식화된 날짜 문자열 또는 기본 문자열
