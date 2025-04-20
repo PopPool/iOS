@@ -27,7 +27,7 @@ final class MapRepositoryImpl: MapRepository {
             ),
             interceptor: TokenInterceptor()
         )
-        .map { $0.popUpStoreList.map(MapDomainModelConverter.convert) }
+        .map { $0.popUpStoreList.map { $0.toDomain() } }
     }
 
     func searchStores(
@@ -41,7 +41,7 @@ final class MapRepositoryImpl: MapRepository {
             ),
             interceptor: TokenInterceptor()
         )
-        .map { $0.popUpStoreList.map(MapDomainModelConverter.convert) }
+        .map { $0.popUpStoreList.map { $0.toDomain() } }
     }
 
     func fetchCategories() -> Observable<[CategoryResponse]> {

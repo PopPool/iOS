@@ -19,7 +19,7 @@ final class PopUpStoreRegisterReactor: Reactor {
     init(
         adminUseCase: AdminUseCase,
         presignedService: PreSignedService,
-        editingStore: GetAdminPopUpStoreListResponseDTO.PopUpStore? = nil
+        editingStore: AdminStore? = nil
     ) {
         self.adminUseCase = adminUseCase
         self.presignedService = presignedService
@@ -89,7 +89,7 @@ final class PopUpStoreRegisterReactor: Reactor {
         case addDeletedImage(id: Int64, path: String)
 
         // 기존 스토어 데이터 설정
-        case setStoreDetail(StoreDetailResponse)
+        case setStoreDetail(AdminStoreDetail)
         case setOriginalImageIds([String: Int64])
 
         // UI 상태 관리

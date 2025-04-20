@@ -9,11 +9,11 @@ final class AdminUseCaseImpl: AdminUseCase {
         self.repository = repository
     }
 
-    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[StoreResponse]> {
+    func fetchStoreList(query: String?, page: Int, size: Int) -> Observable<[AdminStore]> {
         return repository.fetchStoreList(query: query, page: page, size: size)
     }
 
-    func fetchStoreDetail(id: Int64) -> Observable<StoreDetailResponse> {
+    func fetchStoreDetail(id: Int64) -> Observable<AdminStoreDetail> {
         return repository.fetchStoreDetail(id: id)
     }
 

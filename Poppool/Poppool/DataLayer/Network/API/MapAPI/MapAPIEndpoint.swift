@@ -52,7 +52,6 @@ struct MapAPIEndpoint {
     }
 }
 
-// MARK: - Query DTOs
 struct BoundQueryDTO: Encodable {
     let northEastLat: Double
     let northEastLon: Double

@@ -14,8 +14,24 @@ struct MapPopUpStoreDTO: Codable {
     let markerSnippet: String
     let mainImageUrl: String?
     let bookmarkYn: Bool?
-}
 
+    func toDomain() -> MapPopUpStore {
+        return MapPopUpStore(
+            id: id,
+            category: categoryName,
+            name: name,
+            address: address,
+            startDate: startDate,
+            endDate: endDate,
+            latitude: latitude,
+            longitude: longitude,
+            markerId: markerId,
+            markerTitle: markerTitle,
+            markerSnippet: markerSnippet,
+            mainImageUrl: mainImageUrl
+        )
+    }
+}
 struct GetViewBoundPopUpStoreListResponse: Decodable {
     let popUpStoreList: [MapPopUpStoreDTO]
 }
