@@ -19,7 +19,7 @@ public struct GetOtherUserCommentedPopUpResponse {
         self.address = address
         self.closedYn = closedYn
     }
-    
+
     public var popUpStoreId: Int64
     public var popUpStoreName: String?
     public var desc: String?

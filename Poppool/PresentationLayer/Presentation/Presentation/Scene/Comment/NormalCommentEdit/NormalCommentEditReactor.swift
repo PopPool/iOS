@@ -1,8 +1,8 @@
 import PhotosUI
 import UIKit
 
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -35,13 +35,12 @@ final class NormalCommentEditReactor: Reactor {
         var isReloadView: Bool = true
         var isSaving: Bool = false
     }
-    
+
     struct PutCommentImageData {
         var imageId: Int64?
         var imageUrl: String?
         var actionType: String?
     }
-
 
     // MARK: - properties
 
@@ -190,10 +189,10 @@ final class NormalCommentEditReactor: Reactor {
                         content: newState.text,
                         imageUrlList: (convertAddImages + convertKeepImages + convertDeleteImages).map { $0.imageUrl }
                     )
-                    .subscribe(onDisposed:  { [weak self, weak controller] in
+                    .subscribe(onDisposed: { [weak self, weak controller] in
                         guard let self = self else { return }
                         self.preSignedUseCase.tryDelete(objectKeyList: deleteImages.compactMap { $0.0 })
-                            .subscribe(onDisposed:  {
+                            .subscribe(onDisposed: {
                                 controller?.navigationController?.popViewController(animated: true)
                             })
                             .disposed(by: self.disposeBag)

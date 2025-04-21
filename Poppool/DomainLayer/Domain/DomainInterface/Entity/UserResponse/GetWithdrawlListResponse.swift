@@ -13,7 +13,7 @@ public struct GetWithdrawlListDataResponse {
         self.id = id
         self.survey = survey
     }
-    
+
     public var id: Int64
     public var survey: String?
 }

@@ -26,7 +26,7 @@ public struct GetMyPagePopUpResponse {
         self.popUpStoreName = popUpStoreName
         self.mainImageUrl = mainImageUrl
     }
-    
+
     public var popUpStoreId: Int64
     public var popUpStoreName: String?
     public var mainImageUrl: String?

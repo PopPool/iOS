@@ -1,7 +1,7 @@
 import UIKit
 
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -298,7 +298,7 @@ final class AdminViewController: BaseViewController, View {
                 cellIdentifier: AdminStoreCell.identifier,
                 cellType: AdminStoreCell.self
             )) { _, store, cell in
-                cell.configure(with:  store)
+                cell.configure(with: store)
             }
             .disposed(by: disposeBag)
     }

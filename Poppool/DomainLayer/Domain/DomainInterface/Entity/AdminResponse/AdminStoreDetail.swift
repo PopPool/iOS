@@ -20,7 +20,7 @@ public struct AdminStoreDetail {
         self.markerTitle = markerTitle
         self.markerSnippet = markerSnippet
     }
-    
+
     public let id: Int64
     public let name: String
     public let categoryId: Int64
@@ -44,7 +44,7 @@ public struct AdminStoreDetail {
             self.id = id
             self.imageUrl = imageUrl
         }
-        
+
         public let id: Int64
         public let imageUrl: String
     }

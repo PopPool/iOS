@@ -7,7 +7,7 @@ public struct GetNoticeDetailResponse {
         self.content = content
         self.createDateTime = createDateTime
     }
-    
+
     var id: Int64
     public var title: String?
     public var content: String?

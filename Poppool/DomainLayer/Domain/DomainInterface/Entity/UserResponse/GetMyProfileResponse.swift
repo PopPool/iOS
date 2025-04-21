@@ -11,7 +11,7 @@ public struct GetMyProfileResponse {
         self.age = age
         self.interestCategoryList = interestCategoryList
     }
-    
+
     public var profileImageUrl: String?
     public var nickname: String?
     public var email: String?

@@ -1,7 +1,7 @@
 import UIKit
 
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import LinkPresentation
 import ReactorKit
@@ -538,7 +538,7 @@ extension DetailReactor {
 
                     let commentList = comment.imageList.compactMap { $0 }
                     self.preSignedUseCase.tryDelete(objectKeyList: commentList)
-                        .subscribe(onDisposed:  {
+                        .subscribe(onDisposed: {
                             Logger.log(message: "S3 Image Delete 완료", category: .info)
                         })
                         .disposed(by: self.disposeBag)

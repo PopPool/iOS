@@ -5,7 +5,7 @@ public struct CategoryResponse {
         self.categoryId = categoryId
         self.category = category
     }
-    
+
     public let categoryId: Int64
     public let category: String
 }

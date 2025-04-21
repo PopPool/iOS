@@ -56,7 +56,7 @@ final class HomeCardSectionCell: UICollectionViewCell {
         label.textColor = .w100
         return label
     }()
-    
+
     // MARK: - init
 
     override init(frame: CGRect) {

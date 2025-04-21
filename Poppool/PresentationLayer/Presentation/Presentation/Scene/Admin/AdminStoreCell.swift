@@ -80,7 +80,7 @@ final class AdminStoreCell: UITableViewCell {
     }
 
     // MARK: - Configure
-    func configure(with store: AdminStore) {  
+    func configure(with store: AdminStore) {
         Logger.log(message: "셀 데이터 바인딩: \(store)", category: .debug)
 
         titleLabel.text = store.name

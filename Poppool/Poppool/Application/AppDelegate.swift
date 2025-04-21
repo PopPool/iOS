@@ -1,5 +1,5 @@
-import UIKit
 import CoreLocation
+import UIKit
 
 import Data
 import Domain

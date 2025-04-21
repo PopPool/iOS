@@ -20,7 +20,7 @@ import Foundation
 public final class Dependency<T> {
     /// DIContainer에서 꺼내온 실제 인스턴스
     public private(set) var wrappedValue: T
-    
+
     /// DIContainer로부터 자동으로 인스턴스를 꺼내와 초기화합니다.
     public init() {
         self.wrappedValue = DIContainer.resolve(T.self)

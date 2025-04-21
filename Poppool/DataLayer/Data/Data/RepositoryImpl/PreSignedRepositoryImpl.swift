@@ -18,13 +18,13 @@ public final class PreSignedRepositoryImpl: PreSignedRepository {
             )
         })
     }
-    
+
     public func tryDelete(objectKeyList: [String]) -> Completable {
         return service.tryDelete(
             targetPaths: PresignedURLRequestDTO(objectKeyList: objectKeyList)
         )
     }
-    
+
     public func fullImageURL(from filePath: String) -> URL? {
         return service.fullImageURL(from: filePath)
     }

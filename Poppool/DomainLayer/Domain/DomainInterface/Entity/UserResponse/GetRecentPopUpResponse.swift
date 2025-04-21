@@ -23,7 +23,7 @@ public struct GetRecentPopUpDataResponse {
         self.address = address
         self.closeYn = closeYn
     }
-    
+
     public var popUpStoreId: Int64
     public var popUpStoreName: String?
     public var desc: String?

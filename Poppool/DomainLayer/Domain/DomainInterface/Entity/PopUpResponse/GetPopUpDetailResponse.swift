@@ -41,7 +41,7 @@ public struct GetPopUpDetailImageResponse {
         self.id = id
         self.imageUrl = imageUrl
     }
-    
+
     public let id: Int64
     public let imageUrl: String?
 }
@@ -60,7 +60,7 @@ public struct GetPopUpDetailCommentResponse {
         self.createDateTime = createDateTime
         self.commentImageList = commentImageList
     }
-    
+
     public let commentId: Int64
     public let creator: String?
     public let nickname: String?
@@ -81,7 +81,7 @@ public struct GetPopUpDetailSimilarResponse {
         self.mainImageUrl = mainImageUrl
         self.endDate = endDate
     }
-    
+
     public let id: Int64
     public let name: String?
     public let mainImageUrl: String?

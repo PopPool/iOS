@@ -19,7 +19,7 @@ public struct GetBlockUserListDataResponse {
         self.nickname = nickname
         self.instagramId = instagramId
     }
-    
+
     public var userId: String?
     public var profileImageUrl: String?
     public var nickname: String?

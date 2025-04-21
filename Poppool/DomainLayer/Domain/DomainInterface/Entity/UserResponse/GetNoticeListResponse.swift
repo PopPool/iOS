@@ -14,7 +14,7 @@ public struct GetNoticeListDataResponse {
         self.title = title
         self.createdDateTime = createdDateTime
     }
-    
+
     public var id: Int64
     public var title: String?
     public var createdDateTime: String?

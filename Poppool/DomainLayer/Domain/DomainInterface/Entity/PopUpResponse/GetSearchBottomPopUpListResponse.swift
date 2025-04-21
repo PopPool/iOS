@@ -7,7 +7,7 @@ public struct GetSearchBottomPopUpListResponse {
         self.totalPages = totalPages
         self.totalElements = totalElements
     }
-    
+
     public var popUpStoreList: [PopUpStoreResponse]
     public var loginYn: Bool
     public var totalPages: Int32

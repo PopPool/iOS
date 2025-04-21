@@ -1,5 +1,5 @@
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import AuthenticationServices
 import RxSwift

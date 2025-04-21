@@ -1,7 +1,7 @@
 import UIKit
 
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -9,7 +9,7 @@ import RxSwift
 import SnapKit
 
 public final class SplashController: BaseViewController {
-    
+
     // MARK: - Properties
     var disposeBag = DisposeBag()
 

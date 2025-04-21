@@ -1,8 +1,8 @@
 import PhotosUI
 import UIKit
 
-import Infrastructure
 import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
