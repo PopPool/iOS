@@ -13,8 +13,8 @@
 		05C1D6232DB53A6700508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D61D2DB53A6700508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D6262DB53A6E00508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6252DB53A6E00508FFD /* Infrastructure.framework */; };
 		05C1D6272DB53A6E00508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6252DB53A6E00508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05C1D82A2DB53CC200508FFD /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8292DB53CC200508FFD /* RxSwift-Dynamic */; };
-		05C1D82C2DB53CD100508FFD /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D82B2DB53CD100508FFD /* RxSwift-Dynamic */; };
+		08B29EE62DB6696700E57EFA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08B29EE52DB6696700E57EFA /* RxSwift */; };
+		08B2A34F2DB66AD300E57EFA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A34E2DB66AD300E57EFA /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,8 +78,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B2A34F2DB66AD300E57EFA /* RxSwift in Frameworks */,
 				05C1D61E2DB53A6700508FFD /* DomainInterface.framework in Frameworks */,
-				05C1D82A2DB53CC200508FFD /* RxSwift-Dynamic in Frameworks */,
 				05C1D6222DB53A6700508FFD /* Infrastructure.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,7 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05C1D82C2DB53CD100508FFD /* RxSwift-Dynamic in Frameworks */,
+				08B29EE62DB6696700E57EFA /* RxSwift in Frameworks */,
 				05C1D6262DB53A6E00508FFD /* Infrastructure.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -164,7 +164,7 @@
 			);
 			name = Domain;
 			packageProductDependencies = (
-				05C1D8292DB53CC200508FFD /* RxSwift-Dynamic */,
+				08B2A34E2DB66AD300E57EFA /* RxSwift */,
 			);
 			productName = Domain;
 			productReference = 058CC8F02DB5377F0084221A /* Domain.framework */;
@@ -189,7 +189,7 @@
 			);
 			name = DomainInterface;
 			packageProductDependencies = (
-				05C1D82B2DB53CD100508FFD /* RxSwift-Dynamic */,
+				08B29EE52DB6696700E57EFA /* RxSwift */,
 			);
 			productName = DomainInterface;
 			productReference = 05C1D0DB2DB538A600508FFD /* DomainInterface.framework */;
@@ -498,11 +498,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.DomainInterface;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -532,11 +536,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.DomainInterface;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -584,15 +592,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		05C1D8292DB53CC200508FFD /* RxSwift-Dynamic */ = {
+		08B29EE52DB6696700E57EFA /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D8282DB53CC100508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxSwift-Dynamic";
+			productName = RxSwift;
 		};
-		05C1D82B2DB53CD100508FFD /* RxSwift-Dynamic */ = {
+		08B2A34E2DB66AD300E57EFA /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D8282DB53CC100508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxSwift-Dynamic";
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

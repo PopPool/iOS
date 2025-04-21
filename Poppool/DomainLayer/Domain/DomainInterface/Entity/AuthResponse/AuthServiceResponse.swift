@@ -8,8 +8,8 @@ public struct AuthServiceResponse: Encodable {
         self.kakaoAccessToken = kakaoAccessToken
     }
 
-    var idToken: String?
-    var authorizationCode: String?
-    var kakaoUserId: Int64?
-    var kakaoAccessToken: String?
+    public var idToken: String?
+    public var authorizationCode: String?
+    public var kakaoUserId: Int64?
+    public var kakaoAccessToken: String?
 }

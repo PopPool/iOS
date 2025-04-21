@@ -18,6 +18,13 @@
 		05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */; };
 		05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D22DB6536200771CB3 /* RxCocoa */; };
 		05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D42DB6536200771CB3 /* RxSwift */; };
+		08B2A3582DB66B4100E57EFA /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3572DB66B4100E57EFA /* RxKeyboard */; };
+		08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A35A2DB66B5A00E57EFA /* FloatingPanel */; };
+		08B2A35E2DB66B8600E57EFA /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A35D2DB66B8600E57EFA /* RxDataSources */; };
+		08B2A3612DB66BAB00E57EFA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3602DB66BAB00E57EFA /* Then */; };
+		08B2A3642DB66BBC00E57EFA /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3632DB66BBC00E57EFA /* Tabman */; };
+		08B2A3672DB66BD400E57EFA /* Pageboy in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3662DB66BD400E57EFA /* Pageboy */; };
+		08B2A36A2DB66BF200E57EFA /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3692DB66BF200E57EFA /* RxGesture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,15 +61,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B2A3672DB66BD400E57EFA /* Pageboy in Frameworks */,
 				05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */,
+				08B2A36A2DB66BF200E57EFA /* RxGesture in Frameworks */,
 				05125B9B2DB626ED001342A2 /* SnapKit-Dynamic in Frameworks */,
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
 				05125B982DB626E3001342A2 /* ReactorKit in Frameworks */,
+				08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */,
+				08B2A3612DB66BAB00E57EFA /* Then in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 				05125BA12DB6275C001342A2 /* PanModal in Frameworks */,
 				05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */,
+				08B2A3642DB66BBC00E57EFA /* Tabman in Frameworks */,
 				05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */,
+				08B2A35E2DB66B8600E57EFA /* RxDataSources in Frameworks */,
 				05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */,
+				08B2A3582DB66B4100E57EFA /* RxKeyboard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,6 +148,13 @@
 				05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */,
 				05EC93D22DB6536200771CB3 /* RxCocoa */,
 				05EC93D42DB6536200771CB3 /* RxSwift */,
+				08B2A3572DB66B4100E57EFA /* RxKeyboard */,
+				08B2A35A2DB66B5A00E57EFA /* FloatingPanel */,
+				08B2A35D2DB66B8600E57EFA /* RxDataSources */,
+				08B2A3602DB66BAB00E57EFA /* Then */,
+				08B2A3632DB66BBC00E57EFA /* Tabman */,
+				08B2A3662DB66BD400E57EFA /* Pageboy */,
+				08B2A3692DB66BF200E57EFA /* RxGesture */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -169,6 +190,13 @@
 				05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				05125B9F2DB6275C001342A2 /* XCRemoteSwiftPackageReference "PanModal" */,
 				05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				08B2A3562DB66B4100E57EFA /* XCRemoteSwiftPackageReference "RxKeyboard" */,
+				08B2A3592DB66B5A00E57EFA /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+				08B2A35C2DB66B8600E57EFA /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				08B2A35F2DB66BAB00E57EFA /* XCRemoteSwiftPackageReference "Then" */,
+				08B2A3622DB66BBC00E57EFA /* XCRemoteSwiftPackageReference "Tabman" */,
+				08B2A3652DB66BD400E57EFA /* XCRemoteSwiftPackageReference "Pageboy" */,
+				08B2A3682DB66BF200E57EFA /* XCRemoteSwiftPackageReference "RxGesture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9052DB537960084221A /* Products */;
@@ -456,6 +484,62 @@
 				minimumVersion = 2.24.0;
 			};
 		};
+		08B2A3562DB66B4100E57EFA /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
+		08B2A3592DB66B5A00E57EFA /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scenee/FloatingPanel";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.7;
+			};
+		};
+		08B2A35C2DB66B8600E57EFA /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
+		08B2A35F2DB66BAB00E57EFA /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		08B2A3622DB66BBC00E57EFA /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		08B2A3652DB66BD400E57EFA /* XCRemoteSwiftPackageReference "Pageboy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Pageboy";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.0;
+			};
+		};
+		08B2A3682DB66BF200E57EFA /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -493,6 +577,41 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		08B2A3572DB66B4100E57EFA /* RxKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3562DB66B4100E57EFA /* XCRemoteSwiftPackageReference "RxKeyboard" */;
+			productName = RxKeyboard;
+		};
+		08B2A35A2DB66B5A00E57EFA /* FloatingPanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3592DB66B5A00E57EFA /* XCRemoteSwiftPackageReference "FloatingPanel" */;
+			productName = FloatingPanel;
+		};
+		08B2A35D2DB66B8600E57EFA /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A35C2DB66B8600E57EFA /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
+		08B2A3602DB66BAB00E57EFA /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A35F2DB66BAB00E57EFA /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		08B2A3632DB66BBC00E57EFA /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3622DB66BBC00E57EFA /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
+		};
+		08B2A3662DB66BD400E57EFA /* Pageboy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3652DB66BD400E57EFA /* XCRemoteSwiftPackageReference "Pageboy" */;
+			productName = Pageboy;
+		};
+		08B2A3692DB66BF200E57EFA /* RxGesture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3682DB66BF200E57EFA /* XCRemoteSwiftPackageReference "RxGesture" */;
+			productName = RxGesture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

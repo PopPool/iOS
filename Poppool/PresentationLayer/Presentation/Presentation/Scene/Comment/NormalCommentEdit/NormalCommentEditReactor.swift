@@ -35,6 +35,13 @@ final class NormalCommentEditReactor: Reactor {
         var isReloadView: Bool = true
         var isSaving: Bool = false
     }
+    
+    struct PutCommentImageData {
+        var imageId: Int64?
+        var imageUrl: String?
+        var actionType: String?
+    }
+
 
     // MARK: - properties
 
@@ -167,9 +174,9 @@ final class NormalCommentEditReactor: Reactor {
                 }
             }
 
-            var convertAddImages: [PutCommentImageDataRequestDTO] = addImages.map { .init(imageId: nil, imageUrl: pathList[$0.offset], actionType: "ADD")}
-            var convertKeepImages: [PutCommentImageDataRequestDTO] = keepImages.map { .init(imageId: nil, imageUrl: $0, actionType: "KEEP")}
-            var convertDeleteImages: [PutCommentImageDataRequestDTO] = deleteImages.map { .init(imageId: $0.1, imageUrl: $0.0, actionType: "DELETE")}
+            var convertAddImages: [PutCommentImageData] = addImages.map { .init(imageId: nil, imageUrl: pathList[$0.offset], actionType: "ADD")}
+            var convertKeepImages: [PutCommentImageData] = keepImages.map { .init(imageId: nil, imageUrl: $0, actionType: "KEEP")}
+            var convertDeleteImages: [PutCommentImageData] = deleteImages.map { .init(imageId: $0.1, imageUrl: $0.0, actionType: "DELETE")}
 
             if !addImages.isEmpty {
                 preSignedUseCase.tryUpload(presignedURLRequest: addImages.map {
