@@ -1,7 +1,11 @@
 import CoreLocation
+import UIKit
+
+import DomainInterface
+import Infrastructure
+
 import ReactorKit
 import RxSwift
-import UIKit
 
 final class MapGuideReactor: Reactor {
     // MARK: - Actions

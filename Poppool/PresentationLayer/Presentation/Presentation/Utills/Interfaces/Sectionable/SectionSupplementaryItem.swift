@@ -1,11 +1,6 @@
-//
-//  SectionSupplementaryItem.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/29/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 /// `SectionSupplementaryItem` 구조체는 섹션에 추가될 Supplementary View에 대한 정보를 정의합니다.
 /// 제네릭 타입 `View`는 `UICollectionReusableView`와 `InOutputable` 프로토콜을 준수해야 합니다.

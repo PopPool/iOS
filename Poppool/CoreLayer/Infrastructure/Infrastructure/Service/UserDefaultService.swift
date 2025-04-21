@@ -38,7 +38,7 @@ public final class UserDefaultService {
     ///   - key: 찾는 데이터의 키 값 i.e) 유저 id 등
     ///   - from: 로컬 데이터베이스 타입 - DatabaseType
     /// - Returns: 찾은 데이터 - String 타입
-    func fetch(key: String) -> String? {
+    public func fetch(key: String) -> String? {
         if let token = UserDefaults.standard.string(forKey: key) {
             return token
         }

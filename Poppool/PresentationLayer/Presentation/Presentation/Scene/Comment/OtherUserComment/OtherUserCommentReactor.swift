@@ -1,11 +1,7 @@
-//
-//  OtherUserCommentReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/27/24.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa

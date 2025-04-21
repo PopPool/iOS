@@ -1,3 +1,5 @@
+import DomainInterface
+
 import NMapsMap
 
 enum MapZoomLevel {
