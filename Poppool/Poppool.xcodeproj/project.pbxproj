@@ -15,6 +15,7 @@
 		05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6092DB53A4900508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; };
 		05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC93D72DB6599500771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D62DB6599500771CB3 /* RxCocoa */; };
 		082197A12D426DCB0054094A /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 082197A02D426DCB0054094A /* Then */; };
 		083A25D02CF364B70099B58E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 083A25CF2CF364B70099B58E /* Alamofire */; };
 		088DE2442D104EE70030FA9E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 088DE2432D104EE70030FA9E /* SwiftSoup */; };
@@ -99,6 +100,7 @@
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
+				05EC93D72DB6599500771CB3 /* RxCocoa in Frameworks */,
 				4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */,
 				05C1D60D2DB53A4900508FFD /* Domain.framework in Frameworks */,
 				083A25D02CF364B70099B58E /* Alamofire in Frameworks */,
@@ -191,6 +193,7 @@
 				4E15142B2D994A3A00DFD08F /* KakaoSDK */,
 				4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */,
 				4E15142F2D994A3A00DFD08F /* KakaoSDKCommon */,
+				05EC93D62DB6599500771CB3 /* RxCocoa */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -667,6 +670,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		05EC93D62DB6599500771CB3 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDCA41F62CF35D9A005EECF6 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
 		082197A02D426DCB0054094A /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0821979F2D426DCB0054094A /* XCRemoteSwiftPackageReference "Then" */;

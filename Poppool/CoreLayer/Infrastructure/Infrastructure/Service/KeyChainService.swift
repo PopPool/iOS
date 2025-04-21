@@ -20,7 +20,7 @@ public final class KeyChainService {
     /// KeyChain에서 특정 타입의 토큰을 가져오는 메서드
     /// - Parameter type: 가져오려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Returns: 가져온 토큰을 담은 `Single<String>`
-    func fetchToken(type: TokenType) -> Result<String, Error> {
+    public func fetchToken(type: TokenType) -> Result<String, Error> {
         // 1. query 작성
         let keyChainQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,

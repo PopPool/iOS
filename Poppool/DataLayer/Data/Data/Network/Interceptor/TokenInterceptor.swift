@@ -1,12 +1,8 @@
-//
-//  TokenInterceptor.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 10/14/24.
-//
+import Foundation
+
+import Infrastructure
 
 import Alamofire
-import Foundation
 import RxSwift
 
 final class TokenInterceptor: RequestInterceptor {

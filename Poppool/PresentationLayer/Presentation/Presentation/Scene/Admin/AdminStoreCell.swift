@@ -1,6 +1,11 @@
+import UIKit
+
+import DomainInterface
+import Infrastructure
+
 import RxSwift
 import SnapKit
-import UIKit
+
 final class AdminStoreCell: UITableViewCell {
     private let disposeBag = DisposeBag()
 

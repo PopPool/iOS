@@ -1,6 +1,9 @@
+import UIKit
+
+import DomainInterface
+
 import FloatingPanel
 import SnapKit
-import UIKit
 
 final class MapPopupCarouselView: UICollectionView {
     // 스크롤 멈췄을 때의 콜백

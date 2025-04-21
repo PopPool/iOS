@@ -127,7 +127,7 @@ final class LoginReactor: Reactor {
                 return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
-            .map { [weak controller] (owner, loginResponse) in
+            .map({ [weak controller] (owner, loginResponse) in
                 guard let controller = controller else { return .loadView }
                 owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
                 owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
@@ -144,6 +144,6 @@ final class LoginReactor: Reactor {
                 case .failure:
                     return .loadView
                 }
-            }
+            })
     }
 }

@@ -6,6 +6,6 @@ public struct CategoryResponse {
         self.category = category
     }
     
-    let categoryId: Int64
-    let category: String
+    public let categoryId: Int64
+    public let category: String
 }

@@ -1,11 +1,6 @@
-//
-//  InfoEditModalReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/10/25.
-//
-
 import UIKit
+
+import DomainInterface
 
 import ReactorKit
 import RxCocoa

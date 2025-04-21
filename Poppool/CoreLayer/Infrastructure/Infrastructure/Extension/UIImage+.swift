@@ -8,7 +8,7 @@
 import UIKit
 
 // UIImage를 색상으로 생성하는 Helper Extension
-extension UIImage {
+public extension UIImage {
     convenience init(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) {
         UIGraphicsBeginImageContext(size)
         UIGraphicsGetCurrentContext()?.setFillColor(color.cgColor)
@@ -19,7 +19,7 @@ extension UIImage {
     }
 }
 
-extension UIImage {
+public extension UIImage {
     func isBright(threshold: CGFloat = 0.5) -> Bool? {
         guard let cgImage = self.cgImage else { return nil }
 

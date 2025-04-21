@@ -1,11 +1,6 @@
-//
-//  CommentAPIEndPoint.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/15/24.
-//
-
 import Foundation
+
+import Infrastructure
 
 import RxSwift
 

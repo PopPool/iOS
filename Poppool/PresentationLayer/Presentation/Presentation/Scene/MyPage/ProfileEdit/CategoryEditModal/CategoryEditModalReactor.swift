@@ -7,6 +7,8 @@
 
 import UIKit
 
+import DomainInterface
+
 import ReactorKit
 import RxCocoa
 import RxSwift

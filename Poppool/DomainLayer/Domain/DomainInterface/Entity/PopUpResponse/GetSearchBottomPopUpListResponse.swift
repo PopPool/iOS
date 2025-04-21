@@ -8,8 +8,8 @@ public struct GetSearchBottomPopUpListResponse {
         self.totalElements = totalElements
     }
     
-    var popUpStoreList: [PopUpStoreResponse]
-    var loginYn: Bool
-    var totalPages: Int32
-    var totalElements: Int64
+    public var popUpStoreList: [PopUpStoreResponse]
+    public var loginYn: Bool
+    public var totalPages: Int32
+    public var totalElements: Int64
 }

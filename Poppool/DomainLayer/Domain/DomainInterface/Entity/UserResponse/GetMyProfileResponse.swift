@@ -12,12 +12,12 @@ public struct GetMyProfileResponse {
         self.interestCategoryList = interestCategoryList
     }
     
-    var profileImageUrl: String?
-    var nickname: String?
-    var email: String?
-    var instagramId: String?
-    var intro: String?
-    var gender: String?
-    var age: Int32
-    var interestCategoryList: [CategoryResponse]
+    public var profileImageUrl: String?
+    public var nickname: String?
+    public var email: String?
+    public var instagramId: String?
+    public var intro: String?
+    public var gender: String?
+    public var age: Int32
+    public var interestCategoryList: [CategoryResponse]
 }
