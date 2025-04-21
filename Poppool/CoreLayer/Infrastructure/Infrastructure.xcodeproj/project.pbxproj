@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05125B662DB56C21001342A2 /* KakaoSDKAuth in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		05125B672DB56C21001342A2 /* KakaoSDKUser in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */; };
 		05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B722DB56C5E001342A2 /* RxSwift-Dynamic */; };
-		05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */; };
-		05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05C1D8362DB53D3A00508FFD /* KakaoSDKUser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,8 +18,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				05125B672DB56C21001342A2 /* KakaoSDKUser in Embed Frameworks */,
-				05125B662DB56C21001342A2 /* KakaoSDKAuth in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -48,9 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */,
-				05C1D8372DB53D3A00508FFD /* KakaoSDKUser in Frameworks */,
 				05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */,
-				05C1D8352DB53D3A00508FFD /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,8 +105,6 @@
 			);
 			name = Infrastructure;
 			packageProductDependencies = (
-				05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */,
-				05C1D8362DB53D3A00508FFD /* KakaoSDKUser */,
 				05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */,
 				05125B722DB56C5E001342A2 /* RxSwift-Dynamic */,
 			);
@@ -148,7 +138,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */,
-				05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9192DB5383C0084221A /* Products */;
@@ -412,14 +401,6 @@
 				minimumVersion = 6.9.0;
 			};
 		};
-		05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.24.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -432,16 +413,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = "RxSwift-Dynamic";
-		};
-		05C1D8342DB53D3A00508FFD /* KakaoSDKAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
-			productName = KakaoSDKAuth;
-		};
-		05C1D8362DB53D3A00508FFD /* KakaoSDKUser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05C1D8332DB53D3A00508FFD /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
-			productName = KakaoSDKUser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
