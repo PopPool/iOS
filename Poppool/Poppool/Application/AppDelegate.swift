@@ -4,7 +4,6 @@ import CoreLocation
 import Data
 import Domain
 import DomainInterface
-import Presentation
 import Infrastructure
 
 import KakaoSDKCommon

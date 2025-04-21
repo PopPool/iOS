@@ -1,5 +1,5 @@
 {
-  "originHash" : "893e9d5956a6d674d140654334c58c276c99001321206803c07c48415f2e6ac3",
+  "originHash" : "bb8b8add80965de3fd56f4bb28fdba3b8a176e1362ab3ddd0bb3dcc27bc6f621",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -29,11 +29,11 @@
       }
     },
     {
-      "identity" : "lottie-spm",
+      "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-spm.git",
+      "location" : "https://github.com/airbnb/lottie-ios",
       "state" : {
-        "revision" : "8c6edf4f0fa84fe9c058600a4295eb0c01661c69",
+        "revision" : "047aa81b77adcbf583a966dfef620d17650cc656",
         "version" : "4.5.1"
       }
     },
@@ -125,15 +125,6 @@
       "state" : {
         "revision" : "ad89e53fdfec3b8d8994280fb0414b5a7b1c3e8e",
         "version" : "3.21.0"
-      }
-    },
-    {
-      "identity" : "swiftsoup",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scinfu/SwiftSoup",
-      "state" : {
-        "revision" : "bba848db50462894e7fc0891d018dfecad4ef11e",
-        "version" : "2.8.7"
       }
     },
     {

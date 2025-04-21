@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		05125B982DB626E3001342A2 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B972DB626E3001342A2 /* ReactorKit */; };
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
-		05BDD3DA2DB66E6400C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3D92DB66E6400C1E192 /* SnapKit */; };
+		0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1E02DB67C8300B141FF /* RxSwift */; };
+		05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CB2DB6756500C1E192 /* SnapKit */; };
+		05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CE2DB6770300C1E192 /* Lottie */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
 		05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; };
 		05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */; };
 		05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */; };
 		05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D22DB6536200771CB3 /* RxCocoa */; };
-		05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D42DB6536200771CB3 /* RxSwift */; };
 		08B2A3582DB66B4100E57EFA /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3572DB66B4100E57EFA /* RxKeyboard */; };
 		08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A35A2DB66B5A00E57EFA /* FloatingPanel */; };
 		08B2A35E2DB66B8600E57EFA /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A35D2DB66B8600E57EFA /* RxDataSources */; };
@@ -58,13 +59,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				08B2A3672DB66BD400E57EFA /* Pageboy in Frameworks */,
-				05BDD3DA2DB66E6400C1E192 /* SnapKit in Frameworks */,
-				05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */,
+				05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */,
 				08B2A36A2DB66BF200E57EFA /* RxGesture in Frameworks */,
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
 				05125B982DB626E3001342A2 /* ReactorKit in Frameworks */,
+				05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */,
 				08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */,
 				08B2A3612DB66BAB00E57EFA /* Then in Frameworks */,
+				0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 				05125BA12DB6275C001342A2 /* PanModal in Frameworks */,
 				05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */,
@@ -142,7 +144,6 @@
 				05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */,
 				05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */,
 				05EC93D22DB6536200771CB3 /* RxCocoa */,
-				05EC93D42DB6536200771CB3 /* RxSwift */,
 				08B2A3572DB66B4100E57EFA /* RxKeyboard */,
 				08B2A35A2DB66B5A00E57EFA /* FloatingPanel */,
 				08B2A35D2DB66B8600E57EFA /* RxDataSources */,
@@ -150,7 +151,9 @@
 				08B2A3632DB66BBC00E57EFA /* Tabman */,
 				08B2A3662DB66BD400E57EFA /* Pageboy */,
 				08B2A3692DB66BF200E57EFA /* RxGesture */,
-				05BDD3D92DB66E6400C1E192 /* SnapKit */,
+				05BDD5CB2DB6756500C1E192 /* SnapKit */,
+				05BDD5CE2DB6770300C1E192 /* Lottie */,
+				0522C1E02DB67C8300B141FF /* RxSwift */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -193,6 +196,7 @@
 				08B2A3622DB66BBC00E57EFA /* XCRemoteSwiftPackageReference "Tabman" */,
 				08B2A3652DB66BD400E57EFA /* XCRemoteSwiftPackageReference "Pageboy" */,
 				08B2A3682DB66BF200E57EFA /* XCRemoteSwiftPackageReference "RxGesture" */,
+				05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9052DB537960084221A /* Products */;
@@ -472,6 +476,14 @@
 				minimumVersion = 1.2.7;
 			};
 		};
+		05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
 		05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
@@ -549,10 +561,20 @@
 			package = 05125B9F2DB6275C001342A2 /* XCRemoteSwiftPackageReference "PanModal" */;
 			productName = PanModal;
 		};
-		05BDD3D92DB66E6400C1E192 /* SnapKit */ = {
+		0522C1E02DB67C8300B141FF /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		05BDD5CB2DB6756500C1E192 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		05BDD5CE2DB6770300C1E192 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -568,11 +590,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
-		};
-		05EC93D42DB6536200771CB3 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
 		};
 		08B2A3572DB66B4100E57EFA /* RxKeyboard */ = {
 			isa = XCSwiftPackageProductDependency;

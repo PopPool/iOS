@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0522C1DD2DB67C6E00B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1DC2DB67C6E00B141FF /* RxSwift */; };
+		0522C1DF2DB67C7700B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1DE2DB67C7700B141FF /* RxSwift */; };
 		05C1D61E2DB53A6700508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D0DB2DB538A600508FFD /* DomainInterface.framework */; };
 		05C1D6222DB53A6700508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D61D2DB53A6700508FFD /* Infrastructure.framework */; };
 		05C1D6262DB53A6E00508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6252DB53A6E00508FFD /* Infrastructure.framework */; };
-		08B29EE62DB6696700E57EFA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08B29EE52DB6696700E57EFA /* RxSwift */; };
-		08B2A34F2DB66AD300E57EFA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A34E2DB66AD300E57EFA /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +23,29 @@
 			remoteInfo = DomainInterface;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		05BDD5E02DB678D100C1E192 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05BDD5E42DB678DC00C1E192 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		058CC8F02DB5377F0084221A /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08B2A34F2DB66AD300E57EFA /* RxSwift in Frameworks */,
+				0522C1DD2DB67C6E00B141FF /* RxSwift in Frameworks */,
 				05C1D61E2DB53A6700508FFD /* DomainInterface.framework in Frameworks */,
 				05C1D6222DB53A6700508FFD /* Infrastructure.framework in Frameworks */,
 			);
@@ -59,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08B29EE62DB6696700E57EFA /* RxSwift in Frameworks */,
+				0522C1DF2DB67C7700B141FF /* RxSwift in Frameworks */,
 				05C1D6262DB53A6E00508FFD /* Infrastructure.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,6 +146,7 @@
 				058CC8EC2DB5377F0084221A /* Sources */,
 				058CC8ED2DB5377F0084221A /* Frameworks */,
 				058CC8EE2DB5377F0084221A /* Resources */,
+				05BDD5E42DB678DC00C1E192 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -134,7 +158,7 @@
 			);
 			name = Domain;
 			packageProductDependencies = (
-				08B2A34E2DB66AD300E57EFA /* RxSwift */,
+				0522C1DC2DB67C6E00B141FF /* RxSwift */,
 			);
 			productName = Domain;
 			productReference = 058CC8F02DB5377F0084221A /* Domain.framework */;
@@ -148,6 +172,7 @@
 				05C1D0D72DB538A600508FFD /* Sources */,
 				05C1D0D82DB538A600508FFD /* Frameworks */,
 				05C1D0D92DB538A600508FFD /* Resources */,
+				05BDD5E02DB678D100C1E192 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,7 +183,7 @@
 			);
 			name = DomainInterface;
 			packageProductDependencies = (
-				08B29EE52DB6696700E57EFA /* RxSwift */,
+				0522C1DE2DB67C7700B141FF /* RxSwift */,
 			);
 			productName = DomainInterface;
 			productReference = 05C1D0DB2DB538A600508FFD /* DomainInterface.framework */;
@@ -561,12 +586,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		08B29EE52DB6696700E57EFA /* RxSwift */ = {
+		0522C1DC2DB67C6E00B141FF /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D8282DB53CC100508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
 		};
-		08B2A34E2DB66AD300E57EFA /* RxSwift */ = {
+		0522C1DE2DB67C7700B141FF /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D8282DB53CC100508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
