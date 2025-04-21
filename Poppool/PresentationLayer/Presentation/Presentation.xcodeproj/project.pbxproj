@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		05125B982DB626E3001342A2 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B972DB626E3001342A2 /* ReactorKit */; };
-		05125B9B2DB626ED001342A2 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B9A2DB626ED001342A2 /* SnapKit-Dynamic */; };
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
+		05BDD3DA2DB66E6400C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3D92DB66E6400C1E192 /* SnapKit */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
 		05C1D62D2DB53A8200508FFD /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; };
@@ -62,9 +62,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				08B2A3672DB66BD400E57EFA /* Pageboy in Frameworks */,
+				05BDD3DA2DB66E6400C1E192 /* SnapKit in Frameworks */,
 				05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */,
 				08B2A36A2DB66BF200E57EFA /* RxGesture in Frameworks */,
-				05125B9B2DB626ED001342A2 /* SnapKit-Dynamic in Frameworks */,
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
 				05125B982DB626E3001342A2 /* ReactorKit in Frameworks */,
 				08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */,
@@ -142,7 +142,6 @@
 			name = Presentation;
 			packageProductDependencies = (
 				05125B972DB626E3001342A2 /* ReactorKit */,
-				05125B9A2DB626ED001342A2 /* SnapKit-Dynamic */,
 				05125BA02DB6275C001342A2 /* PanModal */,
 				05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */,
 				05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */,
@@ -155,6 +154,7 @@
 				08B2A3632DB66BBC00E57EFA /* Tabman */,
 				08B2A3662DB66BD400E57EFA /* Pageboy */,
 				08B2A3692DB66BF200E57EFA /* RxGesture */,
+				05BDD3D92DB66E6400C1E192 /* SnapKit */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -548,15 +548,15 @@
 			package = 05125B962DB626E3001342A2 /* XCRemoteSwiftPackageReference "ReactorKit" */;
 			productName = ReactorKit;
 		};
-		05125B9A2DB626ED001342A2 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
 		05125BA02DB6275C001342A2 /* PanModal */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B9F2DB6275C001342A2 /* XCRemoteSwiftPackageReference "PanModal" */;
 			productName = PanModal;
+		};
+		05BDD3D92DB66E6400C1E192 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 		05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */ = {
 			isa = XCSwiftPackageProductDependency;

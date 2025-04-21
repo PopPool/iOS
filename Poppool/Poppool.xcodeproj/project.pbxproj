@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05BDD3D62DB66E1700C1E192 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */; };
+		05BDD3D72DB66E1700C1E192 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D60B2DB53A4900508FFD /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6072DB53A4900508FFD /* Data.framework */; };
 		05C1D60C2DB53A4900508FFD /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6072DB53A4900508FFD /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D60D2DB53A4900508FFD /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6082DB53A4900508FFD /* Domain.framework */; };
@@ -44,6 +46,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05BDD3D72DB66E1700C1E192 /* DomainInterface.framework in Embed Frameworks */,
 				05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */,
 				05C1D60E2DB53A4900508FFD /* Domain.framework in Embed Frameworks */,
 				05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */,
@@ -56,6 +59,7 @@
 
 /* Begin PBXFileReference section */
 		05229DD02D99519200D88E73 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6072DB53A4900508FFD /* Data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6082DB53A4900508FFD /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6092DB53A4900508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +103,7 @@
 				BDCA420D2CF35FD2005EECF6 /* RxGesture in Frameworks */,
 				BDCA42072CF35FA6005EECF6 /* Tabman in Frameworks */,
 				BDCA42042CF35F76005EECF6 /* PanModal in Frameworks */,
+				05BDD3D62DB66E1700C1E192 /* DomainInterface.framework in Frameworks */,
 				082197A12D426DCB0054094A /* Then in Frameworks */,
 				05EC93D72DB6599500771CB3 /* RxCocoa in Frameworks */,
 				4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */,
@@ -127,6 +132,7 @@
 		05C1D6062DB53A4900508FFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */,
 				05C1D6072DB53A4900508FFD /* Data.framework */,
 				05C1D6082DB53A4900508FFD /* Domain.framework */,
 				05C1D6092DB53A4900508FFD /* Infrastructure.framework */,

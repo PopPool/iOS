@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3DB2DB66EB500C1E192 /* Alamofire */; };
 		05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6152DB53A5600508FFD /* DomainInterface.framework */; };
 		05C1D6182DB53A5600508FFD /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6152DB53A5600508FFD /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6162DB53A5600508FFD /* Infrastructure.framework */; };
 		05C1D61A2DB53A5600508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6162DB53A5600508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08B2A3522DB66AFB00E57EFA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3512DB66AFB00E57EFA /* RxSwift */; };
-		08B2A3552DB66B1D00E57EFA /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3542DB66B1D00E57EFA /* AlamofireDynamic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -137,7 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08B2A3522DB66AFB00E57EFA /* RxSwift in Frameworks */,
-				08B2A3552DB66B1D00E57EFA /* AlamofireDynamic in Frameworks */,
+				05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */,
 				05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */,
 				05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */,
 			);
@@ -202,7 +202,7 @@
 			name = Data;
 			packageProductDependencies = (
 				08B2A3512DB66AFB00E57EFA /* RxSwift */,
-				08B2A3542DB66B1D00E57EFA /* AlamofireDynamic */,
+				05BDD3DB2DB66EB500C1E192 /* Alamofire */,
 			);
 			productName = Data;
 			productReference = 058CC8DC2DB5376A0084221A /* Data.framework */;
@@ -501,15 +501,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		05BDD3DB2DB66EB500C1E192 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		08B2A3512DB66AFB00E57EFA /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 08B2A3502DB66AFB00E57EFA /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
-		};
-		08B2A3542DB66B1D00E57EFA /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
