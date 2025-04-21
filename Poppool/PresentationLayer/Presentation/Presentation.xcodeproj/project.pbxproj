@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05125B952DB62295001342A2 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B942DB62295001342A2 /* RxSwift-Dynamic */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
 		05C1D62D2DB53A8200508FFD /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; };
@@ -48,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
+				05125B952DB62295001342A2 /* RxSwift-Dynamic in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,6 +115,7 @@
 			);
 			name = Presentation;
 			packageProductDependencies = (
+				05125B942DB62295001342A2 /* RxSwift-Dynamic */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -142,6 +145,9 @@
 			);
 			mainGroup = 058CC8FA2DB537960084221A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9052DB537960084221A /* Products */;
 			projectDirPath = "";
@@ -386,6 +392,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		05125B942DB62295001342A2 /* RxSwift-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = "RxSwift-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 058CC8FB2DB537960084221A /* Project object */;
 }

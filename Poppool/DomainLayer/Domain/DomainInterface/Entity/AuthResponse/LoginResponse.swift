@@ -12,12 +12,12 @@ public struct LoginResponse {
         self.isRegisteredUser = isRegisteredUser
     }
 
-    var userId: String
+    public var userId: String
     var grantType: String
-    var accessToken: String
-    var refreshToken: String
+    public var accessToken: String
+    public var refreshToken: String
     var accessTokenExpiresAt: String
     var refreshTokenExpiresAt: String
-    var socialType: String
-    var isRegisteredUser: Bool
+    public var socialType: String
+    public var isRegisteredUser: Bool
 }

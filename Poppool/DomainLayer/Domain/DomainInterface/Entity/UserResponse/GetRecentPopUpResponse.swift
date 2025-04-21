@@ -7,9 +7,9 @@ public struct GetRecentPopUpResponse {
         self.totalElements = totalElements
     }
 
-    var popUpInfoList: [GetRecentPopUpDataResponse]
-    var totalPages: Int32
-    var totalElements: Int32
+    public var popUpInfoList: [GetRecentPopUpDataResponse]
+    public var totalPages: Int32
+    public var totalElements: Int32
 }
 
 public struct GetRecentPopUpDataResponse {
@@ -24,12 +24,12 @@ public struct GetRecentPopUpDataResponse {
         self.closeYn = closeYn
     }
     
-    var popUpStoreId: Int64
-    var popUpStoreName: String?
-    var desc: String?
-    var mainImageUrl: String?
-    var startDate: String?
-    var endDate: String?
-    var address: String?
-    var closeYn: Bool
+    public var popUpStoreId: Int64
+    public var popUpStoreName: String?
+    public var desc: String?
+    public var mainImageUrl: String?
+    public var startDate: String?
+    public var endDate: String?
+    public var address: String?
+    public var closeYn: Bool
 }

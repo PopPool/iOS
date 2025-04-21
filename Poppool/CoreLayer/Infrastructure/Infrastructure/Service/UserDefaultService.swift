@@ -9,7 +9,9 @@ import Foundation
 
 import RxSwift
 
-final class UserDefaultService {
+public final class UserDefaultService {
+
+    public init() { }
 
     /// Userdefault 데이터 저장 메서드
     /// - Parameters:
@@ -17,7 +19,7 @@ final class UserDefaultService {
     ///   - value: 저장하는 데이터 값 i.e) access token 등
     ///   - to: 로컬 데이터베이스 타입 - DatabaseType
     /// - Returns: 별도 안내 없음
-    func save(key: String, value: String) {
+    public func save(key: String, value: String) {
         UserDefaults.standard.set(value, forKey: key)
     }
 

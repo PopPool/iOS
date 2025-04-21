@@ -1,6 +1,6 @@
 import UIKit
 
-extension UIImageView {
+public extension UIImageView {
     func setPPImage(path: String?) {
         guard let path = path else {
             self.image = UIImage(named: "image_default")

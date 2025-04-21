@@ -1,11 +1,6 @@
-//
-//  Sectionable.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/29/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 import RxSwift
 import SnapKit

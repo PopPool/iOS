@@ -1,9 +1,4 @@
-//
-//  MyPageNoticeDetailReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/13/25.
-//
+import DomainInterface
 
 import ReactorKit
 import RxCocoa

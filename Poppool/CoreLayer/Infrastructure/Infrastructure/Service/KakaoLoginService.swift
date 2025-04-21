@@ -2,7 +2,9 @@ import KakaoSDKAuth
 import KakaoSDKUser
 import RxSwift
 
-final class KakaoLoginService: AuthServiceable {
+public final class KakaoLoginService: AuthServiceable {
+
+    public init() { }
 
     var disposeBag = DisposeBag()
 
@@ -22,7 +24,7 @@ final class KakaoLoginService: AuthServiceable {
         }
     }
 
-    func fetchUserCredential() -> Observable<AuthServiceResponse> {
+    public func fetchUserCredential() -> Observable<AuthServiceResponse> {
         return Observable.create { [weak self] observer in
             guard let self else {
                 Logger.log(

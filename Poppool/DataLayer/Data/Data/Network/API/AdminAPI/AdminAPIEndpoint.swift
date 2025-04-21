@@ -1,5 +1,7 @@
 import Foundation
 
+import Infrastructure
+
 struct EmptyResponse: Decodable {}
 
 struct AdminAPIEndpoint {

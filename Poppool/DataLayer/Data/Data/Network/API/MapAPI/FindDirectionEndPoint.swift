@@ -1,11 +1,6 @@
-//
-//  FindDirectionEndPoint.swift
-//  Poppool
-//
-//  Created by 김기현 on 1/23/25.
-//
-
 import Foundation
+
+import Infrastructure
 
 struct FindDirectionEndPoint {
    // MARK: - Direction

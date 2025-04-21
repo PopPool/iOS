@@ -12,12 +12,12 @@ public struct PopUpStoreResponse {
         self.bookmarkYn = bookmarkYn
     }
 
-    let id: Int64
-    let category: String?
-    let name: String?
-    let address: String?
-    let mainImageUrl: String?
-    let startDate: String?
-    let endDate: String?
-    let bookmarkYn: Bool
+    public let id: Int64
+    public let category: String?
+    public let name: String?
+    public let address: String?
+    public let mainImageUrl: String?
+    public let startDate: String?
+    public let endDate: String?
+    public let bookmarkYn: Bool
 }

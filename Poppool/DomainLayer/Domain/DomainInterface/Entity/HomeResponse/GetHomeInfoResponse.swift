@@ -18,14 +18,14 @@ public struct GetHomeInfoResponse {
 
     var bannerPopUpStoreList: [BannerPopUpStore]
     var nickname: String?
-    var customPopUpStoreList: [PopUpStoreResponse]
-    var customPopUpStoreTotalPages: Int32
+    public var customPopUpStoreList: [PopUpStoreResponse]
+    public var customPopUpStoreTotalPages: Int32
     var customPopUpStoreTotalElements: Int64
-    var popularPopUpStoreList: [PopUpStoreResponse]
-    var popularPopUpStoreTotalPages: Int32
+    public var popularPopUpStoreList: [PopUpStoreResponse]
+    public var popularPopUpStoreTotalPages: Int32
     var popularPopUpStoreTotalElements: Int64
-    var newPopUpStoreList: [PopUpStoreResponse]
-    var newPopUpStoreTotalPages: Int32
+    public var newPopUpStoreList: [PopUpStoreResponse]
+    public var newPopUpStoreTotalPages: Int32
     var newPopUpStoreTotalElements: Int64
-    var loginYn: Bool
+    public var loginYn: Bool
 }

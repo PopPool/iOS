@@ -1,11 +1,7 @@
-//
-//  MyPageBookmarkReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/14/25.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa

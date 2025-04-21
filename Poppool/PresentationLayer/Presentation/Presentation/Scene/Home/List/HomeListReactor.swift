@@ -1,11 +1,7 @@
-//
-//  HomeListReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/2/24.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa

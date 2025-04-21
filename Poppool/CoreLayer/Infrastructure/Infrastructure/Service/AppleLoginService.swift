@@ -1,14 +1,9 @@
-//
-//  AppleLoginService.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 8/20/24.
-//
-
 import AuthenticationServices
 import RxSwift
 
-final class AppleLoginService: NSObject, AuthServiceable {
+public final class AppleLoginService: NSObject, AuthServiceable {
+
+    public override init() { }
 
     // 사용자 자격 증명 정보를 방출할 subject
     private var authServiceResponse: PublishSubject<AuthServiceResponse> = .init()
@@ -34,7 +29,7 @@ final class AppleLoginService: NSObject, AuthServiceable {
 extension AppleLoginService: ASAuthorizationControllerPresentationContextProviding,
                                 ASAuthorizationControllerDelegate {
     // 인증 컨트롤러의 프레젠테이션 앵커를 반환하는 함수
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         let scenes = UIApplication.shared.connectedScenes
         let windowSecne = scenes.first as? UIWindowScene
         guard let window = windowSecne?.windows.first else {
@@ -50,7 +45,7 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
     }
 
     // 인증 성공 시 호출되는 함수
-    func authorizationController(
+    public func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
@@ -81,7 +76,7 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
         }
     }
     // 인증 실패 시 호출되는 함수
-    func authorizationController(
+    public func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithError error: Error
     ) {

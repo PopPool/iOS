@@ -98,7 +98,7 @@ public final class KeyChainService {
     /// KeyChain에서 특정 타입의 토큰을 삭제하는 메서드
     /// - Parameter type: 삭제하려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Returns: 완료 시 `Completable`
-    func deleteToken(type: TokenType) -> Result<Void, Error> {
+    public func deleteToken(type: TokenType) -> Result<Void, Error> {
         // 1. query 작성
         let keyChainQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
