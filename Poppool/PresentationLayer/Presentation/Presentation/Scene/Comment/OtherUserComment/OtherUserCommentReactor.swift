@@ -107,7 +107,8 @@ final class OtherUserCommentReactor: Reactor {
                 popUpID: id,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }

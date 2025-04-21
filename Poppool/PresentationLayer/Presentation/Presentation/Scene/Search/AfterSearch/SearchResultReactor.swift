@@ -128,7 +128,8 @@ final class SearchResultReactor: Reactor {
                 popUpID: searchListSection.inputDataList[indexPath.row].id,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: popUpAPIUseCase,
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
