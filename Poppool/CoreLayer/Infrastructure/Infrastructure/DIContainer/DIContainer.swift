@@ -57,12 +57,10 @@ public final class DIContainer {
     private func resolve<T>(_ type: T.Type) -> T {
         let key = ObjectIdentifier(type)
 
-        return resolveQueue.sync {
-            guard let registration = registrations[key],
-                  let instance = registration() as? T
-            else { fatalError("\(type) does not registered") }
+        guard let registration = registrations[key],
+              let instance = registration() as? T
+        else { fatalError("\(type) does not registered") }
 
-            return instance
-        }
+        return instance
     }
 }
