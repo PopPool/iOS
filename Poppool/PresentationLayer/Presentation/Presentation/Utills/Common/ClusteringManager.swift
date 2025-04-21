@@ -1,3 +1,6 @@
+import DomainInterface
+import Infrastructure
+
 import NMapsMap
 
 class ClusteringManager {

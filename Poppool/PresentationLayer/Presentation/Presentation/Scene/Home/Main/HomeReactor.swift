@@ -1,5 +1,8 @@
 import UIKit
 
+import DomainInterface
+import Infrastructure
+
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -281,7 +284,8 @@ final class HomeReactor: Reactor {
                         popUpID: id,
                         userAPIUseCase: userAPIUseCase,
                         popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                        preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                     )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
@@ -300,7 +304,8 @@ final class HomeReactor: Reactor {
                     popUpID: id,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
@@ -318,7 +323,8 @@ final class HomeReactor: Reactor {
                     popUpID: id,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 12:
@@ -336,7 +342,8 @@ final class HomeReactor: Reactor {
                     popUpID: id,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:
@@ -351,7 +358,8 @@ final class HomeReactor: Reactor {
                         popUpID: id,
                         userAPIUseCase: userAPIUseCase,
                         popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                        preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                     )
                     currentController.navigationController?.pushViewController(controller, animated: true)
                 }
@@ -370,7 +378,8 @@ final class HomeReactor: Reactor {
                     popUpID: id,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             case 7:
@@ -388,7 +397,8 @@ final class HomeReactor: Reactor {
                     popUpID: id,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
                 currentController.navigationController?.pushViewController(controller, animated: true)
             default:

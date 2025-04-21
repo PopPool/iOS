@@ -15,15 +15,15 @@ public struct GetPopUpDirectionResponse {
         self.markerSnippet = markerSnippet
     }
 
-    let id: Int64
-    let categoryName: String
+    public let id: Int64
+    public let categoryName: String
     public let name: String
     public let address: String
-    let startDate: String
-    let endDate: String
+    public let startDate: String
+    public let endDate: String
     public let latitude: Double
     public let longitude: Double
-    let markerId: Int64
-    let markerTitle: String
-    let markerSnippet: String
+    public let markerId: Int64
+    public let markerTitle: String
+    public let markerSnippet: String
 }

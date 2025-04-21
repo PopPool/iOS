@@ -1,11 +1,6 @@
-//
-//  SearchCategoryReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
-
 import UIKit
+
+import DomainInterface
 
 import ReactorKit
 import RxCocoa

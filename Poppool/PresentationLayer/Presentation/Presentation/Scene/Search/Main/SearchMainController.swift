@@ -1,11 +1,7 @@
-//
-//  SearchMainController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/7/24.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import Pageboy
 import ReactorKit

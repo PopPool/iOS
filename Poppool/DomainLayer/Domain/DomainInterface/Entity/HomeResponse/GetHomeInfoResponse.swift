@@ -16,8 +16,8 @@ public struct GetHomeInfoResponse {
         self.loginYn = loginYn
     }
 
-    var bannerPopUpStoreList: [BannerPopUpStore]
-    var nickname: String?
+    public var bannerPopUpStoreList: [BannerPopUpStore]
+    public var nickname: String?
     public var customPopUpStoreList: [PopUpStoreResponse]
     public var customPopUpStoreTotalPages: Int32
     var customPopUpStoreTotalElements: Int64

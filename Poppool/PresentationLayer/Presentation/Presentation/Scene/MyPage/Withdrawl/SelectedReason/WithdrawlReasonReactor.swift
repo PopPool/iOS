@@ -1,11 +1,7 @@
-//
-//  WithdrawlReasonReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/7/25.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa

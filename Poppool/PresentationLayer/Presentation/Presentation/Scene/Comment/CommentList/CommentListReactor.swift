@@ -314,7 +314,8 @@ final class CommentListReactor: Reactor {
                             popUpID: self.popUpID,
                             popUpName: popUpName,
                             comment: comment,
-                            commentAPIUseCase: self.commentAPIUseCase
+                            commentAPIUseCase: self.commentAPIUseCase,
+                            preSignedUseCase: self.preSignedUseCase
                         )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }

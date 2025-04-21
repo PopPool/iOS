@@ -1,9 +1,13 @@
 import CoreLocation
+import UIKit
+
+import DomainInterface
+import Infrastructure
+
 import NMapsMap
 import ReactorKit
 import RxSwift
 import SnapKit
-import UIKit
 
 final class MapGuideViewController: UIViewController, View {
     // MARK: - Properties

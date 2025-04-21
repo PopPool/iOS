@@ -161,7 +161,8 @@ final class DetailReactor: Reactor {
                 commentController.reactor = NormalCommentAddReactor(
                     popUpID: popUpID,
                     popUpName: popUpName ?? "",
-                    commentAPIUseCase: commentAPIUseCase
+                    commentAPIUseCase: commentAPIUseCase,
+                    preSignedUseCase: preSignedUseCase
                 )
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
@@ -198,7 +199,8 @@ final class DetailReactor: Reactor {
                     popUpName: popUpName,
                     userAPIUseCase: userAPIUseCase,
                     popUpAPIUseCase: popUpAPIUseCase,
-                    commentAPIUseCase: commentAPIUseCase
+                    commentAPIUseCase: commentAPIUseCase,
+                    preSignedUseCase: preSignedUseCase
                 )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
@@ -232,7 +234,8 @@ final class DetailReactor: Reactor {
                 popUpID: id,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: popUpAPIUseCase,
-                commentAPIUseCase: commentAPIUseCase
+                commentAPIUseCase: commentAPIUseCase,
+                preSignedUseCase: preSignedUseCase
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):
@@ -548,7 +551,8 @@ extension DetailReactor {
                             popUpID: self.popUpID,
                             popUpName: popUpName,
                             comment: comment,
-                            commentAPIUseCase: self.commentAPIUseCase
+                            commentAPIUseCase: self.commentAPIUseCase,
+                            preSignedUseCase: self.preSignedUseCase
                         )
                         controller?.navigationController?.pushViewController(editController, animated: true)
                     }

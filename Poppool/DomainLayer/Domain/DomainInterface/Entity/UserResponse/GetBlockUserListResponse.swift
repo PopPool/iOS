@@ -7,9 +7,9 @@ public struct GetBlockUserListResponse {
         self.totalElements = totalElements
     }
 
-    var blockedUserInfoList: [GetBlockUserListDataResponse]
-    var totalPages: Int32
-    var totalElements: Int32
+    public var blockedUserInfoList: [GetBlockUserListDataResponse]
+    public var totalPages: Int32
+    public var totalElements: Int32
 }
 
 public struct GetBlockUserListDataResponse {
@@ -20,8 +20,8 @@ public struct GetBlockUserListDataResponse {
         self.instagramId = instagramId
     }
     
-    var userId: String?
-    var profileImageUrl: String?
-    var nickname: String?
-    var instagramId: String?
+    public var userId: String?
+    public var profileImageUrl: String?
+    public var nickname: String?
+    public var instagramId: String?
 }

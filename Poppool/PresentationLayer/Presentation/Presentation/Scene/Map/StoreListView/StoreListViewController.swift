@@ -1,10 +1,14 @@
+import UIKit
+
+import DomainInterface
+import Infrastructure
+
 import FloatingPanel
 import ReactorKit
 import RxCocoa
 import RxDataSources
 import RxSwift
 import SnapKit
-import UIKit
 
 final class StoreListViewController: UIViewController, View {
     typealias Reactor = StoreListReactor
@@ -120,7 +124,8 @@ final class StoreListViewController: UIViewController, View {
                     popUpID: Int64(store.id),
                     userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
                     popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                    commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                    preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
                 )
 
                 owner.navigationController?.isNavigationBarHidden = false

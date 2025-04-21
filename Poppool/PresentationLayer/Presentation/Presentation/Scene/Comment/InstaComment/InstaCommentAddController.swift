@@ -1,11 +1,6 @@
-//
-//  InstaCommentAddController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/15/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 import ReactorKit
 import RxCocoa

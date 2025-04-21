@@ -1,11 +1,6 @@
-//
-//  BaseTabmanController.swift
-//  MomsVillage
-//
-//  Created by SeoJunYoung on 9/25/24.
-//
-
 import UIKit
+
+import Infrastructure
 
 import Pageboy
 import Tabman

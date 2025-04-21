@@ -1,14 +1,11 @@
-//
-//  MyPageReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/30/24.
-//
+import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
 import RxSwift
-import UIKit
 
 final class MyPageReactor: Reactor {
 
@@ -183,7 +180,8 @@ final class MyPageReactor: Reactor {
             let nextController = ProfileEditController()
             nextController.reactor = ProfileEditReactor(
                 userAPIUseCase: userAPIUseCase,
-                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
 
@@ -262,7 +260,8 @@ final class MyPageReactor: Reactor {
                 popUpID: popUpID,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
 

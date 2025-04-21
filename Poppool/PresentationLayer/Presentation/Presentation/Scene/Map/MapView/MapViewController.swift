@@ -1,4 +1,9 @@
+import UIKit
 import CoreLocation
+
+import DomainInterface
+import Infrastructure
+
 import FloatingPanel
 import NMapsMap
 import ReactorKit
@@ -6,7 +11,6 @@ import RxCocoa
 import RxGesture
 import RxSwift
 import SnapKit
-import UIKit
 
 class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, UIGestureRecognizerDelegate {
     typealias Reactor = MapReactor
@@ -126,7 +130,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 popUpID: Int64(store.id),
                 userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
                 popUpAPIUseCase: self?.popUpAPIUseCase ?? DIContainer.resolve(PopUpAPIUseCase.self),
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
 
             self?.navigationController?.isNavigationBarHidden = false

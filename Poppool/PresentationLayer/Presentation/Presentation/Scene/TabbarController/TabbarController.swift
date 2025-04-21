@@ -1,11 +1,7 @@
-//
-//  TabbarController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/1/24.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 class WaveTabBarController: UITabBarController, UITabBarControllerDelegate {
 

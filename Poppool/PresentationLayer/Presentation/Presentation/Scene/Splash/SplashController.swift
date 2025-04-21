@@ -9,10 +9,6 @@ import RxSwift
 import SnapKit
 
 public final class SplashController: BaseViewController {
-
-    public override init() { }
-    
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     // MARK: - Properties
     var disposeBag = DisposeBag()

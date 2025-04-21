@@ -11,13 +11,13 @@ public struct GetMyPageResponse {
         self.myCommentedPopUpList = myCommentedPopUpList
     }
 
-    var nickname: String?
-    var profileImageUrl: String?
-    var intro: String?
-    var instagramId: String?
-    var loginYn: Bool
-    var adminYn: Bool
-    var myCommentedPopUpList: [GetMyPagePopUpResponse]
+    public var nickname: String?
+    public var profileImageUrl: String?
+    public var intro: String?
+    public var instagramId: String?
+    public var loginYn: Bool
+    public var adminYn: Bool
+    public var myCommentedPopUpList: [GetMyPagePopUpResponse]
 }
 
 public struct GetMyPagePopUpResponse {
@@ -27,7 +27,7 @@ public struct GetMyPagePopUpResponse {
         self.mainImageUrl = mainImageUrl
     }
     
-    var popUpStoreId: Int64
-    var popUpStoreName: String?
-    var mainImageUrl: String?
+    public var popUpStoreId: Int64
+    public var popUpStoreName: String?
+    public var mainImageUrl: String?
 }

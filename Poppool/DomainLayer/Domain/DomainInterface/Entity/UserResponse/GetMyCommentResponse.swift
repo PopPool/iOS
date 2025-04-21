@@ -5,7 +5,7 @@ public struct GetMyCommentedPopUpResponse {
         self.popUpInfoList = popUpInfoList
     }
 
-    var popUpInfoList: [GetMyCommentedPopUpDataResponse]
+    public var popUpInfoList: [GetMyCommentedPopUpDataResponse]
 }
 
 public struct GetMyCommentedPopUpDataResponse {
@@ -20,12 +20,12 @@ public struct GetMyCommentedPopUpDataResponse {
         self.closedYn = closedYn
     }
 
-    var popUpStoreId: Int64
-    var popUpStoreName: String?
-    var desc: String?
-    var mainImageUrl: String?
-    var startDate: String?
-    var endDate: String?
-    var address: String?
-    var closedYn: Bool
+    public var popUpStoreId: Int64
+    public var popUpStoreName: String?
+    public var desc: String?
+    public var mainImageUrl: String?
+    public var startDate: String?
+    public var endDate: String?
+    public var address: String?
+    public var closedYn: Bool
 }

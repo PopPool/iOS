@@ -1,4 +1,8 @@
 import CoreLocation
+
+import DomainInterface
+import Infrastructure
+
 import ReactorKit
 import RxSwift
 
@@ -227,9 +231,7 @@ final class MapReactor: Reactor {
                     },
                     onSubscribe: { }
                 )
-                .map { dto in
-                    let response = dto.toDomain()
-
+                .map { response in
                     return MapPopUpStore(
                         id: response.id,
                         category: response.categoryName,

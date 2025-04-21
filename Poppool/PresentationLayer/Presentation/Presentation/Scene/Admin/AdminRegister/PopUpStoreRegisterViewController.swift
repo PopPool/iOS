@@ -32,7 +32,7 @@ final class PopUpStoreRegisterViewController: BaseViewController {
 
         let reactor = PopUpStoreRegisterReactor(
             adminUseCase: DIContainer.resolve(AdminUseCase.self),
-            preSignedUseCase: DIContainer.resolve(PreSignedUseCasae.self),
+            preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self),
             editingStore: editingStore
         )
 

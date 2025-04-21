@@ -19,21 +19,21 @@ public struct GetPopUpDetailResponse {
         self.similarPopUpStoreList = similarPopUpStoreList
     }
 
-    let name: String?
-    let desc: String?
-    let startDate: String?
-    let endDate: String?
-    let startTime: String?
-    let endTime: String?
-    let address: String?
-    let commentCount: Int64
-    let bookmarkYn: Bool
-    let loginYn: Bool
-    let hasCommented: Bool
-    let mainImageUrl: String?
-    let imageList: [GetPopUpDetailImageResponse]
-    let commentList: [GetPopUpDetailCommentResponse]
-    let similarPopUpStoreList: [GetPopUpDetailSimilarResponse]
+    public let name: String?
+    public let desc: String?
+    public let startDate: String?
+    public let endDate: String?
+    public let startTime: String?
+    public let endTime: String?
+    public let address: String?
+    public let commentCount: Int64
+    public let bookmarkYn: Bool
+    public let loginYn: Bool
+    public let hasCommented: Bool
+    public let mainImageUrl: String?
+    public let imageList: [GetPopUpDetailImageResponse]
+    public let commentList: [GetPopUpDetailCommentResponse]
+    public let similarPopUpStoreList: [GetPopUpDetailSimilarResponse]
 }
 
 public struct GetPopUpDetailImageResponse {
@@ -42,8 +42,8 @@ public struct GetPopUpDetailImageResponse {
         self.imageUrl = imageUrl
     }
     
-    let id: Int64
-    let imageUrl: String?
+    public let id: Int64
+    public let imageUrl: String?
 }
 
 public struct GetPopUpDetailCommentResponse {
@@ -61,17 +61,17 @@ public struct GetPopUpDetailCommentResponse {
         self.commentImageList = commentImageList
     }
     
-    let commentId: Int64
-    let creator: String?
-    let nickname: String?
-    let instagramId: String?
-    let profileImageUrl: String?
-    let content: String?
-    let likeYn: Bool
-    let likeCount: Int64
-    let myCommentYn: Bool
-    let createDateTime: String?
-    let commentImageList: [GetPopUpDetailImageResponse]
+    public let commentId: Int64
+    public let creator: String?
+    public let nickname: String?
+    public let instagramId: String?
+    public let profileImageUrl: String?
+    public let content: String?
+    public let likeYn: Bool
+    public let likeCount: Int64
+    public let myCommentYn: Bool
+    public let createDateTime: String?
+    public let commentImageList: [GetPopUpDetailImageResponse]
 }
 
 public struct GetPopUpDetailSimilarResponse {
@@ -82,8 +82,8 @@ public struct GetPopUpDetailSimilarResponse {
         self.endDate = endDate
     }
     
-    let id: Int64
-    let name: String?
-    let mainImageUrl: String?
-    let endDate: String?
+    public let id: Int64
+    public let name: String?
+    public let mainImageUrl: String?
+    public let endDate: String?
 }

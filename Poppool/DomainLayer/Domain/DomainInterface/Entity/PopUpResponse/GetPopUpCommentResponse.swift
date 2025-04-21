@@ -5,5 +5,5 @@ public struct GetPopUpCommentResponse {
         self.commentList = commentList
     }
     
-    let commentList: [GetPopUpDetailCommentResponse]
+    public let commentList: [GetPopUpDetailCommentResponse]
 }

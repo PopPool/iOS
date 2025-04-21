@@ -10,7 +10,7 @@ public class BaseViewController: UIViewController {
     var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
     var systemStatusBarDisposeBag = DisposeBag()
 
-    init() {
+    public init() {
         super.init(nibName: nil, bundle: nil)
         Logger.log(
             message: "\(self) init",
@@ -20,7 +20,7 @@ public class BaseViewController: UIViewController {
         )
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
