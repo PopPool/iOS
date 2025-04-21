@@ -7,7 +7,7 @@ public struct BannerPopUpStore {
         self.mainImageUrl = mainImageUrl
     }
 
-    var id: Int64
-    var name: String
-    var mainImageUrl: String
+    public var id: Int64
+    public var name: String
+    public var mainImageUrl: String
 }

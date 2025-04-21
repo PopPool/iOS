@@ -1,4 +1,8 @@
 import CoreLocation
+
+import DomainInterface
+import Infrastructure
+
 import ReactorKit
 import RxSwift
 

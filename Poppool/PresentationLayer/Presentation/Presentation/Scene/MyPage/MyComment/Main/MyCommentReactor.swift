@@ -1,11 +1,7 @@
-//
-//  MyCommentReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/8/25.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -111,7 +107,8 @@ final class MyCommentReactor: Reactor {
                 popUpID: popUpID,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         case .moveToRecentScene(let controller):

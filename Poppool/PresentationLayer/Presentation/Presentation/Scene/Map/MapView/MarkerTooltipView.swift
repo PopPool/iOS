@@ -1,5 +1,8 @@
-import SnapKit
 import UIKit
+
+import DomainInterface
+
+import SnapKit
 
 final class MarkerTooltipView: UIView, UIGestureRecognizerDelegate {
 

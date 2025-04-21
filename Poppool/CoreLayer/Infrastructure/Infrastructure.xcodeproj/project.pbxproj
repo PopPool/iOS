@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */; };
-		05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B722DB56C5E001342A2 /* RxSwift-Dynamic */; };
+		05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D82DB6605100771CB3 /* RxCocoa */; };
+		05EC93DB2DB6605100771CB3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93DA2DB6605100771CB3 /* RxSwift */; };
+		05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93DD2DB6612100771CB3 /* RxGesture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,8 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05125B732DB56C5E001342A2 /* RxSwift-Dynamic in Frameworks */,
-				05125B702DB56C5E001342A2 /* RxCocoa-Dynamic in Frameworks */,
+				05EC93DB2DB6605100771CB3 /* RxSwift in Frameworks */,
+				05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */,
+				05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +107,9 @@
 			);
 			name = Infrastructure;
 			packageProductDependencies = (
-				05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */,
-				05125B722DB56C5E001342A2 /* RxSwift-Dynamic */,
+				05EC93D82DB6605100771CB3 /* RxCocoa */,
+				05EC93DA2DB6605100771CB3 /* RxSwift */,
+				05EC93DD2DB6612100771CB3 /* RxGesture */,
 			);
 			productName = Infrastructure;
 			productReference = 058CC9182DB5383C0084221A /* Infrastructure.framework */;
@@ -138,6 +141,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */,
+				05EC93DC2DB6612100771CB3 /* XCRemoteSwiftPackageReference "RxGesture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9192DB5383C0084221A /* Products */;
@@ -401,18 +405,31 @@
 				minimumVersion = 6.9.0;
 			};
 		};
+		05EC93DC2DB6612100771CB3 /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		05125B6F2DB56C5E001342A2 /* RxCocoa-Dynamic */ = {
+		05EC93D82DB6605100771CB3 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
+			productName = RxCocoa;
 		};
-		05125B722DB56C5E001342A2 /* RxSwift-Dynamic */ = {
+		05EC93DA2DB6605100771CB3 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxSwift-Dynamic";
+			productName = RxSwift;
+		};
+		05EC93DD2DB6612100771CB3 /* RxGesture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC93DC2DB6612100771CB3 /* XCRemoteSwiftPackageReference "RxGesture" */;
+			productName = RxGesture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

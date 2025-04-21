@@ -1,9 +1,13 @@
 import CoreLocation
+import UIKit
+
+import DomainInterface
+import Infrastructure
+
 import NMapsMap
 import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
 
 class FullScreenMapViewController: MapViewController {
     // MARK: - Properties

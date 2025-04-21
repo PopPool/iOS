@@ -5,7 +5,7 @@ public struct GetWithdrawlListResponse {
         self.withDrawlSurveyList = withDrawlSurveyList
     }
 
-    var withDrawlSurveyList: [GetWithdrawlListDataResponse]
+    public var withDrawlSurveyList: [GetWithdrawlListDataResponse]
 }
 
 public struct GetWithdrawlListDataResponse {

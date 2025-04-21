@@ -1,11 +1,7 @@
-//
-//  MyPageRecentReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/14/25.
-//
-
 import UIKit
+
+import DomainInterface
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -130,7 +126,8 @@ final class MyPageRecentReactor: Reactor {
                 popUpID: listSection.inputDataList[row].id,
                 userAPIUseCase: userAPIUseCase,
                 popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self)
+                commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+                preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
             )
             controller.navigationController?.pushViewController(nextController, animated: true)
         }
