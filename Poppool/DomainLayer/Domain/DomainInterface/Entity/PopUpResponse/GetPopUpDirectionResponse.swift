@@ -17,12 +17,12 @@ public struct GetPopUpDirectionResponse {
 
     let id: Int64
     let categoryName: String
-    let name: String
-    let address: String
+    public let name: String
+    public let address: String
     let startDate: String
     let endDate: String
-    let latitude: Double
-    let longitude: Double
+    public let latitude: Double
+    public let longitude: Double
     let markerId: Int64
     let markerTitle: String
     let markerSnippet: String

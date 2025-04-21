@@ -6,6 +6,6 @@ public struct GetSearchPopUpListResponse {
         self.loginYn = loginYn
     }
     
-    var popUpStoreList: [PopUpStoreResponse]
-    var loginYn: Bool
+    public var popUpStoreList: [PopUpStoreResponse]
+    public var loginYn: Bool
 }

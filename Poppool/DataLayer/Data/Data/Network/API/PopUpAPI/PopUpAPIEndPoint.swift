@@ -1,11 +1,6 @@
-//
-//  PopUpAPIEndPoint.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
-
 import Foundation
+
+import Infrastructure
 
 import RxSwift
 

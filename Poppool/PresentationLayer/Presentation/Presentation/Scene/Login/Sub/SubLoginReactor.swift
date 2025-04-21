@@ -1,9 +1,5 @@
-//
-//  SubLoginReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/28/24.
-//
+import Infrastructure
+import DomainInterface
 
 import ReactorKit
 import RxCocoa

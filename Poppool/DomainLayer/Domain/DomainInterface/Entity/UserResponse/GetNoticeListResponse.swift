@@ -5,7 +5,7 @@ public struct GetNoticeListResponse {
         self.noticeInfoList = noticeInfoList
     }
 
-    var noticeInfoList: [GetNoticeListDataResponse]
+    public var noticeInfoList: [GetNoticeListDataResponse]
 }
 
 public struct GetNoticeListDataResponse {
@@ -15,7 +15,7 @@ public struct GetNoticeListDataResponse {
         self.createdDateTime = createdDateTime
     }
     
-    var id: Int64
-    var title: String?
-    var createdDateTime: String?
+    public var id: Int64
+    public var title: String?
+    public var createdDateTime: String?
 }

@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05125B952DB62295001342A2 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B942DB62295001342A2 /* RxSwift-Dynamic */; };
 		05125B982DB626E3001342A2 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B972DB626E3001342A2 /* ReactorKit */; };
 		05125B9B2DB626ED001342A2 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B9A2DB626ED001342A2 /* SnapKit-Dynamic */; };
-		05125B9D2DB626FA001342A2 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B9C2DB626FA001342A2 /* RxCocoa-Dynamic */; };
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
 		05C1D62D2DB53A8200508FFD /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -18,6 +16,8 @@
 		05C1D62F2DB53A8200508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */; };
 		05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */; };
+		05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D22DB6536200771CB3 /* RxCocoa */; };
+		05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D42DB6536200771CB3 /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,14 +54,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05EC93D52DB6536200771CB3 /* RxSwift in Frameworks */,
 				05125B9B2DB626ED001342A2 /* SnapKit-Dynamic in Frameworks */,
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
-				05125B952DB62295001342A2 /* RxSwift-Dynamic in Frameworks */,
 				05125B982DB626E3001342A2 /* ReactorKit in Frameworks */,
-				05125B9D2DB626FA001342A2 /* RxCocoa-Dynamic in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 				05125BA12DB6275C001342A2 /* PanModal in Frameworks */,
 				05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */,
+				05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */,
 				05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,13 +127,13 @@
 			);
 			name = Presentation;
 			packageProductDependencies = (
-				05125B942DB62295001342A2 /* RxSwift-Dynamic */,
 				05125B972DB626E3001342A2 /* ReactorKit */,
 				05125B9A2DB626ED001342A2 /* SnapKit-Dynamic */,
-				05125B9C2DB626FA001342A2 /* RxCocoa-Dynamic */,
 				05125BA02DB6275C001342A2 /* PanModal */,
 				05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */,
 				05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */,
+				05EC93D22DB6536200771CB3 /* RxCocoa */,
+				05EC93D42DB6536200771CB3 /* RxSwift */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -459,11 +459,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		05125B942DB62295001342A2 /* RxSwift-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxSwift-Dynamic";
-		};
 		05125B972DB626E3001342A2 /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B962DB626E3001342A2 /* XCRemoteSwiftPackageReference "ReactorKit" */;
@@ -473,11 +468,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = "SnapKit-Dynamic";
-		};
-		05125B9C2DB626FA001342A2 /* RxCocoa-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
 		};
 		05125BA02DB6275C001342A2 /* PanModal */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -493,6 +483,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
+		};
+		05EC93D22DB6536200771CB3 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		05EC93D42DB6536200771CB3 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
