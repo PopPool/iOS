@@ -1,5 +1,7 @@
 import UIKit
 
+import Presentation
+
 import KakaoSDKAuth
 import RxSwift
 
@@ -9,7 +11,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     static let appDidBecomeActive = PublishSubject<Void>()
     static let appDidDisconnect = PublishSubject<Void>()
-    private let disposeBag = DisposeBag()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
