@@ -11,9 +11,7 @@
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
 		05BDD3DA2DB66E6400C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3D92DB66E6400C1E192 /* SnapKit */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
-		05C1D62D2DB53A8200508FFD /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; };
-		05C1D62F2DB53A8200508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */; };
 		05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */; };
 		05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D22DB6536200771CB3 /* RxCocoa */; };
@@ -28,14 +26,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		05C1D6302DB53A8200508FFD /* Embed Frameworks */ = {
+		05BDD5C22DB6744000C1E192 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				05C1D62D2DB53A8200508FFD /* DomainInterface.framework in Embed Frameworks */,
-				05C1D62F2DB53A8200508FFD /* Infrastructure.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -130,7 +126,7 @@
 				058CC9002DB537960084221A /* Sources */,
 				058CC9012DB537960084221A /* Frameworks */,
 				058CC9022DB537960084221A /* Resources */,
-				05C1D6302DB53A8200508FFD /* Embed Frameworks */,
+				05BDD5C22DB6744000C1E192 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
