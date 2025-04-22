@@ -12,7 +12,6 @@ final class LoginReactor: Reactor {
         case kakaoButtonTapped(controller: BaseViewController)
         case appleButtonTapped(controller: BaseViewController)
         case guestButtonTapped(controller: BaseViewController)
-        case viewWillAppear
         case inquiryButtonTapped(controller: BaseViewController)
     }
 
@@ -20,7 +19,6 @@ final class LoginReactor: Reactor {
         case moveToSignUpScene(controller: BaseViewController)
         case moveToHomeScene(controller: BaseViewController)
         case loadView
-        case resetService
         case moveToInquiryScene(controller: BaseViewController)
     }
 
@@ -64,8 +62,6 @@ final class LoginReactor: Reactor {
             _ = keyChainService.deleteToken(type: .accessToken)
             _ = keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene(controller: controller))
-        case .viewWillAppear:
-            return Observable.just(.resetService)
         case .inquiryButtonTapped(let controller):
             return Observable.just(.moveToInquiryScene(controller: controller))
         }
@@ -86,9 +82,6 @@ final class LoginReactor: Reactor {
             controller.view.window?.rootViewController = homeTabbar
         case .loadView:
             break
-        case .resetService: break
-//            authrizationCode = nil
-//            appleLoginService = AppleLoginService()
         case .moveToInquiryScene(let controller):
             let nextController = FAQController()
             nextController.reactor = FAQReactor()

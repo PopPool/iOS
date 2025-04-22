@@ -12,7 +12,6 @@ final class SubLoginReactor: Reactor {
         case kakaoButtonTapped(controller: BaseViewController)
         case appleButtonTapped(controller: BaseViewController)
         case xmarkButtonTapped(controller: BaseViewController)
-        case viewWillAppear
         case inquiryButtonTapped(controller: BaseViewController)
     }
 
@@ -20,7 +19,6 @@ final class SubLoginReactor: Reactor {
         case moveToSignUpScene(controller: BaseViewController)
         case dismissScene(controller: BaseViewController)
         case loadView
-        case resetService
         case moveToInquiryScene(controller: BaseViewController)
     }
 
@@ -61,8 +59,6 @@ final class SubLoginReactor: Reactor {
             return loginWithApple(controller: controller)
         case .xmarkButtonTapped(let controller):
             return Observable.just(.dismissScene(controller: controller))
-        case .viewWillAppear:
-            return Observable.just(.resetService)
         case .inquiryButtonTapped(let controller):
             return Observable.just(.moveToInquiryScene(controller: controller))
         }
@@ -82,9 +78,6 @@ final class SubLoginReactor: Reactor {
             controller.dismiss(animated: true)
         case .loadView:
             break
-        case .resetService: break
-//            authrizationCode = nil
-//            appleLoginService = AppleLoginService()
         case .moveToInquiryScene(let controller):
             let nextController = FAQController()
             nextController.reactor = FAQReactor()
