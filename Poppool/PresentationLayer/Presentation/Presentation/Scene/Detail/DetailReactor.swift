@@ -168,7 +168,9 @@ final class DetailReactor: Reactor {
             } else {
                 let loginController = SubLoginController()
                 loginController.reactor = SubLoginReactor(
-                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
+                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
+                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
                 )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
@@ -206,7 +208,9 @@ final class DetailReactor: Reactor {
             } else {
                 let loginController = SubLoginController()
                 loginController.reactor = SubLoginReactor(
-                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
+                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
+                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
                 )
                 let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
@@ -243,7 +247,9 @@ final class DetailReactor: Reactor {
         case .moveToLoginScene(let controller):
             let loginController = SubLoginController()
             loginController.reactor = SubLoginReactor(
-                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
+                kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
+                appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
             )
             let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen

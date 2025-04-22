@@ -268,7 +268,9 @@ final class MyPageReactor: Reactor {
         case .moveToLoginScene(let controller):
             let nextController = SubLoginController()
             nextController.reactor = SubLoginReactor(
-                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self)
+                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
+                kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
+                appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
             )
             let navigationController = UINavigationController(rootViewController: nextController)
             navigationController.modalPresentationStyle = .fullScreen

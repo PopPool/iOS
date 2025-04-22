@@ -52,6 +52,8 @@ extension AppDelegate {
         DIContainer.register(SignUpRepository.self) { return SignUpRepositoryImpl(provider: provider) }
         DIContainer.register(MapDirectionRepository.self) { return MapDirectionRepositoryImpl(provider: provider) }
         DIContainer.register(PreSignedRepository.self) { return PreSignedRepositoryImpl() }
+        DIContainer.register(KakaoLoginRepository.self) { return KakaoLoginRepositoryImpl() }
+        DIContainer.register(AppleLoginRepository.self) { return AppleLoginRepositoryImpl() }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
@@ -63,6 +65,8 @@ extension AppDelegate {
         @Dependency var authAPIRepository: AuthAPIRepository
         @Dependency var signUpRepository: SignUpRepository
         @Dependency var preSignedRepository: PreSignedRepository
+        @Dependency var kakaoLoginRepository: KakaoLoginRepository
+        @Dependency var appleLoginRepository: AppleLoginRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
@@ -74,5 +78,7 @@ extension AppDelegate {
         DIContainer.register(AuthAPIUseCase.self) { return AuthAPIUseCaseImpl(repository: authAPIRepository) }
         DIContainer.register(SignUpAPIUseCase.self) { return SignUpAPIUseCaseImpl(repository: signUpRepository) }
         DIContainer.register(PreSignedUseCase.self) { return PreSignedUseCaseImpl(repository: preSignedRepository) }
+        DIContainer.register(KakaoLoginUseCase.self) { return KakaoLoginUseCaseImpl(repository: kakaoLoginRepository) }
+        DIContainer.register(AppleLoginUseCase.self) { return AppleLoginUseCaseImpl(repository: appleLoginRepository) }
     }
 }

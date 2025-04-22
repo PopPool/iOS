@@ -63,7 +63,9 @@ private extension SplashController {
                 guard let self = self else { return }
                 let loginViewController = LoginController()
                 loginViewController.reactor = LoginReactor(
-                    authAPIUseCase: authAPIUseCase
+                    authAPIUseCase: authAPIUseCase,
+                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
+                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
                 )
                 let loginNavigationController = UINavigationController(rootViewController: loginViewController)
                 rootViewController = loginNavigationController

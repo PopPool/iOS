@@ -34,17 +34,21 @@ final class SubLoginReactor: Reactor {
 
     private var authrizationCode: String?
 
-    private let kakaoLoginService = KakaoLoginService()
-    private var appleLoginService = AppleLoginService()
     private let authAPIUseCase: AuthAPIUseCase
+    private let kakaoLoginUseCase: KakaoLoginUseCase
+    private let appleLoginUseCase: AppleLoginUseCase
     @Dependency private var keyChainService: KeyChainService
     let userDefaultService = UserDefaultService()
 
     // MARK: - init
     init(
-        authAPIUseCase: AuthAPIUseCase
+        authAPIUseCase: AuthAPIUseCase,
+        kakaoLoginUseCase: KakaoLoginUseCase,
+        appleLoginUseCase: AppleLoginUseCase
     ) {
         self.authAPIUseCase = authAPIUseCase
+        self.kakaoLoginUseCase = kakaoLoginUseCase
+        self.appleLoginUseCase = appleLoginUseCase
         self.initialState = State()
     }
 
@@ -78,9 +82,9 @@ final class SubLoginReactor: Reactor {
             controller.dismiss(animated: true)
         case .loadView:
             break
-        case .resetService:
-            authrizationCode = nil
-            appleLoginService = AppleLoginService()
+        case .resetService: break
+//            authrizationCode = nil
+//            appleLoginService = AppleLoginService()
         case .moveToInquiryScene(let controller):
             let nextController = FAQController()
             nextController.reactor = FAQReactor()
@@ -90,7 +94,7 @@ final class SubLoginReactor: Reactor {
     }
 
     func loginWithKakao(controller: BaseViewController) -> Observable<Mutation> {
-        return kakaoLoginService.fetchUserCredential()
+        return kakaoLoginUseCase.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
                 owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
@@ -117,7 +121,7 @@ final class SubLoginReactor: Reactor {
     }
 
     func loginWithApple(controller: BaseViewController) -> Observable<Mutation> {
-        return appleLoginService.fetchUserCredential()
+        return appleLoginUseCase.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
                 owner.authrizationCode = response.authorizationCode

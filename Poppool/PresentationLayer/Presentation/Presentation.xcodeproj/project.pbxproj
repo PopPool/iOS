@@ -14,8 +14,6 @@
 		05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CE2DB6770300C1E192 /* Lottie */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
 		05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62B2DB53A8200508FFD /* Infrastructure.framework */; };
-		05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */; };
-		05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */; };
 		05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D22DB6536200771CB3 /* RxCocoa */; };
 		08B2A3582DB66B4100E57EFA /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A3572DB66B4100E57EFA /* RxKeyboard */; };
 		08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 08B2A35A2DB66B5A00E57EFA /* FloatingPanel */; };
@@ -69,11 +67,9 @@
 				0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 				05125BA12DB6275C001342A2 /* PanModal in Frameworks */,
-				05EC93CF2DB64C6F00771CB3 /* KakaoSDKAuth in Frameworks */,
 				08B2A3642DB66BBC00E57EFA /* Tabman in Frameworks */,
 				05EC93D32DB6536200771CB3 /* RxCocoa in Frameworks */,
 				08B2A35E2DB66B8600E57EFA /* RxDataSources in Frameworks */,
-				05EC93D12DB64C6F00771CB3 /* KakaoSDKUser in Frameworks */,
 				08B2A3582DB66B4100E57EFA /* RxKeyboard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,8 +137,6 @@
 			packageProductDependencies = (
 				05125B972DB626E3001342A2 /* ReactorKit */,
 				05125BA02DB6275C001342A2 /* PanModal */,
-				05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */,
-				05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */,
 				05EC93D22DB6536200771CB3 /* RxCocoa */,
 				08B2A3572DB66B4100E57EFA /* RxKeyboard */,
 				08B2A35A2DB66B5A00E57EFA /* FloatingPanel */,
@@ -188,7 +182,6 @@
 				05125B962DB626E3001342A2 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				05125B992DB626ED001342A2 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				05125B9F2DB6275C001342A2 /* XCRemoteSwiftPackageReference "PanModal" */,
-				05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				08B2A3562DB66B4100E57EFA /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 				08B2A3592DB66B5A00E57EFA /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				08B2A35C2DB66B8600E57EFA /* XCRemoteSwiftPackageReference "RxDataSources" */,
@@ -484,14 +477,6 @@
 				minimumVersion = 4.5.1;
 			};
 		};
-		05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.24.0;
-			};
-		};
 		08B2A3562DB66B4100E57EFA /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
@@ -575,16 +560,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
-		};
-		05EC93CE2DB64C6F00771CB3 /* KakaoSDKAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
-			productName = KakaoSDKAuth;
-		};
-		05EC93D02DB64C6F00771CB3 /* KakaoSDKUser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05EC93CD2DB64C6F00771CB3 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
-			productName = KakaoSDKUser;
 		};
 		05EC93D22DB6536200771CB3 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
