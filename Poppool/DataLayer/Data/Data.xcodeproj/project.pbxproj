@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0522C1DB2DB67C6100B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1DA2DB67C6100B141FF /* RxSwift */; };
+		05BBA73A2DB75A320047A061 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05BBA7392DB75A320047A061 /* KakaoSDKAuth */; };
+		05BBA73C2DB75A320047A061 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05BBA73B2DB75A320047A061 /* KakaoSDKUser */; };
 		05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3DB2DB66EB500C1E192 /* Alamofire */; };
 		05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6152DB53A5600508FFD /* DomainInterface.framework */; };
 		05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6162DB53A5600508FFD /* Infrastructure.framework */; };
@@ -87,11 +89,16 @@
 				Network/Interceptor/TokenInterceptor.swift,
 				Network/Provider/Provider.swift,
 				Network/Provider/ProviderImpl.swift,
+				Network/Service/AppleLoginService.swift,
+				Network/Service/AuthServiceable.swift,
+				Network/Service/KakaoLoginService.swift,
 				Network/Service/PreSignedService.swift,
 				RepositoryImpl/AdminRepositoryImpl.swift,
+				RepositoryImpl/AppleLoginRepositoryImpl.swift,
 				RepositoryImpl/AuthAPIRepositoryImpl.swift,
 				RepositoryImpl/CommentAPIRepositoryImpl.swift,
 				RepositoryImpl/HomeAPIRepositoryImpl.swift,
+				RepositoryImpl/KakaoLoginRepositoryImpl.swift,
 				RepositoryImpl/MapDirectionRepositoryImpl.swift,
 				RepositoryImpl/MapRepositoryImpl.swift,
 				RepositoryImpl/PopUpAPIRepositoryImpl.swift,
@@ -121,8 +128,10 @@
 			files = (
 				05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */,
 				05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */,
+				05BBA73C2DB75A320047A061 /* KakaoSDKUser in Frameworks */,
 				0522C1DB2DB67C6100B141FF /* RxSwift in Frameworks */,
 				05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */,
+				05BBA73A2DB75A320047A061 /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +194,8 @@
 			packageProductDependencies = (
 				05BDD3DB2DB66EB500C1E192 /* Alamofire */,
 				0522C1DA2DB67C6100B141FF /* RxSwift */,
+				05BBA7392DB75A320047A061 /* KakaoSDKAuth */,
+				05BBA73B2DB75A320047A061 /* KakaoSDKUser */,
 			);
 			productName = Data;
 			productReference = 058CC8DC2DB5376A0084221A /* Data.framework */;
@@ -217,6 +228,7 @@
 			packageReferences = (
 				08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */,
 				05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC8DD2DB5376A0084221A /* Products */;
@@ -464,6 +476,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.1;
+			};
+		};
 		05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift";
@@ -487,6 +507,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		05BBA7392DB75A320047A061 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		05BBA73B2DB75A320047A061 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
 		};
 		05BDD3DB2DB66EB500C1E192 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
