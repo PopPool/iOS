@@ -30,7 +30,10 @@ final class SearchController: BaseViewController, View {
 extension SearchController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
+
+        self.addViews()
+        self.setupContstraints()
+        self.configureUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -41,36 +44,50 @@ extension SearchController {
 
 // MARK: - SetUp
 private extension SearchController {
-    func setUp() {
+    func addViews() {
+        [mainView].forEach {
+            self.view.addSubview($0)
+        }
+    }
+
+    func setupContstraints() {
+        mainView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+
+    func configureUI() {
         if let layout = reactor?.compositionalLayout {
             mainView.contentCollectionView.collectionViewLayout = layout
         }
+
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
+
         mainView.contentCollectionView.register(
             SearchTitleSectionCell.self,
             forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             CancelableTagSectionCell.self,
             forCellWithReuseIdentifier: CancelableTagSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             SearchCountTitleSectionCell.self,
             forCellWithReuseIdentifier: SearchCountTitleSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             HomeCardSectionCell.self,
             forCellWithReuseIdentifier: HomeCardSectionCell.identifiers
         )
-        view.addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
     }
 }
 
@@ -122,8 +139,9 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let userDefaultService = reactor?.userDefaultService else { return cell }
-        var searchList = userDefaultService.fetchArray(key: "searchList") ?? []
+        let searchList = userDefaultService.fetchArray(key: "searchList") ?? []
         guard let reactor = reactor else { return cell }
+
         if let cell = cell as? SearchTitleSectionCell {
             cell.titleButton.rx.tap
                 .map { Reactor.Action.recentSearchListAllDeleteButtonTapped }
@@ -168,6 +186,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
+
         return cell
     }
 
