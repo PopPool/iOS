@@ -21,7 +21,7 @@ final class SearchReactor: Reactor {
         case changeCategory(categoryList: [Int64], categoryTitleList: [String?])
         case categoryDelteButtonTapped(indexPath: IndexPath)
         case resetCategory
-        case changePage
+        case loadNextPage
         case bookmarkButtonTapped(indexPath: IndexPath)
         case resetSearchKeyWord
     }
@@ -102,7 +102,8 @@ final class SearchReactor: Reactor {
         switch action {
         case .resetSearchKeyWord:
             return Observable.just(.resetSearchKeyWord)
-        case .changePage:
+        case .loadNextPage:
+
             if isLoading {
                 return Observable.just(.loadView)
             } else {

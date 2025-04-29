@@ -109,7 +109,7 @@ extension SearchController {
 
         loadNextPage
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
-            .map { Reactor.Action.changePage }
+            .map { Reactor.Action.loadNextPage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
