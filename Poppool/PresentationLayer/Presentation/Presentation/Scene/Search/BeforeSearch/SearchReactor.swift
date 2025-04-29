@@ -325,7 +325,7 @@ final class SearchReactor: Reactor {
                     isLogin: isLogin
                 )
             }
-            
+
             if owner.currentPage == 0 {
                 owner.searchListSection.inputDataList = newItems
             } else if owner.currentPage != owner.lastAppendPage {
@@ -336,7 +336,13 @@ final class SearchReactor: Reactor {
             let isOpenString = isOpen ? "오픈・" : "종료・"
             let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
             let sortedTitle = isOpenString + sortedString
-            owner.searchSortedSection.inputDataList = [.init(count: response.totalElements, sortedTitle: sortedTitle)]
+
+            owner.searchSortedSection.inputDataList = [
+                SearchCountTitleSectionCell.Input(
+                    count: response.totalElements,
+                    sortedTitle: sortedTitle
+                )
+            ]
 
             owner.lastPage = response.totalPages
             owner.isLoading = false
