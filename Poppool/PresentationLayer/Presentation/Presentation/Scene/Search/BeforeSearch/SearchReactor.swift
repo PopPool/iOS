@@ -103,18 +103,10 @@ final class SearchReactor: Reactor {
         case .resetSearchKeyWord:
             return Observable.just(.resetSearchKeyWord)
         case .loadNextPage:
-
-            if isLoading {
-                return Observable.just(.loadView)
-            } else {
-                if currentPage < lastPage {
-                    isLoading = true
-                    currentPage += 1
-                    return setBottomSearchList(sort: sort)
-                } else {
-                    return Observable.just(.loadView)
-                }
-            }
+            guard !isLoading, currentPage < lastPage else { return Observable.empty() }
+            isLoading = true
+            currentPage += 1
+            return setBottomSearchList(sort: sort)
         case .viewWillAppear:
             setSearchList()
             return setBottomSearchList(sort: sort)
