@@ -312,43 +312,32 @@ final class SearchReactor: Reactor {
         .withUnretained(self)
         .map { (owner, response) in
             let isLogin = response.loginYn
-            if owner.currentPage == 0 {
-                owner.searchListSection.inputDataList = response.popUpStoreList.map {
-                    return HomeCardSectionCell.Input(
-                        imagePath: $0.mainImageUrl,
-                        id: $0.id,
-                        category: $0.category,
-                        title: $0.name,
-                        address: $0.address,
-                        startDate: $0.startDate,
-                        endDate: $0.endDate,
-                        isBookmark: $0.bookmarkYn,
-                        isLogin: isLogin
-                    )
-                }
-            } else {
-                if owner.currentPage != owner.lastAppendPage {
-                    owner.lastAppendPage = owner.currentPage
-                    let newData = response.popUpStoreList.map {
-                        return HomeCardSectionCell.Input(
-                            imagePath: $0.mainImageUrl,
-                            id: $0.id,
-                            category: $0.category,
-                            title: $0.name,
-                            address: $0.address,
-                            startDate: $0.startDate,
-                            endDate: $0.endDate,
-                            isBookmark: $0.bookmarkYn,
-                            isLogin: isLogin
-                        )
-                    }
-                    owner.searchListSection.inputDataList.append(contentsOf: newData)
-                }
+            let newItems = response.popUpStoreList.map {
+                HomeCardSectionCell.Input(
+                    imagePath: $0.mainImageUrl,
+                    id: $0.id,
+                    category: $0.category,
+                    title: $0.name,
+                    address: $0.address,
+                    startDate: $0.startDate,
+                    endDate: $0.endDate,
+                    isBookmark: $0.bookmarkYn,
+                    isLogin: isLogin
+                )
             }
+            
+            if owner.currentPage == 0 {
+                owner.searchListSection.inputDataList = newItems
+            } else if owner.currentPage != owner.lastAppendPage {
+                owner.lastAppendPage = owner.currentPage
+                owner.searchListSection.inputDataList.append(contentsOf: newItems)
+            }
+
             let isOpenString = isOpen ? "오픈・" : "종료・"
             let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
             let sortedTitle = isOpenString + sortedString
             owner.searchSortedSection.inputDataList = [.init(count: response.totalElements, sortedTitle: sortedTitle)]
+
             owner.lastPage = response.totalPages
             owner.isLoading = false
             return .loadView
