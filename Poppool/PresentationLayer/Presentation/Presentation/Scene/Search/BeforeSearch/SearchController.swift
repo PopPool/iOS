@@ -108,7 +108,7 @@ extension SearchController {
             .disposed(by: disposeBag)
 
         loadNextPage
-            .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changePage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
