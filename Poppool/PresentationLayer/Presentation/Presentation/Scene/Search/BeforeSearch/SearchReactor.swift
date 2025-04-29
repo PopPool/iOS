@@ -306,7 +306,7 @@ final class SearchReactor: Reactor {
             isOpen: isOpen,
             categories: categories,
             page: currentPage,
-            size: 50,
+            size: 10,
             sort: sort
         )
         .withUnretained(self)
