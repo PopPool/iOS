@@ -300,14 +300,37 @@ final class SearchReactor: Reactor {
 
     func setBottomSearchList(sort: String?) -> Observable<Mutation> {
         let isOpen = filterIndex == 0 ? true : false
-        let categorys = searchCategorySection.inputDataList.compactMap { $0.id }
-        return popUpAPIUseCase.getSearchBottomPopUpList(isOpen: isOpen, categories: categorys, page: currentPage, size: 50, sort: sort)
-            .withUnretained(self)
-            .map { (owner, response) in
-                let isLogin = response.loginYn
-                if owner.currentPage == 0 {
-                    owner.searchListSection.inputDataList = response.popUpStoreList.map {
-                        return .init(
+        let categories = searchCategorySection.inputDataList.compactMap { $0.id }
+
+        return popUpAPIUseCase.getSearchBottomPopUpList(
+            isOpen: isOpen,
+            categories: categories,
+            page: currentPage,
+            size: 50,
+            sort: sort
+        )
+        .withUnretained(self)
+        .map { (owner, response) in
+            let isLogin = response.loginYn
+            if owner.currentPage == 0 {
+                owner.searchListSection.inputDataList = response.popUpStoreList.map {
+                    return .init(
+                        imagePath: $0.mainImageUrl,
+                        id: $0.id,
+                        category: $0.category,
+                        title: $0.name,
+                        address: $0.address,
+                        startDate: $0.startDate,
+                        endDate: $0.endDate,
+                        isBookmark: $0.bookmarkYn,
+                        isLogin: isLogin
+                    )
+                }
+            } else {
+                if owner.currentPage != owner.lastAppendPage {
+                    owner.lastAppendPage = owner.currentPage
+                    let newData = response.popUpStoreList.map {
+                        return HomeCardSectionCell.Input(
                             imagePath: $0.mainImageUrl,
                             id: $0.id,
                             category: $0.category,
@@ -319,32 +342,16 @@ final class SearchReactor: Reactor {
                             isLogin: isLogin
                         )
                     }
-                } else {
-                    if owner.currentPage != owner.lastAppendPage {
-                        owner.lastAppendPage = owner.currentPage
-                        let newData = response.popUpStoreList.map {
-                            return HomeCardSectionCell.Input(
-                                imagePath: $0.mainImageUrl,
-                                id: $0.id,
-                                category: $0.category,
-                                title: $0.name,
-                                address: $0.address,
-                                startDate: $0.startDate,
-                                endDate: $0.endDate,
-                                isBookmark: $0.bookmarkYn,
-                                isLogin: isLogin
-                            )
-                        }
-                        owner.searchListSection.inputDataList.append(contentsOf: newData)
-                    }
+                    owner.searchListSection.inputDataList.append(contentsOf: newData)
                 }
-                let isOpenString = isOpen ? "오픈・" : "종료・"
-                let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
-                let sortedTitle = isOpenString + sortedString
-                owner.searchSortedSection.inputDataList = [.init(count: response.totalElements, sortedTitle: sortedTitle)]
-                owner.lastPage = response.totalPages
-                owner.isLoading = false
-                return .loadView
             }
+            let isOpenString = isOpen ? "오픈・" : "종료・"
+            let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
+            let sortedTitle = isOpenString + sortedString
+            owner.searchSortedSection.inputDataList = [.init(count: response.totalElements, sortedTitle: sortedTitle)]
+            owner.lastPage = response.totalPages
+            owner.isLoading = false
+            return .loadView
+        }
     }
 }
