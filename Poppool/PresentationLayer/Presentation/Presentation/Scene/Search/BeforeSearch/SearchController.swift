@@ -23,7 +23,7 @@ final class SearchController: BaseViewController, View {
     private var mainView = SearchView()
     private var sections: [any Sectionable] = []
     private let cellTapped: PublishSubject<IndexPath> = .init()
-    private let pageChange: PublishSubject<Void> = .init()
+    private let loadNextPage = PublishSubject<Void>()
 }
 
 // MARK: - Life Cycle
@@ -107,7 +107,7 @@ extension SearchController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        pageChange
+        loadNextPage
             .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.changePage }
             .bind(to: reactor.action)
@@ -196,7 +196,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         let scrollViewHeight = scrollView.frame.size.height
         let contentOffsetY = scrollView.contentOffset.y
         if contentOffsetY + scrollViewHeight >= contentHeight {
-            pageChange.onNext(())
+            loadNextPage.onNext(())
         }
     }
 
