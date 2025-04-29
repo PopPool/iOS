@@ -314,7 +314,7 @@ final class SearchReactor: Reactor {
             let isLogin = response.loginYn
             if owner.currentPage == 0 {
                 owner.searchListSection.inputDataList = response.popUpStoreList.map {
-                    return .init(
+                    return HomeCardSectionCell.Input(
                         imagePath: $0.mainImageUrl,
                         id: $0.id,
                         category: $0.category,
