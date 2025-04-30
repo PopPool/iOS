@@ -121,7 +121,6 @@ final class MapGuideReactor: Reactor {
             return Observable.just(.showToast("지원하지 않는 맵 앱입니다."))
         }
 
-
         if let url = URL(string: urlScheme) {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
