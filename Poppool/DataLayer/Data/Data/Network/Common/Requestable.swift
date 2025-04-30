@@ -21,10 +21,8 @@ extension Requestable {
         let url = try url()
 
         Logger.log(
-            message: "\(url) URL 생성",
-            category: .network,
-            fileName: #file,
-            line: #line
+            "\(url) URL 생성",
+            category: .network
         )
 
         var urlRequest = URLRequest(url: url)

@@ -401,76 +401,76 @@ final class PopUpStoreRegisterReactor: Reactor {
 
     // 폼 유효성 검사
     private func validateForm(state: State) -> Bool {
-        Logger.log(message: "폼 유효성 검사 시작", category: .debug)
+        Logger.log("폼 유효성 검사 시작", category: .debug)
 
         // 이름 필드 검사
         guard !state.name.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 이름 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 이름 비어있음", category: .debug)
             return false
         }
 
         // 주소 필드 검사
         guard !state.address.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 주소 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 주소 비어있음", category: .debug)
             return false
         }
 
         // 위도/경도 필드 검사
         guard !state.lat.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 위도 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 위도 비어있음", category: .debug)
             return false
         }
 
         guard !state.lon.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 경도 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 경도 비어있음", category: .debug)
             return false
         }
 
         // 설명 필드 검사
         guard !state.description.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 설명 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 설명 비어있음", category: .debug)
             return false
         }
 
         // 카테고리 필드 검사
         guard !state.category.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 카테고리 비어있음", category: .debug)
+            Logger.log("유효성 검사 실패: 카테고리 비어있음", category: .debug)
             return false
         }
 
         // 이미지 검사
         guard !state.images.isEmpty else {
-            Logger.log(message: "유효성 검사 실패: 이미지 없음", category: .debug)
+            Logger.log("유효성 검사 실패: 이미지 없음", category: .debug)
             return false
         }
 
         // 대표 이미지 검사
         guard state.images.contains(where: { $0.isMain }) else {
-            Logger.log(message: "유효성 검사 실패: 대표 이미지 없음", category: .debug)
+            Logger.log("유효성 검사 실패: 대표 이미지 없음", category: .debug)
             return false
         }
 
         // 날짜 검사
         guard state.selectedStartDate != nil else {
-            Logger.log(message: "유효성 검사 실패: 시작 날짜 없음", category: .debug)
+            Logger.log("유효성 검사 실패: 시작 날짜 없음", category: .debug)
             return false
         }
 
         guard state.selectedEndDate != nil else {
-            Logger.log(message: "유효성 검사 실패: 종료 날짜 없음", category: .debug)
+            Logger.log("유효성 검사 실패: 종료 날짜 없음", category: .debug)
             return false
         }
 
         // 위도/경도 유효성 검사
         guard let latVal = Double(state.lat),
               let lonVal = Double(state.lon) else {
-            Logger.log(message: "유효성 검사 실패: 위도/경도 형식 오류", category: .debug)
+            Logger.log("유효성 검사 실패: 위도/경도 형식 오류", category: .debug)
             return false
         }
 
         // 위도/경도 값이 유효한지 검사
         guard latVal != 0 || lonVal != 0 else {
-            Logger.log(message: "유효성 검사 실패: 위도/경도 값이 모두 0", category: .debug)
+            Logger.log("유효성 검사 실패: 위도/경도 값이 모두 0", category: .debug)
             return false
         }
 
@@ -478,17 +478,17 @@ final class PopUpStoreRegisterReactor: Reactor {
         if let startDate = state.selectedStartDate,
            let endDate = state.selectedEndDate,
            startDate > endDate {
-            Logger.log(message: "유효성 검사 실패: 시작일이 종료일보다 늦음", category: .debug)
+            Logger.log("유효성 검사 실패: 시작일이 종료일보다 늦음", category: .debug)
             return false
         }
 
-        Logger.log(message: "유효성 검사 성공", category: .debug)
+        Logger.log("유효성 검사 성공", category: .debug)
         return true
     }
 
     // 주소 지오코딩
     private func geocodeAddress(address: String) -> Observable<CLLocation?> {
-        Logger.log(message: "지오코딩 함수 호출: \(address)", category: .debug)
+        Logger.log("지오코딩 함수 호출: \(address)", category: .debug)
 
         return Observable.create { observer in
             let geocoder = CLGeocoder()
@@ -500,7 +500,7 @@ final class PopUpStoreRegisterReactor: Reactor {
                 preferredLocale: Locale(identifier: "ko_KR")
             ) { placemarks, error in
                 if let error = error {
-                    Logger.log(message: "Geocoding error: \(error.localizedDescription)", category: .error)
+                    Logger.log("Geocoding error: \(error.localizedDescription)", category: .error)
                     observer.onNext(nil)
                     observer.onCompleted()
                     return
@@ -525,10 +525,10 @@ final class PopUpStoreRegisterReactor: Reactor {
         preSignedUseCase.tryDelete(objectKeyList: imagePaths)
             .subscribe(
                 onCompleted: {
-                    Logger.log(message: "S3에서 모든 이미지 삭제 성공: \(imagePaths.count)개", category: .info)
+                    Logger.log("S3에서 모든 이미지 삭제 성공: \(imagePaths.count)개", category: .info)
                 },
                 onError: { error in
-                    Logger.log(message: "S3에서 이미지 삭제 실패: \(error.localizedDescription)", category: .error)
+                    Logger.log("S3에서 이미지 삭제 실패: \(error.localizedDescription)", category: .error)
                 }
             )
         .disposed(by: disposeBag)
@@ -537,7 +537,7 @@ final class PopUpStoreRegisterReactor: Reactor {
     // 카테고리 ID 매핑
     private func getCategoryId(from title: String) -> Int {
         let cleanTitle = title.replacingOccurrences(of: " ▾", with: "")
-        Logger.log(message: "카테고리 매핑 시작 - 타이틀: \(cleanTitle)", category: .debug)
+        Logger.log("카테고리 매핑 시작 - 타이틀: \(cleanTitle)", category: .debug)
 
         let categoryMap: [String: Int64] = [
             "패션": 1,
@@ -555,10 +555,10 @@ final class PopUpStoreRegisterReactor: Reactor {
         ]
 
         if let id = categoryMap[cleanTitle] {
-            Logger.log(message: "카테고리 매핑 성공: \(cleanTitle) -> \(id)", category: .debug)
+            Logger.log("카테고리 매핑 성공: \(cleanTitle) -> \(id)", category: .debug)
             return Int(id)
         } else {
-            Logger.log(message: "카테고리 매핑 실패: \(cleanTitle)에 해당하는 ID를 찾을 수 없음", category: .error)
+            Logger.log("카테고리 매핑 실패: \(cleanTitle)에 해당하는 ID를 찾을 수 없음", category: .error)
             return 1 // 기본값
         }
     }
@@ -655,13 +655,13 @@ final class PopUpStoreRegisterReactor: Reactor {
                                 defer { dispatchGroup.leave() }
 
                                 if let error = error {
-                                    Logger.log(message: "이미지 로드 오류: \(error.localizedDescription)", category: .error)
+                                    Logger.log("이미지 로드 오류: \(error.localizedDescription)", category: .error)
                                     return
                                 }
 
                                 guard let data = data,
                                       let image = UIImage(data: data) else {
-                                    Logger.log(message: "이미지 변환 실패", category: .error)
+                                    Logger.log("이미지 변환 실패", category: .error)
                                     return
                                 }
 

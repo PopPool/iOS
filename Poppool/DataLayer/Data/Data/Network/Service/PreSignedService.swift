@@ -29,20 +29,20 @@ class PreSignedService {
     }
 
     func tryUpload(datas: [PresignedURLRequest]) -> Single<Void> {
-        Logger.log(message: "tryUpload 호출됨 - 요청 데이터 수: \(datas.count)", category: .debug)
+        Logger.log("tryUpload 호출됨 - 요청 데이터 수: \(datas.count)", category: .debug)
 
         return Single.create { [weak self] observer in
-            Logger.log(message: "tryUpload 내부 흐름 시작", category: .debug)
+            Logger.log("tryUpload 내부 흐름 시작", category: .debug)
 
             guard let self = self else {
-                Logger.log(message: "self가 nil입니다. 작업을 중단합니다.", category: .error)
+                Logger.log("self가 nil입니다. 작업을 중단합니다.", category: .error)
                 return Disposables.create()
             }
 
             // 1. 업로드 링크 요청
             self.getUploadLinks(request: .init(objectKeyList: datas.map { $0.filePath }))
                 .subscribe { response in
-                    Logger.log(message: "getUploadLinks 성공: \(response.preSignedUrlList)", category: .debug)
+                    Logger.log("getUploadLinks 성공: \(response.preSignedUrlList)", category: .debug)
 
                     let responseList = response.preSignedUrlList
                     let inputList = datas
@@ -51,23 +51,23 @@ class PreSignedService {
                     let requestList = zip(responseList, inputList).compactMap { zipResponse in
                         let urlResponse = zipResponse.0
                         let inputResponse = zipResponse.1
-                        Logger.log(message: "업로드 준비 - URL: \(urlResponse.preSignedUrl)", category: .debug)
+                        Logger.log("업로드 준비 - URL: \(urlResponse.preSignedUrl)", category: .debug)
                         return self.uploadFromS3(url: urlResponse.preSignedUrl, image: inputResponse.image)
                     }
 
                     // 3. 병렬 업로드 실행
                     Single.zip(requestList)
                         .subscribe(onSuccess: { _ in
-                            Logger.log(message: "모든 이미지 업로드 성공", category: .info)
+                            Logger.log("모든 이미지 업로드 성공", category: .info)
                             observer(.success(()))
                         }, onFailure: { error in
-                            Logger.log(message: "이미지 업로드 실패: \(error.localizedDescription)", category: .error)
+                            Logger.log("이미지 업로드 실패: \(error.localizedDescription)", category: .error)
                             observer(.failure(error))
                         })
                         .disposed(by: self.disposeBag)
 
                 } onError: { error in
-                    Logger.log(message: "getUploadLinks 실패: \(error.localizedDescription)", category: .error)
+                    Logger.log("getUploadLinks 실패: \(error.localizedDescription)", category: .error)
                     observer(.failure(error))
                 }
                 .disposed(by: self.disposeBag)
@@ -123,16 +123,16 @@ class PreSignedService {
                              return filePaths.compactMap { imageMap[$0] }
                          }
                          .subscribe(onSuccess: { sortedImages in
-                             Logger.log(message: "All images downloaded successfully", category: .info)
+                             Logger.log("All images downloaded successfully", category: .info)
                              observer(.success(sortedImages))
                          }, onFailure: { error in
-                             Logger.log(message: "Image download failed: \(error.localizedDescription)", category: .error)
+                             Logger.log("Image download failed: \(error.localizedDescription)", category: .error)
                              observer(.failure(error))
                          })
                          .disposed(by: self.disposeBag)
 
                  } onError: { error in
-                     Logger.log(message: "getDownloadLinks Fail: \(error.localizedDescription)", category: .error)
+                     Logger.log("getDownloadLinks Fail: \(error.localizedDescription)", category: .error)
                      observer(.failure(error))
                  }
                  .disposed(by: disposeBag)
@@ -148,7 +148,7 @@ private extension PreSignedService {
         return Single.create { single in
             if let imageData = image.jpegData(compressionQuality: 0),
                let url = URL(string: url) {
-                Logger.log(message: "S3 업로드 요청 URL: \(url.absoluteString)", category: .debug)
+                Logger.log("S3 업로드 요청 URL: \(url.absoluteString)", category: .debug)
 
                 let headers: HTTPHeaders = [
                     "Content-Type": "image/jpeg"
@@ -156,19 +156,19 @@ private extension PreSignedService {
 
                 AF.upload(imageData, to: url, method: .put, headers: headers)
                     .response { response in
-                        Logger.log(message: "S3 업로드 응답 상태: \(response.response?.statusCode ?? -1)", category: .debug)
+                        Logger.log("S3 업로드 응답 상태: \(response.response?.statusCode ?? -1)", category: .debug)
                         switch response.result {
                         case .success:
-                            Logger.log(message: "S3 업로드 성공 - URL: \(url.absoluteString)", category: .info)
+                            Logger.log("S3 업로드 성공 - URL: \(url.absoluteString)", category: .info)
                             single(.success(()))
                         case .failure(let error):
-                            Logger.log(message: "S3 업로드 실패: \(error.localizedDescription)", category: .error)
+                            Logger.log("S3 업로드 실패: \(error.localizedDescription)", category: .error)
                             single(.failure(error))
                         }
                     }
                 return Disposables.create()
             } else {
-                Logger.log(message: "S3 업로드 실패 - 잘못된 URL 또는 데이터", category: .error)
+                Logger.log("S3 업로드 실패 - 잘못된 URL 또는 데이터", category: .error)
                 single(.failure(NSError(domain: "InvalidDataOrURL", code: -1, userInfo: nil)))
                 return Disposables.create()
             }
@@ -197,13 +197,13 @@ private extension PreSignedService {
     }
 
     func getUploadLinks(request: PresignedURLRequestDTO) -> Observable<PreSignedURLResponseDTO> {
-        Logger.log(message: "Presigned URL 생성 요청 데이터: \(request)", category: .debug)
+        Logger.log("Presigned URL 생성 요청 데이터: \(request)", category: .debug)
         let endPoint = PreSignedAPIEndPoint.presigned_upload(request: request)
         return provider.requestData(with: endPoint, interceptor: tokenInterceptor)
             .do(onNext: { response in
-                Logger.log(message: "Presigned URL 응답 데이터: \(response.preSignedUrlList)", category: .debug)
+                Logger.log("Presigned URL 응답 데이터: \(response.preSignedUrlList)", category: .debug)
             }, onError: { error in
-                Logger.log(message: "Presigned URL 요청 실패: \(error.localizedDescription)", category: .error)
+                Logger.log("Presigned URL 요청 실패: \(error.localizedDescription)", category: .error)
             })
     }
 
@@ -214,18 +214,18 @@ private extension PreSignedService {
 }
 extension PreSignedService {
     func deleteImage(filePath: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        Logger.log(message: "이미지 삭제 시작 - 경로: \(filePath)", category: .debug)
+        Logger.log("이미지 삭제 시작 - 경로: \(filePath)", category: .debug)
 
         let request = PresignedURLRequestDTO(objectKeyList: [filePath])
 
         tryDelete(targetPaths: request)
             .subscribe(
                 onCompleted: {
-                    Logger.log(message: "이미지 삭제 성공: \(filePath)", category: .debug)
+                    Logger.log("이미지 삭제 성공: \(filePath)", category: .debug)
                     completion(.success(()))
                 },
                 onError: { error in
-                    Logger.log(message: "이미지 삭제 실패: \(error.localizedDescription)", category: .error)
+                    Logger.log("이미지 삭제 실패: \(error.localizedDescription)", category: .error)
                     completion(.failure(error))
                 }
             )
@@ -285,12 +285,12 @@ extension PreSignedService {
         guard let encodedPath = filePath
             .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
             .replacingOccurrences(of: "+", with: "%2B") else {
-            Logger.log(message: "URL 인코딩 실패: \(filePath)", category: .error)
+            Logger.log("URL 인코딩 실패: \(filePath)", category: .error)
             return nil
         }
 
         let fullString = baseURL + encodedPath
-        Logger.log(message: "생성된 URL: \(fullString)", category: .debug)
+        Logger.log("생성된 URL: \(fullString)", category: .debug)
 
         return URL(string: fullString)
     }

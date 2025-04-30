@@ -10,6 +10,7 @@
 		0522C1D72DB67B4F00B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1D62DB67B4F00B141FF /* RxSwift */; };
 		05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D82DB6605100771CB3 /* RxCocoa */; };
 		05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93DD2DB6612100771CB3 /* RxGesture */; };
+		4EBC91D32DB8039800495C3B /* OSLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBC91D22DB8039800495C3B /* OSLog.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		058CC9182DB5383C0084221A /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4EBC91D22DB8039800495C3B /* OSLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSLog.framework; path = System/Library/Frameworks/OSLog.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EBC91D32DB8039800495C3B /* OSLog.framework in Frameworks */,
 				0522C1D72DB67B4F00B141FF /* RxSwift in Frameworks */,
 				05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */,
 				05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */,
@@ -54,6 +57,7 @@
 		05125B6A2DB56C32001342A2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EBC91D22DB8039800495C3B /* OSLog.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

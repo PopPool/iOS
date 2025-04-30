@@ -212,7 +212,7 @@ final class AdminBottomSheetView: UIView {
 
     // MARK: - Public Methods
     func updateContentVisibility(isCategorySelected: Bool) {
-        Logger.log(message: "높이 변경 시작: \(isCategorySelected ? "카테고리" : "상태값")", category: .debug)
+        Logger.log("높이 변경 시작: \(isCategorySelected ? "카테고리" : "상태값")", category: .debug)
 
         let newHeight: CGFloat = isCategorySelected ? 200 : 160
 
@@ -223,6 +223,6 @@ final class AdminBottomSheetView: UIView {
         setNeedsLayout()
         layoutIfNeeded()
 
-        Logger.log(message: "높이 변경 완료", category: .debug)
+        Logger.log("높이 변경 완료", category: .debug)
     }
 }

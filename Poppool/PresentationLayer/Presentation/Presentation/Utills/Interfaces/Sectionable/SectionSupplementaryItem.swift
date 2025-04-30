@@ -67,11 +67,8 @@ extension SectionSupplementaryItemable {
             for: indexPath
         ) as? ReusableView else {
             Logger.log(
-                message: "ReusableView Error",
-                category: .error,
-                fileName: #file,
-                line: #line
-            )
+                "ReusableView Error",
+                category: .error)
             return UICollectionReusableView()
         }
         view.injection(with: viewInput)

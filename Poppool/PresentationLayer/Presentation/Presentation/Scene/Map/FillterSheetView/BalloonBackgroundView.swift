@@ -27,15 +27,15 @@ final class BalloonBackgroundView: UIView {
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.interItemSpacing = .fixed(8)
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = .init(top: 20, leading: 20, bottom: 19, trailing: 20)
+            section.contentInsets = .init(top: 18, leading: 20, bottom: 19, trailing: 20)
             section.interGroupSpacing = 8
             return section
         }
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .clear
-        cv.isScrollEnabled = false
-        cv.register(BalloonChipCell.self, forCellWithReuseIdentifier: BalloonChipCell.identifier)
-        return cv
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
+        collectionView.register(BalloonChipCell.self, forCellWithReuseIdentifier: BalloonChipCell.identifier)
+        return collectionView
     }()
 
     // "그 외 지역" 전용 UI: 아이콘과 안내문구
@@ -104,7 +104,7 @@ final class BalloonBackgroundView: UIView {
         containerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().offset(arrowHeight)
-            make.bottom.equalToSuperview().priority(.high)
+            make.bottom.equalToSuperview()
         }
 
         containerView.addSubview(collectionView)
@@ -114,7 +114,7 @@ final class BalloonBackgroundView: UIView {
 
         collectionView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().priority(.high)
+            make.bottom.equalToSuperview()
         }
 
         singleRegionIcon.snp.makeConstraints { make in

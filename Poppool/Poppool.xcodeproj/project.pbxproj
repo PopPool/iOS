@@ -58,7 +58,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				/Localized/Resource/LaunchScreen.storyboard,
-				Resource/Debug.xcconfig,
 				Resource/Info.plist,
 			);
 			target = BDCA41BC2CF35AC0005EECF6 /* Poppool */;
