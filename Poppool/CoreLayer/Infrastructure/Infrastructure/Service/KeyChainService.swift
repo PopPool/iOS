@@ -43,7 +43,7 @@ public final class KeyChainService {
             if let data = dataTypeRef as? Data {
                 if let value = String(data: data, encoding: .utf8) {
                     Logger.log(
-                        message: "Successfully fetched \(type.rawValue) from KeyChain: \(value)",
+                        "Successfully fetched \(type.rawValue) from KeyChain",
                         category: .info,
                         fileName: #file,
                         line: #line
@@ -84,7 +84,7 @@ public final class KeyChainService {
         let status = SecItemAdd(keyChainQuery, nil)
         if status == errSecSuccess {
             Logger.log(
-                message: "Successfully saved \(type.rawValue) to KeyChain: \(value)",
+                "Successfully fetched \(type.rawValue) from KeyChain: \(value)",
                 category: .info,
                 fileName: #file,
                 line: #line
@@ -111,7 +111,7 @@ public final class KeyChainService {
 
         if status == errSecSuccess {
             Logger.log(
-                message: "Successfully deleted \(type.rawValue) from KeyChain",
+                "Successfully deleted \(type.rawValue) from KeyChain",
                 category: .info,
                 fileName: #file,
                 line: #line

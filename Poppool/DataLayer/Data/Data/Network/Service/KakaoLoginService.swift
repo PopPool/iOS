@@ -16,7 +16,7 @@ public final class KakaoLoginService: AuthServiceable {
             UserApi.shared.unlink { error in
                 if let error = error {
                     observer.onNext(())
-                    Logger.log(message: error.localizedDescription, category: .error)
+                    Logger.log(error.localizedDescription, category: .error)
                 } else {
                     observer.onNext(())
                     observer.onCompleted()
@@ -31,7 +31,7 @@ public final class KakaoLoginService: AuthServiceable {
         return Observable.create { [weak self] observer in
             guard let self else {
                 Logger.log(
-                    message: "KakaoTalk login Error",
+                    "KakaoTalk login Error",
                     category: .error,
                     fileName: #file,
                     line: #line
@@ -42,7 +42,7 @@ public final class KakaoLoginService: AuthServiceable {
             // 카카오톡 설치 유무 확인
             guard UserApi.isKakaoTalkLoginAvailable() else {
                 Logger.log(
-                    message: "KakaoTalk is not install",
+                    "KakaoTalk is not install",
                     category: .error,
                     fileName: #file,
                     line: #line

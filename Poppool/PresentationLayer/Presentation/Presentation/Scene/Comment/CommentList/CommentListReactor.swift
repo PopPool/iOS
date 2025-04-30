@@ -303,7 +303,7 @@ final class CommentListReactor: Reactor {
                     let commentList = comment.imageList.compactMap { $0 }
                     self.preSignedUseCase.tryDelete(objectKeyList: commentList)
                         .subscribe(onDisposed: {
-                            Logger.log(message: "S3 Image Delete 완료", category: .info)
+                            Logger.log("S3 Image Delete 완료", category: .info)
                         })
                         .disposed(by: self.disposeBag)
                 case .edit:

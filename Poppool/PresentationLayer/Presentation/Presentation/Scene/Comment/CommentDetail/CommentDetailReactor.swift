@@ -94,14 +94,14 @@ final class CommentDetailReactor: Reactor {
                 newState.commentData.likeCount += 1
                 userAPIUseCase.postCommentLike(commentId: newState.commentData.commentID)
                     .subscribe(onDisposed: {
-                        Logger.log(message: "CommentLike", category: .info)
+                        Logger.log("CommentLike", category: .info)
                     })
                     .disposed(by: disposeBag)
             } else {
                 newState.commentData.likeCount -= 1
                 userAPIUseCase.deleteCommentLike(commentId: newState.commentData.commentID)
                     .subscribe(onDisposed: {
-                        Logger.log(message: "CommentLikeDelete", category: .info)
+                        Logger.log("CommentLikeDelete", category: .info)
                     })
                     .disposed(by: disposeBag)
             }

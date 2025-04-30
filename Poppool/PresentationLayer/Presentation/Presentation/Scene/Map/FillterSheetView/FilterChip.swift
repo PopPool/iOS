@@ -72,7 +72,7 @@ final class FilterChip: UIButton {
         }
 
         let rightPadding: CGFloat = closeButton.isHidden ? 12 : 34
-        contentEdgeInsets = UIEdgeInsets(top: 7, left: 12, bottom: 7, right: rightPadding)
+        contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 7, right: rightPadding)
     }
 
     // MARK: - Actions

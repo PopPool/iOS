@@ -22,22 +22,13 @@ public final class ProviderImpl: Provider {
                 /// 1) endpoint -> urlRequest 생성
                 let urlRequest = try endpoint.getUrlRequest()
 
-                Logger.log(
-                    message: """
-                    [Provider] 최종 요청 URL:
-                    - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-                    - Method: \(urlRequest.httpMethod ?? "알 수 없음")
-                    - Headers: \(urlRequest.allHTTPHeaderFields ?? [:])
-                    요청 시각: \(Date())
-                    """,
-                    category: .debug
-                )
+
 
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in
                         Logger.log(
-                            message: """
+                            """
                             [Provider] 응답 수신:
                             - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
                             - 응답 시각: \(Date())
@@ -63,14 +54,14 @@ public final class ProviderImpl: Provider {
                                 observer.onCompleted()
                             } catch {
                                 Logger.log(
-                                    message: "디코딩 실패: \(error.localizedDescription)",
+                                    "디코딩 실패: \(error.localizedDescription)",
                                     category: .error
                                 )
                                 observer.onError(NetworkError.decodeError)
                             }
 
                         case .failure(let error):
-                            Logger.log(message: "요청 실패 Error:\(error)", category: .error)
+                            Logger.log("요청 실패 Error:\(error)", category: .error)
                             observer.onError(error)
                         }
                     }
@@ -80,7 +71,7 @@ public final class ProviderImpl: Provider {
                 }
 
             } catch {
-                Logger.log(message: "[Provider] URLRequest 생성 실패: \(error.localizedDescription)", category: .error)
+                Logger.log("[Provider] URLRequest 생성 실패: \(error.localizedDescription)", category: .error)
                 observer.onError(NetworkError.urlRequest(error))
                 return Disposables.create()
             }
@@ -101,19 +92,10 @@ public final class ProviderImpl: Provider {
             do {
                 let urlRequest = try request.getUrlRequest()
 
-                Logger.log(
-                    message: """
-                    [Provider] 최종 요청 URL(Completable):
-                    - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-                    - Method: \(urlRequest.httpMethod ?? "알 수 없음")
-                    요청 시각: \(Date())
-                    """,
-                    category: .debug
-                )
 
                 self.executeRequest(urlRequest, interceptor: interceptor) { response in
                     Logger.log(
-                        message: "응답 시각 :\(Date())",
+                        "응답 시각 :\(Date())",
                         category: .network
                     )
 
@@ -132,12 +114,12 @@ public final class ProviderImpl: Provider {
                     case .success:
                         observer(.completed)
                     case .failure(let error):
-                        Logger.log(message: "요청 실패 Error:\(error)", category: .error)
+                        Logger.log("요청 실패 Error:\(error)", category: .error)
                         observer(.error(self.handleRequestError(response: response, error: error)))
                     }
                 }
             } catch {
-                Logger.log(message: "[Provider] URLRequest 생성 실패 (Completable): \(error.localizedDescription)", category: .error)
+                Logger.log("[Provider] URLRequest 생성 실패 (Completable): \(error.localizedDescription)", category: .error)
                 observer(.error(NetworkError.urlRequest(error)))
             }
 
@@ -158,23 +140,16 @@ public final class ProviderImpl: Provider {
 
             do {
                 let urlRequest = try request.asURLRequest()
-                Logger.log(
-                    message: """
-                    [Provider] 이미지 업로드 요청:
-                    - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-                    - Method: \(urlRequest.httpMethod ?? "알 수 없음")
-                    """,
-                    category: .network
-                )
+
 
                 AF.upload(multipartFormData: { multipartFormData in
                     request.asMultipartFormData(multipartFormData: multipartFormData)
-                    Logger.log(message: "업로드 시각 :\(Date())", category: .network)
+                    Logger.log("업로드 시각 :\(Date())", category: .network)
                 }, with: urlRequest, interceptor: interceptor)
                 .validate()
                 .response { response in
                     Logger.log(
-                        message: "이미지 업로드 응답 시각 :\(Date())",
+                        "이미지 업로드 응답 시각 :\(Date())",
                         category: .network
                     )
                     switch response.result {
@@ -200,15 +175,7 @@ private extension ProviderImpl {
         interceptor: RequestInterceptor?,
         completion: @escaping (AFDataResponse<Data?>) -> Void
     ) {
-        // 여기서도 최종 URL 찍을 수 있음
-        Logger.log(
-            message: """
-            [Provider] executeRequest:
-            - URL: \(urlRequest.url?.absoluteString ?? "URL이 없습니다.")
-            요청 시각: \(Date())
-            """,
-            category: .debug
-        )
+      
 
         AF.request(urlRequest, interceptor: interceptor)
             .validate()

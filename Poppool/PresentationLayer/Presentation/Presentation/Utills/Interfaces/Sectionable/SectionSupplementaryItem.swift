@@ -67,7 +67,7 @@ extension SectionSupplementaryItemable {
             for: indexPath
         ) as? ReusableView else {
             Logger.log(
-                message: "ReusableView Error",
+                "ReusableView Error",
                 category: .error,
                 fileName: #file,
                 line: #line

@@ -121,11 +121,9 @@ final class MapGuideReactor: Reactor {
             return Observable.just(.showToast("지원하지 않는 맵 앱입니다."))
         }
 
-        Logger.log(message: "🗺 맵 앱 열기 시도: \(urlScheme)", category: .debug)
 
         if let url = URL(string: urlScheme) {
             if UIApplication.shared.canOpenURL(url) {
-                Logger.log(message: "✅ \(appType) 앱 실행", category: .debug)
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 return Observable.empty()
             } else {
@@ -133,7 +131,7 @@ final class MapGuideReactor: Reactor {
                 if appType.lowercased() == "apple" {
                     return Observable.just(.showToast("애플 지도 앱을 열 수 없습니다."))
                 } else {
-                    Logger.log(message: "❌ \(appType) 앱 미설치 - 앱스토어로 이동", category: .debug)
+                    Logger.log("❌ \(appType) 앱 미설치 - 앱스토어로 이동", category: .debug)
                     if let appStoreURL = URL(string: appStoreUrl) {
                         UIApplication.shared.open(appStoreURL, options: [:], completionHandler: nil)
                     }

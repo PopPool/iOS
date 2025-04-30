@@ -22,26 +22,26 @@ public final class AdminUseCaseImpl: AdminUseCase {
     }
 
     public func createStore(params: CreateStoreParams) -> Completable {
-        Logger.log(message: "createStore 호출 - 스토어명: \(params.name)", category: .debug)
+        Logger.log("createStore 호출 - 스토어명: \(params.name)", category: .debug)
         return repository.createStore(params: params)
             .do(onError: { error in
-                Logger.log(message: "createStore 실패 - Error: \(error)", category: .error)
+                Logger.log("createStore 실패 - Error: \(error)", category: .error)
             }, onCompleted: {
-                Logger.log(message: "createStore 성공", category: .info)
+                Logger.log("createStore 성공", category: .info)
             })
     }
 
     public func updateStore(params: UpdateStoreParams) -> Completable {
-        Logger.log(message: """
+        Logger.log("""
             Updating store with location:
             Latitude: \(params.latitude)
             Longitude: \(params.longitude)
             """, category: .debug)
         return repository.updateStore(params: params)
             .do(onError: { error in
-                Logger.log(message: "Store update failed: \(error)", category: .error)
+                Logger.log("Store update failed: \(error)", category: .error)
             }, onCompleted: {
-                Logger.log(message: "Store update successful", category: .debug)
+                Logger.log("Store update successful", category: .debug)
             })
     }
 
