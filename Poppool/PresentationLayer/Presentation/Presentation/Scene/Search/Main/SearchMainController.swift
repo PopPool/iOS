@@ -9,6 +9,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import Tabman
+import Then
 
 final class SearchMainController: BaseTabmanController, View {
 
@@ -19,23 +20,19 @@ final class SearchMainController: BaseTabmanController, View {
 
     private var mainView = SearchMainView()
 
-    var beforeController: SearchController = {
-        let controller = SearchController()
-        controller.reactor = SearchReactor(
+    var beforeController = SearchController().then {
+        $0.reactor = SearchReactor(
             userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
             popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
         )
-        return controller
-    }()
+    }
 
-    var afterController: SearchResultController = {
-        let controller = SearchResultController()
-        controller.reactor = SearchResultReactor(
+    var afterController = SearchResultController().then {
+        $0.reactor = SearchResultReactor(
             userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
             popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self)
         )
-        return controller
-    }()
+    }
 
     lazy var controllers = [
         beforeController,
@@ -49,7 +46,9 @@ final class SearchMainController: BaseTabmanController, View {
 extension SearchMainController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
+
+        self.addViews()
+        self.setupConstraints()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -68,14 +67,19 @@ extension SearchMainController {
 
 // MARK: - SetUp
 private extension SearchMainController {
-    func setUp() {
-        view.addSubview(mainView)
+    func addViews() {
+        [mainView]
+            .forEach { self.view.addSubview($0) }
+    }
+
+    func setupConstraints() {
+        self.dataSource = self
+        self.isScrollEnabled = false
+
         mainView.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
-        self.dataSource = self
-        self.isScrollEnabled = false
     }
 }
 
@@ -98,25 +102,6 @@ extension SearchMainController {
             })
             .disposed(by: disposeBag)
 
-//        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-//            .withUnretained(self)
-//            .map { (owner, _) in
-//                Reactor.Action.returnSearchKeyWord(text: owner.mainView.searchTextField.text )
-//            }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
-//        
-//        mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-//            .withUnretained(self)
-//            .subscribe(onNext: { (owner, _) in
-//                if let text = owner.mainView.searchTextField.text {
-//                    if !text.isEmpty {
-//                        owner.scrollToPage(.at(index: 1), animated: false)
-//                    }
-//                }
-//                owner.beforeController.reactor?.action.onNext(.returnSearchKeyword(text: owner.mainView.searchTextField.text))
-//            })
-//            .disposed(by: disposeBag)
         mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .withLatestFrom(mainView.searchTextField.rx.text.orEmpty)
             .withUnretained(self)

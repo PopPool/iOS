@@ -23,14 +23,17 @@ final class SearchController: BaseViewController, View {
     private var mainView = SearchView()
     private var sections: [any Sectionable] = []
     private let cellTapped: PublishSubject<IndexPath> = .init()
-    private let pageChange: PublishSubject<Void> = .init()
+    private let loadNextPage = PublishSubject<Void>()
 }
 
 // MARK: - Life Cycle
 extension SearchController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
+
+        self.addViews()
+        self.setupContstraints()
+        self.configureUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -41,36 +44,50 @@ extension SearchController {
 
 // MARK: - SetUp
 private extension SearchController {
-    func setUp() {
+    func addViews() {
+        [mainView].forEach {
+            self.view.addSubview($0)
+        }
+    }
+
+    func setupContstraints() {
+        mainView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+
+    func configureUI() {
         if let layout = reactor?.compositionalLayout {
             mainView.contentCollectionView.collectionViewLayout = layout
         }
+
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
+
         mainView.contentCollectionView.register(
             SearchTitleSectionCell.self,
             forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             SpacingSectionCell.self,
             forCellWithReuseIdentifier: SpacingSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             CancelableTagSectionCell.self,
             forCellWithReuseIdentifier: CancelableTagSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             SearchCountTitleSectionCell.self,
             forCellWithReuseIdentifier: SearchCountTitleSectionCell.identifiers
         )
+
         mainView.contentCollectionView.register(
             HomeCardSectionCell.self,
             forCellWithReuseIdentifier: HomeCardSectionCell.identifiers
         )
-        view.addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
     }
 }
 
@@ -90,17 +107,43 @@ extension SearchController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        pageChange
-            .throttle(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
-            .map { Reactor.Action.changePage }
+        loadNextPage
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
+            .map { Reactor.Action.loadNextPage }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         reactor.state
+            .filter { $0.newBottomSearchList.isEmpty && $0.bottomSearchListLastIndexPath == nil }
             .withUnretained(self)
-            .subscribe { (owner, state) in
+            .subscribe { owner, state in
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .map { (sections: $0.sections,
+                    newItems: $0.newBottomSearchList,
+                    indexPath: $0.bottomSearchListLastIndexPath) }
+            .filter { !$0.newItems.isEmpty && $0.indexPath != nil }
+            .withUnretained(self)
+            .subscribe { (owner, subscribeResponse) in
+                let (updatedSections, newPopUpItems, popUpGridindexPath) = subscribeResponse
+                guard let popUpGridindexPath = popUpGridindexPath else { return }
+
+                let start = popUpGridindexPath.item
+                let count = newPopUpItems.count
+                let section = popUpGridindexPath.section
+                let indexPaths = (start..<start+count).map {
+                    IndexPath(item: $0, section: section)
+                }
+
+                owner.mainView.contentCollectionView.performBatchUpdates {
+                    // 데이터 모델을 업데이트한 뒤 삽입
+                    owner.sections = updatedSections
+                    owner.mainView.contentCollectionView.insertItems(at: indexPaths)
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -122,8 +165,9 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
     ) -> UICollectionViewCell {
         let cell = sections[indexPath.section].getCell(collectionView: collectionView, indexPath: indexPath)
         guard let userDefaultService = reactor?.userDefaultService else { return cell }
-        var searchList = userDefaultService.fetchArray(key: "searchList") ?? []
+        let searchList = userDefaultService.fetchArray(key: "searchList") ?? []
         guard let reactor = reactor else { return cell }
+
         if let cell = cell as? SearchTitleSectionCell {
             cell.titleButton.rx.tap
                 .map { Reactor.Action.recentSearchListAllDeleteButtonTapped }
@@ -168,6 +212,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
                 .bind(to: reactor.action)
                 .disposed(by: cell.disposeBag)
         }
+
         return cell
     }
 
@@ -177,7 +222,7 @@ extension SearchController: UICollectionViewDelegate, UICollectionViewDataSource
         let scrollViewHeight = scrollView.frame.size.height
         let contentOffsetY = scrollView.contentOffset.y
         if contentOffsetY + scrollViewHeight >= contentHeight {
-            pageChange.onNext(())
+            loadNextPage.onNext(())
         }
     }
 

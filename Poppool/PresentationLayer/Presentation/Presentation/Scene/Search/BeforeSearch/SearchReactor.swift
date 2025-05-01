@@ -21,7 +21,7 @@ final class SearchReactor: Reactor {
         case changeCategory(categoryList: [Int64], categoryTitleList: [String?])
         case categoryDelteButtonTapped(indexPath: IndexPath)
         case resetCategory
-        case changePage
+        case loadNextPage
         case bookmarkButtonTapped(indexPath: IndexPath)
         case resetSearchKeyWord
     }
@@ -33,11 +33,29 @@ final class SearchReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case setSearchKeyWord(text: String?)
         case resetSearchKeyWord
+        case updateBottomSearchList(newItems: [HomeCardSectionCell.Input], IndexPath: IndexPath)
     }
 
     struct State {
         var sections: [any Sectionable] = []
         var searchKeyWord: String?
+        var newBottomSearchList: [HomeCardSectionCell.Input] = []
+        var bottomSearchListLastIndexPath: IndexPath?
+
+        mutating func resetPaginationState() {
+            self.newBottomSearchList = []
+            self.bottomSearchListLastIndexPath = nil
+        }
+
+        mutating func updateBottomGridSection(by newItems: [HomeCardSectionCell.Input]) {
+            sections = sections.map { section in
+                if var grid = section as? HomeCardGridSection {
+                    grid.inputDataList.append(contentsOf: newItems)
+                    return grid
+                }
+                return section
+            }
+        }
     }
 
     // MARK: - properties
@@ -102,18 +120,11 @@ final class SearchReactor: Reactor {
         switch action {
         case .resetSearchKeyWord:
             return Observable.just(.resetSearchKeyWord)
-        case .changePage:
-            if isLoading {
-                return Observable.just(.loadView)
-            } else {
-                if currentPage < lastPage {
-                    isLoading = true
-                    currentPage += 1
-                    return setBottomSearchList(sort: sort)
-                } else {
-                    return Observable.just(.loadView)
-                }
-            }
+        case .loadNextPage:
+            guard !isLoading, currentPage < lastPage else { return Observable.empty() }
+            isLoading = true
+            currentPage += 1
+            return setBottomSearchList(sort: sort)
         case .viewWillAppear:
             setSearchList()
             return setBottomSearchList(sort: sort)
@@ -186,6 +197,7 @@ final class SearchReactor: Reactor {
         switch mutation {
         case .loadView:
             newState.sections = getSection()
+            newState.resetPaginationState()
         case .moveToCategoryScene(let controller):
             let categoryIDList = searchCategorySection.inputDataList.compactMap { $0.id }
             let nextController = SearchCategoryController()
@@ -236,6 +248,11 @@ final class SearchReactor: Reactor {
         case .resetSearchKeyWord:
             newState.searchKeyWord = nil
             newState.sections = getSection()
+
+        case .updateBottomSearchList(let newItems, let indexPath):
+            newState.updateBottomGridSection(by: newItems)
+            newState.newBottomSearchList = newItems
+            newState.bottomSearchListLastIndexPath = indexPath
         }
         return newState
     }
@@ -306,52 +323,69 @@ final class SearchReactor: Reactor {
     }
 
     func setBottomSearchList(sort: String?) -> Observable<Mutation> {
-        let isOpen = filterIndex == 0 ? true : false
-        let categorys = searchCategorySection.inputDataList.compactMap { $0.id }
-        return popUpAPIUseCase.getSearchBottomPopUpList(isOpen: isOpen, categories: categorys, page: currentPage, size: 50, sort: sort)
-            .withUnretained(self)
-            .map { (owner, response) in
-                let isLogin = response.loginYn
-                if owner.currentPage == 0 {
-                    owner.searchListSection.inputDataList = response.popUpStoreList.map {
-                        return .init(
-                            imagePath: $0.mainImageUrl,
-                            id: $0.id,
-                            category: $0.category,
-                            title: $0.name,
-                            address: $0.address,
-                            startDate: $0.startDate,
-                            endDate: $0.endDate,
-                            isBookmark: $0.bookmarkYn,
-                            isLogin: isLogin
-                        )
-                    }
-                } else {
-                    if owner.currentPage != owner.lastAppendPage {
-                        owner.lastAppendPage = owner.currentPage
-                        let newData = response.popUpStoreList.map {
-                            return HomeCardSectionCell.Input(
-                                imagePath: $0.mainImageUrl,
-                                id: $0.id,
-                                category: $0.category,
-                                title: $0.name,
-                                address: $0.address,
-                                startDate: $0.startDate,
-                                endDate: $0.endDate,
-                                isBookmark: $0.bookmarkYn,
-                                isLogin: isLogin
-                            )
-                        }
-                        owner.searchListSection.inputDataList.append(contentsOf: newData)
-                    }
-                }
+        let isOpen = filterIndex == 0
+        let categories = searchCategorySection.inputDataList.compactMap { $0.id }
+
+        return popUpAPIUseCase.getSearchBottomPopUpList(
+            isOpen: isOpen,
+            categories: categories,
+            page: currentPage,
+            size: 10,
+            sort: sort
+        )
+        .withUnretained(self)
+        .map { (owner, response) in
+            // 1) 새로 받아오기 전의 기존 아이템 개수 저장
+            let previousCount = owner.searchListSection.inputDataList.count
+
+            // 2) API 결과 매핑
+            let newItems = response.popUpStoreList.map {
+                HomeCardSectionCell.Input(
+                    imagePath: $0.mainImageUrl,
+                    id: $0.id,
+                    category: $0.category,
+                    title: $0.name,
+                    address: $0.address,
+                    startDate: $0.startDate,
+                    endDate: $0.endDate,
+                    isBookmark: $0.bookmarkYn,
+                    isLogin: response.loginYn
+                )
+            }
+
+            // 3) 첫 페이지 vs 이후 페이지 분기
+            if owner.currentPage == 0 {
+                // 첫 페이지는 전체 reload
+                // SearchCountTitleSection 설정
                 let isOpenString = isOpen ? "오픈・" : "종료・"
                 let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
                 let sortedTitle = isOpenString + sortedString
-                owner.searchSortedSection.inputDataList = [.init(count: response.totalElements, sortedTitle: sortedTitle)]
+                owner.searchSortedSection.inputDataList = [
+                    SearchCountTitleSectionCell.Input(
+                        count: response.totalElements,
+                        sortedTitle: sortedTitle
+                    )
+                ]
+                owner.searchListSection.inputDataList = newItems
+                owner.lastAppendPage = owner.currentPage
                 owner.lastPage = response.totalPages
                 owner.isLoading = false
                 return .loadView
+            } else {
+                // 다음 페이지는 append 후 부분 업데이트
+                owner.lastAppendPage = owner.currentPage
+                owner.searchListSection.inputDataList.append(contentsOf: newItems)
+                owner.lastPage = response.totalPages
+                owner.isLoading = false
+
+                // HomeCardGridSection이 컬렉션뷰에서 몇 번째 섹션인지 계산
+                let sectionIndex = owner.getSection().enumerated()
+                    .first { _, section in section is HomeCardGridSection }!.offset
+
+                // append된 첫 아이템의 IndexPath
+                let firstIndexPath = IndexPath(item: previousCount, section: sectionIndex)
+                return .updateBottomSearchList(newItems: newItems, IndexPath: firstIndexPath)
             }
+        }
     }
 }
