@@ -47,6 +47,15 @@ final class SearchReactor: Reactor {
             self.bottomSearchListLastIndexPath = nil
         }
 
+        mutating func updateBottomGridSection(by newItems: [HomeCardSectionCell.Input]) {
+            sections = sections.map { section in
+                if var grid = section as? HomeCardGridSection {
+                    grid.inputDataList.append(contentsOf: newItems)
+                    return grid
+                }
+                return section
+            }
+        }
     }
 
     // MARK: - properties
@@ -239,6 +248,10 @@ final class SearchReactor: Reactor {
         case .resetSearchKeyWord:
             newState.searchKeyWord = nil
             newState.sections = getSection()
+        case .updateBottomSearchList(let newItems, let indexPath):
+            newState.updateBottomGridSection(by: newItems)
+            newState.newBottomSearchList = newItems
+            newState.bottomSearchListLastIndexPath = indexPath
         }
         return newState
     }
