@@ -22,8 +22,6 @@ public final class ProviderImpl: Provider {
                 /// 1) endpoint -> urlRequest 생성
                 let urlRequest = try endpoint.getUrlRequest()
 
-
-
                 let request = AF.request(urlRequest, interceptor: interceptor)
                     .validate()
                     .responseData { [weak self] response in
@@ -92,7 +90,6 @@ public final class ProviderImpl: Provider {
             do {
                 let urlRequest = try request.getUrlRequest()
 
-
                 self.executeRequest(urlRequest, interceptor: interceptor) { response in
                     Logger.log(
                         "응답 시각 :\(Date())",
@@ -141,7 +138,6 @@ public final class ProviderImpl: Provider {
             do {
                 let urlRequest = try request.asURLRequest()
 
-
                 AF.upload(multipartFormData: { multipartFormData in
                     request.asMultipartFormData(multipartFormData: multipartFormData)
                     Logger.log("업로드 시각 :\(Date())", category: .network)
@@ -175,7 +171,6 @@ private extension ProviderImpl {
         interceptor: RequestInterceptor?,
         completion: @escaping (AFDataResponse<Data?>) -> Void
     ) {
-      
 
         AF.request(urlRequest, interceptor: interceptor)
             .validate()

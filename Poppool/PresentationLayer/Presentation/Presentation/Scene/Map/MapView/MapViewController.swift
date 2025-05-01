@@ -1335,8 +1335,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
             if let store = nearestStore, let marker = findMarkerForStore(for: store) {
                 _ = handleSingleStoreTap(marker, store: store)
-            }
-            else if let store = nearestStore {
+            } else if let store = nearestStore {
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: store.latitude, lng: store.longitude)
                 marker.userInfo = ["storeData": store]
@@ -1514,15 +1513,13 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         func mapView(_ mapView: NMFMapView, didTap marker: NMFMarker) -> Bool {
             if let clusterData = marker.userInfo["clusterData"] as? ClusterMarkerData {
                 return handleRegionalClusterTap(marker, clusterData: clusterData)
-            }
-            else if let storeArray = marker.userInfo["storeData"] as? [MapPopUpStore] {
+            } else if let storeArray = marker.userInfo["storeData"] as? [MapPopUpStore] {
                 if storeArray.count > 1 {
                     return handleMicroClusterTap(marker, storeArray: storeArray)
                 } else if let singleStore = storeArray.first {
                     return handleSingleStoreTap(marker, store: singleStore)
                 }
-            }
-            else if let singleStore = marker.userInfo["storeData"] as? MapPopUpStore {
+            } else if let singleStore = marker.userInfo["storeData"] as? MapPopUpStore {
                 return handleSingleStoreTap(marker, store: singleStore)
             }
             return false
