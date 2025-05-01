@@ -248,6 +248,7 @@ final class SearchReactor: Reactor {
         case .resetSearchKeyWord:
             newState.searchKeyWord = nil
             newState.sections = getSection()
+
         case .updateBottomSearchList(let newItems, let indexPath):
             newState.updateBottomGridSection(by: newItems)
             newState.newBottomSearchList = newItems
@@ -334,7 +335,10 @@ final class SearchReactor: Reactor {
         )
         .withUnretained(self)
         .map { (owner, response) in
-            let isLogin = response.loginYn
+            // 1) 새로 받아오기 전의 기존 아이템 개수 저장
+            let previousCount = owner.searchListSection.inputDataList.count
+
+            // 2) API 결과 매핑
             let newItems = response.popUpStoreList.map {
                 HomeCardSectionCell.Input(
                     imagePath: $0.mainImageUrl,
@@ -345,10 +349,11 @@ final class SearchReactor: Reactor {
                     startDate: $0.startDate,
                     endDate: $0.endDate,
                     isBookmark: $0.bookmarkYn,
-                    isLogin: isLogin
+                    isLogin: response.loginYn
                 )
             }
 
+            // 3) 첫 페이지 vs 이후 페이지 분기
             if owner.currentPage == 0 {
                 // 첫 페이지는 전체 reload
                 // SearchCountTitleSection 설정
