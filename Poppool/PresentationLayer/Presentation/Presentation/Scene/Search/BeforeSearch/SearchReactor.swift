@@ -42,6 +42,11 @@ final class SearchReactor: Reactor {
         var newBottomSearchList: [HomeCardSectionCell.Input] = []
         var bottomSearchListLastIndexPath: IndexPath?
 
+        mutating func resetPaginationState() {
+            self.newBottomSearchList = []
+            self.bottomSearchListLastIndexPath = nil
+        }
+
     }
 
     // MARK: - properties
@@ -183,6 +188,7 @@ final class SearchReactor: Reactor {
         switch mutation {
         case .loadView:
             newState.sections = getSection()
+            newState.resetPaginationState()
         case .moveToCategoryScene(let controller):
             let categoryIDList = searchCategorySection.inputDataList.compactMap { $0.id }
             let nextController = SearchCategoryController()
