@@ -114,8 +114,9 @@ extension SearchController {
             .disposed(by: disposeBag)
 
         reactor.state
+            .filter { $0.newBottomSearchList.isEmpty && $0.bottomSearchListLastIndexPath == nil }
             .withUnretained(self)
-            .subscribe { (owner, state) in
+            .subscribe { owner, state in
                 owner.sections = state.sections
                 owner.mainView.contentCollectionView.reloadData()
             }
