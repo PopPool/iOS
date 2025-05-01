@@ -339,16 +339,25 @@ final class SearchReactor: Reactor {
                     )
                 ]
                 owner.searchListSection.inputDataList = newItems
-            } else if owner.currentPage != owner.lastAppendPage {
+                owner.lastAppendPage = owner.currentPage
+                owner.lastPage = response.totalPages
+                owner.isLoading = false
+                return .loadView
+            } else {
+                // 다음 페이지는 append 후 부분 업데이트
                 owner.lastAppendPage = owner.currentPage
                 owner.searchListSection.inputDataList.append(contentsOf: newItems)
+                owner.lastPage = response.totalPages
+                owner.isLoading = false
+
+                // HomeCardGridSection이 컬렉션뷰에서 몇 번째 섹션인지 계산
+                let sectionIndex = owner.getSection().enumerated()
+                    .first { _, section in section is HomeCardGridSection }!.offset
+
+                // append된 첫 아이템의 IndexPath
+                let firstIndexPath = IndexPath(item: previousCount, section: sectionIndex)
+                return .updateBottomSearchList(newItems: newItems, IndexPath: firstIndexPath)
             }
-
-
-
-            owner.lastPage = response.totalPages
-            owner.isLoading = false
-            return .loadView
         }
     }
 }
