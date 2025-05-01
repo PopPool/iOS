@@ -33,11 +33,15 @@ final class SearchReactor: Reactor {
         case moveToDetailScene(controller: BaseViewController, indexPath: IndexPath)
         case setSearchKeyWord(text: String?)
         case resetSearchKeyWord
+        case updateBottomSearchList(newItems: [HomeCardSectionCell.Input], IndexPath: IndexPath)
     }
 
     struct State {
         var sections: [any Sectionable] = []
         var searchKeyWord: String?
+        var newBottomSearchList: [HomeCardSectionCell.Input] = []
+        var bottomSearchListLastIndexPath: IndexPath?
+
     }
 
     // MARK: - properties
