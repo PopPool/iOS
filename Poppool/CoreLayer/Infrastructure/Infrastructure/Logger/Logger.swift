@@ -58,17 +58,14 @@ public struct Logger {
                 return .debug
             case .info:
                 return .info
-            case .error:
-                return .error
-            case .fault:
-                return .fault
+            case .error: return .error
+            case .fault: return .fault
             }
         }
     }
 
-    /// : 아래 옵션 주석 해제시 파일명/라인 번호를 로그 메시지에 포함
-    // private static var isShowFileName: Bool = false // 파일 이름 포함 여부
-    // private static var isShowLine: Bool = true     // 라인 번호 포함 여부
+    private static var isShowFileName: Bool = false
+    private static var isShowLine: Bool = true
     private static var isShowLog: Bool = true
 
     private static var loggers: [Level: os.Logger] = [:]
@@ -84,23 +81,26 @@ public struct Logger {
         return logger
     }
 
-    /// : 파일명과 라인 정보 파라미터 포함
-    // public static func log(
-    //     _ message: Any,
-    //     category: Level,
-    //     level: LogLevel = .info,
-    //     fileName: String = #file,
-    //     line: Int = #line
-    // ) {
     public static func log(
         _ message: Any,
         category: Level,
-        level: LogLevel = .info
+        level: LogLevel = .info,
+        file: String = #file,
+        line: Int = #line
     ) {
         guard isShowLog else { return }
 
         let logger = getLogger(for: category)
-        let fullMessage = "\(category.categoryIcon) \(message)"
+        var fullMessage = "\(category.categoryIcon) \(message)"
+
+        if isShowFileName {
+            let fileNameOnly = (file as NSString).lastPathComponent
+            fullMessage += " | 📁 \(fileNameOnly)"
+        }
+
+        if isShowLine {
+            fullMessage += " | 📍 \(line)"
+        }
 
         logger.log(level: level.osLogType, "\(fullMessage, privacy: .public)")
     }
