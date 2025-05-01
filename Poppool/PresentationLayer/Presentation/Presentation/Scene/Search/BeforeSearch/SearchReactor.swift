@@ -299,7 +299,7 @@ final class SearchReactor: Reactor {
     }
 
     func setBottomSearchList(sort: String?) -> Observable<Mutation> {
-        let isOpen = filterIndex == 0 ? true : false
+        let isOpen = filterIndex == 0
         let categories = searchCategorySection.inputDataList.compactMap { $0.id }
 
         return popUpAPIUseCase.getSearchBottomPopUpList(
@@ -327,22 +327,24 @@ final class SearchReactor: Reactor {
             }
 
             if owner.currentPage == 0 {
+                // 첫 페이지는 전체 reload
+                // SearchCountTitleSection 설정
+                let isOpenString = isOpen ? "오픈・" : "종료・"
+                let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
+                let sortedTitle = isOpenString + sortedString
+                owner.searchSortedSection.inputDataList = [
+                    SearchCountTitleSectionCell.Input(
+                        count: response.totalElements,
+                        sortedTitle: sortedTitle
+                    )
+                ]
                 owner.searchListSection.inputDataList = newItems
             } else if owner.currentPage != owner.lastAppendPage {
                 owner.lastAppendPage = owner.currentPage
                 owner.searchListSection.inputDataList.append(contentsOf: newItems)
             }
 
-            let isOpenString = isOpen ? "오픈・" : "종료・"
-            let sortedString = owner.sortedIndex == 0 ? "신규순" : "인기순"
-            let sortedTitle = isOpenString + sortedString
 
-            owner.searchSortedSection.inputDataList = [
-                SearchCountTitleSectionCell.Input(
-                    count: response.totalElements,
-                    sortedTitle: sortedTitle
-                )
-            ]
 
             owner.lastPage = response.totalPages
             owner.isLoading = false
