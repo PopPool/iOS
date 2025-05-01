@@ -48,7 +48,7 @@ extension SearchMainController {
         super.viewDidLoad()
 
         self.addViews()
-        self.setupContstraints()
+        self.setupConstraints()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -72,7 +72,7 @@ private extension SearchMainController {
             .forEach { self.view.addSubview($0) }
     }
 
-    func setupContstraints() {
+    func setupConstraints() {
         self.dataSource = self
         self.isScrollEnabled = false
 
