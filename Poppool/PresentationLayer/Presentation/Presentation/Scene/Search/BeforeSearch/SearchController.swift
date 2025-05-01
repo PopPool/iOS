@@ -121,6 +121,31 @@ extension SearchController {
                 owner.mainView.contentCollectionView.reloadData()
             }
             .disposed(by: disposeBag)
+
+        reactor.state
+            .map { (sections: $0.sections,
+                    newItems: $0.newBottomSearchList,
+                    indexPath: $0.bottomSearchListLastIndexPath) }
+            .filter { !$0.newItems.isEmpty && $0.indexPath != nil }
+            .withUnretained(self)
+            .subscribe { (owner, subscribeResponse) in
+                let (updatedSections, newPopUpItems, popUpGridindexPath) = subscribeResponse
+                guard let popUpGridindexPath = popUpGridindexPath else { return }
+
+                let start = popUpGridindexPath.item
+                let count = newPopUpItems.count
+                let section = popUpGridindexPath.section
+                let indexPaths = (start..<start+count).map {
+                    IndexPath(item: $0, section: section)
+                }
+
+                owner.mainView.contentCollectionView.performBatchUpdates {
+                    // 데이터 모델을 업데이트한 뒤 삽입
+                    owner.sections = updatedSections
+                    owner.mainView.contentCollectionView.insertItems(at: indexPaths)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 
