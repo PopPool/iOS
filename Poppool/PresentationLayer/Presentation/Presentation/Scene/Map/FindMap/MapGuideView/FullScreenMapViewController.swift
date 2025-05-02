@@ -3,6 +3,7 @@ import UIKit
 
 import DomainInterface
 import Infrastructure
+import DesignSystem
 
 import NMapsMap
 import RxCocoa

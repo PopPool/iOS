@@ -7,6 +7,8 @@
 
 import UIKit
 
+import DesignSystem
+
 import RxSwift
 
 struct HomeCardGridSection: Sectionable {

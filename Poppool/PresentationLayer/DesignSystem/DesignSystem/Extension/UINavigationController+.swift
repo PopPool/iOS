@@ -1,13 +1,6 @@
-//
-//  UINavigationController+.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/7/25.
-//
-
 import UIKit
 
-extension UINavigationController {
+public extension UINavigationController {
     func popViewController(animated: Bool, completion: (() -> Void)?) {
         CATransaction.begin()
         CATransaction.setCompletionBlock {

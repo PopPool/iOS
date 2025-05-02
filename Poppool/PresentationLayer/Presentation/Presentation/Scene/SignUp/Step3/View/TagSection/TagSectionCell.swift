@@ -1,11 +1,6 @@
-//
-//  TagSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 import SnapKit

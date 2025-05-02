@@ -1,11 +1,6 @@
-//
-//  SectionBackGroundDecorationView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/30/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 class SectionBackGroundDecorationView: UICollectionReusableView {
     // Decoration view의 UI 요소를 추가합니다.

@@ -1,9 +1,4 @@
-//
-//  SearchSortedReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/6/24.
-//
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

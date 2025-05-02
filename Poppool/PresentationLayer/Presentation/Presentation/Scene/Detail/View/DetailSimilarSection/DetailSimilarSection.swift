@@ -1,11 +1,6 @@
-//
-//  DetailSimilarSection.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/19/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		05125B982DB626E3001342A2 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B972DB626E3001342A2 /* ReactorKit */; };
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
+		051631302DC3D1FD00A6C0D1 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; };
+		051631312DC3D1FD00A6C0D1 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1E02DB67C8300B141FF /* RxSwift */; };
 		05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CB2DB6756500C1E192 /* SnapKit */; };
 		05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CE2DB6770300C1E192 /* Lottie */; };
@@ -31,6 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				051631312DC3D1FD00A6C0D1 /* DesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		058CC9042DB537960084221A /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D62A2DB53A8200508FFD /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D62B2DB53A8200508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +61,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08B2A3672DB66BD400E57EFA /* Pageboy in Frameworks */,
+				051631302DC3D1FD00A6C0D1 /* DesignSystem.framework in Frameworks */,
 				05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */,
 				08B2A36A2DB66BF200E57EFA /* RxGesture in Frameworks */,
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
@@ -97,6 +102,7 @@
 		05C1D6292DB53A8200508FFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */,
 				05C1D62A2DB53A8200508FFD /* DomainInterface.framework */,
 				05C1D62B2DB53A8200508FFD /* Infrastructure.framework */,
 			);
@@ -372,11 +378,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Presentation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -405,11 +415,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Presentation;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

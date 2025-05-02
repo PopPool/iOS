@@ -1,15 +1,8 @@
-//
-//  PPLabel.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
 
-class PPLabel: UILabel {
+public class PPLabel: UILabel {
 
-    init(
+    public init(
         style: UIFont.FontStyle,
         fontSize: CGFloat,
         text: String = "",

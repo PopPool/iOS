@@ -7,7 +7,7 @@ import SnapKit
 
 /// `Sectionable` 프로토콜은 컬렉션 뷰의 섹션 및 셀을 설정하기 위한 인터페이스를 정의합니다.
 /// 해당 프로토콜은 제네릭 타입 `CellType`을 사용하여 유연하게 컬렉션 뷰 셀을 처리할 수 있습니다.
-protocol Sectionable {
+public protocol Sectionable {
 
     /// 컬렉션 뷰 셀의 타입을 정의합니다. 이 셀은 `UICollectionViewCell`과 `Inputable` 프로토콜을 준수해야 합니다.
     associatedtype CellType: UICollectionViewCell, Inputable
@@ -62,7 +62,7 @@ protocol Sectionable {
     ) -> UICollectionReusableView
 }
 
-extension Sectionable {
+public extension Sectionable {
 
     /// `setSection` 메서드를 호출하여 섹션 레이아웃을 설정하고, Supplementary View를 추가합니다.
     ///

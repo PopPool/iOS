@@ -1,11 +1,6 @@
-//
-//  SignUpCompleteController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/27/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

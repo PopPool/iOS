@@ -1,20 +1,14 @@
-//
-//  PPPicker.swift
-//  PopPool
-//
-//  Created by SeoJunYoung on 7/3/24.
-//
+import UIKit
 
 import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
 
-final class PPPicker: UIView {
+public final class PPPicker: UIView {
 
     // MARK: - Components
     private let components: [String]
-    let pickerView = UIPickerView()
+    public let pickerView = UIPickerView()
     private var selectView: UIView = {
         let view = UIView()
         view.backgroundColor = .g50
@@ -28,7 +22,7 @@ final class PPPicker: UIView {
     // MARK: - init
      /// PickerCPNT init
      /// - Parameter components: UIPickerView에 표시할 문자열 배열입니다.
-    init(components: [String]) {
+    public init(components: [String]) {
         self.components = components
         super.init(frame: .zero)
         setUp()
@@ -78,22 +72,22 @@ extension PPPicker {
 
     /// 지정된 인덱스로 UIPickerView를 설정
     /// - Parameter index: 설정할 인덱스 값
-    func setIndex(index: Int) {
+    public func setIndex(index: Int) {
         pickerView.selectRow(index, inComponent: 0, animated: true)
     }
 }
 
 // MARK: - Delegate
 extension PPPicker: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
 
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return components.count
     }
 
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+    public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         let label = UILabel()
         label.text = components[row]
         label.textAlignment = .center
@@ -107,11 +101,11 @@ extension PPPicker: UIPickerViewDelegate, UIPickerViewDataSource {
         return label
     }
 
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    public func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 48
     }
 
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         pickerView.reloadAllComponents()
     }
 }

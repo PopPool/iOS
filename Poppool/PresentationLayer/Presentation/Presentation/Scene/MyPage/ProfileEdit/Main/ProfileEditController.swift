@@ -2,6 +2,7 @@ import PhotosUI
 import UIKit
 
 import Infrastructure
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

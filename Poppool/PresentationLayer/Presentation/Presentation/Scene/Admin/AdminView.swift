@@ -1,6 +1,9 @@
+import UIKit
+
+import DesignSystem
+
 import SnapKit
 import Then
-import UIKit
 
 final class AdminView: UIView {
 

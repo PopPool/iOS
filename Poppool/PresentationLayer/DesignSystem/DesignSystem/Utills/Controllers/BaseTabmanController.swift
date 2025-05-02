@@ -5,8 +5,8 @@ import Infrastructure
 import Pageboy
 import Tabman
 
-class BaseTabmanController: TabmanViewController {
-    init() {
+open class BaseTabmanController: TabmanViewController {
+    public init() {
         super.init(nibName: nil, bundle: nil)
         Logger.log(
             message: "\(self) init",
@@ -16,11 +16,11 @@ class BaseTabmanController: TabmanViewController {
         )
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         self.navigationController?.navigationBar.isHidden = true

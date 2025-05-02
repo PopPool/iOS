@@ -2,6 +2,7 @@ import UIKit
 
 import DomainInterface
 import Infrastructure
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

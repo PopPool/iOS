@@ -1,11 +1,6 @@
-//
-//  AgeSelectedButton.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/26/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 

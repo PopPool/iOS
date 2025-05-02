@@ -1,13 +1,6 @@
-//
-//  UIView+.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/2/24.
-//
-
 import UIKit
 
-extension UIView {
+public extension UIView {
     func shake() {
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
         animation.timingFunction = CAMediaTimingFunction(name: .linear)

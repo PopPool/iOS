@@ -1,11 +1,6 @@
-//
-//  AddCommentSection.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/15/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 

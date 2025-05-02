@@ -1,15 +1,8 @@
-//
-//  PPButton.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
 
-class PPButton: UIButton {
+public class PPButton: UIButton {
 
-    enum ButtonStyle {
+    public enum ButtonStyle {
         case primary
         case secondary
         case tertiary
@@ -69,7 +62,7 @@ class PPButton: UIButton {
         }
     }
 
-    init(
+    public init(
         style: ButtonStyle,
         text: String,
         disabledText: String = "",
@@ -100,7 +93,7 @@ class PPButton: UIButton {
     /// - Parameters:
     ///   - color: 색상
     ///   - state: 상태
-    func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
+    public func setBackgroundColor(_ color: UIColor, for state: UIControl.State) {
         UIGraphicsBeginImageContext(CGSize(width: 1.0, height: 1.0))
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.setFillColor(color.cgColor)

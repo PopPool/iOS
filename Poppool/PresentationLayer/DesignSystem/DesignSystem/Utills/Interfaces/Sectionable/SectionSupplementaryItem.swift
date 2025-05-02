@@ -4,19 +4,19 @@ import Infrastructure
 
 /// `SectionSupplementaryItem` 구조체는 섹션에 추가될 Supplementary View에 대한 정보를 정의합니다.
 /// 제네릭 타입 `View`는 `UICollectionReusableView`와 `InOutputable` 프로토콜을 준수해야 합니다.
-struct SectionSupplementaryItem<View: UICollectionReusableView & Inputable>: SectionSupplementaryItemable {
-    typealias ReusableView = View
-    var widthDimension: NSCollectionLayoutDimension
-    var heightDimension: NSCollectionLayoutDimension
-    var elementKind: String
-    var alignment: NSRectAlignment
-    var reusableView: ReusableView
-    var viewInput: ReusableView.Input
+public struct SectionSupplementaryItem<View: UICollectionReusableView & Inputable>: SectionSupplementaryItemable {
+    public typealias ReusableView = View
+    public var widthDimension: NSCollectionLayoutDimension
+    public var heightDimension: NSCollectionLayoutDimension
+    public var elementKind: String
+    public var alignment: NSRectAlignment
+    public var reusableView: ReusableView
+    public var viewInput: ReusableView.Input
 }
 
 /// `SectionSupplementaryItemable` 프로토콜은 Supplementary View에 대한 인터페이스를 정의합니다.
 /// 해당 프로토콜을 준수하는 타입은 Supplementary View를 설정하고 반환하는 기능을 가져야 합니다.
-protocol SectionSupplementaryItemable {
+public protocol SectionSupplementaryItemable {
 
     /// Supplementary View의 타입을 정의합니다. 이 뷰는 `UICollectionReusableView`와 `Inputable` 프로토콜을 준수해야 합니다.
     associatedtype ReusableView: UICollectionReusableView, Inputable

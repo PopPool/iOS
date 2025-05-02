@@ -1,17 +1,10 @@
-//
-//  PPProgressIndicator.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
+import UIKit
 
-import Foundation
 import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
 
-final class PPProgressIndicator: UIStackView {
+public final class PPProgressIndicator: UIStackView {
 
     // MARK: - Properties
     private var progressViews: [PPProgressView]
@@ -22,7 +15,7 @@ final class PPProgressIndicator: UIStackView {
     /// - Parameters:
     ///   - totalStep: 전체 단계 수
     ///   - startPoint: 초기 시작 지점 (1부터 시작하는 인덱스)
-    init(totalStep: Int, startPoint: Int) {
+    public init(totalStep: Int, startPoint: Int) {
         self.progressViews = (1...totalStep).map({ index in
             return PPProgressView(isSelected: index == startPoint)
         })
@@ -59,7 +52,7 @@ private extension PPProgressIndicator {
 extension PPProgressIndicator {
 
     /// 진행 인디케이터를 한 단계 앞으로 이동
-    func increaseIndicator() {
+    public func increaseIndicator() {
         if progressIndex < progressViews.count {
             progressViews[progressIndex - 1].disappearAnimation(option: .fromLeft)
             progressIndex += 1
@@ -68,7 +61,7 @@ extension PPProgressIndicator {
     }
 
     /// 진행 인디케이터를 한 단계 뒤로 이동
-    func decreaseIndicator() {
+    public func decreaseIndicator() {
         if progressIndex - 1 > 0 {
             progressViews[progressIndex - 1].disappearAnimation(option: .fromRight)
             progressIndex -= 1

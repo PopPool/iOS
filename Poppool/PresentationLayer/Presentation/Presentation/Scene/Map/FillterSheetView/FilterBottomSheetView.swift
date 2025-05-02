@@ -1,5 +1,8 @@
-import SnapKit
 import UIKit
+
+import DesignSystem
+
+import SnapKit
 
 final class FilterBottomSheetView: UIView {
     // MARK: - UI Components

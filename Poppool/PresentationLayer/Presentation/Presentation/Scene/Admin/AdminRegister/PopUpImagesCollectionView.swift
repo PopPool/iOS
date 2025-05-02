@@ -1,5 +1,7 @@
 import UIKit
 
+import DesignSystem
+
 import SnapKit
 
 final class PopUpImagesCollectionView: UICollectionView {

@@ -1,17 +1,11 @@
-//
-//  PPSegmentedControl.swift
-//  PopPool
-//
-//  Created by SeoJunYoung on 6/27/24.
-//
-
-import SnapKit
 import UIKit
 
-final class PPSegmentedControl: UISegmentedControl {
+import SnapKit
+
+public final class PPSegmentedControl: UISegmentedControl {
 
     /// 세그먼트 컨트롤 타입
-    enum SegmentedControlType {
+    public enum SegmentedControlType {
         case radio
         case base
         case tab
@@ -32,7 +26,7 @@ final class PPSegmentedControl: UISegmentedControl {
         return view
     }()
 
-    init(type: SegmentedControlType, segments: [String], selectedSegmentIndex: Int? = nil) {
+    public init(type: SegmentedControlType, segments: [String], selectedSegmentIndex: Int? = nil) {
         super.init(frame: .zero)
         setUpSegments(type: type, segments: segments)
         if let selectedSegmentIndex = selectedSegmentIndex {
@@ -46,7 +40,7 @@ final class PPSegmentedControl: UISegmentedControl {
     }
 
     /// 서브뷰 레이아웃 설정
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         // layout이 업데이트 될 때 underbar 업데이트
         let underlineFinalXPosition = (self.bounds.width / CGFloat(self.numberOfSegments)) * CGFloat(self.selectedSegmentIndex)
@@ -66,7 +60,7 @@ private extension PPSegmentedControl {
     /// - Parameters:
     ///   - type: 세그먼트 컨트롤 타입
     ///   - segments: 세그먼트 타이틀 배열
-    func setUpSegments(type: SegmentedControlType, segments: [String]) {
+    public func setUpSegments(type: SegmentedControlType, segments: [String]) {
         let emptyImage = UIImage()
         for seg in segments.reversed() {
             self.insertSegment(withTitle: seg, at: 0, animated: true)
@@ -128,7 +122,7 @@ private extension PPSegmentedControl {
     ///   - color: 폰트 색상
     ///   - font: 폰트 스타일
     ///   - state: 세그먼트 상태
-    func setFont(color: UIColor, font: UIFont?, state: UIControl.State) {
+    public func setFont(color: UIColor, font: UIFont?, state: UIControl.State) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.2
         self.setTitleTextAttributes([

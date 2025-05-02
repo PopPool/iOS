@@ -1,5 +1,3 @@
-import Foundation
-
 import UIKit
 
 public extension UIFont {
@@ -11,7 +9,7 @@ public extension UIFont {
         return UIFont(name: "Poppins\(style.rawValue)", size: size)
     }
 
-    enum FontStyle: String {
+    public enum FontStyle: String {
         case bold = "-Bold"
         case medium = "-Medium"
         case regular = "-Regular"

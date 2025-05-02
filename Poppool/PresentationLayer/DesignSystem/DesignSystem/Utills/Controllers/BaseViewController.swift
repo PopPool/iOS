@@ -5,9 +5,9 @@ import Infrastructure
 import RxCocoa
 import RxSwift
 
-public class BaseViewController: UIViewController {
+open class BaseViewController: UIViewController {
 
-    var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
+    public var systemStatusBarIsDark: BehaviorRelay<Bool> = .init(value: true)
     var systemStatusBarDisposeBag = DisposeBag()
 
     public init() {
@@ -24,14 +24,14 @@ public class BaseViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.isHidden = true
         systemStatusBarIsDarkBind()
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         systemStatusBarIsDark.accept(systemStatusBarIsDark.value)
     }

@@ -1,11 +1,6 @@
-//
-//  SearchResultView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/7/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 

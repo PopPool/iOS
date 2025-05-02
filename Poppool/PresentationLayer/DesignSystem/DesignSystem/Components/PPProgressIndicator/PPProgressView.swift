@@ -1,18 +1,11 @@
-//
-//  PPProgressView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
-import Foundation
-import SnapKit
 import UIKit
 
-final class PPProgressView: UIView {
+import SnapKit
+
+public final class PPProgressView: UIView {
 
     /// CMTPProgressView Animation Type
-    enum ProgressFillAnimation {
+    public enum ProgressFillAnimation {
         case fromLeft
         case fromRight
     }
@@ -34,7 +27,7 @@ final class PPProgressView: UIView {
 
     /// CMTPProgressView 초기화
     /// - Parameter isSelected: 선택 여부
-    init(isSelected: Bool) {
+    public init(isSelected: Bool) {
         self.selectedView.isHidden = !isSelected
         super.init(frame: .zero)
         setUpConstraints()

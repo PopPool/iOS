@@ -1,34 +1,26 @@
-//
-//  PPCancelHeaderView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
 
 import SnapKit
 
-final class PPCancelHeaderView: UIView {
+public final class PPReturnHeaderView: UIView {
 
     // MARK: - Components
-    let backButton: UIButton = {
+    public let backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "icon_backButton"), for: .normal)
         button.tintColor = .black
         return button
     }()
 
-    let cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("취소", for: .normal)
-        button.titleLabel?.font = .korFont(style: .regular, size: 14)
-        button.setTitleColor(.black, for: .normal)
-        return button
+    public let headerLabel: UILabel = {
+        let label = UILabel()
+        label.font = .korFont(style: .regular, size: 15)
+        label.textColor = .g1000
+        return label
     }()
 
     // MARK: - init
-    init() {
+    public init() {
         super.init(frame: .zero)
         setUpConstraints()
     }
@@ -36,23 +28,27 @@ final class PPCancelHeaderView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func configure(with text: String) {
+        headerLabel.text = text
+    }
 }
 
 // MARK: - SetUp
-private extension PPCancelHeaderView {
+private extension PPReturnHeaderView {
 
     func setUpConstraints() {
         self.addSubview(backButton)
         backButton.snp.makeConstraints { make in
-            make.size.equalTo(28)
             make.top.bottom.equalToSuperview().inset(8)
             make.leading.equalToSuperview().inset(12)
+            make.size.equalTo(28)
         }
 
-        self.addSubview(cancelButton)
-        cancelButton.snp.makeConstraints { make in
+        self.addSubview(headerLabel)
+        headerLabel.snp.makeConstraints { make in
             make.centerY.equalTo(backButton)
-            make.trailing.equalToSuperview().inset(20)
+            make.centerX.equalToSuperview()
         }
     }
 }
