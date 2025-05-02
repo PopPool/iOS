@@ -22,10 +22,13 @@
       location = "group:PresentationLayer"
       name = "PresentationLayer">
       <FileRef
-         location = "group:DesignSystem/DesignSystem.xcodeproj">
+         location = "group:Presentation/Presentation.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:Presentation/Presentation.xcodeproj">
+         location = "group:SearchFeature/SearchFeature.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:DesignSystem/DesignSystem.xcodeproj">
       </FileRef>
    </Group>
    <Group
