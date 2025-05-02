@@ -5,27 +5,56 @@ import SnapKit
 public final class PPPopupGridCollecView: UICollectionView {
     // MARK: - Properties
 
+    public enum Section: Int, CaseIterable {
+        case main
+    }
+
+    private lazy var diffableDataSource: UICollectionViewDiffableDataSource<Section, PPPopupGridCollectionViewCell.Input> = {
+        return UICollectionViewDiffableDataSource<Section, PPPopupGridCollectionViewCell.Input>(collectionView: self) { collectionView, indexPath, model in
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: PPPopupGridCollectionViewCell.identifiers,
+                for: indexPath
+            ) as! PPPopupGridCollectionViewCell
+            cell.injection(with: model)
+            return cell
+        }
+    }()
+
     // MARK: - init
     public init() {
         super.init(frame: .zero, collectionViewLayout: Self.makeLayout())
 
         self.addViews()
-        self.setupConstraints()
         self.configureUI()
     }
 
     required init?(coder: NSCoder) {
         fatalError("\(#file), \(#function) Error")
     }
+
+    /// 모델을 입력받으면 collectionView를 업데이트함
+    public func apply(
+        _ models: [PPPopupGridCollectionViewCell.Input],
+        animating: Bool = true
+    ) {
+        var snapshot = diffableDataSource.snapshot()
+        snapshot.appendItems(models, toSection: .main)
+        diffableDataSource.apply(snapshot, animatingDifferences: animating)
+    }
 }
 
 // MARK: - SetUp
 private extension PPPopupGridCollecView {
-    func addViews() { }
+    func addViews() {
+        self.register(
+            PPPopupGridCollectionViewCell.self,
+            forCellWithReuseIdentifier: PPPopupGridCollectionViewCell.identifiers
+        )
+    }
 
-    func setupConstraints() { }
-
-    func configureUI() { }
+    func configureUI() {
+        super.dataSource = diffableDataSource
+    }
 }
 
 // MARK: - Layout
