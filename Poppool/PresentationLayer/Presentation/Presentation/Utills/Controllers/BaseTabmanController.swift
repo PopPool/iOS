@@ -9,10 +9,8 @@ class BaseTabmanController: TabmanViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         Logger.log(
-            message: "\(self) init",
-            category: .info,
-            fileName: #file,
-            line: #line
+            "\(self) init",
+            category: .info
         )
     }
 
@@ -28,10 +26,8 @@ class BaseTabmanController: TabmanViewController {
 
     deinit {
         Logger.log(
-            message: "\(self) deinit",
-            category: .info,
-            fileName: #file,
-            line: #line
+            "\(self) deinit",
+            category: .info
         )
     }
 }

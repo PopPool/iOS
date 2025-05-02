@@ -56,9 +56,9 @@ final class AdminReactor: Reactor {
                 .just(.setIsLoading(true)),
                 adminUseCase.fetchStoreList(query: query, page: 0, size: 100)
                     .do(onNext: { response in
-                        Logger.log(message: "조회 성공 - 응답 데이터: \(response)", category: .info)
+                        Logger.log("조회 성공 - 응답 데이터: \(response)", category: .info)
                     }, onError: { error in
-                        Logger.log(message: "조회 실패 - 에러: \(error.localizedDescription)", category: .error)
+                        Logger.log("조회 실패 - 에러: \(error.localizedDescription)", category: .error)
                     })
                     .map { .setStores($0) },
                 .just(.setIsLoading(false))

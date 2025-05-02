@@ -126,10 +126,8 @@ class ClusteringManager {
 
         let combined = Array(seoulClusters.values) + Array(gyeonggiClusters.values) + Array(otherClusters.values)
         let filtered = combined.filter { $0.storeCount > 0 }
-
-        Logger.log(message: "구 단위 클러스터 생성 결과: \(filtered.count)개", category: .debug)
         for cluster in filtered {
-            Logger.log(message: "- \(cluster.base.name): \(cluster.storeCount)개 매장", category: .debug)
+            Logger.log("- \(cluster.base.name): \(cluster.storeCount)개 매장", category: .debug)
         }
 
         return filtered.map { $0.toMarkerData() }

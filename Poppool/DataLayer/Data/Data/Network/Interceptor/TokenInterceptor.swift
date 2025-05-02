@@ -11,7 +11,7 @@ final class TokenInterceptor: RequestInterceptor {
         _ urlRequest: URLRequest,
         for session: Session,
         completion: @escaping (Result<URLRequest, any Error>) -> Void) {
-            Logger.log(message: "TokenInterceptor Adapt Token", category: .network)
+            Logger.log("TokenInterceptor Adapt Token", category: .network)
             @Dependency var keyChainService: KeyChainService
             var urlRequest = urlRequest
             let accessTokenResult = keyChainService.fetchToken(type: .accessToken)
@@ -32,7 +32,7 @@ final class TokenInterceptor: RequestInterceptor {
         dueTo error: any Error,
         completion: @escaping (RetryResult) -> Void
     ) {
-        Logger.log(message: "TokenInterceptor Retry Start", category: .network)
+        Logger.log("TokenInterceptor Retry Start", category: .network)
         completion(.doNotRetry)
     }
 }
