@@ -17,22 +17,26 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
 
     private let categoryLabel = PPLabel(style: .bold, fontSize: 11).then {
         $0.textColor = .blu500
+        $0.setLineHeightText(text: "category", font: .korFont(style: .bold, size: 11))
     }
 
     private let titleLabel = PPLabel(style: .bold, fontSize: 14).then {
         $0.numberOfLines = 2
         $0.lineBreakMode = .byTruncatingTail
+        $0.setLineHeightText(text: "title", font: .korFont(style: .bold, size: 14))
     }
 
     private let addressLabel = PPLabel(style: .medium, fontSize: 11).then {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
         $0.textColor = .g400
+        $0.setLineHeightText(text: "address", font: .korFont(style: .medium, size: 11))
     }
 
     private let dateLabel = PPLabel(style: .medium, fontSize: 11).then {
         $0.lineBreakMode = .byTruncatingTail
         $0.textColor = .g400
+        $0.setLineHeightText(text: "date", font: .korFont(style: .medium, size: 11))
     }
 
     let bookmarkButton = UIButton()
@@ -43,6 +47,8 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
         $0.clipsToBounds = true
         $0.isHidden = true
         $0.textColor = .w100
+        $0.textAlignment = .center
+        $0.setLineHeightText(text: "rank", font: .korFont(style: .medium, size: 11), lineHeight: 1)
     }
 
     // MARK: - init
@@ -56,6 +62,11 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("\(#file), \(#function) Error")
+    }
+
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
 }
 
@@ -139,22 +150,24 @@ extension PPPopupGridCollectionViewCell: Inputable {
     }
 
     public func injection(with input: Input) {
-        categoryLabel.setLineHeightText(text: "#" + (input.category ?? ""), font: .korFont(style: .bold, size: 11))
-        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 14))
-        addressLabel.setLineHeightText(text: input.address, font: .korFont(style: .medium, size: 11))
+        categoryLabel.text = "#" + (input.category ?? "")
+        titleLabel.text = input.title
+        addressLabel.text = input.address
+
         let date = input.startDate.toDate().toPPDateString() + " ~ " + input.endDate.toDate().toPPDateString()
-        dateLabel.setLineHeightText(text: date, font: .korFont(style: .medium, size: 11))
+        dateLabel.text = date
+
         let bookmarkImage = input.isBookmark ? UIImage(named: "icon_bookmark_fill") : UIImage(named: "icon_bookmark")
         bookmarkButton.setImage(bookmarkImage, for: .normal)
-        imageView.setPPImage(path: input.imagePath)
-        bookmarkButton.isHidden = !input.isLogin
 
+        imageView.setPPImage(path: input.imagePath)
+
+        bookmarkButton.isHidden = !input.isLogin
         rankLabel.isHidden = !input.isPopular
-        let rank = input.row ?? 0
-        rankLabel.setLineHeightText(text: "\(rank + 1)위", font: .korFont(style: .medium, size: 11), lineHeight: 1)
-        rankLabel.textAlignment = .center
-        if rank > 2 {
-            rankLabel.isHidden = true
+
+        if let rank = input.row {
+            rankLabel.text = "\(rank)"
+            rankLabel.isHidden = rank > 2
         }
     }
 }
