@@ -5,7 +5,7 @@ import DesignSystem
 import RxSwift
 import SnapKit
 
-final class PPPopupGridCollectionViewCell: UICollectionViewCell {
+public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
 
@@ -124,7 +124,7 @@ private extension PPPopupGridCollectionViewCell {
 }
 
 extension PPPopupGridCollectionViewCell: Inputable {
-    struct Input {
+    public struct Input: Hashable {
         var imagePath: String?
         var id: Int64
         var category: String?
@@ -138,7 +138,7 @@ extension PPPopupGridCollectionViewCell: Inputable {
         var row: Int?
     }
 
-    func injection(with input: Input) {
+    public func injection(with input: Input) {
         categoryLabel.setLineHeightText(text: "#" + (input.category ?? ""), font: .korFont(style: .bold, size: 11))
         titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 14))
         addressLabel.setLineHeightText(text: input.address, font: .korFont(style: .medium, size: 11))
