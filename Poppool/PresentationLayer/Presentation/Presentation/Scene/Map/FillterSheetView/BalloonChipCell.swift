@@ -1,6 +1,7 @@
 import Infrastructure
 import SnapKit
 import UIKit
+import Then
 
 final class BalloonChipCell: UICollectionViewCell {
     static let identifier = "BalloonChipCell"
@@ -15,17 +16,15 @@ final class BalloonChipCell: UICollectionViewCell {
         static let fontSize: CGFloat = 11
     }
 
-    private let button: PPButton = {
-        let button = PPButton(
-            style: .secondary,
-            text: "",
-            font: .korFont(style: .medium, size: Constant.fontSize),
-            cornerRadius: 15
-        )
-        button.titleLabel?.lineBreakMode = .byTruncatingTail
-        button.titleLabel?.adjustsFontSizeToFitWidth = false
-        return button
-    }()
+    private let button = PPButton(
+        style: .secondary,
+        text: "",
+        font: .korFont(style: .medium, size: Constant.fontSize),
+        cornerRadius: 15
+    ).then {
+        $0.titleLabel?.lineBreakMode = .byTruncatingTail
+        $0.titleLabel?.adjustsFontSizeToFitWidth = false
+    }
 
     private var currentAction: UIAction?
 
@@ -46,34 +45,31 @@ final class BalloonChipCell: UICollectionViewCell {
     }
 
     func configure(with title: String, isSelected: Bool) {
-        let attributedTitle = NSMutableAttributedString(string: title)
-        attributedTitle.addAttribute(
-            .baselineOffset,
-            value: Constant.baselineOffset,
-            range: NSRange(location: .zero, length: attributedTitle.length)
-        )
+        let attributedTitle = NSMutableAttributedString(string: title).then {
+            $0.addAttribute(
+                .baselineOffset,
+                value: Constant.baselineOffset,
+                range: NSRange(location: .zero, length: $0.length)
+            )
+        }
 
         if isSelected {
-            let checkImage = UIImage(named: "icon_check_white")?
-                .withRenderingMode(.alwaysOriginal)
-                .resize(to: Constant.checkIconSize)
-            self.button.setImage(checkImage, for: .normal)
-            self.button.semanticContentAttribute = .forceRightToLeft
-            self.button.imageEdgeInsets = .init(
-                top: .zero,
-                left: 1,
-                bottom: .zero,
-                right: .zero
-            )
-            self.button.contentEdgeInsets = .init(
-                top: Constant.verticalInset,
-                left: Constant.selectedLeftInset,
-                bottom: Constant.verticalInset,
-                right: Constant.rightInset
-            )
-            self.button.setBackgroundColor(.blu500, for: .normal)
-            self.button.setTitleColor(.white, for: .normal)
-            self.button.layer.borderWidth = .zero
+            let checkImage = UIImage(named: "icon_check_white")?.withRenderingMode(.alwaysOriginal).resize(to: Constant.checkIconSize)
+
+            button.then {
+                $0.setImage(checkImage, for: .normal)
+                $0.semanticContentAttribute = .forceRightToLeft
+                $0.imageEdgeInsets = .init(top: .zero, left: 1, bottom: .zero, right: .zero)
+                $0.contentEdgeInsets = .init(
+                    top: Constant.verticalInset,
+                    left: Constant.selectedLeftInset,
+                    bottom: Constant.verticalInset,
+                    right: Constant.rightInset
+                )
+                $0.setBackgroundColor(.blu500, for: .normal)
+                $0.setTitleColor(.white, for: .normal)
+                $0.layer.borderWidth = .zero
+            }
 
             attributedTitle.addAttribute(
                 .font,
@@ -81,19 +77,21 @@ final class BalloonChipCell: UICollectionViewCell {
                 range: NSRange(location: .zero, length: attributedTitle.length)
             )
         } else {
-            self.button.setImage(nil, for: .normal)
-            self.button.semanticContentAttribute = .unspecified
-            self.button.imageEdgeInsets = .zero
-            self.button.contentEdgeInsets = .init(
-                top: Constant.verticalInset,
-                left: Constant.normalLeftInset,
-                bottom: Constant.verticalInset,
-                right: Constant.rightInset
-            )
-            self.button.setBackgroundColor(.white, for: .normal)
-            self.button.setTitleColor(.g400, for: .normal)
-            self.button.layer.borderWidth = 1
-            self.button.layer.borderColor = UIColor.g200.cgColor
+            button.then {
+                $0.setImage(nil, for: .normal)
+                $0.semanticContentAttribute = .unspecified
+                $0.imageEdgeInsets = .zero
+                $0.contentEdgeInsets = .init(
+                    top: Constant.verticalInset,
+                    left: Constant.normalLeftInset,
+                    bottom: Constant.verticalInset,
+                    right: Constant.rightInset
+                )
+                $0.setBackgroundColor(.white, for: .normal)
+                $0.setTitleColor(.g400, for: .normal)
+                $0.layer.borderWidth = 1
+                $0.layer.borderColor = UIColor.g200.cgColor
+            }
 
             attributedTitle.addAttribute(
                 .font,
@@ -110,15 +108,18 @@ final class BalloonChipCell: UICollectionViewCell {
             if let oldAction = currentAction {
                 self.button.removeAction(oldAction, for: .touchUpInside)
             }
+
             let action = UIAction { [weak self] _ in
                 guard let self = self else { return }
                 self.buttonAction?()
             }
+
             self.button.addAction(action, for: .touchUpInside)
             self.currentAction = action
         }
     }
 }
+
 extension UIImage {
     func resize(to size: CGSize) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)

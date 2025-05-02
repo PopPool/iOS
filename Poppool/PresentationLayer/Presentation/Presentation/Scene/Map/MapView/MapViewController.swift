@@ -161,12 +161,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                         self.configureTooltip(for: markerToFocus, stores: storeArray)
                     }
 
-                    // 툴팁에서 선택된 스토어 업데이트
                     if let tooltipIndex = storeArray.firstIndex(where: { $0.id == store.id }) {
                         (self.currentTooltipView as? MarkerTooltipView)?.selectStore(at: tooltipIndex)
                     }
                 } else {
-                    // 단일 마커면 기존 툴팁 제거
                     self.currentTooltipView?.removeFromSuperview()
                     self.currentTooltipView = nil
                 }
