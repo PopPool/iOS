@@ -2,7 +2,7 @@ import UIKit
 
 public protocol InOutputable: Inputable, Outputable { }
 
-public protocol Inputable {
+public protocol Inputable: Hashable {
     associatedtype Input
     func injection(with input: Input)
 }
