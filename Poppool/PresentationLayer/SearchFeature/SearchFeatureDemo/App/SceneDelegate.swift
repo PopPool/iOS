@@ -1,5 +1,9 @@
 import UIKit
 
+import Domain
+import DomainInterface
+import Infrastructure
+
 import SearchFeature
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -10,7 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = PopupSearchViewController()
+        let vc = PopupSearchViewController()
+        vc.reactor = PopupSearchReactor(
+            useCase: DIContainer.resolve(PopUpAPIUseCase.self)
+        )
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
 }

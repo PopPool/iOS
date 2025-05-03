@@ -17,6 +17,14 @@
 		05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC234D2DC49AC100C761A5 /* SnapKit */; };
 		05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
 		05EC28602DC5C1CF00C761A5 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC28662DC5FDF800C761A5 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; };
+		05EC28672DC5FDF800C761A5 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC28682DC5FDF800C761A5 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; };
+		05EC28692DC5FDF800C761A5 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC286B2DC5FE5B00C761A5 /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; };
+		05EC286C2DC5FE5B00C761A5 /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; };
+		05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +44,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05EC286C2DC5FE5B00C761A5 /* Data.framework in Embed Frameworks */,
+				05EC28692DC5FDF800C761A5 /* DomainInterface.framework in Embed Frameworks */,
+				05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */,
+				05EC28672DC5FDF800C761A5 /* Domain.framework in Embed Frameworks */,
 				0516364C2DC45E6300A6C0D1 /* SearchFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -59,6 +71,10 @@
 		0516362F2DC457DE00A6C0D1 /* SearchFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SearchFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23422DC49AA200C761A5 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23462DC49AA800C761A5 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05EC28642DC5FDF800C761A5 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05EC28652DC5FDF800C761A5 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05EC286A2DC5FE5B00C761A5 /* Data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -106,6 +122,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05EC286B2DC5FE5B00C761A5 /* Data.framework in Frameworks */,
+				05EC28682DC5FDF800C761A5 /* DomainInterface.framework in Frameworks */,
+				05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */,
+				05EC28662DC5FDF800C761A5 /* Domain.framework in Frameworks */,
 				0516364B2DC45E6300A6C0D1 /* SearchFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,6 +155,10 @@
 		0516364A2DC45E6300A6C0D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */,
+				05EC286A2DC5FE5B00C761A5 /* Data.framework */,
+				05EC28642DC5FDF800C761A5 /* Domain.framework */,
+				05EC28652DC5FDF800C761A5 /* DomainInterface.framework */,
 				05EC23462DC49AA800C761A5 /* DomainInterface.framework */,
 				05EC23422DC49AA200C761A5 /* DesignSystem.framework */,
 			);
@@ -297,6 +321,8 @@
 /* Begin XCBuildConfiguration section */
 		051633722DC457A900A6C0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 051636302DC457DE00A6C0D1 /* SearchFeatureDemo */;
+			baseConfigurationReferenceRelativePath = Resource/Debug.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -422,6 +448,8 @@
 		};
 		051633752DC457A900A6C0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 051636302DC457DE00A6C0D1 /* SearchFeatureDemo */;
+			baseConfigurationReferenceRelativePath = Resource/Debug.xcconfig;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -501,6 +529,8 @@
 		};
 		051636422DC457DF00A6C0D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 051636302DC457DE00A6C0D1 /* SearchFeatureDemo */;
+			baseConfigurationReferenceRelativePath = Resource/Debug.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -511,6 +541,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
 				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS = YES;
 				INFOPLIST_FILE = SearchFeatureDemo/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -544,6 +575,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IBSC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS = YES;
 				INFOPLIST_FILE = SearchFeatureDemo/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
