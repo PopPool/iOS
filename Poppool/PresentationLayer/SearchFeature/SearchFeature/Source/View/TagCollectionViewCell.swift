@@ -24,11 +24,14 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUpConstraints()
+
+        self.addViews()
+        self.setupConstraints()
+        self.configureUI()
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("\(#file), \(#function) Error")
     }
 
     public override func prepareForReuse() {
@@ -39,26 +42,36 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 
 // MARK: - SetUp
 private extension TagCollectionViewCell {
-    func setUpConstraints() {
-        contentView.layer.cornerRadius = 15.5
-        contentView.clipsToBounds = true
-        contentView.layer.borderWidth = 1
+    func addViews() {
+        [contentStackView].forEach {
+            self.contentView.addSubview($0)
+        }
 
-        contentView.addSubview(contentStackView)
+        [titleLabel, cancelButton].forEach {
+            contentStackView.addArrangedSubview($0)
+        }
+    }
+
+    func setupConstraints() {
         contentStackView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().inset(12)
             make.trailing.equalToSuperview().inset(8)
         }
-        contentStackView.addArrangedSubview(titleLabel)
-        contentStackView.addArrangedSubview(cancelButton)
 
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(18)
         }
+
         cancelButton.snp.makeConstraints { make in
             make.size.equalTo(16)
         }
+    }
+
+    func configureUI() {
+        contentView.layer.cornerRadius = 15.5
+        contentView.clipsToBounds = true
+        contentView.layer.borderWidth = 1
     }
 }
 
@@ -67,7 +80,7 @@ extension TagCollectionViewCell: Inputable {
         var title: String?
         var id: Int64? = nil
         var isSelected: Bool = false
-        var isCancelAble: Bool = true
+        var isCancelable: Bool = true
     }
 
     public func injection(with input: Input) {
@@ -84,9 +97,9 @@ extension TagCollectionViewCell: Inputable {
             titleLabel.textColor = .g400
             contentView.layer.borderColor = UIColor.g200.cgColor
         }
-        cancelButton.isHidden = !input.isCancelAble
+        cancelButton.isHidden = !input.isCancelable
 
-        if input.isCancelAble {
+        if input.isCancelable {
             contentStackView.snp.updateConstraints { make in
                 make.trailing.equalToSuperview().inset(8)
             }
