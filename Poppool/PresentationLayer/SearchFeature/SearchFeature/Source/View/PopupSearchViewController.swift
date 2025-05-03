@@ -29,6 +29,25 @@ extension PopupSearchViewController {
 // MARK: - Bind
 extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
-        
+        rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        reactor.state
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                owner.mainView.updateSnapshot(
+                    recentSearchItems: state.recentSearchItems
+                        .map(PopupSearchView.SectionItem.recentSearchItem),
+                    categoryItems: state.categoryItems
+                        .map(PopupSearchView.SectionItem.categoryItem),
+                    searchResultItems: state.searchResultItems
+                        .map(PopupSearchView.SectionItem.searchResultItem)
+                )
+            }
+            .disposed(by: disposeBag)
+
+
     }
 }
