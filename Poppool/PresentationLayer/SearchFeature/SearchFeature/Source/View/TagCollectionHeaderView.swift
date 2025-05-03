@@ -81,7 +81,7 @@ extension TagCollectionHeaderView {
             titleButton.isHidden = false
             let attributes: [NSAttributedString.Key: Any] = [
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
-                .font: UIFont.korFont(style: .regular, size: 13)!
+                .font: UIFont.korFont(style: .regular, size: 13)
             ]
             let attributedTitle = NSAttributedString(string: buttonTitle, attributes: attributes)
             titleButton.setAttributedTitle(attributedTitle, for: .normal)
