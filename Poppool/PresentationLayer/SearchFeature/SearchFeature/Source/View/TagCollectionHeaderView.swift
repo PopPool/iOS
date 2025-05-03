@@ -21,7 +21,7 @@ final class TagCollectionHeaderView: UICollectionReusableView {
 
     // MARK: - Components
     var disposeBag = DisposeBag()
-    
+
     private let sectionTitleLabel = UILabel().then {
         $0.font = .korFont(style: .bold, size: 16)
     }
@@ -72,24 +72,17 @@ private extension TagCollectionHeaderView {
             make.height.equalTo(20)
         }
     }
-
-    func configureUI() {
-
-    }
 }
 
 extension TagCollectionHeaderView {
     func setupHeader(title: String, buttonTitle: String? = nil) {
         sectionTitleLabel.text = title
-
         if let buttonTitle = buttonTitle {
             titleButton.isHidden = false
-
             let attributes: [NSAttributedString.Key: Any] = [
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 .font: UIFont.korFont(style: .regular, size: 13)!
             ]
-
             let attributedTitle = NSAttributedString(string: buttonTitle, attributes: attributes)
             titleButton.setAttributedTitle(attributedTitle, for: .normal)
         }
