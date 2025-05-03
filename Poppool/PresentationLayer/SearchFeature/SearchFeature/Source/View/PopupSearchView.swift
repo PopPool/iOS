@@ -16,9 +16,10 @@ final class PopupSearchView: UIView {
         case searchResultItem(PPPopupGridCollectionViewCell.Input)
     }
 
-    enum SectionHeaderKind: String, CaseIterable {
+    enum SectionHeaderKind: String {
         case recentSearch = "recentSearchElementKind"
         case category = "categoryElementKind"
+        case searchResult = "searchResultElementKind"
     }
 
     // MARK: - Properties
@@ -40,13 +41,19 @@ final class PopupSearchView: UIView {
         $0.register(
             TagCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.recentSearch.rawValue,
-            withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.identifer
+            withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue
         )
 
         $0.register(
             TagCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.category.rawValue,
-            withReuseIdentifier: TagCollectionHeaderView.Identifier.category.identifer
+            withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue
+        )
+
+        $0.register(
+            PopupGridCollectionHeaderView.self,
+            forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
+            withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue
         )
     }
 
@@ -82,7 +89,7 @@ private extension PopupSearchView {
         }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom).offset(24)
+            make.top.equalTo(searchBar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
@@ -104,7 +111,7 @@ private extension PopupSearchView {
             switch Section.allCases[sectionIndex] {
             case .recentSearch: return self.makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
             case .category: return self.makeTagSectionLayout(SectionHeaderKind.category.rawValue)
-            case .searchResult: return self.makeSearchResultSectionLayout()
+            case .searchResult: return self.makeSearchResultSectionLayout(SectionHeaderKind.searchResult.rawValue)
             }
         }
     }
@@ -133,12 +140,12 @@ private extension PopupSearchView {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0)
         section.interGroupSpacing = 6
 
-        section.boundarySupplementaryItems = [makeHeaderLayout(headerKind)]
+        section.boundarySupplementaryItems = [getHeaderViewLayoutWithContentInset(headerKind)]
 
         return section
     }
 
-    static func makeSearchResultSectionLayout() -> NSCollectionLayoutSection {
+    static func makeSearchResultSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
         // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.5),
@@ -162,10 +169,12 @@ private extension PopupSearchView {
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
         section.interGroupSpacing = 24
 
+        section.boundarySupplementaryItems = [getHeaderViewLayoutWithContentInset(headerKind)]
+
         return section
     }
 
-    static func makeHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
+    static func makeTagCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
         // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -179,12 +188,45 @@ private extension PopupSearchView {
 
         return header
     }
+
+    static func makePopupGridCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
+        // Header
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(22)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: elementKind,
+            alignment: .top
+        )
+
+        return header
+    }
+
+    static func getHeaderViewLayoutWithContentInset(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
+        switch SectionHeaderKind(rawValue: elementKind)! {
+        case .recentSearch:
+            let header = makeTagCollectionHeaderLayout(elementKind)
+            header.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 0, bottom: 16, trailing: 0)
+            return header
+
+        case .category:
+            let header = makeTagCollectionHeaderLayout(elementKind)
+            header.contentInsets = NSDirectionalEdgeInsets(top: 48, leading: 0, bottom: 16, trailing: 0)
+            return header
+
+        case .searchResult:
+            let header = makePopupGridCollectionHeaderLayout(elementKind)
+            header.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
+            return header
+        }
+    }
 }
 
 // MARK: - DataSource
 extension PopupSearchView {
     private func configurationDataSourceItem() {
-        print("HEADER DEBUG:", #function, #line, "data source is", self.dataSource == nil)
         self.dataSource = UICollectionViewDiffableDataSource<PopupSearchView.Section, PopupSearchView.SectionItem>(
             collectionView: collectionView
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
@@ -215,37 +257,39 @@ extension PopupSearchView {
             }
         }
 
-        print("HEADER DEBUG:", #function, #line, "data source is", self.dataSource == nil)
-
         self.collectionView.dataSource = self.dataSource
     }
 
     private func configureDataSourceHeader() {
-        print("HEADER DEBUG:", #function, #line)
         dataSource?.supplementaryViewProvider = { (collectionView, elementKind, indexPath) -> UICollectionReusableView? in
-
-            print("HEADER DEBUG:", #function, #line, "elementKind is", elementKind)
-
             switch SectionHeaderKind(rawValue: elementKind)! {
             case .recentSearch:
-                print("HEADER DEBUG:", #function, #line)
                 guard let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: elementKind,
-                    withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.identifer,
+                    withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue,
                     for: indexPath
-                ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error")}
+                ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
                 header.setupHeader(title: "최근 검색어", buttonTitle: "모두삭제")
 
                 return header
 
             case .category:
-                print("HEADER DEBUG:", #function, #line)
                 guard let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: elementKind,
-                    withReuseIdentifier: TagCollectionHeaderView.Identifier.category.identifer,
+                    withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue,
                     for: indexPath
-                ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error")}
+                ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
                 header.setupHeader(title: "팝업스토어 찾기")
+
+                return header
+
+            case .searchResult:
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: elementKind,
+                    withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue,
+                    for: indexPath
+                ) as? PopupGridCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
+                header.injection(with: PopupGridCollectionHeaderView.Input(count: 0, sortedTitle: "Hello"))
 
                 return header
             }

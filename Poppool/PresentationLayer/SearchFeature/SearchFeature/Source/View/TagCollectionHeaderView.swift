@@ -8,15 +8,8 @@ import SnapKit
 final class TagCollectionHeaderView: UICollectionReusableView {
 
     enum Identifier: String {
-        var identifer: String {
-            switch self {
-            case .recentSearch: return "TagCollectionHeaderView.recentSearch"
-            case .category: return "TagCollectionHeaderView.category"
-            }
-        }
-
-        case recentSearch
-        case category
+        case recentSearch = "TagCollectionHeaderView.recentSearch"
+        case category = "TagCollectionHeaderView.category"
     }
 
     // MARK: - Components

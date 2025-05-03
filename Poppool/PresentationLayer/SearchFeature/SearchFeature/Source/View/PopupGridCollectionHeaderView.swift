@@ -7,6 +7,11 @@ import RxSwift
 import Then
 
 final class PopupGridCollectionHeaderView: UICollectionReusableView {
+
+    enum Identifier: String {
+        case searchResult = "PopupGridCollectionHeaderView.searchResult"
+    }
+
     // MARK: - Properties
 
     var disposeBag = DisposeBag()
@@ -26,17 +31,23 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
     let sortedButton = UIButton()
 
     // MARK: - init
-    init() {
+    override init(frame: CGRect) {
         super.init(frame: .zero)
 
         self.addViews()
         self.setupConstraints()
-        self.configureUI()
+
+        self.backgroundColor = .blue
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("\(#file), \(#function) Error")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
 }
 
@@ -75,8 +86,6 @@ private extension PopupGridCollectionHeaderView {
             make.trailing.equalToSuperview()
         }
     }
-
-    func configureUI() { }
 }
 
 extension PopupGridCollectionHeaderView: Inputable {
