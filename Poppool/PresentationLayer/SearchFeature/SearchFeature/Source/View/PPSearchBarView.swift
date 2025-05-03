@@ -57,8 +57,10 @@ private extension PPSearchBarView {
 
     func setupConstraints() {
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.height.equalTo(37)
+            make.top.equalToSuperview().inset(12)
+            make.leading.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(7)
         }
 
         searchBar.snp.makeConstraints { make in
