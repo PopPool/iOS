@@ -252,13 +252,12 @@ extension PopupSearchView {
         }
     }
 
-    private func updateSnapshot(
+    func updateSnapshot(
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem]
     ) {
-        guard var snapshot = dataSource?.snapshot() else { return }
-
+        var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
         snapshot.appendSections(PopupSearchView.Section.allCases)
         snapshot.appendItems(recentSearchItems, toSection: .recentSearch)
         snapshot.appendItems(categoryItems, toSection: .category)
