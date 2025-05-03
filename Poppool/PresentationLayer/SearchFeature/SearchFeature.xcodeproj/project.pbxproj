@@ -12,12 +12,11 @@
 		05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233B2DC49A7600C761A5 /* RxCocoa */; };
 		05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233D2DC49A7600C761A5 /* RxSwift */; };
 		05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC23402DC49A8B00C761A5 /* ReactorKit */; };
-		05EC23432DC49AA200C761A5 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
-		05EC23442DC49AA200C761A5 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23462DC49AA800C761A5 /* DomainInterface.framework */; };
-		05EC23482DC49AA800C761A5 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23462DC49AA800C761A5 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC234B2DC49AB400C761A5 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC234A2DC49AB400C761A5 /* Then */; };
 		05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC234D2DC49AC100C761A5 /* SnapKit */; };
+		05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
+		05EC28602DC5C1CF00C761A5 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,14 +41,13 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		05EC23452DC49AA200C761A5 /* Embed Frameworks */ = {
+		05EC28612DC5C1CF00C761A5 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				05EC23482DC49AA800C761A5 /* DomainInterface.framework in Embed Frameworks */,
-				05EC23442DC49AA200C761A5 /* DesignSystem.framework in Embed Frameworks */,
+				05EC28602DC5C1CF00C761A5 /* DesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,11 +92,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */,
 				05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */,
 				05EC234B2DC49AB400C761A5 /* Then in Frameworks */,
 				05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */,
 				05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */,
-				05EC23432DC49AA200C761A5 /* DesignSystem.framework in Frameworks */,
 				05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */,
 				05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */,
 			);
@@ -164,7 +162,7 @@
 				051633692DC457A900A6C0D1 /* Sources */,
 				0516336A2DC457A900A6C0D1 /* Frameworks */,
 				0516336B2DC457A900A6C0D1 /* Resources */,
-				05EC23452DC49AA200C761A5 /* Embed Frameworks */,
+				05EC28612DC5C1CF00C761A5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
