@@ -9,7 +9,7 @@ public final class Category: NSCopying, Equatable {
         self.items = items
     }
 
-    func contains(id: Int64) -> Bool {
+    func contains(id: Int) -> Bool {
         items.contains { $0.id == id }
     }
 
@@ -17,7 +17,7 @@ public final class Category: NSCopying, Equatable {
         return Category(items: self.items)
     }
 
-    func toggleItemSelection(by categoryID: Int64) {
+    func toggleItemSelection(by categoryID: Int) {
         guard let index = items.firstIndex(where: { $0.id == categoryID }) else { return }
         items[index].isSelected.toggle()
     }

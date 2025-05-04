@@ -9,7 +9,7 @@ struct GetCategoryListResponseDTO: Codable {
 
 // MARK: - InterestResponse
 struct CategoryResponseDTO: Codable {
-    let categoryId: Int64
+    let categoryId: Int32
     let categoryName: String
 }
 

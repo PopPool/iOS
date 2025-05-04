@@ -78,7 +78,7 @@ private extension TagCollectionViewCell {
 extension TagCollectionViewCell: Inputable {
     public struct Input: Hashable {
         var title: String?
-        var id: Int64? = nil
+        var id: Int? = nil
         var isSelected: Bool = false
         var isCancelable: Bool = true
     }

@@ -50,7 +50,7 @@ extension PopupSearchViewController {
                     let sharedCategory = reactor.sourceOfTruthCategory
                     let categoryReactor = CategorySelectReactor(
                         originCategory: sharedCategory,
-                        signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+                        fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
                     )
                     let viewController = CategorySelectViewController()
                     viewController.reactor = categoryReactor

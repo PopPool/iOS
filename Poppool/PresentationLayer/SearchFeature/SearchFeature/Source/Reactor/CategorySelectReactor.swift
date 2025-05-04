@@ -13,14 +13,14 @@ final class CategorySelectReactor: Reactor {
         case viewWillAppear
         case resetButtonTapped
         case saveButtonTapped
-        case cellTapped(categoryID: Int64)
+        case cellTapped(categoryID: Int)
     }
 
     enum Mutation {
         case setupCategotyTag(items: [TagCollectionViewCell.Input])
         case resetCategory
         case saveCategory
-        case toggleTappedCell(categoryID: Int64)
+        case toggleTappedCell(categoryID: Int)
     }
 
     struct State {
@@ -34,28 +34,33 @@ final class CategorySelectReactor: Reactor {
     var disposeBag = DisposeBag()
 
     let originCategory: Category
-    private let signUpAPIUseCase: SignUpAPIUseCase
+    private let fetchCategoryListUseCase: FetchCategoryListUseCase
 
     // MARK: - init
     init(
         originCategory: Category,
-        signUpAPIUseCase: SignUpAPIUseCase
+        fetchCategoryListUseCase: FetchCategoryListUseCase
     ) {
         self.initialState = State(category: originCategory.copy() as! Category)
         self.originCategory = originCategory
-        self.signUpAPIUseCase = signUpAPIUseCase
+        self.fetchCategoryListUseCase = fetchCategoryListUseCase
     }
 
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppear:
-            return signUpAPIUseCase.fetchCategoryList()
+            return fetchCategoryListUseCase.execute()
                 .withUnretained(self)
                 .map { (owner, response) in
                     let items = response.map {
                         let isSelected = owner.originCategory.contains(id: $0.categoryId)
-                        return TagCollectionViewCell.Input(title: $0.category, id: $0.categoryId, isSelected: isSelected)
+                        return TagCollectionViewCell.Input(
+                            title: $0.category,
+                            id: $0.categoryId,
+                            isSelected: isSelected,
+                            isCancelable: false
+                        )
                     }
                     return .setupCategotyTag(items: items)
                 }
