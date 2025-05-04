@@ -6,6 +6,7 @@ import Infrastructure
 
 import ReactorKit
 import RxSwift
+import RxCocoa
 
 public final class PopupSearchViewController: BaseViewController, View {
 
@@ -37,16 +38,44 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self, reactor] _ in
-                guard let self = self else { return }
-                let sharedCategory = reactor.sourceOfTruthCategory
-                let categoryReactor = CategorySelectReactor(
-                    originCategory: sharedCategory,
-                    signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
-                )
-                let viewController = CategorySelectViewController()
-                viewController.reactor = categoryReactor
-                self.presentPanModal(viewController)
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, indexPath) in
+
+                let sections = owner.mainView.getSectionsFromDataSource()
+                guard indexPath.section < sections.count else { return }
+
+                switch sections[indexPath.section] {
+                case .recentSearch: return
+                case .category:
+                    let sharedCategory = reactor.sourceOfTruthCategory
+                    let categoryReactor = CategorySelectReactor(
+                        originCategory: sharedCategory,
+                        signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+                    )
+                    let viewController = CategorySelectViewController()
+                    viewController.reactor = categoryReactor
+                    self.presentPanModal(viewController)
+                case .searchResult:
+                    // MARK: 디테일 화면으로 이동하기
+                    print("SECTION DEBUG:", sections[indexPath.section])
+                }
+            })
+            .disposed(by: disposeBag)
+
+        /// CollectionView에 등록된 Header중 searchResult의 헤더를 찾아서 내부에 있는 button에 접근하기 위한 Rx 바인딩
+        mainView.collectionView.rx
+            .willDisplaySupplementaryView
+            .filter { $0.elementKind == PopupSearchView.SectionHeaderKind.searchResult.rawValue }
+            .compactMap { $0.supplementaryView as? PopupGridCollectionHeaderView }
+            .withUnretained(self)
+            .subscribe(onNext: { (owner, headerView) in
+                headerView.filterOptionButton.rx.tap
+                    .subscribe { _ in
+                        let viewController = FilterOptionSelectViewController()
+                        viewController.reactor = FilterOptionSelectReactor()
+                        owner.presentPanModal(viewController)
+                    }
+                    .disposed(by: owner.disposeBag)
             })
             .disposed(by: disposeBag)
 

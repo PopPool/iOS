@@ -113,8 +113,10 @@ private extension PopupSearchView {
     private func makeLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
             guard let self else { return nil }
-            let sections = self.dataSource?.snapshot().sectionIdentifiers ?? []
+
+            let sections = getSectionsFromDataSource()
             guard sectionIndex < sections.count else { return nil }
+
             switch sections[sectionIndex] {
             case .recentSearch:
                 return makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
@@ -325,5 +327,9 @@ extension PopupSearchView {
         }
 
         dataSource?.apply(snapshot, animatingDifferences: true)
+    }
+
+    func getSectionsFromDataSource() -> [Section] {
+        return dataSource?.snapshot().sectionIdentifiers ?? []
     }
 }
