@@ -16,19 +16,19 @@ final class FilterOptionSelectReactor: Reactor {
     enum Mutation {
         case changeStatus(status: PopupStatus)
         case changeSortOption(sortOption: PopupSortOption)
-        case save
+        case saveCurrentFilterOption
     }
 
     struct State {
         var selectedFilterOption: FilterOption
         var saveButtonIsEnable: Bool = false
+        var isSaveButtonTapped: Bool = false
     }
 
     // MARK: - properties
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private var originFilterOption: FilterOption
 
     // MARK: - init
     init() {
@@ -45,7 +45,7 @@ final class FilterOptionSelectReactor: Reactor {
             return Observable.just(.changeSortOption(sortOption: filter))
 
         case .saveButtonTapped:
-            return Observable.just(.save)
+            return Observable.just(.saveCurrentFilterOption)
         }
     }
 
@@ -61,9 +61,10 @@ final class FilterOptionSelectReactor: Reactor {
             newState.selectedFilterOption.sortOption = sortOption
             newState.saveButtonIsEnable = (newState.selectedFilterOption != FilterOption.shared)
 
-        case .save:
+        case .saveCurrentFilterOption:
             FilterOption.shared.status = newState.selectedFilterOption.status
             FilterOption.shared.sortOption = newState.selectedFilterOption.sortOption
+            newState.isSaveButtonTapped = true
         }
 
         return newState

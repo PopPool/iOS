@@ -36,8 +36,6 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
 
         self.addViews()
         self.setupConstraints()
-
-        self.backgroundColor = .blue
     }
 
     @available(*, unavailable)
@@ -92,12 +90,17 @@ private extension PopupGridCollectionHeaderView {
 
 extension PopupGridCollectionHeaderView: Inputable {
     struct Input {
-        var count: Int
+        var count: Int?
         var sortedTitle: String?
     }
 
     func injection(with input: Input) {
-        cellCountLabel.text = "총 \(input.count)개"
-        filterOptionLabel.text = input.sortedTitle
+        if let count = input.count {
+            cellCountLabel.text = "총 \(count)개"
+        }
+
+        if let sortedTitle = input.sortedTitle {
+            filterOptionLabel.text = sortedTitle
+        }
     }
 }

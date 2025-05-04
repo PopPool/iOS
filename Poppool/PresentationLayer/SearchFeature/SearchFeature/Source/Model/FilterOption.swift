@@ -20,6 +20,8 @@ final class FilterOption: NSCopying, Equatable {
         self.status = status
         self.sortOption = sortOption
     }
+
+    var title: String {  [status.title, sortOption.title].joined(separator: "・") }
 }
 
 /// 팝업 상점이 현재 열려 있는지 또는 닫혀 있는지 여부를 나타냅니다

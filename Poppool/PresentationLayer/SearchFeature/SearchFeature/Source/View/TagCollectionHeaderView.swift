@@ -30,8 +30,6 @@ final class TagCollectionHeaderView: UICollectionReusableView {
 
         self.addViews()
         self.setupConstraints()
-
-        self.backgroundColor = .red
     }
 
     required init?(coder: NSCoder) {

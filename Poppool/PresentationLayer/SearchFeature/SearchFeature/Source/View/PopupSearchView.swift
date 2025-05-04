@@ -53,7 +53,6 @@ final class PopupSearchView: UIView {
             forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
             withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue
         )
-        $0.backgroundColor = UIColor.green
 
         // UICollectionView 최 상단 빈 영역
         $0.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
@@ -61,7 +60,7 @@ final class PopupSearchView: UIView {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    private var popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input?
+    var popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input?
 
     // MARK: - init
     init() {
@@ -100,9 +99,6 @@ private extension PopupSearchView {
     }
 
     func configureUI() {
-        self.searchBar.backgroundColor = .yellow
-        self.collectionView.backgroundColor = UIColor.green
-
         self.configurationDataSourceItem()
         self.configureDataSourceHeader()
     }
@@ -120,8 +116,10 @@ private extension PopupSearchView {
             switch sections[sectionIndex] {
             case .recentSearch:
                 return makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
+
             case .category:
                 return makeTagSectionLayout(SectionHeaderKind.category.rawValue)
+
             case .searchResult:
                 return makeSearchResultSectionLayout(SectionHeaderKind.searchResult.rawValue)
             }

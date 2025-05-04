@@ -12,10 +12,17 @@ public final class PopupSearchReactor: Reactor {
     // MARK: - Reactor
     public enum Action {
         case viewDidLoad
+        case filterOptionChanged
     }
 
     public enum Mutation {
         case setInitialState(
+            recentSearch: [TagCollectionViewCell.Input],
+            categoryItems: [TagCollectionViewCell.Input],
+            results: [PPPopupGridCollectionViewCell.Input]
+        )
+
+        case updateResult(
             recentSearch: [TagCollectionViewCell.Input],
             categoryItems: [TagCollectionViewCell.Input],
             results: [PPPopupGridCollectionViewCell.Input]
@@ -67,17 +74,43 @@ public final class PopupSearchReactor: Reactor {
                     results: owner.convertResponseToSearchResultInput(response: response)
                 )
             }
+
+        case .filterOptionChanged:
+            return useCase.getSearchBottomPopUpList(
+                isOpen: FilterOption.shared.status.requestValue,
+                categories: [],
+                page: 0,
+                size: 10,
+                sort: FilterOption.shared.sortOption.requestValue
+            )
+            .withUnretained(self)
+            .map { (owner, response) in
+                return .updateResult(
+                    recentSearch: owner.getRecentSearchKeywords(),
+                    categoryItems: owner.sourceOfTruthCategory.items,
+                    results: owner.convertResponseToSearchResultInput(response: response)
+                )
+
+            }
         }
     }
 
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case let .setInitialState(recentSearchItems, categoryItems, searchResultItems):
+        case .setInitialState(let recentSearchItems, let categoryItems, let searchResultItems):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems
             newState.searchResultItems = searchResultItems
+
+        case .updateResult(let recentSearchItems, let categoryItems, let searchResultItems):
+            newState.recentSearchItems = recentSearchItems
+            newState.categoryItems = categoryItems
+            newState.searchResultItems = searchResultItems
+            newState.openTitle = FilterOption.shared.status.title
+            newState.sortOptionTitle = FilterOption.shared.sortOption.title
         }
+        
         return newState
     }
 }

@@ -73,6 +73,13 @@ extension PopupSearchViewController {
                     .subscribe { _ in
                         let viewController = FilterOptionSelectViewController()
                         viewController.reactor = FilterOptionSelectReactor()
+
+                        viewController.reactor?.state
+                            .filter { $0.isSaveButtonTapped == true }
+                            .map { _ in Reactor.Action.filterOptionChanged }
+                            .bind(to: reactor.action)
+                            .disposed(by: owner.disposeBag)
+
                         owner.presentPanModal(viewController)
                     }
                     .disposed(by: owner.disposeBag)
