@@ -24,25 +24,24 @@ final class CategorySelectReactor: Reactor {
     }
 
     struct State {
-        var category: Category
+        var categoryItems: [TagCollectionViewCell.Input] = []
         var saveButtonIsEnable: Bool = false
+        var isSaveOrResetButtonTapped: Bool = false
     }
 
     // MARK: - properties
 
     var initialState: State
+    private var originCategoryItems: [TagCollectionViewCell.Input] = []
     var disposeBag = DisposeBag()
 
-    let originCategory: Category
     private let fetchCategoryListUseCase: FetchCategoryListUseCase
 
     // MARK: - init
     init(
-        originCategory: Category,
         fetchCategoryListUseCase: FetchCategoryListUseCase
     ) {
-        self.initialState = State(category: originCategory.copy() as! Category)
-        self.originCategory = originCategory
+        self.initialState = State()
         self.fetchCategoryListUseCase = fetchCategoryListUseCase
     }
 
@@ -54,11 +53,9 @@ final class CategorySelectReactor: Reactor {
                 .withUnretained(self)
                 .map { (owner, response) in
                     let items = response.map {
-                        let isSelected = owner.originCategory.contains(id: $0.categoryId)
                         return TagCollectionViewCell.Input(
                             title: $0.category,
                             id: $0.categoryId,
-                            isSelected: isSelected,
                             isCancelable: false
                         )
                     }
@@ -81,19 +78,31 @@ final class CategorySelectReactor: Reactor {
 
         switch mutation {
         case .setupCategotyTag(let items):
-            newState.category.items = items
+            let fetchedItems = items.map {
+                if let id = $0.id, Category.shared.contains(id: id) {
+                    return $0.selectionToggledItem()
+                } else { return $0 }
+            }
+
+            originCategoryItems = fetchedItems
+            newState.categoryItems = fetchedItems
 
         case .resetCategory:
-            newState.category.turnOffAllItemSelection()
+            Category.shared.resetItems()
+            newState.isSaveOrResetButtonTapped = true
 
         case .saveCategory:
-            self.originCategory.items = newState.category.items
+            Category.shared.items = newState.categoryItems.filter { $0.isSelected == true }
+            newState.isSaveOrResetButtonTapped = true
 
         case .toggleTappedCell(let categoryID):
-            newState.category.toggleItemSelection(by: categoryID)
+            newState.categoryItems = state.categoryItems.map {
+                if $0.id == categoryID { return $0.selectionToggledItem() }
+                else { return $0 }
+            }
+            newState.saveButtonIsEnable = (originCategoryItems != newState.categoryItems)
         }
 
-        newState.saveButtonIsEnable = (originCategory != newState.category)
         return newState
     }
 }

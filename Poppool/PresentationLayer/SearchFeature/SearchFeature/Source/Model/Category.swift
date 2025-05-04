@@ -1,20 +1,33 @@
 import Foundation
 
 public final class Category: NSCopying, Equatable {
+    public func copy(with zone: NSZone? = nil) -> Any {
+        return Category(items: self.items)
+    }
+
     public static func == (lhs: Category, rhs: Category) -> Bool { return lhs === rhs }
 
-    var items: [TagCollectionViewCell.Input]
+    static let shared = Category()
 
-    init(items: [TagCollectionViewCell.Input] = []) {
-        self.items = items
+    /// 선택된 아이템들만 들어가는 인스턴스
+    private var _items: [TagCollectionViewCell.Input]
+    public var items: [TagCollectionViewCell.Input] {
+        get { _items }
+        set { _items = newValue.isEmpty ? [Category.defaultItem] : newValue }
     }
+
+    private static let defaultItem = TagCollectionViewCell.Input(title: "카테고리", isSelected: false, isCancelable: false)
+
+    private init(items: [TagCollectionViewCell.Input] = [Category.defaultItem]) {
+        self._items = items.isEmpty ? [Category.defaultItem] : items
+    }
+}
+
+// MARK: - Functions
+extension Category {
 
     func contains(id: Int) -> Bool {
         items.contains { $0.id == id }
-    }
-
-    public func copy(with zone: NSZone? = nil) -> Any {
-        return Category(items: self.items)
     }
 
     func toggleItemSelection(by categoryID: Int) {
@@ -24,5 +37,13 @@ public final class Category: NSCopying, Equatable {
 
     func turnOffAllItemSelection() {
         for index in items.indices { items[index].isSelected = false }
+    }
+
+    func resetItems() {
+        items = [Category.defaultItem]
+    }
+
+    func getSelectedCategoryIDs() -> [Int64] {
+        return items.filter { $0.isSelected == true }.compactMap { $0.id }.map { Int64($0) }
     }
 }

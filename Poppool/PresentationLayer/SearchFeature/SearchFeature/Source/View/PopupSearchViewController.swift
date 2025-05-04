@@ -47,13 +47,18 @@ extension PopupSearchViewController {
                 switch sections[indexPath.section] {
                 case .recentSearch: return
                 case .category:
-                    let sharedCategory = reactor.sourceOfTruthCategory
                     let categoryReactor = CategorySelectReactor(
-                        originCategory: sharedCategory,
                         fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
                     )
                     let viewController = CategorySelectViewController()
                     viewController.reactor = categoryReactor
+
+                    viewController.reactor?.state
+                        .filter { $0.isSaveOrResetButtonTapped == true }
+                        .map { _ in Reactor.Action.categorySaveButtonTapped }
+                        .bind(to: reactor.action)
+                        .disposed(by: self.disposeBag)
+
                     self.presentPanModal(viewController)
                 case .searchResult:
                     // MARK: 디테일 화면으로 이동하기
@@ -76,7 +81,7 @@ extension PopupSearchViewController {
 
                         viewController.reactor?.state
                             .filter { $0.isSaveButtonTapped == true }
-                            .map { _ in Reactor.Action.filterOptionChanged }
+                            .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
                             .bind(to: reactor.action)
                             .disposed(by: owner.disposeBag)
 

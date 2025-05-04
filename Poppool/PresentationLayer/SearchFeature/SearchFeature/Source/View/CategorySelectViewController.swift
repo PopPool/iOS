@@ -38,7 +38,7 @@ extension CategorySelectViewController {
             .disposed(by: disposeBag)
 
         reactor.state
-            .map { $0.category.items }
+            .map { $0.categoryItems }
             .distinctUntilChanged()
             .bind(to: mainView.collectionView.rx.items(
                 cellIdentifier: TagCollectionViewCell.identifiers,
@@ -50,7 +50,7 @@ extension CategorySelectViewController {
 
         mainView.collectionView.rx.itemSelected
             .withLatestFrom(
-                reactor.state.map { Array($0.category.items) },
+                reactor.state.map { Array($0.categoryItems) },
                 resultSelector: { indexPath, items in items[indexPath.item] }
             )
             .compactMap { $0.id }

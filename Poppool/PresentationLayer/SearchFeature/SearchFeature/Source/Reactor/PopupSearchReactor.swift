@@ -12,7 +12,8 @@ public final class PopupSearchReactor: Reactor {
     // MARK: - Reactor
     public enum Action {
         case viewDidLoad
-        case filterOptionChanged
+        case filterOptionSaveButtonTapped
+        case categorySaveButtonTapped
     }
 
     public enum Mutation {
@@ -31,7 +32,7 @@ public final class PopupSearchReactor: Reactor {
 
     public struct State {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
-        var categoryItems: [TagCollectionViewCell.Input] = []
+        var categoryItems: [TagCollectionViewCell.Input] = Category.shared.items
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
         var openTitle: String = PopupStatus.open.title
         var sortOptionTitle: String = PopupSortOption.newest.title
@@ -45,14 +46,10 @@ public final class PopupSearchReactor: Reactor {
     private let userDefaultService = UserDefaultService()
     private let useCase: PopUpAPIUseCase
 
-    public let sourceOfTruthCategory: Category = Category(
-        items: [TagCollectionViewCell.Input(title: "카테고리", isSelected: false, isCancelable: false)]
-    )
-
     // MARK: - init
     public init(useCase: PopUpAPIUseCase) {
         self.useCase = useCase
-        self.initialState = State(categoryItems: self.sourceOfTruthCategory.items)
+        self.initialState = State()
     }
 
     // MARK: - Reactor Methods
@@ -70,12 +67,12 @@ public final class PopupSearchReactor: Reactor {
             .map { owner, response in
                 return .setInitialState(
                     recentSearch: owner.getRecentSearchKeywords(),
-                    categoryItems: owner.sourceOfTruthCategory.items,
+                    categoryItems: Category.shared.items,
                     results: owner.convertResponseToSearchResultInput(response: response)
                 )
             }
 
-        case .filterOptionChanged:
+        case .filterOptionSaveButtonTapped:
             return useCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: [],
@@ -87,10 +84,27 @@ public final class PopupSearchReactor: Reactor {
             .map { (owner, response) in
                 return .updateResult(
                     recentSearch: owner.getRecentSearchKeywords(),
-                    categoryItems: owner.sourceOfTruthCategory.items,
+                    categoryItems: Category.shared.items,
                     results: owner.convertResponseToSearchResultInput(response: response)
                 )
 
+            }
+
+        case .categorySaveButtonTapped:
+            return useCase.getSearchBottomPopUpList(
+                isOpen: FilterOption.shared.status.requestValue,
+                categories: Category.shared.getSelectedCategoryIDs(),
+                page: 0,
+                size: 10,
+                sort: FilterOption.shared.sortOption.requestValue
+            )
+            .withUnretained(self)
+            .map { (owner, response) in
+                return .updateResult(
+                    recentSearch: owner.getRecentSearchKeywords(),
+                    categoryItems: Category.shared.items,
+                    results: owner.convertResponseToSearchResultInput(response: response)
+                )
             }
         }
     }

@@ -81,6 +81,11 @@ extension TagCollectionViewCell: Inputable {
         var id: Int? = nil
         var isSelected: Bool = false
         var isCancelable: Bool = true
+
+        func selectionToggledItem() -> Input {
+            let toggledSelection = !isSelected
+            return Input(title: self.title, id: self.id, isSelected: toggledSelection, isCancelable: self.isCancelable)
+        }
     }
 
     public func injection(with input: Input) {
