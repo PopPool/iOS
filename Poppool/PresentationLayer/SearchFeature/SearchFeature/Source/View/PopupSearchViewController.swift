@@ -68,8 +68,7 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         /// CollectionView에 등록된 Header중 searchResult의 헤더를 찾아서 내부에 있는 button에 접근하기 위한 Rx 바인딩
-        mainView.collectionView.rx
-            .willDisplaySupplementaryView
+        mainView.collectionView.rx.willDisplaySupplementaryView
             .filter { $0.elementKind == PopupSearchView.SectionHeaderKind.searchResult.rawValue }
             .compactMap { $0.supplementaryView as? PopupGridCollectionHeaderView }
             .withUnretained(self)
@@ -89,6 +88,37 @@ extension PopupSearchViewController {
                     }
                     .disposed(by: owner.disposeBag)
             })
+            .disposed(by: disposeBag)
+
+
+        mainView.collectionView.rx.prefetchItems
+            .throttle(.seconds(1), latest: false , scheduler: MainScheduler.instance)
+            .withUnretained(self)
+            .subscribe { (owner, indexPaths) in
+                let sections = owner.mainView.getSectionsFromDataSource()
+
+                guard let searchResultSectionIndex = sections.firstIndex(where: { section in
+                    switch section {
+                    case .searchResult: return true
+                    default: return false
+                    }
+                }) else { return }
+
+                /// prefetch를 하기까지 남은 아이템의 갯수
+                let prefetchCount = 2
+
+                let itemCount = owner.mainView.collectionView.numberOfItems(inSection: searchResultSectionIndex)
+
+                guard itemCount > prefetchCount else { return }
+
+                /// 보여줄 아이템이 prefetchCount만큼 남았을때 가까운 상태라고 확인
+                let isNearBottom = indexPaths.contains {
+                    $0.section == searchResultSectionIndex &&
+                    $0.item >= owner.mainView.collectionView.numberOfItems(inSection: $0.section) - prefetchCount
+                }
+
+                if isNearBottom { owner.reactor?.action.onNext(.viewAllVisibleItems) }
+            }
             .disposed(by: disposeBag)
 
         reactor.state
