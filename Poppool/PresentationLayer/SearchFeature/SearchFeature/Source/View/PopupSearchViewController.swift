@@ -40,13 +40,14 @@ extension PopupSearchViewController {
         mainView.collectionView.rx.itemSelected
             .withUnretained(self)
             .subscribe(onNext: { (owner, indexPath) in
-
                 let sections = owner.mainView.getSectionsFromDataSource()
                 guard indexPath.section < sections.count else { return }
 
                 switch sections[indexPath.section] {
                 case .recentSearch: return
                 case .category:
+
+
                     let categoryReactor = CategorySelectReactor(
                         fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
                     )
@@ -119,6 +120,11 @@ extension PopupSearchViewController {
 
                 if isNearBottom { owner.reactor?.action.onNext(.viewAllVisibleItems) }
             }
+            .disposed(by: disposeBag)
+
+        mainView.canceledCategoryID
+            .map { Reactor.Action.categoryCancelButtonTapped(categoryID: $0) }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         reactor.state

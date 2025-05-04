@@ -2,6 +2,9 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
+import RxRelay
 
 final class PopupSearchView: UIView {
     /// View를 구성하는 section을 정의
@@ -26,6 +29,8 @@ final class PopupSearchView: UIView {
     }
 
     // MARK: - Properties
+    let canceledCategoryID = PublishRelay<Int>()
+
     let searchBar = PPSearchBarView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         $0.setCollectionViewLayout(self.makeLayout(), animated: false)
@@ -245,6 +250,12 @@ extension PopupSearchView {
                     for: indexPath
                 ) as! TagCollectionViewCell
                 cell.injection(with: categoryItem)
+
+                cell.cancelButton.rx.tap
+                    .compactMap { categoryItem.id }
+                    .bind(to: self.canceledCategoryID)
+                    .disposed(by: cell.disposeBag)
+
                 return cell
 
             case .searchResultItem(let searchResultItem):

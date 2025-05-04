@@ -26,6 +26,7 @@
 		05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; };
 		05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC28E42DC696E000C761A5 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC28E32DC696E000C761A5 /* PanModal */; };
+		05EC2AE92DC7C07400C761A5 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC2AE82DC7C07400C761A5 /* RxRelay */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05EC2AE92DC7C07400C761A5 /* RxRelay in Frameworks */,
 				05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */,
 				05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */,
 				05EC234B2DC49AB400C761A5 /* Then in Frameworks */,
@@ -205,6 +207,7 @@
 				05EC234A2DC49AB400C761A5 /* Then */,
 				05EC234D2DC49AC100C761A5 /* SnapKit */,
 				05EC28E32DC696E000C761A5 /* PanModal */,
+				05EC2AE82DC7C07400C761A5 /* RxRelay */,
 			);
 			productName = SearchFeature;
 			productReference = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */;
@@ -708,6 +711,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC28E22DC696E000C761A5 /* XCRemoteSwiftPackageReference "PanModal" */;
 			productName = PanModal;
+		};
+		05EC2AE82DC7C07400C761A5 /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

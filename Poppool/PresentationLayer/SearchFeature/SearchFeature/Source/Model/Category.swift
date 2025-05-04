@@ -51,4 +51,8 @@ extension Category {
         if items == [Category.defaultItem] { return items }
         else { return items.filter { $0.isSelected == true }.map { $0.cancelableItem() } }
     }
+
+    func removeItem(by categoryID: Int) {
+        items.removeAll { $0.id == categoryID }
+    }
 }

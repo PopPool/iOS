@@ -15,6 +15,7 @@ public final class PopupSearchReactor: Reactor {
         case filterOptionSaveButtonTapped
         case categorySaveOrResetButtonTapped
         case viewAllVisibleItems
+        case categoryCancelButtonTapped(categoryID: Int)
     }
 
     public enum Mutation {
@@ -104,7 +105,6 @@ public final class PopupSearchReactor: Reactor {
                     totalPagesCount: response.totalPages,
                     totalElementCount: response.totalElements
                 )
-
             }
 
         case .viewAllVisibleItems:
@@ -120,6 +120,28 @@ public final class PopupSearchReactor: Reactor {
             .withUnretained(self)
             .map { (owner, response) in
                 return .fetchNextPage(searchResultsItems: owner.convertResponseToSearchResultInput(response: response))
+            }
+
+        case .categoryCancelButtonTapped(let categoryID):
+            Category.shared.removeItem(by: categoryID)
+
+            return useCase.getSearchBottomPopUpList(
+                isOpen: FilterOption.shared.status.requestValue,
+                categories: Category.shared.getSelectedCategoryIDs(),
+                page: 0,
+                size: Int32(currentState.paginationSize),
+                sort: FilterOption.shared.sortOption.requestValue
+            )
+            .withUnretained(self)
+            .map { (owner, response) in
+                return .updateSearchResult(
+                    recentSearchItems: owner.getRecentSearchKeywords(),
+                    categoryItems: Category.shared.getCancelableCategoryItems(),
+                    searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
+                    totalPagesCount: response.totalPages,
+                    totalElementCount: response.totalElements
+                )
+
             }
         }
     }
