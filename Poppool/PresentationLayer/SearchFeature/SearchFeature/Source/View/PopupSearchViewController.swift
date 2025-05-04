@@ -68,29 +68,21 @@ extension PopupSearchViewController {
             })
             .disposed(by: disposeBag)
 
-        /// CollectionView에 등록된 Header중 searchResult의 헤더를 찾아서 내부에 있는 button에 접근하기 위한 Rx 바인딩
-        mainView.collectionView.rx.willDisplaySupplementaryView
-            .filter { $0.elementKind == PopupSearchView.SectionHeaderKind.searchResult.rawValue }
-            .compactMap { $0.supplementaryView as? PopupGridCollectionHeaderView }
+        mainView.filterOptionButtonTapped
             .withUnretained(self)
-            .subscribe(onNext: { (owner, headerView) in
-                headerView.filterOptionButton.rx.tap
-                    .subscribe { _ in
-                        let viewController = FilterOptionSelectViewController()
-                        viewController.reactor = FilterOptionSelectReactor()
+            .subscribe { (owner, _) in
+                let viewController = FilterOptionSelectViewController()
+                viewController.reactor = FilterOptionSelectReactor()
 
-                        viewController.reactor?.state
-                            .filter { $0.isSaveButtonTapped == true }
-                            .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
-                            .bind(to: reactor.action)
-                            .disposed(by: owner.disposeBag)
-
-                        owner.presentPanModal(viewController)
-                    }
+                viewController.reactor?.state
+                    .filter { $0.isSaveButtonTapped == true }
+                    .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
+                    .bind(to: reactor.action)
                     .disposed(by: owner.disposeBag)
-            })
-            .disposed(by: disposeBag)
 
+                owner.presentPanModal(viewController)
+            }
+            .disposed(by: disposeBag)
 
         mainView.collectionView.rx.prefetchItems
             .throttle(.seconds(1), latest: false , scheduler: MainScheduler.instance)

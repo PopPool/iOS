@@ -30,6 +30,7 @@ final class PopupSearchView: UIView {
 
     // MARK: - Properties
     let canceledCategoryID = PublishRelay<Int>()
+    let filterOptionButtonTapped = PublishRelay<Void>()
 
     let searchBar = PPSearchBarView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
@@ -301,9 +302,14 @@ extension PopupSearchView {
                     withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue,
                     for: indexPath
                 ) as? PopupGridCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
+
                 if let input = self.popupGridCollectionHeaderInput {
                     header.injection(with: input)
                 } else { header.injection(with: PopupGridCollectionHeaderView.Input(count: 0, sortedTitle: "nil")) }
+
+                header.filterOptionButton.rx.tap
+                    .bind(to: self.filterOptionButtonTapped)
+                    .disposed(by: header.disposeBag)
 
                 return header
             }
