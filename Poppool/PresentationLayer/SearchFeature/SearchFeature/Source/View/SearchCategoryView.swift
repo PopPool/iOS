@@ -16,7 +16,8 @@ final class SearchCategoryView: UIView {
         $0.setImage(UIImage(named: "icon_xmark"), for: .normal)
     }
 
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: SearchCategoryView.makeLayout()).then {
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        $0.setCollectionViewLayout(makeLayout(), animated: false)
         $0.isScrollEnabled = false
 
         $0.register(
@@ -62,7 +63,7 @@ private extension SearchCategoryView {
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(20)
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(32)
         }
 
         closeButton.snp.makeConstraints { make in
@@ -72,23 +73,23 @@ private extension SearchCategoryView {
         }
 
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(24)
             make.height.equalTo(195)
         }
 
         buttonStackView.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(32)
+            make.top.equalTo(collectionView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(50)
-            make.bottom.equalToSuperview()
+            make.height.equalTo(52)
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
     }
 }
 
 private extension SearchCategoryView {
 
-    static func makeLayout() -> UICollectionViewLayout {
+    func makeLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { sectionIndex, environment in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(26),

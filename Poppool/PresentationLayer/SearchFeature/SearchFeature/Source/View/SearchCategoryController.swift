@@ -26,16 +26,6 @@ extension SearchCategoryController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
-    }
-}
-
-// MARK: - SetUp
-private extension SearchCategoryController {
-    func setUp() {
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
     }
 }
 

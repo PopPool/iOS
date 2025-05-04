@@ -25,6 +25,7 @@
 		05EC286C2DC5FE5B00C761A5 /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; };
 		05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05EC28E42DC696E000C761A5 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC28E32DC696E000C761A5 /* PanModal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 				05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */,
 				05EC234B2DC49AB400C761A5 /* Then in Frameworks */,
 				05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */,
+				05EC28E42DC696E000C761A5 /* PanModal in Frameworks */,
 				05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */,
 				05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */,
 				05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */,
@@ -202,6 +204,7 @@
 				05EC23402DC49A8B00C761A5 /* ReactorKit */,
 				05EC234A2DC49AB400C761A5 /* Then */,
 				05EC234D2DC49AC100C761A5 /* SnapKit */,
+				05EC28E32DC696E000C761A5 /* PanModal */,
 			);
 			productName = SearchFeature;
 			productReference = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */;
@@ -264,6 +267,7 @@
 				05EC233F2DC49A8B00C761A5 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				05EC23492DC49AB400C761A5 /* XCRemoteSwiftPackageReference "Then" */,
 				05EC234C2DC49AC100C761A5 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				05EC28E22DC696E000C761A5 /* XCRemoteSwiftPackageReference "PanModal" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0516336E2DC457A900A6C0D1 /* Products */;
@@ -664,6 +668,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		05EC28E22DC696E000C761A5 /* XCRemoteSwiftPackageReference "PanModal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/slackhq/PanModal";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -691,6 +703,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC234C2DC49AC100C761A5 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		05EC28E32DC696E000C761A5 /* PanModal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC28E22DC696E000C761A5 /* XCRemoteSwiftPackageReference "PanModal" */;
+			productName = PanModal;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
