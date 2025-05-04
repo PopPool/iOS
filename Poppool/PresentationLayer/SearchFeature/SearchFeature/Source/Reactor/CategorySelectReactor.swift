@@ -88,7 +88,7 @@ final class CategorySelectReactor: Reactor {
             newState.categoryItems = fetchedItems
 
         case .resetCategory:
-            if originCategoryItems == newState.categoryItems { break }
+            if originCategoryItems.isEmpty { break }
             Category.shared.resetItems()
             newState.isSaveOrResetButtonTapped = true
 

@@ -22,14 +22,16 @@ public final class PopupSearchReactor: Reactor {
             recentSearchItems: [TagCollectionViewCell.Input],
             categoryItems: [TagCollectionViewCell.Input],
             searchResultsItems: [PPPopupGridCollectionViewCell.Input],
-            totalPages: Int32
+            totalPagesCount: Int32,
+            totalElementCount: Int64
         )
 
         case updateSearchResult(
             recentSearchItems: [TagCollectionViewCell.Input],
             categoryItems: [TagCollectionViewCell.Input],
             searchResultsItems: [PPPopupGridCollectionViewCell.Input],
-            totalPage: Int32
+            totalPagesCount: Int32,
+            totalElementCount: Int64
         )
 
         case fetchNextPage(searchResultsItems: [PPPopupGridCollectionViewCell.Input])
@@ -37,15 +39,16 @@ public final class PopupSearchReactor: Reactor {
 
     public struct State {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
-        var categoryItems: [TagCollectionViewCell.Input] = Category.shared.items
+        var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
         var openTitle: String = PopupStatus.open.title
         var sortOptionTitle: String = PopupSortOption.newest.title
 
-        fileprivate var currentPage: Int32 = 0
-        fileprivate let paginationSize: Int32 = 10
-        fileprivate var totalPages: Int32 = 0
-        var hasNextPage: Bool { get { currentPage < (totalPages - 1) } }
+        fileprivate var currentPage: Int = 0
+        fileprivate let paginationSize: Int = 10
+        fileprivate var totalPagesCount: Int = 0
+        var hasNextPage: Bool { get { currentPage < (totalPagesCount - 1) } }
+        var totalElementsCount: Int = 0
     }
 
     // MARK: - properties
@@ -70,16 +73,17 @@ public final class PopupSearchReactor: Reactor {
                 isOpen: PopupStatus.open.requestValue,
                 categories: [],
                 page: 0,
-                size: currentState.paginationSize,
+                size: Int32(currentState.paginationSize),
                 sort: PopupSortOption.newest.requestValue
             )
             .withUnretained(self)
             .map { owner, response in
                 return .setInitialState(
                     recentSearchItems: owner.getRecentSearchKeywords(),
-                    categoryItems: Category.shared.items,
+                    categoryItems: Category.shared.getCancelableCategoryItems(),
                     searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
-                    totalPages: response.totalPages
+                    totalPagesCount: response.totalPages,
+                    totalElementCount: response.totalElements
                 )
             }
 
@@ -88,16 +92,17 @@ public final class PopupSearchReactor: Reactor {
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
                 page: 0,
-                size: currentState.paginationSize,
+                size: Int32(currentState.paginationSize),
                 sort: FilterOption.shared.sortOption.requestValue
             )
             .withUnretained(self)
             .map { (owner, response) in
                 return .updateSearchResult(
                     recentSearchItems: owner.getRecentSearchKeywords(),
-                    categoryItems: Category.shared.items,
+                    categoryItems: Category.shared.getCancelableCategoryItems(),
                     searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
-                    totalPage: response.totalPages
+                    totalPagesCount: response.totalPages,
+                    totalElementCount: response.totalElements
                 )
 
             }
@@ -108,8 +113,8 @@ public final class PopupSearchReactor: Reactor {
             return useCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
-                page: currentState.currentPage + 1,
-                size: currentState.paginationSize,
+                page: Int32(currentState.currentPage + 1),
+                size: Int32(currentState.paginationSize),
                 sort: FilterOption.shared.sortOption.requestValue
             )
             .withUnretained(self)
@@ -122,21 +127,23 @@ public final class PopupSearchReactor: Reactor {
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setInitialState(let recentSearchItems, let categoryItems, let searchResultItems, let totalPages):
+        case .setInitialState(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems
             newState.searchResultItems = searchResultItems
-            newState.totalPages = totalPages
+            newState.totalPagesCount = Int(totalPagesCount)
+            newState.totalElementsCount = Int(totalElementsCount)
 
 
-        case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPages):
+        case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems
             newState.searchResultItems = searchResultItems
             newState.openTitle = FilterOption.shared.status.title
             newState.sortOptionTitle = FilterOption.shared.sortOption.title
             newState.currentPage = 0
-            newState.totalPages = totalPages
+            newState.totalPagesCount = Int(totalPagesCount)
+            newState.totalElementsCount = Int(totalElementsCount)
 
         case .fetchNextPage(let searchResultItems):
             newState.searchResultItems += searchResultItems

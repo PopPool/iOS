@@ -46,4 +46,9 @@ extension Category {
     func getSelectedCategoryIDs() -> [Int64] {
         return items.filter { $0.isSelected == true }.compactMap { $0.id }.map { Int64($0) }
     }
+
+    func getCancelableCategoryItems() -> [TagCollectionViewCell.Input] {
+        if items == [Category.defaultItem] { return items }
+        else { return items.filter { $0.isSelected == true }.map { $0.cancelableItem() } }
+    }
 }

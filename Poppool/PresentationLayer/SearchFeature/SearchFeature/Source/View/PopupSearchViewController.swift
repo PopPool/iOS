@@ -124,6 +124,7 @@ extension PopupSearchViewController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
+
                 owner.mainView.updateSnapshot(
                     recentSearchItems: state.recentSearchItems
                         .map(PopupSearchView.SectionItem.recentSearchItem),
@@ -132,7 +133,7 @@ extension PopupSearchViewController {
                     searchResultItems: state.searchResultItems
                         .map(PopupSearchView.SectionItem.searchResultItem),
                     headerInput: PopupGridCollectionHeaderView.Input(
-                        count: state.searchResultItems.count,
+                        count: state.totalElementsCount,
                         sortedTitle: [state.openTitle, state.sortOptionTitle].joined(separator: "・")
                     )
                 )
