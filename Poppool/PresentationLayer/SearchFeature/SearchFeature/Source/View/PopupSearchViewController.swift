@@ -55,7 +55,7 @@ extension PopupSearchViewController {
 
                     viewController.reactor?.state
                         .filter { $0.isSaveOrResetButtonTapped == true }
-                        .map { _ in Reactor.Action.categorySaveButtonTapped }
+                        .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
                         .bind(to: reactor.action)
                         .disposed(by: self.disposeBag)
 

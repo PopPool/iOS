@@ -13,7 +13,7 @@ public final class PopupSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
         case filterOptionSaveButtonTapped
-        case categorySaveButtonTapped
+        case categorySaveOrResetButtonTapped
     }
 
     public enum Mutation {
@@ -90,7 +90,7 @@ public final class PopupSearchReactor: Reactor {
 
             }
 
-        case .categorySaveButtonTapped:
+        case .categorySaveOrResetButtonTapped:
             return useCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
