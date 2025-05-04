@@ -1,13 +1,12 @@
 import Foundation
 
 import DomainInterface
-import DesignSystem
 
 import ReactorKit
 import RxCocoa
 import RxSwift
 
-final class SearchCategoryReactor: Reactor {
+final class CategorySelectReactor: Reactor {
 
     // MARK: - Reactor
     enum Action {

@@ -5,7 +5,7 @@ import DesignSystem
 import SnapKit
 import Then
 
-final class SearchCategoryView: UIView {
+final class CategorySelectView: UIView {
 
     // MARK: - Components
     private let titleLabel: PPLabel = {
@@ -48,7 +48,7 @@ final class SearchCategoryView: UIView {
 }
 
 // MARK: - SetUp
-private extension SearchCategoryView {
+private extension CategorySelectView {
 
     func addViews() {
         [titleLabel, closeButton, collectionView, buttonStackView].forEach {
@@ -87,7 +87,7 @@ private extension SearchCategoryView {
     }
 }
 
-private extension SearchCategoryView {
+private extension CategorySelectView {
 
     func makeLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { sectionIndex, environment in

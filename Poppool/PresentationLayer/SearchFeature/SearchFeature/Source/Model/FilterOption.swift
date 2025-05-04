@@ -1,5 +1,18 @@
 import Foundation
 
+/// 필터 옵션 상태를 공유하기 위한 싱글톤 객체
+final class FilterOption {
+    static let shared = FilterOption(status: .open, sortOption: .newest)
+
+    let status: PopupStatus
+    let sortOption: PopupSortOption
+
+    private init(status: PopupStatus, sortOption: PopupSortOption) {
+        self.status = status
+        self.sortOption = sortOption
+    }
+}
+
 /// 팝업 상점이 현재 열려 있는지 또는 닫혀 있는지 여부를 나타냅니다
 enum PopupStatus: CaseIterable {
     case open

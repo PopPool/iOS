@@ -40,11 +40,11 @@ extension PopupSearchViewController {
             .subscribe(onNext: { [weak self, reactor] _ in
                 guard let self = self else { return }
                 let sharedCategory = reactor.sourceOfTruthCategory
-                let categoryReactor = SearchCategoryReactor(
+                let categoryReactor = CategorySelectReactor(
                     originCategory: sharedCategory,
                     signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
                 )
-                let viewController = SearchCategoryController()
+                let viewController = CategorySelectViewController()
                 viewController.reactor = categoryReactor
                 self.presentPanModal(viewController)
             })

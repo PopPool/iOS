@@ -8,18 +8,18 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class SearchCategoryController: BaseViewController, View {
+final class CategorySelectViewController: BaseViewController, View {
 
-    typealias Reactor = SearchCategoryReactor
+    typealias Reactor = CategorySelectReactor
 
     // MARK: - Properties
     var disposeBag = DisposeBag()
 
-    private var mainView = SearchCategoryView()
+    private var mainView = CategorySelectView()
 }
 
 // MARK: - Life Cycle
-extension SearchCategoryController {
+extension CategorySelectViewController {
     override func loadView() {
         self.view = mainView
     }
@@ -30,7 +30,7 @@ extension SearchCategoryController {
 }
 
 // MARK: - Methods
-extension SearchCategoryController {
+extension CategorySelectViewController {
     func bind(reactor: Reactor) {
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
@@ -90,7 +90,7 @@ extension SearchCategoryController {
 }
 
 // MARK: - PanModalPresentable
-extension SearchCategoryController: PanModalPresentable {
+extension CategorySelectViewController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }
