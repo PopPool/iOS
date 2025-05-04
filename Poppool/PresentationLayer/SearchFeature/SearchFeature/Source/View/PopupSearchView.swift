@@ -63,8 +63,8 @@ final class PopupSearchView: UIView {
             withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue
         )
 
-        // UICollectionView 최 상단 빈 영역
-        $0.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
+        // UICollectionView 최 상/하단 빈 영역
+        $0.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 48, right: 0)
         $0.contentInsetAdjustmentBehavior = .never
     }
 

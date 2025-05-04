@@ -61,6 +61,7 @@ extension PopupSearchViewController {
                     self.presentPanModal(viewController)
                 case .searchResult:
                     // MARK: 디테일 화면으로 이동하기
+                    // TODO: Presentation에 의존 역전이 되지 않도록 할 방법 고민하기
                     print("SECTION DEBUG:", sections[indexPath.section])
                 }
             })
