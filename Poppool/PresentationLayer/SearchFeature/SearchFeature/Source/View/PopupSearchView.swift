@@ -145,7 +145,7 @@ private extension PopupSearchView {
 
         // Group
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
+            widthDimension: .estimated(100),
             heightDimension: .estimated(31)
         )
         let group = NSCollectionLayoutGroup.horizontal(
@@ -160,9 +160,9 @@ private extension PopupSearchView {
         section.orthogonalScrollingBehavior = .continuous
 
         if headerKind == SectionHeaderKind.recentSearch.rawValue {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 20)
         } else {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
         }
 
         section.boundarySupplementaryItems = [makeTagCollectionHeaderLayout(headerKind)]

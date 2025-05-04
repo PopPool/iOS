@@ -46,8 +46,6 @@ extension PopupSearchViewController {
                 switch sections[indexPath.section] {
                 case .recentSearch: return
                 case .category:
-
-
                     let categoryReactor = CategorySelectReactor(
                         fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
                     )
