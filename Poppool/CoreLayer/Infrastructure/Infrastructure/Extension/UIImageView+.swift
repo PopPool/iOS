@@ -23,7 +23,7 @@ public extension UIImageView {
     func setPPImage(path: String?, completion: @escaping () -> Void) {
         loadImageFromImageLoader(path: path, completion: completion)
     }
-    
+
     func loadImageFromImageLoader(path: String?, completion: (() -> Void)? = nil) {
         // 기본 이미지 저장
         if placeholderImage == nil {
