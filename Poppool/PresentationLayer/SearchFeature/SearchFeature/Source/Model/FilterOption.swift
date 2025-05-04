@@ -1,11 +1,20 @@
 import Foundation
 
 /// 필터 옵션 상태를 공유하기 위한 싱글톤 객체
-final class FilterOption {
+final class FilterOption: NSCopying, Equatable {
+    func copy(with zone: NSZone? = nil) -> Any {
+        return FilterOption(
+            status: self.status,
+            sortOption: self.sortOption
+        )
+    }
+
+    static func == (lhs: FilterOption, rhs: FilterOption) -> Bool { return lhs === rhs }
+
     static let shared = FilterOption(status: .open, sortOption: .newest)
 
-    let status: PopupStatus
-    let sortOption: PopupSortOption
+    var status: PopupStatus
+    var sortOption: PopupSortOption
 
     private init(status: PopupStatus, sortOption: PopupSortOption) {
         self.status = status
