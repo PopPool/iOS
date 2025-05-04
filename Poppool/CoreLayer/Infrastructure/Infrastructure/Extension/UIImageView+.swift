@@ -17,14 +17,24 @@ public extension UIImageView {
     }
 
     func setPPImage(path: String?) {
+        loadImageFromImageLoader(path: path, completion: nil)
+    }
+
+    func setPPImage(path: String?, completion: @escaping () -> Void) {
+        loadImageFromImageLoader(path: path, completion: completion)
+    }
+    
+    func loadImageFromImageLoader(path: String?, completion: (() -> Void)? = nil) {
         // 기본 이미지 저장
         if placeholderImage == nil {
             placeholderImage = UIImage(named: "image_default")
+            completion?()
         }
 
         guard let path = path, !path.isEmpty else {
             image = placeholderImage
             currentImageURL = nil
+            completion?()
             return
         }
 
@@ -32,11 +42,13 @@ public extension UIImageView {
         guard let encodedURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
             image = placeholderImage
             currentImageURL = nil
+            completion?()
             return
         }
 
         // 이미 같은 URL을 로딩했고 이미지가 있으면 재로딩 방지
         if currentImageURL == encodedURL && self.image != nil && self.image != placeholderImage {
+            completion?()
             return
         }
 
@@ -46,6 +58,7 @@ public extension UIImageView {
         // 먼저 메모리 캐시 확인
         if let cachedImage = MemoryStorage.shared.fetchImage(url: encodedURL) {
             self.image = cachedImage
+            completion?()
             return
         }
 
@@ -53,77 +66,14 @@ public extension UIImageView {
         if let diskImage = DiskStorage.shared.fetchImage(url: encodedURL) {
             MemoryStorage.shared.store(image: diskImage, url: encodedURL)
             self.image = diskImage
+            completion?()
             return
         }
 
         ImageLoader.shared.loadImage(with: encodedURL, defaultImage: placeholderImage, imageQuality: .origin) { [weak self] image in
             guard let self else { return }
-
+            defer { completion?() }
             DispatchQueue.main.async {
-                // 현재 요청 ID와 캡처된 ID가 일치하는지 확인 (다른 이미지로 변경되었으면 무시)
-                if self.currentImageURL == encodedURL {
-                    if let image = image {
-                        self.image = image
-                    } else if self.image == nil {
-                        // 이미지 로드 실패 시 기본 이미지 표시
-                        self.image = self.placeholderImage
-                    }
-                }
-            }
-        }
-    }
-
-    func setPPImage(path: String?, completion: @escaping () -> Void) {
-        // 기본 이미지 저장
-        if placeholderImage == nil {
-            placeholderImage = UIImage(named: "image_default")
-        }
-
-        guard let path = path, !path.isEmpty else {
-            image = placeholderImage
-            currentImageURL = nil
-            completion()
-            return
-        }
-
-        let imageURLString = Secrets.popPoolS3BaseURL + path
-        guard let encodedURL = imageURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            image = placeholderImage
-            currentImageURL = nil
-            completion()
-            return
-        }
-
-        // 이미 같은 URL을 로딩했고 이미지가 있으면 재로딩 방지
-        if currentImageURL == encodedURL && self.image != nil && self.image != placeholderImage {
-            completion()
-            return
-        }
-
-        // 현재 이미지 URL을 업데이트
-        currentImageURL = encodedURL
-
-        // 먼저 메모리 캐시 확인
-        if let cachedImage = MemoryStorage.shared.fetchImage(url: encodedURL) {
-            self.image = cachedImage
-            completion()
-            return
-        }
-
-        // 다음으로 디스크 캐시 확인
-        if let diskImage = DiskStorage.shared.fetchImage(url: encodedURL) {
-            MemoryStorage.shared.store(image: diskImage, url: encodedURL)
-            self.image = diskImage
-            completion()
-            return
-        }
-
-        ImageLoader.shared.loadImage(with: encodedURL, defaultImage: placeholderImage, imageQuality: .origin) { [weak self] image in
-            DispatchQueue.main.async {
-                defer { completion() }
-
-                guard let self else { return }
-
                 // 현재 요청 ID와 캡처된 ID가 일치하는지 확인 (다른 이미지로 변경되었으면 무시)
                 if self.currentImageURL == encodedURL {
                     if let image = image {
