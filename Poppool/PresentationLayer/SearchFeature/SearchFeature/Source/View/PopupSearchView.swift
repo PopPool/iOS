@@ -4,18 +4,21 @@ import SnapKit
 import Then
 
 final class PopupSearchView: UIView {
+    /// View를 구성하는 section을 정의
     enum Section: CaseIterable, Hashable {
         case recentSearch
         case category
         case searchResult
     }
 
+    /// Section에 들어갈 Item을 정의한 변수
     enum SectionItem: Hashable {
         case recentSearchItem(TagCollectionViewCell.Input)
         case categoryItem(TagCollectionViewCell.Input)
         case searchResultItem(PPPopupGridCollectionViewCell.Input)
     }
 
+    /// Section의 헤더를 구분하기 위한 변수
     enum SectionHeaderKind: String {
         case recentSearch = "recentSearchElementKind"
         case category = "categoryElementKind"
@@ -144,6 +147,8 @@ private extension PopupSearchView {
             subitems: [item]
         )
 
+        group.interItemSpacing = .fixed(6)
+
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
@@ -153,8 +158,6 @@ private extension PopupSearchView {
         } else {
             section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 0)
         }
-
-        section.interGroupSpacing = 6
 
         section.boundarySupplementaryItems = [makeTagCollectionHeaderLayout(headerKind)]
 
