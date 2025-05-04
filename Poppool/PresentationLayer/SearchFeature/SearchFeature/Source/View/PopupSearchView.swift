@@ -24,10 +24,9 @@ final class PopupSearchView: UIView {
 
     // MARK: - Properties
     let searchBar = PPSearchBarView()
-    let collectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: PopupSearchView.makeLayout()
-    ).then {
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
+        $0.setCollectionViewLayout(self.makeLayout(), animated: false)
+
         $0.register(
             TagCollectionViewCell.self,
             forCellWithReuseIdentifier: TagCollectionViewCell.identifiers
@@ -49,12 +48,16 @@ final class PopupSearchView: UIView {
             forSupplementaryViewOfKind: SectionHeaderKind.category.rawValue,
             withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue
         )
-
         $0.register(
             PopupGridCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
             withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue
         )
+        $0.backgroundColor = UIColor.green
+
+        // UICollectionView 최 상단 빈 영역
+        $0.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
+        $0.contentInsetAdjustmentBehavior = .never
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
@@ -106,17 +109,23 @@ private extension PopupSearchView {
 
 // MARK: - Layout
 private extension PopupSearchView {
-    static func makeLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { sectionIndex, environment in
-            switch Section.allCases[sectionIndex] {
-            case .recentSearch: return self.makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
-            case .category: return self.makeTagSectionLayout(SectionHeaderKind.category.rawValue)
-            case .searchResult: return self.makeSearchResultSectionLayout(SectionHeaderKind.searchResult.rawValue)
+    private func makeLayout() -> UICollectionViewLayout {
+        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            guard let self else { return nil }
+            let sections = self.dataSource?.snapshot().sectionIdentifiers ?? []
+            guard sectionIndex < sections.count else { return nil }
+            switch sections[sectionIndex] {
+            case .recentSearch:
+                return makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
+            case .category:
+                return makeTagSectionLayout(SectionHeaderKind.category.rawValue)
+            case .searchResult:
+                return makeSearchResultSectionLayout(SectionHeaderKind.searchResult.rawValue)
             }
         }
     }
 
-    static func makeTagSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
+    func makeTagSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
         // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(100),
@@ -137,15 +146,21 @@ private extension PopupSearchView {
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0)
+
+        if headerKind == SectionHeaderKind.recentSearch.rawValue {
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 0)
+        } else {
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 0)
+        }
+
         section.interGroupSpacing = 6
 
-        section.boundarySupplementaryItems = [getHeaderViewLayoutWithContentInset(headerKind)]
+        section.boundarySupplementaryItems = [makeTagCollectionHeaderLayout(headerKind)]
 
         return section
     }
 
-    static func makeSearchResultSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
+    func makeSearchResultSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
         // Item
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.5),
@@ -166,15 +181,15 @@ private extension PopupSearchView {
 
         // Section
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
         section.interGroupSpacing = 24
 
-        section.boundarySupplementaryItems = [getHeaderViewLayoutWithContentInset(headerKind)]
+        section.boundarySupplementaryItems = [makePopupGridCollectionHeaderLayout(headerKind)]
 
         return section
     }
 
-    static func makeTagCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
+    func makeTagCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
         // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -189,7 +204,7 @@ private extension PopupSearchView {
         return header
     }
 
-    static func makePopupGridCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
+    func makePopupGridCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
         // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -202,25 +217,6 @@ private extension PopupSearchView {
         )
 
         return header
-    }
-
-    static func getHeaderViewLayoutWithContentInset(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
-        switch SectionHeaderKind(rawValue: elementKind)! {
-        case .recentSearch:
-            let header = makeTagCollectionHeaderLayout(elementKind)
-            header.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 0, bottom: 16, trailing: 0)
-            return header
-
-        case .category:
-            let header = makeTagCollectionHeaderLayout(elementKind)
-            header.contentInsets = NSDirectionalEdgeInsets(top: 48, leading: 0, bottom: 16, trailing: 0)
-            return header
-
-        case .searchResult:
-            let header = makePopupGridCollectionHeaderLayout(elementKind)
-            header.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
-            return header
-        }
     }
 }
 
@@ -302,10 +298,20 @@ extension PopupSearchView {
         searchResultItems: [SectionItem]
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
-        snapshot.appendSections(PopupSearchView.Section.allCases)
-        snapshot.appendItems(recentSearchItems, toSection: .recentSearch)
-        snapshot.appendItems(categoryItems, toSection: .category)
-        snapshot.appendItems(searchResultItems, toSection: .searchResult)
+        if !recentSearchItems.isEmpty {
+            snapshot.appendSections([PopupSearchView.Section.recentSearch])
+            snapshot.appendItems(recentSearchItems, toSection: .recentSearch)
+        }
+
+        if !categoryItems.isEmpty {
+            snapshot.appendSections([PopupSearchView.Section.category])
+            snapshot.appendItems(categoryItems, toSection: .category)
+        }
+
+        if !searchResultItems.isEmpty {
+            snapshot.appendSections([PopupSearchView.Section.searchResult])
+            snapshot.appendItems(searchResultItems, toSection: .searchResult)
+        }
 
         dataSource?.apply(snapshot, animatingDifferences: true)
     }

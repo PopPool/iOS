@@ -66,12 +66,14 @@ private extension PopupGridCollectionHeaderView {
     func setupConstraints() {
         cellCountLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.verticalEdges.equalToSuperview()
+            make.height.equalTo(22)
+            make.centerY.equalToSuperview()
         }
 
         sortedButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
-            make.verticalEdges.equalToSuperview()
+            make.height.equalTo(22)
+            make.centerY.equalToSuperview()
         }
 
         sortedTitleLabel.snp.makeConstraints { make in

@@ -60,8 +60,8 @@ private extension TagCollectionHeaderView {
         }
 
         titleButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
             make.trailing.equalToSuperview()
+            make.centerY.equalTo(sectionTitleLabel)
             make.height.equalTo(20)
         }
     }
