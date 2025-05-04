@@ -20,7 +20,7 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
         $0.textColor = .g400
     }
 
-    private let sortedTitleLabel = PPLabel(style: .regular, fontSize: 13)
+    private let filterOptionLabel = PPLabel(style: .regular, fontSize: 13)
 
     private let dropDownImageView = UIImageView().then {
         $0.image = UIImage(named: "icon_dropdown")
@@ -28,7 +28,7 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
 
     }
 
-    let sortedButton = UIButton()
+    let filterOptionButton = UIButton()
 
     // MARK: - init
     override init(frame: CGRect) {
@@ -54,12 +54,12 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
 // MARK: - SetUp
 private extension PopupGridCollectionHeaderView {
     func addViews() {
-        [cellCountLabel, sortedButton].forEach {
+        [cellCountLabel, filterOptionButton].forEach {
             addSubview($0)
         }
 
-        [sortedTitleLabel, dropDownImageView].forEach {
-            sortedButton.addSubview($0)
+        [filterOptionLabel, dropDownImageView].forEach {
+            filterOptionButton.addSubview($0)
         }
     }
 
@@ -70,21 +70,21 @@ private extension PopupGridCollectionHeaderView {
             make.centerY.equalToSuperview()
         }
 
-        sortedButton.snp.makeConstraints { make in
+        filterOptionButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.height.equalTo(22)
             make.centerY.equalToSuperview()
         }
 
-        sortedTitleLabel.snp.makeConstraints { make in
+        filterOptionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.verticalEdges.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
 
         dropDownImageView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(dropDownImageView.snp.height)
-            make.leading.equalTo(sortedTitleLabel.snp.trailing).offset(6)
+            make.leading.equalTo(filterOptionLabel.snp.trailing).offset(6)
             make.trailing.equalToSuperview()
         }
     }
@@ -92,12 +92,12 @@ private extension PopupGridCollectionHeaderView {
 
 extension PopupGridCollectionHeaderView: Inputable {
     struct Input {
-        var count: Int64
+        var count: Int
         var sortedTitle: String?
     }
 
     func injection(with input: Input) {
-        sortedTitleLabel.text = input.sortedTitle
         cellCountLabel.text = "총 \(input.count)개"
+        filterOptionLabel.text = input.sortedTitle
     }
 }

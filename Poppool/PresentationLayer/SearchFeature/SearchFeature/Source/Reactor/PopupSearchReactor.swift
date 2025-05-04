@@ -17,7 +17,7 @@ public final class PopupSearchReactor: Reactor {
     public enum Mutation {
         case setInitialState(
             recentSearch: [TagCollectionViewCell.Input],
-            category: [TagCollectionViewCell.Input],
+            categoryItems: [TagCollectionViewCell.Input],
             results: [PPPopupGridCollectionViewCell.Input]
         )
     }
@@ -26,6 +26,8 @@ public final class PopupSearchReactor: Reactor {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
+        var openTitle: String = PopupStatus.open.title
+        var sortOptionTitle: String = PopupSortOption.newest.title
     }
 
     // MARK: - properties
@@ -36,30 +38,34 @@ public final class PopupSearchReactor: Reactor {
     private let userDefaultService = UserDefaultService()
     private let useCase: PopUpAPIUseCase
 
+    public let sourceOfTruthCategory: Category = Category(
+        items: [TagCollectionViewCell.Input(title: "카테고리", isSelected: false, isCancelable: false)]
+    )
+
     // MARK: - init
     public init(useCase: PopUpAPIUseCase) {
         self.useCase = useCase
-        self.initialState = State()
+        self.initialState = State(categoryItems: self.sourceOfTruthCategory.items)
     }
 
     // MARK: - Reactor Methods
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            print("ViewDidLoad")
             return useCase.getSearchBottomPopUpList(
-                isOpen: true,
+                isOpen: PopupStatus.open.requestValue,
                 categories: [],
                 page: 0,
                 size: 10,
-                sort: "NEWEST"
+                sort: PopupSortOption.newest.requestValue
             )
             .withUnretained(self)
             .map { owner, response in
                 return .setInitialState(
-                    recentSearch: [],
-                    category: [],
-                    results: owner.convertResponseToSearchResultInput(response: response))
+                    recentSearch: owner.getRecentSearchKeywords(),
+                    categoryItems: owner.sourceOfTruthCategory.items,
+                    results: owner.convertResponseToSearchResultInput(response: response)
+                )
             }
         }
     }
@@ -67,10 +73,10 @@ public final class PopupSearchReactor: Reactor {
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case let .setInitialState(recentSearch, category, results):
-            newState.recentSearchItems = recentSearch
-            newState.categoryItems = category
-            newState.searchResultItems = results
+        case let .setInitialState(recentSearchItems, categoryItems, searchResultItems):
+            newState.recentSearchItems = recentSearchItems
+            newState.categoryItems = categoryItems
+            newState.searchResultItems = searchResultItems
         }
         return newState
     }
@@ -78,8 +84,9 @@ public final class PopupSearchReactor: Reactor {
 
 // MARK: - Functions
 private extension PopupSearchReactor {
-    func getRecentSearchKeywords() -> [String] {
-        return userDefaultService.fetchArray(key: "searchList") ?? []
+    func getRecentSearchKeywords() -> [TagCollectionViewCell.Input] {
+        let searchKeywords = userDefaultService.fetchArray(key: "searchList") ?? []
+        return searchKeywords.map { TagCollectionViewCell.Input(title: $0) }
     }
 
     func convertResponseToSearchResultInput(response: GetSearchBottomPopUpListResponse) -> [PPPopupGridCollectionViewCell.Input] {

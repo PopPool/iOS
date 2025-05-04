@@ -293,7 +293,8 @@ final class SearchReactor: Reactor {
 
     func setSearchList() {
         let searchList = userDefaultService.fetchArray(key: "searchList") ?? []
-        recentKeywordSection.inputDataList = searchList.map { return .init(title: $0) }
+        recentKeywordSection.inputDataList = searchList.map { return
+            CancelableTagSectionCell.Input(title: $0) }
     }
 
     func appendSearchList(text: String?) {

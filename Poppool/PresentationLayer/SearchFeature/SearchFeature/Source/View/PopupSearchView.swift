@@ -61,6 +61,7 @@ final class PopupSearchView: UIView {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
+    private var popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input?
 
     // MARK: - init
     init() {
@@ -257,7 +258,8 @@ extension PopupSearchView {
     }
 
     private func configureDataSourceHeader() {
-        dataSource?.supplementaryViewProvider = { (collectionView, elementKind, indexPath) -> UICollectionReusableView? in
+        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, elementKind, indexPath) -> UICollectionReusableView? in
+            guard let self else { return nil }
             switch SectionHeaderKind(rawValue: elementKind)! {
             case .recentSearch:
                 guard let header = collectionView.dequeueReusableSupplementaryView(
@@ -285,7 +287,9 @@ extension PopupSearchView {
                     withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue,
                     for: indexPath
                 ) as? PopupGridCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
-                header.injection(with: PopupGridCollectionHeaderView.Input(count: 0, sortedTitle: "Hello"))
+                if let input = self.popupGridCollectionHeaderInput {
+                    header.injection(with: input)
+                } else { header.injection(with: PopupGridCollectionHeaderView.Input(count: 0, sortedTitle: "nil")) }
 
                 return header
             }
@@ -295,9 +299,15 @@ extension PopupSearchView {
     func updateSnapshot(
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
-        searchResultItems: [SectionItem]
+        searchResultItems: [SectionItem],
+        headerInput popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
+
+        if let input = popupGridCollectionHeaderInput {
+            self.popupGridCollectionHeaderInput = input
+        }
+
         if !recentSearchItems.isEmpty {
             snapshot.appendSections([PopupSearchView.Section.recentSearch])
             snapshot.appendItems(recentSearchItems, toSection: .recentSearch)
@@ -311,6 +321,7 @@ extension PopupSearchView {
         if !searchResultItems.isEmpty {
             snapshot.appendSections([PopupSearchView.Section.searchResult])
             snapshot.appendItems(searchResultItems, toSection: .searchResult)
+            snapshot.reloadSections([.searchResult])
         }
 
         dataSource?.apply(snapshot, animatingDifferences: true)

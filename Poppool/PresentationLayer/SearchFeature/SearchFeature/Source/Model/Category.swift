@@ -1,7 +1,7 @@
 import Foundation
 
-final class Category: NSCopying, Equatable {
-    static func == (lhs: Category, rhs: Category) -> Bool { return lhs === rhs }
+public final class Category: NSCopying, Equatable {
+    public static func == (lhs: Category, rhs: Category) -> Bool { return lhs === rhs }
 
     var items: [TagCollectionViewCell.Input]
 
@@ -13,7 +13,7 @@ final class Category: NSCopying, Equatable {
         items.contains { $0.id == id }
     }
 
-    func copy(with zone: NSZone? = nil) -> Any {
+    public func copy(with zone: NSZone? = nil) -> Any {
         return Category(items: self.items)
     }
 
