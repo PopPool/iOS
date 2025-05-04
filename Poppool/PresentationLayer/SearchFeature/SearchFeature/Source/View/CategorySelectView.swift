@@ -60,6 +60,7 @@ private extension CategorySelectView {
         }
     }
 
+    // FIXME: 레이아웃 에러로 인한 Modal이 살짝 내려가지는 문제 발생중
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(20)
