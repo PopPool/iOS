@@ -1,7 +1,7 @@
 import Infrastructure
 import SnapKit
-import UIKit
 import Then
+import UIKit
 
 final class BalloonChipCell: UICollectionViewCell {
     static let identifier = "BalloonChipCell"
