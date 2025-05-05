@@ -29,9 +29,11 @@ extension AppDelegate {
         // MARK: Register Service
         DIContainer.register(Provider.self) { return ProviderImpl() }
         DIContainer.register(KeyChainService.self) { return KeyChainService() }
+        DIContainer.register(UserDefaultService.self) { return UserDefaultService() }
 
         // MARK: Resolve service
         @Dependency var provider: Provider
+        @Dependency var userDefaultService: UserDefaultService
 
         // MARK: Register repository
         DIContainer.register(MapRepository.self) { return MapRepositoryImpl(provider: provider) }
@@ -47,6 +49,7 @@ extension AppDelegate {
         DIContainer.register(KakaoLoginRepository.self) { return KakaoLoginRepositoryImpl() }
         DIContainer.register(AppleLoginRepository.self) { return AppleLoginRepositoryImpl() }
         DIContainer.register(CategoryRepository.self) { return CategoryRepositoryImpl(provider: provider) }
+        DIContainer.register(SearchAPIRepository.self) { return SearchAPIRepositoryImpl(provider: provider, userDefaultService: userDefaultService) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
@@ -61,6 +64,7 @@ extension AppDelegate {
         @Dependency var kakaoLoginRepository: KakaoLoginRepository
         @Dependency var appleLoginRepository: AppleLoginRepository
         @Dependency var categoryRepository: CategoryRepository
+        @Dependency var searchAPIRepository: SearchAPIRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
@@ -75,6 +79,7 @@ extension AppDelegate {
         DIContainer.register(KakaoLoginUseCase.self) { return KakaoLoginUseCaseImpl(repository: kakaoLoginRepository) }
         DIContainer.register(AppleLoginUseCase.self) { return AppleLoginUseCaseImpl(repository: appleLoginRepository) }
         DIContainer.register(FetchCategoryListUseCase.self) { return FetchCategoryListUseCaseImpl(repository: categoryRepository) }
+        DIContainer.register(FetchKeywordBasePopupListUseCase.self) { return FetchKeywordBasePopupListUseCaseImpl(repository: searchAPIRepository) }
     }
 }
 

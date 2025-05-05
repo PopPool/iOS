@@ -59,6 +59,9 @@
 				Network/API/PreSignedAPI/RequestDTO/PresignedURLRequestDTO.swift,
 				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLDTO.swift,
 				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLResponseDTO.swift,
+				Network/API/SearchAPI/RequestDTO/GetSearchPopupStoreRequestDTO.swift,
+				Network/API/SearchAPI/ResponseDTO/GetSearchPopupStoreResponseDTO.swift,
+				Network/API/SearchAPI/SearchAPIEndPoint.swift,
 				Network/API/SignUpAPI/RequestDTO/CheckNickNameRequestDTO.swift,
 				Network/API/SignUpAPI/RequestDTO/SignUpRequestDTO.swift,
 				Network/API/SignUpAPI/SignUpAPIEndpoint.swift,
@@ -105,6 +108,7 @@
 				RepositoryImpl/MapRepositoryImpl.swift,
 				RepositoryImpl/PopUpAPIRepositoryImpl.swift,
 				RepositoryImpl/PreSignedRepositoryImpl.swift,
+				RepositoryImpl/Search/SearchAPIRepositoryImpl.swift,
 				RepositoryImpl/SignUpRepositoryImpl.swift,
 				RepositoryImpl/UserAPIRepositoryImpl.swift,
 			);
