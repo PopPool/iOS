@@ -29,7 +29,7 @@ final class PopupSearchView: UIView {
     }
 
     // MARK: - Properties
-    let canceledCategoryID = PublishRelay<Int>()
+    let categoryTagRemoveButtonTapped = PublishRelay<Int>()
     let filterOptionButtonTapped = PublishRelay<Void>()
 
     let searchBar = PPSearchBarView()
@@ -254,7 +254,7 @@ extension PopupSearchView {
 
                 cell.cancelButton.rx.tap
                     .compactMap { categoryItem.id }
-                    .bind(to: self.canceledCategoryID)
+                    .bind(to: self.categoryTagRemoveButtonTapped)
                     .disposed(by: cell.disposeBag)
 
                 return cell

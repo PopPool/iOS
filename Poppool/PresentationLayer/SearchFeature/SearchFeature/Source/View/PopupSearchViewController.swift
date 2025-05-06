@@ -32,45 +32,11 @@ extension PopupSearchViewController {
 // MARK: - Bind
 extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
-        rx.viewDidLoad
-            .map { Reactor.Action.viewDidLoad }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        mainView.collectionView.rx.itemSelected
-            .withUnretained(self)
-            .compactMap { (owner, indexPath) in
-                let sections = owner.mainView.getSectionsFromDataSource()
-                guard indexPath.section < sections.count else { return nil }
-
-                switch sections[indexPath.section] {
-                case .recentSearch: return Reactor.Action.recentSearchTagButtonTapped
-                case .category: return Reactor.Action.categoryTagButtonTapped
-                case .searchResult: return Reactor.Action.searchResultItemTapped
-                }
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-
-        mainView.filterOptionButtonTapped
-            .withUnretained(self)
-            .subscribe { (owner, _) in
-                let viewController = FilterOptionSelectViewController()
-                viewController.reactor = FilterOptionSelectReactor()
-
-                viewController.reactor?.state
-                    .filter { $0.isSaveButtonTapped == true }
-                    .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
-                    .bind(to: reactor.action)
-                    .disposed(by: owner.disposeBag)
-
-                owner.presentPanModal(viewController)
-            }
-            .disposed(by: disposeBag)
+        self.bindAction(reactor: reactor)
+        self.bindState(reactor: reactor)
 
         mainView.collectionView.rx.prefetchItems
-            .throttle(.seconds(1), latest: false , scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), latest: false , scheduler: MainScheduler.asyncInstance)
             .withUnretained(self)
             .subscribe { (owner, indexPaths) in
                 let sections = owner.mainView.getSectionsFromDataSource()
@@ -99,13 +65,6 @@ extension PopupSearchViewController {
             }
             .disposed(by: disposeBag)
 
-        mainView.canceledCategoryID
-            .map { Reactor.Action.categoryTagRemoveButtonTapped(categoryID: $0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        self.bindState(reactor: reactor)
-
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -126,6 +85,42 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
     }
 
+    private func bindAction(reactor: Reactor) {
+        rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.collectionView.rx.itemSelected
+            .compactMap { indexPath in
+                let sections = self.mainView.getSectionsFromDataSource()
+                guard indexPath.section < sections.count else { return nil }
+
+                switch sections[indexPath.section] {
+                case .recentSearch:
+                    return Reactor.Action.recentSearchTagButtonTapped
+
+                case .category:
+                    return Reactor.Action.categoryTagButtonTapped
+
+                case .searchResult:
+                    return Reactor.Action.searchResultItemTapped
+                }
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.categoryTagRemoveButtonTapped
+            .map { Reactor.Action.categoryTagRemoveButtonTapped(categoryID: $0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.filterOptionButtonTapped
+            .map { Reactor.Action.filterOptionButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+
     private func bindState(reactor: Reactor) {
         reactor.pulse(\.$presentTarget)
             .withUnretained(self)
@@ -143,6 +138,18 @@ extension PopupSearchViewController {
                         .filter { $0.isSaveOrResetButtonTapped }
                         .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
                         .bind(to: owner.reactor!.action)
+                        .disposed(by: owner.disposeBag)
+
+                    owner.presentPanModal(viewController)
+
+                case .filterOptionSelector:
+                    let viewController = FilterOptionSelectViewController()
+                    viewController.reactor = FilterOptionSelectReactor()
+
+                    viewController.reactor?.state
+                        .filter { $0.isSaveButtonTapped == true }
+                        .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
+                        .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
                     owner.presentPanModal(viewController)

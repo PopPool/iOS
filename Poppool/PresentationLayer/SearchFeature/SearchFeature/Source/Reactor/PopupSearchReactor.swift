@@ -13,14 +13,16 @@ public final class PopupSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
 
+        case recentSearchTagButtonTapped
+
         case categoryTagRemoveButtonTapped(categoryID: Int)
         case categoryTagButtonTapped
 
+        case filterOptionButtonTapped
+        case searchResultItemTapped
         case loadNextPage
 
 
-        case recentSearchTagButtonTapped
-        case searchResultItemTapped
 
 
         case filterOptionSaveButtonTapped
@@ -49,6 +51,7 @@ public final class PopupSearchReactor: Reactor {
 
     public enum PresentTarget {
         case categorySelector
+        case filterOptionSelector
     }
 
     public struct State {
@@ -175,6 +178,9 @@ public final class PopupSearchReactor: Reactor {
                     .just(.setupTotalElementCount(count: response.totalElements))
                 ])
             }
+
+        case .filterOptionButtonTapped:
+            return .just(.present(target: .filterOptionSelector))
         }
     }
 
@@ -200,6 +206,8 @@ public final class PopupSearchReactor: Reactor {
             switch target {
             case .categorySelector:
                 newState.presentTarget = .categorySelector
+            case .filterOptionSelector:
+                newState.presentTarget = .filterOptionSelector
             }
 
         case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
