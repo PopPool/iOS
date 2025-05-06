@@ -14,8 +14,13 @@ public final class PopupSearchReactor: Reactor {
         case viewDidLoad
 
         case categoryTagRemoveButtonTapped(categoryID: Int)
+        case categoryTagButtonTapped
 
         case loadNextPage
+
+
+        case recentSearchTagButtonTapped
+        case searchResultItemTapped
 
 
         case filterOptionSaveButtonTapped
@@ -38,6 +43,12 @@ public final class PopupSearchReactor: Reactor {
         case setupTotalElementCount(count: Int64)
 
         case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
+
+        case present(target: PresentTarget)
+    }
+
+    public enum PresentTarget {
+        case categorySelector
     }
 
     public struct State {
@@ -46,6 +57,8 @@ public final class PopupSearchReactor: Reactor {
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
         var openTitle: String = PopupStatus.open.title
         var sortOptionTitle: String = PopupSortOption.newest.title
+
+        @Pulse var presentTarget: PresentTarget?
 
         fileprivate var currentPage: Int = 0
         fileprivate let paginationSize: Int = 10
@@ -98,8 +111,7 @@ public final class PopupSearchReactor: Reactor {
             }
 
         case .loadNextPage:
-            guard currentState.hasNextPage else {
-                return .empty() }
+            guard currentState.hasNextPage else { return .empty() }
 
             return popupAPIUseCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
@@ -116,6 +128,12 @@ public final class PopupSearchReactor: Reactor {
                     .just(.appendSearchResult(items: searchResultItems))
                 ])
             }
+
+        case .categoryTagButtonTapped:
+            return .just(.present(target: .categorySelector))
+
+        case .recentSearchTagButtonTapped: return .empty()
+        case .searchResultItemTapped: return .empty()
 
         case .filterOptionSaveButtonTapped, .categorySaveOrResetButtonTapped:
             return popupAPIUseCase.getSearchBottomPopUpList(
@@ -178,8 +196,12 @@ public final class PopupSearchReactor: Reactor {
         case .setupTotalElementCount(let count):
             newState.totalElementsCount = Int(count)
 
+        case .present(let target):
+            switch target {
+            case .categorySelector:
+                newState.presentTarget = .categorySelector
+            }
 
-            
         case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems

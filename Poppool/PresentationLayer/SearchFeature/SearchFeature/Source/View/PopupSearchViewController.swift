@@ -39,33 +39,19 @@ extension PopupSearchViewController {
 
         mainView.collectionView.rx.itemSelected
             .withUnretained(self)
-            .subscribe(onNext: { (owner, indexPath) in
+            .compactMap { (owner, indexPath) in
                 let sections = owner.mainView.getSectionsFromDataSource()
-                guard indexPath.section < sections.count else { return }
+                guard indexPath.section < sections.count else { return nil }
 
                 switch sections[indexPath.section] {
-                case .recentSearch: return
-                case .category:
-                    let categoryReactor = CategorySelectReactor(
-                        fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
-                    )
-                    let viewController = CategorySelectViewController()
-                    viewController.reactor = categoryReactor
-
-                    viewController.reactor?.state
-                        .filter { $0.isSaveOrResetButtonTapped == true }
-                        .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
-                        .bind(to: reactor.action)
-                        .disposed(by: self.disposeBag)
-
-                    self.presentPanModal(viewController)
-                case .searchResult:
-                    // MARK: 디테일 화면으로 이동하기
-                    // TODO: Presentation에 의존 역전이 되지 않도록 할 방법 고민하기
-                    print("SECTION DEBUG:", sections[indexPath.section])
+                case .recentSearch: return Reactor.Action.recentSearchTagButtonTapped
+                case .category: return Reactor.Action.categoryTagButtonTapped
+                case .searchResult: return Reactor.Action.searchResultItemTapped
                 }
-            })
+            }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
 
         mainView.filterOptionButtonTapped
             .withUnretained(self)
@@ -118,6 +104,8 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        self.bindState(reactor: reactor)
+
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -134,6 +122,33 @@ extension PopupSearchViewController {
                         sortedTitle: [state.openTitle, state.sortOptionTitle].joined(separator: "・")
                     )
                 )
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func bindState(reactor: Reactor) {
+        reactor.pulse(\.$presentTarget)
+            .withUnretained(self)
+            .subscribe { owner, target in
+                switch target {
+                case .categorySelector:
+                    let categoryReactor = CategorySelectReactor(
+                        fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
+                    )
+                    let viewController = CategorySelectViewController()
+                    viewController.reactor = categoryReactor
+
+                    // 완료 후 다시 Reactor로 Action 보내기
+                    categoryReactor.state
+                        .filter { $0.isSaveOrResetButtonTapped }
+                        .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
+                        .bind(to: owner.reactor!.action)
+                        .disposed(by: owner.disposeBag)
+
+                    owner.presentPanModal(viewController)
+
+                default: break
+                }
             }
             .disposed(by: disposeBag)
     }
