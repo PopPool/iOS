@@ -29,6 +29,7 @@ final class PopupSearchView: UIView {
     }
 
     // MARK: - Properties
+    let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
     let filterOptionButtonTapped = PublishRelay<Void>()
 
@@ -243,6 +244,7 @@ extension PopupSearchView {
                     for: indexPath
                 ) as! TagCollectionViewCell
                 cell.injection(with: recentRearchItem)
+
                 return cell
 
             case .categoryItem(let categoryItem):
@@ -283,6 +285,10 @@ extension PopupSearchView {
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
                 header.setupHeader(title: "최근 검색어", buttonTitle: "모두삭제")
+
+                header.removeAllButton.rx.tap
+                    .bind(to: self.recentSearchTagRemoveAllButtonTapped)
+                    .disposed(by: header.disposeBag)
 
                 return header
 

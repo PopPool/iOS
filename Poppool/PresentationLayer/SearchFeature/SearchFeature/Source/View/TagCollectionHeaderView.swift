@@ -19,7 +19,7 @@ final class TagCollectionHeaderView: UICollectionReusableView {
         $0.font = .korFont(style: .bold, size: 16)
     }
 
-    let titleButton = UIButton().then {
+    let removeAllButton = UIButton().then {
         $0.isHidden = true
 
     }
@@ -45,7 +45,7 @@ final class TagCollectionHeaderView: UICollectionReusableView {
 // MARK: - SetUp
 private extension TagCollectionHeaderView {
     func addViews() {
-        [sectionTitleLabel, titleButton].forEach {
+        [sectionTitleLabel, removeAllButton].forEach {
             self.addSubview($0)
         }
     }
@@ -57,7 +57,7 @@ private extension TagCollectionHeaderView {
             make.height.equalTo(22)
         }
 
-        titleButton.snp.makeConstraints { make in
+        removeAllButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalTo(sectionTitleLabel)
             make.height.equalTo(20)
@@ -69,13 +69,13 @@ extension TagCollectionHeaderView {
     func setupHeader(title: String, buttonTitle: String? = nil) {
         sectionTitleLabel.text = title
         if let buttonTitle = buttonTitle {
-            titleButton.isHidden = false
+            removeAllButton.isHidden = false
             let attributes: [NSAttributedString.Key: Any] = [
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 .font: UIFont.korFont(style: .regular, size: 13)
             ]
             let attributedTitle = NSAttributedString(string: buttonTitle, attributes: attributes)
-            titleButton.setAttributedTitle(attributedTitle, for: .normal)
+            removeAllButton.setAttributedTitle(attributedTitle, for: .normal)
         }
     }
 }

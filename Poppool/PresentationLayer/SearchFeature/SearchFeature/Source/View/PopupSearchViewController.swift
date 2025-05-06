@@ -42,6 +42,11 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        mainView.recentSearchTagRemoveAllButtonTapped
+            .map { Reactor.Action.recentSearchTagRemoveAllButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         mainView.collectionView.rx.itemSelected
             .compactMap { indexPath in
                 let sections = self.mainView.getSectionsFromDataSource()

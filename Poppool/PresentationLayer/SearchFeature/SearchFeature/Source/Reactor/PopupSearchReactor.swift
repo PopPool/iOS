@@ -14,6 +14,7 @@ public final class PopupSearchReactor: Reactor {
         case viewDidLoad
 
         case recentSearchTagButtonTapped
+        case recentSearchTagRemoveAllButtonTapped
 
         case categoryTagRemoveButtonTapped(categoryID: Int)
         case categoryTagButtonTapped
@@ -96,6 +97,14 @@ public final class PopupSearchReactor: Reactor {
                         .just(.updateDataSource)
                     ])
                 }
+
+        case .recentSearchTagRemoveAllButtonTapped:
+            self.removeAllRecentSearchItems()
+            return .concat([
+                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
+                .just(.updateDataSource)
+            ])
+
 
         case .searchResultPrefetchItems(let indexPathList):
             guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
@@ -241,6 +250,12 @@ private extension PopupSearchReactor {
 
     func makeSearchResultHeaderInput(count: Int64, title: String = FilterOption.shared.title) -> SearchResultHeaderView.Input {
         return SearchResultHeaderView.Input(count: Int(count), sortedTitle: title)
+    }
+}
+
+private extension PopupSearchReactor {
+    func removeAllRecentSearchItems() {
+        userDefaultService.delete(keyType: .searchKeyword)
     }
 }
 
