@@ -13,9 +13,11 @@ public final class PopupSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
 
-        case textFieldEditing(text: String)
-        case textFieldExitEditing(text: String)
-        case textFieldEndEditing
+        case searchBarEditing(text: String)
+        case searchBarExitEditing(text: String)
+        case searchBarEndEditing
+        case searchBarClearButtonTapped
+        case searchBarCancelButtonTapped
 
         case recentSearchTagButtonTapped
         case recentSearchTagRemoveAllButtonTapped
@@ -27,7 +29,6 @@ public final class PopupSearchReactor: Reactor {
         case searchResultItemTapped
         case searchResultPrefetchItems(indexPathList: [IndexPath])
 
-        case clearButtonTapped
         case filterSaveButtonTapped
         case categorySaveOrResetButtonTapped
     }
@@ -121,10 +122,10 @@ public final class PopupSearchReactor: Reactor {
                     ])
                 }
 
-        case .textFieldEditing(let text):
+        case .searchBarEditing(let text):
             return .just(.clearButton(state: text.isEmpty ? .hidden : .visible))
 
-        case .textFieldExitEditing(let text):
+        case .searchBarExitEditing(let text):
             return fetchSearchResult(keyword: text)
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
@@ -141,7 +142,7 @@ public final class PopupSearchReactor: Reactor {
                     ])
                 }
 
-        case .textFieldEndEditing:
+        case .searchBarEndEditing:
             return .concat([
                 .just(.clearButton(state: .hidden)),
                 .just(.endEditing)
@@ -192,7 +193,7 @@ public final class PopupSearchReactor: Reactor {
                     ])
             }
 
-        case .clearButtonTapped:
+        case .searchBarClearButtonTapped:
             return Observable.concat([
                 .just(.clearButton(state: .hidden)),
                 .just(.clearTextField)

@@ -43,24 +43,24 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.tapGestureRecognizer.rx.event
-            .map { _ in Reactor.Action.textFieldEndEditing }
+            .map { _ in Reactor.Action.searchBarEndEditing }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.searchBar.clearButton.rx.tap
-            .map { Reactor.Action.clearButtonTapped }
+            .map { Reactor.Action.searchBarClearButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin, .editingChanged])
             .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
-            .map(Reactor.Action.textFieldEditing)
+            .map(Reactor.Action.searchBarEditing)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.searchBar.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
             .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
-            .map(Reactor.Action.textFieldExitEditing)
+            .map(Reactor.Action.searchBarExitEditing)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
