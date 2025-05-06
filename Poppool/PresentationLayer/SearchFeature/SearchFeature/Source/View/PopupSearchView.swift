@@ -32,6 +32,7 @@ final class PopupSearchView: UIView {
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
     let filterStatusButtonTapped = PublishRelay<Void>()
+    let tapGestureRecognizer = UITapGestureRecognizer()
 
     let searchBar = PPSearchBarView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
@@ -67,6 +68,8 @@ final class PopupSearchView: UIView {
         // UICollectionView 최 상/하단 빈 영역
         $0.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 48, right: 0)
         $0.contentInsetAdjustmentBehavior = .never
+
+        $0.addGestureRecognizer(tapGestureRecognizer)
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?

@@ -50,8 +50,12 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.searchBar.clearButton.rx.tap
-            .debug("DEBUG: Clear Button Tapped")
             .map { Reactor.Action.clearButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.tapGestureRecognizer.rx.event
+            .map { _ in Reactor.Action.textFieldEndEditing }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

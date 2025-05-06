@@ -15,6 +15,7 @@ public final class PopupSearchReactor: Reactor {
 
         case textFieldEditing(text: String)
         case textFieldExitEditing(text: String)
+        case textFieldEndEditing
 
         case recentSearchTagButtonTapped
         case recentSearchTagRemoveAllButtonTapped
@@ -139,6 +140,12 @@ public final class PopupSearchReactor: Reactor {
                         .just(.updateDataSource)
                     ])
                 }
+
+        case .textFieldEndEditing:
+            return .concat([
+                .just(.clearButton(state: .hidden)),
+                .just(.endEditing)
+            ])
 
 
         case .recentSearchTagRemoveAllButtonTapped:
