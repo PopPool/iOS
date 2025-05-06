@@ -13,12 +13,13 @@ public final class PopupSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
 
+        case categoryTagRemoveButtonTapped(categoryID: Int)
+
         case loadNextPage
 
 
         case filterOptionSaveButtonTapped
         case categorySaveOrResetButtonTapped
-        case categoryCancelButtonTapped(categoryID: Int)
     }
 
     public enum Mutation {
@@ -135,7 +136,7 @@ public final class PopupSearchReactor: Reactor {
                 )
             }
 
-        case .categoryCancelButtonTapped(let categoryID):
+        case .categoryTagRemoveButtonTapped(let categoryID):
             Category.shared.removeItem(by: categoryID)
 
             return popupAPIUseCase.getSearchBottomPopUpList(
@@ -146,15 +147,15 @@ public final class PopupSearchReactor: Reactor {
                 sort: FilterOption.shared.sortOption.requestValue
             )
             .withUnretained(self)
-            .map { (owner, response) in
-                return .updateSearchResult(
-                    recentSearchItems: owner.getRecentSearchKeywords(),
-                    categoryItems: Category.shared.getCancelableCategoryItems(),
-                    searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
-                    totalPagesCount: response.totalPages,
-                    totalElementCount: response.totalElements
-                )
+            .flatMap { (owner, response) -> Observable<Mutation> in
+                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
 
+                return Observable.concat([
+                    .just(.setupCategory(items: Category.shared.items)),
+                    .just(.setupSearchResult(items: searchResultItems)),
+                    .just(.setupTotalPageCount(count: response.totalPages)),
+                    .just(.setupTotalElementCount(count: response.totalElements))
+                ])
             }
         }
     }

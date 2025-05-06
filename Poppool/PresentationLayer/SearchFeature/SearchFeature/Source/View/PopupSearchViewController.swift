@@ -114,7 +114,7 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.canceledCategoryID
-            .map { Reactor.Action.categoryCancelButtonTapped(categoryID: $0) }
+            .map { Reactor.Action.categoryTagRemoveButtonTapped(categoryID: $0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
