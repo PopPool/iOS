@@ -14,15 +14,18 @@ public class PPSearchBarView: UIView {
     }
 
     let searchBar = UISearchBar().then {
-        $0.placeholder = "팝업스토어명을 입력해보세요"
+        $0.searchTextField.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .korFont(style: .regular, size: 14))
         $0.tintColor = .g400
         $0.backgroundColor = .g50
         $0.setImage(UIImage(named: "icon_search_gray"), for: .search, state: .normal)
-        $0.setImage(UIImage(named: "icon_clear_button"), for: .clear, state: .normal)
         $0.searchBarStyle = .minimal
-        if let searchBarTextFieldBackgroundView = $0.searchTextField.subviews.first {
-            searchBarTextFieldBackgroundView.isHidden = true
-        }
+        $0.searchTextField.clearButtonMode = .never
+        $0.searchTextField.subviews.first?.isHidden = true
+    }
+
+    let clearButton = UIButton(type: .custom).then {
+        $0.setImage(UIImage(named: "icon_clear_button"), for: .normal)
+        $0.isHidden = true
     }
 
     let cancelButton = UIButton(type: .system).then {
@@ -53,6 +56,10 @@ private extension PPSearchBarView {
         [searchBar, cancelButton].forEach {
             self.stackView.addArrangedSubview($0)
         }
+
+        [clearButton].forEach {
+            self.searchBar.addSubview($0)
+        }
     }
 
     func setupConstraints() {
@@ -66,6 +73,12 @@ private extension PPSearchBarView {
         searchBar.snp.makeConstraints { make in
             make.height.equalToSuperview()
         }
+
+        clearButton.snp.makeConstraints { make in
+             make.trailing.equalToSuperview().inset(12)
+             make.centerY.equalToSuperview()
+             make.size.equalTo(20)
+         }
 
         cancelButton.snp.makeConstraints { make in
             make.height.equalToSuperview()

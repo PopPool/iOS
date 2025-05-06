@@ -34,6 +34,34 @@ extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
         self.bindAction(reactor: reactor)
         self.bindState(reactor: reactor)
+
+
+
+        mainView.searchBar.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
+            .map(Reactor.Action.textFieldExitEditing)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin, .editingChanged])
+            .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
+            .map(Reactor.Action.textFieldEditing)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$clearButton)
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                owner.mainView.searchBar.clearButton.isHidden = state?.value ?? true
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$endEditing)
+            .withUnretained(self)
+            .subscribe { (owner, _) in
+                owner.mainView.endEditing(true)
+            }
+            .disposed(by: disposeBag)
     }
 
     private func bindAction(reactor: Reactor) {

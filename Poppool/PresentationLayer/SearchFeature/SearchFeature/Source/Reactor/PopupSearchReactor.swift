@@ -13,6 +13,9 @@ public final class PopupSearchReactor: Reactor {
     public enum Action {
         case viewDidLoad
 
+        case textFieldEditing(text: String)
+        case textFieldExitEditing(text: String)
+
         case recentSearchTagButtonTapped
         case recentSearchTagRemoveAllButtonTapped
 
@@ -22,7 +25,6 @@ public final class PopupSearchReactor: Reactor {
         case searchResultFilterButtonTapped
         case searchResultItemTapped
         case searchResultPrefetchItems(indexPathList: [IndexPath])
-
 
         case filterSaveButtonTapped
         case categorySaveOrResetButtonTapped
@@ -38,6 +40,8 @@ public final class PopupSearchReactor: Reactor {
         case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
 
         case present(target: PresentTarget)
+        case clearButton(state: ClearButtonState)
+        case endEditing
 
         case updateCurrentPage(to: Int32)
         case updateDataSource
@@ -48,6 +52,18 @@ public final class PopupSearchReactor: Reactor {
         case filterSelector
     }
 
+    public enum ClearButtonState {
+        var value: Bool {
+            switch self {
+            case .visible: return false
+            case .hidden: return true
+            }
+        }
+        
+        case visible
+        case hidden
+    }
+
     public struct State {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
@@ -55,6 +71,8 @@ public final class PopupSearchReactor: Reactor {
         var searchResultHeader: SearchResultHeaderView.Input? = nil
 
         @Pulse var present: PresentTarget?
+        @Pulse var clearButton: ClearButtonState?
+        @Pulse var endEditing: Void?
         @Pulse var updateDataSource: Void?
 
         fileprivate var currentPage: Int32 = 0
@@ -94,9 +112,31 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateCurrentPage(to: 0)),
                         .just(.updateDataSource)
                     ])
                 }
+
+        case .textFieldEditing(let text):
+            return .just(.clearButton(state: text.isEmpty ? .hidden : .visible))
+
+        case .textFieldExitEditing(let text):
+            return fetchSearchResult(keyword: text)
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return Observable.concat([
+                        .just(.setupRecentSearch(items: [])),
+                        .just(.setupCategory(items: [])),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: 0))), // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.updateCurrentPage(to: 0)),
+                        .just(.clearButton(state: .hidden)),
+                        .just(.endEditing),
+                        .just(.updateDataSource)
+                    ])
+                }
+
 
         case .recentSearchTagRemoveAllButtonTapped:
             self.removeAllRecentSearchItems()
@@ -190,12 +230,13 @@ public final class PopupSearchReactor: Reactor {
             newState.updateDataSource = ()
 
         case .present(let target):
-            switch target {
-            case .categorySelector:
-                newState.present = .categorySelector
-            case .filterSelector:
-                newState.present = .filterSelector
-            }
+            newState.present = target
+
+        case .clearButton(let state):
+            newState.clearButton = state
+
+        case .endEditing:
+            newState.endEditing = ()
         }
 
         return newState
@@ -219,6 +260,10 @@ private extension PopupSearchReactor {
             size: size,
             sort: sort
         )
+    }
+
+    func fetchSearchResult(keyword: String) -> Observable<KeywordBasePopupStoreListResponse> {
+        fetchKeywordBasePopupListUseCase.execute(keyword: keyword)
     }
 }
 
