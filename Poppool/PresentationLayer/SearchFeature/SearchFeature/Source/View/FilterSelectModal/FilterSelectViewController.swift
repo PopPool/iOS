@@ -8,18 +8,18 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class FilterOptionSelectViewController: BaseViewController, View {
+final class FilterSelectViewController: BaseViewController, View {
 
-    typealias Reactor = FilterOptionSelectReactor
+    typealias Reactor = FilterSelectReactor
 
     // MARK: - Properties
     var disposeBag = DisposeBag()
 
-    private var mainView = FilterOptionSelectView()
+    private var mainView = FilterSelectView()
 }
 
 // MARK: - Life Cycle
-extension FilterOptionSelectViewController {
+extension FilterSelectViewController {
     override func loadView() {
         self.view = mainView
     }
@@ -30,7 +30,7 @@ extension FilterOptionSelectViewController {
 }
 
 // MARK: - Methods
-extension FilterOptionSelectViewController {
+extension FilterSelectViewController {
     func bind(reactor: Reactor) {
         mainView.closeButton.rx.tap
             .withUnretained(self)
@@ -47,12 +47,12 @@ extension FilterOptionSelectViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        mainView.sortOptionSegmentControl.rx.controlEvent(.valueChanged)
+        mainView.sortSegmentControl.rx.controlEvent(.valueChanged)
             .withUnretained(self)
             .map { (owner, _) in
-                if owner.mainView.sortOptionSegmentControl.selectedSegmentIndex == 0 {
-                    Reactor.Action.changeSortOption(sortOption: .newest)
-                } else { Reactor.Action.changeSortOption(sortOption: .popularity) }
+                if owner.mainView.sortSegmentControl.selectedSegmentIndex == 0 {
+                    Reactor.Action.changeSort(sort: .newest)
+                } else { Reactor.Action.changeSort(sort: .popularity) }
             }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -67,8 +67,8 @@ extension FilterOptionSelectViewController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
-                owner.mainView.statusSegmentControl.selectedSegmentIndex = state.selectedFilterOption.status.index
-                owner.mainView.sortOptionSegmentControl.selectedSegmentIndex = state.selectedFilterOption.sortOption.index
+                owner.mainView.statusSegmentControl.selectedSegmentIndex = state.selectedFilter.status.index
+                owner.mainView.sortSegmentControl.selectedSegmentIndex = state.selectedFilter.sort.index
                 owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable
             }
             .disposed(by: disposeBag)
@@ -76,7 +76,7 @@ extension FilterOptionSelectViewController {
 }
 
 // MARK: - PanModalPresentable
-extension FilterOptionSelectViewController: PanModalPresentable {
+extension FilterSelectViewController: PanModalPresentable {
     var panScrollable: UIScrollView? {
         return nil
     }

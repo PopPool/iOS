@@ -4,7 +4,7 @@ import DesignSystem
 
 import SnapKit
 
-final class FilterOptionSelectView: UIView {
+final class FilterSelectView: UIView {
 
     // MARK: - Components
     private let titleLabel = PPLabel(style: .bold, fontSize: 18, text: "노출 순서를 선택해주세요")
@@ -17,9 +17,9 @@ final class FilterOptionSelectView: UIView {
 
     let statusSegmentControl = PPSegmentedControl(type: .base, segments: ["오픈", "종료"], selectedSegmentIndex: 0)
 
-    private let sortOptionLabel = PPLabel(style: .regular, fontSize: 13, text: "팝업순서")
+    private let sortLabel = PPLabel(style: .regular, fontSize: 13, text: "팝업순서")
 
-    let sortOptionSegmentControl = PPSegmentedControl(type: .base, segments: ["신규순", "인기순"], selectedSegmentIndex: 0)
+    let sortSegmentControl = PPSegmentedControl(type: .base, segments: ["신규순", "인기순"], selectedSegmentIndex: 0)
 
     let saveButton = PPButton(style: .primary, text: "저장", disabledText: "저장")
 
@@ -38,10 +38,10 @@ final class FilterOptionSelectView: UIView {
 }
 
 // MARK: - SetUp
-private extension FilterOptionSelectView {
+private extension FilterSelectView {
     func addViews() {
         [titleLabel, closeButton, statusLabel, statusSegmentControl,
-         sortOptionLabel, sortOptionSegmentControl, saveButton].forEach {
+         sortLabel, sortSegmentControl, saveButton].forEach {
             self.addSubview($0)
         }
     }
@@ -69,18 +69,18 @@ private extension FilterOptionSelectView {
             make.leading.trailing.equalToSuperview().inset(20)
         }
 
-        sortOptionLabel.snp.makeConstraints { make in
+        sortLabel.snp.makeConstraints { make in
             make.top.equalTo(statusSegmentControl.snp.bottom).offset(20)
             make.leading.equalToSuperview().inset(20)
         }
 
-        sortOptionSegmentControl.snp.makeConstraints { make in
-            make.top.equalTo(sortOptionLabel.snp.bottom).offset(8)
+        sortSegmentControl.snp.makeConstraints { make in
+            make.top.equalTo(sortLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview().inset(20)
         }
 
         saveButton.snp.makeConstraints { make in
-            make.top.equalTo(sortOptionSegmentControl.snp.bottom).offset(32)
+            make.top.equalTo(sortSegmentControl.snp.bottom).offset(32)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }

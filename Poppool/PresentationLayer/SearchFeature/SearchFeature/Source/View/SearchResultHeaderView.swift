@@ -20,14 +20,14 @@ public final class SearchResultHeaderView: UICollectionReusableView {
         $0.textColor = .g400
     }
 
-    private let filterOptionLabel = PPLabel(style: .regular, fontSize: 13)
+    private let filterStatusLabel = PPLabel(style: .regular, fontSize: 13)
 
     private let dropDownImageView = UIImageView().then {
         $0.image = UIImage(named: "icon_dropdown")
         $0.isUserInteractionEnabled = false
     }
 
-    let filterOptionButton = UIButton()
+    let filterStatusButton = UIButton()
 
     // MARK: - init
     override init(frame: CGRect) {
@@ -51,12 +51,12 @@ public final class SearchResultHeaderView: UICollectionReusableView {
 // MARK: - SetUp
 private extension SearchResultHeaderView {
     func addViews() {
-        [cellCountLabel, filterOptionButton].forEach {
+        [cellCountLabel, filterStatusButton].forEach {
             addSubview($0)
         }
 
-        [filterOptionLabel, dropDownImageView].forEach {
-            filterOptionButton.addSubview($0)
+        [filterStatusLabel, dropDownImageView].forEach {
+            filterStatusButton.addSubview($0)
         }
     }
 
@@ -67,13 +67,13 @@ private extension SearchResultHeaderView {
             make.centerY.equalToSuperview()
         }
 
-        filterOptionButton.snp.makeConstraints { make in
+        filterStatusButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.height.equalTo(22)
             make.centerY.equalToSuperview()
         }
 
-        filterOptionLabel.snp.makeConstraints { make in
+        filterStatusLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.centerY.equalToSuperview()
         }
@@ -81,7 +81,7 @@ private extension SearchResultHeaderView {
         dropDownImageView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview()
             make.width.equalTo(dropDownImageView.snp.height)
-            make.leading.equalTo(filterOptionLabel.snp.trailing).offset(6)
+            make.leading.equalTo(filterStatusLabel.snp.trailing).offset(6)
             make.trailing.equalToSuperview()
         }
     }
@@ -90,7 +90,7 @@ private extension SearchResultHeaderView {
 extension SearchResultHeaderView: Inputable {
     public struct Input {
         var count: Int?
-        var sortedTitle: String?
+        var filterStatusTitle: String?
     }
 
     public func injection(with input: Input) {
@@ -98,8 +98,8 @@ extension SearchResultHeaderView: Inputable {
             cellCountLabel.text = "총 \(count)개"
         }
 
-        if let sortedTitle = input.sortedTitle {
-            filterOptionLabel.text = sortedTitle
+        if let filterStatusTitle = input.filterStatusTitle {
+            filterStatusLabel.text = filterStatusTitle
         }
     }
 }

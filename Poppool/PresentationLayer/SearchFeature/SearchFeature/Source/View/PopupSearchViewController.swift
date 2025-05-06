@@ -71,7 +71,7 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        mainView.filterOptionButtonTapped
+        mainView.filterStatusButtonTapped
             .map { Reactor.Action.searchResultFilterButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -120,13 +120,13 @@ extension PopupSearchViewController {
 
                     owner.presentPanModal(viewController)
 
-                case .filterOptionSelector:
-                    let viewController = FilterOptionSelectViewController()
-                    viewController.reactor = FilterOptionSelectReactor()
+                case .filterSelector:
+                    let viewController = FilterSelectViewController()
+                    viewController.reactor = FilterSelectReactor()
 
                     viewController.reactor?.state
                         .filter { $0.isSaveButtonTapped == true }
-                        .map { _ in Reactor.Action.filterOptionSaveButtonTapped }
+                        .map { _ in Reactor.Action.filterSaveButtonTapped }
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 

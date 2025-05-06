@@ -31,7 +31,7 @@ final class PopupSearchView: UIView {
     // MARK: - Properties
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
-    let filterOptionButtonTapped = PublishRelay<Void>()
+    let filterStatusButtonTapped = PublishRelay<Void>()
 
     let searchBar = PPSearchBarView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
@@ -311,10 +311,10 @@ extension PopupSearchView {
 
                 if let input = self.searchResultHeaderInput {
                     header.injection(with: input)
-                } else { header.injection(with: SearchResultHeaderView.Input(count: 0, sortedTitle: "nil")) }
+                } else { header.injection(with: SearchResultHeaderView.Input(count: 0, filterStatusTitle: "nil")) }
 
-                header.filterOptionButton.rx.tap
-                    .bind(to: self.filterOptionButtonTapped)
+                header.filterStatusButton.rx.tap
+                    .bind(to: self.filterStatusButtonTapped)
                     .disposed(by: header.disposeBag)
 
                 return header

@@ -24,8 +24,10 @@ public final class PopupSearchReactor: Reactor {
         case searchResultPrefetchItems(indexPathList: [IndexPath])
 
 
-        case filterOptionSaveButtonTapped
+        case filterSaveButtonTapped
         case categorySaveOrResetButtonTapped
+
+        
     }
 
     public enum Mutation {
@@ -45,7 +47,7 @@ public final class PopupSearchReactor: Reactor {
 
     public enum PresentTarget {
         case categorySelector
-        case filterOptionSelector
+        case filterSelector
     }
 
     public struct State {
@@ -127,7 +129,7 @@ public final class PopupSearchReactor: Reactor {
         case .searchResultItemTapped:
             return .empty()
 
-        case .filterOptionSaveButtonTapped, .categorySaveOrResetButtonTapped:
+        case .filterSaveButtonTapped, .categorySaveOrResetButtonTapped:
             return fetchSearchResult()
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
@@ -158,7 +160,7 @@ public final class PopupSearchReactor: Reactor {
                 }
 
         case .searchResultFilterButtonTapped:
-            return .just(.present(target: .filterOptionSelector))
+            return .just(.present(target: .filterSelector))
         }
     }
 
@@ -193,8 +195,8 @@ public final class PopupSearchReactor: Reactor {
             switch target {
             case .categorySelector:
                 newState.present = .categorySelector
-            case .filterOptionSelector:
-                newState.present = .filterOptionSelector
+            case .filterSelector:
+                newState.present = .filterSelector
             }
         }
 
@@ -206,11 +208,11 @@ public final class PopupSearchReactor: Reactor {
 private extension PopupSearchReactor {
 
     func fetchSearchResult(
-        isOpen: Bool = FilterOption.shared.status.requestValue,
+        isOpen: Bool = Filter.shared.status.requestValue,
         categories: [Int64] = Category.shared.getSelectedCategoryIDs(),
         page: Int32 = 0,
         size: Int32 = 10,
-        sort: String = FilterOption.shared.sortOption.requestValue
+        sort: String = Filter.shared.sort.requestValue
     ) -> Observable<GetSearchBottomPopUpListResponse> {
         return popupAPIUseCase.getSearchBottomPopUpList(
             isOpen: isOpen,
@@ -249,8 +251,8 @@ private extension PopupSearchReactor {
         }
     }
 
-    func makeSearchResultHeaderInput(count: Int64, title: String = FilterOption.shared.title) -> SearchResultHeaderView.Input {
-        return SearchResultHeaderView.Input(count: Int(count), sortedTitle: title)
+    func makeSearchResultHeaderInput(count: Int64, title: String = Filter.shared.title) -> SearchResultHeaderView.Input {
+        return SearchResultHeaderView.Input(count: Int(count), filterStatusTitle: title)
     }
 }
 

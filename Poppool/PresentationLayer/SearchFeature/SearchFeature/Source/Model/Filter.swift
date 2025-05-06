@@ -1,27 +1,27 @@
 import Foundation
 
 /// 필터 옵션 상태를 공유하기 위한 싱글톤 객체
-final class FilterOption: NSCopying, Equatable {
+final class Filter: NSCopying, Equatable {
     func copy(with zone: NSZone? = nil) -> Any {
-        return FilterOption(
+        return Filter(
             status: self.status,
-            sortOption: self.sortOption
+            sort: self.sort
         )
     }
 
-    static func == (lhs: FilterOption, rhs: FilterOption) -> Bool { return lhs === rhs }
+    static func == (lhs: Filter, rhs: Filter) -> Bool { return lhs === rhs }
 
-    static let shared = FilterOption(status: .open, sortOption: .newest)
+    static let shared = Filter(status: .open, sort: .newest)
 
     var status: PopupStatus = .open
-    var sortOption: PopupSortOption = .newest
+    var sort: PopupSort = .newest
 
-    private init(status: PopupStatus, sortOption: PopupSortOption) {
+    private init(status: PopupStatus, sort: PopupSort) {
         self.status = status
-        self.sortOption = sortOption
+        self.sort = sort
     }
 
-    var title: String {  [status.title, sortOption.title].joined(separator: "・") }
+    var title: String {  [status.title, sort.title].joined(separator: "・") }
 }
 
 /// 팝업 상점이 현재 열려 있는지 또는 닫혀 있는지 여부를 나타냅니다
@@ -52,7 +52,7 @@ enum PopupStatus: CaseIterable {
 }
 
 /// 팝업 검색 결과를위한 정렬 옵션을 나타냅니다
-enum PopupSortOption: CaseIterable {
+enum PopupSort: CaseIterable {
     case newest
     case popularity
 
