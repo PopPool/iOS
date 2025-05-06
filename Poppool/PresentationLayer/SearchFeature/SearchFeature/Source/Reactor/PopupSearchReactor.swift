@@ -20,6 +20,7 @@ public final class PopupSearchReactor: Reactor {
         case searchBarCancelButtonTapped
 
         case recentSearchTagButtonTapped
+        case recentSearchTagRemoveButtonTapped(text: String)
         case recentSearchTagRemoveAllButtonTapped
 
         case categoryTagRemoveButtonTapped(categoryID: Int)
@@ -171,6 +172,12 @@ public final class PopupSearchReactor: Reactor {
             }
             else { return .empty() }    // TODO: 이전 화면으로 보내기
 
+        case .recentSearchTagRemoveButtonTapped(let text):
+            self.removeRecentSearchItem(text: text)
+            return Observable.concat([
+                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
+                .just(.updateDataSource)
+            ])
 
         case .recentSearchTagRemoveAllButtonTapped:
             self.removeAllRecentSearchItems()
@@ -316,7 +323,7 @@ private extension PopupSearchReactor {
 // MARK: - Make Functions
 private extension PopupSearchReactor {
     func makeRecentSearchItems() -> [TagCollectionViewCell.Input] {
-        let searchKeywords = userDefaultService.fetchArray(key: "searchList") ?? []
+        let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword) ?? []
         return searchKeywords.map { TagCollectionViewCell.Input(title: $0) }
     }
 
@@ -347,6 +354,11 @@ private extension PopupSearchReactor {
 
 // MARK: - Remove Funtions
 private extension PopupSearchReactor {
+    func removeRecentSearchItem(text: String) {
+        guard let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword) else { return }
+        userDefaultService.save(keyType: .searchKeyword, value: searchKeywords.filter { $0 != text })
+    }
+
     func removeAllRecentSearchItems() {
         userDefaultService.delete(keyType: .searchKeyword)
     }

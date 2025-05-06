@@ -11,7 +11,7 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 
     var disposeBag = DisposeBag()
 
-    private let titleLabel = PPLabel(style: .medium, fontSize: 11)
+    let titleLabel = PPLabel(style: .medium, fontSize: 11)
 
     let cancelButton = UIButton()
 

@@ -29,6 +29,7 @@ final class PopupSearchView: UIView {
     }
 
     // MARK: - Properties
+    let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
     let filterStatusButtonTapped = PublishRelay<Void>()
@@ -247,6 +248,11 @@ extension PopupSearchView {
                     for: indexPath
                 ) as! TagCollectionViewCell
                 cell.injection(with: recentRearchItem)
+
+                cell.cancelButton.rx.tap
+                    .compactMap { cell.titleLabel.text }
+                    .bind(to: self.recentSearchTagRemoveButtonTapped)
+                    .disposed(by: cell.disposeBag)
 
                 return cell
 
