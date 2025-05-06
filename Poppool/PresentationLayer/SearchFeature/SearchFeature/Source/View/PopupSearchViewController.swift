@@ -36,7 +36,7 @@ extension PopupSearchViewController {
         self.bindState(reactor: reactor)
 
         mainView.collectionView.rx.prefetchItems
-            .throttle(.seconds(1), latest: false , scheduler: MainScheduler.asyncInstance)
+            .throttle(.milliseconds(100), latest: false , scheduler: MainScheduler.asyncInstance)
             .withUnretained(self)
             .subscribe { (owner, indexPaths) in
                 let sections = owner.mainView.getSectionsFromDataSource()
