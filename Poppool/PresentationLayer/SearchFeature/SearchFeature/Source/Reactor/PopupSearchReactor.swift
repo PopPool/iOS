@@ -32,14 +32,6 @@ public final class PopupSearchReactor: Reactor {
     }
 
     public enum Mutation {
-        case updateSearchResult(
-            recentSearchItems: [TagCollectionViewCell.Input],
-            categoryItems: [TagCollectionViewCell.Input],
-            searchResultsItems: [PPPopupGridCollectionViewCell.Input],
-            totalPagesCount: Int32,
-            totalElementCount: Int64
-        )
-
         case setupRecentSearch(items: [TagCollectionViewCell.Input])
         case setupCategory(items: [TagCollectionViewCell.Input])
         case setupSearchResult(items: [PPPopupGridCollectionViewCell.Input])
@@ -108,10 +100,10 @@ public final class PopupSearchReactor: Reactor {
             )
             .withUnretained(self)
             .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+                let searchResultItems = owner.makeSearchResultInputs(response: response)
 
                 return Observable.concat([
-                    .just(.setupRecentSearch(items: owner.getRecentSearchKeywords())),
+                    .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
                     .just(.setupCategory(items: Category.shared.items)),
                     .just(.setupSearchResult(items: searchResultItems)),
                     .just(.setupTotalPageCount(count: response.totalPages)),
@@ -132,7 +124,7 @@ public final class PopupSearchReactor: Reactor {
             )
             .withUnretained(self)
             .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+                let searchResultItems = owner.makeSearchResultInputs(response: response)
 
                 return Observable.concat([
                     .just(.appendSearchResult(items: searchResultItems)),
@@ -161,7 +153,7 @@ public final class PopupSearchReactor: Reactor {
                 )
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
-                    let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+                    let searchResultItems = owner.makeSearchResultInputs(response: response)
 
 
                     return .concat([
@@ -192,9 +184,9 @@ public final class PopupSearchReactor: Reactor {
             .withUnretained(self)
             .flatMap { (owner, response) -> Observable<Mutation> in
                 return .concat([
-                    .just(.setupRecentSearch(items: owner.getRecentSearchKeywords())),
-                    .just(.setupCategory(items: Category.shared.getCancelableCategoryItems())),
-                    .just(.setupSearchResult(items: owner.convertResponseToSearchResultInput(response: response))),
+                    .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                    .just(.setupCategory(items: owner.makeCategoryItems())),
+                    .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
                     .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: Int(response.totalElements)))),
                     .just(.setupTotalPageCount(count: response.totalPages)),
                     .just(.setupTotalElementCount(count: response.totalElements)),
@@ -214,7 +206,7 @@ public final class PopupSearchReactor: Reactor {
             )
             .withUnretained(self)
             .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+                let searchResultItems = owner.makeSearchResultInputs(response: response)
 
                 return Observable.concat([
                     .just(.setupCategory(items: Category.shared.items)),
@@ -268,15 +260,6 @@ public final class PopupSearchReactor: Reactor {
             case .filterOptionSelector:
                 newState.present = .filterOptionSelector
             }
-
-        case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
-            newState.recentSearchItems = recentSearchItems
-            newState.categoryItems = categoryItems
-            newState.searchResultItems = searchResultItems
-            newState.currentPage = 0
-            newState.totalPagesCount = Int(totalPagesCount)
-            newState.totalElementsCount = Int(totalElementsCount)
-
         }
 
         return newState
@@ -285,12 +268,16 @@ public final class PopupSearchReactor: Reactor {
 
 // MARK: - Functions
 private extension PopupSearchReactor {
-    func getRecentSearchKeywords() -> [TagCollectionViewCell.Input] {
+    func makeRecentSearchItems() -> [TagCollectionViewCell.Input] {
         let searchKeywords = userDefaultService.fetchArray(key: "searchList") ?? []
         return searchKeywords.map { TagCollectionViewCell.Input(title: $0) }
     }
 
-    func convertResponseToSearchResultInput(response: GetSearchBottomPopUpListResponse) -> [PPPopupGridCollectionViewCell.Input] {
+    func makeCategoryItems() -> [TagCollectionViewCell.Input] {
+        return Category.shared.getCancelableCategoryItems()
+    }
+
+    func makeSearchResultInputs(response: GetSearchBottomPopUpListResponse) -> [PPPopupGridCollectionViewCell.Input] {
         return response.popUpStoreList.map {
             PPPopupGridCollectionViewCell.Input(
                 imagePath: $0.mainImageUrl,
