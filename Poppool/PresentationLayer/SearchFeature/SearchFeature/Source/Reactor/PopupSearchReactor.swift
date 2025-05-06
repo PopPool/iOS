@@ -22,6 +22,8 @@ public final class PopupSearchReactor: Reactor {
         case searchResultItemTapped
         case loadNextPage
 
+        case searchResultPrefetchItems(indexPathList: [IndexPath])
+
 
 
 
@@ -43,10 +45,14 @@ public final class PopupSearchReactor: Reactor {
         case setupSearchResult(items: [PPPopupGridCollectionViewCell.Input])
         case setupTotalPageCount(count: Int32)
         case setupTotalElementCount(count: Int64)
+        case setupSearchResultHeader(item: SearchResultHeaderView.Input)
 
         case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
 
         case present(target: PresentTarget)
+
+        case updateCurrentPage(to: Int)
+        case updateDataSource
     }
 
     public enum PresentTarget {
@@ -58,10 +64,10 @@ public final class PopupSearchReactor: Reactor {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
-        var openTitle: String = PopupStatus.open.title
-        var sortOptionTitle: String = PopupSortOption.newest.title
+        var searchResultHeader: SearchResultHeaderView.Input? = nil
 
-        @Pulse var presentTarget: PresentTarget?
+        @Pulse var present: PresentTarget?
+        @Pulse var updateDataSource: Void?
 
         fileprivate var currentPage: Int = 0
         fileprivate let paginationSize: Int = 10
@@ -109,7 +115,8 @@ public final class PopupSearchReactor: Reactor {
                     .just(.setupCategory(items: Category.shared.items)),
                     .just(.setupSearchResult(items: searchResultItems)),
                     .just(.setupTotalPageCount(count: response.totalPages)),
-                    .just(.setupTotalElementCount(count: response.totalElements))
+                    .just(.setupTotalElementCount(count: response.totalElements)),
+                    .just(.updateDataSource)
                 ])
             }
 
@@ -128,9 +135,45 @@ public final class PopupSearchReactor: Reactor {
                 let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
 
                 return Observable.concat([
-                    .just(.appendSearchResult(items: searchResultItems))
+                    .just(.appendSearchResult(items: searchResultItems)),
+                    .just(.updateDataSource)
                 ])
             }
+        case .searchResultPrefetchItems(let indexPathList):
+            // 마지막 섹션의 마지막 아이템
+            guard let lastItemIndex = indexPathList.last?.last else { return .empty() }
+
+            func isPrefetchable(prefetchCount: Int = 4) -> Bool {
+                let isScrollToEnd = lastItemIndex > currentState.paginationSize * (currentState.currentPage + 1) - prefetchCount
+
+                let hasNextPage = currentState.currentPage < (currentState.totalPagesCount - 1)
+
+                return isScrollToEnd && hasNextPage
+            }
+
+            if isPrefetchable() {
+                return popupAPIUseCase.getSearchBottomPopUpList(
+                    isOpen: FilterOption.shared.status.requestValue,
+                    categories: Category.shared.getSelectedCategoryIDs(),
+                    page: Int32(currentState.currentPage + 1),
+                    size: Int32(currentState.paginationSize),
+                    sort: FilterOption.shared.sortOption.requestValue
+                )
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+
+
+                    return .concat([
+                        .just(.appendSearchResult(items: searchResultItems)),
+                        .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
+                        .just(.updateDataSource)
+                    ])
+                }
+
+            }
+            return .empty()
+
 
         case .categoryTagButtonTapped:
             return .just(.present(target: .categorySelector))
@@ -147,14 +190,16 @@ public final class PopupSearchReactor: Reactor {
                 sort: FilterOption.shared.sortOption.requestValue
             )
             .withUnretained(self)
-            .map { (owner, response) in
-                return .updateSearchResult(
-                    recentSearchItems: owner.getRecentSearchKeywords(),
-                    categoryItems: Category.shared.getCancelableCategoryItems(),
-                    searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
-                    totalPagesCount: response.totalPages,
-                    totalElementCount: response.totalElements
-                )
+            .flatMap { (owner, response) -> Observable<Mutation> in
+                return .concat([
+                    .just(.setupRecentSearch(items: owner.getRecentSearchKeywords())),
+                    .just(.setupCategory(items: Category.shared.getCancelableCategoryItems())),
+                    .just(.setupSearchResult(items: owner.convertResponseToSearchResultInput(response: response))),
+                    .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: Int(response.totalElements)))),
+                    .just(.setupTotalPageCount(count: response.totalPages)),
+                    .just(.setupTotalElementCount(count: response.totalElements)),
+                    .just(.updateDataSource)
+                ])
             }
 
         case .categoryTagRemoveButtonTapped(let categoryID):
@@ -175,7 +220,8 @@ public final class PopupSearchReactor: Reactor {
                     .just(.setupCategory(items: Category.shared.items)),
                     .just(.setupSearchResult(items: searchResultItems)),
                     .just(.setupTotalPageCount(count: response.totalPages)),
-                    .just(.setupTotalElementCount(count: response.totalElements))
+                    .just(.setupTotalElementCount(count: response.totalElements)),
+                    .just(.updateDataSource)
                 ])
             }
 
@@ -202,27 +248,35 @@ public final class PopupSearchReactor: Reactor {
         case .setupTotalElementCount(let count):
             newState.totalElementsCount = Int(count)
 
+        case .setupSearchResultHeader(let input):
+            newState.searchResultHeader = input
+            
+        case .appendSearchResult(let items):
+            newState.searchResultItems += items
+
+
+        case .updateCurrentPage(let currentPage):
+            newState.currentPage = currentPage
+
+        case .updateDataSource:
+            newState.updateDataSource = ()
+
         case .present(let target):
             switch target {
             case .categorySelector:
-                newState.presentTarget = .categorySelector
+                newState.present = .categorySelector
             case .filterOptionSelector:
-                newState.presentTarget = .filterOptionSelector
+                newState.present = .filterOptionSelector
             }
 
         case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems
             newState.searchResultItems = searchResultItems
-            newState.openTitle = FilterOption.shared.status.title
-            newState.sortOptionTitle = FilterOption.shared.sortOption.title
             newState.currentPage = 0
             newState.totalPagesCount = Int(totalPagesCount)
             newState.totalElementsCount = Int(totalElementsCount)
 
-        case .appendSearchResult(let items):
-            newState.searchResultItems += items
-            newState.currentPage += 1
         }
 
         return newState
@@ -250,5 +304,9 @@ private extension PopupSearchReactor {
                 isLogin: response.loginYn
             )
         }
+    }
+
+    func makeSearchResultHeaderInput(count: Int, title: String = FilterOption.shared.title) -> SearchResultHeaderView.Input {
+        return SearchResultHeaderView.Input(count: count, sortedTitle: title)
     }
 }

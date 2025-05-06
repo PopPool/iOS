@@ -6,7 +6,7 @@ import SnapKit
 import RxSwift
 import Then
 
-final class SearchResultHeaderView: UICollectionReusableView {
+public final class SearchResultHeaderView: UICollectionReusableView {
 
     enum Identifier: String {
         case searchResult = "PopupGridCollectionHeaderView.searchResult"
@@ -42,7 +42,7 @@ final class SearchResultHeaderView: UICollectionReusableView {
         fatalError("\(#file), \(#function) Error")
     }
 
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
     }
@@ -88,12 +88,12 @@ private extension SearchResultHeaderView {
 }
 
 extension SearchResultHeaderView: Inputable {
-    struct Input {
+    public struct Input {
         var count: Int?
         var sortedTitle: String?
     }
 
-    func injection(with input: Input) {
+    public func injection(with input: Input) {
         if let count = input.count {
             cellCountLabel.text = "총 \(count)개"
         }

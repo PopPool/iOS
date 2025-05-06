@@ -36,39 +36,15 @@ extension PopupSearchViewController {
         self.bindState(reactor: reactor)
 
         mainView.collectionView.rx.prefetchItems
-            .throttle(.milliseconds(100), latest: false , scheduler: MainScheduler.asyncInstance)
-            .withUnretained(self)
-            .subscribe { (owner, indexPaths) in
-                let sections = owner.mainView.getSectionsFromDataSource()
-
-                guard let searchResultSectionIndex = sections.firstIndex(where: { section in
-                    switch section {
-                    case .searchResult: return true
-                    default: return false
-                    }
-                }) else { return }
-
-                /// prefetch를 하기까지 남은 아이템의 갯수
-                let prefetchCount = 2
-
-                let itemCount = owner.mainView.collectionView.numberOfItems(inSection: searchResultSectionIndex)
-
-                guard itemCount > prefetchCount else { return }
-
-                /// 보여줄 아이템이 prefetchCount만큼 남았을때 가까운 상태라고 확인
-                let isNearBottom = indexPaths.contains {
-                    $0.section == searchResultSectionIndex &&
-                    $0.item >= owner.mainView.collectionView.numberOfItems(inSection: $0.section) - prefetchCount
-                }
-
-                if isNearBottom { owner.reactor?.action.onNext(.loadNextPage) }
-            }
+            .throttle(.milliseconds(100), latest: false, scheduler: MainScheduler.asyncInstance)
+            .map(Reactor.Action.searchResultPrefetchItems)
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        reactor.state
+        reactor.pulse(\.$updateDataSource)
+            .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in
-
                 owner.mainView.updateSnapshot(
                     recentSearchItems: state.recentSearchItems
                         .map(PopupSearchView.SectionItem.recentSearchItem),
@@ -76,13 +52,59 @@ extension PopupSearchViewController {
                         .map(PopupSearchView.SectionItem.categoryItem),
                     searchResultItems: state.searchResultItems
                         .map(PopupSearchView.SectionItem.searchResultItem),
-                    headerInput: SearchResultHeaderView.Input(
-                        count: state.totalElementsCount,
-                        sortedTitle: [state.openTitle, state.sortOptionTitle].joined(separator: "・")
-                    )
+                    headerInput: state.searchResultHeader
                 )
             }
             .disposed(by: disposeBag)
+//
+//
+//        mainView.collectionView.rx.prefetchItems
+//            .throttle(.milliseconds(100), latest: false , scheduler: MainScheduler.asyncInstance)
+//            .withUnretained(self)
+//            .subscribe { (owner, indexPaths) in
+//                let sections = owner.mainView.getSectionsFromDataSource()
+//
+//                guard let searchResultSectionIndex = sections.firstIndex(where: { section in
+//                    switch section {
+//                    case .searchResult: return true
+//                    default: return false
+//                    }
+//                }) else { return }
+//
+//                /// prefetch를 하기까지 남은 아이템의 갯수
+//                let prefetchCount = 2
+//
+//                let itemCount = owner.mainView.collectionView.numberOfItems(inSection: searchResultSectionIndex)
+//
+//                guard itemCount > prefetchCount else { return }
+//
+//                /// 보여줄 아이템이 prefetchCount만큼 남았을때 가까운 상태라고 확인
+//                let isNearBottom = indexPaths.contains {
+//                    $0.section == searchResultSectionIndex &&
+//                    $0.item >= owner.mainView.collectionView.numberOfItems(inSection: $0.section) - prefetchCount
+//                }
+//
+//                if isNearBottom { owner.reactor?.action.onNext(.loadNextPage) }
+//            }
+//            .disposed(by: disposeBag)
+//
+//        reactor.state
+//            .withUnretained(self)
+//            .subscribe { (owner, state) in
+//                owner.mainView.updateSnapshot(
+//                    recentSearchItems: state.recentSearchItems
+//                        .map(PopupSearchView.SectionItem.recentSearchItem),
+//                    categoryItems: state.categoryItems
+//                        .map(PopupSearchView.SectionItem.categoryItem),
+//                    searchResultItems: state.searchResultItems
+//                        .map(PopupSearchView.SectionItem.searchResultItem),
+//                    headerInput: SearchResultHeaderView.Input(
+//                        count: state.totalElementsCount,
+//                        sortedTitle: [state.openTitle, state.sortOptionTitle].joined(separator: "・")
+//                    )
+//                )
+//            }
+//            .disposed(by: disposeBag)
     }
 
     private func bindAction(reactor: Reactor) {
@@ -122,7 +144,7 @@ extension PopupSearchViewController {
     }
 
     private func bindState(reactor: Reactor) {
-        reactor.pulse(\.$presentTarget)
+        reactor.pulse(\.$present)
             .withUnretained(self)
             .subscribe { owner, target in
                 switch target {
