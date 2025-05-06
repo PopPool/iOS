@@ -13,8 +13,8 @@ final class FilterOption: NSCopying, Equatable {
 
     static let shared = FilterOption(status: .open, sortOption: .newest)
 
-    var status: PopupStatus
-    var sortOption: PopupSortOption
+    var status: PopupStatus = .open
+    var sortOption: PopupSortOption = .newest
 
     private init(status: PopupStatus, sortOption: PopupSortOption) {
         self.status = status

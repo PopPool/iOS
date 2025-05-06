@@ -67,7 +67,7 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.filterOptionButtonTapped
-            .map { Reactor.Action.filterOptionButtonTapped }
+            .map { Reactor.Action.searchResultFilterButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 

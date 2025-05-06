@@ -18,13 +18,9 @@ public final class PopupSearchReactor: Reactor {
         case categoryTagRemoveButtonTapped(categoryID: Int)
         case categoryTagButtonTapped
 
-        case filterOptionButtonTapped
+        case searchResultFilterButtonTapped
         case searchResultItemTapped
-        case loadNextPage
-
         case searchResultPrefetchItems(indexPathList: [IndexPath])
-
-
 
 
         case filterOptionSaveButtonTapped
@@ -35,15 +31,14 @@ public final class PopupSearchReactor: Reactor {
         case setupRecentSearch(items: [TagCollectionViewCell.Input])
         case setupCategory(items: [TagCollectionViewCell.Input])
         case setupSearchResult(items: [PPPopupGridCollectionViewCell.Input])
-        case setupTotalPageCount(count: Int32)
-        case setupTotalElementCount(count: Int64)
         case setupSearchResultHeader(item: SearchResultHeaderView.Input)
+        case setupSearchResultTotalPageCount(count: Int32)
 
         case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
 
         case present(target: PresentTarget)
 
-        case updateCurrentPage(to: Int)
+        case updateCurrentPage(to: Int32)
         case updateDataSource
     }
 
@@ -61,11 +56,9 @@ public final class PopupSearchReactor: Reactor {
         @Pulse var present: PresentTarget?
         @Pulse var updateDataSource: Void?
 
-        fileprivate var currentPage: Int = 0
-        fileprivate let paginationSize: Int = 10
-        fileprivate var totalPagesCount: Int = 0
-        var hasNextPage: Bool { get { currentPage < (totalPagesCount - 1) } }
-        var totalElementsCount: Int = 0
+        fileprivate var currentPage: Int32 = 0
+        fileprivate let paginationSize: Int32 = 10
+        fileprivate var totalPagesCount: Int32 = 0
     }
 
     // MARK: - properties
@@ -91,133 +84,70 @@ public final class PopupSearchReactor: Reactor {
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return popupAPIUseCase.getSearchBottomPopUpList(
-                isOpen: PopupStatus.open.requestValue,
-                categories: [],
-                page: 0,
-                size: Int32(currentState.paginationSize),
-                sort: PopupSortOption.newest.requestValue
-            )
-            .withUnretained(self)
-            .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.makeSearchResultInputs(response: response)
-
-                return Observable.concat([
-                    .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                    .just(.setupCategory(items: Category.shared.items)),
-                    .just(.setupSearchResult(items: searchResultItems)),
-                    .just(.setupTotalPageCount(count: response.totalPages)),
-                    .just(.setupTotalElementCount(count: response.totalElements)),
-                    .just(.updateDataSource)
-                ])
-            }
-
-        case .loadNextPage:
-            guard currentState.hasNextPage else { return .empty() }
-
-            return popupAPIUseCase.getSearchBottomPopUpList(
-                isOpen: FilterOption.shared.status.requestValue,
-                categories: Category.shared.getSelectedCategoryIDs(),
-                page: Int32(currentState.currentPage + 1),
-                size: Int32(currentState.paginationSize),
-                sort: FilterOption.shared.sortOption.requestValue
-            )
-            .withUnretained(self)
-            .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.makeSearchResultInputs(response: response)
-
-                return Observable.concat([
-                    .just(.appendSearchResult(items: searchResultItems)),
-                    .just(.updateDataSource)
-                ])
-            }
-        case .searchResultPrefetchItems(let indexPathList):
-            // 마지막 섹션의 마지막 아이템
-            guard let lastItemIndex = indexPathList.last?.last else { return .empty() }
-
-            func isPrefetchable(prefetchCount: Int = 4) -> Bool {
-                let isScrollToEnd = lastItemIndex > currentState.paginationSize * (currentState.currentPage + 1) - prefetchCount
-
-                let hasNextPage = currentState.currentPage < (currentState.totalPagesCount - 1)
-
-                return isScrollToEnd && hasNextPage
-            }
-
-            if isPrefetchable() {
-                return popupAPIUseCase.getSearchBottomPopUpList(
-                    isOpen: FilterOption.shared.status.requestValue,
-                    categories: Category.shared.getSelectedCategoryIDs(),
-                    page: Int32(currentState.currentPage + 1),
-                    size: Int32(currentState.paginationSize),
-                    sort: FilterOption.shared.sortOption.requestValue
-                )
+            return fetchSearchResult()
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
-                    let searchResultItems = owner.makeSearchResultInputs(response: response)
+                    return Observable.concat([
+                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                        .just(.setupCategory(items: owner.makeCategoryItems())),
+                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateDataSource)
+                    ])
+                }
 
-
+        case .searchResultPrefetchItems(let indexPathList):
+            guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
+            return fetchSearchResult(page: currentState.currentPage + 1)
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
                     return .concat([
-                        .just(.appendSearchResult(items: searchResultItems)),
+                        .just(.appendSearchResult(items: owner.makeSearchResultInputs(response: response))),
                         .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
                         .just(.updateDataSource)
                     ])
                 }
 
-            }
-            return .empty()
-
-
         case .categoryTagButtonTapped:
             return .just(.present(target: .categorySelector))
 
-        case .recentSearchTagButtonTapped: return .empty()
-        case .searchResultItemTapped: return .empty()
+        case .recentSearchTagButtonTapped:
+            return .empty()
+
+        case .searchResultItemTapped:
+            return .empty()
 
         case .filterOptionSaveButtonTapped, .categorySaveOrResetButtonTapped:
-            return popupAPIUseCase.getSearchBottomPopUpList(
-                isOpen: FilterOption.shared.status.requestValue,
-                categories: Category.shared.getSelectedCategoryIDs(),
-                page: 0,
-                size: Int32(currentState.paginationSize),
-                sort: FilterOption.shared.sortOption.requestValue
-            )
-            .withUnretained(self)
-            .flatMap { (owner, response) -> Observable<Mutation> in
-                return .concat([
-                    .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                    .just(.setupCategory(items: owner.makeCategoryItems())),
-                    .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
-                    .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: Int(response.totalElements)))),
-                    .just(.setupTotalPageCount(count: response.totalPages)),
-                    .just(.setupTotalElementCount(count: response.totalElements)),
-                    .just(.updateDataSource)
-                ])
+            return fetchSearchResult()
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return .concat([
+                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                        .just(.setupCategory(items: owner.makeCategoryItems())),
+                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateDataSource)
+                    ])
             }
 
         case .categoryTagRemoveButtonTapped(let categoryID):
             Category.shared.removeItem(by: categoryID)
+            return fetchSearchResult()
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return Observable.concat([
+                        .just(.setupCategory(items: owner.makeCategoryItems())),
+                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateCurrentPage(to: 0)),
+                        .just(.updateDataSource)
+                    ])
+                }
 
-            return popupAPIUseCase.getSearchBottomPopUpList(
-                isOpen: FilterOption.shared.status.requestValue,
-                categories: Category.shared.getSelectedCategoryIDs(),
-                page: 0,
-                size: Int32(currentState.paginationSize),
-                sort: FilterOption.shared.sortOption.requestValue
-            )
-            .withUnretained(self)
-            .flatMap { (owner, response) -> Observable<Mutation> in
-                let searchResultItems = owner.makeSearchResultInputs(response: response)
-
-                return Observable.concat([
-                    .just(.setupCategory(items: Category.shared.items)),
-                    .just(.setupSearchResult(items: searchResultItems)),
-                    .just(.setupTotalPageCount(count: response.totalPages)),
-                    .just(.setupTotalElementCount(count: response.totalElements)),
-                    .just(.updateDataSource)
-                ])
-            }
-
-        case .filterOptionButtonTapped:
+        case .searchResultFilterButtonTapped:
             return .just(.present(target: .filterOptionSelector))
         }
     }
@@ -234,18 +164,14 @@ public final class PopupSearchReactor: Reactor {
         case .setupSearchResult(let items):
             newState.searchResultItems = items
 
-        case .setupTotalPageCount(let count):
-            newState.totalPagesCount = Int(count)
-
-        case .setupTotalElementCount(let count):
-            newState.totalElementsCount = Int(count)
+        case .setupSearchResultTotalPageCount(let count):
+            newState.totalPagesCount = count
 
         case .setupSearchResultHeader(let input):
             newState.searchResultHeader = input
             
         case .appendSearchResult(let items):
             newState.searchResultItems += items
-
 
         case .updateCurrentPage(let currentPage):
             newState.currentPage = currentPage
@@ -266,7 +192,27 @@ public final class PopupSearchReactor: Reactor {
     }
 }
 
-// MARK: - Functions
+// MARK: Captulation Mutate
+private extension PopupSearchReactor {
+
+    func fetchSearchResult(
+        isOpen: Bool = FilterOption.shared.status.requestValue,
+        categoried: [Int64] = Category.shared.getSelectedCategoryIDs(),
+        page: Int32 = 0,
+        size: Int32 = 10,
+        sort: String = FilterOption.shared.sortOption.requestValue
+    ) -> Observable<GetSearchBottomPopUpListResponse> {
+        return popupAPIUseCase.getSearchBottomPopUpList(
+            isOpen: FilterOption.shared.status.requestValue,
+            categories: Category.shared.getSelectedCategoryIDs(),
+            page: 0,
+            size: currentState.paginationSize,
+            sort: FilterOption.shared.sortOption.requestValue
+        )
+    }
+}
+
+// MARK: - Make Functions
 private extension PopupSearchReactor {
     func makeRecentSearchItems() -> [TagCollectionViewCell.Input] {
         let searchKeywords = userDefaultService.fetchArray(key: "searchList") ?? []
@@ -293,7 +239,19 @@ private extension PopupSearchReactor {
         }
     }
 
-    func makeSearchResultHeaderInput(count: Int, title: String = FilterOption.shared.title) -> SearchResultHeaderView.Input {
-        return SearchResultHeaderView.Input(count: count, sortedTitle: title)
+    func makeSearchResultHeaderInput(count: Int64, title: String = FilterOption.shared.title) -> SearchResultHeaderView.Input {
+        return SearchResultHeaderView.Input(count: Int(count), sortedTitle: title)
+    }
+}
+
+// MARK: - Checking Method
+private extension PopupSearchReactor {
+    func isPrefetchable(prefetchCount: Int = 4, indexPathList: [IndexPath]) -> Bool {
+        guard let lastItemIndex = indexPathList.last?.last else { return false }
+
+        let isScrollToEnd = lastItemIndex > Int(currentState.paginationSize) * Int(currentState.currentPage + 1) - prefetchCount
+        let hasNextPage = currentState.currentPage < (currentState.totalPagesCount - 1)
+
+        return isScrollToEnd && hasNextPage
     }
 }
