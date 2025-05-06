@@ -137,6 +137,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateCurrentPage(to: 0)),
                         .just(.updateDataSource)
                     ])
             }
