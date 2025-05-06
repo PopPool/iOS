@@ -34,12 +34,21 @@ extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
         self.bindAction(reactor: reactor)
         self.bindState(reactor: reactor)
+    }
 
+    private func bindAction(reactor: Reactor) {
+        rx.viewDidLoad
+            .map { Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
+        mainView.tapGestureRecognizer.rx.event
+            .map { _ in Reactor.Action.textFieldEndEditing }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
-        mainView.searchBar.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
-            .map(Reactor.Action.textFieldExitEditing)
+        mainView.searchBar.clearButton.rx.tap
+            .map { Reactor.Action.clearButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -49,39 +58,9 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        mainView.searchBar.clearButton.rx.tap
-            .map { Reactor.Action.clearButtonTapped }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        mainView.tapGestureRecognizer.rx.event
-            .map { _ in Reactor.Action.textFieldEndEditing }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$clearButton)
-            .withUnretained(self)
-            .subscribe { (owner, state) in
-                owner.mainView.searchBar.clearButton.isHidden = state?.value ?? true
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$endEditing)
-            .withUnretained(self)
-            .subscribe { (owner, _) in
-                owner.mainView.endEditing(true)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$clearButtonTapped)
-            .withUnretained(self)
-            .subscribe { (owner, _) in owner.mainView.searchBar.searchBar.searchTextField.text = nil }
-            .disposed(by: disposeBag)
-    }
-
-    private func bindAction(reactor: Reactor) {
-        rx.viewDidLoad
-            .map { Reactor.Action.viewDidLoad }
+        mainView.searchBar.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .withLatestFrom(mainView.searchBar.searchBar.searchTextField.rx.text.orEmpty)
+            .map(Reactor.Action.textFieldExitEditing)
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -96,14 +75,9 @@ extension PopupSearchViewController {
                 guard indexPath.section < sections.count else { return nil }
 
                 switch sections[indexPath.section] {
-                case .recentSearch:
-                    return Reactor.Action.recentSearchTagButtonTapped
-
-                case .category:
-                    return Reactor.Action.categoryTagButtonTapped
-
-                case .searchResult:
-                    return Reactor.Action.searchResultItemTapped
+                case .recentSearch: return Reactor.Action.recentSearchTagButtonTapped
+                case .category: return Reactor.Action.categoryTagButtonTapped
+                case .searchResult: return Reactor.Action.searchResultItemTapped
                 }
             }
             .bind(to: reactor.action)
@@ -127,20 +101,19 @@ extension PopupSearchViewController {
     }
 
     private func bindState(reactor: Reactor) {
-        reactor.pulse(\.$updateDataSource)
-            .withLatestFrom(reactor.state)
+        reactor.pulse(\.$endEditing)
             .withUnretained(self)
-            .subscribe { (owner, state) in
-                owner.mainView.updateSnapshot(
-                    recentSearchItems: state.recentSearchItems
-                        .map(PopupSearchView.SectionItem.recentSearchItem),
-                    categoryItems: state.categoryItems
-                        .map(PopupSearchView.SectionItem.categoryItem),
-                    searchResultItems: state.searchResultItems
-                        .map(PopupSearchView.SectionItem.searchResultItem),
-                    headerInput: state.searchResultHeader
-                )
-            }
+            .subscribe { (owner, _) in owner.mainView.endEditing(true) }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$clearButton)
+            .withUnretained(self)
+            .subscribe { (owner, state) in owner.mainView.searchBar.clearButton.isHidden = state?.value ?? true }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$clearButtonTapped)
+            .withUnretained(self)
+            .subscribe { (owner, _) in owner.mainView.searchBar.searchBar.searchTextField.text = nil }
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$present)
@@ -177,6 +150,20 @@ extension PopupSearchViewController {
 
                 default: break
                 }
+            }
+            .disposed(by: disposeBag)
+
+
+        reactor.pulse(\.$updateDataSource)
+            .withLatestFrom(reactor.state)
+            .withUnretained(self)
+            .subscribe { (owner, state) in
+                owner.mainView.updateSnapshot(
+                    recentSearchItems: state.recentSearchItems.map(PopupSearchView.SectionItem.recentSearchItem),
+                    categoryItems: state.categoryItems.map(PopupSearchView.SectionItem.categoryItem),
+                    searchResultItems: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
+                    headerInput: state.searchResultHeader
+                )
             }
             .disposed(by: disposeBag)
     }
