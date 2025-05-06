@@ -26,6 +26,7 @@ public final class PopupSearchReactor: Reactor {
         case searchResultItemTapped
         case searchResultPrefetchItems(indexPathList: [IndexPath])
 
+        case clearButtonTapped
         case filterSaveButtonTapped
         case categorySaveOrResetButtonTapped
     }
@@ -41,6 +42,7 @@ public final class PopupSearchReactor: Reactor {
 
         case present(target: PresentTarget)
         case clearButton(state: ClearButtonState)
+        case clearTextField
         case endEditing
 
         case updateCurrentPage(to: Int32)
@@ -72,6 +74,7 @@ public final class PopupSearchReactor: Reactor {
 
         @Pulse var present: PresentTarget?
         @Pulse var clearButton: ClearButtonState?
+        @Pulse var clearButtonTapped: Void?
         @Pulse var endEditing: Void?
         @Pulse var updateDataSource: Void?
 
@@ -182,6 +185,12 @@ public final class PopupSearchReactor: Reactor {
                     ])
             }
 
+        case .clearButtonTapped:
+            return Observable.concat([
+                .just(.clearButton(state: .hidden)),
+                .just(.clearTextField)
+            ])
+
         case .categoryTagRemoveButtonTapped(let categoryID):
             self.removeCategoryItem(by: categoryID)
             return fetchSearchResult()
@@ -234,6 +243,9 @@ public final class PopupSearchReactor: Reactor {
 
         case .clearButton(let state):
             newState.clearButton = state
+
+        case .clearTextField:
+            newState.clearButtonTapped = ()
 
         case .endEditing:
             newState.endEditing = ()

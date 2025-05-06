@@ -49,6 +49,12 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        mainView.searchBar.clearButton.rx.tap
+            .debug("DEBUG: Clear Button Tapped")
+            .map { Reactor.Action.clearButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         reactor.pulse(\.$clearButton)
             .withUnretained(self)
             .subscribe { (owner, state) in
@@ -61,6 +67,11 @@ extension PopupSearchViewController {
             .subscribe { (owner, _) in
                 owner.mainView.endEditing(true)
             }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$clearButtonTapped)
+            .withUnretained(self)
+            .subscribe { (owner, _) in owner.mainView.searchBar.searchBar.searchTextField.text = nil }
             .disposed(by: disposeBag)
     }
 
