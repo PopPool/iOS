@@ -58,11 +58,16 @@ public final class PopupSearchReactor: Reactor {
     var disposeBag = DisposeBag()
 
     private let userDefaultService = UserDefaultService()
-    private let useCase: PopUpAPIUseCase
+    private let popupAPIUseCase: PopUpAPIUseCase
+    private let fetchKeywordBasePopupListUseCase: FetchKeywordBasePopupListUseCase
 
     // MARK: - init
-    public init(useCase: PopUpAPIUseCase) {
-        self.useCase = useCase
+    public init(
+        popupAPIUseCase: PopUpAPIUseCase,
+        fetchKeywordBasePopupListUseCase: FetchKeywordBasePopupListUseCase
+    ) {
+        self.popupAPIUseCase =             popupAPIUseCase
+        self.fetchKeywordBasePopupListUseCase = fetchKeywordBasePopupListUseCase
         self.initialState = State()
     }
 
@@ -70,7 +75,7 @@ public final class PopupSearchReactor: Reactor {
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return useCase.getSearchBottomPopUpList(
+            return popupAPIUseCase.getSearchBottomPopUpList(
                 isOpen: PopupStatus.open.requestValue,
                 categories: [],
                 page: 0,
@@ -89,7 +94,7 @@ public final class PopupSearchReactor: Reactor {
             }
 
         case .filterOptionSaveButtonTapped, .categorySaveOrResetButtonTapped:
-            return useCase.getSearchBottomPopUpList(
+            return popupAPIUseCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
                 page: 0,
@@ -110,7 +115,7 @@ public final class PopupSearchReactor: Reactor {
         case .viewAllVisibleItems:
             guard currentState.hasNextPage else { return .empty() }
 
-            return useCase.getSearchBottomPopUpList(
+            return popupAPIUseCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
                 page: Int32(currentState.currentPage + 1),
@@ -125,7 +130,7 @@ public final class PopupSearchReactor: Reactor {
         case .categoryCancelButtonTapped(let categoryID):
             Category.shared.removeItem(by: categoryID)
 
-            return useCase.getSearchBottomPopUpList(
+            return popupAPIUseCase.getSearchBottomPopUpList(
                 isOpen: FilterOption.shared.status.requestValue,
                 categories: Category.shared.getSelectedCategoryIDs(),
                 page: 0,

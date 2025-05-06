@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let vc = PopupSearchViewController()
         vc.reactor = PopupSearchReactor(
-            useCase: DIContainer.resolve(PopUpAPIUseCase.self),
+            popupAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
             fetchKeywordBasePopupListUseCase: DIContainer.resolve(FetchKeywordBasePopupListUseCase.self)
         )
         window?.rootViewController = vc
