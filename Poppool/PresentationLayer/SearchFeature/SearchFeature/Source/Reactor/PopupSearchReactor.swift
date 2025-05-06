@@ -26,8 +26,6 @@ public final class PopupSearchReactor: Reactor {
 
         case filterSaveButtonTapped
         case categorySaveOrResetButtonTapped
-
-        
     }
 
     public enum Mutation {
@@ -93,7 +91,7 @@ public final class PopupSearchReactor: Reactor {
                     return Observable.concat([
                         .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
                         .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateDataSource)
@@ -114,7 +112,7 @@ public final class PopupSearchReactor: Reactor {
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
                     return .concat([
-                        .just(.appendSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
                         .just(.updateDataSource)
                     ])
@@ -136,7 +134,7 @@ public final class PopupSearchReactor: Reactor {
                     return .concat([
                         .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
                         .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
@@ -151,7 +149,7 @@ public final class PopupSearchReactor: Reactor {
                 .flatMap { (owner, response) -> Observable<Mutation> in
                     return Observable.concat([
                         .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultInputs(response: response))),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
@@ -235,8 +233,8 @@ private extension PopupSearchReactor {
         return Category.shared.getCancelableCategoryItems()
     }
 
-    func makeSearchResultInputs(response: GetSearchBottomPopUpListResponse) -> [PPPopupGridCollectionViewCell.Input] {
-        return response.popUpStoreList.map {
+    func makeSearchResultItems(_ popupStoreList: [PopUpStoreResponse], _ loginYn: Bool) -> [PPPopupGridCollectionViewCell.Input] {
+        return popupStoreList.map {
             PPPopupGridCollectionViewCell.Input(
                 imagePath: $0.mainImageUrl,
                 id: $0.id,
@@ -246,7 +244,7 @@ private extension PopupSearchReactor {
                 startDate: $0.startDate,
                 endDate: $0.endDate,
                 isBookmark: $0.bookmarkYn,
-                isLogin: response.loginYn
+                isLogin: loginYn
             )
         }
     }
