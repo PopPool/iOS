@@ -19,7 +19,7 @@ public final class PopupSearchReactor: Reactor {
         case searchBarClearButtonTapped
         case searchBarCancelButtonTapped
 
-        case recentSearchTagButtonTapped
+        case recentSearchTagButtonTapped(indexPath: IndexPath)
         case recentSearchTagRemoveButtonTapped(text: String)
         case recentSearchTagRemoveAllButtonTapped
 
@@ -48,6 +48,7 @@ public final class PopupSearchReactor: Reactor {
         case clearTextField
         case endEditing
 
+        case updateSearchBar(to: String?)
         case updateCurrentPage(to: Int32)
         case updateSearching(to: Bool)
         case updateDataSource
@@ -71,6 +72,7 @@ public final class PopupSearchReactor: Reactor {
     }
 
     public struct State {
+        var searchBarText: String? = nil
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
@@ -166,6 +168,7 @@ public final class PopupSearchReactor: Reactor {
                             .just(.updateCurrentPage(to: 0)),
                             .just(.updateSearching(to: false)),
                             .just(.clearTextField),
+                            .just(.endEditing),
                             .just(.updateDataSource)
                         ])
                     }
@@ -202,8 +205,24 @@ public final class PopupSearchReactor: Reactor {
         case .categoryTagButtonTapped:
             return .just(.present(target: .categorySelector))
 
-        case .recentSearchTagButtonTapped:
-            return .empty()
+        case .recentSearchTagButtonTapped(let indexPath):
+            return fetchSearchResult(keyword: self.makeRecentSearchItem(at: indexPath))
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return Observable.concat([
+                        .just(.setupRecentSearch(items: [])),
+                        .just(.setupCategory(items: [])),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: 0))), // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchBar(to: self.makeRecentSearchItem(at: indexPath))),
+                        .just(.updateSearching(to: true)),
+                        .just(.clearButton(state: .hidden)),
+                        .just(.endEditing),
+                        .just(.updateDataSource)
+                    ])
+                }
 
         case .searchResultItemTapped:
             return .empty()
@@ -270,6 +289,9 @@ public final class PopupSearchReactor: Reactor {
         case .appendSearchResult(let items):
             newState.searchResultItems += items
 
+        case .updateSearchBar(let text):
+            newState.searchBarText = text
+
         case .updateCurrentPage(let currentPage):
             newState.currentPage = currentPage
 
@@ -315,13 +337,20 @@ private extension PopupSearchReactor {
         )
     }
 
-    func fetchSearchResult(keyword: String) -> Observable<KeywordBasePopupStoreListResponse> {
-        fetchKeywordBasePopupListUseCase.execute(keyword: keyword)
+    func fetchSearchResult(keyword: String?) -> Observable<KeywordBasePopupStoreListResponse> {
+        guard let keyword else { return .empty() }
+        return fetchKeywordBasePopupListUseCase.execute(keyword: keyword)
     }
 }
 
 // MARK: - Make Functions
 private extension PopupSearchReactor {
+    func makeRecentSearchItem(at indexPath: IndexPath) -> String? {
+        guard let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword),
+              searchKeywords.indices.contains(indexPath.item) else { return nil }
+        return searchKeywords[indexPath.item]
+    }
+
     func makeRecentSearchItems() -> [TagCollectionViewCell.Input] {
         let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword) ?? []
         return searchKeywords.map { TagCollectionViewCell.Input(title: $0) }

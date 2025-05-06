@@ -85,7 +85,8 @@ extension PopupSearchViewController {
                 guard indexPath.section < sections.count else { return nil }
 
                 switch sections[indexPath.section] {
-                case .recentSearch: return Reactor.Action.recentSearchTagButtonTapped
+                case .recentSearch:
+                    return Reactor.Action.recentSearchTagButtonTapped(indexPath: indexPath)
                 case .category: return Reactor.Action.categoryTagButtonTapped
                 case .searchResult: return Reactor.Action.searchResultItemTapped
                 }
@@ -161,6 +162,12 @@ extension PopupSearchViewController {
                 default: break
                 }
             }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.searchBarText)
+            .map { $0.searchBarText }
+            .withUnretained(self)
+            .subscribe { (owner, text) in owner.mainView.searchBar.searchBar.text = text }
             .disposed(by: disposeBag)
 
 
