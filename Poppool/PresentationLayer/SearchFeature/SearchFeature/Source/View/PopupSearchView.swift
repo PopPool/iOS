@@ -58,9 +58,9 @@ final class PopupSearchView: UIView {
             withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue
         )
         $0.register(
-            PopupGridCollectionHeaderView.self,
+            SearchResultHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
-            withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue
+            withReuseIdentifier: SearchResultHeaderView.Identifier.searchResult.rawValue
         )
 
         // UICollectionView 최 상/하단 빈 영역
@@ -69,7 +69,7 @@ final class PopupSearchView: UIView {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    var popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input?
+    var popupGridCollectionHeaderInput: SearchResultHeaderView.Input?
 
     // MARK: - init
     init() {
@@ -299,13 +299,13 @@ extension PopupSearchView {
             case .searchResult:
                 guard let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: elementKind,
-                    withReuseIdentifier: PopupGridCollectionHeaderView.Identifier.searchResult.rawValue,
+                    withReuseIdentifier: SearchResultHeaderView.Identifier.searchResult.rawValue,
                     for: indexPath
-                ) as? PopupGridCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
+                ) as? SearchResultHeaderView else { fatalError("\(#file), \(#function) Error") }
 
                 if let input = self.popupGridCollectionHeaderInput {
                     header.injection(with: input)
-                } else { header.injection(with: PopupGridCollectionHeaderView.Input(count: 0, sortedTitle: "nil")) }
+                } else { header.injection(with: SearchResultHeaderView.Input(count: 0, sortedTitle: "nil")) }
 
                 header.filterOptionButton.rx.tap
                     .bind(to: self.filterOptionButtonTapped)
@@ -320,7 +320,7 @@ extension PopupSearchView {
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem],
-        headerInput popupGridCollectionHeaderInput: PopupGridCollectionHeaderView.Input? = nil
+        headerInput popupGridCollectionHeaderInput: SearchResultHeaderView.Input? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
 

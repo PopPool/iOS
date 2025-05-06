@@ -129,7 +129,7 @@ extension PopupSearchViewController {
                         .map(PopupSearchView.SectionItem.categoryItem),
                     searchResultItems: state.searchResultItems
                         .map(PopupSearchView.SectionItem.searchResultItem),
-                    headerInput: PopupGridCollectionHeaderView.Input(
+                    headerInput: SearchResultHeaderView.Input(
                         count: state.totalElementsCount,
                         sortedTitle: [state.openTitle, state.sortOptionTitle].joined(separator: "・")
                     )

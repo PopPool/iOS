@@ -6,7 +6,7 @@ import SnapKit
 import RxSwift
 import Then
 
-final class PopupGridCollectionHeaderView: UICollectionReusableView {
+final class SearchResultHeaderView: UICollectionReusableView {
 
     enum Identifier: String {
         case searchResult = "PopupGridCollectionHeaderView.searchResult"
@@ -25,7 +25,6 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
     private let dropDownImageView = UIImageView().then {
         $0.image = UIImage(named: "icon_dropdown")
         $0.isUserInteractionEnabled = false
-
     }
 
     let filterOptionButton = UIButton()
@@ -50,7 +49,7 @@ final class PopupGridCollectionHeaderView: UICollectionReusableView {
 }
 
 // MARK: - SetUp
-private extension PopupGridCollectionHeaderView {
+private extension SearchResultHeaderView {
     func addViews() {
         [cellCountLabel, filterOptionButton].forEach {
             addSubview($0)
@@ -88,7 +87,7 @@ private extension PopupGridCollectionHeaderView {
     }
 }
 
-extension PopupGridCollectionHeaderView: Inputable {
+extension SearchResultHeaderView: Inputable {
     struct Input {
         var count: Int?
         var sortedTitle: String?
