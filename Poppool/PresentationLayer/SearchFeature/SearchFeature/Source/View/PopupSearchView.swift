@@ -153,8 +153,6 @@ private extension PopupSearchView {
             subitems: [item]
         )
 
-        group.interItemSpacing = .fixed(6)
-
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
@@ -164,6 +162,8 @@ private extension PopupSearchView {
         } else {
             section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
         }
+
+        section.interGroupSpacing = 6
 
         section.boundarySupplementaryItems = [makeTagCollectionHeaderLayout(headerKind)]
 
