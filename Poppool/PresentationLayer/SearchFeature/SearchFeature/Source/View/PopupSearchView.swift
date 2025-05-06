@@ -337,7 +337,7 @@ extension PopupSearchView {
         if !searchResultItems.isEmpty {
             self.searchResultHeaderInput = searchResultHeaderInput
             snapshot.appendSections([PopupSearchView.Section.searchResult])
-            snapshot.appendItems(searchResultItems, toSection: .searchResult)
+            snapshot.appendItems(searchResultItems, toSection: .searchResult) 
             snapshot.reloadSections([.searchResult])
         }
 

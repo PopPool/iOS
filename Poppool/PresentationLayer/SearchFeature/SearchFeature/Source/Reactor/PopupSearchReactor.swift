@@ -197,17 +197,17 @@ private extension PopupSearchReactor {
 
     func fetchSearchResult(
         isOpen: Bool = FilterOption.shared.status.requestValue,
-        categoried: [Int64] = Category.shared.getSelectedCategoryIDs(),
+        categories: [Int64] = Category.shared.getSelectedCategoryIDs(),
         page: Int32 = 0,
         size: Int32 = 10,
         sort: String = FilterOption.shared.sortOption.requestValue
     ) -> Observable<GetSearchBottomPopUpListResponse> {
         return popupAPIUseCase.getSearchBottomPopUpList(
-            isOpen: FilterOption.shared.status.requestValue,
-            categories: Category.shared.getSelectedCategoryIDs(),
-            page: 0,
-            size: currentState.paginationSize,
-            sort: FilterOption.shared.sortOption.requestValue
+            isOpen: isOpen,
+            categories: categories,
+            page: page,
+            size: size,
+            sort: sort
         )
     }
 }
