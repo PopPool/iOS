@@ -142,7 +142,7 @@ public final class PopupSearchReactor: Reactor {
             }
 
         case .categoryTagRemoveButtonTapped(let categoryID):
-            Category.shared.removeItem(by: categoryID)
+            self.removeCategoryItem(by: categoryID)
             return fetchSearchResult()
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
@@ -253,9 +253,14 @@ private extension PopupSearchReactor {
     }
 }
 
+// MARK: - Remove Funtions
 private extension PopupSearchReactor {
     func removeAllRecentSearchItems() {
         userDefaultService.delete(keyType: .searchKeyword)
+    }
+
+    func removeCategoryItem(by categoryID: Int) {
+        Category.shared.removeItem(by: categoryID)
     }
 }
 
