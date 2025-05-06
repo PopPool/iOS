@@ -48,6 +48,7 @@ public final class PopupSearchReactor: Reactor {
         case endEditing
 
         case updateCurrentPage(to: Int32)
+        case updateSearching(to: Bool)
         case updateDataSource
     }
 
@@ -80,6 +81,7 @@ public final class PopupSearchReactor: Reactor {
         @Pulse var endEditing: Void?
         @Pulse var updateDataSource: Void?
 
+        fileprivate var isSearching: Bool = false
         fileprivate var currentPage: Int32 = 0
         fileprivate let paginationSize: Int32 = 10
         fileprivate var totalPagesCount: Int32 = 0
@@ -136,6 +138,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: 0))), // FIXME: API에 해당 결과값이 아직 없음
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearching(to: true)),
                         .just(.clearButton(state: .hidden)),
                         .just(.endEditing),
                         .just(.updateDataSource)
@@ -147,6 +150,26 @@ public final class PopupSearchReactor: Reactor {
                 .just(.clearButton(state: .hidden)),
                 .just(.endEditing)
             ])
+
+        case .searchBarCancelButtonTapped:
+            if currentState.isSearching {
+                return fetchSearchResult()
+                    .withUnretained(self)
+                    .flatMap { (owner, response) -> Observable<Mutation> in
+                        return Observable.concat([
+                            .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                            .just(.setupCategory(items: owner.makeCategoryItems())),
+                            .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                            .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                            .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                            .just(.updateCurrentPage(to: 0)),
+                            .just(.updateSearching(to: false)),
+                            .just(.clearTextField),
+                            .just(.updateDataSource)
+                        ])
+                    }
+            }
+            else { return .empty() }    // TODO: 이전 화면으로 보내기
 
 
         case .recentSearchTagRemoveAllButtonTapped:
@@ -242,6 +265,9 @@ public final class PopupSearchReactor: Reactor {
 
         case .updateCurrentPage(let currentPage):
             newState.currentPage = currentPage
+
+        case .updateSearching(let isSearching):
+            newState.isSearching = isSearching
 
         case .updateDataSource:
             newState.updateDataSource = ()

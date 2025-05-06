@@ -34,6 +34,11 @@ extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
         self.bindAction(reactor: reactor)
         self.bindState(reactor: reactor)
+
+        mainView.searchBar.cancelButton.rx.tap
+            .map { _ in Reactor.Action.searchBarCancelButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 
     private func bindAction(reactor: Reactor) {
