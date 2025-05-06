@@ -12,21 +12,16 @@ public final class PopupSearchReactor: Reactor {
     // MARK: - Reactor
     public enum Action {
         case viewDidLoad
+
+        case loadNextPage
+
+
         case filterOptionSaveButtonTapped
         case categorySaveOrResetButtonTapped
-        case viewAllVisibleItems
         case categoryCancelButtonTapped(categoryID: Int)
     }
 
     public enum Mutation {
-        case setInitialState(
-            recentSearchItems: [TagCollectionViewCell.Input],
-            categoryItems: [TagCollectionViewCell.Input],
-            searchResultsItems: [PPPopupGridCollectionViewCell.Input],
-            totalPagesCount: Int32,
-            totalElementCount: Int64
-        )
-
         case updateSearchResult(
             recentSearchItems: [TagCollectionViewCell.Input],
             categoryItems: [TagCollectionViewCell.Input],
@@ -35,7 +30,13 @@ public final class PopupSearchReactor: Reactor {
             totalElementCount: Int64
         )
 
-        case fetchNextPage(searchResultsItems: [PPPopupGridCollectionViewCell.Input])
+        case setupRecentSearch(items: [TagCollectionViewCell.Input])
+        case setupCategory(items: [TagCollectionViewCell.Input])
+        case setupSearchResult(items: [PPPopupGridCollectionViewCell.Input])
+        case setupTotalPageCount(count: Int32)
+        case setupTotalElementCount(count: Int64)
+
+        case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
     }
 
     public struct State {
@@ -66,7 +67,7 @@ public final class PopupSearchReactor: Reactor {
         popupAPIUseCase: PopUpAPIUseCase,
         fetchKeywordBasePopupListUseCase: FetchKeywordBasePopupListUseCase
     ) {
-        self.popupAPIUseCase =             popupAPIUseCase
+        self.popupAPIUseCase = popupAPIUseCase
         self.fetchKeywordBasePopupListUseCase = fetchKeywordBasePopupListUseCase
         self.initialState = State()
     }
@@ -83,14 +84,36 @@ public final class PopupSearchReactor: Reactor {
                 sort: PopupSortOption.newest.requestValue
             )
             .withUnretained(self)
-            .map { owner, response in
-                return .setInitialState(
-                    recentSearchItems: owner.getRecentSearchKeywords(),
-                    categoryItems: Category.shared.getCancelableCategoryItems(),
-                    searchResultsItems: owner.convertResponseToSearchResultInput(response: response),
-                    totalPagesCount: response.totalPages,
-                    totalElementCount: response.totalElements
-                )
+            .flatMap { (owner, response) -> Observable<Mutation> in
+                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+
+                return Observable.concat([
+                    .just(.setupRecentSearch(items: owner.getRecentSearchKeywords())),
+                    .just(.setupCategory(items: Category.shared.items)),
+                    .just(.setupSearchResult(items: searchResultItems)),
+                    .just(.setupTotalPageCount(count: response.totalPages)),
+                    .just(.setupTotalElementCount(count: response.totalElements))
+                ])
+            }
+
+        case .loadNextPage:
+            guard currentState.hasNextPage else {
+                return .empty() }
+
+            return popupAPIUseCase.getSearchBottomPopUpList(
+                isOpen: FilterOption.shared.status.requestValue,
+                categories: Category.shared.getSelectedCategoryIDs(),
+                page: Int32(currentState.currentPage + 1),
+                size: Int32(currentState.paginationSize),
+                sort: FilterOption.shared.sortOption.requestValue
+            )
+            .withUnretained(self)
+            .flatMap { (owner, response) -> Observable<Mutation> in
+                let searchResultItems = owner.convertResponseToSearchResultInput(response: response)
+
+                return Observable.concat([
+                    .just(.appendSearchResult(items: searchResultItems))
+                ])
             }
 
         case .filterOptionSaveButtonTapped, .categorySaveOrResetButtonTapped:
@@ -110,21 +133,6 @@ public final class PopupSearchReactor: Reactor {
                     totalPagesCount: response.totalPages,
                     totalElementCount: response.totalElements
                 )
-            }
-
-        case .viewAllVisibleItems:
-            guard currentState.hasNextPage else { return .empty() }
-
-            return popupAPIUseCase.getSearchBottomPopUpList(
-                isOpen: FilterOption.shared.status.requestValue,
-                categories: Category.shared.getSelectedCategoryIDs(),
-                page: Int32(currentState.currentPage + 1),
-                size: Int32(currentState.paginationSize),
-                sort: FilterOption.shared.sortOption.requestValue
-            )
-            .withUnretained(self)
-            .map { (owner, response) in
-                return .fetchNextPage(searchResultsItems: owner.convertResponseToSearchResultInput(response: response))
             }
 
         case .categoryCancelButtonTapped(let categoryID):
@@ -154,14 +162,23 @@ public final class PopupSearchReactor: Reactor {
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .setInitialState(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
-            newState.recentSearchItems = recentSearchItems
-            newState.categoryItems = categoryItems
-            newState.searchResultItems = searchResultItems
-            newState.totalPagesCount = Int(totalPagesCount)
-            newState.totalElementsCount = Int(totalElementsCount)
+        case .setupRecentSearch(let items):
+            newState.recentSearchItems = items
+
+        case .setupCategory(let items):
+            newState.categoryItems = items
+
+        case .setupSearchResult(let items):
+            newState.searchResultItems = items
+
+        case .setupTotalPageCount(let count):
+            newState.totalPagesCount = Int(count)
+
+        case .setupTotalElementCount(let count):
+            newState.totalElementsCount = Int(count)
 
 
+            
         case .updateSearchResult(let recentSearchItems, let categoryItems, let searchResultItems, let totalPagesCount, let totalElementsCount):
             newState.recentSearchItems = recentSearchItems
             newState.categoryItems = categoryItems
@@ -172,8 +189,8 @@ public final class PopupSearchReactor: Reactor {
             newState.totalPagesCount = Int(totalPagesCount)
             newState.totalElementsCount = Int(totalElementsCount)
 
-        case .fetchNextPage(let searchResultItems):
-            newState.searchResultItems += searchResultItems
+        case .appendSearchResult(let items):
+            newState.searchResultItems += items
             newState.currentPage += 1
         }
 

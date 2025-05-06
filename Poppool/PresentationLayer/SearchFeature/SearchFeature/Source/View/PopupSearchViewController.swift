@@ -109,7 +109,7 @@ extension PopupSearchViewController {
                     $0.item >= owner.mainView.collectionView.numberOfItems(inSection: $0.section) - prefetchCount
                 }
 
-                if isNearBottom { owner.reactor?.action.onNext(.viewAllVisibleItems) }
+                if isNearBottom { owner.reactor?.action.onNext(.loadNextPage) }
             }
             .disposed(by: disposeBag)
 
