@@ -69,7 +69,7 @@ final class PopupSearchView: UIView {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    var popupGridCollectionHeaderInput: SearchResultHeaderView.Input?
+    private var searchResultHeaderInput: SearchResultHeaderView.Input?
 
     // MARK: - init
     init() {
@@ -303,7 +303,7 @@ extension PopupSearchView {
                     for: indexPath
                 ) as? SearchResultHeaderView else { fatalError("\(#file), \(#function) Error") }
 
-                if let input = self.popupGridCollectionHeaderInput {
+                if let input = self.searchResultHeaderInput {
                     header.injection(with: input)
                 } else { header.injection(with: SearchResultHeaderView.Input(count: 0, sortedTitle: "nil")) }
 
@@ -320,13 +320,9 @@ extension PopupSearchView {
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem],
-        headerInput popupGridCollectionHeaderInput: SearchResultHeaderView.Input? = nil
+        headerInput searchResultHeaderInput: SearchResultHeaderView.Input? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
-
-        if let input = popupGridCollectionHeaderInput {
-            self.popupGridCollectionHeaderInput = input
-        }
 
         if !recentSearchItems.isEmpty {
             snapshot.appendSections([PopupSearchView.Section.recentSearch])
@@ -339,6 +335,7 @@ extension PopupSearchView {
         }
 
         if !searchResultItems.isEmpty {
+            self.searchResultHeaderInput = searchResultHeaderInput
             snapshot.appendSections([PopupSearchView.Section.searchResult])
             snapshot.appendItems(searchResultItems, toSection: .searchResult)
             snapshot.reloadSections([.searchResult])
