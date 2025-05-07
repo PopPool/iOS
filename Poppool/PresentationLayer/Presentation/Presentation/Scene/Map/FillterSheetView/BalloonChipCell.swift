@@ -1,10 +1,11 @@
-import Infrastructure
-import SnapKit
 import UIKit
+
+import Infrastructure
+
+import SnapKit
 import Then
 
 final class BalloonChipCell: UICollectionViewCell {
-    static let identifier = "BalloonChipCell"
 
     private enum Constant {
         static let verticalInset: CGFloat = 6
