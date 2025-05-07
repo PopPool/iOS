@@ -32,59 +32,54 @@ extension CategorySelectViewController {
 // MARK: - Methods
 extension CategorySelectViewController {
     func bind(reactor: Reactor) {
+        self.bindAction(reactor: reactor)
+        self.bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: Reactor) {
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        reactor.state
-            .map { $0.categoryItems }
-            .distinctUntilChanged()
-            .bind(to: mainView.collectionView.rx.items(
-                cellIdentifier: TagCollectionViewCell.identifiers,
-                cellType: TagCollectionViewCell.self
-            )) { index, input, cell in
-                cell.injection(with: input)
-            }
-            .disposed(by: disposeBag)
-
-        mainView.collectionView.rx.itemSelected
-            .withLatestFrom(
-                reactor.state.map { Array($0.categoryItems) },
-                resultSelector: { indexPath, items in items[indexPath.item] }
-            )
-            .compactMap { $0.id }
-            .map { Reactor.Action.cellTapped(categoryID: $0) }
+        mainView.closeButton.rx.tap
+            .map { Reactor.Action.closeButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        mainView.closeButton.rx.tap
-            .withUnretained(self)
-            .subscribe { (owner, _) in owner.dismiss(animated: true) }
-            .disposed(by: disposeBag)
-
-
         mainView.resetButton.rx.tap
-            .withUnretained(self)
-            .do { (owner, _) in owner.dismiss(animated: true) }
-            .map { (owner, _) in Reactor.Action.resetButtonTapped }
+            .map { Reactor.Action.resetButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.saveButton.rx.tap
-            .withUnretained(self)
-            .do { (owner, _) in owner.dismiss(animated: true) }
-            .map { (owner, _) in Reactor.Action.saveButtonTapped }
+            .map { Reactor.Action.saveButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        mainView.collectionView.rx.itemSelected
+            .map(Reactor.Action.categoryTagButtonTapped)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
 
-        reactor.state
+    private func bindState(reactor: Reactor) {
+        reactor.pulse(\.$dismiss)
             .withUnretained(self)
-            .subscribe { (owner, state) in
-                owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable
-                // owner.mainView.collectionView.reloadItems
-            }
+            .subscribe { (owner, _) in owner.dismiss(animated: true) }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.categoryItems)
+            .map(\.categoryItems)
+            .bind(to: mainView.collectionView.rx.items(
+                cellIdentifier: TagCollectionViewCell.identifiers,
+                cellType: TagCollectionViewCell.self
+            )) { _, item, cell in cell.injection(with: item) }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.saveButtonIsEnable)
+            .withUnretained(self)
+            .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
             .disposed(by: disposeBag)
     }
 }

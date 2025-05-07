@@ -132,16 +132,15 @@ extension PopupSearchViewController {
             .subscribe { owner, target in
                 switch target {
                 case .categorySelector:
-                    let categoryReactor = CategorySelectReactor(
+                    let viewController = CategorySelectViewController()
+                    viewController.reactor = CategorySelectReactor(
                         fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
                     )
-                    let viewController = CategorySelectViewController()
-                    viewController.reactor = categoryReactor
 
-                    categoryReactor.state
-                        .filter { $0.isSaveOrResetButtonTapped }
-                        .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
-                        .bind(to: owner.reactor!.action)
+                    viewController.reactor?.state.distinctUntilChanged(\.selectedCategoryChanged)
+                        .filter { $0.selectedCategoryChanged == true }
+                        .map { _ in Reactor.Action.categoryChangedBySelector }
+                        .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
                     owner.presentPanModal(viewController)
@@ -151,7 +150,7 @@ extension PopupSearchViewController {
                     viewController.reactor = FilterSelectReactor()
 
                     viewController.reactor?.pulse(\.$saveButtonTapped)
-                        .map { _ in Reactor.Action.filterSaveButtonTapped }
+                        .map { _ in Reactor.Action.searchResultFilterChangedBySelector }
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 

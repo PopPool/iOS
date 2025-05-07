@@ -25,13 +25,12 @@ public final class PopupSearchReactor: Reactor {
 
         case categoryTagRemoveButtonTapped(categoryID: Int)
         case categoryTagButtonTapped
+        case categoryChangedBySelector
 
         case searchResultFilterButtonTapped
+        case searchResultFilterChangedBySelector
         case searchResultItemTapped
         case searchResultPrefetchItems(indexPathList: [IndexPath])
-
-        case filterSaveButtonTapped
-        case categorySaveOrResetButtonTapped
     }
 
     public enum Mutation {
@@ -240,7 +239,7 @@ public final class PopupSearchReactor: Reactor {
         case .searchResultItemTapped:
             return .empty()
 
-        case .filterSaveButtonTapped, .categorySaveOrResetButtonTapped:
+        case .searchResultFilterChangedBySelector, .categoryChangedBySelector:
             return fetchSearchResult()
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in

@@ -11,30 +11,35 @@ final class CategorySelectReactor: Reactor {
     // MARK: - Reactor
     enum Action {
         case viewWillAppear
+        case closeButtonTapped
         case resetButtonTapped
         case saveButtonTapped
-        case cellTapped(categoryID: Int)
+        case categoryTagButtonTapped(indexPath: IndexPath)
     }
 
     enum Mutation {
         case setupCategotyTag(items: [TagCollectionViewCell.Input])
+        case dismiss
         case resetCategory
         case saveCategory
-        case toggleTappedCell(categoryID: Int)
+        case updateCategoryTagSelection(categoryID: Int)
+        case updateSaveButtonEnable
+        case updateSelectedCategory
     }
 
     struct State {
         var categoryItems: [TagCollectionViewCell.Input] = []
         var saveButtonIsEnable: Bool = false
-        var isSaveOrResetButtonTapped: Bool = false
+        var selectedCategoryChanged: Bool?
+
+        @Pulse var dismiss: Void?
     }
 
     // MARK: - properties
-
     var initialState: State
-    private var originCategoryItems: [TagCollectionViewCell.Input] = []
     var disposeBag = DisposeBag()
 
+    private var originCategoryItems: [TagCollectionViewCell.Input] = []
     private let fetchCategoryListUseCase: FetchCategoryListUseCase
 
     // MARK: - init
@@ -53,23 +58,34 @@ final class CategorySelectReactor: Reactor {
                 .withUnretained(self)
                 .map { (owner, response) in
                     let items = response.map {
-                        return TagCollectionViewCell.Input(
-                            title: $0.category,
-                            id: $0.categoryId,
-                            isCancelable: false
-                        )
+                        return TagCollectionViewCell.Input(title: $0.category, id: $0.categoryId, isCancelable: false)
                     }
                     return .setupCategotyTag(items: items)
                 }
-            
+
+        case .closeButtonTapped:
+            return .just(.dismiss)
+
         case .resetButtonTapped:
-            return Observable.just(.resetCategory)
+            return Observable.concat([
+                .just(.resetCategory),
+                .just(.dismiss),
+                .just(.updateSelectedCategory)
+            ])
 
         case .saveButtonTapped:
-            return Observable.just(.saveCategory)
+            return Observable.concat([
+                .just(.saveCategory),
+                .just(.dismiss),
+                .just(.updateSelectedCategory)
+            ])
 
-        case .cellTapped(let categoryID):
-            return Observable.just(.toggleTappedCell(categoryID: categoryID))
+        case .categoryTagButtonTapped(let indexPath):
+            guard let categoryID = currentState.categoryItems[indexPath.row].id else { return .empty() }
+            return Observable.concat([
+                .just(.updateCategoryTagSelection(categoryID: categoryID)),
+                .just(.updateSaveButtonEnable)
+            ])
         }
     }
 
@@ -79,29 +95,34 @@ final class CategorySelectReactor: Reactor {
         switch mutation {
         case .setupCategotyTag(let items):
             let fetchedItems = items.map {
-                if let id = $0.id, Category.shared.contains(id: id) {
-                    return $0.selectionToggledItem()
-                } else { return $0 }
+                if let id = $0.id, Category.shared.contains(id: id) { return $0.selectionToggledItem() }
+                else { return $0 }
             }
-
             originCategoryItems = fetchedItems
             newState.categoryItems = fetchedItems
 
+        case .dismiss:
+            newState.dismiss = ()
+
         case .resetCategory:
-            if originCategoryItems.isEmpty { break }
             Category.shared.resetItems()
-            newState.isSaveOrResetButtonTapped = true
+            newState.selectedCategoryChanged = true
 
         case .saveCategory:
             Category.shared.items = newState.categoryItems.filter { $0.isSelected == true }
-            newState.isSaveOrResetButtonTapped = true
+            newState.selectedCategoryChanged = true
 
-        case .toggleTappedCell(let categoryID):
+        case .updateCategoryTagSelection(let categoryID):
             newState.categoryItems = state.categoryItems.map {
                 if $0.id == categoryID { return $0.selectionToggledItem() }
                 else { return $0 }
             }
+
+        case .updateSaveButtonEnable:
             newState.saveButtonIsEnable = (originCategoryItems != newState.categoryItems)
+
+        case .updateSelectedCategory:
+            newState.selectedCategoryChanged = (originCategoryItems != newState.categoryItems)
         }
 
         return newState
