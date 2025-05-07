@@ -7,8 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0516364B2DC45E6300A6C0D1 /* SearchFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; };
-		0516364C2DC45E6300A6C0D1 /* SearchFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; };
+		05CFFBE62DCB8F6C0051129F /* SearchFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBE92DCB90070051129F /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFBE82DCB90070051129F /* RxSwift */; };
+		05CFFBEA2DCB90210051129F /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; };
+		05CFFBEB2DCB90210051129F /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBEC2DCB90440051129F /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; };
+		05CFFBED2DCB90440051129F /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBEE2DCB90460051129F /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; };
+		05CFFBEF2DCB90460051129F /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBF02DCB90580051129F /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; };
+		05CFFBF12DCB90580051129F /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBF32DCB906F0051129F /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFBF22DCB906F0051129F /* RxCocoa */; };
+		05CFFBF42DCB908B0051129F /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
+		05CFFBF52DCB908B0051129F /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFBF72DCB90A10051129F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFBF62DCB90A10051129F /* SnapKit */; };
 		05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233B2DC49A7600C761A5 /* RxCocoa */; };
 		05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233D2DC49A7600C761A5 /* RxSwift */; };
 		05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC23402DC49A8B00C761A5 /* ReactorKit */; };
@@ -16,15 +29,6 @@
 		05EC234B2DC49AB400C761A5 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC234A2DC49AB400C761A5 /* Then */; };
 		05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC234D2DC49AC100C761A5 /* SnapKit */; };
 		05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
-		05EC28602DC5C1CF00C761A5 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05EC28662DC5FDF800C761A5 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; };
-		05EC28672DC5FDF800C761A5 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28642DC5FDF800C761A5 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05EC28682DC5FDF800C761A5 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; };
-		05EC28692DC5FDF800C761A5 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC28652DC5FDF800C761A5 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05EC286B2DC5FE5B00C761A5 /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; };
-		05EC286C2DC5FE5B00C761A5 /* Data.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286A2DC5FE5B00C761A5 /* Data.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; };
-		05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EC28E42DC696E000C761A5 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC28E32DC696E000C761A5 /* PanModal */; };
 		05EC2AE92DC7C07400C761A5 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC2AE82DC7C07400C761A5 /* RxRelay */; };
 /* End PBXBuildFile section */
@@ -40,28 +44,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0516364F2DC45E6400A6C0D1 /* Embed Frameworks */ = {
+		05CFFBE72DCB8F6C0051129F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				05EC286C2DC5FE5B00C761A5 /* Data.framework in Embed Frameworks */,
-				05EC28692DC5FDF800C761A5 /* DomainInterface.framework in Embed Frameworks */,
-				05EC286F2DC5FE6000C761A5 /* Infrastructure.framework in Embed Frameworks */,
-				05EC28672DC5FDF800C761A5 /* Domain.framework in Embed Frameworks */,
-				0516364C2DC45E6300A6C0D1 /* SearchFeature.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05EC28612DC5C1CF00C761A5 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05EC28602DC5C1CF00C761A5 /* DesignSystem.framework in Embed Frameworks */,
+				05CFFBED2DCB90440051129F /* Domain.framework in Embed Frameworks */,
+				05CFFBEB2DCB90210051129F /* Data.framework in Embed Frameworks */,
+				05CFFBF12DCB90580051129F /* Infrastructure.framework in Embed Frameworks */,
+				05CFFBF52DCB908B0051129F /* DesignSystem.framework in Embed Frameworks */,
+				05CFFBEF2DCB90460051129F /* DomainInterface.framework in Embed Frameworks */,
+				05CFFBE62DCB8F6C0051129F /* SearchFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,11 +120,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05EC286B2DC5FE5B00C761A5 /* Data.framework in Frameworks */,
-				05EC28682DC5FDF800C761A5 /* DomainInterface.framework in Frameworks */,
-				05EC286E2DC5FE6000C761A5 /* Infrastructure.framework in Frameworks */,
-				05EC28662DC5FDF800C761A5 /* Domain.framework in Frameworks */,
-				0516364B2DC45E6300A6C0D1 /* SearchFeature.framework in Frameworks */,
+				05CFFBEE2DCB90460051129F /* DomainInterface.framework in Frameworks */,
+				05CFFBF42DCB908B0051129F /* DesignSystem.framework in Frameworks */,
+				05CFFBEC2DCB90440051129F /* Domain.framework in Frameworks */,
+				05CFFBEA2DCB90210051129F /* Data.framework in Frameworks */,
+				05CFFBF32DCB906F0051129F /* RxCocoa in Frameworks */,
+				05CFFBF02DCB90580051129F /* Infrastructure.framework in Frameworks */,
+				05CFFBF72DCB90A10051129F /* SnapKit in Frameworks */,
+				05CFFBE92DCB90070051129F /* RxSwift in Frameworks */,
+				05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,7 +188,6 @@
 				051633692DC457A900A6C0D1 /* Sources */,
 				0516336A2DC457A900A6C0D1 /* Frameworks */,
 				0516336B2DC457A900A6C0D1 /* Resources */,
-				05EC28612DC5C1CF00C761A5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -220,7 +217,7 @@
 				0516362B2DC457DE00A6C0D1 /* Sources */,
 				0516362C2DC457DE00A6C0D1 /* Frameworks */,
 				0516362D2DC457DE00A6C0D1 /* Resources */,
-				0516364F2DC45E6400A6C0D1 /* Embed Frameworks */,
+				05CFFBE72DCB8F6C0051129F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -232,6 +229,9 @@
 			);
 			name = SearchFeatureDemo;
 			packageProductDependencies = (
+				05CFFBE82DCB90070051129F /* RxSwift */,
+				05CFFBF22DCB906F0051129F /* RxCocoa */,
+				05CFFBF62DCB90A10051129F /* SnapKit */,
 			);
 			productName = SearchFeatureDemo;
 			productReference = 0516362F2DC457DE00A6C0D1 /* SearchFeatureDemo.app */;
@@ -682,6 +682,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		05CFFBE82DCB90070051129F /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		05CFFBF22DCB906F0051129F /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		05CFFBF62DCB90A10051129F /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC234C2DC49AC100C761A5 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
 		05EC233B2DC49A7600C761A5 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;

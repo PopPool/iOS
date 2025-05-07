@@ -271,7 +271,7 @@ extension PopupSearchView {
         }
         snapshot.reloadSections([.searchResult])
 
-        dataSource?.apply(snapshot, animatingDifferences: false)
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     func getSectionsFromDataSource() -> [Section] {
