@@ -70,7 +70,7 @@ final class SignUpStep2View: UIView {
         let attributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g1000 // 텍스트 색상
             ]
@@ -78,7 +78,7 @@ final class SignUpStep2View: UIView {
         let disabledAttributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g300 // 텍스트 색상
             ]

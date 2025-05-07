@@ -35,7 +35,7 @@ final class SearchMainView: UIView {
         $0.setPlaceholder(
             text: "팝업스토어명을 입력해보세요",
             color: .g400,
-            font: .korFont(style: .regular, size: 14)!
+            font: .korFont(style: .regular, size: 14)
         )
     }
 

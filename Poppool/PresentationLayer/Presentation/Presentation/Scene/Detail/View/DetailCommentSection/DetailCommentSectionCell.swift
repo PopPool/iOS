@@ -321,20 +321,20 @@ extension DetailCommentSectionCell: Inputable {
 
         // 기본 스타일 (폰트, 색상 등)
         let normalAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.korFont(style: .regular, size: 14)!,
+            .font: UIFont.korFont(style: .regular, size: 14),
             .foregroundColor: UIColor.g1000,
             .paragraphStyle: paragraphStyle
         ]
 
         // 스타일을 다르게 할 부분 (팝업스토어명, 생생한 후기)
         let popupStoreAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.korFont(style: .bold, size: 14)!,  // 다른 폰트 스타일
+            .font: UIFont.korFont(style: .bold, size: 14),  // 다른 폰트 스타일
             .foregroundColor: UIColor.blu500,  // 다른 색상
             .paragraphStyle: paragraphStyle
         ]
 
         let reviewAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.korFont(style: .bold, size: 14)!,  // 이탤릭체
+            .font: UIFont.korFont(style: .bold, size: 14),  // 이탤릭체
             .foregroundColor: UIColor.g1000,  // 다른 색상
             .paragraphStyle: paragraphStyle
         ]
