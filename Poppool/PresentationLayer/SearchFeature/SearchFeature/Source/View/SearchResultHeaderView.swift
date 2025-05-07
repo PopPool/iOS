@@ -16,6 +16,10 @@ public final class SearchResultHeaderView: UICollectionReusableView {
 
     var disposeBag = DisposeBag()
 
+    private let afterSearchTitleLabel = PPLabel(style: .bold, fontSize: 16).then {
+        $0.isHidden = true
+    }
+
     private let cellCountLabel = PPLabel(style: .regular, fontSize: 13).then {
         $0.textColor = .g400
     }
@@ -51,7 +55,7 @@ public final class SearchResultHeaderView: UICollectionReusableView {
 // MARK: - SetUp
 private extension SearchResultHeaderView {
     func addViews() {
-        [cellCountLabel, filterStatusButton].forEach {
+        [afterSearchTitleLabel, cellCountLabel, filterStatusButton].forEach {
             addSubview($0)
         }
 
@@ -61,16 +65,23 @@ private extension SearchResultHeaderView {
     }
 
     func setupConstraints() {
+        afterSearchTitleLabel.snp.makeConstraints { make in
+            make.height.equalTo(0)
+            make.horizontalEdges.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalTo(cellCountLabel.snp.top).offset(-4)
+        }
+
         cellCountLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.height.equalTo(22)
-            make.centerY.equalToSuperview()
+            make.height.equalTo(20)
+            make.bottom.equalToSuperview()
         }
 
         filterStatusButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.height.equalTo(22)
-            make.centerY.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
 
         filterStatusLabel.snp.makeConstraints { make in
@@ -89,16 +100,28 @@ private extension SearchResultHeaderView {
 
 extension SearchResultHeaderView: Inputable {
     public struct Input {
-        var count: Int?
-        var filterStatusTitle: String?
+        let title: String?
+        let count: Int?
+        let filterStatusText: String?
     }
 
     public func injection(with input: Input) {
-        if let count = input.count {
-            cellCountLabel.text = "총 \(count)개"
-        }
+        if let afterSearchTitle = input.title,
+           let count = input.count {
+            filterStatusButton.isHidden = true
+            afterSearchTitleLabel.isHidden = false
+            afterSearchTitleLabel.text = afterSearchTitle + " 포함된 팝업"
+            cellCountLabel.text = "총 \(count)개를 찾았어요."
 
-        if let filterStatusTitle = input.filterStatusTitle {
+            afterSearchTitleLabel.snp.updateConstraints { make in
+                make.height.equalTo(24)
+            }
+
+        } else if let count = input.count,
+                  let filterStatusTitle = input.filterStatusText {
+            filterStatusButton.isHidden = false
+            afterSearchTitleLabel.isHidden = true
+            cellCountLabel.text = "총 \(count)개"
             filterStatusLabel.text = filterStatusTitle
         }
     }

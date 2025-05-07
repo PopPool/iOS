@@ -39,7 +39,7 @@ final class PopupSearchView: UIView {
     }
 
     let searchBar = PPSearchBarView()
-    
+
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         $0.setCollectionViewLayout(self.makeLayout(), animated: false)
 
@@ -229,7 +229,7 @@ private extension PopupSearchView {
         // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(22)
+            heightDimension: .estimated(22)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -326,7 +326,11 @@ extension PopupSearchView {
 
                 if let input = self.searchResultHeaderInput {
                     header.injection(with: input)
-                } else { header.injection(with: SearchResultHeaderView.Input(count: 0, filterStatusTitle: "nil")) }
+                } else { header.injection(with: SearchResultHeaderView.Input(
+                    title: nil,
+                    count: nil, filterStatusText: nil
+                ))
+                }
 
                 header.filterStatusButton.rx.tap
                     .bind(to: self.filterStatusButtonTapped)

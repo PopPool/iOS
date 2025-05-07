@@ -138,7 +138,10 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupRecentSearch(items: [])),
                         .just(.setupCategory(items: [])),
                         .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: 0))), // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(
+                            keyword: owner.makePostPositionedText(text),
+                            count: Int64(response.popupStoreList.count)
+                        ))), // FIXME: API에 해당 결과값이 아직 없음
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearching(to: true)),
@@ -206,17 +209,21 @@ public final class PopupSearchReactor: Reactor {
             return .just(.present(target: .categorySelector))
 
         case .recentSearchTagButtonTapped(let indexPath):
-            return fetchSearchResult(keyword: self.makeRecentSearchItem(at: indexPath))
+            let keyword = self.makeRecentSearchItem(at: indexPath)
+            return fetchSearchResult(keyword: keyword)
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
                     return Observable.concat([
                         .just(.setupRecentSearch(items: [])),
                         .just(.setupCategory(items: [])),
                         .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: 0))), // FIXME: API에 해당 결과값이 아직 없음
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(
+                            keyword: owner.makePostPositionedText(keyword),
+                            count: Int64(response.popupStoreList.count)
+                        ))),
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchBar(to: self.makeRecentSearchItem(at: indexPath))),
+                        .just(.updateSearchBar(to: keyword)),
                         .just(.updateSearching(to: true)),
                         .just(.clearButton(state: .hidden)),
                         .just(.endEditing),
@@ -376,8 +383,32 @@ private extension PopupSearchReactor {
         }
     }
 
-    func makeSearchResultHeaderInput(count: Int64, title: String = Filter.shared.title) -> SearchResultHeaderView.Input {
-        return SearchResultHeaderView.Input(count: Int(count), filterStatusTitle: title)
+    func makeSearchResultHeaderInput(
+        keyword afterTitle: String? = nil,
+        count: Int64,
+        filter filterTitle: String? = Filter.shared.title) -> SearchResultHeaderView.Input {
+        return SearchResultHeaderView.Input(
+            title: afterTitle,
+            count: Int(count),
+            filterStatusText: filterTitle
+        )
+    }
+
+    /// 받침에 따라 이/가 를 판단해서 붙여준다.
+    func makePostPositionedText(_ text: String?) -> String {
+
+        guard let text, let lastCharacter = text.last else { return "" }
+
+        let unicodeValue = Int(lastCharacter.unicodeScalars.first!.value)
+
+        // 한글 유니코드 범위 체크
+        let base = 0xAC00
+        let last = 0xD7A3
+        guard base...last ~= unicodeValue else { return text + "가" }
+
+        // 종성 인덱스 계산 (받침이 있으면 1 이상)
+        let finalConsonantIndex = (unicodeValue - base) % 28
+        return (finalConsonantIndex != 0) ? text + "이" : text + "가"
     }
 }
 

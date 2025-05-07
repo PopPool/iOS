@@ -43,7 +43,6 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.tapGestureRecognizer.rx.event
-            .debug("DEBUG: Tap Gesture Recognizer")
             .map { _ in Reactor.Action.searchBarEndEditing }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -81,7 +80,6 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.collectionView.rx.itemSelected
-            .debug("DEBUG: collectionView.rx.itemSelected")
             .compactMap { indexPath in
                 let sections = self.mainView.getSectionsFromDataSource()
                 guard indexPath.section < sections.count else { return nil }
