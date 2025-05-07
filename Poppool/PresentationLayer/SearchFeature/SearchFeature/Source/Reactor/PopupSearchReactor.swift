@@ -51,6 +51,7 @@ public final class PopupSearchReactor: Reactor {
         case updateSearchBar(to: String?)
         case updateCurrentPage(to: Int32)
         case updateSearching(to: Bool)
+        case updateSearchResultEmptyCase
         case updateDataSource
     }
 
@@ -77,6 +78,7 @@ public final class PopupSearchReactor: Reactor {
         var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
         var searchResultHeader: SearchResultHeaderView.Input? = nil
+        var searchResultEmptyCase: SearchResultEmptyCollectionViewCell.EmptyCase?
 
         @Pulse var present: PresentTarget?
         @Pulse var clearButton: ClearButtonState?
@@ -123,6 +125,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchResultEmptyCase),
                         .just(.updateDataSource)
                     ])
                 }
@@ -145,6 +148,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearching(to: true)),
+                        .just(.updateSearchResultEmptyCase),
                         .just(.clearButton(state: .hidden)),
                         .just(.endEditing),
                         .just(.updateDataSource)
@@ -170,6 +174,7 @@ public final class PopupSearchReactor: Reactor {
                             .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                             .just(.updateCurrentPage(to: 0)),
                             .just(.updateSearching(to: false)),
+                            .just(.updateSearchResultEmptyCase),
                             .just(.clearTextField),
                             .just(.endEditing),
                             .just(.updateDataSource)
@@ -225,6 +230,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchBar(to: keyword)),
                         .just(.updateSearching(to: true)),
+                        .just(.updateSearchResultEmptyCase),
                         .just(.clearButton(state: .hidden)),
                         .just(.endEditing),
                         .just(.updateDataSource)
@@ -245,6 +251,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchResultEmptyCase),
                         .just(.updateDataSource)
                     ])
             }
@@ -266,6 +273,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchResultEmptyCase),
                         .just(.updateDataSource)
                     ])
                 }
@@ -304,6 +312,9 @@ public final class PopupSearchReactor: Reactor {
 
         case .updateSearching(let isSearching):
             newState.isSearching = isSearching
+
+        case .updateSearchResultEmptyCase:
+            newState.searchResultEmptyCase = makeSearchResultEmptyCase(state: newState)
 
         case .updateDataSource:
             newState.updateDataSource = ()
@@ -392,6 +403,12 @@ private extension PopupSearchReactor {
             count: Int(count),
             filterStatusText: filterTitle
         )
+    }
+
+    func makeSearchResultEmptyCase(state: State) -> SearchResultEmptyCollectionViewCell.EmptyCase? {
+        if !currentState.searchResultItems.isEmpty { return nil }
+        else if currentState.isSearching { return .keyword }
+        else { return .option }
     }
 
     /// 받침에 따라 이/가 를 판단해서 붙여준다.

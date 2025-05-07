@@ -19,6 +19,7 @@ final class PopupSearchView: UIView {
         case recentSearchItem(TagCollectionViewCell.Input)
         case categoryItem(TagCollectionViewCell.Input)
         case searchResultItem(PPPopupGridCollectionViewCell.Input)
+        case searchResultEmptyItem(SearchResultEmptyCollectionViewCell.EmptyCase)
     }
 
     /// Section의 헤더를 구분하기 위한 변수
@@ -44,16 +45,6 @@ final class PopupSearchView: UIView {
         $0.setCollectionViewLayout(self.makeLayout(), animated: false)
 
         $0.register(
-            TagCollectionViewCell.self,
-            forCellWithReuseIdentifier: TagCollectionViewCell.identifiers
-        )
-
-        $0.register(
-            PPPopupGridCollectionViewCell.self,
-            forCellWithReuseIdentifier: PPPopupGridCollectionViewCell.identifiers
-        )
-
-        $0.register(
             TagCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.recentSearch.rawValue,
             withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue
@@ -64,10 +55,26 @@ final class PopupSearchView: UIView {
             forSupplementaryViewOfKind: SectionHeaderKind.category.rawValue,
             withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue
         )
+
+        $0.register(
+            TagCollectionViewCell.self,
+            forCellWithReuseIdentifier: TagCollectionViewCell.identifiers
+        )
+
         $0.register(
             SearchResultHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
             withReuseIdentifier: SearchResultHeaderView.Identifier.searchResult.rawValue
+        )
+
+        $0.register(
+            PPPopupGridCollectionViewCell.self,
+            forCellWithReuseIdentifier: PPPopupGridCollectionViewCell.identifiers
+        )
+
+        $0.register(
+            SearchResultEmptyCollectionViewCell.self,
+            forCellWithReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers
         )
 
         // UICollectionView 최 상/하단 빈 영역
@@ -182,9 +189,21 @@ private extension PopupSearchView {
     }
 
     func makeSearchResultSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
+        // Determine if there is a searchResultEmptyItem in the current visible items to adjust item width
+        let sectionItems = collectionView.indexPathsForVisibleItems.compactMap {
+            dataSource?.itemIdentifier(for: $0)
+        }
+
+        let hasEmptyItem = sectionItems.contains {
+            if case .searchResultEmptyItem = $0 { return true }
+            return false
+        }
+
+        let itemWidth: NSCollectionLayoutDimension = hasEmptyItem ? .fractionalWidth(1.0) : .fractionalWidth(0.5)
+
         // Item
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
+            widthDimension: itemWidth,
             heightDimension: .absolute(249)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -283,6 +302,14 @@ extension PopupSearchView {
                 ) as! PPPopupGridCollectionViewCell
                 cell.injection(with: searchResultItem)
                 return cell
+
+            case .searchResultEmptyItem(let emptyCase):
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers,
+                    for: indexPath
+                ) as! SearchResultEmptyCollectionViewCell
+                cell.injection(with: SearchResultEmptyCollectionViewCell.Input(emptyCase: emptyCase))
+                return cell
             }
         }
 
@@ -345,7 +372,8 @@ extension PopupSearchView {
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem],
-        headerInput searchResultHeaderInput: SearchResultHeaderView.Input? = nil
+        headerInput searchResultHeaderInput: SearchResultHeaderView.Input? = nil,
+        searchResultEmpty: SearchResultEmptyCollectionViewCell.EmptyCase? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
 
@@ -359,12 +387,15 @@ extension PopupSearchView {
             snapshot.appendItems(categoryItems, toSection: .category)
         }
 
-        if !searchResultItems.isEmpty {
-            self.searchResultHeaderInput = searchResultHeaderInput
-            snapshot.appendSections([PopupSearchView.Section.searchResult])
-            snapshot.appendItems(searchResultItems, toSection: .searchResult) 
-            snapshot.reloadSections([.searchResult])
+        snapshot.appendSections([PopupSearchView.Section.searchResult])
+        self.searchResultHeaderInput = searchResultHeaderInput
+
+        if let searchResultEmpty {
+            snapshot.appendItems([.searchResultEmptyItem(searchResultEmpty)], toSection: .searchResult)
+        } else {
+            snapshot.appendItems(searchResultItems, toSection: .searchResult)
         }
+        snapshot.reloadSections([.searchResult])
 
         dataSource?.apply(snapshot, animatingDifferences: true)
     }

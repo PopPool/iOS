@@ -123,6 +123,10 @@ extension SearchResultHeaderView: Inputable {
             afterSearchTitleLabel.isHidden = true
             cellCountLabel.text = "총 \(count)개"
             filterStatusLabel.text = filterStatusTitle
+
+            afterSearchTitleLabel.snp.updateConstraints { make in
+                make.height.equalTo(0)
+            }
         }
     }
 }

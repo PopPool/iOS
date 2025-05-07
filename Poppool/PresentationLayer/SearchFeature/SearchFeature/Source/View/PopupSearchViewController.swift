@@ -179,7 +179,8 @@ extension PopupSearchViewController {
                     recentSearchItems: state.recentSearchItems.map(PopupSearchView.SectionItem.recentSearchItem),
                     categoryItems: state.categoryItems.map(PopupSearchView.SectionItem.categoryItem),
                     searchResultItems: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
-                    headerInput: state.searchResultHeader
+                    headerInput: state.searchResultHeader,
+                    searchResultEmpty: state.searchResultEmptyCase
                 )
             }
             .disposed(by: disposeBag)
