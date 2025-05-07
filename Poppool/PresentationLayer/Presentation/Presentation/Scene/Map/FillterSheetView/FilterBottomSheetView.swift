@@ -1,39 +1,43 @@
-import SnapKit
 import UIKit
 
+import SnapKit
+import Then
+
 final class FilterBottomSheetView: UIView {
-    // MARK: - UI Components
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 20
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.masksToBounds = true
-        return view
-    }()
+    private enum Constant {
+        static let cornerRadius: CGFloat = 20
+        static let topInset: CGFloat = 30
+        static let horizontalInset: CGFloat = 16
+        static let segmentedTopOffset: CGFloat = 16
+        static let scrollViewHeight: CGFloat = 36
+        static let categoryHeight: CGFloat = 160
+        static let balloonTopOffset: CGFloat = 16
+        static let filterChipsHeight: CGFloat = 80
+        static let buttonStackSpacing: CGFloat = 12
+        static let buttonStackHeight: CGFloat = 52
+    }
 
-    let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 18, text: "보기 옵션을 선택해주세요")
-        label.textColor = .black
-        return label
-    }()
+    private let containerView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = Constant.cornerRadius
+        $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        $0.layer.masksToBounds = true
+    }
 
-    let closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "icon_xmark"), for: .normal)
-        button.tintColor = .black
-        return button
-    }()
+    let titleLabel = PPLabel(style: .bold, fontSize: 18, text: "보기 옵션을 선택해주세요").then {
+        $0.textColor = .black
+    }
 
-    let segmentedControl: PPSegmentedControl = {
-        return PPSegmentedControl(type: .tab, segments: ["지역", "카테고리"], selectedSegmentIndex: 0)
-    }()
+    let closeButton = UIButton(type: .system).then {
+        $0.setImage(UIImage(named: "icon_xmark"), for: .normal)
+        $0.tintColor = .black
+    }
 
-    let locationScrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.showsHorizontalScrollIndicator = false
-        return scrollView
-    }()
+    let segmentedControl = PPSegmentedControl(type: .tab, segments: ["지역", "카테고리"], selectedSegmentIndex: 0)
+
+    let locationScrollView = UIScrollView().then {
+        $0.showsHorizontalScrollIndicator = false
+    }
 
     let locationContentView = UIView()
     var categoryHeightConstraint: Constraint?
@@ -42,13 +46,13 @@ final class FilterBottomSheetView: UIView {
         let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(26),
-                heightDimension: .estimated(36)
+                heightDimension: .estimated(Constant.scrollViewHeight)
             )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(36)
+                heightDimension: .estimated(Constant.scrollViewHeight)
             )
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: groupSize,
@@ -67,35 +71,25 @@ final class FilterBottomSheetView: UIView {
 
             return section
         }
-
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.isScrollEnabled = false
-        collectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
-        return collectionView
+        return UICollectionView(frame: .zero, collectionViewLayout: layout).then {
+            $0.backgroundColor = .clear
+            $0.isScrollEnabled = false
+            $0.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
+        }
     }()
 
     let balloonBackgroundView = BalloonBackgroundView()
 
-    let resetButton: PPButton = {
-        return PPButton(style: .secondary, text: "초기화")
-    }()
+    let resetButton = PPButton(style: .secondary, text: "초기화")
+    let saveButton = PPButton(style: .primary, text: "옵션저장", disabledText: "옵션저장")
 
-    let saveButton: PPButton = {
-        return PPButton(style: .primary, text: "옵션저장", disabledText: "옵션저장")
-    }()
+    private let buttonStack = UIStackView().then {
+        $0.axis = .horizontal
+        $0.spacing = Constant.buttonStackSpacing
+        $0.distribution = .fillEqually
+    }
 
-    private let buttonStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 12
-        stack.distribution = .fillEqually
-        return stack
-    }()
-
-    let filterChipsView: FilterChipsView = {
-        return FilterChipsView()
-    }()
+    let filterChipsView = FilterChipsView()
 
     private var balloonHeightConstraint: Constraint?
 
@@ -142,25 +136,25 @@ final class FilterBottomSheetView: UIView {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.top.equalToSuperview().offset(30)
+            make.leading.equalToSuperview().offset(Constant.horizontalInset)
+            make.top.equalToSuperview().offset(Constant.topInset)
         }
 
         closeButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(Constant.horizontalInset)
             make.centerY.equalTo(titleLabel)
             make.size.equalTo(24)
         }
 
         segmentedControl.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(Constant.segmentedTopOffset)
             make.leading.trailing.equalToSuperview()
         }
 
         locationScrollView.snp.makeConstraints { make in
             make.top.equalTo(segmentedControl.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(36)
+            make.height.equalTo(Constant.scrollViewHeight)
         }
 
         locationContentView.snp.makeConstraints { make in
@@ -169,28 +163,28 @@ final class FilterBottomSheetView: UIView {
         }
 
         categoryCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(segmentedControl.snp.bottom).offset(16)
+            make.top.equalTo(segmentedControl.snp.bottom).offset(Constant.segmentedTopOffset)
             make.leading.trailing.equalToSuperview()
-            categoryHeightConstraint = make.height.equalTo(160).constraint
+            categoryHeightConstraint = make.height.equalTo(Constant.categoryHeight).constraint
         }
 
         balloonBackgroundView.snp.makeConstraints { make in
-            make.top.equalTo(locationScrollView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(locationScrollView.snp.bottom).offset(Constant.balloonTopOffset)
+            make.leading.trailing.equalToSuperview().inset(Constant.horizontalInset)
             balloonHeightConstraint = make.height.equalTo(0).constraint
         }
 
         filterChipsView.snp.makeConstraints { make in
             make.top.equalTo(balloonBackgroundView.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(80)
+            make.leading.trailing.equalToSuperview().inset(Constant.horizontalInset)
+            make.height.equalTo(Constant.filterChipsHeight)
         }
 
         buttonStack.snp.makeConstraints { make in
             make.top.equalTo(filterChipsView.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview().inset(Constant.horizontalInset)
             make.bottom.equalToSuperview().inset(40)
-            make.height.equalTo(52)
+            make.height.equalTo(Constant.buttonStackHeight)
         }
     }
 
@@ -305,41 +299,44 @@ final class FilterBottomSheetView: UIView {
         let button = PPButton(
             style: .secondary,
             text: title,
-            font: .korFont(style: .medium, size: 13),
+            font: .korFont(style: isSelected ? .bold : .medium, size: 13),
             cornerRadius: 18
         )
-        button.setBackgroundColor(.w100, for: .normal)
-        button.setTitleColor(.g400, for: .normal)
+        button.setBackgroundColor(isSelected ? .blu500 : .w100, for: .normal)
+        button.setTitleColor(isSelected ? .w100 : .g400, for: .normal)
+        button.layer.borderWidth = isSelected ? 0 : 1
         button.layer.borderColor = UIColor.g200.cgColor
-        button.layer.borderWidth = 1
-
-        if isSelected {
-            button.setBackgroundColor(.blu500, for: .normal)
-            button.setTitleColor(.w100, for: .normal)
-            button.layer.borderWidth = 0
-        }
-
         button.contentEdgeInsets = UIEdgeInsets(top: 9, left: 16, bottom: 9, right: 16)
+
+        button.titleLabel?.setLineHeightText(
+            text: title,
+            font: .korFont(style: isSelected ? .bold : .medium, size: 13),
+            lineHeight: 1.2
+        )
 
         return button
     }
 
+
     func updateMainLocationSelection(_ index: Int) {
         locationContentView.subviews.enumerated().forEach { (idx, view) in
             guard let button = view as? PPButton else { return }
-            if idx == index {
-                button.setBackgroundColor(.blu500, for: .normal)
-                button.setTitleColor(.w100, for: .normal)
-                button.layer.borderWidth = 0
-                button.titleLabel?.font = .korFont(style: .bold, size: 13)
-            } else {
-                button.setBackgroundColor(.w100, for: .normal)
-                button.setTitleColor(.g400, for: .normal)
-                button.layer.borderColor = UIColor.g200.cgColor
-                button.titleLabel?.font = .korFont(style: .medium, size: 13)
-                button.layer.borderWidth = 1
-            }
+
+            let isSelected = idx == index
+            button.setBackgroundColor(isSelected ? .blu500 : .w100, for: .normal)
+            button.setTitleColor(isSelected ? .w100 : .g400, for: .normal)
+            button.layer.borderWidth = isSelected ? 0 : 1
+            button.layer.borderColor = UIColor.g200.cgColor
+
+            // 버튼의 타이틀 레이블에 setLineHeightText 적용
+            let title = button.currentTitle ?? ""
+            button.titleLabel?.setLineHeightText(
+                text: title,
+                font: .korFont(style: isSelected ? .bold : .medium, size: 13),
+                lineHeight: 1.2
+            )
         }
+
     }
 
     func updateBalloonHeight(isHidden: Bool, dynamicHeight: CGFloat = 160) {

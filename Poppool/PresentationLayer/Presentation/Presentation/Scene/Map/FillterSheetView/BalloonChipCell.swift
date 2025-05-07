@@ -4,7 +4,6 @@ import Infrastructure
 
 import SnapKit
 import Then
-import UIKit
 
 final class BalloonChipCell: UICollectionViewCell {
 
