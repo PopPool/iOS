@@ -34,16 +34,6 @@ extension PopupSearchViewController {
     public func bind(reactor: Reactor) {
         self.bindAction(reactor: reactor)
         self.bindState(reactor: reactor)
-
-        mainView.searchBar.cancelButton.rx.tap
-            .map { _ in Reactor.Action.searchBarCancelButtonTapped }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        mainView.recentSearchTagRemoveButtonTapped
-            .map(Reactor.Action.recentSearchTagRemoveButtonTapped)
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
     }
 
     private func bindAction(reactor: Reactor) {
@@ -53,12 +43,8 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         mainView.tapGestureRecognizer.rx.event
+            .debug("DEBUG: Tap Gesture Recognizer")
             .map { _ in Reactor.Action.searchBarEndEditing }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        mainView.searchBar.clearButton.rx.tap
-            .map { Reactor.Action.searchBarClearButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -74,12 +60,28 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        mainView.searchBar.clearButton.rx.tap
+            .map { Reactor.Action.searchBarClearButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.searchBar.cancelButton.rx.tap
+            .map { _ in Reactor.Action.searchBarCancelButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        mainView.recentSearchTagRemoveButtonTapped
+            .map(Reactor.Action.recentSearchTagRemoveButtonTapped)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         mainView.recentSearchTagRemoveAllButtonTapped
             .map { Reactor.Action.recentSearchTagRemoveAllButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.collectionView.rx.itemSelected
+            .debug("DEBUG: collectionView.rx.itemSelected")
             .compactMap { indexPath in
                 let sections = self.mainView.getSectionsFromDataSource()
                 guard indexPath.section < sections.count else { return nil }
