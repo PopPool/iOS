@@ -30,6 +30,7 @@ final class PopupSearchView: UIView {
     }
 
     // MARK: - Properties
+    private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
@@ -42,7 +43,9 @@ final class PopupSearchView: UIView {
     let searchBar = PPSearchBarView()
 
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-        $0.setCollectionViewLayout(self.makeLayout(), animated: false)
+        let layout = layoutFactory.makeCollectionViewLayout { [weak self] in self?.dataSource }
+
+        $0.setCollectionViewLayout(layout, animated: false)
 
         $0.register(
             TagCollectionHeaderView.self,
@@ -128,135 +131,6 @@ private extension PopupSearchView {
     func configureUI() {
         self.configurationDataSourceItem()
         self.configureDataSourceHeader()
-    }
-}
-
-// MARK: - Layout
-private extension PopupSearchView {
-    private func makeLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
-            guard let self else { return nil }
-
-            let sections = getSectionsFromDataSource()
-            guard sectionIndex < sections.count else { return nil }
-
-            switch sections[sectionIndex] {
-            case .recentSearch:
-                return makeTagSectionLayout(SectionHeaderKind.recentSearch.rawValue)
-
-            case .category:
-                return makeTagSectionLayout(SectionHeaderKind.category.rawValue)
-
-            case .searchResult:
-                return makeSearchResultSectionLayout(SectionHeaderKind.searchResult.rawValue)
-            }
-        }
-    }
-
-    func makeTagSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
-        // Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(100),
-            heightDimension: .absolute(31)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        // Group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(100),
-            heightDimension: .estimated(31)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item]
-        )
-
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-
-        if headerKind == SectionHeaderKind.recentSearch.rawValue {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 20)
-        } else {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
-        }
-
-        section.interGroupSpacing = 6
-
-        section.boundarySupplementaryItems = [makeTagCollectionHeaderLayout(headerKind)]
-
-        return section
-    }
-
-    func makeSearchResultSectionLayout(_ headerKind: String) -> NSCollectionLayoutSection {
-        // Determine if there is a searchResultEmptyItem in the current visible items to adjust item width
-        let sectionItems = collectionView.indexPathsForVisibleItems.compactMap {
-            dataSource?.itemIdentifier(for: $0)
-        }
-
-        let hasEmptyItem = sectionItems.contains {
-            if case .searchResultEmptyItem = $0 { return true }
-            return false
-        }
-
-        let itemWidth: NSCollectionLayoutDimension = hasEmptyItem ? .fractionalWidth(1.0) : .fractionalWidth(0.5)
-
-        // Item
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: itemWidth,
-            heightDimension: .absolute(249)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        // Group
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(249)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item, item]
-        )
-        group.interItemSpacing = .fixed(16)
-
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
-        section.interGroupSpacing = 24
-
-        section.boundarySupplementaryItems = [makePopupGridCollectionHeaderLayout(headerKind)]
-
-        return section
-    }
-
-    func makeTagCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
-        // Header
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(24)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: elementKind,
-            alignment: .top
-        )
-
-        return header
-    }
-
-    func makePopupGridCollectionHeaderLayout(_ elementKind: String) -> NSCollectionLayoutBoundarySupplementaryItem {
-        // Header
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(22)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: elementKind,
-            alignment: .top
-        )
-
-        return header
     }
 }
 
