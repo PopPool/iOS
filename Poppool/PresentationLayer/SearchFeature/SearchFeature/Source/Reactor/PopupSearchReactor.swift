@@ -42,16 +42,15 @@ public final class PopupSearchReactor: Reactor {
 
         case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
 
-        case present(target: PresentTarget)
-        case clearButton(state: ClearButtonState)
-        case clearTextField
-        case endEditing
-
+        case updateEditingState
         case updateSearchBar(to: String?)
+        case updateClearButtonIsHidden(to: Bool)
         case updateCurrentPage(to: Int32)
-        case updateSearching(to: Bool)
+        case updateSearchingState(to: Bool)
         case updateSearchResultEmptyCase
         case updateDataSource
+
+        case present(target: PresentTarget)
     }
 
     public enum PresentTarget {
@@ -59,29 +58,16 @@ public final class PopupSearchReactor: Reactor {
         case filterSelector
     }
 
-    public enum ClearButtonState {
-        var value: Bool {
-            switch self {
-            case .visible: return false
-            case .hidden: return true
-            }
-        }
-        
-        case visible
-        case hidden
-    }
-
     public struct State {
-        var searchBarText: String? = nil
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
         var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
         var searchResultHeader: SearchResultHeaderView.Input? = nil
         var searchResultEmptyCase: SearchResultEmptyCollectionViewCell.EmptyCase?
 
+        @Pulse var searchBarText: String? = nil
         @Pulse var present: PresentTarget?
-        @Pulse var clearButton: ClearButtonState?
-        @Pulse var clearButtonTapped: Void?
+        @Pulse var clearButtonIsHidden: Bool?
         @Pulse var endEditing: Void?
         @Pulse var updateDataSource: Void?
 
@@ -130,7 +116,7 @@ public final class PopupSearchReactor: Reactor {
                 }
 
         case .searchBarEditing(let text):
-            return .just(.clearButton(state: text.isEmpty ? .hidden : .visible))
+            return .just(.updateClearButtonIsHidden(to: text.isEmpty ? true : false))
 
         case .searchBarExitEditing(let text):
             return fetchSearchResult(keyword: text)
@@ -146,18 +132,18 @@ public final class PopupSearchReactor: Reactor {
                         ))), // FIXME: API에 해당 결과값이 아직 없음
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearching(to: true)),
+                        .just(.updateSearchingState(to: true)),
                         .just(.updateSearchResultEmptyCase),
-                        .just(.clearButton(state: .hidden)),
-                        .just(.endEditing),
+                        .just(.updateClearButtonIsHidden(to: true)),
+                        .just(.updateEditingState),
                         .just(.updateDataSource)
                     ])
                 }
 
         case .searchBarEndEditing:
             return .concat([
-                .just(.clearButton(state: .hidden)),
-                .just(.endEditing)
+                .just(.updateClearButtonIsHidden(to: true)),
+                .just(.updateEditingState)
             ])
 
         case .searchBarCancelButtonTapped:
@@ -172,10 +158,10 @@ public final class PopupSearchReactor: Reactor {
                             .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
                             .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                             .just(.updateCurrentPage(to: 0)),
-                            .just(.updateSearching(to: false)),
+                            .just(.updateSearchingState(to: false)),
                             .just(.updateSearchResultEmptyCase),
-                            .just(.clearTextField),
-                            .just(.endEditing),
+                            .just(.updateSearchBar(to: nil)),
+                            .just(.updateEditingState),
                             .just(.updateDataSource)
                         ])
                     }
@@ -228,10 +214,10 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchBar(to: keyword)),
-                        .just(.updateSearching(to: true)),
+                        .just(.updateSearchingState(to: true)),
                         .just(.updateSearchResultEmptyCase),
-                        .just(.clearButton(state: .hidden)),
-                        .just(.endEditing),
+                        .just(.updateClearButtonIsHidden(to: true)),
+                        .just(.updateEditingState),
                         .just(.updateDataSource)
                     ])
                 }
@@ -257,8 +243,8 @@ public final class PopupSearchReactor: Reactor {
 
         case .searchBarClearButtonTapped:
             return Observable.concat([
-                .just(.clearButton(state: .hidden)),
-                .just(.clearTextField)
+                .just(.updateClearButtonIsHidden(to: true)),
+                .just(.updateSearchBar(to: nil))
             ])
 
         case .categoryTagRemoveButtonTapped(let categoryID):
@@ -309,7 +295,7 @@ public final class PopupSearchReactor: Reactor {
         case .updateCurrentPage(let currentPage):
             newState.currentPage = currentPage
 
-        case .updateSearching(let isSearching):
+        case .updateSearchingState(let isSearching):
             newState.isSearching = isSearching
 
         case .updateSearchResultEmptyCase:
@@ -321,13 +307,10 @@ public final class PopupSearchReactor: Reactor {
         case .present(let target):
             newState.present = target
 
-        case .clearButton(let state):
-            newState.clearButton = state
+        case .updateClearButtonIsHidden(let state):
+            newState.clearButtonIsHidden = state
 
-        case .clearTextField:
-            newState.clearButtonTapped = ()
-
-        case .endEditing:
+        case .updateEditingState:
             newState.endEditing = ()
         }
 

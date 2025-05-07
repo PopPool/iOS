@@ -117,14 +117,10 @@ extension PopupSearchViewController {
             .subscribe { (owner, _) in owner.mainView.endEditing(true) }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$clearButton)
+        reactor.pulse(\.$clearButtonIsHidden)
+            .compactMap { $0 }
             .withUnretained(self)
-            .subscribe { (owner, state) in owner.mainView.searchBar.clearButton.isHidden = state?.value ?? true }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$clearButtonTapped)
-            .withUnretained(self)
-            .subscribe { (owner, _) in owner.mainView.searchBar.searchBar.searchTextField.text = nil }
+            .subscribe { (owner, state) in owner.mainView.searchBar.clearButton.isHidden = state }
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$present)
@@ -161,12 +157,10 @@ extension PopupSearchViewController {
             }
             .disposed(by: disposeBag)
 
-        reactor.state.distinctUntilChanged(\.searchBarText)
-            .map { $0.searchBarText }
+        reactor.pulse(\.$searchBarText)
             .withUnretained(self)
             .subscribe { (owner, text) in owner.mainView.searchBar.searchBar.text = text }
             .disposed(by: disposeBag)
-
 
         reactor.pulse(\.$updateDataSource)
             .withLatestFrom(reactor.state)
