@@ -32,45 +32,53 @@ extension FilterSelectViewController {
 // MARK: - Methods
 extension FilterSelectViewController {
     func bind(reactor: Reactor) {
+        self.bindAction(reactor: reactor)
+        self.bindState(reactor: reactor)
+    }
+
+    private func bindAction(reactor: Reactor) {
         mainView.closeButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in owner.dismiss(animated: true) })
+            .map { _ in Reactor.Action.closeButtonTapped }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.statusSegmentControl.rx.controlEvent(.valueChanged)
             .withUnretained(self)
-            .map { (owner, _) in
-                if owner.mainView.statusSegmentControl.selectedSegmentIndex == 0 {
-                    Reactor.Action.changeStatus(status: .open)
-                } else { Reactor.Action.changeStatus(status: .closed) }
-            }
+            .map { (owner, _) in Reactor.Action.statusSegmentChanged(index: owner.mainView.statusSegmentControl.selectedSegmentIndex) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.sortSegmentControl.rx.controlEvent(.valueChanged)
             .withUnretained(self)
-            .map { (owner, _) in
-                if owner.mainView.sortSegmentControl.selectedSegmentIndex == 0 {
-                    Reactor.Action.changeSort(sort: .newest)
-                } else { Reactor.Action.changeSort(sort: .popularity) }
-            }
+            .map { (owner, _) in Reactor.Action.sortSegmentChanged(index: owner.mainView.sortSegmentControl.selectedSegmentIndex) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         mainView.saveButton.rx.tap
             .withUnretained(self)
-            .do { (owner, _) in owner.dismiss(animated: true) }
             .map { (owner, _) in Reactor.Action.saveButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
 
-        reactor.state
+    private func bindState(reactor: Reactor) {
+        reactor.state.distinctUntilChanged(\.selectedFilter)
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.mainView.statusSegmentControl.selectedSegmentIndex = state.selectedFilter.status.index
                 owner.mainView.sortSegmentControl.selectedSegmentIndex = state.selectedFilter.sort.index
-                owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable
             }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.saveButtonIsEnable)
+            .withUnretained(self)
+            .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
+            .disposed(by: disposeBag)
+
+
+        reactor.pulse(\.$dismiss)
+            .withUnretained(self)
+            .subscribe { (owner, _) in owner.dismiss(animated: true) }
             .disposed(by: disposeBag)
     }
 }

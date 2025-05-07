@@ -138,7 +138,6 @@ extension PopupSearchViewController {
                     let viewController = CategorySelectViewController()
                     viewController.reactor = categoryReactor
 
-                    #warning("pulse에서 bind하는 구조...? 개선 가능하려나")
                     categoryReactor.state
                         .filter { $0.isSaveOrResetButtonTapped }
                         .map { _ in Reactor.Action.categorySaveOrResetButtonTapped }
@@ -151,8 +150,7 @@ extension PopupSearchViewController {
                     let viewController = FilterSelectViewController()
                     viewController.reactor = FilterSelectReactor()
 
-                    viewController.reactor?.state
-                        .filter { $0.isSaveButtonTapped == true }
+                    viewController.reactor?.pulse(\.$saveButtonTapped)
                         .map { _ in Reactor.Action.filterSaveButtonTapped }
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
