@@ -317,7 +317,6 @@ final class FilterBottomSheetView: UIView {
         return button
     }
 
-
     func updateMainLocationSelection(_ index: Int) {
         locationContentView.subviews.enumerated().forEach { (idx, view) in
             guard let button = view as? PPButton else { return }
