@@ -1,8 +1,8 @@
 import Foundation
 
 public struct CategoryResponse {
-    public init(categoryId: Int32, category: String) {
-        self.categoryId = Int(categoryId)
+    public init(categoryId: Int, category: String) {
+        self.categoryId = categoryId
         self.category = category
     }
 

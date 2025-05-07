@@ -15,6 +15,6 @@ struct CategoryResponseDTO: Codable {
 
 extension CategoryResponseDTO {
     func toDomain() -> CategoryResponse {
-        return CategoryResponse(categoryId: categoryId, category: categoryName)
+        return CategoryResponse(categoryId: Int(categoryId), category: categoryName)
     }
 }
