@@ -74,7 +74,7 @@ extension CategorySelectViewController {
                 cellIdentifier: TagCollectionViewCell.identifiers,
                 cellType: TagCollectionViewCell.self
             )) { _, item, cell in
-                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
+                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable, fontSize: 13, cornerRadius: 18)
             }
             .disposed(by: disposeBag)
 

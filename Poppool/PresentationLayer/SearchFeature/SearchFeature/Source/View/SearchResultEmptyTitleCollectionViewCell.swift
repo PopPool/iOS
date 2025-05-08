@@ -11,7 +11,8 @@ final class SearchResultEmptyTitleCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
     private let emptyLabel = PPLabel(
         style: .medium,
-        fontSize: 14
+        fontSize: 14,
+        lineHeight: 1.5
     ).then {
         $0.textAlignment = .center
         $0.numberOfLines = 2
