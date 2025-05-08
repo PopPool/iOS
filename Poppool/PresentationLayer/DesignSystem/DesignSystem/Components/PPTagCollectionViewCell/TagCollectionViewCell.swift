@@ -9,11 +9,11 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Components
 
-    var disposeBag = DisposeBag()
+    public var disposeBag = DisposeBag()
 
-    let titleLabel = PPLabel(style: .medium, fontSize: 11)
+    public let titleLabel = PPLabel(style: .medium, fontSize: 11)
 
-    let cancelButton = UIButton()
+    public let cancelButton = UIButton()
 
     private let contentStackView = UIStackView().then {
         $0.alignment = .center
@@ -75,40 +75,24 @@ private extension TagCollectionViewCell {
     }
 }
 
-extension TagCollectionViewCell: Inputable {
-    public struct Input: Hashable {
-        var title: String?
-        var id: Int? = nil
-        var isSelected: Bool = false
-        var isCancelable: Bool = true
-
-        func selectionToggledItem() -> Input {
-            let toggledSelection = !isSelected
-            return Input(title: self.title, id: self.id, isSelected: toggledSelection, isCancelable: self.isCancelable)
-        }
-
-        func cancelableItem() -> Input {
-            return Input(title: self.title, id: self.id, isSelected: self.isSelected, isCancelable: true)
-        }
-    }
-
-    public func injection(with input: Input) {
-        let xmarkImage = input.isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")
+extension TagCollectionViewCell {
+    public func configureCell(title: String? = nil, id: Int?, isSelected: Bool = false, isCancelable: Bool = true) {
+        let xmarkImage = isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")
         cancelButton.setImage(xmarkImage, for: .normal)
-        if input.isSelected {
+        if isSelected {
             contentView.backgroundColor = .blu500
-            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .bold, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: title, font: .korFont(style: .bold, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .w100
             contentView.layer.borderColor = UIColor.blu500.cgColor
         } else {
             contentView.backgroundColor = .clear
-            titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .medium, size: 11), lineHeight: 1.15)
+            titleLabel.setLineHeightText(text: title, font: .korFont(style: .medium, size: 11), lineHeight: 1.15)
             titleLabel.textColor = .g400
             contentView.layer.borderColor = UIColor.g200.cgColor
         }
-        cancelButton.isHidden = !input.isCancelable
+        cancelButton.isHidden = !isCancelable
 
-        if input.isCancelable {
+        if isCancelable {
             contentStackView.snp.updateConstraints { make in
                 make.trailing.equalToSuperview().inset(8)
             }

@@ -18,7 +18,7 @@ final class CategorySelectReactor: Reactor {
     }
 
     enum Mutation {
-        case setupCategotyTag(items: [TagCollectionViewCell.Input])
+        case setupCategotyTag(items: [TagModel])
         case dismiss
         case resetCategory
         case saveCategory
@@ -28,7 +28,7 @@ final class CategorySelectReactor: Reactor {
     }
 
     struct State {
-        var categoryItems: [TagCollectionViewCell.Input] = []
+        var categoryItems: [TagModel] = []
         var saveButtonIsEnable: Bool = false
         var selectedCategoryChanged: Bool?
 
@@ -39,7 +39,7 @@ final class CategorySelectReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private var originCategoryItems: [TagCollectionViewCell.Input] = []
+    private var originCategoryItems: [TagModel] = []
     private let fetchCategoryListUseCase: FetchCategoryListUseCase
 
     // MARK: - init
@@ -58,7 +58,7 @@ final class CategorySelectReactor: Reactor {
                 .withUnretained(self)
                 .map { (owner, response) in
                     let items = response.map {
-                        return TagCollectionViewCell.Input(title: $0.category, id: $0.categoryId, isCancelable: false)
+                        return TagModel(title: $0.category, id: $0.categoryId, isCancelable: false)
                     }
                     return .setupCategotyTag(items: items)
                 }

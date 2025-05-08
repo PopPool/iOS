@@ -73,7 +73,9 @@ extension CategorySelectViewController {
             .bind(to: mainView.collectionView.rx.items(
                 cellIdentifier: TagCollectionViewCell.identifiers,
                 cellType: TagCollectionViewCell.self
-            )) { _, item, cell in cell.injection(with: item) }
+            )) { _, item, cell in
+                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
+            }
             .disposed(by: disposeBag)
 
         reactor.state.distinctUntilChanged(\.saveButtonIsEnable)

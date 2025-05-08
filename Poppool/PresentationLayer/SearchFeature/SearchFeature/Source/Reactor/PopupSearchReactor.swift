@@ -34,8 +34,8 @@ public final class PopupSearchReactor: Reactor {
     }
 
     public enum Mutation {
-        case setupRecentSearch(items: [TagCollectionViewCell.Input])
-        case setupCategory(items: [TagCollectionViewCell.Input])
+        case setupRecentSearch(items: [TagModel])
+        case setupCategory(items: [TagModel])
         case setupSearchResult(items: [SearchResultModel])
         case setupSearchResultHeader(item: SearchResultHeaderView.Input)
         case setupSearchResultTotalPageCount(count: Int32)
@@ -59,8 +59,8 @@ public final class PopupSearchReactor: Reactor {
     }
 
     public struct State {
-        var recentSearchItems: [TagCollectionViewCell.Input] = []
-        var categoryItems: [TagCollectionViewCell.Input] = []
+        var recentSearchItems: [TagModel] = []
+        var categoryItems: [TagModel] = []
         var searchResultItems: [SearchResultModel] = []
         var searchResultHeader: SearchResultHeaderView.Input? = nil
         var searchResultEmptyCase: SearchResultEmptyCollectionViewCell.EmptyCase?
@@ -351,12 +351,12 @@ private extension PopupSearchReactor {
         return searchKeywords[indexPath.item]
     }
 
-    func makeRecentSearchItems() -> [TagCollectionViewCell.Input] {
+    func makeRecentSearchItems() -> [TagModel] {
         let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword) ?? []
-        return searchKeywords.map { TagCollectionViewCell.Input(title: $0) }
+        return searchKeywords.map { TagModel(title: $0) }
     }
 
-    func makeCategoryItems() -> [TagCollectionViewCell.Input] {
+    func makeCategoryItems() -> [TagModel] {
         return Category.shared.getCancelableCategoryItems()
     }
 

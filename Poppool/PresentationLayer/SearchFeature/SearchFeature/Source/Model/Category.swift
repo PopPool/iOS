@@ -10,15 +10,15 @@ public final class Category: NSCopying, Equatable {
     static let shared = Category()
 
     /// 선택된 아이템들만 들어가는 인스턴스
-    private var _items: [TagCollectionViewCell.Input]
-    public var items: [TagCollectionViewCell.Input] {
+    private var _items: [TagModel]
+    public var items: [TagModel] {
         get { _items }
         set { _items = newValue.isEmpty ? [Category.defaultItem] : newValue }
     }
 
-    private static let defaultItem = TagCollectionViewCell.Input(title: "카테고리", isSelected: false, isCancelable: false)
+    private static let defaultItem = TagModel(title: "카테고리", isSelected: false, isCancelable: false)
 
-    private init(items: [TagCollectionViewCell.Input] = [Category.defaultItem]) {
+    private init(items: [TagModel] = [Category.defaultItem]) {
         self._items = items.isEmpty ? [Category.defaultItem] : items
     }
 }
@@ -47,7 +47,7 @@ extension Category {
         return items.filter { $0.isSelected == true }.compactMap { $0.id }
     }
 
-    func getCancelableCategoryItems() -> [TagCollectionViewCell.Input] {
+    func getCancelableCategoryItems() -> [TagModel] {
         if items == [Category.defaultItem] { return items }
         else { return items.filter { $0.isSelected == true }.map { $0.cancelableItem() } }
     }

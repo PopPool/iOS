@@ -18,8 +18,8 @@ final class PopupSearchView: UIView {
 
     /// Section에 들어갈 Item을 정의한 변수
     enum SectionItem: Hashable {
-        case recentSearchItem(TagCollectionViewCell.Input)
-        case categoryItem(TagCollectionViewCell.Input)
+        case recentSearchItem(TagModel)
+        case categoryItem(TagModel)
         case searchResultItem(SearchResultModel)
         case searchResultEmptyItem(SearchResultEmptyCollectionViewCell.EmptyCase)
     }
@@ -143,12 +143,12 @@ extension PopupSearchView {
             collectionView: collectionView
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             switch item {
-            case .recentSearchItem(let recentRearchItem):
+            case .recentSearchItem(let item):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: TagCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! TagCollectionViewCell
-                cell.injection(with: recentRearchItem)
+                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
 
                 cell.cancelButton.rx.tap
                     .compactMap { cell.titleLabel.text }
@@ -157,15 +157,15 @@ extension PopupSearchView {
 
                 return cell
 
-            case .categoryItem(let categoryItem):
+            case .categoryItem(let item):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: TagCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! TagCollectionViewCell
-                cell.injection(with: categoryItem)
+                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
 
                 cell.cancelButton.rx.tap
-                    .compactMap { categoryItem.id }
+                    .compactMap { item.id }
                     .bind(to: self.categoryTagRemoveButtonTapped)
                     .disposed(by: cell.disposeBag)
 
