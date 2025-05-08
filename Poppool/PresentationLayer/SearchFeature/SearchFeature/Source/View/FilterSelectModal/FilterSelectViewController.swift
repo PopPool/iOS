@@ -22,7 +22,7 @@ extension FilterSelectViewController {
     override func loadView() {
         self.view = mainView
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -77,7 +77,15 @@ extension FilterSelectViewController {
 
         reactor.pulse(\.$dismiss)
             .withUnretained(self)
-            .subscribe { (owner, _) in owner.dismiss(animated: true) }
+            .subscribe { (owner, _) in owner.dismissModal() }
             .disposed(by: disposeBag)
     }
+}
+
+extension FilterSelectViewController: PPModalPresentable {
+    var modalHeight: CGFloat? { return 379 }
+
+    var backgroundColor: UIColor { return .pb60 }
+
+    var cornerRadius: CGFloat { return 20 }
 }

@@ -49,40 +49,41 @@ private extension FilterSelectView {
     // FIXME: 레이아웃 에러로 인한 Modal이 살짝 내려가지는 문제 발생중
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(32)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         closeButton.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             make.centerY.equalTo(titleLabel)
         }
 
         statusLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(36)
-            make.leading.equalToSuperview().inset(20)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         statusSegmentControl.snp.makeConstraints { make in
             make.top.equalTo(statusLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         sortLabel.snp.makeConstraints { make in
             make.top.equalTo(statusSegmentControl.snp.bottom).offset(20)
-            make.leading.equalToSuperview().inset(20)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         sortSegmentControl.snp.makeConstraints { make in
             make.top.equalTo(sortLabel.snp.bottom).offset(8)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         saveButton.snp.makeConstraints { make in
             make.top.equalTo(sortSegmentControl.snp.bottom).offset(32)
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.height.equalTo(50)
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide.snp.horizontalEdges).inset(20)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
     }
 }

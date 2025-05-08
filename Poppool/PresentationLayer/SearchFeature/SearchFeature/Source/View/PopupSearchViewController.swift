@@ -166,7 +166,7 @@ extension PopupSearchViewController {
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
-                    owner.present(viewController, animated: true)
+                    owner.PPPresent(viewController, animated: true)
 
                 default: break
                 }
