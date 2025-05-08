@@ -65,7 +65,7 @@ extension CategorySelectViewController {
     private func bindState(reactor: Reactor) {
         reactor.pulse(\.$dismiss)
             .withUnretained(self)
-            .subscribe { (owner, _) in owner.dismiss(animated: true) }
+            .subscribe { (owner, _) in owner.dismissModal() }
             .disposed(by: disposeBag)
 
         reactor.state.distinctUntilChanged(\.categoryItems)
@@ -81,4 +81,12 @@ extension CategorySelectViewController {
             .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
             .disposed(by: disposeBag)
     }
+}
+
+extension CategorySelectViewController: PPModalPresentable {
+    var modalHeight: CGFloat? { return 384 }
+
+    var backgroundColor: UIColor { return .pb60 }
+
+    var cornerRadius: CGFloat { return 20 }
 }

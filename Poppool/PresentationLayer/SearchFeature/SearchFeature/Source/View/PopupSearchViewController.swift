@@ -155,7 +155,7 @@ extension PopupSearchViewController {
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
-                    owner.present(viewController, animated: true)
+                    owner.PPPresent(viewController)
 
                 case .filterSelector:
                     let viewController = FilterSelectViewController()
@@ -166,7 +166,7 @@ extension PopupSearchViewController {
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
-                    owner.PPPresent(viewController, animated: true)
+                    owner.PPPresent(viewController)
 
                 default: break
                 }

@@ -63,27 +63,26 @@ private extension CategorySelectView {
     // FIXME: 레이아웃 에러로 인한 Modal이 살짝 내려가지는 문제 발생중
     func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(32)
+            make.leading.equalTo(safeAreaLayoutGuide).inset(20)
         }
 
         closeButton.snp.makeConstraints { make in
             make.size.equalTo(24)
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             make.centerY.equalTo(titleLabel)
         }
 
         collectionView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide)
             make.top.equalTo(titleLabel.snp.bottom).offset(24)
-            make.height.equalTo(195)
+            make.bottom.equalTo(buttonStackView.snp.top).offset(24)
         }
 
         buttonStackView.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(20)
             make.height.equalTo(52)
-            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
 }
@@ -100,7 +99,7 @@ private extension CategorySelectView {
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(1000)
+                heightDimension: .estimated(200)
             )
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             group.interItemSpacing = .fixed(12)
