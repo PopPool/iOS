@@ -1,5 +1,7 @@
 import UIKit
 
+import DesignSystem
+
 import SnapKit
 import Then
 import RxSwift
@@ -40,7 +42,7 @@ final class PopupSearchView: UIView {
         $0.cancelsTouchesInView = false
     }
 
-    let searchBar = PPSearchBarView()
+    public let searchBar = PPSearchBarView()
 
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let layout = layoutFactory.makeCollectionViewLayout { [weak self] in self?.dataSource }

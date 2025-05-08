@@ -1,7 +1,5 @@
 import UIKit
 
-import DesignSystem
-
 import SnapKit
 import Then
 
@@ -13,7 +11,7 @@ public class PPSearchBarView: UIView {
         $0.axis = .horizontal
     }
 
-    let searchBar = UISearchBar().then {
+    public let searchBar = UISearchBar().then {
         $0.searchTextField.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .korFont(style: .regular, size: 14))
         $0.tintColor = .g400
         $0.backgroundColor = .g50
@@ -23,12 +21,12 @@ public class PPSearchBarView: UIView {
         $0.searchTextField.subviews.first?.isHidden = true
     }
 
-    let clearButton = UIButton(type: .custom).then {
+    public let clearButton = UIButton(type: .custom).then {
         $0.setImage(UIImage(named: "icon_clear_button"), for: .normal)
         $0.isHidden = true
     }
 
-    let cancelButton = UIButton(type: .system).then {
+    public let cancelButton = UIButton(type: .system).then {
         $0.setTitle("취소", for: .normal)
         $0.tintColor = .g1000
         $0.titleLabel?.font = .korFont(style: .regular, size: 14)

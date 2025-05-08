@@ -13,6 +13,7 @@
 		051631652DC3D29400A6C0D1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 051631642DC3D29400A6C0D1 /* SnapKit */; };
 		051631682DC3D3FA00A6C0D1 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 051631672DC3D3FA00A6C0D1 /* Tabman */; };
 		0516316B2DC3D50700A6C0D1 /* Pageboy in Frameworks */ = {isa = PBXBuildFile; productRef = 0516316A2DC3D50700A6C0D1 /* Pageboy */; };
+		05CFFCBE2DCCB3810051129F /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFCBD2DCCB3810051129F /* Then */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 				0516316B2DC3D50700A6C0D1 /* Pageboy in Frameworks */,
 				051631682DC3D3FA00A6C0D1 /* Tabman in Frameworks */,
 				051631622DC3D28400A6C0D1 /* RxSwift in Frameworks */,
+				05CFFCBE2DCCB3810051129F /* Then in Frameworks */,
 				051631652DC3D29400A6C0D1 /* SnapKit in Frameworks */,
 				051631602DC3D28400A6C0D1 /* RxCocoa in Frameworks */,
 				0516312C2DC3D1E900A6C0D1 /* Infrastructure.framework in Frameworks */,
@@ -106,6 +108,7 @@
 				051631642DC3D29400A6C0D1 /* SnapKit */,
 				051631672DC3D3FA00A6C0D1 /* Tabman */,
 				0516316A2DC3D50700A6C0D1 /* Pageboy */,
+				05CFFCBD2DCCB3810051129F /* Then */,
 			);
 			productName = DesignSystem;
 			productReference = 051630B82DC3D1A000A6C0D1 /* DesignSystem.framework */;
@@ -140,6 +143,7 @@
 				051631632DC3D29400A6C0D1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				051631662DC3D3FA00A6C0D1 /* XCRemoteSwiftPackageReference "Tabman" */,
 				051631692DC3D50700A6C0D1 /* XCRemoteSwiftPackageReference "Pageboy" */,
+				05CFFCBC2DCCB3810051129F /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 051630B92DC3D1A000A6C0D1 /* Products */;
@@ -427,6 +431,14 @@
 				minimumVersion = 4.2.0;
 			};
 		};
+		05CFFCBC2DCCB3810051129F /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -454,6 +466,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 051631692DC3D50700A6C0D1 /* XCRemoteSwiftPackageReference "Pageboy" */;
 			productName = Pageboy;
+		};
+		05CFFCBD2DCCB3810051129F /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05CFFCBC2DCCB3810051129F /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
