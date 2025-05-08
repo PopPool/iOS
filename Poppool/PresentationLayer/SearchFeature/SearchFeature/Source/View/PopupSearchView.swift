@@ -118,7 +118,7 @@ private extension PopupSearchView {
 
     func setupConstraints() {
         searchBar.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide).inset(12)
+            make.top.equalTo(self.safeAreaLayoutGuide)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(56)
         }
