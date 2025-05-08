@@ -24,7 +24,7 @@ final class PopupSearchLayoutFactory {
             case .searchResult:
                 let sectionSnapshot = dataSource.snapshot(for: sectionType)
                 let hasEmptyItem = sectionSnapshot.items.contains { item in
-                    if case .searchResultEmptyItem = item { return true }
+                    if case .searchResultEmptyTitle = item { return true }
                     return false
                 }
                 return makeSearchResultSectionLayout(

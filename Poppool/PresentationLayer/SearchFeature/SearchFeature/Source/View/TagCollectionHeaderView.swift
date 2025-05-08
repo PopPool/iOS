@@ -66,7 +66,7 @@ private extension TagCollectionHeaderView {
 }
 
 extension TagCollectionHeaderView {
-    func setupHeader(title: String, buttonTitle: String? = nil) {
+    func configureHeader(title: String, buttonTitle: String? = nil) {
         sectionTitleLabel.text = title
         if let buttonTitle = buttonTitle {
             removeAllButton.isHidden = false

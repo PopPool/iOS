@@ -6,7 +6,7 @@ import Infrastructure
 import SnapKit
 import Then
 
-final class SearchResultEmptyCollectionViewCell: UICollectionViewCell {
+final class SearchResultEmptyTitleCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
     private let emptyLabel = PPLabel(
@@ -34,7 +34,7 @@ final class SearchResultEmptyCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - SetUp
-private extension SearchResultEmptyCollectionViewCell {
+private extension SearchResultEmptyTitleCollectionViewCell {
     func addViews() {
         [emptyLabel].forEach {
             self.addSubview($0)
@@ -52,12 +52,9 @@ private extension SearchResultEmptyCollectionViewCell {
     func configureUI() { }
 }
 
-extension SearchResultEmptyCollectionViewCell {
-    func configureCell(with emptyCase: SearchResultModel.EmptyCase) {
-        switch emptyCase {
-        case .option: self.emptyLabel.text = "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요"
-        case .keyword: self.emptyLabel.text = "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요"
-        }
+extension SearchResultEmptyTitleCollectionViewCell {
+    func configureCell(title: String) {
+        self.emptyLabel.text = title
     }
 }
 

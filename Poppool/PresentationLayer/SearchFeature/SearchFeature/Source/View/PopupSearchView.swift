@@ -21,7 +21,7 @@ final class PopupSearchView: UIView {
         case recentSearchItem(TagModel)
         case categoryItem(TagModel)
         case searchResultItem(SearchResultModel)
-        case searchResultEmptyItem(SearchResultModel.EmptyCase)
+        case searchResultEmptyTitle(String)
     }
 
     /// Section의 헤더를 구분하기 위한 변수
@@ -78,8 +78,8 @@ final class PopupSearchView: UIView {
         )
 
         $0.register(
-            SearchResultEmptyCollectionViewCell.self,
-            forCellWithReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers
+            SearchResultEmptyTitleCollectionViewCell.self,
+            forCellWithReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers
         )
 
         // UICollectionView 최 상/하단 빈 영역
@@ -179,12 +179,12 @@ extension PopupSearchView {
                 cell.configureCell(imagePath: item.imagePath, id: item.id, category: item.category, title: item.title, address: item.address, startDate: item.startDate, endDate: item.endDate, isBookmark: item.isBookmark, isLogin: item.isLogin, isPopular: item.isPopular, row: item.row)
                 return cell
 
-            case .searchResultEmptyItem(let emptyCase):
+            case .searchResultEmptyTitle(let title):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers,
+                    withReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers,
                     for: indexPath
-                ) as! SearchResultEmptyCollectionViewCell
-                cell.configureCell(with: emptyCase)
+                ) as! SearchResultEmptyTitleCollectionViewCell
+                cell.configureCell(title: title)
                 return cell
             }
         }
@@ -202,7 +202,7 @@ extension PopupSearchView {
                     withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue,
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
-                header.setupHeader(title: "최근 검색어", buttonTitle: "모두삭제")
+                header.configureHeader(title: "최근 검색어", buttonTitle: "모두삭제")
 
                 header.removeAllButton.rx.tap
                     .bind(to: self.recentSearchTagRemoveAllButtonTapped)
@@ -216,7 +216,7 @@ extension PopupSearchView {
                     withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue,
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
-                header.setupHeader(title: "팝업스토어 찾기")
+                header.configureHeader(title: "팝업스토어 찾기")
 
                 return header
 
@@ -247,7 +247,7 @@ extension PopupSearchView {
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem],
         headerInput searchResultHeaderInput: SearchResultHeaderModel? = nil,
-        searchResultEmpty: SearchResultModel.EmptyCase? = nil
+        searchResultEmpty: String? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
 
@@ -265,7 +265,7 @@ extension PopupSearchView {
         self.searchResultHeaderInput = searchResultHeaderInput
 
         if let searchResultEmpty {
-            snapshot.appendItems([.searchResultEmptyItem(searchResultEmpty)], toSection: .searchResult)
+            snapshot.appendItems([.searchResultEmptyTitle(searchResultEmpty)], toSection: .searchResult)
         } else {
             snapshot.appendItems(searchResultItems, toSection: .searchResult)
         }
