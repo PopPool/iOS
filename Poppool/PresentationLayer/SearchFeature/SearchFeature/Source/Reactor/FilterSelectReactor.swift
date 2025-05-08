@@ -96,6 +96,7 @@ final class FilterSelectReactor: Reactor {
             newState.selectedFilter.sort = sort
 
         case .updateSaveButtonEnable:
+            print("DEBUG: status: \(Filter.shared.status), sort: \(Filter.shared.sort)", )
             newState.saveButtonIsEnable = (newState.selectedFilter != Filter.shared)
 
         case .saveCurrentFilter:

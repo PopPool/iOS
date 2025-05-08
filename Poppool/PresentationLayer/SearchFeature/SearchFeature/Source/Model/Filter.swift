@@ -9,7 +9,7 @@ final class Filter: NSCopying, Equatable {
         )
     }
 
-    static func == (lhs: Filter, rhs: Filter) -> Bool { return lhs === rhs }
+    static func == (lhs: Filter, rhs: Filter) -> Bool { return (lhs.status == rhs.status) && (lhs.sort == rhs.sort) }
 
     static let shared = Filter(status: .open, sort: .newest)
 
