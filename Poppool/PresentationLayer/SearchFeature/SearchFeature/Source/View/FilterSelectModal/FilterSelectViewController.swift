@@ -2,7 +2,6 @@ import UIKit
 
 import DesignSystem
 
-import PanModal
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -80,24 +79,5 @@ extension FilterSelectViewController {
             .withUnretained(self)
             .subscribe { (owner, _) in owner.dismiss(animated: true) }
             .disposed(by: disposeBag)
-    }
-}
-
-// MARK: - PanModalPresentable
-extension FilterSelectViewController: PanModalPresentable {
-    var panScrollable: UIScrollView? {
-        return nil
-    }
-    var longFormHeight: PanModalHeight {
-        return .intrinsicHeight
-    }
-    var shortFormHeight: PanModalHeight {
-        return .intrinsicHeight
-    }
-    var showDragIndicator: Bool {
-        return false
-    }
-    var cornerRadius: CGFloat {
-        return 20
     }
 }

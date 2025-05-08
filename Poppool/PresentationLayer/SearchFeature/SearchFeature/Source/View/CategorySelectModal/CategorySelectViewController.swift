@@ -2,7 +2,6 @@ import UIKit
 
 import DesignSystem
 
-import PanModal
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -81,24 +80,5 @@ extension CategorySelectViewController {
             .withUnretained(self)
             .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
             .disposed(by: disposeBag)
-    }
-}
-
-// MARK: - PanModalPresentable
-extension CategorySelectViewController: PanModalPresentable {
-    var panScrollable: UIScrollView? {
-        return nil
-    }
-    var longFormHeight: PanModalHeight {
-        return .intrinsicHeight
-    }
-    var shortFormHeight: PanModalHeight {
-        return .intrinsicHeight
-    }
-    var showDragIndicator: Bool {
-        return false
-    }
-    var cornerRadius: CGFloat {
-        return 20
     }
 }

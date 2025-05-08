@@ -7,6 +7,7 @@ import Infrastructure
 import ReactorKit
 import RxSwift
 import RxCocoa
+import Then
 
 public final class PopupSearchViewController: BaseViewController, View {
 
@@ -16,6 +17,7 @@ public final class PopupSearchViewController: BaseViewController, View {
     public var disposeBag = DisposeBag()
 
     private let mainView = PopupSearchView()
+
 }
 
 // MARK: - Life Cycle
@@ -26,6 +28,19 @@ extension PopupSearchViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    public override func present(
+        _ viewControllerToPresent: UIViewController,
+        animated flag: Bool,
+        completion: (() -> Void)? = nil
+    ) {
+        if let sheet = viewControllerToPresent.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.preferredCornerRadius = 20
+        }
+
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
     }
 }
 
@@ -124,6 +139,7 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$present)
+            .debug("DEBUG: present")
             .withUnretained(self)
             .subscribe { owner, target in
                 switch target {
@@ -139,7 +155,7 @@ extension PopupSearchViewController {
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
-                    owner.presentPanModal(viewController)
+                    owner.present(viewController, animated: true)
 
                 case .filterSelector:
                     let viewController = FilterSelectViewController()
@@ -150,7 +166,7 @@ extension PopupSearchViewController {
                         .bind(to: reactor.action)
                         .disposed(by: owner.disposeBag)
 
-                    owner.presentPanModal(viewController)
+                    owner.present(viewController, animated: true)
 
                 default: break
                 }
