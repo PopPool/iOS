@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		058AE08D2DCCC27F009119B2 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 058AE08C2DCCC27F009119B2 /* Then */; };
+		058AE0AE2DCCE3E1009119B2 /* CoordinatorKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */; };
+		058AE0B22DCCE3E9009119B2 /* CoordinatorKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */; };
+		058AE0B32DCCE3E9009119B2 /* CoordinatorKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; };
 		05CFFBE62DCB8F6C0051129F /* SearchFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05CFFBE92DCB90070051129F /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFBE82DCB90070051129F /* RxSwift */; };
@@ -50,6 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				058AE0B32DCCE3E9009119B2 /* CoordinatorKit.framework in Embed Frameworks */,
 				05CFFBED2DCB90440051129F /* Domain.framework in Embed Frameworks */,
 				05CFFBEB2DCB90210051129F /* Data.framework in Embed Frameworks */,
 				05CFFBF12DCB90580051129F /* Infrastructure.framework in Embed Frameworks */,
@@ -65,6 +69,8 @@
 /* Begin PBXFileReference section */
 		0516336D2DC457A900A6C0D1 /* SearchFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SearchFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0516362F2DC457DE00A6C0D1 /* SearchFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SearchFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23422DC49AA200C761A5 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23462DC49AA800C761A5 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC28642DC5FDF800C761A5 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +116,7 @@
 				05EC234B2DC49AB400C761A5 /* Then in Frameworks */,
 				05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */,
 				05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */,
+				058AE0AE2DCCE3E1009119B2 /* CoordinatorKit.framework in Frameworks */,
 				05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */,
 				05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */,
 			);
@@ -119,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				058AE0B22DCCE3E9009119B2 /* CoordinatorKit.framework in Frameworks */,
 				05CFFBEE2DCB90460051129F /* DomainInterface.framework in Frameworks */,
 				05CFFBF42DCB908B0051129F /* DesignSystem.framework in Frameworks */,
 				05CFFBEC2DCB90440051129F /* Domain.framework in Frameworks */,
@@ -157,6 +165,8 @@
 		0516364A2DC45E6300A6C0D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */,
+				058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */,
 				05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */,
 				05EC286A2DC5FE5B00C761A5 /* Data.framework */,
 				05EC28642DC5FDF800C761A5 /* Domain.framework */,

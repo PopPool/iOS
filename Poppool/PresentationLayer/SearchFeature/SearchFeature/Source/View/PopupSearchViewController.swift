@@ -14,6 +14,8 @@ public final class PopupSearchViewController: BaseViewController, View {
     public typealias Reactor = PopupSearchReactor
 
     // MARK: - Properties
+    public weak var coordinator: SearchFeatureCoordinator!
+
     public var disposeBag = DisposeBag()
 
     private let mainView = PopupSearchView()
@@ -144,29 +146,10 @@ extension PopupSearchViewController {
             .subscribe { owner, target in
                 switch target {
                 case .categorySelector:
-                    let viewController = CategorySelectViewController()
-                    viewController.reactor = CategorySelectReactor(
-                        fetchCategoryListUseCase: DIContainer.resolve(FetchCategoryListUseCase.self)
-                    )
-
-                    viewController.reactor?.state.distinctUntilChanged(\.selectedCategoryChanged)
-                        .filter { $0.selectedCategoryChanged == true }
-                        .map { _ in Reactor.Action.categoryChangedBySelector }
-                        .bind(to: reactor.action)
-                        .disposed(by: owner.disposeBag)
-
-                    owner.PPPresent(viewController)
+                    owner.coordinator?.presentCategorySelector(from: owner, parentReactor: reactor)
 
                 case .filterSelector:
-                    let viewController = FilterSelectViewController()
-                    viewController.reactor = FilterSelectReactor()
-
-                    viewController.reactor?.pulse(\.$saveButtonTapped)
-                        .map { _ in Reactor.Action.searchResultFilterChangedBySelector }
-                        .bind(to: reactor.action)
-                        .disposed(by: owner.disposeBag)
-
-                    owner.PPPresent(viewController)
+                    owner.coordinator?.presentFilterSelector(from: owner, parentReactor: reactor)
 
                 default: break
                 }
