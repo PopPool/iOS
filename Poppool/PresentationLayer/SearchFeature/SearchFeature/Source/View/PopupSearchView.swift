@@ -177,6 +177,7 @@ extension PopupSearchView {
                     for: indexPath
                 ) as! PPPopupGridCollectionViewCell
                 cell.configureCell(imagePath: item.imagePath, id: item.id, category: item.category, title: item.title, address: item.address, startDate: item.startDate, endDate: item.endDate, isBookmark: item.isBookmark, isLogin: item.isLogin, isPopular: item.isPopular, row: item.row)
+
                 return cell
 
             case .searchResultEmptyTitle(let title):

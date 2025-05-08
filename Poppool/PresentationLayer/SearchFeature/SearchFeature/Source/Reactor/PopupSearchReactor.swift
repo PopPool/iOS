@@ -29,7 +29,7 @@ public final class PopupSearchReactor: Reactor {
 
         case searchResultFilterButtonTapped
         case searchResultFilterChangedBySelector
-        case searchResultItemTapped
+        case searchResultItemTapped(indexPath: IndexPath)
         case searchResultPrefetchItems(indexPathList: [IndexPath])
     }
 
@@ -56,6 +56,7 @@ public final class PopupSearchReactor: Reactor {
     public enum PresentTarget {
         case categorySelector
         case filterSelector
+        case popupDetail(popupID: Int)
     }
 
     public struct State {
@@ -266,8 +267,8 @@ public final class PopupSearchReactor: Reactor {
                     ])
             }
 
-        case .searchResultItemTapped:
-            return .empty()
+        case .searchResultItemTapped(let indexPath):
+            return .just(.present(target: .popupDetail(popupID: self.findPopupStoreID(at: indexPath))))
 
         case .searchResultPrefetchItems(let indexPathList):
             guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
@@ -389,6 +390,10 @@ private extension PopupSearchReactor {
                 isLogin: loginYn
             )
         }
+    }
+
+    func findPopupStoreID(at indexPath: IndexPath) -> Int {
+        return Int(currentState.searchResultItems[indexPath.item].id)
     }
 
     func makeSearchResultHeaderInput(

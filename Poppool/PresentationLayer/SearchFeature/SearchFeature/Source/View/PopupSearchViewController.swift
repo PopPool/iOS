@@ -1,5 +1,6 @@
 import UIKit
 
+import CoordinatorKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
@@ -14,7 +15,7 @@ public final class PopupSearchViewController: BaseViewController, View {
     public typealias Reactor = PopupSearchReactor
 
     // MARK: - Properties
-    public weak var coordinator: SearchFeatureCoordinator!
+    public weak var coordinator: SearchFeatureCoordinator?
 
     public var disposeBag = DisposeBag()
 
@@ -104,8 +105,10 @@ extension PopupSearchViewController {
                 switch sections[indexPath.section] {
                 case .recentSearch:
                     return Reactor.Action.recentSearchTagButtonTapped(indexPath: indexPath)
-                case .category: return Reactor.Action.categoryTagButtonTapped
-                case .searchResult: return Reactor.Action.searchResultItemTapped
+                case .category:
+                    return Reactor.Action.categoryTagButtonTapped
+                case .searchResult:
+                    return Reactor.Action.searchResultItemTapped(indexPath: indexPath)
                 }
             }
             .bind(to: reactor.action)
@@ -150,6 +153,9 @@ extension PopupSearchViewController {
 
                 case .filterSelector:
                     owner.coordinator?.presentFilterSelector(from: owner, parentReactor: reactor)
+
+                case .popupDetail(let popupID):
+                    print("DEBUG: PopupStore ID is \(popupID)")
 
                 default: break
                 }
