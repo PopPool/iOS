@@ -44,7 +44,7 @@ extension TagSectionCell: Inputable {
     struct Input {
         var title: String?
         var isSelected: Bool
-        var id: Int64?
+        var id: Int?
     }
 
     func injection(with input: Input) {

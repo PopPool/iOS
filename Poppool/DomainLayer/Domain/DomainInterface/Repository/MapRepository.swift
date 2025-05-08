@@ -8,12 +8,12 @@ public protocol MapRepository {
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]>
 
     func searchStores(
         query: String,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]>
 
     func fetchCategories() -> Observable<[CategoryResponse]>

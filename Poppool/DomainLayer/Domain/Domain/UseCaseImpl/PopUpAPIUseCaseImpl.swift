@@ -12,7 +12,7 @@ public final class PopUpAPIUseCaseImpl: PopUpAPIUseCase {
         self.repository = repository
     }
 
-    public func getSearchBottomPopUpList(isOpen: Bool, categories: [Int64], page: Int32?, size: Int32, sort: String?) -> Observable<GetSearchBottomPopUpListResponse> {
+    public func getSearchBottomPopUpList(isOpen: Bool, categories: [Int], page: Int32?, size: Int32, sort: String?) -> Observable<GetSearchBottomPopUpListResponse> {
         var categoryString: String?
         if !categories.isEmpty {
             categoryString = categories.map { String($0) + "," }.reduce("", +)

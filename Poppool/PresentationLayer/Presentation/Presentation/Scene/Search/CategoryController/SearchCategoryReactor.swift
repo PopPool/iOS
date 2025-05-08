@@ -27,7 +27,7 @@ final class SearchCategoryReactor: Reactor {
 
     struct State {
         var sections: [any Sectionable] = []
-        var categoryIDList: [Int64] = []
+        var categoryIDList: [Int] = []
         var categoryTitleList: [String?] = []
         var saveButtonIsEnable: Bool = false
         var isSave: Bool = false
@@ -38,7 +38,7 @@ final class SearchCategoryReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    var originCategoryList: [Int64]
+    var originCategoryList: [Int]
     private let signUpAPIUseCase: SignUpAPIUseCase
     private var tagSection = TagSection(inputDataList: [])
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
@@ -57,7 +57,7 @@ final class SearchCategoryReactor: Reactor {
 
     // MARK: - init
     init(
-        originCategoryList: [Int64],
+        originCategoryList: [Int],
         signUpAPIUseCase: SignUpAPIUseCase
     ) {
         self.initialState = State()

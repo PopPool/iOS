@@ -24,7 +24,7 @@ final class CategoryEditModalReactor: Reactor {
 
     struct State {
         var sections: [any Sectionable] = []
-        var originSelectedID: [Int64]
+        var originSelectedID: [Int]
         var saveButtonIsEnable: Bool = false
     }
 
@@ -32,7 +32,7 @@ final class CategoryEditModalReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-    private let originSelectedID: [Int64]
+    private let originSelectedID: [Int]
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -54,7 +54,7 @@ final class CategoryEditModalReactor: Reactor {
 
     // MARK: - init
     init(
-        selectedID: [Int64],
+        selectedID: [Int],
         userAPIUseCase: UserAPIUseCase,
         signUpAPIUseCase: SignUpAPIUseCase
     ) {
@@ -88,9 +88,9 @@ final class CategoryEditModalReactor: Reactor {
             }
             return Observable.just(.loadView)
         case .saveButtonTapped(let controller):
-            var addList: [Int64] = []
-            var keepList: [Int64] = []
-            var deleteList: [Int64] = []
+            var addList: [Int] = []
+            var keepList: [Int] = []
+            var deleteList: [Int] = []
             let currentArray = tagSection.inputDataList.filter { $0.isSelected == true }.compactMap { $0.id }
             for index in currentArray {
                 if originSelectedID.contains(index) {

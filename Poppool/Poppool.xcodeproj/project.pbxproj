@@ -20,6 +20,8 @@
 		05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6092DB53A4900508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; };
 		05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFC432DCC83290051129F /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CFFC422DCC83290051129F /* DesignSystem.framework */; };
+		05CFFC442DCC83290051129F /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05CFFC422DCC83290051129F /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1514292D99480200DFD08F /* NMapsMap */; };
 		4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */; };
 		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
@@ -35,6 +37,7 @@
 				05BDD3D72DB66E1700C1E192 /* DomainInterface.framework in Embed Frameworks */,
 				05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */,
 				05C1D60E2DB53A4900508FFD /* Domain.framework in Embed Frameworks */,
+				05CFFC442DCC83290051129F /* DesignSystem.framework in Embed Frameworks */,
 				05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */,
 				05C1D60C2DB53A4900508FFD /* Data.framework in Embed Frameworks */,
 			);
@@ -50,6 +53,7 @@
 		05C1D6082DB53A4900508FFD /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6092DB53A4900508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D60A2DB53A4900508FFD /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CFFC422DCC83290051129F /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDCA41BD2CF35AC0005EECF6 /* Poppool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poppool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -93,6 +97,7 @@
 				05C1D60B2DB53A4900508FFD /* Data.framework in Frameworks */,
 				05BBA73E2DB75DA60047A061 /* KakaoSDKUser in Frameworks */,
 				0522C3C62DB67D7800B141FF /* RxGesture in Frameworks */,
+				05CFFC432DCC83290051129F /* DesignSystem.framework in Frameworks */,
 				4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */,
 				4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */,
 			);
@@ -104,6 +109,7 @@
 		05C1D6062DB53A4900508FFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05CFFC422DCC83290051129F /* DesignSystem.framework */,
 				05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */,
 				05C1D6072DB53A4900508FFD /* Data.framework */,
 				05C1D6082DB53A4900508FFD /* Domain.framework */,

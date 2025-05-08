@@ -19,7 +19,7 @@ final class SearchReactor: Reactor {
         case cellTapped(indexPath: IndexPath, controller: BaseViewController)
         case sortedButtonTapped(controller: BaseViewController)
         case changeSortedFilterIndex(filterIndex: Int, sortedIndex: Int)
-        case changeCategory(categoryList: [Int64], categoryTitleList: [String?])
+        case changeCategory(categoryList: [Int], categoryTitleList: [String?])
         case categoryDelteButtonTapped(indexPath: IndexPath)
         case resetCategory
         case loadNextPage

@@ -30,7 +30,7 @@ public final class SignUpRepositoryImpl: SignUpRepository {
         age: Int32,
         socialEmail: String,
         socialType: String,
-        interests: [Int64],
+        interests: [Int],
         appleAuthorizationCode: String?
     ) -> Completable {
         let endPoint = SignUpAPIEndpoint.signUp_trySignUp(with: .init(

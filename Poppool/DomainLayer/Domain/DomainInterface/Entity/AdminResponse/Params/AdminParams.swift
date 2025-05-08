@@ -1,7 +1,7 @@
 import Foundation
 
 public struct CreateStoreParams {
-    public init(name: String, categoryId: Int64, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
+    public init(name: String, categoryId: Int, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
         self.name = name
         self.categoryId = categoryId
         self.desc = desc
@@ -18,7 +18,7 @@ public struct CreateStoreParams {
     }
 
     public let name: String
-    public let categoryId: Int64
+    public let categoryId: Int
     public let desc: String
     public let address: String
     public let startDate: String
@@ -33,7 +33,7 @@ public struct CreateStoreParams {
 }
 
 public struct UpdateStoreParams {
-    public init(id: Int64, name: String, categoryId: Int64, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], imagesToDelete: [Int64], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
+    public init(id: Int64, name: String, categoryId: Int, desc: String, address: String, startDate: String, endDate: String, mainImageUrl: String, imageUrlList: [String?], imagesToDelete: [Int64], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String, startDateBeforeEndDate: Bool) {
         self.id = id
         self.name = name
         self.categoryId = categoryId
@@ -53,7 +53,7 @@ public struct UpdateStoreParams {
 
     public let id: Int64
     public let name: String
-    public let categoryId: Int64
+    public let categoryId: Int
     public let desc: String
     public let address: String
     public let startDate: String

@@ -20,7 +20,7 @@ final class SignUpMainReactor: Reactor {
         case step4SkipButtonTapped(controller: BaseTabmanController)
         case changeTerms(isMarketingAgree: Bool)
         case changeNickName(nickName: String?)
-        case changeCategory(categorys: [Int64], categoryTitles: [String], categoryIDList: [Int64])
+        case changeCategory(categorys: [Int], categoryTitles: [String], categoryIDList: [Int])
         case changeGender(gender: String?)
         case changeAge(age: Int?)
     }
@@ -34,7 +34,7 @@ final class SignUpMainReactor: Reactor {
         case moveToCompleteScene(controller: BaseTabmanController)
         case setTerms(isMarketingAgree: Bool)
         case setNickName(nickName: String?)
-        case setCategory(categorys: [Int64], categoryTitles: [String], categoryIDList: [Int64])
+        case setCategory(categorys: [Int], categoryTitles: [String], categoryIDList: [Int])
         case setGender(gender: String?)
         case setAge(age: Int?)
     }
@@ -43,10 +43,10 @@ final class SignUpMainReactor: Reactor {
         var currentIndex: Int = 0
         var isMarketingAgree: Bool = false
         var nickName: String?
-        var categorys: [Int64] = []
+        var categorys: [Int] = []
         var categoryTitles: [String] = []
         var gender: String? = "선택안함"
-        var categoryIDList: [Int64] = []
+        var categoryIDList: [Int] = []
         var age: Int?
     }
 

@@ -18,7 +18,7 @@ public final class MapRepositoryImpl: MapRepository {
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]> {
         return provider.requestData(
             with: MapAPIEndpoint.locations_fetchStoresInBounds(
@@ -26,7 +26,7 @@ public final class MapRepositoryImpl: MapRepository {
                 northEastLon: northEastLon,
                 southWestLat: southWestLat,
                 southWestLon: southWestLon,
-                categories: categories
+                categories: categories.map { Int64($0 ) }
             ),
             interceptor: TokenInterceptor()
         )
@@ -35,12 +35,12 @@ public final class MapRepositoryImpl: MapRepository {
 
     public func searchStores(
         query: String,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]> {
         return provider.requestData(
             with: MapAPIEndpoint.locations_searchStores(
                 query: query,
-                categories: categories
+                categories: categories.map { Int64($0 ) }
             ),
             interceptor: TokenInterceptor()
         )

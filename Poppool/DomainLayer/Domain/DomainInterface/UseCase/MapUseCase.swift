@@ -9,12 +9,12 @@ public protocol MapUseCase {
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]>
 
     func searchStores(
         query: String,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]>
 
     func filterStoresByLocation(_ stores: [MapPopUpStore], selectedRegions: [String]) -> [MapPopUpStore]
