@@ -20,7 +20,7 @@ final class PopupSearchView: UIView {
     enum SectionItem: Hashable {
         case recentSearchItem(TagCollectionViewCell.Input)
         case categoryItem(TagCollectionViewCell.Input)
-        case searchResultItem(PPPopupGridCollectionViewCell.Input)
+        case searchResultItem(SearchResultModel)
         case searchResultEmptyItem(SearchResultEmptyCollectionViewCell.EmptyCase)
     }
 
@@ -171,12 +171,12 @@ extension PopupSearchView {
 
                 return cell
 
-            case .searchResultItem(let searchResultItem):
+            case .searchResultItem(let item):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PPPopupGridCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! PPPopupGridCollectionViewCell
-                cell.injection(with: searchResultItem)
+                cell.configureCell(imagePath: item.imagePath, id: item.id, category: item.category, title: item.title, address: item.address, startDate: item.startDate, endDate: item.endDate, isBookmark: item.isBookmark, isLogin: item.isLogin, isPopular: item.isPopular, row: item.row)
                 return cell
 
             case .searchResultEmptyItem(let emptyCase):

@@ -1,6 +1,6 @@
 import UIKit
 
-import DesignSystem
+import Infrastructure
 
 import RxSwift
 import SnapKit
@@ -134,38 +134,25 @@ private extension PPPopupGridCollectionViewCell {
     }
 }
 
-extension PPPopupGridCollectionViewCell: Inputable {
-    public struct Input: Hashable {
-        var imagePath: String?
-        var id: Int64
-        var category: String?
-        var title: String?
-        var address: String?
-        var startDate: String?
-        var endDate: String?
-        var isBookmark: Bool
-        var isLogin: Bool
-        var isPopular: Bool = false
-        var row: Int?
-    }
+extension PPPopupGridCollectionViewCell {
+    public func configureCell(imagePath: String?, id: Int64, category: String?, title: String?, address: String?, startDate: String?, endDate: String?, isBookmark: Bool, isLogin: Bool, isPopular: Bool = false, row: Int?) {
 
-    public func injection(with input: Input) {
-        categoryLabel.text = "#" + (input.category ?? "")
-        titleLabel.text = input.title
-        addressLabel.text = input.address
+        categoryLabel.text = "#" + (category ?? "")
+        titleLabel.text = title
+        addressLabel.text = address
 
-        let date = input.startDate.toDate().toPPDateString() + " ~ " + input.endDate.toDate().toPPDateString()
+        let date = startDate.toDate().toPPDateString() + " ~ " + endDate.toDate().toPPDateString()
         dateLabel.text = date
 
-        let bookmarkImage = input.isBookmark ? UIImage(named: "icon_bookmark_fill") : UIImage(named: "icon_bookmark")
+        let bookmarkImage = isBookmark ? UIImage(named: "icon_bookmark_fill") : UIImage(named: "icon_bookmark")
         bookmarkButton.setImage(bookmarkImage, for: .normal)
 
-        imageView.setPPImage(path: input.imagePath)
+        imageView.setPPImage(path: imagePath)
 
-        bookmarkButton.isHidden = !input.isLogin
-        rankLabel.isHidden = !input.isPopular
+        bookmarkButton.isHidden = !isLogin
+        rankLabel.isHidden = !isPopular
 
-        if let rank = input.row {
+        if let rank = row {
             rankLabel.text = "\(rank)"
             rankLabel.isHidden = rank > 2
         }

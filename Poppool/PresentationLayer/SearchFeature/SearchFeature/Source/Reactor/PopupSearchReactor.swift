@@ -36,11 +36,11 @@ public final class PopupSearchReactor: Reactor {
     public enum Mutation {
         case setupRecentSearch(items: [TagCollectionViewCell.Input])
         case setupCategory(items: [TagCollectionViewCell.Input])
-        case setupSearchResult(items: [PPPopupGridCollectionViewCell.Input])
+        case setupSearchResult(items: [SearchResultModel])
         case setupSearchResultHeader(item: SearchResultHeaderView.Input)
         case setupSearchResultTotalPageCount(count: Int32)
 
-        case appendSearchResult(items: [PPPopupGridCollectionViewCell.Input])
+        case appendSearchResult(items: [SearchResultModel])
 
         case updateEditingState
         case updateSearchBar(to: String?)
@@ -61,7 +61,7 @@ public final class PopupSearchReactor: Reactor {
     public struct State {
         var recentSearchItems: [TagCollectionViewCell.Input] = []
         var categoryItems: [TagCollectionViewCell.Input] = []
-        var searchResultItems: [PPPopupGridCollectionViewCell.Input] = []
+        var searchResultItems: [SearchResultModel] = []
         var searchResultHeader: SearchResultHeaderView.Input? = nil
         var searchResultEmptyCase: SearchResultEmptyCollectionViewCell.EmptyCase?
 
@@ -360,9 +360,9 @@ private extension PopupSearchReactor {
         return Category.shared.getCancelableCategoryItems()
     }
 
-    func makeSearchResultItems(_ popupStoreList: [PopUpStoreResponse], _ loginYn: Bool) -> [PPPopupGridCollectionViewCell.Input] {
+    func makeSearchResultItems(_ popupStoreList: [PopUpStoreResponse], _ loginYn: Bool) -> [SearchResultModel] {
         return popupStoreList.map {
-            PPPopupGridCollectionViewCell.Input(
+            SearchResultModel(
                 imagePath: $0.mainImageUrl,
                 id: $0.id,
                 category: $0.category,
