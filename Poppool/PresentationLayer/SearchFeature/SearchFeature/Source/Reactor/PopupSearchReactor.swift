@@ -323,7 +323,7 @@ private extension PopupSearchReactor {
 
     func fetchSearchResult(
         isOpen: Bool = Filter.shared.status.requestValue,
-        categories: [Int64] = Category.shared.getSelectedCategoryIDs(),
+        categories: [Int] = Category.shared.getSelectedCategoryIDs(),
         page: Int32 = 0,
         size: Int32 = 10,
         sort: String = Filter.shared.sort.requestValue
