@@ -146,6 +146,12 @@ public final class PopupSearchReactor: Reactor {
                 .just(.updateEditingState)
             ])
 
+        case .searchBarClearButtonTapped:
+            return Observable.concat([
+                .just(.updateClearButtonIsHidden(to: true)),
+                .just(.updateSearchBar(to: nil))
+            ])
+
         case .searchBarCancelButtonTapped:
             if currentState.isSearching {
                 return fetchSearchResult()
@@ -167,36 +173,6 @@ public final class PopupSearchReactor: Reactor {
                     }
             }
             else { return .empty() }    // TODO: 이전 화면으로 보내기
-
-        case .recentSearchTagRemoveButtonTapped(let text):
-            self.removeRecentSearchItem(text: text)
-            return Observable.concat([
-                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateDataSource)
-            ])
-
-        case .recentSearchTagRemoveAllButtonTapped:
-            self.removeAllRecentSearchItems()
-            return .concat([
-                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateDataSource)
-            ])
-
-
-        case .searchResultPrefetchItems(let indexPathList):
-            guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
-            return fetchSearchResult(page: currentState.currentPage + 1)
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return .concat([
-                        .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
-                        .just(.updateDataSource)
-                    ])
-                }
-
-        case .categoryTagButtonTapped:
-            return .just(.present(target: .categorySelector))
 
         case .recentSearchTagButtonTapped(let indexPath):
             let keyword = self.makeRecentSearchItem(at: indexPath)
@@ -222,29 +198,18 @@ public final class PopupSearchReactor: Reactor {
                     ])
                 }
 
-        case .searchResultItemTapped:
-            return .empty()
-
-        case .searchResultFilterChangedBySelector, .categoryChangedBySelector:
-            return fetchSearchResult()
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return .concat([
-                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                        .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchResultEmptyTitle),
-                        .just(.updateDataSource)
-                    ])
-            }
-
-        case .searchBarClearButtonTapped:
+        case .recentSearchTagRemoveButtonTapped(let text):
+            self.removeRecentSearchItem(text: text)
             return Observable.concat([
-                .just(.updateClearButtonIsHidden(to: true)),
-                .just(.updateSearchBar(to: nil))
+                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
+                .just(.updateDataSource)
+            ])
+
+        case .recentSearchTagRemoveAllButtonTapped:
+            self.removeAllRecentSearchItems()
+            return .concat([
+                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
+                .just(.updateDataSource)
             ])
 
         case .categoryTagRemoveButtonTapped(let categoryID):
@@ -263,8 +228,58 @@ public final class PopupSearchReactor: Reactor {
                     ])
                 }
 
+        case .categoryTagButtonTapped:
+            return .just(.present(target: .categorySelector))
+
+        case .categoryChangedBySelector:
+            return fetchSearchResult()
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return .concat([
+                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                        .just(.setupCategory(items: owner.makeCategoryItems())),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchResultEmptyTitle),
+                        .just(.updateDataSource)
+                    ])
+            }
+
         case .searchResultFilterButtonTapped:
             return .just(.present(target: .filterSelector))
+
+        case .searchResultFilterChangedBySelector:
+            return fetchSearchResult()
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return .concat([
+                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                        .just(.setupCategory(items: owner.makeCategoryItems())),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                        .just(.updateCurrentPage(to: 0)),
+                        .just(.updateSearchResultEmptyTitle),
+                        .just(.updateDataSource)
+                    ])
+            }
+
+        case .searchResultItemTapped:
+            return .empty()
+
+        case .searchResultPrefetchItems(let indexPathList):
+            guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
+            return fetchSearchResult(page: currentState.currentPage + 1)
+                .withUnretained(self)
+                .flatMap { (owner, response) -> Observable<Mutation> in
+                    return .concat([
+                        .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                        .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
+                        .just(.updateDataSource)
+                    ])
+                }
         }
     }
 
@@ -280,17 +295,23 @@ public final class PopupSearchReactor: Reactor {
         case .setupSearchResult(let items):
             newState.searchResultItems = items
 
+        case .setupSearchResultHeader(let input):
+            newState.searchResultHeader = input
+
         case .setupSearchResultTotalPageCount(let count):
             newState.totalPagesCount = count
 
-        case .setupSearchResultHeader(let input):
-            newState.searchResultHeader = input
-            
         case .appendSearchResult(let items):
             newState.searchResultItems += items
 
+        case .updateEditingState:
+            newState.endEditing = ()
+
         case .updateSearchBar(let text):
             newState.searchBarText = text
+
+        case .updateClearButtonIsHidden(let state):
+            newState.clearButtonIsHidden = state
 
         case .updateCurrentPage(let currentPage):
             newState.currentPage = currentPage
@@ -306,12 +327,6 @@ public final class PopupSearchReactor: Reactor {
 
         case .present(let target):
             newState.present = target
-
-        case .updateClearButtonIsHidden(let state):
-            newState.clearButtonIsHidden = state
-
-        case .updateEditingState:
-            newState.endEditing = ()
         }
 
         return newState
