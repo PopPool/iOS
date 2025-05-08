@@ -37,7 +37,7 @@ public final class PopupSearchReactor: Reactor {
         case setupRecentSearch(items: [TagModel])
         case setupCategory(items: [TagModel])
         case setupSearchResult(items: [SearchResultModel])
-        case setupSearchResultHeader(item: SearchResultHeaderView.Input)
+        case setupSearchResultHeader(item: SearchResultHeaderModel)
         case setupSearchResultTotalPageCount(count: Int32)
 
         case appendSearchResult(items: [SearchResultModel])
@@ -62,8 +62,8 @@ public final class PopupSearchReactor: Reactor {
         var recentSearchItems: [TagModel] = []
         var categoryItems: [TagModel] = []
         var searchResultItems: [SearchResultModel] = []
-        var searchResultHeader: SearchResultHeaderView.Input? = nil
-        var searchResultEmptyCase: SearchResultEmptyCollectionViewCell.EmptyCase?
+        var searchResultHeader: SearchResultHeaderModel? = nil
+        var searchResultEmptyCase: SearchResultModel.EmptyCase?
 
         @Pulse var searchBarText: String? = nil
         @Pulse var present: PresentTarget?
@@ -379,15 +379,15 @@ private extension PopupSearchReactor {
     func makeSearchResultHeaderInput(
         keyword afterTitle: String? = nil,
         count: Int64,
-        filter filterTitle: String? = Filter.shared.title) -> SearchResultHeaderView.Input {
-        return SearchResultHeaderView.Input(
+        filter filterTitle: String? = Filter.shared.title) -> SearchResultHeaderModel {
+        return SearchResultHeaderModel(
             title: afterTitle,
             count: Int(count),
-            filterStatusText: filterTitle
+            filterText: filterTitle
         )
     }
 
-    func makeSearchResultEmptyCase(state: State) -> SearchResultEmptyCollectionViewCell.EmptyCase? {
+    func makeSearchResultEmptyCase(state: State) -> SearchResultModel.EmptyCase? {
         if !currentState.searchResultItems.isEmpty { return nil }
         else if currentState.isSearching { return .keyword }
         else { return .option }

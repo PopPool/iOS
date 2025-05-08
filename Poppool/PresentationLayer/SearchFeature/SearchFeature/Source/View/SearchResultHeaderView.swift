@@ -98,16 +98,10 @@ private extension SearchResultHeaderView {
     }
 }
 
-extension SearchResultHeaderView: Inputable {
-    public struct Input {
-        let title: String?
-        let count: Int?
-        let filterStatusText: String?
-    }
-
-    public func injection(with input: Input) {
-        if let afterSearchTitle = input.title,
-           let count = input.count {
+extension SearchResultHeaderView {
+    func configureHeader(title: String?, count: Int?, filterText: String?) {
+        if let afterSearchTitle = title,
+           let count = count {
             filterStatusButton.isHidden = true
             afterSearchTitleLabel.isHidden = false
             afterSearchTitleLabel.text = afterSearchTitle + " 포함된 팝업"
@@ -121,12 +115,11 @@ extension SearchResultHeaderView: Inputable {
                 }
             }
 
-        } else if let count = input.count,
-                  let filterStatusTitle = input.filterStatusText {
+        } else if let count, let filterText {
             filterStatusButton.isHidden = false
             afterSearchTitleLabel.isHidden = true
             cellCountLabel.text = "총 \(count)개"
-            filterStatusLabel.text = filterStatusTitle
+            filterStatusLabel.text = filterText
 
             self.isHidden = false
             afterSearchTitleLabel.snp.updateConstraints { make in

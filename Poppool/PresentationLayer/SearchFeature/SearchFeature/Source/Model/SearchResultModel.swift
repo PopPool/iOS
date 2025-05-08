@@ -12,4 +12,9 @@ public struct SearchResultModel: Hashable {
     var isLogin: Bool
     var isPopular: Bool = false
     var row: Int?
+
+    enum EmptyCase {
+        case option
+        case keyword
+    }
 }

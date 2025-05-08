@@ -52,18 +52,9 @@ private extension SearchResultEmptyCollectionViewCell {
     func configureUI() { }
 }
 
-extension SearchResultEmptyCollectionViewCell: Inputable {
-    enum EmptyCase {
-        case option
-        case keyword
-    }
-
-    struct Input: Hashable {
-        let emptyCase: EmptyCase
-    }
-
-    func injection(with input: Input) {
-        switch input.emptyCase {
+extension SearchResultEmptyCollectionViewCell {
+    func configureCell(with emptyCase: SearchResultModel.EmptyCase) {
+        switch emptyCase {
         case .option: self.emptyLabel.text = "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요"
         case .keyword: self.emptyLabel.text = "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요"
         }

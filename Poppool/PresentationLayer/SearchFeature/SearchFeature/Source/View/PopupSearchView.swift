@@ -21,7 +21,7 @@ final class PopupSearchView: UIView {
         case recentSearchItem(TagModel)
         case categoryItem(TagModel)
         case searchResultItem(SearchResultModel)
-        case searchResultEmptyItem(SearchResultEmptyCollectionViewCell.EmptyCase)
+        case searchResultEmptyItem(SearchResultModel.EmptyCase)
     }
 
     /// Section의 헤더를 구분하기 위한 변수
@@ -88,7 +88,7 @@ final class PopupSearchView: UIView {
     }
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    private var searchResultHeaderInput: SearchResultHeaderView.Input?
+    private var searchResultHeaderInput: SearchResultHeaderModel?
 
     // MARK: - init
     init() {
@@ -184,7 +184,7 @@ extension PopupSearchView {
                     withReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! SearchResultEmptyCollectionViewCell
-                cell.injection(with: SearchResultEmptyCollectionViewCell.Input(emptyCase: emptyCase))
+                cell.configureCell(with: emptyCase)
                 return cell
             }
         }
@@ -228,11 +228,9 @@ extension PopupSearchView {
                 ) as? SearchResultHeaderView else { fatalError("\(#file), \(#function) Error") }
 
                 if let input = self.searchResultHeaderInput {
-                    header.injection(with: input)
-                } else { header.injection(with: SearchResultHeaderView.Input(
-                    title: nil,
-                    count: nil, filterStatusText: nil
-                ))
+                    header.configureHeader(title: input.title, count: input.count, filterText: input.filterText)
+                } else {
+                    header.configureHeader(title: nil, count: nil, filterText: nil)
                 }
 
                 header.filterStatusButton.rx.tap
@@ -248,8 +246,8 @@ extension PopupSearchView {
         recentSearchItems: [SectionItem],
         categoryItems: [SectionItem],
         searchResultItems: [SectionItem],
-        headerInput searchResultHeaderInput: SearchResultHeaderView.Input? = nil,
-        searchResultEmpty: SearchResultEmptyCollectionViewCell.EmptyCase? = nil
+        headerInput searchResultHeaderInput: SearchResultHeaderModel? = nil,
+        searchResultEmpty: SearchResultModel.EmptyCase? = nil
     ) {
         var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
 
