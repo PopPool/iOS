@@ -5,7 +5,7 @@ import DesignSystem
 import RxSwift
 import SnapKit
 
-final class SearchTitleSectionCell: UICollectionViewCell {
+final class SimilarTitleSectionCell: UICollectionViewCell {
 
     // MARK: - Components
 
@@ -38,7 +38,7 @@ final class SearchTitleSectionCell: UICollectionViewCell {
 }
 
 // MARK: - SetUp
-private extension SearchTitleSectionCell {
+private extension SimilarTitleSectionCell {
     func setUpConstraints() {
         self.addSubview(sectionTitleLabel)
         sectionTitleLabel.snp.makeConstraints { make in
@@ -56,7 +56,7 @@ private extension SearchTitleSectionCell {
     }
 }
 
-extension SearchTitleSectionCell: Inputable {
+extension SimilarTitleSectionCell: Inputable {
     struct Input {
         var title: String?
         var buttonTitle: String?

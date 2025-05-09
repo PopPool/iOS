@@ -4,11 +4,11 @@ import DesignSystem
 
 import RxSwift
 
-struct SearchTitleSection: Sectionable {
+struct SimilarTitleSection: Sectionable {
 
     var currentPage: PublishSubject<Int> = .init()
 
-    typealias CellType = SearchTitleSectionCell
+    typealias CellType = SimilarTitleSectionCell
 
     var inputDataList: [CellType.Input]
 
