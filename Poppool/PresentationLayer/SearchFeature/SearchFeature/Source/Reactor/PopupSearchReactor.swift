@@ -30,6 +30,7 @@ public final class PopupSearchReactor: Reactor {
         case searchResultFilterButtonTapped
         case searchResultFilterChangedBySelector
         case searchResultItemTapped(indexPath: IndexPath)
+        case searchResultBookmarkButtonTapped(indexPath: IndexPath)
         case searchResultPrefetchItems(indexPathList: [IndexPath])
     }
 
@@ -48,6 +49,7 @@ public final class PopupSearchReactor: Reactor {
         case updateCurrentPage(to: Int32)
         case updateSearchingState(to: Bool)
         case updateSearchResultEmptyTitle
+        case updateSearchResultBookmark(indexPath: IndexPath)
         case updateDataSource
 
         case present(target: PresentTarget)
@@ -88,14 +90,17 @@ public final class PopupSearchReactor: Reactor {
 
     private let userDefaultService = UserDefaultService()
     private let popupAPIUseCase: PopUpAPIUseCase
+    private let userAPIUseCase: UserAPIUseCase
     private let fetchKeywordBasePopupListUseCase: FetchKeywordBasePopupListUseCase
 
     // MARK: - init
     public init(
         popupAPIUseCase: PopUpAPIUseCase,
+        userAPIUseCase: UserAPIUseCase,
         fetchKeywordBasePopupListUseCase: FetchKeywordBasePopupListUseCase
     ) {
         self.popupAPIUseCase = popupAPIUseCase
+        self.userAPIUseCase = userAPIUseCase
         self.fetchKeywordBasePopupListUseCase = fetchKeywordBasePopupListUseCase
         self.initialState = State()
     }
@@ -273,6 +278,13 @@ public final class PopupSearchReactor: Reactor {
         case .searchResultItemTapped(let indexPath):
             return .just(.present(target: .popupDetail(popupID: self.findPopupStoreID(at: indexPath))))
 
+        case .searchResultBookmarkButtonTapped(let indexPath):
+            return fetchSearchResultBookmark(at: indexPath)
+                .andThen(.concat([
+                    .just(.updateSearchResultBookmark(indexPath: indexPath)),
+                    .just(.updateDataSource)
+                ]))
+
         case .searchResultPrefetchItems(let indexPathList):
             guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
             return fetchSearchResult(page: currentState.currentPage + 1)
@@ -326,6 +338,9 @@ public final class PopupSearchReactor: Reactor {
         case .updateSearchResultEmptyTitle:
             newState.searchResultEmptyTitle = makeSearchResultEmptyTitle(state: newState)
 
+        case .updateSearchResultBookmark(let indexPath):
+            newState.searchResultItems[indexPath.item].isBookmark.toggle()
+
         case .updateDataSource:
             newState.updateDataSource = ()
 
@@ -359,6 +374,15 @@ private extension PopupSearchReactor {
     func fetchSearchResult(keyword: String?) -> Observable<KeywordBasePopupStoreListResponse> {
         guard let keyword else { return .empty() }
         return fetchKeywordBasePopupListUseCase.execute(keyword: keyword)
+    }
+
+    func fetchSearchResultBookmark(at indexPath: IndexPath) -> Completable {
+        let popupID = currentState.searchResultItems[indexPath.item].id
+        if currentState.searchResultItems[indexPath.item].isBookmark {
+            return userAPIUseCase.deleteBookmarkPopUp(popUpID: popupID)
+        } else {
+            return userAPIUseCase.postBookmarkPopUp(popUpID: popupID)
+        }
     }
 }
 

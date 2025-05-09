@@ -145,9 +145,6 @@ final class HomeReactor: Reactor {
         case .moveToSearchScene(let controller):
             @Dependency var factory: PopupSearchFactory
             controller.navigationController?.pushViewController(factory.make(), animated: true)
-//            let nextController = SearchMainController()
-//            nextController.reactor = SearchMainReactor()
-//            controller.navigationController?.pushViewController(nextController, animated: true)
         case .loadView:
             newState.isReloadView = true
             newState.sections = getSection()

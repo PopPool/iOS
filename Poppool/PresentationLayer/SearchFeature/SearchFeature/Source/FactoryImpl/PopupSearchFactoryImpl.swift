@@ -11,6 +11,7 @@ public final class PopupSearchFactoryImpl: PopupSearchFactory {
 
         viewController.reactor = PopupSearchReactor(
             popupAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
             fetchKeywordBasePopupListUseCase: DIContainer.resolve(FetchKeywordBasePopupListUseCase.self)
         )
 

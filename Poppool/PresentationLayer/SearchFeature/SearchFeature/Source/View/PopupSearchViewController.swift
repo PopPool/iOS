@@ -122,6 +122,11 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        mainView.bookmarkButtonTapped
+            .map(Reactor.Action.searchResultBookmarkButtonTapped)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         mainView.collectionView.rx.prefetchItems
             .throttle(.milliseconds(100), latest: false, scheduler: MainScheduler.asyncInstance)
             .map(Reactor.Action.searchResultPrefetchItems)

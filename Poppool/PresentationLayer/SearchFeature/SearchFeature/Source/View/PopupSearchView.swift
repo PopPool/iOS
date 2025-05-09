@@ -37,6 +37,7 @@ final class PopupSearchView: UIView {
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
     let filterStatusButtonTapped = PublishRelay<Void>()
+    let bookmarkButtonTapped = PublishRelay<IndexPath>()
 
     let tapGestureRecognizer = UITapGestureRecognizer().then {
         $0.cancelsTouchesInView = false
@@ -178,6 +179,11 @@ extension PopupSearchView {
                 ) as! PPPopupGridCollectionViewCell
                 cell.configureCell(imagePath: item.imagePath, id: item.id, category: item.category, title: item.title, address: item.address, startDate: item.startDate, endDate: item.endDate, isBookmark: item.isBookmark, isLogin: item.isLogin, isPopular: item.isPopular, row: item.row)
 
+                cell.bookmarkButton.rx.tap
+                    .map { indexPath }
+                    .bind(to: self.bookmarkButtonTapped)
+                    .disposed(by: cell.disposeBag)
+
                 return cell
 
             case .searchResultEmptyTitle(let title):
@@ -186,6 +192,7 @@ extension PopupSearchView {
                     for: indexPath
                 ) as! SearchResultEmptyTitleCollectionViewCell
                 cell.configureCell(title: title)
+
                 return cell
             }
         }

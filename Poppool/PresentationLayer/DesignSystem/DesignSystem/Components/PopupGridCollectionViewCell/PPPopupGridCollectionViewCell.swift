@@ -9,7 +9,7 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
 
-    var disposeBag = DisposeBag()
+    public var disposeBag = DisposeBag()
 
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -39,7 +39,7 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
         $0.setLineHeightText(text: "date", font: .korFont(style: .medium, size: 11))
     }
 
-    let bookmarkButton = UIButton()
+    public let bookmarkButton = UIButton()
 
     private let rankLabel = UILabel().then {
         $0.backgroundColor = .w10
