@@ -4,6 +4,7 @@ import UIKit
 import DomainInterface
 import Infrastructure
 import DesignSystem
+import SearchFeatureInterface
 
 import FloatingPanel
 import NMapsMap
@@ -488,9 +489,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
-                let searchMainVC = SearchMainController()
-                searchMainVC.reactor = SearchMainReactor()
-                owner.navigationController?.pushViewController(searchMainVC, animated: true)
+                @Dependency var factory: PopupSearchFactory
+                owner.navigationController?.pushViewController(factory.make(), animated: true)
             })
             .disposed(by: disposeBag)
 

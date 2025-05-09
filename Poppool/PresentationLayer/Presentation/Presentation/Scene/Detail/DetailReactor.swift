@@ -86,7 +86,7 @@ final class DetailReactor: Reactor {
     private var commentTitleSection = DetailCommentTitleSection(inputDataList: [])
     private var commentSection = DetailCommentSection(inputDataList: [])
     private var commentEmptySection = DetailEmptyCommetSection(inputDataList: [.init()])
-    private var similarTitleSecion = SearchTitleSection(inputDataList: [.init(title: "지금 보고있는 팝업과 비슷한 팝업")])
+    private var similarTitleSecion = SimilarTitleSection(inputDataList: [.init(title: "지금 보고있는 팝업과 비슷한 팝업")])
     private var similarSection = DetailSimilarSection(inputDataList: [])
 
     private var spacing70Section = SpacingSection(inputDataList: [.init(spacing: 70)])
