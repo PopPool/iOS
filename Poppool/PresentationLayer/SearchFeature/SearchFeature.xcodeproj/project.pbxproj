@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		054A96202DCE38B500C0DD58 /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
+		054A96212DCE38B500C0DD58 /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		054A96262DCE38E900C0DD58 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 054A96252DCE38E900C0DD58 /* Tabman */; };
+		054A96282DCE390A00C0DD58 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 054A96272DCE390A00C0DD58 /* ReactorKit */; };
+		054A962B2DCE3A0300C0DD58 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 054A962A2DCE3A0300C0DD58 /* NMapsMap */; };
 		05734C082DCDA7D20093825D /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
 		05734C092DCDA7D20093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C2B2DCDD6380093825D /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C2A2DCDD6380093825D /* Infrastructure.framework */; };
@@ -51,6 +56,13 @@
 			remoteGlobalIDString = 0516336C2DC457A900A6C0D1;
 			remoteInfo = SearchFeature;
 		};
+		054A96222DCE38B500C0DD58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 051633642DC457A900A6C0D1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05734BF42DCDA6B90093825D;
+			remoteInfo = SearchFeatureInterface;
+		};
 		05734C0A2DCDA7D20093825D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 051633642DC457A900A6C0D1 /* Project object */;
@@ -93,6 +105,7 @@
 				05CFFBED2DCB90440051129F /* Domain.framework in Embed Frameworks */,
 				05CFFBEB2DCB90210051129F /* Data.framework in Embed Frameworks */,
 				05734C512DCDF8B40093825D /* PresentationInterface.framework in Embed Frameworks */,
+				054A96212DCE38B500C0DD58 /* SearchFeatureInterface.framework in Embed Frameworks */,
 				05CFFBF12DCB90580051129F /* Infrastructure.framework in Embed Frameworks */,
 				05CFFBF52DCB908B0051129F /* DesignSystem.framework in Embed Frameworks */,
 				05CFFBEF2DCB90460051129F /* DomainInterface.framework in Embed Frameworks */,
@@ -181,12 +194,16 @@
 				05734C532DCDF8B80093825D /* Presentation.framework in Frameworks */,
 				05CFFBEC2DCB90440051129F /* Domain.framework in Frameworks */,
 				05CFFBEA2DCB90210051129F /* Data.framework in Frameworks */,
+				054A962B2DCE3A0300C0DD58 /* NMapsMap in Frameworks */,
 				05CFFBF32DCB906F0051129F /* RxCocoa in Frameworks */,
 				058AE08D2DCCC27F009119B2 /* Then in Frameworks */,
 				05CFFBF02DCB90580051129F /* Infrastructure.framework in Frameworks */,
+				054A96202DCE38B500C0DD58 /* SearchFeatureInterface.framework in Frameworks */,
+				054A96262DCE38E900C0DD58 /* Tabman in Frameworks */,
 				05CFFBF72DCB90A10051129F /* SnapKit in Frameworks */,
 				05CFFBE92DCB90070051129F /* RxSwift in Frameworks */,
 				05734C502DCDF8B40093825D /* PresentationInterface.framework in Frameworks */,
+				054A96282DCE390A00C0DD58 /* ReactorKit in Frameworks */,
 				05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,6 +324,7 @@
 			);
 			dependencies = (
 				0516364E2DC45E6300A6C0D1 /* PBXTargetDependency */,
+				054A96232DCE38B500C0DD58 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				051636302DC457DE00A6C0D1 /* SearchFeatureDemo */,
@@ -317,6 +335,9 @@
 				05CFFBF22DCB906F0051129F /* RxCocoa */,
 				05CFFBF62DCB90A10051129F /* SnapKit */,
 				058AE08C2DCCC27F009119B2 /* Then */,
+				054A96252DCE38E900C0DD58 /* Tabman */,
+				054A96272DCE390A00C0DD58 /* ReactorKit */,
+				054A962A2DCE3A0300C0DD58 /* NMapsMap */,
 			);
 			productName = SearchFeatureDemo;
 			productReference = 0516362F2DC457DE00A6C0D1 /* SearchFeatureDemo.app */;
@@ -382,6 +403,8 @@
 				05EC233F2DC49A8B00C761A5 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				05EC23492DC49AB400C761A5 /* XCRemoteSwiftPackageReference "Then" */,
 				05EC234C2DC49AC100C761A5 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				054A96242DCE38E900C0DD58 /* XCRemoteSwiftPackageReference "Tabman" */,
+				054A96292DCE3A0300C0DD58 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0516336E2DC457A900A6C0D1 /* Products */;
@@ -448,6 +471,11 @@
 			isa = PBXTargetDependency;
 			target = 0516336C2DC457A900A6C0D1 /* SearchFeature */;
 			targetProxy = 0516364D2DC45E6300A6C0D1 /* PBXContainerItemProxy */;
+		};
+		054A96232DCE38B500C0DD58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05734BF42DCDA6B90093825D /* SearchFeatureInterface */;
+			targetProxy = 054A96222DCE38B500C0DD58 /* PBXContainerItemProxy */;
 		};
 		05734C0B2DCDA7D20093825D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -853,6 +881,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		054A96242DCE38E900C0DD58 /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		054A96292DCE3A0300C0DD58 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
+			};
+		};
 		05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift";
@@ -888,6 +932,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		054A96252DCE38E900C0DD58 /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 054A96242DCE38E900C0DD58 /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
+		};
+		054A96272DCE390A00C0DD58 /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC233F2DC49A8B00C761A5 /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
+		054A962A2DCE3A0300C0DD58 /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 054A96292DCE3A0300C0DD58 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
+		};
 		058AE08C2DCCC27F009119B2 /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC23492DC49AB400C761A5 /* XCRemoteSwiftPackageReference "Then" */;
