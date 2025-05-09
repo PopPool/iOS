@@ -4,6 +4,8 @@ import Data
 import Domain
 import DomainInterface
 import Infrastructure
+import Presentation
+import PresentationInterface
 import SearchFeature
 import SearchFeatureInterface
 
@@ -67,6 +69,7 @@ extension AppDelegate {
         DIContainer.register(PopupSearchFactory.self) { return PopupSearchFactoryImpl() }
         DIContainer.register(CategorySelectorFactory.self) { return CategorySelectorFactoryImpl() }
         DIContainer.register(FilterSelectorFactory.self) { return FilterSelectorFactoryImpl() }
+        DIContainer.register(DetailFactory.self) { return DetailFactoryImpl() }
     }
 }
 

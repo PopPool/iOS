@@ -11,6 +11,12 @@
 		05734C092DCDA7D20093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C2B2DCDD6380093825D /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C2A2DCDD6380093825D /* Infrastructure.framework */; };
 		05734C2C2DCDD6380093825D /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C2A2DCDD6380093825D /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C442DCDF7240093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C432DCDF7240093825D /* PresentationInterface.framework */; };
+		05734C452DCDF7240093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C432DCDF7240093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C502DCDF8B40093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C4F2DCDF8B40093825D /* PresentationInterface.framework */; };
+		05734C512DCDF8B40093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C4F2DCDF8B40093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C532DCDF8B80093825D /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C522DCDF8B80093825D /* Presentation.framework */; };
+		05734C542DCDF8B80093825D /* Presentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C522DCDF8B80093825D /* Presentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		058AE08D2DCCC27F009119B2 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 058AE08C2DCCC27F009119B2 /* Then */; };
 		05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; };
 		05CFFBE62DCB8F6C0051129F /* SearchFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -61,6 +67,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05734C452DCDF7240093825D /* PresentationInterface.framework in Embed Frameworks */,
 				05734C092DCDA7D20093825D /* SearchFeatureInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -85,9 +92,11 @@
 			files = (
 				05CFFBED2DCB90440051129F /* Domain.framework in Embed Frameworks */,
 				05CFFBEB2DCB90210051129F /* Data.framework in Embed Frameworks */,
+				05734C512DCDF8B40093825D /* PresentationInterface.framework in Embed Frameworks */,
 				05CFFBF12DCB90580051129F /* Infrastructure.framework in Embed Frameworks */,
 				05CFFBF52DCB908B0051129F /* DesignSystem.framework in Embed Frameworks */,
 				05CFFBEF2DCB90460051129F /* DomainInterface.framework in Embed Frameworks */,
+				05734C542DCDF8B80093825D /* Presentation.framework in Embed Frameworks */,
 				05CFFBE62DCB8F6C0051129F /* SearchFeature.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -101,6 +110,9 @@
 		05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SearchFeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C232DCDD4CF0093825D /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C2A2DCDD6380093825D /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05734C432DCDF7240093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05734C4F2DCDF8B40093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05734C522DCDF8B80093825D /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23422DC49AA200C761A5 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05734C442DCDF7240093825D /* PresentationInterface.framework in Frameworks */,
 				05EC2AE92DC7C07400C761A5 /* RxRelay in Frameworks */,
 				05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */,
 				05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */,
@@ -165,6 +178,7 @@
 			files = (
 				05CFFBEE2DCB90460051129F /* DomainInterface.framework in Frameworks */,
 				05CFFBF42DCB908B0051129F /* DesignSystem.framework in Frameworks */,
+				05734C532DCDF8B80093825D /* Presentation.framework in Frameworks */,
 				05CFFBEC2DCB90440051129F /* Domain.framework in Frameworks */,
 				05CFFBEA2DCB90210051129F /* Data.framework in Frameworks */,
 				05CFFBF32DCB906F0051129F /* RxCocoa in Frameworks */,
@@ -172,6 +186,7 @@
 				05CFFBF02DCB90580051129F /* Infrastructure.framework in Frameworks */,
 				05CFFBF72DCB90A10051129F /* SnapKit in Frameworks */,
 				05CFFBE92DCB90070051129F /* RxSwift in Frameworks */,
+				05734C502DCDF8B40093825D /* PresentationInterface.framework in Frameworks */,
 				05CFFBE52DCB8F6C0051129F /* SearchFeature.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,6 +226,9 @@
 		0516364A2DC45E6300A6C0D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05734C522DCDF8B80093825D /* Presentation.framework */,
+				05734C4F2DCDF8B40093825D /* PresentationInterface.framework */,
+				05734C432DCDF7240093825D /* PresentationInterface.framework */,
 				05734C2A2DCDD6380093825D /* Infrastructure.framework */,
 				05734C232DCDD4CF0093825D /* DesignSystem.framework */,
 				058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */,
