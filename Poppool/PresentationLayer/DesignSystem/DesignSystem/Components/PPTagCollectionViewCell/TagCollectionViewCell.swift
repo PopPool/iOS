@@ -36,6 +36,16 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 
     public override func prepareForReuse() {
         super.prepareForReuse()
+
+        configureCell(
+            title: nil,
+            id: nil,
+            isSelected: false,
+            isCancelable: false,
+            fontSize: 11,
+            cornerRadius: 15.5
+        )
+
         disposeBag = DisposeBag()
     }
 }
