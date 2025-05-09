@@ -40,7 +40,7 @@ final class SearchMainView: UIView {
     }
 
     let clearButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_clearButton"), for: .normal)
+        $0.setImage(UIImage(named: "icon_clear_button"), for: .normal)
     }
 
     private var headerStackView = UIStackView().then {

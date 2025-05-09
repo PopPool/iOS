@@ -53,10 +53,12 @@ public final class PopupSearchReactor: Reactor {
         case present(target: PresentTarget)
     }
 
+    @frozen
     public enum PresentTarget {
         case categorySelector
         case filterSelector
         case popupDetail(popupID: Int)
+        case before
     }
 
     public struct State {
@@ -71,6 +73,7 @@ public final class PopupSearchReactor: Reactor {
         @Pulse var clearButtonIsHidden: Bool?
         @Pulse var endEditing: Void?
         @Pulse var updateDataSource: Void?
+        @Pulse var dismiss: Void?
 
         fileprivate var isSearching: Bool = false
         fileprivate var currentPage: Int32 = 0
@@ -173,7 +176,7 @@ public final class PopupSearchReactor: Reactor {
                         ])
                     }
             }
-            else { return .empty() }    // TODO: 이전 화면으로 보내기
+            else { return .just(.present(target: .before)) }
 
         case .recentSearchTagButtonTapped(let indexPath):
             let keyword = self.makeRecentSearchItem(at: indexPath)

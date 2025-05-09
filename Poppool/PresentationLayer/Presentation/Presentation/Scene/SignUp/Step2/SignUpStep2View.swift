@@ -46,7 +46,7 @@ final class SignUpStep2View: UIView {
 
     let clearButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "icon_clearButton"), for: .normal)
+        button.setImage(UIImage(named: "icon_clear_button"), for: .normal)
         return button
     }()
 

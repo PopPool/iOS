@@ -1,8 +1,9 @@
 import UIKit
 
+import DesignSystem
 import DomainInterface
 import Infrastructure
-import DesignSystem
+import SearchFeatureInterface
 
 import ReactorKit
 import RxCocoa
@@ -142,9 +143,11 @@ final class HomeReactor: Reactor {
         newState.isReloadView = false
         switch mutation {
         case .moveToSearchScene(let controller):
-            let nextController = SearchMainController()
-            nextController.reactor = SearchMainReactor()
-            controller.navigationController?.pushViewController(nextController, animated: true)
+            @Dependency var factory: PopupSearchFactory
+            controller.navigationController?.pushViewController(factory.make(), animated: true)
+//            let nextController = SearchMainController()
+//            nextController.reactor = SearchMainReactor()
+//            controller.navigationController?.pushViewController(nextController, animated: true)
         case .loadView:
             newState.isReloadView = true
             newState.sections = getSection()

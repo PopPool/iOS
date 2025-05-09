@@ -27,22 +27,11 @@ extension PopupSearchViewController {
     public override func loadView() {
         self.view = mainView
     }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    public override func present(
-        _ viewControllerToPresent: UIViewController,
-        animated flag: Bool,
-        completion: (() -> Void)? = nil
-    ) {
-        if let sheet = viewControllerToPresent.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.preferredCornerRadius = 20
-        }
-
-        super.present(viewControllerToPresent, animated: flag, completion: completion)
+        tabBarController?.tabBar.isHidden = true
     }
 }
 
@@ -153,10 +142,10 @@ extension PopupSearchViewController {
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$present)
-            .debug("DEBUG: present")
             .withUnretained(self)
+            .skip(1)
             .subscribe { owner, target in
-                switch target {
+                switch target! {
                 case .categorySelector:
                     @Dependency var factory: CategorySelectorFactory
                     owner.PPPresent(factory.make())
@@ -172,7 +161,8 @@ extension PopupSearchViewController {
                         animated: true
                     )
 
-                default: break
+                case .before:
+                    owner.navigationController?.popViewController(animated: true)
                 }
             }
             .disposed(by: disposeBag)

@@ -69,7 +69,7 @@ final class ProfileEditView: UIView {
     }()
     let nickNameClearButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "icon_clearButton"), for: .normal)
+        button.setImage(UIImage(named: "icon_clear_button"), for: .normal)
         button.isHidden = true
         return button
     }()
