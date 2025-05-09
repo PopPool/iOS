@@ -1,9 +1,9 @@
 import UIKit
 
-import CoordinatorKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import SearchFeatureInterface
 
 import ReactorKit
 import RxSwift
@@ -15,8 +15,6 @@ public final class PopupSearchViewController: BaseViewController, View {
     public typealias Reactor = PopupSearchReactor
 
     // MARK: - Properties
-    public weak var coordinator: SearchFeatureCoordinator?
-
     public var disposeBag = DisposeBag()
 
     private let mainView = PopupSearchView()
@@ -119,8 +117,18 @@ extension PopupSearchViewController {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        Category.valueChanged
+            .map { _ in Reactor.Action.categoryChangedBySelector }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         mainView.filterStatusButtonTapped
             .map { Reactor.Action.searchResultFilterButtonTapped }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        Filter.valueChanged
+            .map { _ in Reactor.Action.searchResultFilterChangedBySelector }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -149,10 +157,17 @@ extension PopupSearchViewController {
             .subscribe { owner, target in
                 switch target {
                 case .categorySelector:
-                    owner.coordinator?.presentCategorySelector(from: owner, parentReactor: reactor)
+                    @Dependency var factory: CategorySelectorFactory
+                    let viewController = factory.make()
+
+                    owner.PPPresent(viewController)
 
                 case .filterSelector:
-                    owner.coordinator?.presentFilterSelector(from: owner, parentReactor: reactor)
+                    let viewController = FilterSelectViewController()
+                    let filterReactor = FilterSelectReactor()
+
+                    viewController.reactor = filterReactor
+                    owner.PPPresent(viewController)
 
                 case .popupDetail(let popupID):
                     print("DEBUG: PopupStore ID is \(popupID)")

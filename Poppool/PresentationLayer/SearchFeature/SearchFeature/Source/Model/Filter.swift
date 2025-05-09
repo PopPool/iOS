@@ -1,5 +1,7 @@
 import Foundation
 
+import RxSwift
+
 /// 필터 옵션 상태를 공유하기 위한 싱글톤 객체
 final class Filter: NSCopying, Equatable {
     func copy(with zone: NSZone? = nil) -> Any {
@@ -12,6 +14,7 @@ final class Filter: NSCopying, Equatable {
     static func == (lhs: Filter, rhs: Filter) -> Bool { return (lhs.status == rhs.status) && (lhs.sort == rhs.sort) }
 
     static let shared = Filter(status: .open, sort: .newest)
+    static let valueChanged = PublishSubject<Void>()
 
     var status: PopupStatus = .open
     var sort: PopupSort = .newest

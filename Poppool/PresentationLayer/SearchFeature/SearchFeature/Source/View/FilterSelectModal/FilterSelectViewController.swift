@@ -1,6 +1,7 @@
 import UIKit
 
 import DesignSystem
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -78,6 +79,10 @@ extension FilterSelectViewController {
         reactor.pulse(\.$dismiss)
             .withUnretained(self)
             .subscribe { (owner, _) in owner.dismissModal() }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$filterChanged)
+            .subscribe { _ in Filter.valueChanged.onNext(()) }
             .disposed(by: disposeBag)
     }
 }

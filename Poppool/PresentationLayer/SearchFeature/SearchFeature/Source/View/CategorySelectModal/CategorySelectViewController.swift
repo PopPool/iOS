@@ -1,6 +1,7 @@
 import UIKit
 
 import DesignSystem
+import Infrastructure
 
 import ReactorKit
 import RxCocoa
@@ -81,6 +82,10 @@ extension CategorySelectViewController {
         reactor.state.distinctUntilChanged(\.saveButtonIsEnable)
             .withUnretained(self)
             .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$categoryChanged)
+            .subscribe { _ in Category.valueChanged.onNext(()) }
             .disposed(by: disposeBag)
     }
 }

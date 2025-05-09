@@ -1,17 +1,20 @@
 import Foundation
 
-public final class Category: NSCopying, Equatable {
-    public func copy(with zone: NSZone? = nil) -> Any {
+import RxSwift
+
+final class Category: NSCopying, Equatable {
+    func copy(with zone: NSZone? = nil) -> Any {
         return Category(items: self.items)
     }
 
-    public static func == (lhs: Category, rhs: Category) -> Bool { return lhs === rhs }
+    static func == (lhs: Category, rhs: Category) -> Bool { return lhs === rhs }
 
     static let shared = Category()
+    static let valueChanged = PublishSubject<Void>()
 
     /// 선택된 아이템들만 들어가는 인스턴스
     private var _items: [TagModel]
-    public var items: [TagModel] {
+    var items: [TagModel] {
         get { _items }
         set { _items = newValue.isEmpty ? [Category.defaultItem] : newValue }
     }

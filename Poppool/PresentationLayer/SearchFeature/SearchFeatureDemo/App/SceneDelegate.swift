@@ -3,12 +3,11 @@ import UIKit
 import Domain
 import DomainInterface
 import Infrastructure
-import SearchFeature
+import SearchFeatureInterface
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private var coordinator: SearchFeatureCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -16,9 +15,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         let navigationController = UINavigationController()
+        @Dependency var popupSearchFactory: PopupSearchFactory
 
-        coordinator = SearchFeatureCoordinator(navigationController: navigationController)
-        coordinator?.start()
+        navigationController.pushViewController(
+            popupSearchFactory.make(),
+            animated: false
+        )
 
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

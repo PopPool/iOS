@@ -26,7 +26,7 @@ final class FilterSelectReactor: Reactor {
         var selectedFilter: Filter
         var saveButtonIsEnable: Bool = false
 
-        @Pulse var saveButtonTapped: Void?
+        @Pulse var filterChanged: Void?
         @Pulse var dismiss: Void?
     }
 
@@ -96,13 +96,12 @@ final class FilterSelectReactor: Reactor {
             newState.selectedFilter.sort = sort
 
         case .updateSaveButtonEnable:
-            print("DEBUG: status: \(Filter.shared.status), sort: \(Filter.shared.sort)", )
             newState.saveButtonIsEnable = (newState.selectedFilter != Filter.shared)
 
         case .saveCurrentFilter:
             Filter.shared.status = newState.selectedFilter.status
             Filter.shared.sort = newState.selectedFilter.sort
-            newState.saveButtonTapped = ()
+            newState.filterChanged = ()
         }
 
         return newState

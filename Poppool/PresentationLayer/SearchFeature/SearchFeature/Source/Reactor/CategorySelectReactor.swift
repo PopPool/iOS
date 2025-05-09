@@ -32,6 +32,7 @@ final class CategorySelectReactor: Reactor {
         var saveButtonIsEnable: Bool = false
         var selectedCategoryChanged: Bool?
 
+        @Pulse var categoryChanged: Void?
         @Pulse var dismiss: Void?
     }
 
@@ -106,11 +107,11 @@ final class CategorySelectReactor: Reactor {
 
         case .resetCategory:
             Category.shared.resetItems()
-            newState.selectedCategoryChanged = true
+            newState.categoryChanged = ()
 
         case .saveCategory:
             Category.shared.items = newState.categoryItems.filter { $0.isSelected == true }
-            newState.selectedCategoryChanged = true
+            newState.categoryChanged = ()
 
         case .updateCategoryTagSelection(let categoryID):
             newState.categoryItems = state.categoryItems.map {
