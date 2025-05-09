@@ -179,7 +179,7 @@ public final class PopupSearchReactor: Reactor {
             else { return .just(.present(target: .before)) }
 
         case .recentSearchTagButtonTapped(let indexPath):
-            let keyword = self.makeRecentSearchItem(at: indexPath)
+            let keyword = self.findRecentSearchKeyword(at: indexPath)
             return fetchSearchResult(keyword: keyword)
                 .withUnretained(self)
                 .flatMap { (owner, response) -> Observable<Mutation> in
@@ -364,10 +364,11 @@ private extension PopupSearchReactor {
 
 // MARK: - Make Functions
 private extension PopupSearchReactor {
-    func makeRecentSearchItem(at indexPath: IndexPath) -> String? {
-        guard let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword),
-              searchKeywords.indices.contains(indexPath.item) else { return nil }
-        return searchKeywords[indexPath.item]
+    func findRecentSearchKeyword(at indexPath: IndexPath) -> String? {
+        guard currentState.recentSearchItems.indices.contains(indexPath.item)
+        else { return nil }
+
+        return currentState.recentSearchItems[indexPath.item].title
     }
 
     func makeRecentSearchItems() -> [TagModel] {
