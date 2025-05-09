@@ -158,16 +158,11 @@ extension PopupSearchViewController {
                 switch target {
                 case .categorySelector:
                     @Dependency var factory: CategorySelectorFactory
-                    let viewController = factory.make()
-
-                    owner.PPPresent(viewController)
+                    owner.PPPresent(factory.make())
 
                 case .filterSelector:
-                    let viewController = FilterSelectViewController()
-                    let filterReactor = FilterSelectReactor()
-
-                    viewController.reactor = filterReactor
-                    owner.PPPresent(viewController)
+                    @Dependency var factory: FilterSelectorFactory
+                    owner.PPPresent(factory.make())
 
                 case .popupDetail(let popupID):
                     print("DEBUG: PopupStore ID is \(popupID)")

@@ -66,6 +66,7 @@ extension AppDelegate {
     private func registerFactory() {
         DIContainer.register(PopupSearchFactory.self) { return PopupSearchFactoryImpl() }
         DIContainer.register(CategorySelectorFactory.self) { return CategorySelectorFactoryImpl() }
+        DIContainer.register(FilterSelectorFactory.self) { return FilterSelectorFactoryImpl() }
     }
 }
 
