@@ -20,14 +20,15 @@ public final class SearchAPIRepositoryImpl: SearchAPIRepository {
     }
 
     public func fetchSearchResult(by query: String) -> Observable<KeywordBasePopupStoreListResponse> {
-        self.saveSearchKeyword(keyword: query)
 
         let request = GetSearchPopupStoreRequestDTO(query: query)
         let endPoint = SearchAPIEndPoint.getSearchPopUpList(request: request)
-        return provider.requestData(
+        return provider.requestData(    // 실패했을때는 키워드 저장이 안되도록 수정
             with: endPoint,
             interceptor: tokenInterceptor
-        ).map { $0.toDomain() }
+        )
+        .map { $0.toDomain() }
+        .do { _ in self.saveSearchKeyword(keyword: query) }
     }
 }
 
