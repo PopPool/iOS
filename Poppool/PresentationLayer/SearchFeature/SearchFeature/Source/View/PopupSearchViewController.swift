@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import PresentationInterface
 import SearchFeatureInterface
 
 import ReactorKit
@@ -165,7 +166,11 @@ extension PopupSearchViewController {
                     owner.PPPresent(factory.make())
 
                 case .popupDetail(let popupID):
-                    print("DEBUG: PopupStore ID is \(popupID)")
+                    @Dependency var factory: DetailFactory
+                    owner.navigationController?.pushViewController(
+                        factory.make(popupID: popupID),
+                        animated: true
+                    )
 
                 default: break
                 }

@@ -18,6 +18,7 @@
 		05734C422DCDF7190093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C402DCDF7190093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C492DCDF7960093825D /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C482DCDF7960093825D /* DesignSystem.framework */; };
 		05734C4A2DCDF7960093825D /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C482DCDF7960093825D /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C572DCDF9E80093825D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C562DCDF9E80093825D /* NMapsMap */; };
 		05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CB2DB6756500C1E192 /* SnapKit */; };
 		05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CE2DB6770300C1E192 /* Lottie */; };
 		05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D62A2DB53A8200508FFD /* DomainInterface.framework */; };
@@ -115,6 +116,7 @@
 				05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */,
 				08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */,
 				08B2A3612DB66BAB00E57EFA /* Then in Frameworks */,
+				05734C572DCDF9E80093825D /* NMapsMap in Frameworks */,
 				0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */,
 				05C1D62E2DB53A8200508FFD /* Infrastructure.framework in Frameworks */,
 				05734C412DCDF7190093825D /* SearchFeatureInterface.framework in Frameworks */,
@@ -237,6 +239,7 @@
 				05BDD5CB2DB6756500C1E192 /* SnapKit */,
 				05BDD5CE2DB6770300C1E192 /* Lottie */,
 				0522C1E02DB67C8300B141FF /* RxSwift */,
+				05734C562DCDF9E80093825D /* NMapsMap */,
 			);
 			productName = Presentation;
 			productReference = 058CC9042DB537960084221A /* Presentation.framework */;
@@ -282,6 +285,7 @@
 				08B2A3652DB66BD400E57EFA /* XCRemoteSwiftPackageReference "Pageboy" */,
 				08B2A3682DB66BF200E57EFA /* XCRemoteSwiftPackageReference "RxGesture" */,
 				05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				05734C552DCDF9E80093825D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 058CC9052DB537960084221A /* Products */;
@@ -675,6 +679,14 @@
 				minimumVersion = 1.2.7;
 			};
 		};
+		05734C552DCDF9E80093825D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
+			};
+		};
 		05BDD5CD2DB6770300C1E192 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -756,6 +768,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05125B932DB62295001342A2 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		05734C562DCDF9E80093825D /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C552DCDF9E80093825D /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
 		};
 		05BDD5CB2DB6756500C1E192 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
