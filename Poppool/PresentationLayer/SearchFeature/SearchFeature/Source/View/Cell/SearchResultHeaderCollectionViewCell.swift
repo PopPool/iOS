@@ -6,11 +6,7 @@ import SnapKit
 import RxSwift
 import Then
 
-public final class SearchResultHeaderView: UICollectionReusableView {
-
-    enum Identifier: String {
-        case searchResult = "PopupGridCollectionHeaderView.searchResult"
-    }
+public final class SearchResultHeaderCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
 
@@ -53,7 +49,7 @@ public final class SearchResultHeaderView: UICollectionReusableView {
 }
 
 // MARK: - SetUp
-private extension SearchResultHeaderView {
+private extension SearchResultHeaderCollectionViewCell {
     func addViews() {
         [afterSearchTitleLabel, cellCountLabel, filterStatusButton].forEach {
             addSubview($0)
@@ -98,8 +94,8 @@ private extension SearchResultHeaderView {
     }
 }
 
-extension SearchResultHeaderView {
-    func configureHeader(title: String?, count: Int?, filterText: String?) {
+extension SearchResultHeaderCollectionViewCell {
+    func configureCell(title: String?, count: Int?, filterText: String?) {
         if let afterSearchTitle = title,
            let count = count {
             filterStatusButton.isHidden = true

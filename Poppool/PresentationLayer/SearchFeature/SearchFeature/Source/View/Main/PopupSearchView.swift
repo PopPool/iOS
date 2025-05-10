@@ -13,7 +13,6 @@ final class PopupSearchView: UIView {
     // MARK: - Properties
     private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
     private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
-    private var searchResultHeaderInput: SearchResultHeaderModel?
 
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
@@ -50,9 +49,8 @@ final class PopupSearchView: UIView {
         )
 
         $0.register(
-            SearchResultHeaderView.self,
-            forSupplementaryViewOfKind: SectionHeaderKind.searchResult.rawValue,
-            withReuseIdentifier: SearchResultHeaderView.Identifier.searchResult.rawValue
+            SearchResultHeaderCollectionViewCell.self,
+            forCellWithReuseIdentifier: SearchResultHeaderCollectionViewCell.identifiers
         )
 
         $0.register(
@@ -167,6 +165,20 @@ extension PopupSearchView {
 
                 return cell
 
+            case .searchResultHeaderItem(let item):
+                let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: SearchResultHeaderCollectionViewCell.identifiers,
+                    for: indexPath
+                ) as! SearchResultHeaderCollectionViewCell
+
+                cell.configureCell(title: item.title, count: item.count, filterText: item.filterText)
+
+                cell.filterStatusButton.rx.tap
+                    .bind(to: self.filterStatusButtonTapped)
+                    .disposed(by: cell.disposeBag)
+
+                return cell
+
             case .searchResultItem(let item):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: PPPopupGridCollectionViewCell.identifiers,
@@ -199,6 +211,7 @@ extension PopupSearchView {
                     withReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! SearchResultEmptyTitleCollectionViewCell
+
                 cell.configureCell(title: title)
 
                 return cell
@@ -235,60 +248,52 @@ extension PopupSearchView {
                 header.configureHeader(title: "팝업스토어 찾기")
 
                 return header
-
-            case .searchResult:
-                guard let header = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: elementKind,
-                    withReuseIdentifier: SearchResultHeaderView.Identifier.searchResult.rawValue,
-                    for: indexPath
-                ) as? SearchResultHeaderView else { fatalError("\(#file), \(#function) Error") }
-
-                if let input = self.searchResultHeaderInput {
-                    header.configureHeader(title: input.title, count: input.count, filterText: input.filterText)
-                } else {
-                    header.configureHeader(title: nil, count: nil, filterText: nil)
-                }
-
-                header.filterStatusButton.rx.tap
-                    .bind(to: self.filterStatusButtonTapped)
-                    .disposed(by: header.disposeBag)
-
-                return header
             }
         }
     }
 
-    func updateSnapshot(
-        recentSearchItems: [SectionItem],
-        categoryItems: [SectionItem],
-        searchResultItems: [SectionItem],
-        headerInput searchResultHeaderInput: SearchResultHeaderModel? = nil,
-        searchResultEmpty: String? = nil
-    ) {
-        var snapshot = NSDiffableDataSourceSnapshot<PopupSearchView.Section, PopupSearchView.SectionItem>()
-
-        if !recentSearchItems.isEmpty {
-            snapshot.appendSections([PopupSearchView.Section.recentSearch])
-            snapshot.appendItems(recentSearchItems, toSection: .recentSearch)
-        }
-
-        if !categoryItems.isEmpty {
-            snapshot.appendSections([PopupSearchView.Section.category])
-            snapshot.appendItems(categoryItems, toSection: .category)
-        }
-
-        snapshot.appendSections([PopupSearchView.Section.searchResult])
-        self.searchResultHeaderInput = searchResultHeaderInput
-
-        if let searchResultEmpty {
-            snapshot.appendItems([.searchResultEmptyTitle(searchResultEmpty)], toSection: .searchResult)
+    func updateSectionSnapshot(at section: Section, with items: [SectionItem]) {
+        if items.isEmpty {
+            guard var snapshot = dataSource?.snapshot() else { return }
+            snapshot.deleteSections([section])
+            dataSource?.apply(snapshot)
+            return
         } else {
-            snapshot.appendItems(searchResultItems, toSection: .searchResult)
+            if var snapshot = dataSource?.snapshot(for: section) {
+                snapshot.deleteAll()
+                snapshot.append(items)
+                dataSource?.apply(snapshot, to: section)
+            } else {
+                guard var snapshot = dataSource?.snapshot() else { return }
+                snapshot.appendSections([section])
+                snapshot.appendItems(items, toSection: section)
+                dataSource?.apply(snapshot)
+            }
         }
-        snapshot.reloadSections([.searchResult])
-
-        dataSource?.apply(snapshot, animatingDifferences: true)
     }
+
+    func updateSearchResultSectionSnapshot(
+        with items: [SectionItem],
+        header: SectionItem,
+        empty: SectionItem? = nil
+    ) {
+        guard var snapshot = dataSource?.snapshot() else { return }
+
+        snapshot.deleteSections([.searchResultHeader, .searchResult])
+
+        snapshot.appendSections( [.searchResultHeader, .searchResult])
+        snapshot.appendItems([header], toSection: .searchResultHeader)
+
+        if let empty {
+            snapshot.appendItems([empty], toSection: .searchResult)
+        } else {
+            snapshot.appendItems(items, toSection: .searchResult)
+        }
+
+        dataSource?.apply(snapshot)
+    }
+
+    
 
     func getSectionsFromDataSource() -> [Section] {
         return dataSource?.snapshot().sectionIdentifiers ?? []
@@ -301,6 +306,7 @@ extension PopupSearchView {
     enum Section: CaseIterable, Hashable {
         case recentSearch
         case category
+        case searchResultHeader
         case searchResult
     }
 
@@ -308,6 +314,7 @@ extension PopupSearchView {
     enum SectionItem: Hashable {
         case recentSearchItem(TagModel)
         case categoryItem(TagModel)
+        case searchResultHeaderItem(SearchResultHeaderModel)
         case searchResultItem(SearchResultModel)
         case searchResultEmptyTitle(String)
     }
@@ -316,6 +323,5 @@ extension PopupSearchView {
     enum SectionHeaderKind: String {
         case recentSearch = "recentSearchElementKind"
         case category = "categoryElementKind"
-        case searchResult = "searchResultElementKind"
     }
 }

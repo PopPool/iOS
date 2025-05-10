@@ -85,6 +85,7 @@ extension CategorySelectViewController {
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$categoryChanged)
+            .skip(1)
             .subscribe { _ in Category.valueChanged.onNext(()) }
             .disposed(by: disposeBag)
     }

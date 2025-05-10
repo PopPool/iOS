@@ -4,8 +4,8 @@ import DomainInterface
 import Infrastructure
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 public final class PopupSearchReactor: Reactor {
 
@@ -67,14 +67,14 @@ public final class PopupSearchReactor: Reactor {
         var recentSearchItems: [TagModel] = []
         var categoryItems: [TagModel] = []
         var searchResultItems: [SearchResultModel] = []
-        var searchResultHeader: SearchResultHeaderModel? = nil
+        var searchResultHeader: SearchResultHeaderModel = SearchResultHeaderModel(filterText: Filter.shared.title)
         var searchResultEmptyTitle: String?
 
         @Pulse var searchBarText: String? = nil
         @Pulse var present: PresentTarget?
         @Pulse var clearButtonIsHidden: Bool?
         @Pulse var endEditing: Void?
-        @Pulse var updateDataSource: Void?
+        @Pulse var updateSearchResult: Void?
         @Pulse var dismiss: Void?
 
         fileprivate var isSearching: Bool = false
@@ -115,8 +115,8 @@ public final class PopupSearchReactor: Reactor {
                     return Observable.concat([
                         .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
                         .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchResultEmptyTitle),
@@ -342,7 +342,7 @@ public final class PopupSearchReactor: Reactor {
             newState.searchResultItems[indexPath.item].isBookmark.toggle()
 
         case .updateDataSource:
-            newState.updateDataSource = ()
+            newState.updateSearchResult = ()
 
         case .present(let target):
             newState.present = target
@@ -428,6 +428,7 @@ private extension PopupSearchReactor {
         keyword afterTitle: String? = nil,
         count: Int64,
         filter filterTitle: String? = Filter.shared.title) -> SearchResultHeaderModel {
+            print("DEBUG: count is \(count)")
         return SearchResultHeaderModel(
             title: afterTitle,
             count: Int(count),

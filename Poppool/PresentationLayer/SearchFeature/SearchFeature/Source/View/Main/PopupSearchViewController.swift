@@ -95,6 +95,8 @@ extension PopupSearchViewController {
                     return Reactor.Action.recentSearchTagButtonTapped(indexPath: indexPath)
                 case .category:
                     return Reactor.Action.categoryTagButtonTapped
+
+                case .searchResultHeader: return nil
                 case .searchResult:
                     return Reactor.Action.searchResultItemTapped(indexPath: indexPath)
                 }
@@ -177,17 +179,44 @@ extension PopupSearchViewController {
             .subscribe { (owner, text) in owner.mainView.searchBar.searchBar.text = text }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$updateDataSource)
+        reactor.state.distinctUntilChanged(\.recentSearchItems)
+            .compactMap { $0.recentSearchItems }
+            .withUnretained(self)
+            .subscribe { (owner, items) in
+                owner.mainView.updateSectionSnapshot(
+                    at: .recentSearch,
+                    with: items.map(PopupSearchView.SectionItem.recentSearchItem)
+                )
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.categoryItems)
+            .compactMap { $0.categoryItems }
+            .withUnretained(self)
+            .subscribe { (owner, items) in
+                owner.mainView.updateSectionSnapshot(
+                    at: .category,
+                    with: items.map(PopupSearchView.SectionItem.categoryItem)
+                )
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$updateSearchResult)
             .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in
-                owner.mainView.updateSnapshot(
-                    recentSearchItems: state.recentSearchItems.map(PopupSearchView.SectionItem.recentSearchItem),
-                    categoryItems: state.categoryItems.map(PopupSearchView.SectionItem.categoryItem),
-                    searchResultItems: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
-                    headerInput: state.searchResultHeader,
-                    searchResultEmpty: state.searchResultEmptyTitle
-                )
+                if let emptyTitle = state.searchResultEmptyTitle {
+                    owner.mainView.updateSearchResultSectionSnapshot(
+                        with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
+                        header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader),
+                        empty: PopupSearchView.SectionItem.searchResultEmptyTitle(emptyTitle)
+                    )
+                } else {
+                    owner.mainView.updateSearchResultSectionSnapshot(
+                        with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
+                        header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader)
+                    )
+                }
             }
             .disposed(by: disposeBag)
     }

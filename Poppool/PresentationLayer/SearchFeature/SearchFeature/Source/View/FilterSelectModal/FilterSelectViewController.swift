@@ -75,13 +75,13 @@ extension FilterSelectViewController {
             .subscribe { (owner, state) in owner.mainView.saveButton.isEnabled = state.saveButtonIsEnable }
             .disposed(by: disposeBag)
 
-
         reactor.pulse(\.$dismiss)
             .withUnretained(self)
             .subscribe { (owner, _) in owner.dismissModal() }
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$filterChanged)
+            .skip(1)
             .subscribe { _ in Filter.valueChanged.onNext(()) }
             .disposed(by: disposeBag)
     }
