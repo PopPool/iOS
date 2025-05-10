@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		052413092DCF7DA100C42E2D /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; };
+		0524130A2DCF7DA100C42E2D /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A96202DCE38B500C0DD58 /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
 		054A96212DCE38B500C0DD58 /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A96262DCE38E900C0DD58 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 054A96252DCE38E900C0DD58 /* Tabman */; };
@@ -92,6 +94,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				05734C2C2DCDD6380093825D /* Infrastructure.framework in Embed Frameworks */,
+				0524130A2DCF7DA100C42E2D /* DesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,6 +123,7 @@
 /* Begin PBXFileReference section */
 		0516336D2DC457A900A6C0D1 /* SearchFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SearchFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0516362F2DC457DE00A6C0D1 /* SearchFeatureDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SearchFeatureDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		052413082DCF7DA100C42E2D /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SearchFeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C232DCDD4CF0093825D /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C2A2DCDD6380093825D /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05734C2B2DCDD6380093825D /* Infrastructure.framework in Frameworks */,
+				052413092DCF7DA100C42E2D /* DesignSystem.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +248,7 @@
 		0516364A2DC45E6300A6C0D1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				052413082DCF7DA100C42E2D /* DesignSystem.framework */,
 				05734C522DCDF8B80093825D /* Presentation.framework */,
 				05734C4F2DCDF8B40093825D /* PresentationInterface.framework */,
 				05734C432DCDF7240093825D /* PresentationInterface.framework */,

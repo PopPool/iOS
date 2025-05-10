@@ -4,35 +4,17 @@ import DesignSystem
 
 import SnapKit
 import Then
-import RxSwift
 import RxCocoa
+import RxSwift
 import RxRelay
 
 final class PopupSearchView: UIView {
-    /// View를 구성하는 section을 정의
-    enum Section: CaseIterable, Hashable {
-        case recentSearch
-        case category
-        case searchResult
-    }
-
-    /// Section에 들어갈 Item을 정의한 변수
-    enum SectionItem: Hashable {
-        case recentSearchItem(TagModel)
-        case categoryItem(TagModel)
-        case searchResultItem(SearchResultModel)
-        case searchResultEmptyTitle(String)
-    }
-
-    /// Section의 헤더를 구분하기 위한 변수
-    enum SectionHeaderKind: String {
-        case recentSearch = "recentSearchElementKind"
-        case category = "categoryElementKind"
-        case searchResult = "searchResultElementKind"
-    }
 
     // MARK: - Properties
+    private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
     private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
+    private var searchResultHeaderInput: SearchResultHeaderModel?
+
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
     let categoryTagRemoveButtonTapped = PublishRelay<Int>()
@@ -88,9 +70,6 @@ final class PopupSearchView: UIView {
         $0.contentInsetAdjustmentBehavior = .never
     }
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    private var searchResultHeaderInput: SearchResultHeaderModel?
-
     // MARK: - init
     init() {
         super.init(frame: .zero)
@@ -140,16 +119,26 @@ private extension PopupSearchView {
 // MARK: - DataSource
 extension PopupSearchView {
     private func configurationDataSourceItem() {
-        self.dataSource = UICollectionViewDiffableDataSource<PopupSearchView.Section, PopupSearchView.SectionItem>(
+        self.dataSource = UICollectionViewDiffableDataSource<
+            PopupSearchView.Section,
+            PopupSearchView.SectionItem
+        >(
             collectionView: collectionView
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+
             switch item {
             case .recentSearchItem(let item):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: TagCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! TagCollectionViewCell
-                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
+
+                cell.configureCell(
+                    title: item.title,
+                    id: item.id,
+                    isSelected: item.isSelected,
+                    isCancelable: item.isCancelable
+                )
 
                 cell.cancelButton.rx.tap
                     .compactMap { cell.titleLabel.text }
@@ -163,7 +152,13 @@ extension PopupSearchView {
                     withReuseIdentifier: TagCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! TagCollectionViewCell
-                cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable)
+
+                cell.configureCell(
+                    title: item.title,
+                    id: item.id,
+                    isSelected: item.isSelected,
+                    isCancelable: item.isCancelable
+                )
 
                 cell.cancelButton.rx.tap
                     .compactMap { item.id }
@@ -177,7 +172,20 @@ extension PopupSearchView {
                     withReuseIdentifier: PPPopupGridCollectionViewCell.identifiers,
                     for: indexPath
                 ) as! PPPopupGridCollectionViewCell
-                cell.configureCell(imagePath: item.imagePath, id: item.id, category: item.category, title: item.title, address: item.address, startDate: item.startDate, endDate: item.endDate, isBookmark: item.isBookmark, isLogin: item.isLogin, isPopular: item.isPopular, row: item.row)
+
+                cell.configureCell(
+                    imagePath: item.imagePath,
+                    id: item.id,
+                    category: item.category,
+                    title: item.title,
+                    address: item.address,
+                    startDate: item.startDate,
+                    endDate: item.endDate,
+                    isBookmark: item.isBookmark,
+                    isLogin: item.isLogin,
+                    isPopular: item.isPopular,
+                    row: item.row
+                )
 
                 cell.bookmarkButton.rx.tap
                     .map { indexPath }
@@ -284,5 +292,30 @@ extension PopupSearchView {
 
     func getSectionsFromDataSource() -> [Section] {
         return dataSource?.snapshot().sectionIdentifiers ?? []
+    }
+}
+
+// MARK: - Section information
+extension PopupSearchView {
+    /// View를 구성하는 section을 정의
+    enum Section: CaseIterable, Hashable {
+        case recentSearch
+        case category
+        case searchResult
+    }
+
+    /// Section에 들어갈 Item을 정의한 변수
+    enum SectionItem: Hashable {
+        case recentSearchItem(TagModel)
+        case categoryItem(TagModel)
+        case searchResultItem(SearchResultModel)
+        case searchResultEmptyTitle(String)
+    }
+
+    /// Section의 헤더를 구분하기 위한 변수
+    enum SectionHeaderKind: String {
+        case recentSearch = "recentSearchElementKind"
+        case category = "categoryElementKind"
+        case searchResult = "searchResultElementKind"
     }
 }
