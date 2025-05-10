@@ -182,9 +182,15 @@ extension PopupSearchViewController {
             .withUnretained(self)
             .subscribe { (owner, state) in
                 owner.mainView.updateSnapshot(
-                    recentSearchItems: state.recentSearchItems.map(PopupSearchView.SectionItem.recentSearchItem),
-                    categoryItems: state.categoryItems.map(PopupSearchView.SectionItem.categoryItem),
-                    searchResultItems: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
+                    recentSearchItems: state.recentSearchItems.map(
+                        PopupSearchView.SectionItem.recentSearchItem
+                    ),
+                    categoryItems: state.categoryItems.map(
+                        PopupSearchView.SectionItem.categoryItem
+                    ),
+                    searchResultItems: state.searchResultItems.map(
+                        PopupSearchView.SectionItem.searchResultItem
+                    ),
                     headerInput: state.searchResultHeader,
                     searchResultEmpty: state.searchResultEmptyTitle
                 )

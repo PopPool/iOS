@@ -82,6 +82,7 @@ extension FilterSelectViewController {
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$filterChanged)
+            .skip(1)
             .subscribe { _ in Filter.valueChanged.onNext(()) }
             .disposed(by: disposeBag)
     }
