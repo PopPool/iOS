@@ -225,7 +225,7 @@ final class MapReactor: Reactor {
                     },
                     onError: { error in
                         Logger.log(
-                            message: "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
+                            "❌ [에러]: 요청 실패 - \(error.localizedDescription)",
                             category: .error
                         )
                     },
@@ -353,7 +353,7 @@ final class MapReactor: Reactor {
             }
 
             Logger.log(
-                message: """
+                """
                 Updated viewport stores:
                 - Total: \(updatedStores.count)
                 - Selected Store: \(state.selectedStore?.name ?? "None")
@@ -370,7 +370,7 @@ final class MapReactor: Reactor {
             newState.error = error
             if let error = error {
                 Logger.log(
-                    message: """
+                    """
                     Error occurred in MapReactor:
                     - Description: \(error.localizedDescription)
                     - Domain: \(String(describing: (error as NSError).domain))

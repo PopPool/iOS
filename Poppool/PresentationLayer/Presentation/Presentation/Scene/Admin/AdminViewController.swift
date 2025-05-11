@@ -224,7 +224,7 @@ final class AdminViewController: BaseViewController, View {
 
                     allImageUrls = Array(Set(allImageUrls))
 
-                    Logger.log(message: "삭제할 이미지: \(allImageUrls.count)개", category: .debug)
+                    Logger.log("삭제할 이미지: \(allImageUrls.count)개", category: .debug)
 
                     @Dependency var preSignedUseCase: PreSignedUseCase
                     preSignedUseCase.tryDelete(objectKeyList: allImageUrls)

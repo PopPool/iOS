@@ -21,8 +21,8 @@ final class CategorySelectView: UIView {
         $0.isScrollEnabled = false
 
         $0.register(
-            TagCollectionViewCell.self,
-            forCellWithReuseIdentifier: TagCollectionViewCell.identifiers
+            PPTagCollectionViewCell.self,
+            forCellWithReuseIdentifier: PPTagCollectionViewCell.identifiers
         )
     }
 

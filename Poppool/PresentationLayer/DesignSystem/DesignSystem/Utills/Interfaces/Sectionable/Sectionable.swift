@@ -131,10 +131,8 @@ public extension Sectionable {
             for: indexPath
         ) as? CellType else {
             Logger.log(
-                message: "dequeueReusableCell Fail",
-                category: .error,
-                fileName: #file,
-                line: #line
+                "dequeueReusableCell Fail",
+                category: .error
             )
             return UICollectionViewCell()
         }
@@ -158,10 +156,8 @@ public extension Sectionable {
 
         guard let item = supplementaryItems?.filter({ $0.elementKind == kind }).first else {
             Logger.log(
-                message: "ReusableView Not Register",
-                category: .error,
-                fileName: #file,
-                line: #line
+                "ReusableView Not Register",
+                category: .error
             )
             fatalError()
         }

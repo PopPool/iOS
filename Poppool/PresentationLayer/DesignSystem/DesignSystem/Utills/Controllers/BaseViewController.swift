@@ -13,10 +13,8 @@ open class BaseViewController: UIViewController {
     public init() {
         super.init(nibName: nil, bundle: nil)
         Logger.log(
-            message: "\(self) init",
-            category: .info,
-            fileName: #file,
-            line: #line
+            "\(self) init",
+            category: .info
         )
     }
 
@@ -38,10 +36,8 @@ open class BaseViewController: UIViewController {
 
     deinit {
         Logger.log(
-            message: "\(self) deinit",
-            category: .info,
-            fileName: #file,
-            line: #line
+            "\(self) deinit",
+            category: .info
         )
     }
 

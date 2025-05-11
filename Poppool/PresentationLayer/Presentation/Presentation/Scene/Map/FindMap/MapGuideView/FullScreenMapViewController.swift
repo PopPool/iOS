@@ -35,10 +35,10 @@ class FullScreenMapViewController: MapViewController {
         setupNavigation()
 //        configureInitialMapPosition()
         self.navigationController?.navigationBar.isHidden = false
-        Logger.log(message: "💡 초기 위치 구성 직전: initialStore=\(String(describing: initialStore?.name))", category: .debug)
+        Logger.log("💡 초기 위치 구성 직전: initialStore=\(String(describing: initialStore?.name))", category: .debug)
         configureInitialMapPosition()
 
-        Logger.log(message: "✅ FullScreenMapViewController - viewDidLoad 완료", category: .debug)
+        Logger.log("✅ FullScreenMapViewController - viewDidLoad 완료", category: .debug)
 
         mainView.mapView.touchDelegate = self
     }

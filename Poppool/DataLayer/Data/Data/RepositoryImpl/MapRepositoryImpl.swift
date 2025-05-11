@@ -48,7 +48,7 @@ public final class MapRepositoryImpl: MapRepository {
     }
 
     public func fetchCategories() -> Observable<[CategoryResponse]> {
-        Logger.log(message: "카테고리 목록 요청을 시작합니다.", category: .network)
+        Logger.log("카테고리 목록 요청을 시작합니다.", category: .network)
 
         return provider.requestData(
             with: SignUpAPIEndpoint.signUp_getCategoryList(),
@@ -56,7 +56,7 @@ public final class MapRepositoryImpl: MapRepository {
         )
         .do(onNext: { _ in
             Logger.log(
-                message: "카테고리 목록 응답 성공",
+                "카테고리 목록 응답 성공",
                 category: .debug
             )
         })
@@ -65,7 +65,7 @@ public final class MapRepositoryImpl: MapRepository {
         }
         .catch { error in
             Logger.log(
-                message: "카테고리 목록 요청 실패: \(error.localizedDescription)",
+                "카테고리 목록 요청 실패: \(error.localizedDescription)",
                 category: .error
             )
             throw error

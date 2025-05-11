@@ -224,11 +224,11 @@ extension NormalCommentAddReactor: PHPickerViewControllerDelegate {
                     if let image = image as? UIImage {
                         originImageList[index] = image // 로드된 이미지를 해당 인덱스에 저장
                     } else {
-                        Logger.log(message: "Failed to load image", category: .error)
+                        Logger.log("Failed to load image", category: .error)
                     }
                 }
             } else {
-                Logger.log(message: "ItemProvider Can Not Load Object", category: .error)
+                Logger.log("ItemProvider Can Not Load Object", category: .error)
             }
         }
 

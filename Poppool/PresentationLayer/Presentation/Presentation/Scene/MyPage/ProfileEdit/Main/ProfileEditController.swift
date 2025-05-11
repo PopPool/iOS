@@ -221,7 +221,7 @@ extension ProfileEditController: PHPickerViewControllerDelegate, UIImagePickerCo
 
     func showCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            Logger.log(message: "카메라를 사용할 수 없습니다.", category: .error)
+            Logger.log("카메라를 사용할 수 없습니다.", category: .error)
             return
         }
 

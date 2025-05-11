@@ -427,23 +427,23 @@ extension DetailReactor {
         // URL 인코딩 후 생성
         guard let encodedPath = imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: encodedPath) else {
-            Logger.log(message: "URL 생성 실패", category: .error)
+            Logger.log("URL 생성 실패", category: .error)
             return
         }
 
         // 🔹 비동기적으로 이미지 다운로드
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
-                Logger.log(message: "다운로드 실패", category: .error)
+                Logger.log("다운로드 실패", category: .error)
                 return
             }
 
             guard let data = data, let image = UIImage(data: data) else {
-                Logger.log(message: "이미지 변환 실패", category: .error)
+                Logger.log("이미지 변환 실패", category: .error)
                 return
             }
 
-            Logger.log(message: "이미지 다운로드 성공", category: .info)
+            Logger.log("이미지 다운로드 성공", category: .info)
 
             let sharedText = "[팝풀] \(storeName) 팝업 어때요?\n지금 바로 팝풀에서 확인해보세요!"
             // UI 업데이트는 메인 스레드에서 실행
@@ -546,7 +546,7 @@ extension DetailReactor {
                     let commentList = comment.imageList.compactMap { $0 }
                     self.preSignedUseCase.tryDelete(objectKeyList: commentList)
                         .subscribe(onDisposed: {
-                            Logger.log(message: "S3 Image Delete 완료", category: .info)
+                            Logger.log("S3 Image Delete 완료", category: .info)
                         })
                         .disposed(by: self.disposeBag)
 

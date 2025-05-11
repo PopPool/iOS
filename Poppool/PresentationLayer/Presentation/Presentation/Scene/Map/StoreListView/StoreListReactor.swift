@@ -80,7 +80,7 @@ final class StoreListReactor: Reactor {
 
             // Int64 → Int32 변환 필요
             guard let idInt32 = Int32(exactly: store.id) else {
-                Logger.log(message: "ID 값이 Int32 범위를 초과했습니다: \(store.id)", category: .error)
+                Logger.log("ID 값이 Int32 범위를 초과했습니다: \(store.id)", category: .error)
                 return .empty()
             }
 
@@ -192,7 +192,7 @@ final class StoreListReactor: Reactor {
                 newState.stores[index].isBookmarked = isBookmarked
 
                 Logger.log(
-                    message: """
+                    """
                     북마크 상태 변경:
                     - 스토어명: \(store.title)
                     - ID: \(store.id)

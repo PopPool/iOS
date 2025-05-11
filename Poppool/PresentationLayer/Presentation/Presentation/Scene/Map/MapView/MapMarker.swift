@@ -68,7 +68,7 @@ final class MapMarker: UIView {
 
     // MARK: - Init
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: 80, height: 32))
+        super.init(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
         setUpConstraints()
     }
 
@@ -89,10 +89,8 @@ private extension MapMarker {
         labelStackView.addArrangedSubview(countLabel)
         countBadgeView.addSubview(badgeCountLabel)
 
-        self.snp.makeConstraints { make in
-            make.width.equalTo(200)
-            make.height.equalTo(70)
-        }
+        // 고정된 크기 제약조건 제거
+        // 대신 내부 컨텐츠에 맞게 크기가 조정되도록 변경
 
         markerImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -102,12 +100,12 @@ private extension MapMarker {
 
         clusterContainer.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.height.equalTo(24)
-            make.width.equalTo(80)
+            make.height.equalTo(32)
+            make.width.greaterThanOrEqualTo(80)
         }
 
         labelStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8))
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
         }
 
         countBadgeView.snp.makeConstraints { make in
@@ -143,10 +141,14 @@ private extension MapMarker {
 
         countBadgeView.snp.remakeConstraints { make in
             make.width.height.equalTo(20)
-            make.top.equalTo(markerImageView.snp.top).offset(isSelected ? 0 : -4)
-            make.right.equalTo(markerImageView.snp.right).offset(isSelected ? 0 : 4)
+            if isSelected {
+                make.top.equalTo(markerImageView.snp.top).offset(-4)
+                make.right.equalTo(markerImageView.snp.right).offset(4)
+            } else {
+                make.top.equalTo(markerImageView.snp.top).offset(-4)
+                make.right.equalTo(markerImageView.snp.right).offset(4)
+            }
         }
-
         self.layoutIfNeeded()
         CATransaction.commit()
     }
@@ -191,8 +193,10 @@ extension MapMarker: Inputable {
         regionLabel.text = input.regionName
         countLabel.text = " \(input.count)"
 
+        // 클러스터 마커 크기 계산 - 텍스트 내용에 맞게 동적으로 조정
+        labelStackView.layoutIfNeeded()
         let stackSize = labelStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        let requiredWidth = stackSize.width + 24
+        let requiredWidth = max(stackSize.width + 24, 80) // 최소 너비 보장
 
         clusterContainer.snp.remakeConstraints { make in
             make.center.equalToSuperview()
@@ -203,18 +207,33 @@ extension MapMarker: Inputable {
         labelStackView.snp.remakeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
         }
+
+        self.frame.size = CGSize(width: requiredWidth, height: 32)
     }
 
     private func setupSingleMarker(_ input: Input) {
         markerImageView.isHidden = false
         clusterContainer.isHidden = true
+
         updateMarkerImage(isSelected: input.isSelected)
+
+        let size = input.isSelected ? 44 : 32
 
         if input.count > 1 {
             countBadgeView.isHidden = false
             badgeCountLabel.text = "\(input.count)"
+
+            countBadgeView.snp.remakeConstraints { make in
+                make.width.height.equalTo(20)
+                make.top.equalTo(markerImageView.snp.top).offset(input.isSelected ? 0 : -4)
+                make.right.equalTo(markerImageView.snp.right).offset(input.isSelected ? 2 : 4)
+            }
+
+            self.frame.size = CGSize(width: size + 8, height: size)
         } else {
             countBadgeView.isHidden = true
+
+            self.frame.size = CGSize(width: size, height: size)
         }
     }
 }
@@ -225,6 +244,18 @@ extension MapMarker {
     }
 
     func asImage() -> UIImage? {
+        if let input = currentInput {
+            if input.isCluster {
+                self.layoutIfNeeded()
+                let clusterSize = clusterContainer.bounds.size
+                self.frame = CGRect(x: 0, y: 0, width: clusterSize.width + 8, height: clusterSize.height + 8)
+            } else {
+                let size = input.isSelected ? 44 : 32
+                let extraWidth = (input.count > 1) ? 10 : 0
+                self.frame = CGRect(x: 0, y: 0, width: size + extraWidth, height: size + 4)
+            }
+        }
+
         self.layoutIfNeeded()
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
         defer { UIGraphicsEndImageContext() }

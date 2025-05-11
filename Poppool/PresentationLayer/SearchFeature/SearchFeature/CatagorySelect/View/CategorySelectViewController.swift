@@ -72,8 +72,8 @@ extension CategorySelectViewController {
         reactor.state.distinctUntilChanged(\.categoryItems)
             .map(\.categoryItems)
             .bind(to: mainView.collectionView.rx.items(
-                cellIdentifier: TagCollectionViewCell.identifiers,
-                cellType: TagCollectionViewCell.self
+                cellIdentifier: PPTagCollectionViewCell.identifiers,
+                cellType: PPTagCollectionViewCell.self
             )) { _, item, cell in
                 cell.configureCell(title: item.title, id: item.id, isSelected: item.isSelected, isCancelable: item.isCancelable, fontSize: 13, cornerRadius: 18)
             }

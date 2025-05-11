@@ -37,10 +37,8 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
         let windowSecne = scenes.first as? UIWindowScene
         guard let window = windowSecne?.windows.first else {
             Logger.log(
-                message: "\(#function) UIWindow fetch Fail",
-                category: .error,
-                fileName: #file,
-                line: #line
+                "\(#function) UIWindow fetch Fail",
+                category: .error
             )
             return UIWindow()
         }
@@ -71,8 +69,8 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
             guard let convertAuthorizationCode = String(data: authorizationCode, encoding: .utf8) else {
                 return
             }
-            Logger.log(message: "IDToken: \(idToken)", category: .info)
-            Logger.log(message: "Auth Code: \(convertAuthorizationCode)", category: .info)
+            Logger.log("IDToken: \(idToken)", category: .info)
+            Logger.log("Auth Code: \(convertAuthorizationCode)", category: .info)
             authServiceResponse.onNext(.init(idToken: idToken, authorizationCode: convertAuthorizationCode))
         default:
             break
@@ -84,10 +82,8 @@ extension AppleLoginService: ASAuthorizationControllerPresentationContextProvidi
         didCompleteWithError error: Error
     ) {
         Logger.log(
-            message: "AppleLogin Fail",
-            category: .error,
-            fileName: #file,
-            line: #line
+            "AppleLogin Fail",
+            category: .error
         )
         authServiceResponse.onError(error)
     }

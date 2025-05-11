@@ -45,13 +45,13 @@ final class FilterBottomSheetView: UIView {
         let layout = UICollectionViewCompositionalLayout { section, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(26),
-                heightDimension: .absolute(36)
+                heightDimension: .estimated(36)
             )
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(36)
+                heightDimension: .estimated(36)
             )
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: groupSize,
@@ -394,16 +394,22 @@ extension FilterBottomSheetView {
         var filters: [String] = []
 
         if let locationText = locationText, !locationText.isEmpty {
-            filters.append(locationText)
+            let locations = locationText
+                              .split(separator: ",")
+                              .map { $0.trimmingCharacters(in: .whitespaces) }
+            filters += locations
         }
+
         if let categoryText = categoryText, !categoryText.isEmpty {
-            filters.append(categoryText)
+            let categories = categoryText
+                                .split(separator: ",")
+                                .map { $0.trimmingCharacters(in: .whitespaces) }
+            filters += categories
         }
 
         filterChipsView.updateChips(with: filters)
     }
 }
-
 extension FilterBottomSheetView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateSelectedButtonPosition()

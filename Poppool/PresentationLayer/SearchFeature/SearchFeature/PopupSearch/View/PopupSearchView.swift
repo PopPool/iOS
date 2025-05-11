@@ -44,8 +44,8 @@ final class PopupSearchView: UIView {
         )
 
         $0.register(
-            TagCollectionViewCell.self,
-            forCellWithReuseIdentifier: TagCollectionViewCell.identifiers
+            PPTagCollectionViewCell.self,
+            forCellWithReuseIdentifier: PPTagCollectionViewCell.identifiers
         )
 
         $0.register(
@@ -127,9 +127,9 @@ extension PopupSearchView {
             switch item {
             case .recentSearchItem(let item):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: TagCollectionViewCell.identifiers,
+                    withReuseIdentifier: PPTagCollectionViewCell.identifiers,
                     for: indexPath
-                ) as! TagCollectionViewCell
+                ) as! PPTagCollectionViewCell
 
                 cell.configureCell(
                     title: item.title,
@@ -147,9 +147,9 @@ extension PopupSearchView {
 
             case .categoryItem(let item):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: TagCollectionViewCell.identifiers,
+                    withReuseIdentifier: PPTagCollectionViewCell.identifiers,
                     for: indexPath
-                ) as! TagCollectionViewCell
+                ) as! PPTagCollectionViewCell
 
                 cell.configureCell(
                     title: item.title,

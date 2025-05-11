@@ -32,9 +32,9 @@ public final class MapUseCaseImpl: MapUseCase {
             categories: categories
         )
         .do(onNext: { stores in
-            Logger.log(message: "맵 범위 내 스토어 \(stores.count)개 로드됨", category: .debug)
+            Logger.log("맵 범위 내 스토어 \(stores.count)개 로드됨", category: .debug)
         }, onError: { error in
-            Logger.log(message: "맵 범위 내 스토어 로드 실패: \(error)", category: .error)
+            Logger.log("맵 범위 내 스토어 로드 실패: \(error)", category: .error)
         })
     }
 
@@ -47,9 +47,9 @@ public final class MapUseCaseImpl: MapUseCase {
             categories: categories
         )
         .do(onNext: { stores in
-            Logger.log(message: "'\(query)' 검색 결과 \(stores.count)개 로드됨", category: .debug)
+            Logger.log("'\(query)' 검색 결과 \(stores.count)개 로드됨", category: .debug)
         }, onError: { error in
-            Logger.log(message: "스토어 검색 실패: \(error)", category: .error)
+            Logger.log("스토어 검색 실패: \(error)", category: .error)
         })
     }
 

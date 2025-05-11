@@ -44,7 +44,7 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setImage(resizedImage, for: .normal)
            button.semanticContentAttribute = .forceRightToLeft
            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: 0)
-           button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 12)
+           button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 10, bottom: 6, right: 12)
            button.setBackgroundColor(.blu500, for: .normal)
            button.setTitleColor(.white, for: .normal)
            button.layer.borderWidth = 0
@@ -54,7 +54,7 @@ final class BalloonChipCell: UICollectionViewCell {
            button.setImage(nil, for: .normal)
            button.semanticContentAttribute = .unspecified
            button.imageEdgeInsets = .zero
-           button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+           button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 12, bottom: 6, right: 12)
            button.setBackgroundColor(.white, for: .normal)
            button.setTitleColor(.g400, for: .normal)
            button.layer.borderWidth = 1

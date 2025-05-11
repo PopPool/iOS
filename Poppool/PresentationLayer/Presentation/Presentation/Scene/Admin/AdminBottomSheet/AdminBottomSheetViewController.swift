@@ -43,7 +43,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
     private func setupViews() {
         view.backgroundColor = .clear
 
-        Logger.log(message: "초기 뷰 계층:", category: .debug)
+        Logger.log("초기 뷰 계층:", category: .debug)
 
         view.addSubview(mainView)
         mainView.isUserInteractionEnabled = true
@@ -58,7 +58,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
             containerViewBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
         }
 
-        Logger.log(message: "mainView 추가 후 계층:", category: .debug)
+        Logger.log("mainView 추가 후 계층:", category: .debug)
 
         dimmedView.backgroundColor = .black.withAlphaComponent(0.4)
         dimmedView.alpha = 0
@@ -73,7 +73,7 @@ final class AdminBottomSheetViewController: BaseViewController, View {
             make.edges.equalToSuperview()
         }
 
-        Logger.log(message: "최종 뷰 계층:", category: .debug)
+        Logger.log("최종 뷰 계층:", category: .debug)
     }
 
    private func setupCollectionView() {
@@ -215,6 +215,6 @@ final class AdminBottomSheetViewController: BaseViewController, View {
    }
 
    deinit {
-       Logger.log(message: "BottomSheet deinit", category: .debug)
+       Logger.log("BottomSheet deinit", category: .debug)
    }
 }

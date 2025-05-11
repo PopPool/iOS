@@ -34,7 +34,7 @@ public class MultipartEndPoint: URLRequestConvertible {
     public func asURLRequest() throws -> URLRequest {
         let url = try baseURL.asURL().appendingPathComponent(path)
         var request = URLRequest(url: url)
-        Logger.log(message: "\(request) URL 생성", category: .network)
+        Logger.log("\(request) URL 생성", category: .network)
         request.method = method
 
         if let headers = headers {
@@ -57,7 +57,7 @@ public class MultipartEndPoint: URLRequestConvertible {
                     multipartFormData.append(jsonString.data(using: .utf8)!, withName: "data")
                 }
             } catch {
-                Logger.log(message: "JSON 변환 오류: \(error)", category: .network)
+                Logger.log("JSON 변환 오류: \(error)", category: .network)
             }
         }
 
