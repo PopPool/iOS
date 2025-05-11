@@ -19,7 +19,6 @@ final class SearchResultEmptyTitleCollectionViewCell: UICollectionViewCell {
         $0.textColor = .g400
     }
 
-
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,4 +57,3 @@ extension SearchResultEmptyTitleCollectionViewCell {
         self.emptyLabel.text = title
     }
 }
-

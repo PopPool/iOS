@@ -1,8 +1,8 @@
 import UIKit
 
+import DesignSystem
 import DomainInterface
 import Infrastructure
-import DesignSystem
 
 import Pageboy
 import ReactorKit

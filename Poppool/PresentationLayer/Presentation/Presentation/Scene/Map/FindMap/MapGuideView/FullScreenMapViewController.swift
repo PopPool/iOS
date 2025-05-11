@@ -1,9 +1,9 @@
 import CoreLocation
 import UIKit
 
+import DesignSystem
 import DomainInterface
 import Infrastructure
-import DesignSystem
 
 import NMapsMap
 import RxCocoa

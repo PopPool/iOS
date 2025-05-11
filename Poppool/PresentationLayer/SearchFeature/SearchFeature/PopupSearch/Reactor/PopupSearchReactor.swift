@@ -180,8 +180,7 @@ public final class PopupSearchReactor: Reactor {
                             .just(.updateSearchResultDataSource)
                         ])
                     }
-            }
-            else { return .just(.present(target: .before)) }
+            } else { return .just(.present(target: .before)) }
 
         case .recentSearchTagButtonTapped(let indexPath):
             let keyword = self.findRecentSearchKeyword(at: indexPath)
@@ -436,9 +435,7 @@ private extension PopupSearchReactor {
     }
 
     func makeSearchResultEmptyTitle(state: State) -> String? {
-        if !currentState.searchResultItems.isEmpty { return nil }
-        else if currentState.isSearching { return "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요" }
-        else { return "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요" }
+        if !currentState.searchResultItems.isEmpty { return nil } else if currentState.isSearching { return "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요" } else { return "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요" }
     }
 
     /// 받침에 따라 이/가 를 판단해서 붙여준다.

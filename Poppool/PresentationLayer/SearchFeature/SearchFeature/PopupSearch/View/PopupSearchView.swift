@@ -2,11 +2,11 @@ import UIKit
 
 import DesignSystem
 
+import RxCocoa
+import RxRelay
+import RxSwift
 import SnapKit
 import Then
-import RxCocoa
-import RxSwift
-import RxRelay
 
 final class PopupSearchView: UIView {
 

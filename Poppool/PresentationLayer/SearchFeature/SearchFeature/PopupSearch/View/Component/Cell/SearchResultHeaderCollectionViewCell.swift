@@ -2,8 +2,8 @@ import UIKit
 
 import DesignSystem
 
-import SnapKit
 import RxSwift
+import SnapKit
 import Then
 
 public final class SearchResultHeaderCollectionViewCell: UICollectionViewCell {
@@ -103,8 +103,7 @@ extension SearchResultHeaderCollectionViewCell {
             afterSearchTitleLabel.text = afterSearchTitle + " 포함된 팝업"
             cellCountLabel.text = "총 \(count)개를 찾았어요."
 
-            if count == 0 { self.isHidden = true }
-            else {
+            if count == 0 { self.isHidden = true } else {
                 self.isHidden = false
                 afterSearchTitleLabel.snp.updateConstraints { make in
                     make.height.equalTo(24)

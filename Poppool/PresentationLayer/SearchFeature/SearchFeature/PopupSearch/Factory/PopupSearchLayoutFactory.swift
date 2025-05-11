@@ -6,7 +6,7 @@ final class PopupSearchLayoutFactory {
     func makeCollectionViewLayout(
         dataSourceProvider: @escaping () -> UICollectionViewDiffableDataSource<PopupSearchView.Section, PopupSearchView.SectionItem>?
     ) -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, environment -> NSCollectionLayoutSection? in
+        return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ -> NSCollectionLayoutSection? in
             guard let self = self,
                   let dataSource = dataSourceProvider() else { return nil }
 
@@ -130,12 +130,10 @@ final class PopupSearchLayoutFactory {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(24)
         )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
+        return NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
             elementKind: elementKind,
             alignment: .top
         )
-
-        return header
     }
 }

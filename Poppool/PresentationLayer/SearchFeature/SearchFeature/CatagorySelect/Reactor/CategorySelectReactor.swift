@@ -57,7 +57,7 @@ final class CategorySelectReactor: Reactor {
         case .viewWillAppear:
             return fetchCategoryListUseCase.execute()
                 .withUnretained(self)
-                .map { (owner, response) in
+                .map { (_, response) in
                     let items = response.map {
                         return TagModel(title: $0.category, id: $0.categoryId, isCancelable: false)
                     }
@@ -96,8 +96,7 @@ final class CategorySelectReactor: Reactor {
         switch mutation {
         case .setupCategotyTag(let items):
             let fetchedItems = items.map {
-                if let id = $0.id, Category.shared.contains(id: id) { return $0.selectionToggledItem() }
-                else { return $0 }
+                if let id = $0.id, Category.shared.contains(id: id) { return $0.selectionToggledItem() } else { return $0 }
             }
             originCategoryItems = fetchedItems
             newState.categoryItems = fetchedItems
@@ -115,8 +114,7 @@ final class CategorySelectReactor: Reactor {
 
         case .updateCategoryTagSelection(let categoryID):
             newState.categoryItems = state.categoryItems.map {
-                if $0.id == categoryID { return $0.selectionToggledItem() }
-                else { return $0 }
+                if $0.id == categoryID { return $0.selectionToggledItem() } else { return $0 }
             }
 
         case .updateSaveButtonEnable:

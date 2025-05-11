@@ -23,10 +23,6 @@ extension FilterSelectViewController {
     override func loadView() {
         self.view = mainView
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 }
 
 // MARK: - Methods
@@ -56,7 +52,7 @@ extension FilterSelectViewController {
 
         mainView.saveButton.rx.tap
             .withUnretained(self)
-            .map { (owner, _) in Reactor.Action.saveButtonTapped }
+            .map { (_, _) in Reactor.Action.saveButtonTapped }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

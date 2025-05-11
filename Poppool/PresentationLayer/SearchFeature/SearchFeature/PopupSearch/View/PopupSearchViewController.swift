@@ -7,8 +7,8 @@ import PresentationInterface
 import SearchFeatureInterface
 
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 import Then
 
 public final class PopupSearchViewController: BaseViewController, View {
@@ -27,7 +27,7 @@ extension PopupSearchViewController {
     public override func loadView() {
         self.view = mainView
     }
-    
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 

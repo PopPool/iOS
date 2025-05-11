@@ -51,8 +51,7 @@ extension Category {
     }
 
     func getCancelableCategoryItems() -> [TagModel] {
-        if items == [Category.defaultItem] { return items }
-        else { return items.filter { $0.isSelected == true }.map { $0.cancelableItem() } }
+        if items == [Category.defaultItem] { return items } else { return items.filter { $0.isSelected == true }.map { $0.cancelableItem() } }
     }
 
     func removeItem(by categoryID: Int) {

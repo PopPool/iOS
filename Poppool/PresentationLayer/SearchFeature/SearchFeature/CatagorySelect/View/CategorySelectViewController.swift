@@ -23,10 +23,6 @@ extension CategorySelectViewController {
     override func loadView() {
         self.view = mainView
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 }
 
 // MARK: - Methods

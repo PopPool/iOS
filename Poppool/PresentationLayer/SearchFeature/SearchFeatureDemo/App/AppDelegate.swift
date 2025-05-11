@@ -72,4 +72,3 @@ extension AppDelegate {
         DIContainer.register(DetailFactory.self) { return DetailFactoryImpl() }
     }
 }
-

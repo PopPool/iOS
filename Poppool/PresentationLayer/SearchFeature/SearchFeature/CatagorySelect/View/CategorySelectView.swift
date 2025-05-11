@@ -90,7 +90,7 @@ private extension CategorySelectView {
 private extension CategorySelectView {
 
     func makeLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { sectionIndex, environment in
+        return UICollectionViewCompositionalLayout { _, _ in
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .estimated(26),
                 heightDimension: .absolute(36)

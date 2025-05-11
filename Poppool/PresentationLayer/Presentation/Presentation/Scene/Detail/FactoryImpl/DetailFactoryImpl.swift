@@ -3,10 +3,9 @@ import DomainInterface
 import Infrastructure
 import PresentationInterface
 
-
 public final class DetailFactoryImpl: DetailFactory {
     public init() { }
-    
+
     public func make(popupID: Int) -> BaseViewController {
         let viewController = DetailController()
         let reactor = DetailReactor(
