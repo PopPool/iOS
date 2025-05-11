@@ -201,7 +201,7 @@ extension PopupSearchViewController {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$updateSearchResult)
+        reactor.pulse(\.$updateSearchResultDataSource)
             .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in

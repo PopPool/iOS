@@ -50,7 +50,7 @@ public final class PopupSearchReactor: Reactor {
         case updateSearchingState(to: Bool)
         case updateSearchResultEmptyTitle
         case updateSearchResultBookmark(indexPath: IndexPath)
-        case updateDataSource
+        case updateSearchResultDataSource
 
         case present(target: PresentTarget)
     }
@@ -74,7 +74,7 @@ public final class PopupSearchReactor: Reactor {
         @Pulse var present: PresentTarget?
         @Pulse var clearButtonIsHidden: Bool?
         @Pulse var endEditing: Void?
-        @Pulse var updateSearchResult: Void?
+        @Pulse var updateSearchResultDataSource: Void?
         @Pulse var dismiss: Void?
 
         fileprivate var isSearching: Bool = false
@@ -120,7 +120,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchResultEmptyTitle),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
                 }
 
@@ -145,7 +145,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.updateSearchResultEmptyTitle),
                         .just(.updateClearButtonIsHidden(to: true)),
                         .just(.updateEditingState),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
                 }
 
@@ -177,7 +177,7 @@ public final class PopupSearchReactor: Reactor {
                             .just(.updateSearchResultEmptyTitle),
                             .just(.updateSearchBar(to: nil)),
                             .just(.updateEditingState),
-                            .just(.updateDataSource)
+                            .just(.updateSearchResultDataSource)
                         ])
                     }
             }
@@ -203,7 +203,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.updateSearchResultEmptyTitle),
                         .just(.updateClearButtonIsHidden(to: true)),
                         .just(.updateEditingState),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
                 }
 
@@ -211,14 +211,14 @@ public final class PopupSearchReactor: Reactor {
             self.removeRecentSearchItem(text: text)
             return Observable.concat([
                 .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateDataSource)
+                .just(.updateSearchResultDataSource)
             ])
 
         case .recentSearchTagRemoveAllButtonTapped:
             self.removeAllRecentSearchItems()
             return .concat([
                 .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateDataSource)
+                .just(.updateSearchResultDataSource)
             ])
 
         case .categoryTagRemoveButtonTapped(let categoryID):
@@ -233,7 +233,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchResultEmptyTitle),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
                 }
 
@@ -252,7 +252,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchResultEmptyTitle),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
             }
 
@@ -271,7 +271,7 @@ public final class PopupSearchReactor: Reactor {
                         .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                         .just(.updateCurrentPage(to: 0)),
                         .just(.updateSearchResultEmptyTitle),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
             }
 
@@ -282,7 +282,7 @@ public final class PopupSearchReactor: Reactor {
             return fetchSearchResultBookmark(at: indexPath)
                 .andThen(.concat([
                     .just(.updateSearchResultBookmark(indexPath: indexPath)),
-                    .just(.updateDataSource)
+                    .just(.updateSearchResultDataSource)
                 ]))
 
         case .searchResultPrefetchItems(let indexPathList):
@@ -293,7 +293,7 @@ public final class PopupSearchReactor: Reactor {
                     return .concat([
                         .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                         .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
-                        .just(.updateDataSource)
+                        .just(.updateSearchResultDataSource)
                     ])
                 }
         }
@@ -341,8 +341,8 @@ public final class PopupSearchReactor: Reactor {
         case .updateSearchResultBookmark(let indexPath):
             newState.searchResultItems[indexPath.item].isBookmark.toggle()
 
-        case .updateDataSource:
-            newState.updateSearchResult = ()
+        case .updateSearchResultDataSource:
+            newState.updateSearchResultDataSource = ()
 
         case .present(let target):
             newState.present = target
@@ -428,7 +428,6 @@ private extension PopupSearchReactor {
         keyword afterTitle: String? = nil,
         count: Int64,
         filter filterTitle: String? = Filter.shared.title) -> SearchResultHeaderModel {
-            print("DEBUG: count is \(count)")
         return SearchResultHeaderModel(
             title: afterTitle,
             count: Int(count),
