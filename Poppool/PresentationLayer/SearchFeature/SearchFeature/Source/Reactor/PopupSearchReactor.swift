@@ -397,7 +397,7 @@ private extension PopupSearchReactor {
 
     func makeRecentSearchItems() -> [TagModel] {
         let searchKeywords = userDefaultService.fetchArray(keyType: .searchKeyword) ?? []
-        return searchKeywords.map { TagModel(title: $0) }
+        return searchKeywords.prefix(10).map { TagModel(title: $0) }
     }
 
     func makeCategoryItems() -> [TagModel] {
