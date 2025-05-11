@@ -1,11 +1,9 @@
 import UIKit
 
-import DesignSystem
-
 import RxSwift
 import SnapKit
 
-public final class TagCollectionViewCell: UICollectionViewCell {
+public final class PPTagCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Components
 
@@ -51,7 +49,7 @@ public final class TagCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - SetUp
-private extension TagCollectionViewCell {
+private extension PPTagCollectionViewCell {
     func addViews() {
         [contentStackView].forEach {
             self.contentView.addSubview($0)
@@ -85,7 +83,7 @@ private extension TagCollectionViewCell {
     }
 }
 
-extension TagCollectionViewCell {
+extension PPTagCollectionViewCell {
     public func configureCell(title: String? = nil, id: Int?, isSelected: Bool = false, isCancelable: Bool = true, fontSize: CGFloat = 11, cornerRadius: CGFloat = 15.5) {
         let xmarkImage = isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")
         cancelButton.setImage(xmarkImage, for: .normal)
