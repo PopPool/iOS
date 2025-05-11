@@ -256,7 +256,7 @@ extension PopupSearchView {
         if items.isEmpty {
             guard var snapshot = dataSource?.snapshot() else { return }
             snapshot.deleteSections([section])
-            dataSource?.apply(snapshot)
+            dataSource?.apply(snapshot, animatingDifferences: false)
             return
         } else {
             if var snapshot = dataSource?.snapshot(for: section) {
@@ -290,10 +290,8 @@ extension PopupSearchView {
             snapshot.appendItems(items, toSection: .searchResult)
         }
 
-        dataSource?.apply(snapshot)
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
-
-    
 
     func getSectionsFromDataSource() -> [Section] {
         return dataSource?.snapshot().sectionIdentifiers ?? []
