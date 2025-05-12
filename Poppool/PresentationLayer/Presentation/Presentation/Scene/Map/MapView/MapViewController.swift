@@ -12,7 +12,7 @@ import RxGesture
 import RxSwift
 import SnapKit
 
-class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, UIGestureRecognizerDelegate {
+class MapViewController: BaseViewController, View {
     typealias Reactor = MapReactor
 
     fileprivate struct CoordinateKey: Hashable {
@@ -1485,8 +1485,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - CLLocationManagerDelegate
-    extension MapViewController {
+// MARK: - CLLocationManagerDelegate
+extension MapViewController: CLLocationManagerDelegate {
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
             guard let location = locations.last else { return }
 
@@ -1506,8 +1506,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - NMFMapViewTouchDelegate
-    extension MapViewController {
+// MARK: - NMFMapViewTouchDelegate
+extension MapViewController: NMFMapViewTouchDelegate {
         func mapView(_ mapView: NMFMapView, didTap marker: NMFMarker) -> Bool {
             if let clusterData = marker.userInfo["clusterData"] as? ClusterMarkerData {
                 return handleRegionalClusterTap(marker, clusterData: clusterData)
@@ -1543,8 +1543,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - NMFMapViewCameraDelegate
-    extension MapViewController {
+// MARK: - NMFMapViewCameraDelegate
+extension MapViewController: NMFMapViewCameraDelegate {
         func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
             if reason == NMFMapChangedByGesture && !isMovingToMarker {
                 resetSelectedMarker()
@@ -1576,8 +1576,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             cameraIdle.onNext(())
         }
     }
-    // MARK: - UIGestureRecognizerDelegate
-    extension MapViewController {
+// MARK: - UIGestureRecognizerDelegate
+extension MapViewController: UIGestureRecognizerDelegate {
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             return true
         }
