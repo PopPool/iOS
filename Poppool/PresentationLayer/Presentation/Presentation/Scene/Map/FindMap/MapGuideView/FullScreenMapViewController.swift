@@ -106,8 +106,8 @@ class FullScreenMapViewController: MapViewController {
         let position = NMGLatLng(lat: store.latitude, lng: store.longitude)
 
         let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: 15.0)
-        cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 0.3
+        mainView.mapView.cancelTransitions()
+        cameraUpdate.animation = .none
         mainView.mapView.moveCamera(cameraUpdate)
 
         if let existingMarker = initialMarker {
@@ -210,8 +210,8 @@ class FullScreenMapViewController: MapViewController {
         mainView.setStoreCardHidden(false, animated: true)
 
         let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position, zoomTo: 15.0)
-        cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 0.3
+        mainView.mapView.cancelTransitions()
+        cameraUpdate.animation = .none
         mainView.mapView.moveCamera(cameraUpdate)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
