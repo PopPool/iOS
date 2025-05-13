@@ -176,7 +176,7 @@ final class AdminViewController: BaseViewController, View {
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
-                onNext: { [weak self] storeDetail in
+                onNext: { [weak self] _ in
                     guard let self = self else { return }
                     let registerVC = PopUpStoreRegisterViewController(
                         nickname: self.nickname,
