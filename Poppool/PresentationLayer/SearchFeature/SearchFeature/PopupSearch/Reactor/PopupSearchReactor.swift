@@ -275,7 +275,8 @@ public final class PopupSearchReactor: Reactor {
             }
 
         case .searchResultItemTapped(let indexPath):
-            return .just(.present(target: .popupDetail(popupID: self.findPopupStoreID(at: indexPath))))
+            guard let popupID = self.findPopupStoreID(at: indexPath) else { return .empty() }
+            return .just(.present(target: .popupDetail(popupID: popupID)))
 
         case .searchResultBookmarkButtonTapped(let indexPath):
             return fetchSearchResultBookmark(at: indexPath)
@@ -419,7 +420,9 @@ private extension PopupSearchReactor {
         }
     }
 
-    func findPopupStoreID(at indexPath: IndexPath) -> Int {
+    // 빈 화면에서 탭할때 문제
+    func findPopupStoreID(at indexPath: IndexPath) -> Int? {
+        guard currentState.searchResultItems.indices.contains(indexPath.item) else { return nil }
         return Int(currentState.searchResultItems[indexPath.item].id)
     }
 
