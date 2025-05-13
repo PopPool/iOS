@@ -34,7 +34,7 @@ final class BalloonBackgroundView: UIView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.isScrollEnabled = false
-        collectionView.register(BalloonChipCell.self, forCellWithReuseIdentifier: BalloonChipCell.identifier)
+        collectionView.register(BalloonChipCell.self, forCellWithReuseIdentifier: BalloonChipCell.identifiers)
         return collectionView
     }()
 
@@ -289,7 +289,7 @@ extension BalloonBackgroundView: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: BalloonChipCell.identifier,
+                withReuseIdentifier: BalloonChipCell.identifiers,
                 for: indexPath
             ) as? BalloonChipCell,
             let input = tagSection?.inputDataList[indexPath.item]
