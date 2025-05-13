@@ -20,11 +20,23 @@ class MapViewController: BaseViewController, View {
         let lng: Int
 
         init(latitude: Double, longitude: Double) {
-            self.lat = Int(latitude * 1_000_00)
-            self.lng = Int(longitude * 1_000_00)
+            self.lat = Int(latitude * Constants.coordinateMultiplier)
+             self.lng = Int(longitude * Constants.coordinateMultiplier)
         }
     }
 
+    private enum Constants {
+        static let carouselHeight: CGFloat        = 140
+        static let carouselBottomOffset: CGFloat  = -24
+        static let tooltipMarkerHeight: CGFloat   = 32
+        static let tooltipYOffset: CGFloat        = 14
+        static let coordinateMultiplier: Double   = 100_000
+        static let cameraDebounceMs: Int          = 300
+        static let swipeDuration: TimeInterval    = 0.3
+        static let panVelocityThreshold: CGFloat  = 500
+        static let middleRatio: CGFloat           = 0.3
+        static let defaultZoom: Double            = 15.0
+    }
     var currentTooltipView: UIView?
     var currentTooltipStores: [MapPopUpStore] = []
     var currentTooltipCoordinate: NMGLatLng?
@@ -180,7 +192,7 @@ class MapViewController: BaseViewController, View {
     private func setupMapViewRxObservables() {
         mainView.mapView.addCameraDelegate(delegate: self)
         cameraIdle
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(Constants.cameraDebounceMs), scheduler: MainScheduler.instance)
             .map { [unowned self] in
                 let bounds = self.getVisibleBounds()
                 return MapReactor.Action.viewportChanged(
@@ -230,11 +242,10 @@ class MapViewController: BaseViewController, View {
         }
 
         let markerPoint = self.mainView.mapView.projection.point(from: marker.position)
-        let markerHeight: CGFloat = 32
-
+        let markerHeight = Constants.tooltipMarkerHeight
         tooltipView.frame = CGRect(
             x: markerPoint.x,
-            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
+            y: markerPoint.y - markerHeight - tooltipView.frame.height - Constants.tooltipYOffset,
             width: tooltipView.frame.width,
             height: tooltipView.frame.height
         )
@@ -255,8 +266,8 @@ class MapViewController: BaseViewController, View {
         view.addSubview(carouselView)
         carouselView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(140)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
+            make.height.equalTo(Constants.carouselHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(Constants.carouselBottomOffset)
         }
         carouselView.isHidden = true
         mainView.mapView.touchDelegate = self
@@ -282,7 +293,7 @@ class MapViewController: BaseViewController, View {
         mapViewTapGesture.delegate = self
     }
 
-    private let defaultZoomLevel: Double = 15.0
+    private let defaultZoomLevel: Double = Constants.defaultZoom
     private func setupPanAndSwipeGestures() {
         storeListViewController.mainView.grabberHandle.rx.swipeGesture(.up)
             .skip(1)
@@ -344,7 +355,7 @@ class MapViewController: BaseViewController, View {
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                     lat: location.coordinate.latitude,
                     lng: location.coordinate.longitude
-                ), zoomTo: 15.0)
+                ), zoomTo: Constants.defaultZoom)
 
                 self.mainView.mapView.moveCamera(cameraUpdate)
             }
@@ -445,7 +456,7 @@ class MapViewController: BaseViewController, View {
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                     lat: store.latitude,
                     lng: store.longitude
-                ), zoomTo: 15.0)
+                ), zoomTo: Constants.defaultZoom)
                 cameraUpdate.animation = .easeIn
                 cameraUpdate.animationDuration = 0.3
                 self.mainView.mapView.moveCamera(cameraUpdate)
@@ -503,7 +514,7 @@ class MapViewController: BaseViewController, View {
                     let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                         lat: firstStore.latitude,
                         lng: firstStore.longitude
-                    ), zoomTo: 15.0)
+                    ), zoomTo: Constants.defaultZoom)
                     cameraUpdate.animation = .easeIn
                     cameraUpdate.animationDuration = 0.3
                     self.mainView.mapView.moveCamera(cameraUpdate)
@@ -514,7 +525,7 @@ class MapViewController: BaseViewController, View {
 
     // MARK: - List View Control
     private func toggleListView() {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: Constants.swipeDuration) {
             let middleOffset = -self.view.frame.height * 0.7
             self.listViewTopConstraint?.update(offset: middleOffset)
             self.modalState = .middle
@@ -611,9 +622,9 @@ class MapViewController: BaseViewController, View {
                 let middleY = view.frame.height * 0.3
                 let targetState: ModalState
 
-                if velocity.y > 500 {
+                if velocity.y > Constants.panVelocityThreshold {
                     targetState = .bottom
-                } else if velocity.y < -500 {
+                } else if velocity.y < -Constants.panVelocityThreshold  {
                     targetState = .top
                 } else if currentOffset < middleY * 0.7 {
                     targetState = .top
@@ -1496,7 +1507,7 @@ extension MapViewController: CLLocationManagerDelegate {
             currentCarouselStores = []
 
             let position = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
-            let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: 15.0)
+            let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: Constants.defaultZoom)
             mainView.mapView.moveCamera(cameraUpdate) { [weak self] _ in
                 guard let self = self else { return }
                 self.findAndShowNearestStore(from: location)
