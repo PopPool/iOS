@@ -176,26 +176,17 @@ final class AdminViewController: BaseViewController, View {
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
-                onNext: { [weak self] storeDetail in
+                onNext: { [weak self] _ in
                     guard let self = self else { return }
-                    let updateParams = UpdateStoreParams(
-                        id: storeDetail.id,
-                        name: storeDetail.name,
-                        categoryId: storeDetail.categoryId,
-                        desc: storeDetail.description,
-                        address: storeDetail.address,
-                        startDate: storeDetail.startDate,
-                        endDate: storeDetail.endDate,
-                        mainImageUrl: storeDetail.mainImageUrl,
-                        imageUrlList: storeDetail.images.map { $0.imageUrl },
-                        imagesToDelete: [],
-                        latitude: storeDetail.latitude,
-                        longitude: storeDetail.longitude,
-                        markerTitle: storeDetail.markerTitle,
-                        markerSnippet: storeDetail.markerSnippet,
-                        startDateBeforeEndDate: true
+                    let registerVC = PopUpStoreRegisterViewController(
+                        nickname: self.nickname,
+                        editingStore: store
                     )
-                    let registerVC = PopUpStoreRegisterViewController(nickname: self.nickname)
+
+                    registerVC.completionHandler = { [weak self] in
+                        self?.reactor?.action.onNext(.reloadData)
+                    }
+
                     self.navigationController?.pushViewController(registerVC, animated: true)
                 },
                 onError: { [weak self] error in
@@ -206,7 +197,6 @@ final class AdminViewController: BaseViewController, View {
     }
 
     private func deleteStore(_ store: AdminStore) {
-        // 먼저 스토어 상세 정보를 가져와 모든 이미지 URL을 확인
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
