@@ -23,7 +23,7 @@ public final class SearchAPIRepositoryImpl: SearchAPIRepository {
 
         let request = GetSearchPopupStoreRequestDTO(query: query)
         let endPoint = SearchAPIEndPoint.getSearchPopUpList(request: request)
-        return provider.requestData(    // 실패했을때는 키워드 저장이 안되도록 수정
+        return provider.requestData(
             with: endPoint,
             interceptor: tokenInterceptor
         )
