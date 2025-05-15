@@ -205,11 +205,11 @@ extension PopupSearchViewController {
             .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in
-                if let emptyTitle = state.searchResultEmptyTitle {
+                if let searchResultEmpty = state.searchResultEmpty {
                     owner.mainView.updateSearchResultSectionSnapshot(
                         with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
                         header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader),
-                        empty: PopupSearchView.SectionItem.searchResultEmptyTitle(emptyTitle)
+                        empty: PopupSearchView.SectionItem.searchResultEmptyItem(searchResultEmpty)
                     )
                 } else {
                     owner.mainView.updateSearchResultSectionSnapshot(

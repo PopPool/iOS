@@ -59,8 +59,8 @@ final class PopupSearchView: UIView {
         )
 
         $0.register(
-            SearchResultEmptyTitleCollectionViewCell.self,
-            forCellWithReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers
+            SearchResultEmptyCollectionViewCell.self,
+            forCellWithReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers
         )
 
         // UICollectionView 최 상/하단 빈 영역
@@ -206,11 +206,11 @@ extension PopupSearchView {
 
                 return cell
 
-            case .searchResultEmptyTitle(let title):
+            case .searchResultEmptyItem(let title):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers,
+                    withReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers,
                     for: indexPath
-                ) as! SearchResultEmptyTitleCollectionViewCell
+                ) as! SearchResultEmptyCollectionViewCell
 
                 cell.configureCell(title: title)
 
@@ -314,7 +314,7 @@ extension PopupSearchView {
         case categoryItem(TagModel)
         case searchResultHeaderItem(SearchResultHeaderModel)
         case searchResultItem(SearchResultModel)
-        case searchResultEmptyTitle(String)
+        case searchResultEmptyItem(String)
     }
 
     /// Section의 헤더를 구분하기 위한 변수
