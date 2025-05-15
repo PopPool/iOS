@@ -58,12 +58,12 @@ extension SectionSupplementaryItemable {
         collectionView.register(
             ReusableView.self,
             forSupplementaryViewOfKind: kind,
-            withReuseIdentifier: reusableView.identifiers
+            withReuseIdentifier: ReusableView.identifiers
         )
 
         guard let view = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
-            withReuseIdentifier: reusableView.identifiers,
+            withReuseIdentifier: ReusableView.identifiers,
             for: indexPath
         ) as? ReusableView else {
             Logger.log(

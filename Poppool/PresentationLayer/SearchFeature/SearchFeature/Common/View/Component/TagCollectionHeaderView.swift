@@ -7,11 +7,6 @@ import SnapKit
 
 final class TagCollectionHeaderView: UICollectionReusableView {
 
-    enum Identifier: String {
-        case recentSearch = "TagCollectionHeaderView.recentSearch"
-        case category = "TagCollectionHeaderView.category"
-    }
-
     // MARK: - Components
     var disposeBag = DisposeBag()
 

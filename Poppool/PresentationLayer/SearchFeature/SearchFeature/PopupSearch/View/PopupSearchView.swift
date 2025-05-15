@@ -34,13 +34,13 @@ final class PopupSearchView: UIView {
         $0.register(
             TagCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.recentSearch.rawValue,
-            withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue
+            withReuseIdentifier: TagCollectionHeaderView.identifiers
         )
 
         $0.register(
             TagCollectionHeaderView.self,
             forSupplementaryViewOfKind: SectionHeaderKind.category.rawValue,
-            withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue
+            withReuseIdentifier: TagCollectionHeaderView.identifiers
         )
 
         $0.register(
@@ -228,7 +228,7 @@ extension PopupSearchView {
             case .recentSearch:
                 guard let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: elementKind,
-                    withReuseIdentifier: TagCollectionHeaderView.Identifier.recentSearch.rawValue,
+                    withReuseIdentifier: TagCollectionHeaderView.identifiers,
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
                 header.configureHeader(title: "최근 검색어", buttonTitle: "모두삭제")
@@ -242,7 +242,7 @@ extension PopupSearchView {
             case .category:
                 guard let header = collectionView.dequeueReusableSupplementaryView(
                     ofKind: elementKind,
-                    withReuseIdentifier: TagCollectionHeaderView.Identifier.category.rawValue,
+                    withReuseIdentifier: TagCollectionHeaderView.identifiers,
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
                 header.configureHeader(title: "팝업스토어 찾기")
