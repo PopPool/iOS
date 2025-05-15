@@ -11,7 +11,7 @@ import Then
 final class PopupSearchView: UIView {
 
     // MARK: - Properties
-    private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
+    private var dataSource: UICollectionViewDiffableDataSource<PopupSearchSection, SectionItem>?
     private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
 
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
@@ -118,7 +118,7 @@ private extension PopupSearchView {
 extension PopupSearchView {
     private func configurationDataSourceItem() {
         self.dataSource = UICollectionViewDiffableDataSource<
-            PopupSearchView.Section,
+            PopupSearchSection,
             PopupSearchView.SectionItem
         >(
             collectionView: collectionView
@@ -252,7 +252,7 @@ extension PopupSearchView {
         }
     }
 
-    func updateSectionSnapshot(at section: Section, with items: [SectionItem]) {
+    func updateSectionSnapshot(at section: PopupSearchSection, with items: [SectionItem]) {
         if items.isEmpty {
             guard var snapshot = dataSource?.snapshot() else { return }
             snapshot.deleteSections([section])
@@ -293,21 +293,13 @@ extension PopupSearchView {
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
-    func getSectionsFromDataSource() -> [Section] {
+    func getSectionsFromDataSource() -> [PopupSearchSection] {
         return dataSource?.snapshot().sectionIdentifiers ?? []
     }
 }
 
 // MARK: - Section information
 extension PopupSearchView {
-    /// View를 구성하는 section을 정의
-    enum Section: CaseIterable, Hashable {
-        case recentSearch
-        case category
-        case searchResultHeader
-        case searchResult
-    }
-
     /// Section에 들어갈 Item을 정의한 변수
     enum SectionItem: Hashable {
         case recentSearchItem(TagModel)

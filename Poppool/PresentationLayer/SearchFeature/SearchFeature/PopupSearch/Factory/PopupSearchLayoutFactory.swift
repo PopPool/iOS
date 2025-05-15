@@ -4,7 +4,7 @@ import UIKit
 final class PopupSearchLayoutFactory {
 
     func makeCollectionViewLayout(
-        dataSourceProvider: @escaping () -> UICollectionViewDiffableDataSource<PopupSearchView.Section, PopupSearchView.SectionItem>?
+        dataSourceProvider: @escaping () -> UICollectionViewDiffableDataSource<PopupSearchSection, PopupSearchView.SectionItem>?
     ) -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ -> NSCollectionLayoutSection? in
             guard let self = self,
