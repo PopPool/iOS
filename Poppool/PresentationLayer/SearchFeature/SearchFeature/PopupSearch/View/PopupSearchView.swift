@@ -278,16 +278,18 @@ extension PopupSearchView {
         empty: SectionItem? = nil
     ) {
         guard var snapshot = dataSource?.snapshot() else { return }
-
-        snapshot.deleteSections([.searchResultHeader, .searchResult])
-
-        snapshot.appendSections( [.searchResultHeader, .searchResult])
-        snapshot.appendItems([header], toSection: .searchResultHeader)
+        snapshot.deleteSections([.searchResultHeader, .searchResult, .searchResultEmpty])
 
         if let empty {
-            snapshot.appendItems([empty], toSection: .searchResult)
+            snapshot.appendSections([.searchResultHeader, .searchResultEmpty])
+            snapshot.appendItems([header], toSection: .searchResultHeader)
+            snapshot.appendItems([empty], toSection: .searchResultEmpty)
+            collectionView.isScrollEnabled = false
         } else {
+            snapshot.appendSections([.searchResultHeader, .searchResult])
+            snapshot.appendItems([header], toSection: .searchResultHeader)
             snapshot.appendItems(items, toSection: .searchResult)
+            collectionView.isScrollEnabled = true
         }
 
         dataSource?.apply(snapshot, animatingDifferences: false)

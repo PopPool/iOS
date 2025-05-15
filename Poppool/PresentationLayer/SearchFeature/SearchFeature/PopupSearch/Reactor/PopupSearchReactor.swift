@@ -438,7 +438,9 @@ private extension PopupSearchReactor {
     }
 
     func makeSearchResultEmpty(state: State) -> String? {
-        if !currentState.searchResultItems.isEmpty { return nil } else if currentState.isSearching { return "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요" } else { return "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요" }
+        if !currentState.searchResultItems.isEmpty { return nil }
+        else if currentState.isSearching { return "검색 결과가 없어요 :(\n다른 키워드로 검색해주세요" }
+        else { return "검색 결과가 없어요 :(\n다른 옵션을 선택해주세요" }
     }
 
     /// 받침에 따라 이/가 를 판단해서 붙여준다.

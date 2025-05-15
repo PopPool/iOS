@@ -5,4 +5,5 @@ enum PopupSearchSection: CaseIterable, Hashable {
     case category
     case searchResultHeader
     case searchResult
+    case searchResultEmpty
 }

@@ -25,12 +25,10 @@ final class PopupSearchLayoutFactory {
                 return makeSearchResultHeaderSectionLayout()
 
             case .searchResult:
-                let sectionSnapshot = dataSource.snapshot(for: sectionType)
-                let hasEmptyItem = sectionSnapshot.items.contains { item in
-                    if case .searchResultEmptyItem = item { return true }
-                    return false
-                }
-                return makeSearchResultSectionLayout(hasEmptyItem: hasEmptyItem)
+                return makeSearchResultSectionLayout()
+
+            case .searchResultEmpty:
+                return makeSearchResultEmptySectionLayout()
             }
         })
     }
@@ -95,12 +93,10 @@ final class PopupSearchLayoutFactory {
         return section
     }
 
-    func makeSearchResultSectionLayout(hasEmptyItem: Bool) -> NSCollectionLayoutSection {
-        let itemWidth: NSCollectionLayoutDimension = hasEmptyItem ? .fractionalWidth(1.0) : .fractionalWidth(0.5)
-
+    func makeSearchResultSectionLayout() -> NSCollectionLayoutSection {
         // Item
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: itemWidth,
+            widthDimension: .fractionalWidth(0.5),
             heightDimension: .absolute(249)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -120,6 +116,33 @@ final class PopupSearchLayoutFactory {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
         section.interGroupSpacing = 24
+
+        return section
+    }
+
+    func makeSearchResultEmptySectionLayout() -> NSCollectionLayoutSection {
+
+        // Item
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        // Group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 0, trailing: 20)
 
         return section
     }
