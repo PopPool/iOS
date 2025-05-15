@@ -45,7 +45,7 @@ private extension PopUpImagesCollectionView {
 
     func configureUI() {
         self.backgroundColor = .clear
-        self.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
+        self.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identifiers)
         self.dataSource = self
         self.delegate = self
         self.showsHorizontalScrollIndicator = false
@@ -68,7 +68,7 @@ extension PopUpImagesCollectionView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ImageCell.identifier,
+            withReuseIdentifier: ImageCell.identifiers,
             for: indexPath
         ) as? ImageCell else {
             return UICollectionViewCell()

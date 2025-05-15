@@ -5,8 +5,6 @@ import DesignSystem
 import SnapKit
 
 final class ImageCell: UICollectionViewCell {
-    static let identifier = "ImageCell"
-
     // UI
     private let thumbnailImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
