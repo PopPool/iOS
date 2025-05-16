@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0506BE882DD79A6C006CDEDE /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 0506BE872DD79A6C006CDEDE /* RxCocoa */; };
 		052413092DCF7DA100C42E2D /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; };
 		0524130A2DCF7DA100C42E2D /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A96202DCE38B500C0DD58 /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
@@ -40,7 +41,6 @@
 		05CFFBF42DCB908B0051129F /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; };
 		05CFFBF52DCB908B0051129F /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23422DC49AA200C761A5 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05CFFBF72DCB90A10051129F /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05CFFBF62DCB90A10051129F /* SnapKit */; };
-		05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233B2DC49A7600C761A5 /* RxCocoa */; };
 		05EC233E2DC49A7600C761A5 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC233D2DC49A7600C761A5 /* RxSwift */; };
 		05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC23402DC49A8B00C761A5 /* ReactorKit */; };
 		05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EC23462DC49AA800C761A5 /* DomainInterface.framework */; };
@@ -178,6 +178,7 @@
 			files = (
 				05734C442DCDF7240093825D /* PresentationInterface.framework in Frameworks */,
 				05EC2AE92DC7C07400C761A5 /* RxRelay in Frameworks */,
+				0506BE882DD79A6C006CDEDE /* RxCocoa in Frameworks */,
 				05EC285F2DC5C1CF00C761A5 /* DesignSystem.framework in Frameworks */,
 				05EC23472DC49AA800C761A5 /* DomainInterface.framework in Frameworks */,
 				05EC234B2DC49AB400C761A5 /* Then in Frameworks */,
@@ -185,7 +186,6 @@
 				05EC234E2DC49AC100C761A5 /* SnapKit in Frameworks */,
 				05734C082DCDA7D20093825D /* SearchFeatureInterface.framework in Frameworks */,
 				05EC23412DC49A8B00C761A5 /* ReactorKit in Frameworks */,
-				05EC233C2DC49A7600C761A5 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,12 +306,12 @@
 			);
 			name = SearchFeature;
 			packageProductDependencies = (
-				05EC233B2DC49A7600C761A5 /* RxCocoa */,
 				05EC233D2DC49A7600C761A5 /* RxSwift */,
 				05EC23402DC49A8B00C761A5 /* ReactorKit */,
 				05EC234A2DC49AB400C761A5 /* Then */,
 				05EC234D2DC49AC100C761A5 /* SnapKit */,
 				05EC2AE82DC7C07400C761A5 /* RxRelay */,
+				0506BE872DD79A6C006CDEDE /* RxCocoa */,
 			);
 			productName = SearchFeature;
 			productReference = 0516336D2DC457A900A6C0D1 /* SearchFeature.framework */;
@@ -938,6 +938,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0506BE872DD79A6C006CDEDE /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
 		054A96252DCE38E900C0DD58 /* Tabman */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 054A96242DCE38E900C0DD58 /* XCRemoteSwiftPackageReference "Tabman" */;
@@ -972,11 +977,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05EC234C2DC49AC100C761A5 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		05EC233B2DC49A7600C761A5 /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05EC233A2DC49A7600C761A5 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
 		};
 		05EC233D2DC49A7600C761A5 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
