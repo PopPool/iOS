@@ -27,9 +27,9 @@ public protocol UserAPIRepository {
     func putUserTailoredInfo(gender: String?, age: Int32) -> Completable
 
     func putUserCategory(
-        interestCategoriesToAdd: [Int64],
-        interestCategoriesToDelete: [Int64],
-        interestCategoriesToKeep: [Int64]
+        interestCategoriesToAdd: [Int],
+        interestCategoriesToDelete: [Int],
+        interestCategoriesToKeep: [Int]
     ) -> Completable
 
     func putUserProfile(

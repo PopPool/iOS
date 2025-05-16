@@ -24,6 +24,12 @@
       <FileRef
          location = "group:Presentation/Presentation.xcodeproj">
       </FileRef>
+      <FileRef
+         location = "group:SearchFeature/SearchFeature.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:DesignSystem/DesignSystem.xcodeproj">
+      </FileRef>
    </Group>
    <Group
       location = "group:CoreLayer"

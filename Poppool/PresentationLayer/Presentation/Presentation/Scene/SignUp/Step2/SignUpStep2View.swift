@@ -1,11 +1,6 @@
-//
-//  SignUpStep2View.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 
@@ -51,7 +46,7 @@ final class SignUpStep2View: UIView {
 
     let clearButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "icon_clearButton"), for: .normal)
+        button.setImage(UIImage(named: "icon_clear_button"), for: .normal)
         return button
     }()
 
@@ -75,7 +70,7 @@ final class SignUpStep2View: UIView {
         let attributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g1000 // 텍스트 색상
             ]
@@ -83,7 +78,7 @@ final class SignUpStep2View: UIView {
         let disabledAttributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g300 // 텍스트 색상
             ]

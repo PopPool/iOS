@@ -1,9 +1,4 @@
-//
-//  SignUpCompleteReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/27/24.
-//
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

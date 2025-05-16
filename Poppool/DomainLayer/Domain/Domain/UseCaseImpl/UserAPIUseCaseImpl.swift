@@ -76,9 +76,9 @@ public final class UserAPIUseCaseImpl: UserAPIUseCase {
     }
 
     public func putUserCategory(
-        interestCategoriesToAdd: [Int64],
-        interestCategoriesToDelete: [Int64],
-        interestCategoriesToKeep: [Int64]
+        interestCategoriesToAdd: [Int],
+        interestCategoriesToDelete: [Int],
+        interestCategoriesToKeep: [Int]
     ) -> Completable {
         return repository.putUserCategory(
             interestCategoriesToAdd: interestCategoriesToAdd,

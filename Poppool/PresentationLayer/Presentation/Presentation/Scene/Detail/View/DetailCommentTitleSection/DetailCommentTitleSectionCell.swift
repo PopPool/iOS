@@ -1,11 +1,6 @@
-//
-//  DetailCommentTitleSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/18/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 import SnapKit
@@ -28,7 +23,7 @@ final class DetailCommentTitleSectionCell: UICollectionViewCell {
         let attributedTitle = NSAttributedString(
             string: "전체보기",
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!,  // 커스텀 폰트 적용
+                .font: UIFont.korFont(style: .regular, size: 13),  // 커스텀 폰트 적용
                 .underlineStyle: NSUnderlineStyle.single.rawValue // 밑줄 스타일
             ]
         )

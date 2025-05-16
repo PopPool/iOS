@@ -1,11 +1,6 @@
-//
-//  DetailContentSection.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/10/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 

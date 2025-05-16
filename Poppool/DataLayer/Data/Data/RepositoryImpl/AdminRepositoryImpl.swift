@@ -44,7 +44,7 @@ public final class AdminRepositoryImpl: AdminRepository {
            AdminStoreDetail(
                id: dto.id,
                name: dto.name,
-               categoryId: dto.categoryId,
+               categoryId: Int(dto.categoryId),
                categoryName: dto.categoryName,
                description: dto.desc,
                address: dto.address,
@@ -77,7 +77,7 @@ public final class AdminRepositoryImpl: AdminRepository {
     public func createStore(params: CreateStoreParams) -> Completable {
         let dto = CreatePopUpStoreRequestDTO(
             name: params.name,
-            categoryId: params.categoryId,
+            categoryId: Int64(params.categoryId),
             desc: params.desc,
             address: params.address,
             startDate: params.startDate,
@@ -99,7 +99,7 @@ public final class AdminRepositoryImpl: AdminRepository {
             popUpStore: UpdatePopUpStoreRequestDTO.PopUpStore(
                 id: params.id,
                 name: params.name,
-                categoryId: params.categoryId,
+                categoryId: Int64(params.categoryId),
                 desc: params.desc,
                 address: params.address,
                 startDate: params.startDate,

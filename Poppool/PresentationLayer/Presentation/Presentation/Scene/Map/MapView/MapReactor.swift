@@ -46,7 +46,7 @@ final class MapReactor: Reactor {
         case setSelectedStore(MapPopUpStore) // 선택된 스토어 상태
         case setViewportStores([MapPopUpStore])
         case setError(Error?)
-        case setCategoryMapping([String: Int64])
+        case setCategoryMapping([String: Int])
     }
 
     struct State {
@@ -64,7 +64,7 @@ final class MapReactor: Reactor {
         var selectedStore: MapPopUpStore? = nil // 선택된 스토어
         var viewportStores: [MapPopUpStore] = []
         var error: Error? = nil
-        var categoryMapping: [String: Int64] = [:]
+        var categoryMapping: [String: Int] = [:]
     }
 
     let initialState: State
@@ -96,7 +96,7 @@ final class MapReactor: Reactor {
         case .fetchCategories:
             return mapUseCase.fetchCategories()
                 .map { categories in
-                    let mapping = categories.reduce(into: [String: Int64]()) { dict, category in
+                    let mapping = categories.reduce(into: [String: Int]()) { dict, category in
                         dict[category.category] = category.categoryId
                     }
                     return .setCategoryMapping(mapping)

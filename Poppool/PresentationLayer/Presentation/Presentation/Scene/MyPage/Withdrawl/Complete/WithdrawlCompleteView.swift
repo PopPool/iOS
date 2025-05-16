@@ -1,11 +1,6 @@
-//
-//  WithdrawlCompleteView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/7/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 

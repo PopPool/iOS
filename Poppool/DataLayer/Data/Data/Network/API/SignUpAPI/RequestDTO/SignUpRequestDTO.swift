@@ -13,6 +13,6 @@ struct SignUpRequestDTO: Encodable {
     var age: Int32
     var socialEmail: String
     var socialType: String
-    var interestCategories: [Int64]
+    var interestCategories: [Int]
     var appleAuthorizationCode: String?
 }

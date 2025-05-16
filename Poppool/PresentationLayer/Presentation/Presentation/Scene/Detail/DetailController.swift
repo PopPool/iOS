@@ -1,5 +1,7 @@
 import UIKit
 
+import DesignSystem
+
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -63,7 +65,7 @@ private extension DetailController {
         mainView.contentCollectionView.register(DetailCommentTitleSectionCell.self, forCellWithReuseIdentifier: DetailCommentTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailCommentSectionCell.self, forCellWithReuseIdentifier: DetailCommentSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailEmptyCommetSectionCell.self, forCellWithReuseIdentifier: DetailEmptyCommetSectionCell.identifiers)
-        mainView.contentCollectionView.register(SearchTitleSectionCell.self, forCellWithReuseIdentifier: SearchTitleSectionCell.identifiers)
+        mainView.contentCollectionView.register(SimilarTitleSectionCell.self, forCellWithReuseIdentifier: SimilarTitleSectionCell.identifiers)
         mainView.contentCollectionView.register(DetailSimilarSectionCell.self, forCellWithReuseIdentifier: DetailSimilarSectionCell.identifiers)
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in

@@ -22,7 +22,7 @@ public final class MapUseCaseImpl: MapUseCase {
         northEastLon: Double,
         southWestLat: Double,
         southWestLon: Double,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]> {
         return repository.fetchStoresInBounds(
             northEastLat: northEastLat,
@@ -40,7 +40,7 @@ public final class MapUseCaseImpl: MapUseCase {
 
     public func searchStores(
         query: String,
-        categories: [Int64]
+        categories: [Int]
     ) -> Observable<[MapPopUpStore]> {
         return repository.searchStores(
             query: query,

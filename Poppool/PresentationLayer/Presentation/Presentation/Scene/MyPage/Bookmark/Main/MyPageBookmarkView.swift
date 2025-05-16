@@ -1,11 +1,6 @@
-//
-//  MyPageBookmarkView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/14/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 
@@ -42,7 +37,7 @@ final class MyPageBookmarkView: UIView {
         let buttonTitle = NSAttributedString(
             string: "추천 팝업 보러가기",
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!,
+                .font: UIFont.korFont(style: .regular, size: 13),
                 .underlineStyle: NSUnderlineStyle.single.rawValue,
                 .foregroundColor: UIColor.g1000
             ]

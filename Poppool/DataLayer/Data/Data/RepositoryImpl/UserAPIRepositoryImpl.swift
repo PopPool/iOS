@@ -86,14 +86,14 @@ public final class UserAPIRepositoryImpl: UserAPIRepository {
     }
 
     public func putUserCategory(
-        interestCategoriesToAdd: [Int64],
-        interestCategoriesToDelete: [Int64],
-        interestCategoriesToKeep: [Int64]
+        interestCategoriesToAdd: [Int],
+        interestCategoriesToDelete: [Int],
+        interestCategoriesToKeep: [Int]
     ) -> Completable {
         let request = PutUserCategoryRequestDTO(
-            interestCategoriesToAdd: interestCategoriesToAdd,
-            interestCategoriesToDelete: interestCategoriesToDelete,
-            interestCategoriesToKeep: interestCategoriesToKeep
+            interestCategoriesToAdd: interestCategoriesToAdd.map { Int64($0 ) },
+            interestCategoriesToDelete: interestCategoriesToDelete.map { Int64($0 ) },
+            interestCategoriesToKeep: interestCategoriesToKeep.map { Int64($0 ) }
         )
         let endPoint = UserAPIEndPoint.putUserCategory(request: request)
         return provider.request(with: endPoint, interceptor: tokenInterceptor)

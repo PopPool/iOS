@@ -1,6 +1,7 @@
 import CoreLocation
 import UIKit
 
+import DesignSystem
 import DomainInterface
 import Infrastructure
 

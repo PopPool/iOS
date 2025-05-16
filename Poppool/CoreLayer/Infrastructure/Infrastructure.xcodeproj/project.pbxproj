@@ -46,7 +46,6 @@
 			files = (
 				4EBC91D32DB8039800495C3B /* OSLog.framework in Frameworks */,
 				0522C1D72DB67B4F00B141FF /* RxSwift in Frameworks */,
-				05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */,
 				05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -112,7 +111,6 @@
 			name = Infrastructure;
 			packageProductDependencies = (
 				05EC93D82DB6605100771CB3 /* RxCocoa */,
-				05EC93DD2DB6612100771CB3 /* RxGesture */,
 				0522C1D62DB67B4F00B141FF /* RxSwift */,
 			);
 			productName = Infrastructure;
@@ -435,11 +433,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 05C1D82E2DB53CE300508FFD /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
-		};
-		05EC93DD2DB6612100771CB3 /* RxGesture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 05EC93DC2DB6612100771CB3 /* XCRemoteSwiftPackageReference "RxGesture" */;
-			productName = RxGesture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,11 +1,7 @@
-//
-//  MyPageTermsReactor.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 2/4/25.
-//
-
 import Foundation
+
+import DesignSystem
+
 import ReactorKit
 import RxCocoa
 import RxSwift

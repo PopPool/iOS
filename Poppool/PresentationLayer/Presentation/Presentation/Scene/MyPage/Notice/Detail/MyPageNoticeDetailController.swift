@@ -1,11 +1,6 @@
-//
-//  MyPageNoticeDetailController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/13/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

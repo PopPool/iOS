@@ -39,17 +39,6 @@
 	<string>${POPPOOL_BASE_URL}</string>
 	<key>POPPOOL_S3_BASE_URL</key>
 	<string>${POPPOOL_S3_BASE_URL}</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>GothicA1-Bold.ttf</string>
-		<string>GothicA1-Light.ttf</string>
-		<string>GothicA1-Medium.ttf</string>
-		<string>GothicA1-Regular.ttf</string>
-		<string>Poppins-Bold.ttf</string>
-		<string>Poppins-Light.ttf</string>
-		<string>Poppins-Medium.ttf</string>
-		<string>Poppins-Regular.ttf</string>
-	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -1,7 +1,10 @@
+import UIKit
+
+import DesignSystem
+
 import ReactorKit
 import RxSwift
 import SnapKit
-import UIKit
 
 final class StoreListCell: UICollectionViewCell {
     static let identifier = "StoreListCell"

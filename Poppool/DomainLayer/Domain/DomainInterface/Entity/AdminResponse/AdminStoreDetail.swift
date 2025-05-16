@@ -1,7 +1,7 @@
 import Foundation
 
 public struct AdminStoreDetail {
-    public init(id: Int64, name: String, categoryId: Int64, categoryName: String, description: String, address: String, startDate: String, endDate: String, createUserId: String, createDateTime: String, mainImageUrl: String, bannerYn: Bool, images: [StoreImage], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String) {
+    public init(id: Int64, name: String, categoryId: Int, categoryName: String, description: String, address: String, startDate: String, endDate: String, createUserId: String, createDateTime: String, mainImageUrl: String, bannerYn: Bool, images: [StoreImage], latitude: Double, longitude: Double, markerTitle: String, markerSnippet: String) {
         self.id = id
         self.name = name
         self.categoryId = categoryId
@@ -23,7 +23,7 @@ public struct AdminStoreDetail {
 
     public let id: Int64
     public let name: String
-    public let categoryId: Int64
+    public let categoryId: Int
     public let categoryName: String
     public let description: String
     public let address: String
