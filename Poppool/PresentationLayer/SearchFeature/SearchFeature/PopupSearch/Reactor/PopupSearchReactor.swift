@@ -109,193 +109,55 @@ public final class PopupSearchReactor: Reactor {
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return fetchSearchResult()
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return Observable.concat([
-                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                        .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateSearchResultDataSource)
-                    ])
-                }
+            return handleViewDidLoad()
 
         case .searchBarEditing(let text):
-            return .just(.updateClearButtonIsHidden(to: text.isEmpty ? true : false))
+            return handleSearchBarEditing(text)
 
         case .searchBarExitEditing(let text):
-            return fetchSearchResult(keyword: text)
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return Observable.concat([
-                        .just(.setupRecentSearch(items: [])),
-                        .just(.setupCategory(items: [])),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(
-                            keyword: owner.makePostPositionedText(text),
-                            count: Int64(response.popupStoreList.count)
-                        ))), // FIXME: API에 해당 결과값이 아직 없음
-                        .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchingState(to: true)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateClearButtonIsHidden(to: true)),
-                        .just(.updateEditingState),
-                        .just(.updateSearchResultDataSource)
-                    ])
-                }
+            return handleSearchBarExitEditing(text)
 
         case .searchBarEndEditing:
-            return .concat([
-                .just(.updateClearButtonIsHidden(to: true)),
-                .just(.updateEditingState)
-            ])
+            return handleSearchBarEndEditing()
 
         case .searchBarClearButtonTapped:
-            return Observable.concat([
-                .just(.updateClearButtonIsHidden(to: true)),
-                .just(.updateSearchBar(to: nil))
-            ])
+            return handleSearchBarClear()
 
         case .searchBarCancelButtonTapped:
-            if currentState.isSearching {
-                return fetchSearchResult()
-                    .withUnretained(self)
-                    .flatMap { (owner, response) -> Observable<Mutation> in
-                        return Observable.concat([
-                            .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                            .just(.setupCategory(items: owner.makeCategoryItems())),
-                            .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                            .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                            .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                            .just(.updateCurrentPage(to: 0)),
-                            .just(.updateSearchingState(to: false)),
-                            .just(.updateSearchResultEmpty),
-                            .just(.updateSearchBar(to: nil)),
-                            .just(.updateEditingState),
-                            .just(.updateSearchResultDataSource)
-                        ])
-                    }
-            } else { return .just(.present(target: .before)) }
+            return handleSearchBarCancel()
 
         case .recentSearchTagButtonTapped(let indexPath):
-            let keyword = self.findRecentSearchKeyword(at: indexPath)
-            return fetchSearchResult(keyword: keyword)
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return Observable.concat([
-                        .just(.setupRecentSearch(items: [])),
-                        .just(.setupCategory(items: [])),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(
-                            keyword: owner.makePostPositionedText(keyword),
-                            count: Int64(response.popupStoreList.count)
-                        ))),
-                        .just(.setupSearchResultTotalPageCount(count: 0)),  // FIXME: API에 해당 결과값이 아직 없음
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchBar(to: keyword)),
-                        .just(.updateSearchingState(to: true)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateClearButtonIsHidden(to: true)),
-                        .just(.updateEditingState),
-                        .just(.updateSearchResultDataSource)
-                    ])
-                }
+            return handleRecentSearchTagTap(at: indexPath)
 
         case .recentSearchTagRemoveButtonTapped(let text):
-            self.removeRecentSearchItem(text: text)
-            return Observable.concat([
-                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateSearchResultDataSource)
-            ])
+            return handleRecentSearchTagRemove(text)
 
         case .recentSearchTagRemoveAllButtonTapped:
-            self.removeAllRecentSearchItems()
-            return .concat([
-                .just(.setupRecentSearch(items: self.makeRecentSearchItems())),
-                .just(.updateSearchResultDataSource)
-            ])
+            return handleRecentSearchTagRemoveAll()
 
         case .categoryTagRemoveButtonTapped(let categoryID):
-            self.removeCategoryItem(by: categoryID)
-            return fetchSearchResult()
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return Observable.concat([
-                        .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateSearchResultDataSource)
-                    ])
-                }
+            return handleCategoryTagRemove(categoryID)
 
         case .categoryTagButtonTapped:
             return .just(.present(target: .categorySelector))
 
         case .categoryChangedBySelector:
-            return fetchSearchResult()
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return .concat([
-                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                        .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateSearchResultDataSource)
-                    ])
-            }
+            return handleCategoryChanged()
 
         case .searchResultFilterButtonTapped:
             return .just(.present(target: .filterSelector))
 
         case .searchResultFilterChangedBySelector:
-            return fetchSearchResult()
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return .concat([
-                        .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
-                        .just(.setupCategory(items: owner.makeCategoryItems())),
-                        .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
-                        .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
-                        .just(.updateCurrentPage(to: 0)),
-                        .just(.updateSearchResultEmpty),
-                        .just(.updateSearchResultDataSource)
-                    ])
-            }
+            return handleFilterChanged()
 
         case .searchResultItemTapped(let indexPath):
-            guard let popupID = self.findPopupStoreID(at: indexPath) else { return .empty() }
-            return .just(.present(target: .popupDetail(popupID: popupID)))
+            return handleSearchResultItemTap(at: indexPath)
 
         case .searchResultBookmarkButtonTapped(let indexPath):
-            return fetchSearchResultBookmark(at: indexPath)
-                .andThen(.concat([
-                    .just(.updateSearchResultBookmark(indexPath: indexPath)),
-                    .just(.updateSearchResultDataSource)
-                ]))
+            return handleSearchResultBookmark(at: indexPath)
 
         case .searchResultPrefetchItems(let indexPathList):
-            guard isPrefetchable(indexPathList: indexPathList) else { return .empty() }
-            return fetchSearchResult(page: currentState.currentPage + 1)
-                .withUnretained(self)
-                .flatMap { (owner, response) -> Observable<Mutation> in
-                    return .concat([
-                        .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
-                        .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
-                        .just(.updateSearchResultDataSource)
-                    ])
-                }
+            return handleSearchResultPrefetch(at: indexPathList)
         }
     }
 
@@ -486,5 +348,150 @@ private extension PopupSearchReactor {
         let hasNextPage = currentState.currentPage < (currentState.totalPagesCount - 1)
 
         return isScrollToEnd && hasNextPage
+    }
+}
+
+
+// MARK: - Mutate Handlers
+private extension PopupSearchReactor {
+    func handleViewDidLoad() -> Observable<Mutation> {
+        return loadDefaultSearchResults()
+    }
+
+    func handleSearchBarEditing(_ text: String) -> Observable<Mutation> {
+        return .just(.updateClearButtonIsHidden(to: !text.isEmpty))
+    }
+
+    func handleSearchBarExitEditing(_ text: String) -> Observable<Mutation> {
+        return loadKeywordSearchResults(text)
+    }
+
+    func handleSearchBarEndEditing() -> Observable<Mutation> {
+        return Observable.concat([
+            .just(.updateClearButtonIsHidden(to: true)),
+            .just(.updateEditingState)
+        ])
+    }
+
+    func handleSearchBarClear() -> Observable<Mutation> {
+        return Observable.concat([
+            .just(.updateClearButtonIsHidden(to: true)),
+            .just(.updateSearchBar(to: nil))
+        ])
+    }
+
+    func handleSearchBarCancel() -> Observable<Mutation> {
+        if currentState.isSearching {
+            return loadDefaultSearchResults()
+        } else {
+            return .just(.present(target: .before))
+        }
+    }
+
+    func handleRecentSearchTagTap(at indexPath: IndexPath) -> Observable<Mutation> {
+        let keyword = findRecentSearchKeyword(at: indexPath)
+        return loadKeywordSearchResults(keyword)
+    }
+
+    func handleRecentSearchTagRemove(_ text: String) -> Observable<Mutation> {
+        removeRecentSearchItem(text: text)
+        return Observable.concat([
+            .just(.setupRecentSearch(items: makeRecentSearchItems())),
+            .just(.updateSearchResultDataSource)
+        ])
+    }
+
+    func handleRecentSearchTagRemoveAll() -> Observable<Mutation> {
+        removeAllRecentSearchItems()
+        return Observable.concat([
+            .just(.setupRecentSearch(items: makeRecentSearchItems())),
+            .just(.updateSearchResultDataSource)
+        ])
+    }
+
+    func handleCategoryTagRemove(_ categoryID: Int) -> Observable<Mutation> {
+        removeCategoryItem(by: categoryID)
+        return loadDefaultSearchResults()
+    }
+
+    func handleCategoryChanged() -> Observable<Mutation> {
+        return loadDefaultSearchResults()
+    }
+
+    func handleFilterChanged() -> Observable<Mutation> {
+        return loadDefaultSearchResults()
+    }
+
+    func handleSearchResultItemTap(at indexPath: IndexPath) -> Observable<Mutation> {
+        guard let popupID = findPopupStoreID(at: indexPath) else { return .empty() }
+        return .just(.present(target: .popupDetail(popupID: popupID)))
+    }
+
+    func handleSearchResultBookmark(at indexPath: IndexPath) -> Observable<Mutation> {
+        return fetchSearchResultBookmark(at: indexPath)
+            .andThen(.concat([
+                .just(.updateSearchResultBookmark(indexPath: indexPath)),
+                .just(.updateSearchResultDataSource)
+            ]))
+    }
+
+    func handleSearchResultPrefetch(at indexPathList: [IndexPath]) -> Observable<Mutation> {
+        guard isPrefetchable(prefetchCount: 4, indexPathList: indexPathList) else { return .empty() }
+        return fetchSearchResult(page: currentState.currentPage + 1)
+            .withUnretained(self)
+            .flatMap { owner, response in
+                Observable.concat([
+                    .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                    .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
+                    .just(.updateSearchResultDataSource)
+                ])
+            }
+    }
+}
+
+// MARK: - Load Search Results
+private extension PopupSearchReactor {
+    func loadDefaultSearchResults(page: Int32 = 0) -> Observable<Mutation> {
+        return fetchSearchResult(page: page)
+            .withUnretained(self)
+            .flatMap { owner, response in
+                Observable.concat([
+                    .just(.setupRecentSearch(items: owner.makeRecentSearchItems())),
+                    .just(.setupCategory(items: owner.makeCategoryItems())),
+                    .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(count: response.totalElements))),
+                    .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
+                    .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
+                    .just(.updateCurrentPage(to: 0)),
+                    .just(.updateSearchingState(to: false)),
+                    .just(.updateSearchResultEmpty),
+                    .just(.updateSearchBar(to: nil)),
+                    .just(.updateEditingState),
+                    .just(.updateSearchResultDataSource)
+                ])
+            }
+    }
+
+    func loadKeywordSearchResults(_ keyword: String?) -> Observable<Mutation> {
+        guard let keyword = keyword else { return .empty() }
+        return fetchSearchResult(keyword: keyword)
+            .withUnretained(self)
+            .flatMap { owner, response in
+                Observable.concat([
+                    .just(.setupRecentSearch(items: [])),
+                    .just(.setupCategory(items: [])),
+                    .just(.setupSearchResult(items: owner.makeSearchResultItems(response.popupStoreList, response.loginYn))),
+                    .just(.setupSearchResultHeader(item: owner.makeSearchResultHeaderInput(
+                        keyword: owner.makePostPositionedText(keyword),
+                        count: Int64(response.popupStoreList.count)
+                    ))),
+                    .just(.setupSearchResultTotalPageCount(count: 0)),
+                    .just(.updateCurrentPage(to: 0)),
+                    .just(.updateSearchingState(to: true)),
+                    .just(.updateSearchResultEmpty),
+                    .just(.updateClearButtonIsHidden(to: true)),
+                    .just(.updateEditingState),
+                    .just(.updateSearchResultDataSource)
+                ])
+            }
     }
 }
