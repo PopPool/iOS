@@ -12,7 +12,7 @@ final class PopupSearchView: UIView {
 
     // MARK: - Properties
     private var dataSource: UICollectionViewDiffableDataSource<PopupSearchSection, SectionItem>?
-    private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
+    private var layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
 
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()

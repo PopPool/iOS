@@ -1,7 +1,6 @@
 import UIKit
 
 // MARK: - Layout
-final class PopupSearchLayoutFactory {
 
     func makeCollectionViewLayout(
         dataSourceProvider: @escaping () -> UICollectionViewDiffableDataSource<PopupSearchSection, PopupSearchView.SectionItem>?
@@ -9,6 +8,7 @@ final class PopupSearchLayoutFactory {
         return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ -> NSCollectionLayoutSection? in
             guard let self = self,
                   let dataSource = dataSourceProvider() else { return nil }
+struct PopupSearchLayoutFactory {
 
            // sectionIndex를 사용하여 현재 dataSource에서 Section 타입을 가져옴
            guard sectionIndex < dataSource.snapshot().numberOfSections,
