@@ -207,15 +207,17 @@ extension PopupSearchViewController {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$updateSearchResultDataSource)
+        reactor.pulse(\.$updateSearchResultSection)
             .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in
+                let isEmpty = state.updateSearchResultSection == nil
+                let emptyCaseTitle = state.updateSearchResultSection
+
                 owner.mainView.updateSearchResultSectionSnapshot(
                     with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
                     header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader),
-                    empty: state.searchResultEmpty == nil ? nil :
-                    PopupSearchView.SectionItem.searchResultEmptyItem(state.searchResultEmpty!)
+                    empty: isEmpty ? nil : PopupSearchView.SectionItem.searchResultEmptyItem(emptyCaseTitle!)
                 )
             }
             .disposed(by: disposeBag)

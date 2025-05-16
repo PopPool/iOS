@@ -48,9 +48,8 @@ public final class PopupSearchReactor: Reactor {
         case updateClearButtonIsHidden(to: Bool)
         case updateCurrentPage(to: Int32)
         case updateSearchingState(to: Bool)
-        case updateSearchResultEmpty
         case updateSearchResultBookmark(indexPath: IndexPath)
-        case updateSearchResultDataSource
+        case updateSearchResultSection
 
         case present(target: PresentTarget)
     }
@@ -68,13 +67,12 @@ public final class PopupSearchReactor: Reactor {
         var categoryItems: [TagModel] = []
         var searchResultItems: [SearchResultModel] = []
         var searchResultHeader: SearchResultHeaderModel = SearchResultHeaderModel(filterText: Filter.shared.title)
-        var searchResultEmpty: String?
 
         @Pulse var searchBarText: String? = nil
         @Pulse var present: PresentTarget?
         @Pulse var clearButtonIsHidden: Bool?
         @Pulse var endEditing: Void?
-        @Pulse var updateSearchResultDataSource: Void?
+        @Pulse var updateSearchResultSection: String?
         @Pulse var dismiss: Void?
 
         fileprivate var isSearching: Bool = false
@@ -197,14 +195,11 @@ public final class PopupSearchReactor: Reactor {
         case .updateSearchingState(let isSearching):
             newState.isSearching = isSearching
 
-        case .updateSearchResultEmpty:
-            newState.searchResultEmpty = makeSearchResultEmpty(state: newState)
-
         case .updateSearchResultBookmark(let indexPath):
             newState.searchResultItems[indexPath.item].isBookmark.toggle()
 
-        case .updateSearchResultDataSource:
-            newState.updateSearchResultDataSource = ()
+        case .updateSearchResultSection:
+            newState.updateSearchResultSection = makeSearchResultEmpty(state: newState)
 
         case .present(let target):
             newState.present = target
@@ -397,7 +392,7 @@ private extension PopupSearchReactor {
         removeRecentSearchItem(text: text)
         return Observable.concat([
             .just(.setupRecentSearch(items: makeRecentSearchItems())),
-            .just(.updateSearchResultDataSource)
+            .just(.updateSearchResultSection)
         ])
     }
 
@@ -405,7 +400,7 @@ private extension PopupSearchReactor {
         removeAllRecentSearchItems()
         return Observable.concat([
             .just(.setupRecentSearch(items: makeRecentSearchItems())),
-            .just(.updateSearchResultDataSource)
+            .just(.updateSearchResultSection)
         ])
     }
 
@@ -431,7 +426,7 @@ private extension PopupSearchReactor {
         return fetchSearchResultBookmark(at: indexPath)
             .andThen(.concat([
                 .just(.updateSearchResultBookmark(indexPath: indexPath)),
-                .just(.updateSearchResultDataSource)
+                .just(.updateSearchResultSection)
             ]))
     }
 
@@ -443,7 +438,7 @@ private extension PopupSearchReactor {
                 Observable.concat([
                     .just(.appendSearchResult(items: owner.makeSearchResultItems(response.popUpStoreList, response.loginYn))),
                     .just(.updateCurrentPage(to: owner.currentState.currentPage + 1)),
-                    .just(.updateSearchResultDataSource)
+                    .just(.updateSearchResultSection)
                 ])
             }
     }
@@ -463,10 +458,9 @@ private extension PopupSearchReactor {
                     .just(.setupSearchResultTotalPageCount(count: response.totalPages)),
                     .just(.updateCurrentPage(to: 0)),
                     .just(.updateSearchingState(to: false)),
-                    .just(.updateSearchResultEmpty),
                     .just(.updateSearchBar(to: nil)),
                     .just(.updateEditingState),
-                    .just(.updateSearchResultDataSource)
+                    .just(.updateSearchResultSection)
                 ])
             }
     }
@@ -487,10 +481,9 @@ private extension PopupSearchReactor {
                     .just(.setupSearchResultTotalPageCount(count: 0)),
                     .just(.updateCurrentPage(to: 0)),
                     .just(.updateSearchingState(to: true)),
-                    .just(.updateSearchResultEmpty),
                     .just(.updateClearButtonIsHidden(to: true)),
                     .just(.updateEditingState),
-                    .just(.updateSearchResultDataSource)
+                    .just(.updateSearchResultSection)
                 ])
             }
     }
