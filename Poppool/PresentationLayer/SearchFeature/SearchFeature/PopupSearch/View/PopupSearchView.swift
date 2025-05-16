@@ -27,9 +27,12 @@ final class PopupSearchView: UIView {
     public let searchBar = PPSearchBarView()
 
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-        let layout = layoutFactory.makeCollectionViewLayout { [weak self] in self?.dataSource }
-
-        $0.setCollectionViewLayout(layout, animated: false)
+        layoutFactory.setSectionProvider { [weak self] index in
+            guard let self, let dataSource else { return nil }
+            return dataSource.sectionIdentifier(for: index)
+        }
+        
+        $0.setCollectionViewLayout(layoutFactory.makeCollectionViewLayout(), animated: false)
 
         $0.register(
             TagCollectionHeaderView.self,
