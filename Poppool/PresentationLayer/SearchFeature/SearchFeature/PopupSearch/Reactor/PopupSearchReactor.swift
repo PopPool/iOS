@@ -354,7 +354,7 @@ private extension PopupSearchReactor {
     }
 
     func handleSearchBarEditing(_ text: String) -> Observable<Mutation> {
-        return .just(.updateClearButtonIsHidden(to: !text.isEmpty))
+        return .just(.updateClearButtonIsHidden(to: text.isEmpty))
     }
 
     func handleSearchBarExitEditing(_ text: String) -> Observable<Mutation> {
