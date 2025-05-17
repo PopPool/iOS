@@ -13,23 +13,29 @@ struct PopupSearchLayoutFactory {
     }
 
     func makeCollectionViewLayout() -> UICollectionViewLayout {
-        return UICollectionViewCompositionalLayout { sectionIndex, environment -> NSCollectionLayoutSection? in
+        return UICollectionViewCompositionalLayout {
+            sectionIndex,
+            environment -> NSCollectionLayoutSection? in
             guard let sectionType = sectionProvider?(sectionIndex) else { return nil }
 
             switch sectionType {
             case .recentSearch:
                 let layout = self.tagLayoutProvider.makeLayout()
-                self.tagLayoutProvider.configureSectionInsets(layout, isRecentSearch: true)
+                layout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 20)
                 layout.boundarySupplementaryItems = [
-                    self.tagLayoutProvider.makeHeaderLayout(PopupSearchView.SectionHeaderKind.recentSearch.rawValue)
+                    self.tagLayoutProvider.makeHeaderLayout(
+                        PopupSearchView.SectionHeaderKind.recentSearch.rawValue
+                    )
                 ]
                 return layout
                 
             case .category:
                 let layout = self.tagLayoutProvider.makeLayout()
-                self.tagLayoutProvider.configureSectionInsets(layout, isRecentSearch: false)
+                layout.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
                 layout.boundarySupplementaryItems = [
-                    self.tagLayoutProvider.makeHeaderLayout(PopupSearchView.SectionHeaderKind.category.rawValue)
+                    self.tagLayoutProvider.makeHeaderLayout(
+                        PopupSearchView.SectionHeaderKind.category.rawValue
+                    )
                 ]
                 return layout
                 

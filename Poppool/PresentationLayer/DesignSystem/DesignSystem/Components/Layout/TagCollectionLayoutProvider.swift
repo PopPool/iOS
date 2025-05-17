@@ -40,12 +40,4 @@ public struct TagCollectionLayoutProvider: CollectionLayoutProvidable, HeaderLay
             alignment: .top
         )
     }
-    
-    public func configureSectionInsets(_ section: NSCollectionLayoutSection, isRecentSearch: Bool) {
-        if isRecentSearch {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 48, trailing: 20)
-        } else {
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 20)
-        }
-    }
 } 
