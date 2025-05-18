@@ -2,7 +2,7 @@ import UIKit
 
 public struct GridCollectionLayoutProvider: CollectionLayoutProvidable {
     public init() { }
-    
+
     public func makeLayout() -> NSCollectionLayoutSection {
         return CollectionLayoutBuilder()
             .item(width: .fractionalWidth(0.5), height: .absolute(249))

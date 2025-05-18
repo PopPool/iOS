@@ -31,7 +31,7 @@ final class PopupSearchView: UIView {
             guard let self, let dataSource else { return nil }
             return dataSource.sectionIdentifier(for: index)
         }
-        
+
         $0.setCollectionViewLayout(layoutFactory.makeCollectionViewLayout(), animated: false)
 
         $0.register(

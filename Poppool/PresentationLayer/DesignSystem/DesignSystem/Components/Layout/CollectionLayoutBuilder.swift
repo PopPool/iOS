@@ -7,7 +7,7 @@ public final class CollectionLayoutBuilder {
     private var interItemSpacing: NSCollectionLayoutSpacing?
     private var section: NSCollectionLayoutSection?
     private var headerItem: NSCollectionLayoutBoundarySupplementaryItem?
-    
+
     public init() { }
 
     public init(section existingSection: NSCollectionLayoutSection) {
@@ -26,7 +26,7 @@ public final class CollectionLayoutBuilder {
 
         return self
     }
-    
+
     @discardableResult
     public func group(
         width: NSCollectionLayoutDimension,
@@ -39,21 +39,21 @@ public final class CollectionLayoutBuilder {
 
         return self
     }
-    
+
     @discardableResult
     public func numberOfItemsPerGroup(_ count: Int) -> Self {
         numberOfItemsPerGroup = count
 
         return self
     }
-    
+
     @discardableResult
     public func itemSpacing(_ spacing: CGFloat) -> Self {
         interItemSpacing = .fixed(spacing)
 
         return self
     }
-    
+
     @discardableResult
     public func withContentInsets(
         top: CGFloat = 0,
@@ -70,13 +70,13 @@ public final class CollectionLayoutBuilder {
 
         return self
     }
-    
+
     @discardableResult
     public func composeSection(_ axis: UIAxis) -> Self {
         guard let itemSize, let groupSize else {
             fatalError("Item and Group must be set before creating section")
         }
-        
+
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         var group: NSCollectionLayoutGroup!
@@ -96,16 +96,16 @@ public final class CollectionLayoutBuilder {
 
         default: fatalError("Can't compose section to selected axis")
         }
-        
+
         if let interItemSpacing {
             group.interItemSpacing = interItemSpacing
         }
-        
+
         section = NSCollectionLayoutSection(group: group)
 
         return self
     }
-    
+
     @discardableResult
     public func header(
         elementKind: String,
@@ -117,34 +117,34 @@ public final class CollectionLayoutBuilder {
             widthDimension: width,
             heightDimension: height
         )
-        
+
         headerItem = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
             elementKind: elementKind,
             alignment: alignment
         )
-        
+
         if let headerItem {
             section?.boundarySupplementaryItems = [headerItem]
         }
-        
+
         return self
     }
-    
+
     @discardableResult
     public func withScrollingBehavior(_ behavior: UICollectionLayoutSectionOrthogonalScrollingBehavior) -> Self {
         section?.orthogonalScrollingBehavior = behavior
 
         return self
     }
-    
+
     @discardableResult
     public func groupSpacing(_ spacing: CGFloat) -> Self {
         section?.interGroupSpacing = spacing
 
         return self
     }
-    
+
     @discardableResult
     public func modifySection(_ modifier: (NSCollectionLayoutSection) -> Void) -> Self {
         if let section = self.section {
@@ -152,15 +152,15 @@ public final class CollectionLayoutBuilder {
         }
         return self
     }
-    
+
     @discardableResult
     public func withExistingHeader(_ headerItem: NSCollectionLayoutBoundarySupplementaryItem) -> Self {
         self.headerItem = headerItem
-        
+
         if let section = self.section {
             section.boundarySupplementaryItems = [headerItem]
         }
-        
+
         return self
     }
 
@@ -169,17 +169,17 @@ public final class CollectionLayoutBuilder {
         if let section = self.section {
             section.boundarySupplementaryItems = headerItems
         }
-        
+
         return self
     }
-    
+
     public func build() -> NSCollectionLayoutSection {
         guard let section else { fatalError("Section must be created before building") }
         return section
     }
-    
+
     public func buildHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         guard let headerItem else { fatalError("Header must be created before building") }
         return headerItem
     }
-} 
+}
