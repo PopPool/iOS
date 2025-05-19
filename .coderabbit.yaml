@@ -1,0 +1,93 @@
+language: ko-KR # 언어 설정
+
+early_access: true # 미리보기 기능 활성화
+enable_free_tier: true # 프리 티어 활성화
+auto_resolve_threads: false # 자동 해결 비활성화
+
+reviews:
+  profile: chill
+  request_changes_workflow: true
+  high_level_summary: true # 리뷰에 대해 요약(high-level summary)를 자동 작성
+  high_level_summary_placeholder: '@coderabbitai 요약'
+  auto_title_placeholder: '@coderabbitai'
+  poem: true
+  review_status: true # PR 리뷰 상태를 리뷰 요약란에 표시
+  collapse_walkthrough: false # 리뷰 단계 설명을 기본적으로 접지 않음
+
+  abort_on_close: true # PR이 닫히면 리뷰 수행을 중단(abort)
+
+
+  auto_review:
+    enabled: true # 자동 리뷰 기능을 활성화
+    auto_incremental_review: true # 커밋이 추가될 때마다 변경 사항에 대해서만 자동 수행
+    ignore_title_keywords: [] # PR 제목에 포함되면 리뷰를 건너뛰는 키워드 목록
+    labels: [] # 특정 라벨이 붙은 PR만 자동 리뷰 대상
+    drafts: false # Draft 상태인 PR은 자동 리뷰 대상에서 제외(false면 제외)
+    base_branches: [] # 특정 브랜치만 리뷰하도록
+
+  tools:
+    shellcheck: # 셸 스크립트 문법 및 보안 검사
+      enabled: true
+    ruff: # Python 코드 스타일 검사기
+      enabled: true
+    markdownlint: # 마크다운 문법 검사
+      enabled: true
+    github-checks: # GitHub 체크 연동 + 타임아웃(ms 단위)
+      enabled: true
+      timeout_ms: 90000
+    languagetool: # 맞춤법, 문법 검사
+      enabled: true
+      disabled_rules:
+        - EN_UNPAIRED_BRACKETS
+        - EN_UNPAIRED_QUOTES
+      disabled_categories:
+        - TYPOS
+        - TYPOGRAPHY
+        - CASING
+      enabled_only: false
+      level: default
+      enabled_rules: []
+      enabled_categories: []
+    biome: # JavaScript/TypeScript 정적 분석
+      enabled: true
+    hadolint: # Dockerfile 코드 스타일 검사
+      enabled: true
+    swiftlint: # Swift 코드 스타일 검사
+      enabled: true
+    phpstan: # PHP 정적 분석
+      enabled: true
+      level: default
+    golangci-lint: # Go 코드 스타일 검사
+      enabled: true
+    yamllint: # YAML 형식 검사
+      enabled: true
+    gitleaks: # Git 시크릿 노출 탐지
+      enabled: true
+    checkov: # 인프라 보안 검사
+      enabled: true
+    ast-grep: # AST 기반 코드 패턴 검사
+      packages: []
+      rule_dirs: []
+      util_dirs: []
+      essential_rules: true
+
+# CodeRabbit AI 챗 기능을 사용 가능하게 하고,
+# 한 번에 처리 가능한 토큰 수를 최대 4096으로 제한
+chat:
+  enabled: true
+  max_token_length: 4096
+
+
+# 지식 기반에 사용할 학습 범위를 지정하십시오.
+# 'Local' - Repository
+# 'Global'- Organization
+# 'Auto' - Repository(users public) + Organization(private)
+knowledge_base:
+  web_search: # AI 웹 검색 허용
+    enabled: true
+  learnings: # 학습 범위 설정 (local, global, auto)
+    scope: local
+  issues: # 이슈 자동 참조 범위 설정 (local, global, auto)
+    scope: auto
+  jira:
+    project_keys: []
