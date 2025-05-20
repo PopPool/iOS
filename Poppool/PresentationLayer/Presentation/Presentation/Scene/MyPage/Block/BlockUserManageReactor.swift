@@ -1,5 +1,6 @@
 import UIKit
 
+import DesignSystem
 import DomainInterface
 
 import ReactorKit

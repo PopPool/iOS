@@ -1,11 +1,6 @@
-//
-//  MyPageMyCommentTitleSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/2/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 import SnapKit
@@ -67,7 +62,7 @@ extension MyPageMyCommentTitleSectionCell: Inputable {
             let buttonTitle = NSAttributedString(
                 string: input.buttonTitle ?? "",
                 attributes: [
-                    .font: UIFont.korFont(style: .regular, size: 13)!,
+                    .font: UIFont.korFont(style: .regular, size: 13),
                     .underlineStyle: NSUnderlineStyle.single.rawValue,
                     .foregroundColor: UIColor.g600
                 ]

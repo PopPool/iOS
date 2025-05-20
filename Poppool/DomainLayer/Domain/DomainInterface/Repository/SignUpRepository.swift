@@ -11,7 +11,7 @@ public protocol SignUpRepository {
         age: Int32,
         socialEmail: String,
         socialType: String,
-        interests: [Int64],
+        interests: [Int],
         appleAuthorizationCode: String?
     ) -> Completable
 }

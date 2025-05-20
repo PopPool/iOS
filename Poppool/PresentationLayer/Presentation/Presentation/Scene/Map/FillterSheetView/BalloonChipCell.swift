@@ -1,5 +1,6 @@
 import UIKit
 
+import DesignSystem
 import Infrastructure
 
 import SnapKit
@@ -74,7 +75,7 @@ final class BalloonChipCell: UICollectionViewCell {
 
             attributedTitle.addAttribute(
                 .font,
-                value: UIFont.korFont(style: .bold, size: Constant.fontSize)!,
+                value: UIFont.korFont(style: .bold, size: Constant.fontSize),
                 range: NSRange(location: .zero, length: attributedTitle.length)
             )
         } else {
@@ -96,7 +97,7 @@ final class BalloonChipCell: UICollectionViewCell {
 
             attributedTitle.addAttribute(
                 .font,
-                value: UIFont.korFont(style: .medium, size: Constant.fontSize)!,
+                value: UIFont.korFont(style: .medium, size: Constant.fontSize),
                 range: NSRange(location: .zero, length: attributedTitle.length)
             )
         }

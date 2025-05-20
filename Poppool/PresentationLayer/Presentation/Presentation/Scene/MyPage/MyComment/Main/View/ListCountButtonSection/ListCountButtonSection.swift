@@ -1,11 +1,6 @@
-//
-//  ListCountButtonSection.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/12/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 

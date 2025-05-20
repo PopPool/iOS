@@ -1,11 +1,6 @@
-//
-//  TagSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 import SnapKit
@@ -49,7 +44,7 @@ extension TagSectionCell: Inputable {
     struct Input {
         var title: String?
         var isSelected: Bool
-        var id: Int64?
+        var id: Int?
     }
 
     func injection(with input: Input) {

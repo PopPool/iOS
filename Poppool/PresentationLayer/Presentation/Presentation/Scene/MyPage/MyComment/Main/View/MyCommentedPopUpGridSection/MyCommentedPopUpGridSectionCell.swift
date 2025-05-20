@@ -1,11 +1,6 @@
-//
-//  MyCommentedPopUpGridSectionCell.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 2/6/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import RxSwift
 import SnapKit

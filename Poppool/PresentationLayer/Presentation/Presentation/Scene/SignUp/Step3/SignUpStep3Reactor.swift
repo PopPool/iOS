@@ -1,5 +1,6 @@
 import UIKit
 
+import DesignSystem
 import DomainInterface
 
 import ReactorKit
@@ -20,9 +21,9 @@ final class SignUpStep3Reactor: Reactor {
 
     struct State {
         var sections: [any Sectionable] = []
-        var selectedCategory: [Int64] = []
+        var selectedCategory: [Int] = []
         var selectedCategoryTitle: [String] = []
-        var categoryIDList: [Int64] = []
+        var categoryIDList: [Int] = []
     }
 
     // MARK: - properties
@@ -30,7 +31,7 @@ final class SignUpStep3Reactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
     private let signUpAPIUseCase: SignUpAPIUseCase
-    private var cetegoryIDList: [Int64] = []
+    private var cetegoryIDList: [Int] = []
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in

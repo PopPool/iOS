@@ -1,5 +1,8 @@
-import SnapKit
 import UIKit
+
+import DesignSystem
+
+import SnapKit
 
 final class FilterChipsView: UIView {
     // MARK: - Components

@@ -1,5 +1,7 @@
 import UIKit
 
+import DesignSystem
+
 import PanModal
 import ReactorKit
 import RxCocoa

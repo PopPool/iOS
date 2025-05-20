@@ -1,11 +1,6 @@
-//
-//  SignUpStep2Controller.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 11/25/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import ReactorKit
 import RxCocoa

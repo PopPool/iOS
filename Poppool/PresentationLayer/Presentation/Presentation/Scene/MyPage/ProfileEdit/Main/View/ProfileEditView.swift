@@ -1,11 +1,6 @@
-//
-//  ProfileEditView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/4/25.
-//
-
 import UIKit
+
+import DesignSystem
 
 import SnapKit
 
@@ -74,7 +69,7 @@ final class ProfileEditView: UIView {
     }()
     let nickNameClearButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "icon_clearButton"), for: .normal)
+        button.setImage(UIImage(named: "icon_clear_button"), for: .normal)
         button.isHidden = true
         return button
     }()
@@ -96,7 +91,7 @@ final class ProfileEditView: UIView {
         let attributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g1000 // 텍스트 색상
             ]
@@ -104,7 +99,7 @@ final class ProfileEditView: UIView {
         let disabledAttributedTitle = NSAttributedString(
             string: title,
             attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13)!, // 폰트
+                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
                 .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
                 .foregroundColor: UIColor.g300 // 텍스트 색상
             ]

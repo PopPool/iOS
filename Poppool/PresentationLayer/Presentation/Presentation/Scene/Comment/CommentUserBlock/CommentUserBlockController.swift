@@ -1,11 +1,6 @@
-//
-//  CommentUserBlockController.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 12/27/24.
-//
-
 import UIKit
+
+import DesignSystem
 
 import PanModal
 import ReactorKit

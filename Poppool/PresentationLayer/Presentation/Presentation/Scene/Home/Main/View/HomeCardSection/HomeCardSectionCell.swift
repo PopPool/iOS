@@ -1,5 +1,7 @@
 import UIKit
 
+import DesignSystem
+
 import RxSwift
 import SnapKit
 

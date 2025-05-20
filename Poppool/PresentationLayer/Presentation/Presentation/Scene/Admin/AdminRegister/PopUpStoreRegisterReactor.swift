@@ -110,7 +110,7 @@ final class PopUpStoreRegisterReactor: Reactor {
         var lon: String = ""
         var description: String = ""
         var category: String = ""
-        var categoryId: Int64 = 0
+        var categoryId: Int = 0
         var markerTitle: String = "마커 제목"
         var markerSnippet: String = "마커 설명"
 
@@ -277,7 +277,7 @@ final class PopUpStoreRegisterReactor: Reactor {
 
         case let .setCategory(category):
             newState.category = category
-            newState.categoryId = Int64(getCategoryId(from: category))
+            newState.categoryId = getCategoryId(from: category)
 
         case let .setMarkerTitle(title):
             newState.markerTitle = title

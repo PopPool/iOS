@@ -16,7 +16,7 @@ public protocol UserAPIUseCase {
     func postWithdrawl(surveyList: [GetWithdrawlListDataResponse]) -> Completable
     func getMyProfile() -> Observable<GetMyProfileResponse>
     func putUserTailoredInfo(gender: String?, age: Int32) -> Completable
-    func putUserCategory(interestCategoriesToAdd: [Int64], interestCategoriesToDelete: [Int64], interestCategoriesToKeep: [Int64]) -> Completable
+    func putUserCategory(interestCategoriesToAdd: [Int], interestCategoriesToDelete: [Int], interestCategoriesToKeep: [Int]) -> Completable
     func putUserProfile(profileImageUrl: String?, nickname: String?, email: String?, instagramId: String?, intro: String?) -> Completable
     func getMyCommentedPopUp(page: Int32?, size: Int32?, sort: String?) -> Observable<GetMyCommentedPopUpResponse>
     func getBlockUserList(page: Int32?, size: Int32?, sort: String?) -> Observable<GetBlockUserListResponse>

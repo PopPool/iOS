@@ -5,6 +5,10 @@ import Data
 import Domain
 import DomainInterface
 import Infrastructure
+import Presentation
+import PresentationInterface
+import SearchFeature
+import SearchFeatureInterface
 
 import KakaoSDKCommon
 import NMapsMap
@@ -20,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         locationManager.requestWhenInUseAuthorization()
 
         self.registerDependencies()
+        self.registerFactory()
 
         return true
     }
@@ -36,10 +41,12 @@ extension AppDelegate {
     private func registerDependencies() {
         // MARK: Register Service
         DIContainer.register(Provider.self) { return ProviderImpl() }
+        DIContainer.register(UserDefaultService.self) { return UserDefaultService() }
         DIContainer.register(KeyChainService.self) { return KeyChainService() }
 
         // MARK: Resolve service
         @Dependency var provider: Provider
+        @Dependency var userDefaultService: UserDefaultService
 
         // MARK: Register repository
         DIContainer.register(MapRepository.self) { return MapRepositoryImpl(provider: provider) }
@@ -54,6 +61,8 @@ extension AppDelegate {
         DIContainer.register(PreSignedRepository.self) { return PreSignedRepositoryImpl() }
         DIContainer.register(KakaoLoginRepository.self) { return KakaoLoginRepositoryImpl() }
         DIContainer.register(AppleLoginRepository.self) { return AppleLoginRepositoryImpl() }
+        DIContainer.register(CategoryRepository.self) { return CategoryRepositoryImpl(provider: provider) }
+        DIContainer.register(SearchAPIRepository.self) { return SearchAPIRepositoryImpl(provider: provider, userDefaultService: userDefaultService) }
 
         // MARK: Resolve repository
         @Dependency var mapRepository: MapRepository
@@ -67,6 +76,8 @@ extension AppDelegate {
         @Dependency var preSignedRepository: PreSignedRepository
         @Dependency var kakaoLoginRepository: KakaoLoginRepository
         @Dependency var appleLoginRepository: AppleLoginRepository
+        @Dependency var categoryRepository: CategoryRepository
+        @Dependency var searchAPIRepository: SearchAPIRepository
 
         // MARK: Register UseCase
         DIContainer.register(MapUseCase.self) { return MapUseCaseImpl(repository: mapRepository) }
@@ -80,5 +91,14 @@ extension AppDelegate {
         DIContainer.register(PreSignedUseCase.self) { return PreSignedUseCaseImpl(repository: preSignedRepository) }
         DIContainer.register(KakaoLoginUseCase.self) { return KakaoLoginUseCaseImpl(repository: kakaoLoginRepository) }
         DIContainer.register(AppleLoginUseCase.self) { return AppleLoginUseCaseImpl(repository: appleLoginRepository) }
+        DIContainer.register(FetchCategoryListUseCase.self) { return FetchCategoryListUseCaseImpl(repository: categoryRepository) }
+        DIContainer.register(FetchKeywordBasePopupListUseCase.self) { return FetchKeywordBasePopupListUseCaseImpl(repository: searchAPIRepository) }
+    }
+
+    private func registerFactory() {
+        DIContainer.register(PopupSearchFactory.self) { return PopupSearchFactoryImpl() }
+        DIContainer.register(DetailFactory.self) { return DetailFactoryImpl() }
+        DIContainer.register(CategorySelectorFactory.self) { return CategorySelectorFactoryImpl() }
+        DIContainer.register(FilterSelectorFactory.self) { return FilterSelectorFactoryImpl() }
     }
 }

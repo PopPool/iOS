@@ -1,17 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "icon_bookmark_fill.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "solid.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

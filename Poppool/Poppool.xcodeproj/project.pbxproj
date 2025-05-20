@@ -9,6 +9,18 @@
 /* Begin PBXBuildFile section */
 		0522C1D92DB67C5900B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1D82DB67C5900B141FF /* RxSwift */; };
 		0522C3C62DB67D7800B141FF /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C3C52DB67D7800B141FF /* RxGesture */; };
+		05734C5A2DCDFAC20093825D /* SearchFeature.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C582DCDFAC20093825D /* SearchFeature.framework */; };
+		05734C5B2DCDFAC20093825D /* SearchFeature.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C582DCDFAC20093825D /* SearchFeature.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C5C2DCDFAC20093825D /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C592DCDFAC20093825D /* SearchFeatureInterface.framework */; };
+		05734C5D2DCDFAC20093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C592DCDFAC20093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C5F2DCE04CE0093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C5E2DCE04CE0093825D /* PresentationInterface.framework */; };
+		05734C602DCE04CE0093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C5E2DCE04CE0093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05734C632DCE04FA0093825D /* Pageboy in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C622DCE04FA0093825D /* Pageboy */; };
+		05734C662DCE05070093825D /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C652DCE05070093825D /* PanModal */; };
+		05734C682DCE05240093825D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C672DCE05240093825D /* SnapKit */; };
+		05734C6B2DCE05550093825D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C6A2DCE05550093825D /* ReactorKit */; };
+		05734C6E2DCE05680093825D /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C6D2DCE05680093825D /* Tabman */; };
+		05734C712DCE059D0093825D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C702DCE059D0093825D /* Then */; };
 		05BBA73E2DB75DA60047A061 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05BBA73D2DB75DA60047A061 /* KakaoSDKUser */; };
 		05BDD3D62DB66E1700C1E192 /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */; };
 		05BDD3D72DB66E1700C1E192 /* DomainInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -20,6 +32,8 @@
 		05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6092DB53A4900508FFD /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; };
 		05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D60A2DB53A4900508FFD /* Presentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05CFFC432DCC83290051129F /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05CFFC422DCC83290051129F /* DesignSystem.framework */; };
+		05CFFC442DCC83290051129F /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05CFFC422DCC83290051129F /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1514292D99480200DFD08F /* NMapsMap */; };
 		4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4E15142D2D994A3A00DFD08F /* KakaoSDKAuth */; };
 		4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE360FC2D91876300D2441D /* NMapsMap */; };
@@ -32,10 +46,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				05734C5B2DCDFAC20093825D /* SearchFeature.framework in Embed Frameworks */,
 				05BDD3D72DB66E1700C1E192 /* DomainInterface.framework in Embed Frameworks */,
 				05C1D6102DB53A4900508FFD /* Infrastructure.framework in Embed Frameworks */,
 				05C1D60E2DB53A4900508FFD /* Domain.framework in Embed Frameworks */,
+				05734C602DCE04CE0093825D /* PresentationInterface.framework in Embed Frameworks */,
+				05CFFC442DCC83290051129F /* DesignSystem.framework in Embed Frameworks */,
 				05C1D6122DB53A4900508FFD /* Presentation.framework in Embed Frameworks */,
+				05734C5D2DCDFAC20093825D /* SearchFeatureInterface.framework in Embed Frameworks */,
 				05C1D60C2DB53A4900508FFD /* Data.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -45,11 +63,15 @@
 
 /* Begin PBXFileReference section */
 		05229DD02D99519200D88E73 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		05734C582DCDFAC20093825D /* SearchFeature.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SearchFeature.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05734C592DCDFAC20093825D /* SearchFeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SearchFeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05734C5E2DCE04CE0093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6072DB53A4900508FFD /* Data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6082DB53A4900508FFD /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D6092DB53A4900508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1D60A2DB53A4900508FFD /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05CFFC422DCC83290051129F /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDCA41BD2CF35AC0005EECF6 /* Poppool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Poppool.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -83,16 +105,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05734C662DCE05070093825D /* PanModal in Frameworks */,
 				05C1D60F2DB53A4900508FFD /* Infrastructure.framework in Frameworks */,
 				05BDD3D62DB66E1700C1E192 /* DomainInterface.framework in Frameworks */,
 				0522C1D92DB67C5900B141FF /* RxSwift in Frameworks */,
 				4E15142E2D994A3A00DFD08F /* KakaoSDKAuth in Frameworks */,
+				05734C6E2DCE05680093825D /* Tabman in Frameworks */,
 				05C1D60D2DB53A4900508FFD /* Domain.framework in Frameworks */,
 				05C1D6112DB53A4900508FFD /* Presentation.framework in Frameworks */,
+				05734C5C2DCDFAC20093825D /* SearchFeatureInterface.framework in Frameworks */,
 				05C1D60B2DB53A4900508FFD /* Data.framework in Frameworks */,
+				05734C712DCE059D0093825D /* Then in Frameworks */,
 				05BBA73E2DB75DA60047A061 /* KakaoSDKUser in Frameworks */,
+				05734C6B2DCE05550093825D /* ReactorKit in Frameworks */,
+				05734C5A2DCDFAC20093825D /* SearchFeature.framework in Frameworks */,
+				05734C5F2DCE04CE0093825D /* PresentationInterface.framework in Frameworks */,
 				0522C3C62DB67D7800B141FF /* RxGesture in Frameworks */,
+				05CFFC432DCC83290051129F /* DesignSystem.framework in Frameworks */,
 				4EE360FD2D91876300D2441D /* NMapsMap in Frameworks */,
+				05734C682DCE05240093825D /* SnapKit in Frameworks */,
+				05734C632DCE04FA0093825D /* Pageboy in Frameworks */,
 				4E15142A2D99480200DFD08F /* NMapsMap in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,6 +135,10 @@
 		05C1D6062DB53A4900508FFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05734C5E2DCE04CE0093825D /* PresentationInterface.framework */,
+				05734C582DCDFAC20093825D /* SearchFeature.framework */,
+				05734C592DCDFAC20093825D /* SearchFeatureInterface.framework */,
+				05CFFC422DCC83290051129F /* DesignSystem.framework */,
 				05BDD3D52DB66E1700C1E192 /* DomainInterface.framework */,
 				05C1D6072DB53A4900508FFD /* Data.framework */,
 				05C1D6082DB53A4900508FFD /* Domain.framework */,
@@ -157,6 +193,12 @@
 				0522C1D82DB67C5900B141FF /* RxSwift */,
 				0522C3C52DB67D7800B141FF /* RxGesture */,
 				05BBA73D2DB75DA60047A061 /* KakaoSDKUser */,
+				05734C622DCE04FA0093825D /* Pageboy */,
+				05734C652DCE05070093825D /* PanModal */,
+				05734C672DCE05240093825D /* SnapKit */,
+				05734C6A2DCE05550093825D /* ReactorKit */,
+				05734C6D2DCE05680093825D /* Tabman */,
+				05734C702DCE059D0093825D /* Then */,
 			);
 			productName = Poppool;
 			productReference = BDCA41BD2CF35AC0005EECF6 /* Poppool.app */;
@@ -191,6 +233,11 @@
 				05BDD5C32DB674E500C1E192 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				05BDD5D62DB6783C00C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				0522C3C42DB67D7800B141FF /* XCRemoteSwiftPackageReference "RxGesture" */,
+				05734C612DCE04FA0093825D /* XCRemoteSwiftPackageReference "Pageboy" */,
+				05734C642DCE05070093825D /* XCRemoteSwiftPackageReference "PanModal" */,
+				05734C692DCE05550093825D /* XCRemoteSwiftPackageReference "ReactorKit" */,
+				05734C6C2DCE05680093825D /* XCRemoteSwiftPackageReference "Tabman" */,
+				05734C6F2DCE059D0093825D /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			preferredProjectObjectVersion = 56;
 			productRefGroup = BDCA41BE2CF35AC0005EECF6 /* Products */;
@@ -491,6 +538,46 @@
 				minimumVersion = 4.0.4;
 			};
 		};
+		05734C612DCE04FA0093825D /* XCRemoteSwiftPackageReference "Pageboy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Pageboy";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.0;
+			};
+		};
+		05734C642DCE05070093825D /* XCRemoteSwiftPackageReference "PanModal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/slackhq/PanModal";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.7;
+			};
+		};
+		05734C692DCE05550093825D /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		05734C6C2DCE05680093825D /* XCRemoteSwiftPackageReference "Tabman" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uias/Tabman";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		05734C6F2DCE059D0093825D /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		05BDD5C32DB674E500C1E192 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -543,6 +630,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0522C3C42DB67D7800B141FF /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
+		};
+		05734C622DCE04FA0093825D /* Pageboy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C612DCE04FA0093825D /* XCRemoteSwiftPackageReference "Pageboy" */;
+			productName = Pageboy;
+		};
+		05734C652DCE05070093825D /* PanModal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C642DCE05070093825D /* XCRemoteSwiftPackageReference "PanModal" */;
+			productName = PanModal;
+		};
+		05734C672DCE05240093825D /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BDD5C32DB674E500C1E192 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		05734C6A2DCE05550093825D /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C692DCE05550093825D /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
+		05734C6D2DCE05680093825D /* Tabman */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C6C2DCE05680093825D /* XCRemoteSwiftPackageReference "Tabman" */;
+			productName = Tabman;
+		};
+		05734C702DCE059D0093825D /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05734C6F2DCE059D0093825D /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 		05BBA73D2DB75DA60047A061 /* KakaoSDKUser */ = {
 			isa = XCSwiftPackageProductDependency;
