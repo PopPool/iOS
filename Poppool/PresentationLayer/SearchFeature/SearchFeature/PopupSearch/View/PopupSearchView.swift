@@ -11,8 +11,8 @@ import Then
 final class PopupSearchView: UIView {
 
     // MARK: - Properties
-    private var dataSource: UICollectionViewDiffableDataSource<Section, SectionItem>?
-    private let layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
+    private var dataSource: UICollectionViewDiffableDataSource<PopupSearchSection, SectionItem>?
+    private var layoutFactory: PopupSearchLayoutFactory = PopupSearchLayoutFactory()
 
     let recentSearchTagRemoveButtonTapped = PublishRelay<String>()
     let recentSearchTagRemoveAllButtonTapped = PublishRelay<Void>()
@@ -27,9 +27,12 @@ final class PopupSearchView: UIView {
     public let searchBar = PPSearchBarView()
 
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
-        let layout = layoutFactory.makeCollectionViewLayout { [weak self] in self?.dataSource }
+        layoutFactory.setSectionProvider { [weak self] index in
+            guard let self, let dataSource else { return nil }
+            return dataSource.sectionIdentifier(for: index)
+        }
 
-        $0.setCollectionViewLayout(layout, animated: false)
+        $0.setCollectionViewLayout(layoutFactory.makeCollectionViewLayout(), animated: false)
 
         $0.register(
             TagCollectionHeaderView.self,
@@ -59,8 +62,8 @@ final class PopupSearchView: UIView {
         )
 
         $0.register(
-            SearchResultEmptyTitleCollectionViewCell.self,
-            forCellWithReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers
+            SearchResultEmptyCollectionViewCell.self,
+            forCellWithReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers
         )
 
         // UICollectionView 최 상/하단 빈 영역
@@ -118,7 +121,7 @@ private extension PopupSearchView {
 extension PopupSearchView {
     private func configurationDataSourceItem() {
         self.dataSource = UICollectionViewDiffableDataSource<
-            PopupSearchView.Section,
+            PopupSearchSection,
             PopupSearchView.SectionItem
         >(
             collectionView: collectionView
@@ -206,11 +209,11 @@ extension PopupSearchView {
 
                 return cell
 
-            case .searchResultEmptyTitle(let title):
+            case .searchResultEmptyItem(let title):
                 let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: SearchResultEmptyTitleCollectionViewCell.identifiers,
+                    withReuseIdentifier: SearchResultEmptyCollectionViewCell.identifiers,
                     for: indexPath
-                ) as! SearchResultEmptyTitleCollectionViewCell
+                ) as! SearchResultEmptyCollectionViewCell
 
                 cell.configureCell(title: title)
 
@@ -252,7 +255,7 @@ extension PopupSearchView {
         }
     }
 
-    func updateSectionSnapshot(at section: Section, with items: [SectionItem]) {
+    func updateSectionSnapshot(at section: PopupSearchSection, with items: [SectionItem]) {
         if items.isEmpty {
             guard var snapshot = dataSource?.snapshot() else { return }
             snapshot.deleteSections([section])
@@ -278,43 +281,37 @@ extension PopupSearchView {
         empty: SectionItem? = nil
     ) {
         guard var snapshot = dataSource?.snapshot() else { return }
-
-        snapshot.deleteSections([.searchResultHeader, .searchResult])
-
-        snapshot.appendSections( [.searchResultHeader, .searchResult])
-        snapshot.appendItems([header], toSection: .searchResultHeader)
+        snapshot.deleteSections([.searchResultHeader, .searchResult, .searchResultEmpty])
 
         if let empty {
-            snapshot.appendItems([empty], toSection: .searchResult)
+            snapshot.appendSections([.searchResultHeader, .searchResultEmpty])
+            snapshot.appendItems([header], toSection: .searchResultHeader)
+            snapshot.appendItems([empty], toSection: .searchResultEmpty)
+            collectionView.isScrollEnabled = false
         } else {
+            snapshot.appendSections([.searchResultHeader, .searchResult])
+            snapshot.appendItems([header], toSection: .searchResultHeader)
             snapshot.appendItems(items, toSection: .searchResult)
+            collectionView.isScrollEnabled = true
         }
 
         dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
-    func getSectionsFromDataSource() -> [Section] {
+    func getSectionsFromDataSource() -> [PopupSearchSection] {
         return dataSource?.snapshot().sectionIdentifiers ?? []
     }
 }
 
 // MARK: - Section information
 extension PopupSearchView {
-    /// View를 구성하는 section을 정의
-    enum Section: CaseIterable, Hashable {
-        case recentSearch
-        case category
-        case searchResultHeader
-        case searchResult
-    }
-
     /// Section에 들어갈 Item을 정의한 변수
     enum SectionItem: Hashable {
         case recentSearchItem(TagModel)
         case categoryItem(TagModel)
         case searchResultHeaderItem(SearchResultHeaderModel)
         case searchResultItem(SearchResultModel)
-        case searchResultEmptyTitle(String)
+        case searchResultEmptyItem(String)
     }
 
     /// Section의 헤더를 구분하기 위한 변수

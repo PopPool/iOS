@@ -93,12 +93,18 @@ extension PopupSearchViewController {
                 switch sections[indexPath.section] {
                 case .recentSearch:
                     return Reactor.Action.recentSearchTagButtonTapped(indexPath: indexPath)
+
                 case .category:
                     return Reactor.Action.categoryTagButtonTapped
 
-                case .searchResultHeader: return nil
+                case .searchResultHeader:
+                    return nil
+
                 case .searchResult:
                     return Reactor.Action.searchResultItemTapped(indexPath: indexPath)
+
+                case .searchResultEmpty:
+                    return nil
                 }
             }
             .bind(to: reactor.action)
@@ -201,22 +207,18 @@ extension PopupSearchViewController {
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$updateSearchResultDataSource)
+        reactor.pulse(\.$updateSearchResultSection)
             .withLatestFrom(reactor.state)
             .withUnretained(self)
             .subscribe { (owner, state) in
-                if let emptyTitle = state.searchResultEmptyTitle {
-                    owner.mainView.updateSearchResultSectionSnapshot(
-                        with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
-                        header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader),
-                        empty: PopupSearchView.SectionItem.searchResultEmptyTitle(emptyTitle)
-                    )
-                } else {
-                    owner.mainView.updateSearchResultSectionSnapshot(
-                        with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
-                        header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader)
-                    )
-                }
+                let isEmpty = state.updateSearchResultSection == nil
+                let emptyCaseTitle = state.updateSearchResultSection
+
+                owner.mainView.updateSearchResultSectionSnapshot(
+                    with: state.searchResultItems.map(PopupSearchView.SectionItem.searchResultItem),
+                    header: PopupSearchView.SectionItem.searchResultHeaderItem(state.searchResultHeader),
+                    empty: isEmpty ? nil : PopupSearchView.SectionItem.searchResultEmptyItem(emptyCaseTitle!)
+                )
             }
             .disposed(by: disposeBag)
     }
