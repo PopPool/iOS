@@ -55,33 +55,16 @@ public extension UIImageView {
         // 현재 이미지 URL을 업데이트
         currentImageURL = encodedURL
 
-        // 먼저 메모리 캐시 확인
-        if let cachedImage = MemoryStorage.shared.fetchImage(url: encodedURL) {
-            self.image = cachedImage
-            completion?()
-            return
-        }
-
-        // 다음으로 디스크 캐시 확인
-        if let diskImage = DiskStorage.shared.fetchImage(url: encodedURL) {
-            MemoryStorage.shared.store(image: diskImage, url: encodedURL)
-            self.image = diskImage
-            completion?()
-            return
-        }
-
         ImageLoader.shared.loadImage(with: encodedURL, defaultImage: placeholderImage, imageQuality: .origin) { [weak self] image in
             guard let self else { return }
             defer { completion?() }
-            DispatchQueue.main.async {
-                // 현재 요청 ID와 캡처된 ID가 일치하는지 확인 (다른 이미지로 변경되었으면 무시)
-                if self.currentImageURL == encodedURL {
-                    if let image = image {
-                        self.image = image
-                    } else if self.image == nil {
-                        // 이미지 로드 실패 시 기본 이미지 표시
-                        self.image = self.placeholderImage
-                    }
+            // 현재 요청 ID와 캡처된 ID가 일치하는지 확인 (다른 이미지로 변경되었으면 무시)
+            if self.currentImageURL == encodedURL {
+                if let image = image {
+                    self.image = image
+                } else if self.image == nil {
+                    // 이미지 로드 실패 시 기본 이미지 표시
+                    self.image = self.placeholderImage
                 }
             }
         }

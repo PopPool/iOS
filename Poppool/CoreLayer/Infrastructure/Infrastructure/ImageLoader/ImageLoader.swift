@@ -98,12 +98,14 @@ private extension ImageLoader {
                 if let data = data, let image = UIImage(data: data) {
                     MemoryStorage.shared.store(image: image, url: stringURL)
                     DiskStorage.shared.store(image: image, url: stringURL)
-                    completion(.success(image))
+                    DispatchQueue.main.async { completion(.success(image)) }
                 } else {
-                    completion(.failure(ImageLoaderError.convertError(description: "Failed to convert data to UIImage")))
+                    DispatchQueue.main.async {
+                        completion(.failure(ImageLoaderError.convertError(description: "Failed to convert data to UIImage")))
+                    }
                 }
             case .failure(let error):
-                completion(.failure(error))
+                DispatchQueue.main.async { completion(.failure(error)) }
             }
         }
     }
