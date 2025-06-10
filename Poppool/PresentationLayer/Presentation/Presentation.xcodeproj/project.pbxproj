@@ -10,14 +10,10 @@
 		05125B982DB626E3001342A2 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05125B972DB626E3001342A2 /* ReactorKit */; };
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
 		051631302DC3D1FD00A6C0D1 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; };
-		051631312DC3D1FD00A6C0D1 /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1E02DB67C8300B141FF /* RxSwift */; };
 		05734C3C2DCDF6FE0093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C352DCDF6EC0093825D /* PresentationInterface.framework */; };
-		05734C3D2DCDF6FE0093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C352DCDF6EC0093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C412DCDF7190093825D /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C402DCDF7190093825D /* SearchFeatureInterface.framework */; };
-		05734C422DCDF7190093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C402DCDF7190093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C492DCDF7960093825D /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C482DCDF7960093825D /* DesignSystem.framework */; };
-		05734C4A2DCDF7960093825D /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C482DCDF7960093825D /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C572DCDF9E80093825D /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 05734C562DCDF9E80093825D /* NMapsMap */; };
 		05BDD5CC2DB6756500C1E192 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CB2DB6756500C1E192 /* SnapKit */; };
 		05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD5CE2DB6770300C1E192 /* Lottie */; };
@@ -42,33 +38,6 @@
 			remoteInfo = PresentationInterface;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		05734C4B2DCDF7960093825D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05734C4A2DCDF7960093825D /* DesignSystem.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05BDD5C22DB6744000C1E192 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05734C422DCDF7190093825D /* SearchFeatureInterface.framework in Embed Frameworks */,
-				05734C3D2DCDF6FE0093825D /* PresentationInterface.framework in Embed Frameworks */,
-				051631312DC3D1FD00A6C0D1 /* DesignSystem.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,7 +159,6 @@
 				05734C312DCDF6EC0093825D /* Sources */,
 				05734C322DCDF6EC0093825D /* Frameworks */,
 				05734C332DCDF6EC0093825D /* Resources */,
-				05734C4B2DCDF7960093825D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -214,7 +182,6 @@
 				058CC9002DB537960084221A /* Sources */,
 				058CC9012DB537960084221A /* Frameworks */,
 				058CC9022DB537960084221A /* Resources */,
-				05BDD5C22DB6744000C1E192 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
