@@ -83,7 +83,7 @@ private extension HomeController {
 
         view.addSubview(homeHeaderView)
         homeHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(7)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.leading.trailing.equalToSuperview()
         }
 

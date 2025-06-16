@@ -101,7 +101,7 @@ private extension MapView {
 
         searchFilterContainer.addSubview(searchInput)
         searchInput.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalTo(safeAreaLayoutGuide).inset(12)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(37)
         }
