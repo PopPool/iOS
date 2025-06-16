@@ -1,7 +1,11 @@
+import UIKit
+
+import DesignSystem
+
 import ReactorKit
 import RxCocoa
 import RxSwift
-import UIKit
+import Then
 
 final class MapSearchInput: UIView, View {
     // MARK: - Components
@@ -17,7 +21,7 @@ final class MapSearchInput: UIView, View {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 4
         return view
     }()
 
@@ -28,22 +32,20 @@ final class MapSearchInput: UIView, View {
         return iv
     }()
 
-    let searchTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "팝업스토어명, 지역을 입력해보세요"
-        textField.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        textField.clearButtonMode = .whileEditing
-        textField.textColor = .g400
-        textField.returnKeyType = .search
-        textField.enablesReturnKeyAutomatically = true
-        textField.attributedPlaceholder = NSAttributedString(
+    let searchTextField = UITextField().then {
+        $0.placeholder = "팝업스토어명, 지역을 입력해보세요"
+        $0.font = .korFont(style: .regular, size: 14)
+        $0.clearButtonMode = .whileEditing
+        $0.textColor = .g400
+        $0.returnKeyType = .search
+        $0.enablesReturnKeyAutomatically = true
+        $0.attributedPlaceholder = NSAttributedString(
             string: "팝업스토어명, 지역을 입력해보세요",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.g400]
         )
         // 편집은 하지 않고, 탭으로 화면 전환을 유도
-        textField.isEnabled = false
-        return textField
-    }()
+        $0.isEnabled = false
+    }
 
     // MARK: - Init
     init() {
@@ -117,13 +119,13 @@ private extension MapSearchInput {
         }
 
         searchIcon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(12)
             make.centerY.equalToSuperview()
             make.size.equalTo(20)
         }
 
         searchTextField.snp.makeConstraints { make in
-            make.leading.equalTo(searchIcon.snp.trailing).offset(8)
+            make.leading.equalTo(searchIcon.snp.trailing).offset(4)
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-16)
         }
