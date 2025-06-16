@@ -6,7 +6,7 @@ import Infrastructure
 import SnapKit
 import Then
 
-final class SearchResultEmptyTitleCollectionViewCell: UICollectionViewCell {
+final class SearchResultEmptyCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
     private let emptyLabel = PPLabel(
@@ -34,7 +34,7 @@ final class SearchResultEmptyTitleCollectionViewCell: UICollectionViewCell {
 }
 
 // MARK: - SetUp
-private extension SearchResultEmptyTitleCollectionViewCell {
+private extension SearchResultEmptyCollectionViewCell {
     func addViews() {
         [emptyLabel].forEach {
             self.addSubview($0)
@@ -52,7 +52,7 @@ private extension SearchResultEmptyTitleCollectionViewCell {
     func configureUI() { }
 }
 
-extension SearchResultEmptyTitleCollectionViewCell {
+extension SearchResultEmptyCollectionViewCell {
     func configureCell(title: String) {
         self.emptyLabel.text = title
     }
