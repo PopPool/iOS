@@ -1,8 +1,6 @@
 import UIKit
-
 import DesignSystem
 import Infrastructure
-
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -14,9 +12,15 @@ final class AdminBottomSheetViewController: BaseViewController, View {
 
    // MARK: - Properties
    private let mainView = AdminBottomSheetView()
-   private let dimmedView = UIView()
+   private lazy var dimmedView: UIView = {
+       let view = UIView()
+       view.backgroundColor = .black.withAlphaComponent(0.4)
+       view.alpha = 0
+       return view
+   }()
    var disposeBag = DisposeBag()
    private var containerViewBottomConstraint: Constraint?
+   private var containerHeightConstraint: Constraint?
    private var tagSection: TagSection?
 
    var onSave: (([String]) -> Void)?
@@ -43,37 +47,30 @@ final class AdminBottomSheetViewController: BaseViewController, View {
     private func setupViews() {
         view.backgroundColor = .clear
 
-        Logger.log("초기 뷰 계층:", category: .debug)
-
-        view.addSubview(mainView)
-        mainView.isUserInteractionEnabled = true
-        mainView.containerView.isUserInteractionEnabled = true
-        mainView.closeButton.isUserInteractionEnabled = true
-        mainView.segmentedControl.isUserInteractionEnabled = true
-        mainView.headerView.isUserInteractionEnabled = true
-
-        mainView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(view.bounds.height * 0.45)
-            containerViewBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
-        }
-
-        Logger.log("mainView 추가 후 계층:", category: .debug)
-
-        dimmedView.backgroundColor = .black.withAlphaComponent(0.4)
-        dimmedView.alpha = 0
-        dimmedView.isUserInteractionEnabled = false
-
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dimmedViewTapped))
-        dimmedView.addGestureRecognizer(tapGesture)
-        tapGesture.cancelsTouchesInView = true // 터치 이벤트가 다른 뷰로 전달되도록 설정
-        view.insertSubview(dimmedView, belowSubview: mainView)
-
+        view.addSubview(dimmedView)
         dimmedView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        Logger.log("최종 뷰 계층:", category: .debug)
+        view.addSubview(mainView)
+        mainView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            containerHeightConstraint = make.height.greaterThanOrEqualTo(400).constraint
+            containerViewBottomConstraint = make.bottom.equalTo(view.snp.bottom).constraint
+        }
+
+        setupGestures()
+    }
+
+    private func setupGestures() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapDimmedView))
+        tapGesture.delegate = self
+        dimmedView.addGestureRecognizer(tapGesture)
+        dimmedView.isUserInteractionEnabled = true
+    }
+
+    @objc private func handleTapDimmedView() {
+        hideBottomSheet()
     }
 
    private func setupCollectionView() {
@@ -86,11 +83,9 @@ final class AdminBottomSheetViewController: BaseViewController, View {
    // MARK: - Binding
    func bind(reactor: Reactor) {
        mainView.segmentedControl.rx.selectedSegmentIndex
-                 .do(onNext: { _ in
-                 })
-                 .map { Reactor.Action.segmentChanged($0) }
-                 .bind(to: reactor.action)
-                 .disposed(by: disposeBag)
+           .map { Reactor.Action.segmentChanged($0) }
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
 
        mainView.resetButton.rx.tap
            .map { Reactor.Action.resetFilters }
@@ -98,46 +93,48 @@ final class AdminBottomSheetViewController: BaseViewController, View {
            .disposed(by: disposeBag)
 
        mainView.contentCollectionView.rx.itemSelected
-                  .withLatestFrom(reactor.state) { indexPath, state -> Reactor.Action in
-                      let title = state.activeSegment == 0 ?
-                          state.statusOptions[indexPath.item] :
-                          state.categoryOptions[indexPath.item]
+           .withLatestFrom(reactor.state) { indexPath, state -> Reactor.Action in
+               let title = state.activeSegment == 0 ?
+                   state.statusOptions[indexPath.item] :
+                   state.categoryOptions[indexPath.item]
 
-                      return state.activeSegment == 0 ?
-                          .toggleStatusOption(title) :
-                          .toggleCategoryOption(title)
-                  }
-                  .bind(to: reactor.action)
-                  .disposed(by: disposeBag)
-
-       reactor.state.map { state in
-           let items = state.activeSegment == 0 ?
-               state.statusOptions :
-               state.categoryOptions
-           let selectedItems = state.activeSegment == 0 ?
-               state.selectedStatusOptions :
-               state.selectedCategoryOptions
-
-           return items.map {
-               TagSectionCell.Input(
-                   title: $0,
-                   isSelected: selectedItems.contains($0),
-                   id: nil
-               )
+               return state.activeSegment == 0 ?
+                   .toggleStatusOption(title) :
+                   .toggleCategoryOption(title)
            }
-       }
-       .bind(to: mainView.contentCollectionView.rx.items(
-           cellIdentifier: TagSectionCell.identifiers,
-           cellType: TagSectionCell.self
-       )) { _, item, cell in
-           cell.injection(with: item)
-       }
-       .disposed(by: disposeBag)
+           .bind(to: reactor.action)
+           .disposed(by: disposeBag)
 
+       reactor.state
+           .map { state in
+               let items = state.activeSegment == 0 ?
+                   state.statusOptions :
+                   state.categoryOptions
+               let selectedItems = state.activeSegment == 0 ?
+                   state.selectedStatusOptions :
+                   state.selectedCategoryOptions
+
+               return items.map {
+                   TagSectionCell.Input(
+                       title: $0,
+                       isSelected: selectedItems.contains($0),
+                       id: nil
+                   )
+               }
+           }
+           .bind(to: mainView.contentCollectionView.rx.items(
+               cellIdentifier: TagSectionCell.identifiers,
+               cellType: TagSectionCell.self
+           )) { _, item, cell in
+               cell.injection(with: item)
+           }
+           .disposed(by: disposeBag)
+
+       // 세그먼트 변경 시 전체 시트 높이 업데이트
        reactor.state.map { $0.activeSegment }
            .distinctUntilChanged()
-           .bind { [weak self] index in
-               self?.mainView.updateContentVisibility(isCategorySelected: index == 1)
+           .bind { [weak self] _ in
+               self?.updateContainerHeight()
            }
            .disposed(by: disposeBag)
 
@@ -167,7 +164,6 @@ final class AdminBottomSheetViewController: BaseViewController, View {
            }
            .disposed(by: disposeBag)
 
-       // View Events
        mainView.closeButton.rx.tap
            .bind { [weak self] in
                self?.hideBottomSheet()
@@ -189,13 +185,30 @@ final class AdminBottomSheetViewController: BaseViewController, View {
            .disposed(by: disposeBag)
    }
 
-   // MARK: - Actions
-   @objc private func dimmedViewTapped() {
-       hideBottomSheet()
+   // MARK: - Height Management
+   private func updateContainerHeight() {
+       guard let reactor = reactor else { return }
+
+       let items = reactor.currentState.activeSegment == 0 ?
+                   reactor.currentState.statusOptions :
+                   reactor.currentState.categoryOptions
+
+       let collectionViewHeight = mainView.calculateCollectionViewHeight(for: items)
+
+       let totalHeight = 60 + 50 + collectionViewHeight + 80 + 52 + 100
+
+       let finalHeight = min(max(totalHeight, 400), UIScreen.main.bounds.height * 0.8)
+
+       containerHeightConstraint?.update(offset: finalHeight)
+
+       self.view.layoutIfNeeded()
    }
 
    // MARK: - Show/Hide
    func showBottomSheet() {
+       // 초기 높이 설정
+       updateContainerHeight()
+
        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
            self.dimmedView.alpha = 1
            self.containerViewBottomConstraint?.update(offset: 0)
@@ -217,4 +230,14 @@ final class AdminBottomSheetViewController: BaseViewController, View {
    deinit {
        Logger.log("BottomSheet deinit", category: .debug)
    }
+}
+
+extension AdminBottomSheetViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if gestureRecognizer.view == dimmedView {
+            let touchPoint = touch.location(in: view)
+            return !mainView.containerView.frame.contains(touchPoint)
+        }
+        return true
+    }
 }

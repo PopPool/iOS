@@ -15,6 +15,8 @@ import RxSwift
 import SnapKit
 
 class MapViewController: BaseViewController, View {
+    // 최초 뷰포트 진입 여부 플래그
+    private var isFirstViewportEntry = true
     typealias Reactor = MapReactor
 
     fileprivate struct CoordinateKey: Hashable {
@@ -1229,27 +1231,31 @@ class MapViewController: BaseViewController, View {
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
 
+            // 최초 진입시에만 자동 포커싱/캐러셀 동작
             reactor.state
-                   .map { $0.viewportStores }
-                   .distinctUntilChanged()
-                   .filter { !$0.isEmpty }
-                   .take(1)
-                   .observe(on: MainScheduler.instance)
-                   .subscribe(onNext: { [weak self] stores in
-                       guard let self = self else { return }
+                .map { $0.viewportStores }
+                .distinctUntilChanged()
+                .filter { !$0.isEmpty }
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { [weak self] stores in
+                    guard let self = self else { return }
+                    // 최초 진입시에만 자동 포커싱/캐러셀 동작
+                    if self.isFirstViewportEntry {
+                        self.isFirstViewportEntry = false
 
-                       if let location = self.locationManager.location {
-                           self.findAndShowNearestStore(from: location)
-                       } else if let firstStore = stores.first,
-                                 let marker = self.findMarkerForStore(for: firstStore) {
-                           _ = self.handleSingleStoreTap(marker, store: firstStore)
-                       }
+                        if let location = self.locationManager.location {
+                            self.findAndShowNearestStore(from: location)
+                        } else if let firstStore = stores.first,
+                                  let marker = self.findMarkerForStore(for: firstStore) {
+                            _ = self.handleSingleStoreTap(marker, store: firstStore)
+                        }
+                    }
+                    self.currentStores = stores
+                    self.updateMapWithClustering()
+                })
+                .disposed(by: disposeBag)
 
-                       self.currentStores = stores
-                       self.updateMapWithClustering()
-                   })
-                   .disposed(by: disposeBag)
-
+            // 지도 이동시 자동 캐러셀/포커싱 등 UI 업데이트 제거
             reactor.state
                 .map { $0.viewportStores }
                 .distinctUntilChanged()
@@ -1257,73 +1263,6 @@ class MapViewController: BaseViewController, View {
                 .observe(on: MainScheduler.instance)
                 .subscribe(onNext: { [weak self] stores in
                     guard let self = self else { return }
-
-                    let effectiveViewport = self.getEffectiveViewport()
-                    let bounds = self.getVisibleBounds()
-
-                    let visibleStores = stores.filter { store in
-                        let storePosition = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                        return NMGLatLngBounds(southWest: bounds.southWest, northEast: bounds.northEast).contains(storePosition)
-                    }
-                    self.currentStores = visibleStores
-
-                    let currentZoom = self.mainView.mapView.zoomLevel
-                    let level = MapZoomLevel.getLevel(from: Float(currentZoom))
-
-                    if level == .detailed && !visibleStores.isEmpty {
-                        let effectiveStores = visibleStores.filter { store in
-                            let storePosition = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                            return effectiveViewport.contains(storePosition)
-                        }
-
-                        self.currentCarouselStores = visibleStores
-                        self.carouselView.updateCards(visibleStores)
-                        self.carouselView.isHidden = false
-                        self.mainView.setStoreCardHidden(false, animated: true)
-
-                        if let currentMarker = self.currentMarker {
-                            if let currentStore = currentMarker.userInfo["storeData"] as? MapPopUpStore,
-                               let index = visibleStores.firstIndex(where: { $0.id == currentStore.id }) {
-                                self.carouselView.scrollToCard(index: index)
-                            } else if let storeArray = currentMarker.userInfo["storeData"] as? [MapPopUpStore],
-                                      let firstStore = storeArray.first,
-                                      let index = visibleStores.firstIndex(where: { $0.id == firstStore.id }) {
-                                self.carouselView.scrollToCard(index: index)
-                            } else {
-                                // 선택된 마커가 현재 뷰포트에 없는 경우
-                                self.updateMarkerStyle(marker: currentMarker, selected: false, isCluster: false)
-                                self.currentMarker = nil
-
-                                // 첫 번째 스토어의 마커를 선택 상태로 설정
-                                if let firstStore = visibleStores.first,
-                                   let marker = self.findMarkerForStore(for: firstStore) {
-                                    self.updateMarkerStyle(marker: marker, selected: true, isCluster: false)
-                                    self.currentMarker = marker
-                                }
-
-                                self.carouselView.scrollToCard(index: 0)
-                            }
-                        } else {
-                            if let firstStore = visibleStores.first,
-                               let marker = self.findMarkerForStore(for: firstStore) {
-                                self.updateMarkerStyle(marker: marker, selected: true, isCluster: false)
-                                self.currentMarker = marker
-                            }
-                            self.carouselView.scrollToCard(index: 0)
-                        }
-                    } else {
-                        // 클러스터 레벨이거나 마커가 없는 경우
-                        self.carouselView.isHidden = true
-                        self.carouselView.updateCards([])
-                        self.currentCarouselStores = []
-                        self.mainView.setStoreCardHidden(true, animated: true)
-
-                        if level == .detailed && visibleStores.isEmpty {
-                            // 개별 마커 레벨인데 마커가 없는 경우 토스트 표시
-                            self.showNoMarkersToast()
-                        }
-                    }
-
                     self.updateMapWithClustering()
                 })
                 .disposed(by: disposeBag)
@@ -1443,26 +1382,10 @@ class MapViewController: BaseViewController, View {
     }
 
         func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
-            if currentMarker == marker {
-                currentTooltipView?.removeFromSuperview()
-                currentTooltipView = nil
-                currentTooltipStores = []
-                currentTooltipCoordinate = nil
-
-                carouselView.isHidden = true
-                carouselView.updateCards([])
-                currentCarouselStores = []
-                updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeArray.count)
-
-                currentMarker = nil
-                isMovingToMarker = false
-                return false
-            }
-
-            isMovingToMarker = true
-
             currentTooltipView?.removeFromSuperview()
             currentTooltipView = nil
+            currentTooltipStores = []
+            currentTooltipCoordinate = nil
 
             if let previousMarker = currentMarker {
                 updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
@@ -1471,22 +1394,23 @@ class MapViewController: BaseViewController, View {
             updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: storeArray.count)
             currentMarker = marker
 
+            // 3. 캐러셀/툴팁 갱신
             currentCarouselStores = storeArray
             carouselView.updateCards(storeArray)
             carouselView.isHidden = false
             carouselView.scrollToCard(index: 0)
-
             mainView.setStoreCardHidden(false, animated: true)
+
             let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position)
             cameraUpdate.animation = .easeIn
             cameraUpdate.animationDuration = 0.3
             mainView.mapView.moveCamera(cameraUpdate)
-            if storeArray.count > 1 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                    guard let self = self else { return }
-                    self.configureTooltip(for: marker, stores: storeArray)
-                    self.isMovingToMarker = false
-                }
+
+            // 4. 툴팁 갱신 및 위치 재계산
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                guard let self = self else { return }
+                self.configureTooltip(for: marker, stores: storeArray)
+                self.isMovingToMarker = false
             }
 
             return true

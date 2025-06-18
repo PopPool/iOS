@@ -97,6 +97,8 @@ final class AdminView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        tableView.backgroundView = UIView()
+        tableView.backgroundView?.isUserInteractionEnabled = true
     }
 
     required init?(coder: NSCoder) {
