@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:Poppool.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:DataLayer"
+      name = "DataLayer">
+      <FileRef
+         location = "container:DataLayer/Data/Data.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:DomainLayer"
+      name = "DomainLayer">
+      <FileRef
+         location = "container:DomainLayer/Domain/Domain.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:PresentationLayer"
+      name = "PresentationLayer">
+      <FileRef
+         location = "group:Presentation/Presentation.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:SearchFeature/SearchFeature.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:DesignSystem/DesignSystem.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:CoreLayer"
+      name = "CoreLayer">
+      <FileRef
+         location = "group:Infrastructure/Infrastructure.xcodeproj">
+      </FileRef>
+   </Group>
+</Workspace>

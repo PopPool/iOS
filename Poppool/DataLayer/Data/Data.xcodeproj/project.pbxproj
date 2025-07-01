@@ -1,0 +1,543 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0522C1DB2DB67C6100B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1DA2DB67C6100B141FF /* RxSwift */; };
+		05BBA73A2DB75A320047A061 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 05BBA7392DB75A320047A061 /* KakaoSDKAuth */; };
+		05BBA73C2DB75A320047A061 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 05BBA73B2DB75A320047A061 /* KakaoSDKUser */; };
+		05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 05BDD3DB2DB66EB500C1E192 /* Alamofire */; };
+		05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6152DB53A5600508FFD /* DomainInterface.framework */; };
+		05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C1D6162DB53A5600508FFD /* Infrastructure.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		058CC8DC2DB5376A0084221A /* Data.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Data.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C1D6152DB53A5600508FFD /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C1D6162DB53A5600508FFD /* Infrastructure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Infrastructure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		05C1D67A2DB53AB000508FFD /* Exceptions for "Data" folder in "Data" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Network/API/AdminAPI/AdminAPIEndpoint.swift,
+				Network/API/AdminAPI/ResponseDTO/AdminResponseDTO.swift,
+				Network/API/AdminAPI/ResponseDTO/GetAdminPopUpStoreListResponseDTO.swift,
+				Network/API/AuthAPI/AuthAPIEndPoint.swift,
+				Network/API/AuthAPI/ResponseDTO/LoginResponseDTO.swift,
+				Network/API/AuthAPI/ResponseDTO/PostTokenReissueResponseDTO.swift,
+				Network/API/CategoryAPI/CategoryAPIEndpoint.swift,
+				Network/API/CategoryAPI/ResponseDTO/GetCategoryListResponseDTO.swift,
+				Network/API/CommentAPI/CommentAPIEndPoint.swift,
+				Network/API/CommentAPI/RequestDTO/DeleteCommentRequestDTO.swift,
+				Network/API/CommentAPI/RequestDTO/PostCommentRequestDTO.swift,
+				Network/API/CommentAPI/RequestDTO/PutCommentRequestDTO.swift,
+				Network/API/HomeAPI/HomeAPIEndpoint.swift,
+				Network/API/HomeAPI/RequestDTO/HomeSortedRequestDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/BannerPopUpStoreDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/GetHomeInfoResponseDTO.swift,
+				Network/API/HomeAPI/ResponseDTO/PopUpStoreResponseDTO.swift,
+				Network/API/MapAPI/FindDirectionEndPoint.swift,
+				Network/API/MapAPI/MapAPIEndpoint.swift,
+				Network/API/MapAPI/ResponseDTO/GetPopUpDirectionResponseDTO.swift,
+				Network/API/MapAPI/ResponseDTO/MapPopUpStoreDTO.swift,
+				Network/API/PopUpAPI/PopUpAPIEndPoint.swift,
+				Network/API/PopUpAPI/RequestDTO/GetPopUpCommentRequestDTO.swift,
+				Network/API/PopUpAPI/RequestDTO/GetPopUpDetailRequestDTO.swift,
+				Network/API/PopUpAPI/RequestDTO/GetSearchPopUpListRequestDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetClosePopUpListResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetOpenPopUpListResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetPopUpCommentResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetPopUpDetailResponseDTO.swift,
+				Network/API/PopUpAPI/ResponseDTO/GetSearchPopUpListResponseDTO.swift,
+				Network/API/PreSignedAPI/PreSignedAPIEndPoint.swift,
+				Network/API/PreSignedAPI/RequestDTO/PresignedURLRequestDTO.swift,
+				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLDTO.swift,
+				Network/API/PreSignedAPI/ResponseDTO/PreSignedURLResponseDTO.swift,
+				Network/API/SearchAPI/RequestDTO/GetSearchPopupStoreRequestDTO.swift,
+				Network/API/SearchAPI/ResponseDTO/GetSearchPopupStoreResponseDTO.swift,
+				Network/API/SearchAPI/SearchAPIEndPoint.swift,
+				Network/API/SignUpAPI/RequestDTO/CheckNickNameRequestDTO.swift,
+				Network/API/SignUpAPI/RequestDTO/SignUpRequestDTO.swift,
+				Network/API/SignUpAPI/SignUpAPIEndpoint.swift,
+				Network/API/UserAPI/RequesetDTO/CommentLikeRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/GetMyCommentRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/GetOtherUserCommentListRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PostBookmarkPopUpRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PostUserBlockRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserCategoryRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserProfileRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/PutUserTailoredInfoRequestDTO.swift,
+				Network/API/UserAPI/RequesetDTO/UserSortedRequestDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetBlockUserListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyCommentedPopUpResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyPageResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetMyProfileResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetNoticeDetailResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetNoticeListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetOtherUserCommentedPopUpListResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetRecentPopUpResponseDTO.swift,
+				Network/API/UserAPI/ResponseDTO/GetWithdrawlListResponseDTO.swift,
+				Network/API/UserAPI/UserAPIEndPoint.swift,
+				Network/Common/NetworkError.swift,
+				Network/Common/Requestable.swift,
+				Network/Common/Responsable.swift,
+				Network/EndPoint/Endpoint.swift,
+				Network/EndPoint/MultipartEndPoint.swift,
+				Network/EndPoint/RequestEndpoint.swift,
+				Network/Interceptor/TokenInterceptor.swift,
+				Network/Provider/Provider.swift,
+				Network/Provider/ProviderImpl.swift,
+				Network/Service/AppleLoginService.swift,
+				Network/Service/AuthServiceable.swift,
+				Network/Service/KakaoLoginService.swift,
+				Network/Service/PreSignedService.swift,
+				RepositoryImpl/AdminRepositoryImpl.swift,
+				RepositoryImpl/AppleLoginRepositoryImpl.swift,
+				RepositoryImpl/AuthAPIRepositoryImpl.swift,
+				RepositoryImpl/CategoryRepositoryImpl.swift,
+				RepositoryImpl/CommentAPIRepositoryImpl.swift,
+				RepositoryImpl/HomeAPIRepositoryImpl.swift,
+				RepositoryImpl/KakaoLoginRepositoryImpl.swift,
+				RepositoryImpl/MapDirectionRepositoryImpl.swift,
+				RepositoryImpl/MapRepositoryImpl.swift,
+				RepositoryImpl/PopUpAPIRepositoryImpl.swift,
+				RepositoryImpl/PreSignedRepositoryImpl.swift,
+				RepositoryImpl/Search/SearchAPIRepositoryImpl.swift,
+				RepositoryImpl/SignUpRepositoryImpl.swift,
+				RepositoryImpl/UserAPIRepositoryImpl.swift,
+			);
+			target = 058CC8DB2DB5376A0084221A /* Data */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		05C1D05C2DB5387500508FFD /* Data */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				05C1D67A2DB53AB000508FFD /* Exceptions for "Data" folder in "Data" target */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		058CC8D92DB5376A0084221A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05BDD3DC2DB66EB500C1E192 /* Alamofire in Frameworks */,
+				05C1D6172DB53A5600508FFD /* DomainInterface.framework in Frameworks */,
+				05BBA73C2DB75A320047A061 /* KakaoSDKUser in Frameworks */,
+				0522C1DB2DB67C6100B141FF /* RxSwift in Frameworks */,
+				05C1D6192DB53A5600508FFD /* Infrastructure.framework in Frameworks */,
+				05BBA73A2DB75A320047A061 /* KakaoSDKAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		058CC8D22DB5376A0084221A = {
+			isa = PBXGroup;
+			children = (
+				05C1D05C2DB5387500508FFD /* Data */,
+				05C1D6142DB53A5600508FFD /* Frameworks */,
+				058CC8DD2DB5376A0084221A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		058CC8DD2DB5376A0084221A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				058CC8DC2DB5376A0084221A /* Data.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		05C1D6142DB53A5600508FFD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05C1D6152DB53A5600508FFD /* DomainInterface.framework */,
+				05C1D6162DB53A5600508FFD /* Infrastructure.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		058CC8D72DB5376A0084221A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		058CC8DB2DB5376A0084221A /* Data */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 058CC8E32DB5376A0084221A /* Build configuration list for PBXNativeTarget "Data" */;
+			buildPhases = (
+				058CC8D72DB5376A0084221A /* Headers */,
+				058CC8D82DB5376A0084221A /* Sources */,
+				058CC8D92DB5376A0084221A /* Frameworks */,
+				058CC8DA2DB5376A0084221A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Data;
+			packageProductDependencies = (
+				05BDD3DB2DB66EB500C1E192 /* Alamofire */,
+				0522C1DA2DB67C6100B141FF /* RxSwift */,
+				05BBA7392DB75A320047A061 /* KakaoSDKAuth */,
+				05BBA73B2DB75A320047A061 /* KakaoSDKUser */,
+			);
+			productName = Data;
+			productReference = 058CC8DC2DB5376A0084221A /* Data.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		058CC8D32DB5376A0084221A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					058CC8DB2DB5376A0084221A = {
+						CreatedOnToolsVersion = 16.3;
+					};
+				};
+			};
+			buildConfigurationList = 058CC8D62DB5376A0084221A /* Build configuration list for PBXProject "Data" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 058CC8D22DB5376A0084221A;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */,
+				05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 058CC8DD2DB5376A0084221A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				058CC8DB2DB5376A0084221A /* Data */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		058CC8DA2DB5376A0084221A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		058CC8D82DB5376A0084221A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		058CC8E12DB5376A0084221A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		058CC8E22DB5376A0084221A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		058CC8E42DB5376A0084221A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Data;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		058CC8E52DB5376A0084221A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.Data;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		058CC8D62DB5376A0084221A /* Build configuration list for PBXProject "Data" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				058CC8E12DB5376A0084221A /* Debug */,
+				058CC8E22DB5376A0084221A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		058CC8E32DB5376A0084221A /* Build configuration list for PBXNativeTarget "Data" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				058CC8E42DB5376A0084221A /* Debug */,
+				058CC8E52DB5376A0084221A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.1;
+			};
+		};
+		05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+		08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0522C1DA2DB67C6100B141FF /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BDD5DA2DB6786900C1E192 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		05BBA7392DB75A320047A061 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		05BBA73B2DB75A320047A061 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 05BBA7382DB75A320047A061 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
+		};
+		05BDD3DB2DB66EB500C1E192 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08B2A3532DB66B1D00E57EFA /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 058CC8D32DB5376A0084221A /* Project object */;
+}
