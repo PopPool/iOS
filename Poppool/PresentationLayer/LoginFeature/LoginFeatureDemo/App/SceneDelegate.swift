@@ -14,10 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
         let navigationController = UINavigationController()
-        @Dependency var loginFactory: LoginFactory
+        @Dependency var factory: LoginFactory
 
         navigationController.pushViewController(
-            loginFactory.make(),
+            factory.make(),
             animated: false
         )
 

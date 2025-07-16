@@ -1,8 +1,13 @@
 import UIKit
 
+import Data
+import Domain
+import DomainInterface
 import Infrastructure
 import LoginFeature
 import LoginFeatureInterface
+import Presentation
+import PresentationInterface
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,18 +30,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     private func registerDependencies() {
         // MARK: Register Service
+        DIContainer.register(Provider.self) { return ProviderImpl() }
 
         // MARK: Resolve service
+        @Dependency var provider: Provider
 
         // MARK: Register repository
+        DIContainer.register(AuthAPIRepository.self) { return AuthAPIRepositoryImpl(provider: provider) }
+        DIContainer.register(KakaoLoginRepository.self) { return KakaoLoginRepositoryImpl() }
+        DIContainer.register(AppleLoginRepository.self) { return AppleLoginRepositoryImpl() }
 
         // MARK: Resolve repository
+        @Dependency var authAPIRepository: AuthAPIRepository
+        @Dependency var kakaoLoginRepository: KakaoLoginRepository
+        @Dependency var appleLoginRepository: AppleLoginRepository
 
         // MARK: Register UseCase
-        
+        DIContainer.register(AuthAPIUseCase.self) { return AuthAPIUseCaseImpl(repository: authAPIRepository) }
+        DIContainer.register(KakaoLoginUseCase.self) { return KakaoLoginUseCaseImpl(repository: kakaoLoginRepository) }
+        DIContainer.register(AppleLoginUseCase.self) { return AppleLoginUseCaseImpl(repository: appleLoginRepository) }
     }
 
     private func registerFactory() {
         DIContainer.register(LoginFactory.self) { return LoginFactoryImpl() }
+        DIContainer.register(SignUpFactory.self) { return SignUpFactoryImpl() }
+        DIContainer.register(WaveTabbarFactory.self) { return WaveTabbarFactoryImpl() }
+        DIContainer.register(FAQFactory.self) { return FAQFactoryImpl() }
     }
 }
