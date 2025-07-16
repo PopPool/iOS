@@ -78,10 +78,12 @@ final class LoginReactor: Reactor {
             )
 
         case .moveToHomeScene(let controller):
-            let homeTabbar = WaveTabBarController()
-            controller.view.window?.rootViewController = homeTabbar
+            @Dependency var factory: WaveTabbarFactory
+            controller.view.window?.rootViewController = factory.make()
+
         case .loadView:
             break
+            
         case .moveToInquiryScene(let controller):
             @Dependency var factory: FAQFactory
             controller.navigationController?.pushViewController(factory.make(), animated: true)
