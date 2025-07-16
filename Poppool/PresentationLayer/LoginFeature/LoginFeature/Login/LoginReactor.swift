@@ -1,36 +1,147 @@
+import DesignSystem
+import DomainInterface
+import Infrastructure
+
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class LoginReactor: Reactor {
 
     // MARK: - Reactor
-    enum Action { }
+    enum Action {
+        case kakaoButtonTapped(controller: BaseViewController)
+        case appleButtonTapped(controller: BaseViewController)
+        case guestButtonTapped(controller: BaseViewController)
+        case inquiryButtonTapped(controller: BaseViewController)
+    }
 
-    enum Mutation { }
+    enum Mutation {
+        case moveToSignUpScene(controller: BaseViewController)
+        case moveToHomeScene(controller: BaseViewController)
+        case loadView
+        case moveToInquiryScene(controller: BaseViewController)
+    }
 
     struct State { }
 
     // MARK: - properties
+
     var initialState: State
     var disposeBag = DisposeBag()
 
+    private var authrizationCode: String?
+
+    private let authAPIUseCase: AuthAPIUseCase
+    private let kakaoLoginUseCase: KakaoLoginUseCase
+    private let appleLoginUseCase: AppleLoginUseCase
+
+    @Dependency private var keyChainService: KeyChainService
+    let userDefaultService = UserDefaultService()
+
     // MARK: - init
-    init() {
+    init(
+        authAPIUseCase: AuthAPIUseCase,
+        kakaoLoginUseCase: KakaoLoginUseCase,
+        appleLoginUseCase: AppleLoginUseCase
+    ) {
+        self.authAPIUseCase = authAPIUseCase
+        self.kakaoLoginUseCase = kakaoLoginUseCase
+        self.appleLoginUseCase = appleLoginUseCase
         self.initialState = State()
     }
 
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action { }
+        switch action {
+        case .kakaoButtonTapped(let controller):
+            return loginWithKakao(controller: controller)
+        case .appleButtonTapped(let controller):
+            return loginWithApple(controller: controller)
+        case .guestButtonTapped(let controller):
+            _ = keyChainService.deleteToken(type: .accessToken)
+            _ = keyChainService.deleteToken(type: .refreshToken)
+            return Observable.just(.moveToHomeScene(controller: controller))
+        case .inquiryButtonTapped(let controller):
+            return Observable.just(.moveToInquiryScene(controller: controller))
+        }
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
-        var newState = state
+        switch mutation {
+        case .moveToSignUpScene(let controller):
+            let signUpController = SignUpMainController()
+            signUpController.reactor = SignUpMainReactor(
+                isFirstResponderCase: true,
+                authrizationCode: authrizationCode,
+                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            )
+            controller.navigationController?.pushViewController(signUpController, animated: true)
+        case .moveToHomeScene(let controller):
+            let homeTabbar = WaveTabBarController()
+            controller.view.window?.rootViewController = homeTabbar
+        case .loadView:
+            break
+        case .moveToInquiryScene(let controller):
+            let nextController = FAQController()
+            nextController.reactor = FAQReactor()
+            controller.navigationController?.pushViewController(nextController, animated: true)
+        }
+        return state
+    }
 
-        switch mutation { }
+    func loginWithKakao(controller: BaseViewController) -> Observable<Mutation> {
+        return kakaoLoginUseCase.fetchUserCredential()
+            .withUnretained(self)
+            .flatMap { owner, response in
+                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
+            }
+            .withUnretained(self)
+            .map { [weak controller] (owner, loginResponse) in
+                guard let controller = controller else { return .loadView }
+                owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
+                owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
+                let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
+                let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+                switch accessTokenResult {
+                case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "kakao")
+                    if loginResponse.isRegisteredUser {
+                        return .moveToHomeScene(controller: controller)
+                    } else {
+                        return .moveToSignUpScene(controller: controller)
+                    }
+                case .failure:
+                    return .loadView
+                }
+            }
+    }
 
-        return newState
+    func loginWithApple(controller: BaseViewController) -> Observable<Mutation> {
+        return appleLoginUseCase.fetchUserCredential()
+            .withUnretained(self)
+            .flatMap { owner, response in
+                owner.authrizationCode = response.authorizationCode
+                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
+            }
+            .withUnretained(self)
+            .map({ [weak controller] (owner, loginResponse) in
+                guard let controller = controller else { return .loadView }
+                owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
+                owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
+                let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
+                let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+                switch accessTokenResult {
+                case .success:
+                    owner.userDefaultService.save(key: "lastLogin", value: "apple")
+                    if loginResponse.isRegisteredUser {
+                        return .moveToHomeScene(controller: controller)
+                    } else {
+                        return .moveToSignUpScene(controller: controller)
+                    }
+                case .failure:
+                    return .loadView
+                }
+            })
     }
 }
-
