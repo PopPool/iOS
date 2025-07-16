@@ -79,7 +79,7 @@ private extension LoginView {
 
     func setupConstraints() {
         guestButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(11)
+            make.top.equalTo(safeAreaLayoutGuide).inset(11)
             make.trailing.equalToSuperview().inset(20)
         }
 
