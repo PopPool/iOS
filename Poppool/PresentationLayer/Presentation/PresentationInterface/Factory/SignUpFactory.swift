@@ -1,5 +1,3 @@
-import UIKit
-
 import DesignSystem
 
 public protocol SignUpFactory {
