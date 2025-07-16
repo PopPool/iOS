@@ -76,16 +76,15 @@ final class LoginReactor: Reactor {
                 factory.make(isFirstResponder: true, authrizationCode: authrizationCode),
                 animated: true
             )
-            
+
         case .moveToHomeScene(let controller):
             let homeTabbar = WaveTabBarController()
             controller.view.window?.rootViewController = homeTabbar
         case .loadView:
             break
         case .moveToInquiryScene(let controller):
-            let nextController = FAQController()
-            nextController.reactor = FAQReactor()
-            controller.navigationController?.pushViewController(nextController, animated: true)
+            @Dependency var factory: FAQFactory
+            controller.navigationController?.pushViewController(factory.make(), animated: true)
         }
         return state
     }
