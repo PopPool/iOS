@@ -1,6 +1,7 @@
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import PresentationInterface
 
 import ReactorKit
 import RxCocoa
@@ -68,21 +69,18 @@ final class SubLoginReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToSignUpScene(let controller):
-            let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(
-                isFirstResponderCase: false,
-                authrizationCode: authrizationCode,
-                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            @Dependency var factory: SignUpFactory
+            controller.navigationController?.pushViewController(
+                factory.make(isFirstResponder: false, authrizationCode: authrizationCode),
+                animated: true
             )
-            controller.navigationController?.pushViewController(signUpController, animated: true)
         case .dismissScene(let controller):
             controller.dismiss(animated: true)
         case .loadView:
             break
         case .moveToInquiryScene(let controller):
-            let nextController = FAQController()
-            nextController.reactor = FAQReactor()
-            controller.navigationController?.pushViewController(nextController, animated: true)
+            @Dependency var factory: FAQFactory
+            controller.navigationController?.pushViewController(factory.make(), animated: true)
         }
         return state
     }

@@ -9,6 +9,8 @@ import Presentation
 import PresentationInterface
 import SearchFeature
 import SearchFeatureInterface
+import LoginFeature
+import LoginFeatureInterface
 
 import KakaoSDKCommon
 import NMapsMap
@@ -100,5 +102,9 @@ extension AppDelegate {
         DIContainer.register(DetailFactory.self) { return DetailFactoryImpl() }
         DIContainer.register(CategorySelectorFactory.self) { return CategorySelectorFactoryImpl() }
         DIContainer.register(FilterSelectorFactory.self) { return FilterSelectorFactoryImpl() }
+        DIContainer.register(LoginFactory.self) { return LoginFactoryImpl() }
+        DIContainer.register(SignUpFactory.self) { return SignUpFactoryImpl() }
+        DIContainer.register(WaveTabbarFactory.self) { return WaveTabbarFactoryImpl() }
+        DIContainer.register(FAQFactory.self) { return FAQFactoryImpl() }
     }
 }

@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import LoginFeatureInterface
 
 import ReactorKit
 import RxCocoa
@@ -62,13 +63,8 @@ private extension SplashController {
                 owner.rootViewController = navigationController
             }, onError: { [weak self] _ in
                 guard let self = self else { return }
-                let loginViewController = LoginController()
-                loginViewController.reactor = LoginReactor(
-                    authAPIUseCase: authAPIUseCase,
-                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
-                )
-                let loginNavigationController = UINavigationController(rootViewController: loginViewController)
+                @Dependency var factory: LoginFactory
+                let loginNavigationController = UINavigationController(rootViewController: factory.make())
                 rootViewController = loginNavigationController
             })
             .disposed(by: disposeBag)
