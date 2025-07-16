@@ -1,6 +1,7 @@
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import PresentationInterface
 
 import ReactorKit
 import RxCocoa
@@ -70,13 +71,12 @@ final class LoginReactor: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
         case .moveToSignUpScene(let controller):
-            let signUpController = SignUpMainController()
-            signUpController.reactor = SignUpMainReactor(
-                isFirstResponderCase: true,
-                authrizationCode: authrizationCode,
-                signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
+            @Dependency var factory: SignUpFactory
+            controller.navigationController?.pushViewController(
+                factory.make(isFirstResponder: true, authrizationCode: authrizationCode),
+                animated: true
             )
-            controller.navigationController?.pushViewController(signUpController, animated: true)
+            
         case .moveToHomeScene(let controller):
             let homeTabbar = WaveTabBarController()
             controller.view.window?.rootViewController = homeTabbar
