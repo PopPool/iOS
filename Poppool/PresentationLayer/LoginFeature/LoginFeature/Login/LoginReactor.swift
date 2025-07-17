@@ -83,7 +83,7 @@ final class LoginReactor: Reactor {
 
         case .loadView:
             break
-            
+
         case .moveToInquiryScene(let controller):
             @Dependency var factory: FAQFactory
             controller.navigationController?.pushViewController(factory.make(), animated: true)

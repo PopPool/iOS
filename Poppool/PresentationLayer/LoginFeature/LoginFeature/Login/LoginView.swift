@@ -52,9 +52,8 @@ final class LoginView: UIView {
 
         self.addViews()
         self.setupConstraints()
-        self.configureUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("\(#file), \(#function) Error")
     }
@@ -124,6 +123,4 @@ private extension LoginView {
             make.centerX.equalToSuperview()
         }
     }
-
-    func configureUI() { }
 }

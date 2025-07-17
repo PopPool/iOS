@@ -2,9 +2,9 @@ import UIKit
 
 import DesignSystem
 import SnapKit
+import ReactorKit
 import RxCocoa
 import RxSwift
-import ReactorKit
 
 final class LoginViewController: BaseViewController, View {
 
@@ -18,36 +18,24 @@ final class LoginViewController: BaseViewController, View {
     override func loadView() {
         self.view = mainView
     }
+}
+
+// MARK: - Life Cycle
+extension LoginViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let lastLogin = reactor?.userDefaultService.fetch(key: "lastLogin") {
             switch lastLogin {
             case "kakao":
-                mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown, text: "최근에 이 방법으로 로그인했어요")
+                mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown)
             case "apple":
-                mainView.appleButton.showToolTip(color: .w100, direction: .pointUp, text: "최근에 이 방법으로 로그인했어요")
+                mainView.appleButton.showToolTip(color: .w100, direction: .pointUp)
             default:
                 break
             }
         }
     }
-}
-
-// MARK: - Life Cycle
-extension LoginViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-}
-
-// MARK: - SetUp
-private extension LoginViewController {
-    func addViews() { }
-
-    func setupConstraints() { }
-
-    func configureUI() { }
 }
 
 extension LoginViewController {
@@ -85,5 +73,3 @@ extension LoginViewController {
             .disposed(by: disposeBag)
     }
 }
-
-
