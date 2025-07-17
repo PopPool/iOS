@@ -6,13 +6,17 @@ import DomainInterface
 import Infrastructure
 import LoginFeature
 import LoginFeatureInterface
-import Presentation
 import PresentationInterface
+import PresentationTesting
+
+import KakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+//        KakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppKey)
 
         self.registerDependencies()
         self.registerFactory()
@@ -31,6 +35,7 @@ extension AppDelegate {
     private func registerDependencies() {
         // MARK: Register Service
         DIContainer.register(Provider.self) { return ProviderImpl() }
+        DIContainer.register(KeyChainService.self) { return KeyChainService() }
 
         // MARK: Resolve service
         @Dependency var provider: Provider
@@ -53,8 +58,8 @@ extension AppDelegate {
 
     private func registerFactory() {
         DIContainer.register(LoginFactory.self) { return LoginFactoryImpl() }
-        DIContainer.register(SignUpFactory.self) { return SignUpFactoryImpl() }
-        DIContainer.register(WaveTabbarFactory.self) { return WaveTabbarFactoryImpl() }
-        DIContainer.register(FAQFactory.self) { return FAQFactoryImpl() }
+        DIContainer.register(SignUpFactory.self) { return SignUpFactoryMock() }
+        DIContainer.register(WaveTabbarFactory.self) { return WaveTabbarFactoryMock() }
+        DIContainer.register(FAQFactory.self) { return FAQFactoryMock() }
     }
 }
