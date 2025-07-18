@@ -60,8 +60,8 @@ final class LoginReactor: Reactor {
         case .appleButtonTapped(let controller):
             return loginWithApple(controller: controller)
         case .guestButtonTapped(let controller):
-            _ = keyChainService.deleteToken(type: .accessToken)
-            _ = keyChainService.deleteToken(type: .refreshToken)
+            keyChainService.deleteToken(type: .accessToken)
+            keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene(controller: controller))
         case .inquiryButtonTapped(let controller):
             return Observable.just(.moveToInquiryScene(controller: controller))
