@@ -1,0 +1,8 @@
+git_url("git@github.com:PopPool/iOS-Signing.git")
+
+storage_mode("git")
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier(["com.poppoolIOS.poppool", "com.poppoolIOS.*", "com.poppoolIOS.poppool.LoginFeatureDemo"])
+username("thddudgns972@gmail.com")
