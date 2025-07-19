@@ -14,19 +14,17 @@ final class LoginView: UIView {
         $0.setTitleColor(.g1000, for: .normal)
     }
 
+    let xmarkButton = UIButton(type: .system).then {
+        $0.setImage(UIImage(named: "icon_xmark"), for: .normal)
+        $0.tintColor = .g1000
+    }
+
     private let logoImageView = UIImageView().then {
         $0.image = UIImage(named: "image_login_logo")
         $0.contentMode = .scaleAspectFit
     }
 
-    private let titleLabel = PPLabel(
-        style: .bold,
-        fontSize: 16,
-        text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요"
-    ).then {
-        $0.numberOfLines = 0
-        $0.textAlignment = .center
-    }
+    let titleLabel = PPLabel()
 
     let kakaoButton = PPButton(style: .kakao, text: "카카오톡으로 로그인")
 
@@ -63,7 +61,7 @@ final class LoginView: UIView {
 private extension LoginView {
 
     func addViews() {
-        [guestButton, logoImageView, titleLabel, kakaoButton, appleButton, inquiryButton].forEach {
+        [guestButton, xmarkButton, logoImageView, titleLabel, kakaoButton, appleButton, inquiryButton].forEach {
             self.addSubview($0)
         }
 
@@ -80,6 +78,12 @@ private extension LoginView {
         guestButton.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(11)
             make.trailing.equalToSuperview().inset(20)
+        }
+
+        xmarkButton.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide).inset(11)
+            make.trailing.equalToSuperview().inset(20)
+            make.size.equalTo(32)
         }
 
         logoImageView.snp.makeConstraints { make in
@@ -122,5 +126,17 @@ private extension LoginView {
             make.bottom.equalToSuperview().inset(56)
             make.centerX.equalToSuperview()
         }
+    }
+}
+
+extension LoginView {
+    func setTitle(_ title: String) {
+        self.titleLabel.setLineHeightText(
+            text: title,
+            font: .korFont(style: .bold, size: 16),
+            lineHeight: 1.3
+        )
+        self.titleLabel.numberOfLines = 0
+        self.titleLabel.textAlignment = .center
     }
 }

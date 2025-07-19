@@ -168,8 +168,8 @@ final class DetailReactor: Reactor {
                 )
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
-                @Dependency var factory: SubLoginFactory
-                let nextController = UINavigationController(rootViewController: factory.make())
+                @Dependency var factory: LoginFactory
+                let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -203,8 +203,8 @@ final class DetailReactor: Reactor {
                 )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
-                @Dependency var factory: SubLoginFactory
-                let nextController = UINavigationController(rootViewController: factory.make())
+                @Dependency var factory: LoginFactory
+                let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -237,8 +237,8 @@ final class DetailReactor: Reactor {
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
         case .moveToLoginScene(let controller):
-            @Dependency var factory: SubLoginFactory
-            let nextController = UINavigationController(rootViewController: factory.make())
+            @Dependency var factory: LoginFactory
+            let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
         case .moveToImageDetailScene(let controller, let cellRow, let imageRow):

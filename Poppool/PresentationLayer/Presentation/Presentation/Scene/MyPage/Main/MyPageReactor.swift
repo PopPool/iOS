@@ -268,8 +268,8 @@ final class MyPageReactor: Reactor {
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .moveToLoginScene(let controller):
-            @Dependency var factory: SubLoginFactory
-            let navigationController = UINavigationController(rootViewController: factory.make())
+            @Dependency var factory: LoginFactory
+            let navigationController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
             navigationController.modalPresentationStyle = .fullScreen
             controller.present(navigationController, animated: true)
         case .moveToMyCommentScene(let controller):

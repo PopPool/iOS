@@ -9,14 +9,10 @@ import LoginFeatureInterface
 import PresentationInterface
 import PresentationTesting
 
-import KakaoSDKCommon
-
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-//        KakaoSDK.initSDK(appKey: Secrets.kakaoAuthAppKey)
 
         self.registerDependencies()
         self.registerFactory()

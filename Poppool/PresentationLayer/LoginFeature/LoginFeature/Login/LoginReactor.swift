@@ -14,22 +14,27 @@ final class LoginReactor: Reactor {
         case kakaoButtonTapped
         case appleButtonTapped
         case guestButtonTapped
+        case xmarkButtonTapped
         case inquiryButtonTapped
     }
 
     enum Mutation {
-        case moveToSignUpScene(authrizationCode: String?)
+        case moveToSignUpScene(isSubLogin: Bool, authrizationCode: String?)
         case moveToHomeScene
+        case moveToBeforeScene
         case moveToInquiryScene
     }
 
     struct State {
+        var isSubLogin: Bool
+
         @Pulse var present: PresentTarget?
     }
 
     enum PresentTarget {
-        case signUp(authrizationCode: String?)
+        case signUp(isFirstResponder: Bool, authrizationCode: String?)
         case home
+        case dismiss
         case inquiry
     }
 
@@ -47,14 +52,15 @@ final class LoginReactor: Reactor {
 
     // MARK: - init
     init(
+        isSubLogin: Bool,
         authAPIUseCase: AuthAPIUseCase,
         kakaoLoginUseCase: KakaoLoginUseCase,
         appleLoginUseCase: AppleLoginUseCase
     ) {
+        self.initialState = State(isSubLogin: isSubLogin)
         self.authAPIUseCase = authAPIUseCase
         self.kakaoLoginUseCase = kakaoLoginUseCase
         self.appleLoginUseCase = appleLoginUseCase
-        self.initialState = State()
     }
 
     // MARK: - Reactor Methods
@@ -71,6 +77,9 @@ final class LoginReactor: Reactor {
             keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene)
 
+        case .xmarkButtonTapped:
+            return Observable.just(.moveToBeforeScene)
+
         case .inquiryButtonTapped:
             return Observable.just(.moveToInquiryScene)
         }
@@ -80,11 +89,17 @@ final class LoginReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case .moveToSignUpScene(let authrizationCode):
-            newState.present = .signUp(authrizationCode: authrizationCode)
+        case .moveToSignUpScene(let isSubLogin, let authrizationCode):
+            newState.present = .signUp(
+                isFirstResponder: !isSubLogin,
+                authrizationCode: authrizationCode
+            )
 
         case .moveToHomeScene:
             newState.present = .home
+
+        case .moveToBeforeScene:
+            newState.present = .dismiss
 
         case .moveToInquiryScene:
             newState.present = .inquiry
@@ -119,10 +134,17 @@ final class LoginReactor: Reactor {
                     switch loginResponse.isRegisteredUser {
                     case true:
                         owner.userDefaultService.save(keyType: .lastLogin, value: "kakao")
-                        return Observable.just(.moveToHomeScene)
+                        return Observable.just(
+                            owner.currentState.isSubLogin ? .moveToBeforeScene : .moveToHomeScene
+                        )
 
                     case false:
-                        return Observable.just(.moveToSignUpScene(authrizationCode: nil))
+                        return Observable.just(
+                            .moveToSignUpScene(
+                                isSubLogin: owner.currentState.isSubLogin,
+                                authrizationCode: nil
+                            )
+                        )
                     }
 
                 case .failure(let error):
@@ -161,10 +183,15 @@ final class LoginReactor: Reactor {
                     switch loginResponse.isRegisteredUser {
                     case true:
                         owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
-                        return .just(.moveToHomeScene)
+                        return .just(owner.currentState.isSubLogin ? .moveToBeforeScene : .moveToHomeScene)
 
                     case false:
-                        return .just(.moveToSignUpScene(authrizationCode: authCode))
+                        return .just(
+                            .moveToSignUpScene(
+                                isSubLogin: owner.currentState.isSubLogin,
+                                authrizationCode: authCode
+                            )
+                        )
                     }
 
                 case .failure:

@@ -64,7 +64,7 @@ private extension SplashController {
             }, onError: { [weak self] _ in
                 guard let self = self else { return }
                 @Dependency var factory: LoginFactory
-                let loginNavigationController = UINavigationController(rootViewController: factory.make())
+                let loginNavigationController = UINavigationController(rootViewController: factory.make(isSubLogin: false))
                 rootViewController = loginNavigationController
             })
             .disposed(by: disposeBag)

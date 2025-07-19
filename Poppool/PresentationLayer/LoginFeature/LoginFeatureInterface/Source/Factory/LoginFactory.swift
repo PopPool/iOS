@@ -3,5 +3,5 @@ import UIKit
 import DesignSystem
 
 public protocol LoginFactory {
-    func make() -> BaseViewController
+    func make(isSubLogin: Bool) -> BaseViewController
 }

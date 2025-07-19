@@ -9,9 +9,10 @@ public final class LoginFactoryImpl: LoginFactory {
 
     public init() { }
 
-    public func make() -> BaseViewController {
+    public func make(isSubLogin: Bool) -> BaseViewController {
         let viewController = LoginViewController()
         viewController.reactor = LoginReactor(
+            isSubLogin: isSubLogin,
             authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
             kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
             appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
