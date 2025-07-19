@@ -60,12 +60,15 @@ final class LoginReactor: Reactor {
         switch action {
         case .kakaoButtonTapped:
             return loginWithKakao()
+
         case .appleButtonTapped:
             return loginWithApple()
+
         case .guestButtonTapped:
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene)
+            
         case .inquiryButtonTapped:
             return Observable.just(.moveToInquiryScene)
         }
