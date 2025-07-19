@@ -69,36 +69,32 @@ extension LoginViewController {
     }
 
     private func bindOutput(reactor: Reactor) {
-        reactor.pulse(\.$presentSignUp)
+        reactor.pulse(\.$present)
+            .skip(1)
             .withUnretained(self)
-            .subscribe { (owner, authrizationCode) in
-                @Dependency var factory: SignUpFactory
-                owner.navigationController?.pushViewController(
-                    factory.make(
-                        isFirstResponder: true,
-                        authrizationCode: authrizationCode
-                    ),
-                    animated: true
-                )
-            }
-            .disposed(by: disposeBag)
+            .subscribe { (owner, target) in
+                switch target! {
+                case .signUp(let authrizationCode):
+                    @Dependency var factory: SignUpFactory
+                    owner.navigationController?.pushViewController(
+                        factory.make(
+                            isFirstResponder: true,
+                            authrizationCode: authrizationCode
+                        ),
+                        animated: true
+                    )
 
-        reactor.pulse(\.$presentHome)
-            .withUnretained(self)
-            .subscribe { (owner, _) in
-                @Dependency var factory: WaveTabbarFactory
-                owner.view.window?.rootViewController = factory.make()
-            }
-            .disposed(by: disposeBag)
+                case .home:
+                    @Dependency var factory: WaveTabbarFactory
+                    owner.view.window?.rootViewController = factory.make()
 
-        reactor.pulse(\.$presentInquiry)
-            .withUnretained(self)
-            .subscribe { (owner, _) in
-                @Dependency var factory: FAQFactory
-                owner.navigationController?.pushViewController(
-                    factory.make(),
-                    animated: true
-                )
+                case .inquiry:
+                    @Dependency var factory: FAQFactory
+                    owner.navigationController?.pushViewController(
+                        factory.make(),
+                        animated: true
+                    )
+                }
             }
             .disposed(by: disposeBag)
     }

@@ -24,10 +24,6 @@ final class LoginReactor: Reactor {
     }
 
     struct State {
-        @Pulse var presentSignUp: String?
-        @Pulse var presentHome: Void?
-        @Pulse var presentInquiry: Void?
-
         @Pulse var present: PresentTarget?
     }
 
@@ -41,7 +37,6 @@ final class LoginReactor: Reactor {
 
     var initialState: State
     var disposeBag = DisposeBag()
-
 
     private let authAPIUseCase: AuthAPIUseCase
     private let kakaoLoginUseCase: KakaoLoginUseCase
