@@ -68,7 +68,7 @@ final class LoginReactor: Reactor {
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
             return Observable.just(.moveToHomeScene)
-            
+
         case .inquiryButtonTapped:
             return Observable.just(.moveToInquiryScene)
         }
@@ -87,21 +87,26 @@ final class LoginReactor: Reactor {
         case .moveToInquiryScene:
             newState.presentInquiry = ()
         }
+
         return newState
     }
 
     func loginWithKakao() -> Observable<Mutation> {
         return kakaoLoginUseCase.fetchUserCredential()
             .withUnretained(self)
-            .flatMap { owner, response in
-                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
+            .flatMap { (owner, authServiceResponse) in
+                return owner.authAPIUseCase.postTryLogin(
+                    userCredential: authServiceResponse,
+                    socialType: "kakao"
+                )
             }
             .withUnretained(self)
-            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
+            .do { (owner, loginResponse) in
                 owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
                 owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
                 owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
-
+            }
+            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
                 let accessTokenResult = owner.keyChainService.saveToken(
                     type: .accessToken,
                     value: loginResponse.accessToken
@@ -116,7 +121,8 @@ final class LoginReactor: Reactor {
                     case false: return Observable.just(.moveToSignUpScene)
                     }
 
-                case .failure:
+                case .failure(let error):
+                    // TODO: 로거 개선 후 로그인 실패 에러 남기기
                     return Observable.empty()
                 }
             }
@@ -125,20 +131,27 @@ final class LoginReactor: Reactor {
     func loginWithApple() -> Observable<Mutation> {
         return appleLoginUseCase.fetchUserCredential()
             .withUnretained(self)
-            .flatMap { owner, response in
-                owner.authrizationCode = response.authorizationCode
-                return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
+            .do { (owner, authServiceResponse) in
+                owner.authrizationCode = authServiceResponse.authorizationCode
+            }
+            .flatMap { (owner, authServiceResponse) in
+                return owner.authAPIUseCase.postTryLogin(
+                    userCredential: authServiceResponse,
+                    socialType: "apple"
+                )
             }
             .withUnretained(self)
-            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
+            .do { (owner, loginResponse) in
                 owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
                 owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
                 owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
-
+            }
+            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
                 let accessTokenResult = owner.keyChainService.saveToken(
                     type: .accessToken,
                     value: loginResponse.accessToken
                 )
+
                 switch accessTokenResult {
                 case .success:
                     owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
@@ -148,7 +161,8 @@ final class LoginReactor: Reactor {
                     case false: return Observable.just(.moveToSignUpScene)
                     }
 
-                case .failure:
+                case .failure(let error):
+                    // TODO: 로거 개선 후 로그인 실패 에러 남기기
                     return Observable.empty()
                 }
             }
