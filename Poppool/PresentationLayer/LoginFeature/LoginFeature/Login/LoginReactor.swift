@@ -18,7 +18,7 @@ final class LoginReactor: Reactor {
     }
 
     enum Mutation {
-        case moveToSignUpScene
+        case moveToSignUpScene(authrizationCode: String?)
         case moveToHomeScene
         case moveToInquiryScene
     }
@@ -27,6 +27,14 @@ final class LoginReactor: Reactor {
         @Pulse var presentSignUp: String?
         @Pulse var presentHome: Void?
         @Pulse var presentInquiry: Void?
+
+        @Pulse var present: PresentTarget?
+    }
+
+    enum PresentTarget {
+        case signUp(authrizationCode: String?)
+        case home
+        case inquiry
     }
 
     // MARK: - properties
@@ -34,7 +42,6 @@ final class LoginReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private var authrizationCode: String?
 
     private let authAPIUseCase: AuthAPIUseCase
     private let kakaoLoginUseCase: KakaoLoginUseCase
@@ -78,14 +85,14 @@ final class LoginReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case .moveToSignUpScene:
-            newState.presentSignUp = authrizationCode
+        case .moveToSignUpScene(let authrizationCode):
+            newState.present = .signUp(authrizationCode: authrizationCode)
 
         case .moveToHomeScene:
-            newState.presentHome = ()
+            newState.present = .home
 
         case .moveToInquiryScene:
-            newState.presentInquiry = ()
+            newState.present = .inquiry
         }
 
         return newState
@@ -94,7 +101,6 @@ final class LoginReactor: Reactor {
     func loginWithKakao() -> Observable<Mutation> {
         return kakaoLoginUseCase.fetchUserCredential()
             .withUnretained(self)
-            .do { (owner, _) in owner.authrizationCode = nil }
             .flatMap { (owner, authServiceResponse) in
                 return owner.authAPIUseCase.postTryLogin(
                     userCredential: authServiceResponse,
@@ -119,7 +125,7 @@ final class LoginReactor: Reactor {
 
                     switch loginResponse.isRegisteredUser {
                     case true: return Observable.just(.moveToHomeScene)
-                    case false: return Observable.just(.moveToSignUpScene)
+                    case false: return Observable.just(.moveToSignUpScene(authrizationCode: nil))
                     }
 
                 case .failure(let error):
@@ -132,39 +138,39 @@ final class LoginReactor: Reactor {
     func loginWithApple() -> Observable<Mutation> {
         return appleLoginUseCase.fetchUserCredential()
             .withUnretained(self)
-            .do { (owner, authServiceResponse) in
-                owner.authrizationCode = authServiceResponse.authorizationCode
-            }
-            .flatMap { (owner, authServiceResponse) in
+            .flatMap { (owner, authServiceResponse) -> Observable<(String?, LoginResponse)> in
                 return owner.authAPIUseCase.postTryLogin(
                     userCredential: authServiceResponse,
                     socialType: "apple"
                 )
+                .map { (authServiceResponse.authorizationCode, $0) }
             }
             .withUnretained(self)
-            .do { (owner, loginResponse) in
-                owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
-                owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
-                owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+            .do { (owner, tuple) in
+                let (authCode, loginResponse) = tuple
+                self.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
+                self.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
+                self.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
             }
-            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
-                let accessTokenResult = owner.keyChainService.saveToken(
+            .flatMap { (owner, tuple) -> Observable<Mutation> in
+                let (authCode, loginResponse) = tuple
+
+                let accessResult = self.keyChainService.saveToken(
                     type: .accessToken,
                     value: loginResponse.accessToken
                 )
-
-                switch accessTokenResult {
+                switch accessResult {
                 case .success:
-                    owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
+                    self.userDefaultService.save(keyType: .lastLogin, value: "apple")
 
                     switch loginResponse.isRegisteredUser {
-                    case true: return Observable.just(.moveToHomeScene)
-                    case false: return Observable.just(.moveToSignUpScene)
+                    case true: return .just(.moveToHomeScene)
+                    case false: return .just(.moveToSignUpScene(authrizationCode: authCode))
                     }
 
-                case .failure(let error):
+                case .failure:
                     // TODO: 로거 개선 후 로그인 실패 에러 남기기
-                    return Observable.empty()
+                    return .empty()
                 }
             }
     }
