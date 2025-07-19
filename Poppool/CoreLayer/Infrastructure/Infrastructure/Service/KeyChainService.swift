@@ -1,8 +1,6 @@
 import Foundation
 import Security
 
-import RxSwift
-
 public final class KeyChainService {
 
     // KeyChain에서 발생할 수 있는 오류를 정의
