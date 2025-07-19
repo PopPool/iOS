@@ -116,11 +116,13 @@ final class LoginReactor: Reactor {
 
                 switch accessTokenResult {
                 case .success:
-                    owner.userDefaultService.save(keyType: .lastLogin, value: "kakao")
-
                     switch loginResponse.isRegisteredUser {
-                    case true: return Observable.just(.moveToHomeScene)
-                    case false: return Observable.just(.moveToSignUpScene(authrizationCode: nil))
+                    case true:
+                        owner.userDefaultService.save(keyType: .lastLogin, value: "kakao")
+                        return Observable.just(.moveToHomeScene)
+
+                    case false:
+                        return Observable.just(.moveToSignUpScene(authrizationCode: nil))
                     }
 
                 case .failure(let error):
@@ -156,11 +158,13 @@ final class LoginReactor: Reactor {
                 )
                 switch accessResult {
                 case .success:
-                    self.userDefaultService.save(keyType: .lastLogin, value: "apple")
-
                     switch loginResponse.isRegisteredUser {
-                    case true: return .just(.moveToHomeScene)
-                    case false: return .just(.moveToSignUpScene(authrizationCode: authCode))
+                    case true:
+                        owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
+                        return .just(.moveToHomeScene)
+
+                    case false:
+                        return .just(.moveToSignUpScene(authrizationCode: authCode))
                     }
 
                 case .failure:

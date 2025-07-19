@@ -27,7 +27,7 @@ extension LoginViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let lastLogin = reactor?.userDefaultService.fetch(key: "lastLogin") {
+        if let lastLogin = reactor?.userDefaultService.fetch(keyType: .lastLogin) {
             switch lastLogin {
             case "kakao":
                 mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown)

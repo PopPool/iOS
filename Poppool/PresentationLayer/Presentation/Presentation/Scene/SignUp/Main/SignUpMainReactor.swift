@@ -135,6 +135,11 @@ final class SignUpMainReactor: Reactor {
             )
             .subscribe { [weak self, weak controller] in
                 guard let self = self else { return }
+                self.userDefaultService.save(
+                    keyType: .lastLogin,
+                    value: authrizationCode != nil ? "apple" : "kakao"
+                )
+
                 let completeController = SignUpCompleteController()
                 completeController.reactor = SignUpCompleteReactor(
                     nickName: nickName,
