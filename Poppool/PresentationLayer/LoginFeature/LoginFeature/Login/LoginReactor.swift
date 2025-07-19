@@ -21,7 +21,6 @@ final class LoginReactor: Reactor {
         case moveToSignUpScene
         case moveToHomeScene
         case moveToInquiryScene
-        case loadView
     }
 
     struct State {
@@ -84,9 +83,6 @@ final class LoginReactor: Reactor {
 
         case .moveToInquiryScene:
             newState.presentInquiry = ()
-
-        case .loadView:
-            break
         }
         return newState
     }
@@ -98,21 +94,27 @@ final class LoginReactor: Reactor {
                 return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
             }
             .withUnretained(self)
-            .map { (owner, loginResponse) in
+            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
                 owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
                 owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
-                let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
-                let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+                owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+
+                let accessTokenResult = owner.keyChainService.saveToken(
+                    type: .accessToken,
+                    value: loginResponse.accessToken
+                )
+
                 switch accessTokenResult {
                 case .success:
                     owner.userDefaultService.save(key: "lastLogin", value: "kakao")
-                    if loginResponse.isRegisteredUser {
-                        return .moveToHomeScene
-                    } else {
-                        return .moveToSignUpScene
+
+                    switch loginResponse.isRegisteredUser {
+                    case true: return Observable.just(.moveToHomeScene)
+                    case false: return Observable.just(.moveToSignUpScene)
                     }
+
                 case .failure:
-                    return .loadView
+                    return Observable.empty()
                 }
             }
     }
@@ -125,21 +127,26 @@ final class LoginReactor: Reactor {
                 return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
-            .map { (owner, loginResponse) in
+            .flatMap { (owner, loginResponse) -> Observable<Mutation> in
                 owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
                 owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
-                let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
-                let refreshTokenResult = owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+                owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+
+                let accessTokenResult = owner.keyChainService.saveToken(
+                    type: .accessToken,
+                    value: loginResponse.accessToken
+                )
                 switch accessTokenResult {
                 case .success:
                     owner.userDefaultService.save(key: "lastLogin", value: "apple")
-                    if loginResponse.isRegisteredUser {
-                        return .moveToHomeScene
-                    } else {
-                        return .moveToSignUpScene
+
+                    switch loginResponse.isRegisteredUser {
+                    case true: return Observable.just(.moveToHomeScene)
+                    case false: return Observable.just(.moveToSignUpScene)
                     }
+
                 case .failure:
-                    return .loadView
+                    return Observable.empty()
                 }
             }
     }
