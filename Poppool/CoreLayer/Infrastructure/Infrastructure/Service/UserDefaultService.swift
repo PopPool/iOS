@@ -71,6 +71,9 @@ public final class UserDefaultService {
 extension UserDefaultService {
     public enum Key: String {
         case searchKeyword = "searchList"
+        case userID = "userID"
+        case socialType = "socialType"
+        case lastLogin = "lastLogin"
     }
 
     /// Userdefault 데이터 저장 메서드

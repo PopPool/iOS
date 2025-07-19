@@ -95,8 +95,8 @@ final class LoginReactor: Reactor {
             }
             .withUnretained(self)
             .flatMap { (owner, loginResponse) -> Observable<Mutation> in
-                owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
-                owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
+                owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
+                owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
                 owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
 
                 let accessTokenResult = owner.keyChainService.saveToken(
@@ -106,7 +106,7 @@ final class LoginReactor: Reactor {
 
                 switch accessTokenResult {
                 case .success:
-                    owner.userDefaultService.save(key: "lastLogin", value: "kakao")
+                    owner.userDefaultService.save(keyType: .lastLogin, value: "kakao")
 
                     switch loginResponse.isRegisteredUser {
                     case true: return Observable.just(.moveToHomeScene)
@@ -128,8 +128,8 @@ final class LoginReactor: Reactor {
             }
             .withUnretained(self)
             .flatMap { (owner, loginResponse) -> Observable<Mutation> in
-                owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
-                owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
+                owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
+                owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
                 owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
 
                 let accessTokenResult = owner.keyChainService.saveToken(
@@ -138,7 +138,7 @@ final class LoginReactor: Reactor {
                 )
                 switch accessTokenResult {
                 case .success:
-                    owner.userDefaultService.save(key: "lastLogin", value: "apple")
+                    owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
 
                     switch loginResponse.isRegisteredUser {
                     case true: return Observable.just(.moveToHomeScene)
