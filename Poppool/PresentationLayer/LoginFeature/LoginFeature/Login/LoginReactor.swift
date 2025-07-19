@@ -94,6 +94,7 @@ final class LoginReactor: Reactor {
     func loginWithKakao() -> Observable<Mutation> {
         return kakaoLoginUseCase.fetchUserCredential()
             .withUnretained(self)
+            .do { (owner, _) in owner.authrizationCode = nil }
             .flatMap { (owner, authServiceResponse) in
                 return owner.authAPIUseCase.postTryLogin(
                     userCredential: authServiceResponse,
