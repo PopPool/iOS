@@ -11,20 +11,24 @@ final class LoginReactor: Reactor {
 
     // MARK: - Reactor
     enum Action {
-        case kakaoButtonTapped(controller: BaseViewController)
-        case appleButtonTapped(controller: BaseViewController)
-        case guestButtonTapped(controller: BaseViewController)
-        case inquiryButtonTapped(controller: BaseViewController)
+        case kakaoButtonTapped
+        case appleButtonTapped
+        case guestButtonTapped
+        case inquiryButtonTapped
     }
 
     enum Mutation {
-        case moveToSignUpScene(controller: BaseViewController)
-        case moveToHomeScene(controller: BaseViewController)
+        case moveToSignUpScene
+        case moveToHomeScene
+        case moveToInquiryScene
         case loadView
-        case moveToInquiryScene(controller: BaseViewController)
     }
 
-    struct State { }
+    struct State {
+        @Pulse var presentSignUp: String?
+        @Pulse var presentHome: Void?
+        @Pulse var presentInquiry: Void?
+    }
 
     // MARK: - properties
 
@@ -55,51 +59,46 @@ final class LoginReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .kakaoButtonTapped(let controller):
-            return loginWithKakao(controller: controller)
-        case .appleButtonTapped(let controller):
-            return loginWithApple(controller: controller)
-        case .guestButtonTapped(let controller):
+        case .kakaoButtonTapped:
+            return loginWithKakao()
+        case .appleButtonTapped:
+            return loginWithApple()
+        case .guestButtonTapped:
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
-            return Observable.just(.moveToHomeScene(controller: controller))
-        case .inquiryButtonTapped(let controller):
-            return Observable.just(.moveToInquiryScene(controller: controller))
+            return Observable.just(.moveToHomeScene)
+        case .inquiryButtonTapped:
+            return Observable.just(.moveToInquiryScene)
         }
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
-        switch mutation {
-        case .moveToSignUpScene(let controller):
-            @Dependency var factory: SignUpFactory
-            controller.navigationController?.pushViewController(
-                factory.make(isFirstResponder: true, authrizationCode: authrizationCode),
-                animated: true
-            )
+        var newState = state
 
-        case .moveToHomeScene(let controller):
-            @Dependency var factory: WaveTabbarFactory
-            controller.view.window?.rootViewController = factory.make()
+        switch mutation {
+        case .moveToSignUpScene:
+            newState.presentSignUp = authrizationCode
+
+        case .moveToHomeScene:
+            newState.presentHome = ()
+
+        case .moveToInquiryScene:
+            newState.presentInquiry = ()
 
         case .loadView:
             break
-
-        case .moveToInquiryScene(let controller):
-            @Dependency var factory: FAQFactory
-            controller.navigationController?.pushViewController(factory.make(), animated: true)
         }
-        return state
+        return newState
     }
 
-    func loginWithKakao(controller: BaseViewController) -> Observable<Mutation> {
+    func loginWithKakao() -> Observable<Mutation> {
         return kakaoLoginUseCase.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
                 return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "kakao")
             }
             .withUnretained(self)
-            .map { [weak controller] (owner, loginResponse) in
-                guard let controller = controller else { return .loadView }
+            .map { (owner, loginResponse) in
                 owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
                 owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
                 let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
@@ -108,9 +107,9 @@ final class LoginReactor: Reactor {
                 case .success:
                     owner.userDefaultService.save(key: "lastLogin", value: "kakao")
                     if loginResponse.isRegisteredUser {
-                        return .moveToHomeScene(controller: controller)
+                        return .moveToHomeScene
                     } else {
-                        return .moveToSignUpScene(controller: controller)
+                        return .moveToSignUpScene
                     }
                 case .failure:
                     return .loadView
@@ -118,7 +117,7 @@ final class LoginReactor: Reactor {
             }
     }
 
-    func loginWithApple(controller: BaseViewController) -> Observable<Mutation> {
+    func loginWithApple() -> Observable<Mutation> {
         return appleLoginUseCase.fetchUserCredential()
             .withUnretained(self)
             .flatMap { owner, response in
@@ -126,8 +125,7 @@ final class LoginReactor: Reactor {
                 return owner.authAPIUseCase.postTryLogin(userCredential: response, socialType: "apple")
             }
             .withUnretained(self)
-            .map({ [weak controller] (owner, loginResponse) in
-                guard let controller = controller else { return .loadView }
+            .map { (owner, loginResponse) in
                 owner.userDefaultService.save(key: "userID", value: loginResponse.userId)
                 owner.userDefaultService.save(key: "socialType", value: loginResponse.socialType)
                 let accessTokenResult = owner.keyChainService.saveToken(type: .accessToken, value: loginResponse.accessToken)
@@ -136,13 +134,13 @@ final class LoginReactor: Reactor {
                 case .success:
                     owner.userDefaultService.save(key: "lastLogin", value: "apple")
                     if loginResponse.isRegisteredUser {
-                        return .moveToHomeScene(controller: controller)
+                        return .moveToHomeScene
                     } else {
-                        return .moveToSignUpScene(controller: controller)
+                        return .moveToSignUpScene
                     }
                 case .failure:
                     return .loadView
                 }
-            })
+            }
     }
 }
