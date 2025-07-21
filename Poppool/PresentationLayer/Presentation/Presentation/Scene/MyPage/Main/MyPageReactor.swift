@@ -46,6 +46,8 @@ final class MyPageReactor: Reactor {
 
     private let userAPIUseCase: UserAPIUseCase
 
+    @Dependency private var userDefaultService: UserDefaultService
+
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
             guard let self = self else {
@@ -162,7 +164,13 @@ final class MyPageReactor: Reactor {
         case .logoutButtonTapped:
             // 로그아웃 API
             return userAPIUseCase.postLogout()
+                .do(onCompleted: { [weak self] in
+                    UserDefaultService.Key.allCases
+                        .filter { $0 != .lastLogin }
+                        .forEach { self?.userDefaultService.delete(keyType: $0) }
+                })
                 .andThen(Observable.just(.logout))
+                .catch { error in Observable.empty() }
 
         case .adminMenuTapped(let controller):
             // 별도의 액션으로도 관리자 메뉴로 이동 가능
@@ -189,8 +197,9 @@ final class MyPageReactor: Reactor {
 
         case .logout:
             @Dependency var keyChainService: KeyChainService
-            _ = keyChainService.deleteToken(type: .accessToken)
-            _ = keyChainService.deleteToken(type: .refreshToken)
+            keyChainService.deleteToken(type: .accessToken)
+            keyChainService.deleteToken(type: .refreshToken)
+
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)

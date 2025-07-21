@@ -69,7 +69,7 @@ public final class UserDefaultService {
 
 // MARK: - Key base
 extension UserDefaultService {
-    public enum Key: String {
+    public enum Key: String, CaseIterable {
         case searchKeyword = "searchList"
         case userID = "userID"
         case socialType = "socialType"
