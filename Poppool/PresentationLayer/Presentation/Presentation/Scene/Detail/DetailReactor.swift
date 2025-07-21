@@ -169,7 +169,9 @@ final class DetailReactor: Reactor {
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
                 @Dependency var factory: LoginFactory
-                let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
+                let nextController = UINavigationController(
+                    rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
+                )
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -204,7 +206,9 @@ final class DetailReactor: Reactor {
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
                 @Dependency var factory: LoginFactory
-                let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
+                let nextController = UINavigationController(
+                    rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
+                )
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -238,7 +242,9 @@ final class DetailReactor: Reactor {
             controller.navigationController?.popViewController(animated: true)
         case .moveToLoginScene(let controller):
             @Dependency var factory: LoginFactory
-            let nextController = UINavigationController(rootViewController: factory.make(isSubLogin: true))
+            let nextController = UINavigationController(
+                rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
+            )
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
         case .moveToImageDetailScene(let controller, let cellRow, let imageRow):

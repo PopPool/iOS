@@ -2,11 +2,26 @@ import UIKit
 
 import DesignSystem
 import Infrastructure
+import LoginFeatureInterface
 import PresentationInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
 import SnapKit
+
+/// 다른 처리가 뭐가 있을까
+/// 1. 코멘트 타이틀
+///     1-1. 외부로부터 주입(상황에 맞춰 적절한 코멘트를 띄우기 위함)
+/// 2. 우상단 버튼의 형태
+///     2-1. 둘러보기/xmark
+///     2-2. 버튼의 타입만 전달받도록?
+///     2-3. 사이즈가 달라서 어려움이 있다고 봄
+/// 3. 우상단 버튼의 동작 -> 클로저로 넘긴다면 Reactor로 어떻게 처리?
+///     3-1. 일단 받아두고 reactor로부터 명령이 오면 실행
+///     3-2. 이러면 viewController를 만들 때 클로저를 넣어줘야됨. -> factory, init 변경
+/// 4. 배경 색상
+///     4-1. g50 -> subLogin
+///     4-2. w100 -> main login
 
 final class LoginViewController: BaseViewController, View {
 
@@ -16,6 +31,24 @@ final class LoginViewController: BaseViewController, View {
     var disposeBag = DisposeBag()
 
     private var mainView = LoginView()
+
+    public convenience init(
+        loginSceneType: LoginSceneType,
+        text: String
+    ) {
+        self.init()
+
+        self.mainView.setCloseButton(for: loginSceneType)
+        self.mainView.setTitle(text)
+    }
+
+    private override init() {
+        super.init()
+    }
+
+    public required init?(coder: NSCoder) {
+        fatalError("\(#file), \(#function) Error")
+    }
 
     override func loadView() {
         self.view = mainView
@@ -74,23 +107,6 @@ extension LoginViewController {
     }
 
     private func bindOutput(reactor: Reactor) {
-        reactor.state.distinctUntilChanged(\.isSubLogin)
-            .compactMap { $0.isSubLogin }
-            .withUnretained(self)
-            .subscribe { (owner, isSubLogin) in
-                switch isSubLogin {
-                case true:
-                    owner.mainView.guestButton.isHidden = true
-                    owner.mainView.xmarkButton.isHidden = false
-                    owner.mainView.setTitle("간편하게 SNS 로그인하고\n공감가는 코멘트에 반응해볼까요?\n다른 코멘트를 확인해볼까요?")
-
-                case false:
-                    owner.mainView.guestButton.isHidden = false
-                    owner.mainView.xmarkButton.isHidden = true
-                    owner.mainView.setTitle("간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
-                }
-            }
-            .disposed(by: disposeBag)
 
         reactor.pulse(\.$present)
             .skip(1)

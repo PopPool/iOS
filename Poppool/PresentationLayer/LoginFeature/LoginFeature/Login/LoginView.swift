@@ -1,6 +1,7 @@
 import UIKit
 
 import DesignSystem
+import LoginFeatureInterface
 
 import SnapKit
 import Then
@@ -12,11 +13,13 @@ final class LoginView: UIView {
         $0.setTitle("둘러보기", for: .normal)
         $0.titleLabel?.font = .korFont(style: .regular, size: 14)
         $0.setTitleColor(.g1000, for: .normal)
+        $0.isHidden = true
     }
 
     let xmarkButton = UIButton(type: .system).then {
         $0.setImage(UIImage(named: "icon_xmark"), for: .normal)
         $0.tintColor = .g1000
+        $0.isHidden = true
     }
 
     private let logoImageView = UIImageView().then {
@@ -54,6 +57,10 @@ final class LoginView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("\(#file), \(#function) Error")
+    }
+
+    deinit {
+        print("DEINIT DEBUG: \(#file)")
     }
 }
 
@@ -138,5 +145,15 @@ extension LoginView {
         )
         self.titleLabel.numberOfLines = 0
         self.titleLabel.textAlignment = .center
+    }
+
+    func setCloseButton(for loginSceneType: LoginSceneType) {
+        switch loginSceneType {
+        case .main:
+            self.guestButton.isHidden = false
+
+        case .sub:
+            self.xmarkButton.isHidden = false
+        }
     }
 }

@@ -1,6 +1,7 @@
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import LoginFeatureInterface
 import PresentationInterface
 
 import ReactorKit
@@ -19,15 +20,13 @@ final class LoginReactor: Reactor {
     }
 
     enum Mutation {
-        case moveToSignUpScene(isSubLogin: Bool, authrizationCode: String?)
+        case moveToSignUpScene(from: LoginSceneType, authrizationCode: String?)
         case moveToHomeScene
         case moveToBeforeScene
         case moveToInquiryScene
     }
 
     struct State {
-        var isSubLogin: Bool
-
         @Pulse var present: PresentTarget?
     }
 
@@ -43,6 +42,7 @@ final class LoginReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
+    private let loginSceneType: LoginSceneType
     private let authAPIUseCase: AuthAPIUseCase
     private let kakaoLoginUseCase: KakaoLoginUseCase
     private let appleLoginUseCase: AppleLoginUseCase
@@ -52,12 +52,13 @@ final class LoginReactor: Reactor {
 
     // MARK: - init
     init(
-        isSubLogin: Bool,
+        for loginSceneType: LoginSceneType,
         authAPIUseCase: AuthAPIUseCase,
         kakaoLoginUseCase: KakaoLoginUseCase,
         appleLoginUseCase: AppleLoginUseCase
     ) {
-        self.initialState = State(isSubLogin: isSubLogin)
+        self.initialState = State()
+        self.loginSceneType = loginSceneType
         self.authAPIUseCase = authAPIUseCase
         self.kakaoLoginUseCase = kakaoLoginUseCase
         self.appleLoginUseCase = appleLoginUseCase
@@ -91,7 +92,7 @@ final class LoginReactor: Reactor {
         switch mutation {
         case .moveToSignUpScene(let isSubLogin, let authrizationCode):
             newState.present = .signUp(
-                isFirstResponder: !isSubLogin,
+                isFirstResponder: loginSceneType == .main,
                 authrizationCode: authrizationCode
             )
 
@@ -135,13 +136,13 @@ final class LoginReactor: Reactor {
                     case true:
                         owner.userDefaultService.save(keyType: .lastLogin, value: "kakao")
                         return Observable.just(
-                            owner.currentState.isSubLogin ? .moveToBeforeScene : .moveToHomeScene
+                            owner.loginSceneType == .main ? .moveToHomeScene : .moveToBeforeScene
                         )
 
                     case false:
                         return Observable.just(
                             .moveToSignUpScene(
-                                isSubLogin: owner.currentState.isSubLogin,
+                                from: owner.loginSceneType,
                                 authrizationCode: nil
                             )
                         )
@@ -183,12 +184,12 @@ final class LoginReactor: Reactor {
                     switch loginResponse.isRegisteredUser {
                     case true:
                         owner.userDefaultService.save(keyType: .lastLogin, value: "apple")
-                        return .just(owner.currentState.isSubLogin ? .moveToBeforeScene : .moveToHomeScene)
+                        return .just(owner.loginSceneType == .main ?  .moveToHomeScene : .moveToBeforeScene)
 
                     case false:
                         return .just(
                             .moveToSignUpScene(
-                                isSubLogin: owner.currentState.isSubLogin,
+                                from: owner.loginSceneType,
                                 authrizationCode: authCode
                             )
                         )
