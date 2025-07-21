@@ -170,7 +170,7 @@ final class MyPageReactor: Reactor {
                         .forEach { self?.userDefaultService.delete(keyType: $0) }
                 })
                 .andThen(Observable.just(.logout))
-                .catch { error in Observable.empty() }
+                .catch { _ in Observable.empty() }
 
         case .adminMenuTapped(let controller):
             // 별도의 액션으로도 관리자 메뉴로 이동 가능
