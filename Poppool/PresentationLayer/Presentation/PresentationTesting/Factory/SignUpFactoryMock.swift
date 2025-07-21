@@ -5,7 +5,7 @@ public final class SignUpFactoryMock: SignUpFactory {
 
     public init() { }
 
-    public func make(isFirstResponder: Bool = false, authrizationCode: String? = nil) -> BaseTabmanController {
+    public func make(isFirstResponder: Bool = false, authorizationCode: String? = nil) -> BaseTabmanController {
         return BaseTabmanController()
     }
 }

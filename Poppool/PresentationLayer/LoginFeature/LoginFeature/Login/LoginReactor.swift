@@ -21,7 +21,7 @@ final class LoginReactor: Reactor {
     }
 
     enum Mutation {
-        case moveToSignUpScene(from: LoginSceneType, authrizationCode: String?)
+        case moveToSignUpScene(from: LoginSceneType, authorizationCode: String?)
         case moveToHomeScene
         case moveToBeforeScene
         case moveToInquiryScene
@@ -34,7 +34,7 @@ final class LoginReactor: Reactor {
     }
 
     enum PresentTarget {
-        case signUp(isFirstResponder: Bool, authrizationCode: String?)
+        case signUp(isFirstResponder: Bool, authorizationCode: String?)
         case home
         case dismiss
         case inquiry
@@ -103,10 +103,10 @@ final class LoginReactor: Reactor {
         case .showTooltip(let tooltipType):
             newState.tooltipType = tooltipType
 
-        case .moveToSignUpScene(let loginSceneType, let authrizationCode):
+        case .moveToSignUpScene(let loginSceneType, let authorizationCode):
             newState.present = .signUp(
                 isFirstResponder: loginSceneType == .main,
-                authrizationCode: authrizationCode
+                authorizationCode: authorizationCode
             )
 
         case .moveToHomeScene:
@@ -156,7 +156,7 @@ final class LoginReactor: Reactor {
                         return Observable.just(
                             .moveToSignUpScene(
                                 from: owner.loginSceneType,
-                                authrizationCode: nil
+                                authorizationCode: nil
                             )
                         )
                     }
@@ -203,7 +203,7 @@ final class LoginReactor: Reactor {
                         return .just(
                             .moveToSignUpScene(
                                 from: owner.loginSceneType,
-                                authrizationCode: authCode
+                                authorizationCode: authCode
                             )
                         )
                     }

@@ -99,12 +99,12 @@ extension LoginViewController {
             .withUnretained(self)
             .subscribe { (owner, target) in
                 switch target! {
-                case .signUp(let isFirstResponder, let authrizationCode):
+                case .signUp(let isFirstResponder, let authorizationCode):
                     @Dependency var factory: SignUpFactory
                     owner.navigationController?.pushViewController(
                         factory.make(
                             isFirstResponder: isFirstResponder,
-                            authorizationCode: authrizationCode
+                            authorizationCode: authorizationCode
                         ),
                         animated: true
                     )
