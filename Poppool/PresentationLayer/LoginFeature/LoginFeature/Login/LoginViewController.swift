@@ -104,7 +104,7 @@ extension LoginViewController {
                     owner.navigationController?.pushViewController(
                         factory.make(
                             isFirstResponder: isFirstResponder,
-                            authrizationCode: authrizationCode
+                            authorizationCode: authrizationCode
                         ),
                         animated: true
                     )

@@ -9,12 +9,12 @@ public final class SignUpFactoryImpl: SignUpFactory {
 
     public init() { }
 
-    public func make(isFirstResponder: Bool, authrizationCode: String?) -> DesignSystem.BaseTabmanController {
+    public func make(isFirstResponder: Bool, authorizationCode: String?) -> DesignSystem.BaseTabmanController {
         let viewController = SignUpMainController()
 
         viewController.reactor = SignUpMainReactor(
             isFirstResponderCase: isFirstResponder,
-            authrizationCode: authrizationCode,
+            authorizationCode: authorizationCode,
             signUpAPIUseCase: DIContainer.resolve(SignUpAPIUseCase.self)
         )
 
