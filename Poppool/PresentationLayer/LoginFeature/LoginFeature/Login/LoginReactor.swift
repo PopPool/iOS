@@ -12,6 +12,7 @@ final class LoginReactor: Reactor {
 
     // MARK: - Reactor
     enum Action {
+        case viewWillAppear
         case kakaoButtonTapped
         case appleButtonTapped
         case guestButtonTapped
@@ -24,9 +25,11 @@ final class LoginReactor: Reactor {
         case moveToHomeScene
         case moveToBeforeScene
         case moveToInquiryScene
+        case showTooltip(of: TooltipType?)
     }
 
     struct State {
+        var tooltipType: TooltipType?
         @Pulse var present: PresentTarget?
     }
 
@@ -35,6 +38,10 @@ final class LoginReactor: Reactor {
         case home
         case dismiss
         case inquiry
+    }
+
+    enum TooltipType: String {
+        case kakao, apple
     }
 
     // MARK: - properties
@@ -67,6 +74,9 @@ final class LoginReactor: Reactor {
     // MARK: - Reactor Methods
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewWillAppear:
+            return updateTooltip()
+
         case .kakaoButtonTapped:
             return loginWithKakao()
 
@@ -90,7 +100,10 @@ final class LoginReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case .moveToSignUpScene(let isSubLogin, let authrizationCode):
+        case .showTooltip(let tooltipType):
+            newState.tooltipType = tooltipType
+
+        case .moveToSignUpScene(let loginSceneType, let authrizationCode):
             newState.present = .signUp(
                 isFirstResponder: loginSceneType == .main,
                 authrizationCode: authrizationCode
@@ -200,5 +213,15 @@ final class LoginReactor: Reactor {
                     return .empty()
                 }
             }
+    }
+}
+
+extension LoginReactor {
+    private func updateTooltip() -> Observable<Mutation> {
+        if let lastLogin = userDefaultService.fetch(keyType: .lastLogin) {
+            return .just(.showTooltip(of: TooltipType(rawValue: lastLogin)))
+        } else {
+            return .empty()
+        }
     }
 }

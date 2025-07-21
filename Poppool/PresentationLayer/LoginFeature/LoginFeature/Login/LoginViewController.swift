@@ -55,24 +55,6 @@ final class LoginViewController: BaseViewController, View {
     }
 }
 
-// MARK: - Life Cycle
-extension LoginViewController {
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let lastLogin = reactor?.userDefaultService.fetch(keyType: .lastLogin) {
-            switch lastLogin {
-            case "kakao":
-                mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown)
-            case "apple":
-                mainView.appleButton.showToolTip(color: .w100, direction: .pointUp)
-            default:
-                break
-            }
-        }
-    }
-}
-
 extension LoginViewController {
     func bind(reactor: Reactor) {
         bindInput(reactor: reactor)
@@ -80,6 +62,11 @@ extension LoginViewController {
     }
 
     private func bindInput(reactor: Reactor) {
+        rx.viewWillAppear
+            .map { Reactor.Action.viewWillAppear }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         mainView.guestButton.rx.tap
             .map { Reactor.Action.guestButtonTapped }
             .bind(to: reactor.action)
@@ -107,7 +94,6 @@ extension LoginViewController {
     }
 
     private func bindOutput(reactor: Reactor) {
-
         reactor.pulse(\.$present)
             .skip(1)
             .withUnretained(self)
@@ -136,6 +122,22 @@ extension LoginViewController {
                         factory.make(),
                         animated: true
                     )
+                }
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.distinctUntilChanged(\.tooltipType)
+            .skip(1)
+            .map { $0.tooltipType }
+            .withUnretained(self)
+            .subscribe { (owner, type) in
+                switch type {
+                case .kakao:
+                    owner.mainView.kakaoButton.showToolTip(color: .w100, direction: .pointDown)
+                case .apple:
+                    owner.mainView.appleButton.showToolTip(color: .w100, direction: .pointUp)
+                case .none:
+                    return
                 }
             }
             .disposed(by: disposeBag)
