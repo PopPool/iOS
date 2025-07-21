@@ -179,16 +179,16 @@ final class LoginReactor: Reactor {
                 .map { (authServiceResponse.authorizationCode, $0) }
             }
             .withUnretained(self)
-            .do { (_, tuple) in
-                let (authCode, loginResponse) = tuple
-                self.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
-                self.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
-                self.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
+            .do { (owner, tuple) in
+                let loginResponse = tuple.1
+                owner.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
+                owner.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)
+                owner.keyChainService.saveToken(type: .refreshToken, value: loginResponse.refreshToken)
             }
             .flatMap { (owner, tuple) -> Observable<Mutation> in
                 let (authCode, loginResponse) = tuple
 
-                let accessResult = self.keyChainService.saveToken(
+                let accessResult = owner.keyChainService.saveToken(
                     type: .accessToken,
                     value: loginResponse.accessToken
                 )
