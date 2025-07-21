@@ -166,7 +166,7 @@ final class LoginReactor: Reactor {
                 .map { (authServiceResponse.authorizationCode, $0) }
             }
             .withUnretained(self)
-            .do { (owner, tuple) in
+            .do { (_, tuple) in
                 let (authCode, loginResponse) = tuple
                 self.userDefaultService.save(keyType: .userID, value: loginResponse.userId)
                 self.userDefaultService.save(keyType: .socialType, value: loginResponse.socialType)

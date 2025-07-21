@@ -67,7 +67,7 @@ private extension SplashController {
                     guard let self = self else { return }
                     @Dependency var factory: LoginFactory
                     let loginNavigationController = UINavigationController(
-                        rootViewController: factory.make(.main,text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
+                        rootViewController: factory.make(.main, text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
                     )
                 rootViewController = loginNavigationController
             })

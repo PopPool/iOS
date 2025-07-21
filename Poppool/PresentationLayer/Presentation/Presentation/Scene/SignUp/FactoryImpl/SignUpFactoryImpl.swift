@@ -2,8 +2,8 @@ import UIKit
 
 import DesignSystem
 import DomainInterface
-import PresentationInterface
 import Infrastructure
+import PresentationInterface
 
 public final class SignUpFactoryImpl: SignUpFactory {
 
