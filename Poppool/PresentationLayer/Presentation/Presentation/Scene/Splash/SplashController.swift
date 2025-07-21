@@ -4,6 +4,7 @@ import DesignSystem
 import DomainInterface
 import Infrastructure
 import LoginFeatureInterface
+import PresentationInterface
 
 import ReactorKit
 import RxCocoa
@@ -58,10 +59,10 @@ private extension SplashController {
                 onNext: { (owner, response) in
                     let newAccessToken = response.accessToken ?? ""
                     let newRefreshToken = response.refreshToken ?? ""
-                    _ = owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
-                    _ = owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
-                    let navigationController = WaveTabBarController()
-                    owner.rootViewController = navigationController
+                    owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
+                    owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
+                    @Dependency var factory: WaveTabbarFactory
+                    owner.rootViewController = factory.make()
                 },
                 onError: { [weak self] _ in
                     guard let self = self else { return }
