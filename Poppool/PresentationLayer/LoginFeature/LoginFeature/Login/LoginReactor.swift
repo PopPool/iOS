@@ -48,7 +48,7 @@ final class LoginReactor: Reactor {
     private let appleLoginUseCase: AppleLoginUseCase
 
     @Dependency private var keyChainService: KeyChainService
-    let userDefaultService = UserDefaultService()
+    @Dependency private var userDefaultService: UserDefaultService
 
     // MARK: - init
     init(

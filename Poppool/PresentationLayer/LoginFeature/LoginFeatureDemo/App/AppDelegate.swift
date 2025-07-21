@@ -31,6 +31,7 @@ extension AppDelegate {
     private func registerDependencies() {
         // MARK: Register Service
         DIContainer.register(Provider.self) { return ProviderImpl() }
+        DIContainer.register(UserDefaultService.self) { return UserDefaultService() }
         DIContainer.register(KeyChainService.self) { return KeyChainService() }
 
         // MARK: Resolve service
