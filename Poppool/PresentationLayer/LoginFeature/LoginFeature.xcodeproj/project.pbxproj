@@ -22,7 +22,6 @@
 		05A7C1D82E267B130010F1CD /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 05A7C1D72E267B130010F1CD /* RxSwift */; };
 		05A7CBB92E277AE30010F1CD /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 05A7CBB82E277AE30010F1CD /* Then */; };
 		05A7CBD32E27D0700010F1CD /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A7CBD22E27D0700010F1CD /* PresentationInterface.framework */; };
-		05A7CBD42E27D0700010F1CD /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05A7CBD22E27D0700010F1CD /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05A7CBDA2E27D3510010F1CD /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A7CBD72E27D3510010F1CD /* PresentationInterface.framework */; };
 		05A7CBDB2E27D3510010F1CD /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05A7CBD72E27D3510010F1CD /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05A7CBDF2E27D44F0010F1CD /* Data.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A7CBDC2E27D44F0010F1CD /* Data.framework */; };
@@ -84,17 +83,6 @@
 				05A7CBE02E27D44F0010F1CD /* Data.framework in Embed Frameworks */,
 				05A7CBE42E27D44F0010F1CD /* DomainInterface.framework in Embed Frameworks */,
 				05A7CBDB2E27D3510010F1CD /* PresentationInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05A7CBD52E27D0700010F1CD /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05A7CBD42E27D0700010F1CD /* PresentationInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,7 +252,6 @@
 				05A7C15B2E26768A0010F1CD /* Sources */,
 				05A7C15C2E26768A0010F1CD /* Frameworks */,
 				05A7C15D2E26768A0010F1CD /* Resources */,
-				05A7CBD52E27D0700010F1CD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
