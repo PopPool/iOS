@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import LoginFeatureInterface
 
 import ReactorKit
 import RxCocoa
@@ -44,6 +45,8 @@ final class MyPageReactor: Reactor {
     var disposeBag = DisposeBag()
 
     private let userAPIUseCase: UserAPIUseCase
+
+    @Dependency private var userDefaultService: UserDefaultService
 
     lazy var compositionalLayout: UICollectionViewCompositionalLayout = {
         UICollectionViewCompositionalLayout { [weak self] section, env in
@@ -161,7 +164,13 @@ final class MyPageReactor: Reactor {
         case .logoutButtonTapped:
             // 로그아웃 API
             return userAPIUseCase.postLogout()
+                .do(onCompleted: { [weak self] in
+                    UserDefaultService.Key.allCases
+                        .filter { $0 != .lastLogin }
+                        .forEach { self?.userDefaultService.delete(keyType: $0) }
+                })
                 .andThen(Observable.just(.logout))
+                .catch { _ in Observable.empty() }
 
         case .adminMenuTapped(let controller):
             // 별도의 액션으로도 관리자 메뉴로 이동 가능
@@ -188,8 +197,9 @@ final class MyPageReactor: Reactor {
 
         case .logout:
             @Dependency var keyChainService: KeyChainService
-            _ = keyChainService.deleteToken(type: .accessToken)
-            _ = keyChainService.deleteToken(type: .refreshToken)
+            keyChainService.deleteToken(type: .accessToken)
+            keyChainService.deleteToken(type: .refreshToken)
+
             ToastMaker.createToast(message: "로그아웃 되었어요")
             DispatchQueue.main.async { [weak self] in
                 self?.action.onNext(.viewWillAppear)
@@ -267,13 +277,10 @@ final class MyPageReactor: Reactor {
             controller.navigationController?.pushViewController(nextController, animated: true)
 
         case .moveToLoginScene(let controller):
-            let nextController = SubLoginController()
-            nextController.reactor = SubLoginReactor(
-                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
-                kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
+            @Dependency var factory: LoginFactory
+            let navigationController = UINavigationController(
+                rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
             )
-            let navigationController = UINavigationController(rootViewController: nextController)
             navigationController.modalPresentationStyle = .fullScreen
             controller.present(navigationController, animated: true)
         case .moveToMyCommentScene(let controller):

@@ -109,8 +109,8 @@ final class WithdrawlReasonReactor: Reactor {
         case .moveToCompleteScene(let controller):
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
-            userDefaultService.delete(key: "lastLogin")
-            userDefaultService.delete(key: "searchList")
+            UserDefaultService.Key.allCases.forEach { userDefaultService.delete(keyType: $0) }
+
             let nextController = WithdrawlCompleteController()
             nextController.mainView.checkButton.rx.tap
                 .withUnretained(nextController)
