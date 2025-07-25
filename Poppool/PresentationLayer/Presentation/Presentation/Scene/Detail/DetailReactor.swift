@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import LoginFeatureInterface
 
 import LinkPresentation
 import ReactorKit
@@ -167,13 +168,10 @@ final class DetailReactor: Reactor {
                 )
                 controller.navigationController?.pushViewController(commentController, animated: true)
             } else {
-                let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor(
-                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
-                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
+                @Dependency var factory: LoginFactory
+                let nextController = UINavigationController(
+                    rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
                 )
-                let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -207,13 +205,10 @@ final class DetailReactor: Reactor {
                 )
                 controller.navigationController?.pushViewController(nextController, animated: true)
             } else {
-                let loginController = SubLoginController()
-                loginController.reactor = SubLoginReactor(
-                    authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
-                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
+                @Dependency var factory: LoginFactory
+                let nextController = UINavigationController(
+                    rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
                 )
-                let nextController = UINavigationController(rootViewController: loginController)
                 nextController.modalPresentationStyle = .fullScreen
                 controller.present(nextController, animated: true)
             }
@@ -246,13 +241,10 @@ final class DetailReactor: Reactor {
         case .moveToRecentScene(let controller):
             controller.navigationController?.popViewController(animated: true)
         case .moveToLoginScene(let controller):
-            let loginController = SubLoginController()
-            loginController.reactor = SubLoginReactor(
-                authAPIUseCase: DIContainer.resolve(AuthAPIUseCase.self),
-                kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
+            @Dependency var factory: LoginFactory
+            let nextController = UINavigationController(
+                rootViewController: factory.make(.sub, text: "간편하게 SNS 로그인하고\n다른 코멘트를 확인해볼까요?")
             )
-            let nextController = UINavigationController(rootViewController: loginController)
             nextController.modalPresentationStyle = .fullScreen
             controller.present(nextController, animated: true)
         case .moveToImageDetailScene(let controller, let cellRow, let imageRow):

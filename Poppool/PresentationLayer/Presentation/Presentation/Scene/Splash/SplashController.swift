@@ -3,6 +3,8 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import LoginFeatureInterface
+import PresentationInterface
 
 import ReactorKit
 import RxCocoa
@@ -53,22 +55,21 @@ private extension SplashController {
     func setRootview() {
         authAPIUseCase.postTokenReissue()
             .withUnretained(self)
-            .subscribe(onNext: { (owner, response) in
-                let newAccessToken = response.accessToken ?? ""
-                let newRefreshToken = response.refreshToken ?? ""
-                _ = owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
-                _ = owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
-                let navigationController = WaveTabBarController()
-                owner.rootViewController = navigationController
-            }, onError: { [weak self] _ in
-                guard let self = self else { return }
-                let loginViewController = LoginController()
-                loginViewController.reactor = LoginReactor(
-                    authAPIUseCase: authAPIUseCase,
-                    kakaoLoginUseCase: DIContainer.resolve(KakaoLoginUseCase.self),
-                    appleLoginUseCase: DIContainer.resolve(AppleLoginUseCase.self)
-                )
-                let loginNavigationController = UINavigationController(rootViewController: loginViewController)
+            .subscribe(
+                onNext: { (owner, response) in
+                    let newAccessToken = response.accessToken ?? ""
+                    let newRefreshToken = response.refreshToken ?? ""
+                    owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
+                    owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
+                    @Dependency var factory: WaveTabbarFactory
+                    owner.rootViewController = factory.make()
+                },
+                onError: { [weak self] _ in
+                    guard let self = self else { return }
+                    @Dependency var factory: LoginFactory
+                    let loginNavigationController = UINavigationController(
+                        rootViewController: factory.make(.main, text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
+                    )
                 rootViewController = loginNavigationController
             })
             .disposed(by: disposeBag)

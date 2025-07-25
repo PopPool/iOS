@@ -1,8 +1,6 @@
 import Foundation
 import Security
 
-import RxSwift
-
 public final class KeyChainService {
 
     // KeyChain에서 발생할 수 있는 오류를 정의
@@ -60,6 +58,7 @@ public final class KeyChainService {
     /// - Parameter type: 저장하려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Parameter value: 저장할 토큰의 값
     /// - Returns: 완료 시 `Completable`
+    @discardableResult
     public func saveToken(type: TokenType, value: String) -> Result<Void, Error> {
         // allowLossyConversion은 인코딩 과정에서 손실이 되는 것을 허용할 것인지 설정
         guard let convertValue = value.data(using: .utf8, allowLossyConversion: false) else {
@@ -95,6 +94,7 @@ public final class KeyChainService {
     /// KeyChain에서 특정 타입의 토큰을 삭제하는 메서드
     /// - Parameter type: 삭제하려는 토큰의 타입 (`accessToken` 또는 `refreshToken`)
     /// - Returns: 완료 시 `Completable`
+    @discardableResult
     public func deleteToken(type: TokenType) -> Result<Void, Error> {
         // 1. query 작성
         let keyChainQuery: NSDictionary = [

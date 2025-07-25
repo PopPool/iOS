@@ -69,8 +69,11 @@ public final class UserDefaultService {
 
 // MARK: - Key base
 extension UserDefaultService {
-    public enum Key: String {
+    public enum Key: String, CaseIterable {
         case searchKeyword = "searchList"
+        case userID = "userID"
+        case socialType = "socialType"
+        case lastLogin = "lastLogin"
     }
 
     /// Userdefault 데이터 저장 메서드
