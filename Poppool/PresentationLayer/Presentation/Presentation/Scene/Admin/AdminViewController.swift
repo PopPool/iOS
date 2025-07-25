@@ -46,6 +46,11 @@ final class AdminViewController: BaseViewController, View {
         mainView.logoImageView.isUserInteractionEnabled = true
         mainView.logoImageView.addGestureRecognizer(logoTapGesture)
         mainView.tableView.register(AdminStoreCell.self, forCellReuseIdentifier: AdminStoreCell.identifier)
+        if let tableBgView = mainView.tableView.backgroundView {
+            let tableBackgroundTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            tableBgView.addGestureRecognizer(tableBackgroundTap)
+        }
+        mainView.tableView.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -292,5 +297,29 @@ final class AdminViewController: BaseViewController, View {
                 cell.configure(with: store)
             }
             .disposed(by: disposeBag)
+    }
+}
+
+@objc private extension AdminViewController {
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension AdminViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        view.endEditing(true)
+        guard let store = reactor?.currentState.storeList[indexPath.row] else { return }
+        let detailReactor = DetailReactor(
+            popUpID: store.id,
+            userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self),
+            popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+            commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+            preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
+        )
+        let detailVC = DetailController()
+        detailVC.reactor = detailReactor
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
