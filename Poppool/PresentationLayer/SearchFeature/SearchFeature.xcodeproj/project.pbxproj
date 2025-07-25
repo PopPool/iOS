@@ -9,18 +9,14 @@
 /* Begin PBXBuildFile section */
 		0506BE882DD79A6C006CDEDE /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 0506BE872DD79A6C006CDEDE /* RxCocoa */; };
 		052413092DCF7DA100C42E2D /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; };
-		0524130A2DCF7DA100C42E2D /* DesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 052413082DCF7DA100C42E2D /* DesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A96202DCE38B500C0DD58 /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
 		054A96212DCE38B500C0DD58 /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		054A96262DCE38E900C0DD58 /* Tabman in Frameworks */ = {isa = PBXBuildFile; productRef = 054A96252DCE38E900C0DD58 /* Tabman */; };
 		054A96282DCE390A00C0DD58 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 054A96272DCE390A00C0DD58 /* ReactorKit */; };
 		054A962B2DCE3A0300C0DD58 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 054A962A2DCE3A0300C0DD58 /* NMapsMap */; };
 		05734C082DCDA7D20093825D /* SearchFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; };
-		05734C092DCDA7D20093825D /* SearchFeatureInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734BF52DCDA6B90093825D /* SearchFeatureInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C2B2DCDD6380093825D /* Infrastructure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C2A2DCDD6380093825D /* Infrastructure.framework */; };
-		05734C2C2DCDD6380093825D /* Infrastructure.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C2A2DCDD6380093825D /* Infrastructure.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C442DCDF7240093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C432DCDF7240093825D /* PresentationInterface.framework */; };
-		05734C452DCDF7240093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C432DCDF7240093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C502DCDF8B40093825D /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C4F2DCDF8B40093825D /* PresentationInterface.framework */; };
 		05734C512DCDF8B40093825D /* PresentationInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C4F2DCDF8B40093825D /* PresentationInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05734C532DCDF8B80093825D /* Presentation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C522DCDF8B80093825D /* Presentation.framework */; };
@@ -75,30 +71,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		05734C0C2DCDA7D20093825D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05734C452DCDF7240093825D /* PresentationInterface.framework in Embed Frameworks */,
-				05734C092DCDA7D20093825D /* SearchFeatureInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05734C2D2DCDD6390093825D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05734C2C2DCDD6380093825D /* Infrastructure.framework in Embed Frameworks */,
-				0524130A2DCF7DA100C42E2D /* DesignSystem.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		05CFFBE72DCB8F6C0051129F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,8 +102,6 @@
 		05734C432DCDF7240093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C4F2DCDF8B40093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C522DCDF8B80093825D /* Presentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Presentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoordinatorKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23422DC49AA200C761A5 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC23462DC49AA800C761A5 /* DomainInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DomainInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EC28642DC5FDF800C761A5 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -254,8 +224,6 @@
 				05734C432DCDF7240093825D /* PresentationInterface.framework */,
 				05734C2A2DCDD6380093825D /* Infrastructure.framework */,
 				05734C232DCDD4CF0093825D /* DesignSystem.framework */,
-				058AE0B12DCCE3E9009119B2 /* CoordinatorKit.framework */,
-				058AE0AD2DCCE3E1009119B2 /* CoordinatorKit.framework */,
 				05EC286D2DC5FE6000C761A5 /* Infrastructure.framework */,
 				05EC286A2DC5FE5B00C761A5 /* Data.framework */,
 				05EC28642DC5FDF800C761A5 /* Domain.framework */,
@@ -294,7 +262,6 @@
 				051633692DC457A900A6C0D1 /* Sources */,
 				0516336A2DC457A900A6C0D1 /* Frameworks */,
 				0516336B2DC457A900A6C0D1 /* Resources */,
-				05734C0C2DCDA7D20093825D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -357,7 +324,6 @@
 				05734BF12DCDA6B90093825D /* Sources */,
 				05734BF22DCDA6B90093825D /* Frameworks */,
 				05734BF32DCDA6B90093825D /* Resources */,
-				05734C2D2DCDD6390093825D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -706,12 +672,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5QTRMS954;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9JZYRP3D46;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS = YES;
 				INFOPLIST_FILE = SearchFeatureDemo/Resource/Info.plist;
@@ -728,12 +695,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.SearchFeatureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = poppoolSearchFeatureDemoProvisioning;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.poppoolIOS.*";
+				SKIP_INSTALL = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_SKIP_AUTOLINKING_ALL_FRAMEWORKS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -744,8 +713,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9JZYRP3D46;
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_COMPILER_AUTO_ACTIVATE_CUSTOM_FONTS = YES;
 				INFOPLIST_FILE = SearchFeatureDemo/Resource/Info.plist;
@@ -761,11 +734,15 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.poppoolIOS.poppool.SearchFeatureDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.poppoolIOS.*";
+				SKIP_INSTALL = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_SKIP_AUTOLINKING_ALL_FRAMEWORKS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

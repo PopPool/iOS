@@ -3,8 +3,8 @@ import UIKit
 public class PPLabel: UILabel {
 
     public init(
-        style: UIFont.FontStyle,
-        fontSize: CGFloat,
+        style: UIFont.FontStyle = .regular,
+        fontSize: CGFloat = 12,
         text: String = "",
         lineHeight: CGFloat = 1.2
     ) {

@@ -178,7 +178,13 @@ public final class PopupSearchReactor: Reactor {
             newState.totalPagesCount = count
 
         case .appendSearchResult(let items):
-            newState.searchResultItems += items
+            // TODO: 캡슐화 진행해주기
+            // TODO: 페이지네이션에서 왜 중복된 아이템이 내려오는지 이유 알기
+            let currentItemsSet = Set(newState.searchResultItems)
+            let appendItemsSet = Set(items)
+            let newItems = Array(appendItemsSet.subtracting(currentItemsSet))
+
+            newState.searchResultItems += newItems
 
         case .updateEditingState:
             newState.endEditing = ()

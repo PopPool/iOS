@@ -15,6 +15,7 @@ public class PPSearchBarView: UIView {
         $0.searchTextField.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .korFont(style: .regular, size: 14))
         $0.tintColor = .g400
         $0.backgroundColor = .g50
+        $0.layer.cornerRadius = 4
         $0.setImage(UIImage(named: "icon_search_gray"), for: .search, state: .normal)
         $0.searchBarStyle = .minimal
         $0.searchTextField.clearButtonMode = .never
