@@ -45,3 +45,4 @@ fastlane/test_output
 # Cursor
 **/buildServer.json
 .vscode/*
+*.env

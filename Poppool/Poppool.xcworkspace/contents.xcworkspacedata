@@ -22,6 +22,9 @@
       location = "group:PresentationLayer"
       name = "PresentationLayer">
       <FileRef
+         location = "group:LoginFeature/LoginFeature.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:Presentation/Presentation.xcodeproj">
       </FileRef>
       <FileRef

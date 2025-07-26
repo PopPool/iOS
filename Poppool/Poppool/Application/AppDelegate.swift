@@ -5,6 +5,8 @@ import Data
 import Domain
 import DomainInterface
 import Infrastructure
+import LoginFeature
+import LoginFeatureInterface
 import Presentation
 import PresentationInterface
 import SearchFeature
@@ -100,5 +102,9 @@ extension AppDelegate {
         DIContainer.register(DetailFactory.self) { return DetailFactoryImpl() }
         DIContainer.register(CategorySelectorFactory.self) { return CategorySelectorFactoryImpl() }
         DIContainer.register(FilterSelectorFactory.self) { return FilterSelectorFactoryImpl() }
+        DIContainer.register(LoginFactory.self) { return LoginFactoryImpl() }
+        DIContainer.register(SignUpFactory.self) { return SignUpFactoryImpl() }
+        DIContainer.register(WaveTabbarFactory.self) { return WaveTabbarFactoryImpl() }
+        DIContainer.register(FAQFactory.self) { return FAQFactoryImpl() }
     }
 }

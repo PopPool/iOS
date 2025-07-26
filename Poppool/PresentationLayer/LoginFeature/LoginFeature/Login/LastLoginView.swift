@@ -1,10 +1,3 @@
-//
-//  LastLoginView.swift
-//  Poppool
-//
-//  Created by SeoJunYoung on 1/16/25.
-//
-
 import UIKit
 
 import SnapKit
@@ -189,18 +182,24 @@ extension LastLoginView {
         layer.shadowRadius = 5
 
         // 섀도우를 그릴 때 드는 리소스를 줄이기 위해 캐시를 적용하는 방식
-//        layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        // layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
         layer.shouldRasterize = true
         layer.rasterizationScale = UIScreen.main.scale
     }
 }
 
 extension UIView {
-    func showToolTip(color: LastLoginView.TipColor, direction: LastLoginView.TipDirection, text: String? = "최근에 이 방법으로 로그인했어요") {
+    func showToolTip(
+        color: LastLoginView.TipColor,
+        direction: LastLoginView.TipDirection,
+        text: String? = "최근에 이 방법으로 로그인했어요"
+    ) {
         // 호출하는 컴포넌트 위 또는 아래에 생성되기 위해 superview를 구합니다
         guard let superview = self.superview else { return }
 
         let toolTip = LastLoginView(colorType: color, direction: direction, text: text)
+        let beforeToolTip = superview.subviews.filter { $0 is LastLoginView }
+        beforeToolTip.forEach { $0.removeFromSuperview() }
 
         superview.addSubview(toolTip)
         toolTip.snp.makeConstraints { make in

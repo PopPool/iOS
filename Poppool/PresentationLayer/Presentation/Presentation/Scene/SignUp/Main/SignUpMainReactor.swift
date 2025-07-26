@@ -55,7 +55,7 @@ final class SignUpMainReactor: Reactor {
     var initialState: State
     var disposeBag = DisposeBag()
 
-    private var authrizationCode: String?
+    private var authorizationCode: String?
 
     private let signUpAPIUseCase: SignUpAPIUseCase
     private let userDefaultService = UserDefaultService()
@@ -64,11 +64,11 @@ final class SignUpMainReactor: Reactor {
     // MARK: - init
     init(
         isFirstResponderCase: Bool,
-        authrizationCode: String?,
+        authorizationCode: String?,
         signUpAPIUseCase: SignUpAPIUseCase
     ) {
         self.initialState = State()
-        self.authrizationCode = authrizationCode
+        self.authorizationCode = authorizationCode
         self.isFirstResponderCase = isFirstResponderCase
         self.signUpAPIUseCase = signUpAPIUseCase
     }
@@ -131,10 +131,15 @@ final class SignUpMainReactor: Reactor {
                 socialEmail: "",
                 socialType: socialType,
                 interests: newState.categorys,
-                appleAuthorizationCode: authrizationCode
+                appleAuthorizationCode: authorizationCode
             )
             .subscribe { [weak self, weak controller] in
                 guard let self = self else { return }
+                self.userDefaultService.save(
+                    keyType: .lastLogin,
+                    value: authorizationCode != nil ? "apple" : "kakao"
+                )
+
                 let completeController = SignUpCompleteController()
                 completeController.reactor = SignUpCompleteReactor(
                     nickName: nickName,
