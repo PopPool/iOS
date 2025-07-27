@@ -18,6 +18,19 @@ public class PPLabel: UILabel {
         )
     }
 
+    public init(text: String, style: PoppoolFont) {
+        super.init(frame: .zero)
+
+        self.font = .poppoolFont(style: style)
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = style.lineHeight
+
+        self.attributedText = NSMutableAttributedString(
+            string: text, attributes: [.paragraphStyle: paragraphStyle]
+        )
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
