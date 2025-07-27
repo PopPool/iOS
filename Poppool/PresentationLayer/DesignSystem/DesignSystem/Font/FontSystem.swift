@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 
 // MARK: - Font cases
-public enum FontStyle {
+public enum PoppoolFont {
     // 한국어 Typeface Guide
     case KOl32, KOl28, KOl24, KOl20, KOl18, KOl16, KOl15, KOl14, KOl13, KOl12, KOl11
     case KOr32, KOr28, KOr24, KOr20, KOr18, KOr16, KOr15, KOr14, KOr13, KOr12, KOr11
@@ -18,9 +18,9 @@ public enum FontStyle {
 }
 
 // MARK: - Font size
-extension FontStyle {
+extension PoppoolFont {
     /// 폰트 패밀리 크기
-    public var pointSize: CGFloat {
+    public var size: CGFloat {
         switch self {
         case .KOl32, .KOr32, .KOm32, .KOb32, .ENl32, .ENr32, .ENm32, .ENb32: return 32
         case .KOl28, .KOr28, .KOm28, .KOb28, .ENl28, .ENr28, .ENm28, .ENb28: return 28
@@ -38,7 +38,7 @@ extension FontStyle {
 }
 
 // MARK: - Font name
-extension FontStyle {
+extension PoppoolFont {
     /// 폰트 패밀리 이름
     public var fontName: String {
         switch self {
@@ -56,7 +56,7 @@ extension FontStyle {
 }
 
 // MARK: - Font line height
-extension FontStyle {
+extension PoppoolFont {
     /// 폰트 패밀리 행간
     public var lineHeight: CGFloat {
         switch self {
