@@ -2,6 +2,7 @@ import UIKit
 
 public class PPLabel: UILabel {
 
+    @available(*, deprecated, renamed: "init(text:style:)",message: "타이포를 직접 지정하는 대신 PPFontStyle을 이용하세요")
     public init(
         style: UIFont.FontStyle = .regular,
         fontSize: CGFloat = 12,
