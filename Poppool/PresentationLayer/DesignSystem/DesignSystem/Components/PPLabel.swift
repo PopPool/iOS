@@ -24,7 +24,7 @@ public class PPLabel: UILabel {
     ) {
         super.init(frame: .zero)
 
-        self.font = .poppoolFont(style: style)
+        self.font = .PPFont(style: style)
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = style.lineHeight
