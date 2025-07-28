@@ -18,7 +18,10 @@ public class PPLabel: UILabel {
         )
     }
 
-    public init(text: String, style: PoppoolFont) {
+    public init(
+        text: String = " ", // 값이 없으면 Attribute가 적용이 안돼서 기본값은 공백
+        style: PoppoolFont
+    ) {
         super.init(frame: .zero)
 
         self.font = .poppoolFont(style: style)
