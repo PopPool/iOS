@@ -50,6 +50,6 @@ private extension SearchResultEmptyCollectionViewCell {
 
 extension SearchResultEmptyCollectionViewCell {
     func configureCell(title: String) {
-        self.emptyLabel.setText(to: title)
+        self.emptyLabel.updateText(to: title)
     }
 }

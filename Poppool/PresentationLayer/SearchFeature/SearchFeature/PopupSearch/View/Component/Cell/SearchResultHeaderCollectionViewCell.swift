@@ -101,8 +101,8 @@ extension SearchResultHeaderCollectionViewCell {
            let count = count {
             filterStatusButton.isHidden = true
             afterSearchTitleLabel.isHidden = false
-            afterSearchTitleLabel.setText(to: afterSearchTitle + " 포함된 팝업")
-            cellCountLabel.setText(to: "총 \(count)개를 찾았어요.")
+            afterSearchTitleLabel.updateText(to: afterSearchTitle + " 포함된 팝업")
+            cellCountLabel.updateText(to: "총 \(count)개를 찾았어요.")
 
             if count == 0 { self.isHidden = true } else {
                 self.isHidden = false
@@ -114,8 +114,8 @@ extension SearchResultHeaderCollectionViewCell {
         } else if let count, let filterText {
             filterStatusButton.isHidden = false
             afterSearchTitleLabel.isHidden = true
-            cellCountLabel.setText(to: "총 \(count)개")
-            filterStatusLabel.setText(to: filterText)
+            cellCountLabel.updateText(to: "총 \(count)개")
+            filterStatusLabel.updateText(to: filterText)
 
             self.isHidden = false
             afterSearchTitleLabel.snp.updateConstraints { make in
