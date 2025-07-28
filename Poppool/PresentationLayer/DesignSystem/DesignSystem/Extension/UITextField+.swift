@@ -7,4 +7,14 @@ public extension UITextField {
             attributes: [.foregroundColor: color, .font: font]
         )
     }
+
+    func setPlaceholder(text: String, color: UIColor, style: PPFontStyle) {
+        self.attributedPlaceholder = NSAttributedString(
+            string: text,
+            attributes: [
+                .foregroundColor: color,
+                .font: UIFont.PPFont(style: style)
+            ]
+        )
+    }
 }

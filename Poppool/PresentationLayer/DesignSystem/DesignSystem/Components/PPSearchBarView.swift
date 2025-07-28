@@ -12,7 +12,11 @@ public class PPSearchBarView: UIView {
     }
 
     public let searchBar = UISearchBar().then {
-        $0.searchTextField.setPlaceholder(text: "팝업스토어명을 입력해보세요", color: .g400, font: .korFont(style: .regular, size: 14))
+        $0.searchTextField.setPlaceholder(
+            text: "팝업스토어명을 입력해보세요",
+            color: .g400,
+            style: .KOr14
+        )
         $0.tintColor = .g400
         $0.backgroundColor = .g50
         $0.layer.cornerRadius = 4
