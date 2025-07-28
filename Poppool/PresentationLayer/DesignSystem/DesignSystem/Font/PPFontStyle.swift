@@ -1,4 +1,3 @@
-
 import Foundation
 import UIKit
 
@@ -83,9 +82,13 @@ extension PPFontStyle {
 
     public var baseLineOffset: CGFloat {
         if #available(iOS 16.4, *) {
-            return (lineHeight - size) / 2
+            return fontName.hasPrefix("Poppins")
+            ? (lineHeight - size + UIFont.PPFont(style: self).descender) / 2
+            : (lineHeight - size) / 2
         } else {
-            return (lineHeight - size) / 4
+            return fontName.hasPrefix("Poppins")
+            ? (lineHeight - size + UIFont.PPFont(style: self).descender) / 4
+            : (lineHeight - size) / 4
         }
     }
 }
