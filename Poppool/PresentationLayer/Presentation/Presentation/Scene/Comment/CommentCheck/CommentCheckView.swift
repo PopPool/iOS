@@ -27,11 +27,11 @@ final class CommentCheckView: UIView {
     }()
 
     let continueButton: PPButton = {
-        return PPButton(style: .secondary, text: "계속하기")
+        return PPButton(buttonStyle: .secondary, text: "계속하기")
     }()
 
     let stopButton: PPButton = {
-        return PPButton(style: .primary, text: "그만하기")
+        return PPButton(buttonStyle: .primary, text: "그만하기")
     }()
 
     // MARK: - init

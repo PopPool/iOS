@@ -145,5 +145,4 @@ extension StoreListCell: Inputable {
         let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
         bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
-
 }
