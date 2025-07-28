@@ -27,7 +27,10 @@ final class LoginView: UIView {
         $0.contentMode = .scaleAspectFit
     }
 
-    let titleLabel = PPLabel()
+    let titleLabel = PPLabel(style: .KOb16).then {
+        $0.textAlignment = .center
+        $0.numberOfLines = 0
+    }
 
     let kakaoButton = PPButton(style: .kakao, text: "카카오톡으로 로그인")
 
@@ -138,13 +141,7 @@ private extension LoginView {
 
 extension LoginView {
     func setTitle(_ title: String) {
-        self.titleLabel.setLineHeightText(
-            text: title,
-            font: .korFont(style: .bold, size: 16),
-            lineHeight: 1.3
-        )
-        self.titleLabel.numberOfLines = 0
-        self.titleLabel.textAlignment = .center
+        self.titleLabel.updateText(to: title)
     }
 
     func setCloseButton(for loginSceneType: LoginSceneType) {

@@ -9,7 +9,7 @@ public final class PPTagCollectionViewCell: UICollectionViewCell {
 
     public var disposeBag = DisposeBag()
 
-    public let titleLabel = PPLabel(style: .medium, fontSize: 11)
+    public let titleLabel = PPLabel(style: .KOm11)
 
     public let cancelButton = UIButton()
 
