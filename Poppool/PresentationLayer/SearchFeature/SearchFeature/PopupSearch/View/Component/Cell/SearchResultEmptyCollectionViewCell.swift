@@ -9,11 +9,7 @@ import Then
 final class SearchResultEmptyCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
-    private let emptyLabel = PPLabel(
-        style: .medium,
-        fontSize: 14,
-        lineHeight: 1.5
-    ).then {
+    private let emptyLabel = PPLabel(style: .KOm14).then {
         $0.textAlignment = .center
         $0.numberOfLines = 2
         $0.textColor = .g400
@@ -54,6 +50,6 @@ private extension SearchResultEmptyCollectionViewCell {
 
 extension SearchResultEmptyCollectionViewCell {
     func configureCell(title: String) {
-        self.emptyLabel.text = title
+        self.emptyLabel.setText(to: title)
     }
 }
