@@ -60,7 +60,6 @@ extension PoppoolFont {
     /// 폰트 패밀리 행간
     public var lineHeight: CGFloat {
         switch self {
-            //
         case .KOl28, .KOl24, .KOl20, .KOl18, .KOl16, .KOl15, .KOl14, .KOl13, .KOl12, .KOl11,
              .KOr28, .KOr24, .KOr20, .KOr18, .KOr16, .KOr15, .KOr14, .KOr13, .KOr12, .KOr11,
              .KOm28, .KOm24, .KOm20, .KOm18, .KOm16, .KOm15, .KOm14, .KOm13, .KOm12, .KOm11:
