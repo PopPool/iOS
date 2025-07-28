@@ -55,7 +55,7 @@ private extension PPLabel {
         case .light: result.append("l")
         }
 
-        result.append("\(Int(font.pointSize))")
+        result.append("\(Int(fontSize))")
 
         return result
     }
