@@ -17,13 +17,13 @@ public extension UILabel {
     }
 
     /// 기존 attributedText 속성을 유지하며 텍스트만 교체합니다.
-    func updateText(to text: String) {
+    func updateText(to text: String?) {
         guard let current = self.attributedText, current.length > 0 else {
             self.text = text
             return
         }
         let attributes = current.attributes(at: 0, effectiveRange: nil)
-        self.attributedText = NSAttributedString(string: text, attributes: attributes)
+        self.attributedText = NSAttributedString(string: text ?? " ", attributes: attributes)
     }
 
     /// Style이 포함된 텍스트를 적용합니다.
