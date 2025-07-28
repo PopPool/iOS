@@ -57,8 +57,8 @@ extension PPFontStyle {
 
 // MARK: - Font line height
 extension PPFontStyle {
-    /// 폰트 패밀리 행간
-    public var lineHeight: CGFloat {
+    /// 폰트 패밀리 행간 배율
+    public var lineHeightMultiple: CGFloat {
         switch self {
         case .KOl28, .KOl24, .KOl20, .KOl18, .KOl16, .KOl15, .KOl14, .KOl13, .KOl12, .KOl11,
              .KOr28, .KOr24, .KOr20, .KOr18, .KOr16, .KOr15, .KOr14, .KOr13, .KOr12, .KOr11,
@@ -73,6 +73,19 @@ extension PPFontStyle {
              .ENm32, .ENm28, .ENm24, .ENm20, .ENm18, .ENm16, .ENm15, .ENm14, .ENm13, .ENm12, .ENm11,
              .ENb32, .ENb28, .ENb24, .ENb20, .ENb18, .ENb16, .ENb15, .ENb14, .ENb13, .ENb12, .ENb11:
             return 1.35
+        }
+    }
+
+    /// 폰트 패밀리 행간
+    public var lineHeight: CGFloat {
+        return (size * lineHeightMultiple).rounded()
+    }
+
+    public var baseLineOffset: CGFloat {
+        if #available(iOS 16.4, *) {
+            return (lineHeight - size) / 2
+        } else {
+            return (lineHeight - size) / 4
         }
     }
 }
