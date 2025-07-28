@@ -24,4 +24,21 @@ public extension UILabel {
         let attributes = current.attributes(at: 0, effectiveRange: nil)
         self.attributedText = NSAttributedString(string: text, attributes: attributes)
     }
+
+    /// Style이 포함된 텍스트를 적용합니다.
+    func setText(to text: String, with style: PPFontStyle) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = style.lineHeightMultiple
+        paragraphStyle.maximumLineHeight = style.lineHeight
+        paragraphStyle.minimumLineHeight = style.lineHeight
+
+        self.attributedText = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: UIFont.PPFont(style: style),
+                .paragraphStyle: paragraphStyle,
+                .baselineOffset: style.baseLineOffset
+            ]
+        )
+    }
 }
