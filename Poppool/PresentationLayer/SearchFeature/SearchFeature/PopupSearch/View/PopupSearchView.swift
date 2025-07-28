@@ -234,7 +234,7 @@ extension PopupSearchView {
                     withReuseIdentifier: TagCollectionHeaderView.identifiers,
                     for: indexPath
                 ) as? TagCollectionHeaderView else { fatalError("\(#file), \(#function) Error") }
-                header.configureHeader(title: "최근 검색어", buttonTitle: "모두삭제")
+                header.configureHeader(title: "최근 검색어", showRemoveAllButton: true)
 
                 header.removeAllButton.rx.tap
                     .bind(to: self.recentSearchTagRemoveAllButtonTapped)
