@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 // MARK: - Font cases
-public enum PPFontStyle {
+public enum PPFontStyle: String {
     // 한국어 Typeface Guide
     case KOl32, KOl28, KOl24, KOl20, KOl18, KOl16, KOl15, KOl14, KOl13, KOl12, KOl11
     case KOr32, KOr28, KOr24, KOr20, KOr18, KOr16, KOr15, KOr14, KOr13, KOr12, KOr11
