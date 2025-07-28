@@ -24,13 +24,18 @@ public class PPLabel: UILabel {
     ) {
         super.init(frame: .zero)
 
-        self.font = .PPFont(style: style)
-
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = style.lineHeight
+        paragraphStyle.lineHeightMultiple = style.lineHeightMultiple
+        paragraphStyle.maximumLineHeight = style.lineHeight
+        paragraphStyle.minimumLineHeight = style.lineHeight
 
         self.attributedText = NSMutableAttributedString(
-            string: text, attributes: [.paragraphStyle: paragraphStyle]
+            string: text,
+            attributes: [
+                .font: UIFont.PPFont(style: style),
+                .paragraphStyle: paragraphStyle,
+                .baselineOffset: style.baseLineOffset
+            ]
         )
     }
 
