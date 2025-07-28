@@ -21,7 +21,7 @@ public extension UIFont {
         if let font = UIFont(name: fontName, size: size) { return font } else { return registerAndGetFont(name: fontName, size: size) }
     }
 
-    static func poppoolFont(style: PPFontStyle) -> UIFont {
+    static func PPFont(style: PPFontStyle) -> UIFont {
         if let font = UIFont(name: style.fontName, size: style.size) {
             return font
         } else {
