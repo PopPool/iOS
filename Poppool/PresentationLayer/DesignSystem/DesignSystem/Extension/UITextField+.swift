@@ -9,11 +9,20 @@ public extension UITextField {
     }
 
     func setPlaceholder(text: String, color: UIColor, style: PPFontStyle) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        let font = UIFont.PPFont(style: style)
+
+        paragraphStyle.lineHeightMultiple = style.lineHeightMultiple
+        paragraphStyle.maximumLineHeight = style.lineHeight
+        paragraphStyle.minimumLineHeight = style.lineHeight
+
         self.attributedPlaceholder = NSAttributedString(
             string: text,
             attributes: [
                 .foregroundColor: color,
-                .font: UIFont.PPFont(style: style)
+                .paragraphStyle: paragraphStyle,
+                .baselineOffset: style.baseLineOffset,
+                .font: font
             ]
         )
     }
