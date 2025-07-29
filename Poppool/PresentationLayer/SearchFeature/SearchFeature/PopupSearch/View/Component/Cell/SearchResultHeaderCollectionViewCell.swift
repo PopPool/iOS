@@ -12,7 +12,6 @@ public final class SearchResultHeaderCollectionViewCell: UICollectionViewCell {
 
     var disposeBag = DisposeBag()
 
-
     private let afterSearchTitleLabel = PPLabel(style: .KOb16).then {
         $0.isHidden = true
     }
