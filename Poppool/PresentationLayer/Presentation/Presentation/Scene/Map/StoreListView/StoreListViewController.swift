@@ -93,7 +93,6 @@ final class StoreListViewController: UIViewController, View {
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
-        // 찜한 팝업 토스트 처리 체인
         reactor.state
             .map { $0.shouldShowBookmarkToast }
             .distinctUntilChanged()
@@ -104,7 +103,6 @@ final class StoreListViewController: UIViewController, View {
                 if isBookmarking {
                     toastView.moveButton.rx.tap
                         .subscribe(onNext: { [weak self] in
-                            // 이동 처리 (예: 찜한 팝업 리스트 페이지로 이동)
                         })
                         .disposed(by: self.disposeBag)
                 }
@@ -112,7 +110,6 @@ final class StoreListViewController: UIViewController, View {
             }
             .disposed(by: disposeBag)
 
-        // 3) 아이템 선택
         mainView.collectionView.rx.itemSelected
             .withUnretained(self)
             .subscribe(onNext: { owner, indexPath in
