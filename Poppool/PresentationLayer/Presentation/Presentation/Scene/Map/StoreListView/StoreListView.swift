@@ -2,9 +2,26 @@ import SnapKit
 import UIKit
 
 final class StoreListView: UIView {
+
+    // MARK: - Properties
+    private enum Constant {
+        static let grabberWidth: CGFloat = 36
+        static let grabberHeight: CGFloat = 5
+        static let grabberTopOffset: CGFloat = 14
+        static let grabberCornerRadius: CGFloat = 2.5
+        static let collectionViewTopOffset: CGFloat = 8
+        static let cornerRadius: CGFloat = 16
+        static let itemHeight: CGFloat = 250 
+        static let minimumLineSpacing: CGFloat = 20
+        static let minimumInteritemSpacing: CGFloat = 16
+        static let sectionInsetTop: CGFloat = 16
+        static let sectionInsetHorizontal: CGFloat = 16
+        static let sectionInsetBottom: CGFloat = 16
+    }
+
     // MARK: - Components
     lazy var collectionView: UICollectionView = {
-        let layout = createLayout()
+        let layout = self.createLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         cv.register(StoreListCell.self, forCellWithReuseIdentifier: StoreListCell.identifier)
@@ -14,22 +31,18 @@ final class StoreListView: UIView {
     let grabberHandle: UIView = {
         let view = UIView()
         view.backgroundColor = .g200
-        view.layer.cornerRadius = 2.5
+        view.layer.cornerRadius = Constant.grabberCornerRadius
         view.isUserInteractionEnabled = true
-        return view
-    }()
-
-    private let paddingView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear // 간격만 추가하므로 투명
         return view
     }()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureLayer() // 최상단 레이어 설정
-        setUpConstraints()
+
+        self.configureLayer()
+        self.addViews()
+        self.setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -39,47 +52,51 @@ final class StoreListView: UIView {
 
 // MARK: - Setup
 private extension StoreListView {
+    func addViews() {
+        [collectionView, grabberHandle].forEach {
+            self.addSubview($0)
+        }
+    }
+
+    func setupConstraints() {
+        grabberHandle.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(Constant.grabberTopOffset).priority(.high)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(Constant.grabberWidth)
+            make.height.equalTo(Constant.grabberHeight)
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(grabberHandle.snp.bottom).offset(Constant.collectionViewTopOffset).priority(.medium)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+    }
+
     func createLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 20
-        layout.minimumInteritemSpacing = 16
+        layout.minimumLineSpacing = Constant.minimumLineSpacing
+        layout.minimumInteritemSpacing = Constant.minimumInteritemSpacing
 
-        let totalWidth = UIScreen.main.bounds.width - 32
+        let totalWidth = UIScreen.main.bounds.width - (Constant.sectionInsetHorizontal * 2)
         let itemWidth = (totalWidth - layout.minimumInteritemSpacing) / 2
 
-        layout.itemSize = CGSize(width: floor(itemWidth), height: itemWidth + 100)
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.itemSize = CGSize(width: floor(itemWidth), height: Constant.itemHeight)
+        layout.sectionInset = UIEdgeInsets(
+            top: Constant.sectionInsetTop,
+            left: Constant.sectionInsetHorizontal,
+            bottom: Constant.sectionInsetBottom,
+            right: Constant.sectionInsetHorizontal
+        )
 
         return layout
     }
 
-    func setUpConstraints() {
-        backgroundColor = .white
-        addSubview(collectionView)
-        addSubview(grabberHandle)
-        grabberHandle.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(14).priority(.high)
-                 make.centerX.equalToSuperview()
-                 make.width.equalTo(36)
-                 make.height.equalTo(5)
-             }
-//        paddingView.snp.makeConstraints { make in
-//            make.top.equalTo(grabberHandle.snp.bottom)
-//            make.leading.trailing.equalToSuperview()
-//            
-//        }
-
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(grabberHandle.snp.bottom).offset(8).priority(.medium)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()  // bottom 제약 다시 추가
-        }
-    }
-
     func configureLayer() {
-        layer.cornerRadius = 16
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // 상단 좌우 코너만 적용
-        layer.masksToBounds = true
+        self.backgroundColor = .white
+        self.layer.cornerRadius = Constant.cornerRadius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.layer.masksToBounds = true
     }
 }
