@@ -11,7 +11,7 @@ final class StoreListView: UIView {
         static let grabberCornerRadius: CGFloat = 2.5
         static let collectionViewTopOffset: CGFloat = 8
         static let cornerRadius: CGFloat = 16
-        static let itemHeight: CGFloat = 250 
+        static let itemHeight: CGFloat = 250
         static let minimumLineSpacing: CGFloat = 20
         static let minimumInteritemSpacing: CGFloat = 16
         static let sectionInsetTop: CGFloat = 16
