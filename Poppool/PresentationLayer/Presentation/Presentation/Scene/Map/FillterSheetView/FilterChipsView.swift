@@ -7,12 +7,9 @@ import SnapKit
 final class FilterChipsView: UIView {
     // MARK: - Components
     var onRemoveChip: ((String) -> Void)?
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 13)
-        label.text = "선택한 옵션"
-        label.textColor = .g200
-        return label
-    }()
+    private let titleLabel = PPLabel(text: "선택한 옵션", style: .KOr13).then {
+        $0.textColor = .g200
+    }
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -28,15 +25,11 @@ final class FilterChipsView: UIView {
         return collectionView
     }()
 
-    private let emptyStateLabel: UILabel = {
-        let label = UILabel()
-        label.text = "선택한 옵션이 없어요 :)"
-        label.textColor = .g300
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textAlignment = .center
-        label.isHidden = true // 초기에는 숨김 상태
-        return label
-    }()
+    private let emptyStateLabel = PPLabel(text: "선택한 옵션이 없어요 :)", style: .KOm14).then {
+        $0.textColor = .g300
+        $0.textAlignment = .center
+        $0.isHidden = true // 초기에는 숨김 상태
+    }
 
     private var filters: [String] = []
 
