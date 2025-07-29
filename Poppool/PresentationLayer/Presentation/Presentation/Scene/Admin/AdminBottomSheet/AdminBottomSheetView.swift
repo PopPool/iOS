@@ -1,10 +1,10 @@
-import UIKit
 import DesignSystem
 import Infrastructure
 import ReactorKit
 import RxCocoa
 import RxSwift
 import SnapKit
+import UIKit
 
 final class AdminBottomSheetView: UIView {
 
@@ -231,10 +231,8 @@ final class AdminBottomSheetView: UIView {
         }
 
         let itemHeight: CGFloat = 36
-        let totalHeight = sectionInsets.top + sectionInsets.bottom +
+        return sectionInsets.top + sectionInsets.bottom +
                          (CGFloat(numberOfRows) * itemHeight) +
                          (CGFloat(max(0, numberOfRows - 1)) * lineSpacing)
-
-        return totalHeight
     }
 }

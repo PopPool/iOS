@@ -627,7 +627,7 @@ class MapViewController: BaseViewController, View {
 
                 if velocity.y > Constants.panVelocityThreshold {
                     targetState = .bottom
-                } else if velocity.y < -Constants.panVelocityThreshold  {
+                } else if velocity.y < -Constants.panVelocityThreshold {
                     targetState = .top
                 } else if currentOffset < middleY * 0.7 {
                     targetState = .top
@@ -1261,7 +1261,7 @@ class MapViewController: BaseViewController, View {
                 .distinctUntilChanged()
                 .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
                 .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { [weak self] stores in
+                .subscribe(onNext: { [weak self] _ in
                     guard let self = self else { return }
                     self.updateMapWithClustering()
                 })
