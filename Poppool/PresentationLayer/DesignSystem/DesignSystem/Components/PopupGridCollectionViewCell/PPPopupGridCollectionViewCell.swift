@@ -15,40 +15,35 @@ public final class PPPopupGridCollectionViewCell: UICollectionViewCell {
         $0.contentMode = .scaleAspectFill
     }
 
-    private let categoryLabel = PPLabel(style: .bold, fontSize: 11).then {
+    private let categoryLabel = PPLabel(style: .KOb11).then {
         $0.textColor = .blu500
-        $0.setLineHeightText(text: "category", font: .korFont(style: .bold, size: 11))
     }
 
-    private let titleLabel = PPLabel(style: .bold, fontSize: 14).then {
+    private let titleLabel = PPLabel(style: .KOb14).then {
         $0.numberOfLines = 2
         $0.lineBreakMode = .byTruncatingTail
-        $0.setLineHeightText(text: "title", font: .korFont(style: .bold, size: 14))
     }
 
-    private let addressLabel = PPLabel(style: .medium, fontSize: 11).then {
+    private let addressLabel = PPLabel(style: .KOm11).then {
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
         $0.textColor = .g400
-        $0.setLineHeightText(text: "address", font: .korFont(style: .medium, size: 11))
     }
 
-    private let dateLabel = PPLabel(style: .medium, fontSize: 11).then {
+    private let dateLabel = PPLabel(style: .ENr11).then {
         $0.lineBreakMode = .byTruncatingTail
         $0.textColor = .g400
-        $0.setLineHeightText(text: "date", font: .korFont(style: .medium, size: 11))
     }
 
     public let bookmarkButton = UIButton()
 
-    private let rankLabel = UILabel().then {
+    private let rankLabel = PPLabel(style: .KOm11).then {
         $0.backgroundColor = .w10
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
         $0.isHidden = true
         $0.textColor = .w100
         $0.textAlignment = .center
-        $0.setLineHeightText(text: "rank", font: .korFont(style: .medium, size: 11), lineHeight: 1)
     }
 
     // MARK: - init
@@ -103,14 +98,12 @@ private extension PPPopupGridCollectionViewCell {
 
         dateLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.height.equalTo(15).priority(.high)
             make.bottom.equalToSuperview()
         }
 
         addressLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(dateLabel.snp.top)
-            make.height.equalTo(17).priority(.high)
         }
 
         bookmarkButton.snp.makeConstraints { make in
@@ -137,12 +130,12 @@ private extension PPPopupGridCollectionViewCell {
 extension PPPopupGridCollectionViewCell {
     public func configureCell(imagePath: String?, id: Int64, category: String?, title: String?, address: String?, startDate: String?, endDate: String?, isBookmark: Bool, isLogin: Bool, isPopular: Bool = false, row: Int?) {
 
-        categoryLabel.text = "#" + (category ?? "")
-        titleLabel.text = title
-        addressLabel.text = address
+        categoryLabel.updateText(to: "#" + (category ?? ""))
+        titleLabel.updateText(to: title)
+        addressLabel.updateText(to: address)
 
         let date = startDate.toDate().toPPDateString() + " ~ " + endDate.toDate().toPPDateString()
-        dateLabel.text = date
+        dateLabel.updateText(to: date)
 
         let bookmarkImage = isBookmark ? UIImage(named: "icon_bookmark_fill") : UIImage(named: "icon_bookmark")
         bookmarkButton.setImage(bookmarkImage, for: .normal)
@@ -153,7 +146,7 @@ extension PPPopupGridCollectionViewCell {
         rankLabel.isHidden = !isPopular
 
         if let rank = row {
-            rankLabel.text = "\(rank)"
+            rankLabel.updateText(to: "\(rank)")
             rankLabel.isHidden = rank > 2
         }
     }

@@ -4,16 +4,15 @@ import DesignSystem
 
 import RxSwift
 import SnapKit
+import Then
 
 final class CommentDetailContentSectionCell: UICollectionViewCell {
 
     // MARK: - Components
 
-    private let contentLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 13)
-        label.numberOfLines = 0
-        return label
-    }()
+    private let contentLabel = PPLabel(style: .KOm13).then {
+        $0.numberOfLines = 0
+    }
 
     let disposeBag = DisposeBag()
     // MARK: - init
@@ -44,6 +43,6 @@ extension CommentDetailContentSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        contentLabel.setLineHeightText(text: input.content, font: .korFont(style: .medium, size: 13))
+        contentLabel.updateText(to: input.content)
     }
 }

@@ -31,31 +31,23 @@ final class HomePopularCardSectionCell: UICollectionViewCell {
         return view
     }()
 
-    private let dateLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 16)
-        label.textColor = .w100
-        return label
-    }()
+    private let dateLabel = PPLabel(style: .KOr16).then {
+        $0.textColor = .w100
+    }
 
-    private let categoryLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 16)
-        label.textColor = .g1000
-        label.backgroundColor = .w100
-        return label
-    }()
+    private let categoryLabel = PPLabel(style: .KOr16).then {
+        $0.textColor = .g1000
+        $0.backgroundColor = .w100
+    }
 
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 16)
-        label.numberOfLines = 2
-        label.textColor = .w100
-        return label
-    }()
+    private let titleLabel = PPLabel(style: .KOr16).then {
+        $0.numberOfLines = 2
+        $0.textColor = .w100
+    }
 
-    private let locationLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 16)
-        label.textColor = .w100
-        return label
-    }()
+    private let locationLabel = PPLabel(style: .KOr16).then {
+        $0.textColor = .w100
+    }
 
     let disposeBag = DisposeBag()
 
@@ -127,7 +119,8 @@ extension HomePopularCardSectionCell: Inputable {
 
     func injection(with input: Input) {
         let date = "#\(input.endDate.toDate().toPPDateMonthString())까지 열리는"
-        dateLabel.setLineHeightText(text: date, font: .korFont(style: .regular, size: 16))
+        dateLabel.updateText(to: date)
+
         let category = "#\(input.category ?? "")"
         if let addressArray = input.address?.components(separatedBy: " ") {
             if addressArray.count > 2 {
@@ -136,8 +129,8 @@ extension HomePopularCardSectionCell: Inputable {
             }
         }
 
-        categoryLabel.text = category
-        titleLabel.setLineHeightText(text: input.title, font: .korFont(style: .regular, size: 16))
+        categoryLabel.updateText(to: category)
+        titleLabel.updateText(to: input.title)
         backGroundImageView.setPPImage(path: input.imagePath)
     }
 }

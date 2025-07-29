@@ -10,13 +10,15 @@ final class TagCollectionHeaderView: UICollectionReusableView {
     // MARK: - Components
     var disposeBag = DisposeBag()
 
-    private let sectionTitleLabel = UILabel().then {
-        $0.font = .korFont(style: .bold, size: 16)
-    }
+    private let sectionTitleLabel = PPLabel(text: "최근 검색어", style: .KOb16)
 
     let removeAllButton = UIButton().then {
         $0.isHidden = true
+        $0.setText(to: "모두삭제", with: .KOr13)
+    }
 
+    private let removeAllButtonUnderline = UIView().then {
+        $0.backgroundColor = .g1000
     }
     // MARK: - init
 
@@ -43,6 +45,10 @@ private extension TagCollectionHeaderView {
         [sectionTitleLabel, removeAllButton].forEach {
             self.addSubview($0)
         }
+
+        [removeAllButtonUnderline].forEach {
+            removeAllButton.addSubview($0)
+        }
     }
 
     func setupConstraints() {
@@ -57,20 +63,18 @@ private extension TagCollectionHeaderView {
             make.centerY.equalTo(sectionTitleLabel)
             make.height.equalTo(20)
         }
+
+        removeAllButtonUnderline.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+        }
     }
 }
 
 extension TagCollectionHeaderView {
-    func configureHeader(title: String, buttonTitle: String? = nil) {
-        sectionTitleLabel.text = title
-        if let buttonTitle = buttonTitle {
-            removeAllButton.isHidden = false
-            let attributes: [NSAttributedString.Key: Any] = [
-                .underlineStyle: NSUnderlineStyle.single.rawValue,
-                .font: UIFont.korFont(style: .regular, size: 13)
-            ]
-            let attributedTitle = NSAttributedString(string: buttonTitle, attributes: attributes)
-            removeAllButton.setAttributedTitle(attributedTitle, for: .normal)
-        }
+    func configureHeader(title: String, showRemoveAllButton: Bool = false) {
+        sectionTitleLabel.updateText(to: title)
+        removeAllButton.isHidden = !showRemoveAllButton
     }
 }

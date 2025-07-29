@@ -14,9 +14,8 @@ public final class PPCancelHeaderView: UIView {
 
     public let cancelButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("취소", for: .normal)
-        button.titleLabel?.font = .korFont(style: .regular, size: 14)
         button.setTitleColor(.black, for: .normal)
+        button.setText(to: "취소", with: .KOr14, for: .normal)
         return button
     }()
 

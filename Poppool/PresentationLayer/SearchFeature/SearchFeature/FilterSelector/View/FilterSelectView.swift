@@ -7,17 +7,17 @@ import SnapKit
 final class FilterSelectView: UIView {
 
     // MARK: - Components
-    private let titleLabel = PPLabel(style: .bold, fontSize: 18, text: "노출 순서를 선택해주세요")
+    private let titleLabel = PPLabel(text: "노출 순서를 선택해주세요", style: .KOb18)
 
     let closeButton = UIButton().then {
         $0.setImage(UIImage(named: "icon_xmark"), for: .normal)
     }
 
-    private let statusLabel = PPLabel(style: .regular, fontSize: 13, text: "노출 조건")
+    private let statusLabel = PPLabel(text: "노출 조건", style: .KOr13)
 
     let statusSegmentControl = PPSegmentedControl(type: .base, segments: ["오픈", "종료"], selectedSegmentIndex: 0)
 
-    private let sortLabel = PPLabel(style: .regular, fontSize: 13, text: "팝업순서")
+    private let sortLabel = PPLabel(text: "팝업순서", style: .KOr13)
 
     let sortSegmentControl = PPSegmentedControl(type: .base, segments: ["신규순", "인기순"], selectedSegmentIndex: 0)
 

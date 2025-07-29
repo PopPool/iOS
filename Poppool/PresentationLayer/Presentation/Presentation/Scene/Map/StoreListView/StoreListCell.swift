@@ -5,6 +5,7 @@ import DesignSystem
 import ReactorKit
 import RxSwift
 import SnapKit
+import Then
 
 final class StoreListCell: UICollectionViewCell {
     static let identifier = "StoreListCell"
@@ -27,39 +28,31 @@ final class StoreListCell: UICollectionViewCell {
         return button
     }()
 
-    private let categoryTagLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 11, text: "")
-        label.textColor = .blu500
-        label.text = "#카테고리"
-        return label
-    }()
+    private let categoryTagLabel = PPLabel(style: .KOb11).then {
+        $0.textColor = .blu500
+    }
 
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 14, text: "")
-        label.textColor = .g900
-        label.numberOfLines = 2
-        return label
-    }()
+    private let titleLabel = PPLabel(style: .KOb14).then {
+        $0.textColor = .g900
+        $0.numberOfLines = 2
+    }
 
-    private let locationLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 11, text: "")
-        label.textColor = .g400
-        label.numberOfLines = 2
-        return label
-    }()
+    private let locationLabel = PPLabel(style: .KOm11).then {
+        $0.textColor = .g400
+        $0.numberOfLines = 2
+    }
 
-    private let dateLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12, text: "")
-        label.textColor = .g400
-        label.numberOfLines = 2
-        return label
-    }()
+    private let dateLabel = PPLabel(style: .KOr12).then {
+        $0.textColor = .g400
+        $0.numberOfLines = 2
+    }
 
     var disposeBag = DisposeBag()
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setUpConstraints()
         configureUI()
     }
@@ -137,13 +130,12 @@ extension StoreListCell: Inputable {
 
     func injection(with input: Input) {
         thumbnailImageView.setPPImage(path: input.thumbnailURL)
-        categoryTagLabel.text = "#\(input.category)"
-        titleLabel.text = input.title
-        locationLabel.text = input.location
-        dateLabel.text = input.date
+        categoryTagLabel.updateText(to: "#\(input.category)")
+        titleLabel.updateText(to: input.title)
+        locationLabel.updateText(to: input.location)
+        dateLabel.updateText(to: input.date)
 
         let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
         bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
-
 }
