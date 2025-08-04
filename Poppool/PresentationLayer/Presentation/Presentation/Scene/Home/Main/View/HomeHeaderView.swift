@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class HomeHeaderView: UIView {
 
@@ -23,12 +24,13 @@ final class HomeHeaderView: UIView {
         return view
     }()
 
-    private let searchLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 14, text: "팝업스토어명을 입력해보세요")
-        label.textColor = .g1000
-        label.isUserInteractionEnabled = false
-        return label
-    }()
+    private let searchLabel = PPLabel(
+        text: "팝업스토어명을 입력해보세요",
+        style: .KOr14
+    ).then {
+        $0.textColor = .g1000
+        $0.isUserInteractionEnabled = false
+    }
 
     // MARK: - init
     init() {

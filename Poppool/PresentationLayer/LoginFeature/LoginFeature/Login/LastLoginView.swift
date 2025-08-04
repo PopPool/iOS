@@ -1,5 +1,6 @@
 import UIKit
 
+import DesignSystem
 import SnapKit
 
 final class LastLoginView: UIView {
@@ -37,11 +38,10 @@ final class LastLoginView: UIView {
         return UIView()
     }()
 
-    private let notificationLabel: UILabel = {
-        let label = UILabel()
-        label.font = .korFont(style: .medium, size: 13)
-        return label
-    }()
+    private let notificationLabel = PPLabel(
+        text: "최근에 이 방법으로 로그인했어요",
+        style: .KOm13
+    )
 
     private var colorType: TipColor {
         didSet {
@@ -61,13 +61,13 @@ final class LastLoginView: UIView {
     /// - Parameters:
     ///   - colorType: 툴팁의 색상(UIColor)을 인자로 받습니다 - w100, blu500
     ///   - direction: 툴팁의 방향을 인자로 받습니다 - up / down
-    init(colorType: TipColor, direction: TipDirection, text: String?) {
+    init(colorType: TipColor, direction: TipDirection) {
         self.colorType = colorType
         self.direction = direction
         super.init(frame: .zero)
+
         setupLayer(color: colorType)
         notificationLabel.textColor = colorType.textColor
-        notificationLabel.text = text
     }
 
     required init?(coder: NSCoder) {
@@ -97,13 +97,13 @@ extension LastLoginView {
         case .pointUp:
             notificationLabel.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview().inset(16)
-                make.bottom.equalToSuperview().inset(11)
+                make.bottom.equalToSuperview().inset(8)
             }
 
         case .pointDown:
             notificationLabel.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview().inset(16)
-                make.top.equalToSuperview().inset(11)
+                make.horizontalEdges.equalToSuperview().inset(16)
+                make.top.equalToSuperview().inset(8)
             }
         }
     }
@@ -191,13 +191,15 @@ extension LastLoginView {
 extension UIView {
     func showToolTip(
         color: LastLoginView.TipColor,
-        direction: LastLoginView.TipDirection,
-        text: String? = "최근에 이 방법으로 로그인했어요"
+        direction: LastLoginView.TipDirection
     ) {
         // 호출하는 컴포넌트 위 또는 아래에 생성되기 위해 superview를 구합니다
         guard let superview = self.superview else { return }
 
-        let toolTip = LastLoginView(colorType: color, direction: direction, text: text)
+        let toolTip = LastLoginView(
+            colorType: color,
+            direction: direction
+        )
         let beforeToolTip = superview.subviews.filter { $0 is LastLoginView }
         beforeToolTip.forEach { $0.removeFromSuperview() }
 
