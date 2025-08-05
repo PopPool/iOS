@@ -1,6 +1,7 @@
 import UIKit
 
 import DesignSystem
+import Infrastructure
 
 import ReactorKit
 import RxSwift
@@ -10,55 +11,71 @@ import Then
 final class StoreListCell: UICollectionViewCell {
     static let identifier = "StoreListCell"
 
-    // MARK: - Components
-    private let thumbnailImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.layer.cornerRadius = 12
-        iv.backgroundColor = .g100
-        return iv
-    }()
-
-    let bookmarkButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "icon_bookmark"), for: .normal)
-        button.backgroundColor = .clear
-        button.layer.cornerRadius = 12
-        return button
-    }()
-
-    private let categoryTagLabel = PPLabel(style: .KOb11).then {
-        $0.textColor = .blu500
-    }
-
-    private let titleLabel = PPLabel(style: .KOb14).then {
-        $0.textColor = .g900
-        $0.numberOfLines = 2
-    }
-
-    private let locationLabel = PPLabel(style: .KOm11).then {
-        $0.textColor = .g400
-        $0.numberOfLines = 2
-    }
-
-    private let dateLabel = PPLabel(style: .KOr12).then {
-        $0.textColor = .g400
-        $0.numberOfLines = 2
-    }
-
+    // MARK: - Properties
     var disposeBag = DisposeBag()
+
+    private enum Constant {
+        static let imageHeight: CGFloat = 140
+        static let bookmarkSize: CGFloat = 24
+        static let bookmarkInset: CGFloat = 8
+        static let categoryTopOffset: CGFloat = 12
+        static let categoryHeight: CGFloat = 15
+        static let titleTopOffset: CGFloat = 4
+        static let addressHeight: CGFloat = 17
+        static let dateHeight: CGFloat = 15
+        static let cornerRadius: CGFloat = 12
+        static let cellCornerRadius: CGFloat = 4
+    }
+
+    // MARK: - Components
+    private let thumbnailImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = Constant.cornerRadius
+        $0.backgroundColor = .g100
+    }
+
+    let bookmarkButton = UIButton().then {
+        $0.setImage(UIImage(named: "icon_bookmark"), for: .normal)
+        $0.backgroundColor = .clear
+        $0.layer.cornerRadius = Constant.cornerRadius
+    }
+
+    private let categoryTagLabel = PPLabel(style: .bold, fontSize: 11).then {
+        $0.textColor = .blu500
+        $0.setLineHeightText(text: "category", font: .korFont(style: .bold, size: 11))
+    }
+
+    private let titleLabel = PPLabel(style: .bold, fontSize: 14).then {
+        $0.numberOfLines = 2
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textColor = .g900
+        $0.setLineHeightText(text: "title", font: .korFont(style: .bold, size: 14))
+    }
+
+    private let locationLabel = PPLabel(style: .medium, fontSize: 11).then {
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textColor = .g400
+        $0.setLineHeightText(text: "location", font: .korFont(style: .medium, size: 11))
+    }
+
+    private let dateLabel = PPLabel(style: .medium, fontSize: 11).then {
+        $0.lineBreakMode = .byTruncatingTail
+        $0.textColor = .g400
+        $0.setLineHeightText(text: "date", font: .korFont(style: .medium, size: 11))
+    }
 
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        setUpConstraints()
-        configureUI()
+        self.addViews()
+        self.setupConstraints()
+        self.configureUI()
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("\(#file), \(#function) Error")
     }
 
     override func prepareForReuse() {
@@ -69,55 +86,58 @@ final class StoreListCell: UICollectionViewCell {
 
 // MARK: - SetUp
 private extension StoreListCell {
-    func configureUI() {
-        //        backgroundColor = .white
+    func addViews() {
+        [thumbnailImageView, categoryTagLabel, titleLabel, locationLabel, dateLabel, bookmarkButton].forEach {
+            self.contentView.addSubview($0)
+        }
     }
 
-    func setUpConstraints() {
-        contentView.addSubview(thumbnailImageView)
+    func setupConstraints() {
         thumbnailImageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
-            make.width.equalTo((UIScreen.main.bounds.width - 48) / 2)
-            make.height.equalTo(thumbnailImageView.snp.width)
+            make.width.equalTo(self.contentView.bounds.width)
+            make.height.equalTo(Constant.imageHeight)
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
         }
 
-        contentView.addSubview(bookmarkButton)
         bookmarkButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(8)
-            make.size.equalTo(24)
+            make.size.equalTo(Constant.bookmarkSize)
+            make.top.trailing.equalToSuperview().inset(Constant.bookmarkInset)
         }
 
-        contentView.addSubview(categoryTagLabel)
-           contentView.addSubview(titleLabel)
-           contentView.addSubview(locationLabel)
-           contentView.addSubview(dateLabel)
+        categoryTagLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.top.equalTo(self.thumbnailImageView.snp.bottom).offset(Constant.categoryTopOffset)
+            make.height.equalTo(Constant.categoryHeight)
+        }
 
-           // 각 라벨의 위치 설정
-           categoryTagLabel.snp.makeConstraints { make in
-               make.top.equalTo(thumbnailImageView.snp.bottom).offset(10)
-               make.leading.trailing.equalToSuperview()
-               make.height.equalTo(16)
-           }
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.categoryTagLabel.snp.bottom).offset(Constant.titleTopOffset)
+            make.leading.trailing.equalToSuperview()
+        }
 
-           titleLabel.snp.makeConstraints { make in
-               make.top.equalTo(categoryTagLabel.snp.bottom).offset(6)
-               make.leading.trailing.equalToSuperview()
-           }
+        dateLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.height.equalTo(Constant.dateHeight).priority(.high)
+            make.bottom.equalToSuperview()
+        }
 
-           locationLabel.snp.makeConstraints { make in
-               make.top.equalTo(titleLabel.snp.bottom).offset(12)
-               make.leading.trailing.equalToSuperview()
-           }
+        locationLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(self.dateLabel.snp.top)
+            make.height.equalTo(Constant.addressHeight).priority(.high)
+        }
+    }
 
-           dateLabel.snp.makeConstraints { make in
-               make.top.equalTo(locationLabel.snp.bottom).offset(6)
-               make.leading.trailing.equalToSuperview()
-               make.bottom.lessThanOrEqualToSuperview()
-           }
-       }
+    func configureUI() {
+        self.contentView.layer.cornerRadius = Constant.cellCornerRadius
+        self.contentView.clipsToBounds = true
+
+        self.thumbnailImageView.layer.cornerRadius = Constant.cornerRadius
+        self.thumbnailImageView.clipsToBounds = true
+    }
 }
 
-// MARK: - Inputable
 extension StoreListCell: Inputable {
     struct Input {
         let thumbnailURL: String
@@ -129,13 +149,13 @@ extension StoreListCell: Inputable {
     }
 
     func injection(with input: Input) {
-        thumbnailImageView.setPPImage(path: input.thumbnailURL)
-        categoryTagLabel.updateText(to: "#\(input.category)")
-        titleLabel.updateText(to: input.title)
-        locationLabel.updateText(to: input.location)
-        dateLabel.updateText(to: input.date)
+        self.thumbnailImageView.setPPImage(path: input.thumbnailURL)
+        self.categoryTagLabel.updateText(to: "#\(input.category)")
+        self.titleLabel.updateText(to: input.title)
+        self.locationLabel.updateText(to: input.location)
+        self.dateLabel.updateText(to: input.date)
 
         let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
-        bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
+        self.bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
 }
