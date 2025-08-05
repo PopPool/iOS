@@ -46,8 +46,6 @@ final class FilterChip: UIButton {
 
     // MARK: - Configuration
     func setTitle(_ title: String, style: Style) {
-        setTitle(title, for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
 
         switch style {
         case .inactive:
@@ -73,6 +71,8 @@ final class FilterChip: UIButton {
 
         let rightPadding: CGFloat = closeButton.isHidden ? 12 : 34
         contentEdgeInsets = UIEdgeInsets(top: 5, left: 12, bottom: 7, right: rightPadding)
+
+        self.setText(to: title, with: .KOb14, for: .normal)
     }
 
     // MARK: - Actions

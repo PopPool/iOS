@@ -6,6 +6,7 @@ import Infrastructure
 import ReactorKit
 import RxSwift
 import SnapKit
+import Then
 
 final class StoreListCell: UICollectionViewCell {
     static let identifier = "StoreListCell"
@@ -23,6 +24,7 @@ final class StoreListCell: UICollectionViewCell {
         static let addressHeight: CGFloat = 17
         static let dateHeight: CGFloat = 15
         static let cornerRadius: CGFloat = 12
+        static let cellCornerRadius: CGFloat = 4
     }
 
     // MARK: - Components
@@ -36,6 +38,7 @@ final class StoreListCell: UICollectionViewCell {
     let bookmarkButton = UIButton().then {
         $0.setImage(UIImage(named: "icon_bookmark"), for: .normal)
         $0.backgroundColor = .clear
+        $0.layer.cornerRadius = Constant.cornerRadius
     }
 
     private let categoryTagLabel = PPLabel(style: .bold, fontSize: 11).then {
@@ -66,7 +69,6 @@ final class StoreListCell: UICollectionViewCell {
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         self.addViews()
         self.setupConstraints()
         self.configureUI()
@@ -92,7 +94,7 @@ private extension StoreListCell {
 
     func setupConstraints() {
         thumbnailImageView.snp.makeConstraints { make in
-            make.width.equalTo(contentView.bounds.width)
+            make.width.equalTo(self.contentView.bounds.width)
             make.height.equalTo(Constant.imageHeight)
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
@@ -105,12 +107,12 @@ private extension StoreListCell {
 
         categoryTagLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
-            make.top.equalTo(thumbnailImageView.snp.bottom).offset(Constant.categoryTopOffset)
+            make.top.equalTo(self.thumbnailImageView.snp.bottom).offset(Constant.categoryTopOffset)
             make.height.equalTo(Constant.categoryHeight)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(categoryTagLabel.snp.bottom).offset(Constant.titleTopOffset)
+            make.top.equalTo(self.categoryTagLabel.snp.bottom).offset(Constant.titleTopOffset)
             make.leading.trailing.equalToSuperview()
         }
 
@@ -122,21 +124,20 @@ private extension StoreListCell {
 
         locationLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(dateLabel.snp.top)
+            make.bottom.equalTo(self.dateLabel.snp.top)
             make.height.equalTo(Constant.addressHeight).priority(.high)
         }
     }
 
     func configureUI() {
-        self.contentView.layer.cornerRadius = 4
+        self.contentView.layer.cornerRadius = Constant.cellCornerRadius
         self.contentView.clipsToBounds = true
 
-        thumbnailImageView.layer.cornerRadius = 4
-        thumbnailImageView.clipsToBounds = true
+        self.thumbnailImageView.layer.cornerRadius = Constant.cornerRadius
+        self.thumbnailImageView.clipsToBounds = true
     }
 }
 
-// MARK: - Inputable
 extension StoreListCell: Inputable {
     struct Input {
         let thumbnailURL: String
@@ -148,13 +149,13 @@ extension StoreListCell: Inputable {
     }
 
     func injection(with input: Input) {
-        thumbnailImageView.setPPImage(path: input.thumbnailURL)
-        categoryTagLabel.text = "#\(input.category)"
-        titleLabel.text = input.title
-        locationLabel.text = input.location
-        dateLabel.text = input.date
+        self.thumbnailImageView.setPPImage(path: input.thumbnailURL)
+        self.categoryTagLabel.updateText(to: "#\(input.category)")
+        self.titleLabel.updateText(to: input.title)
+        self.locationLabel.updateText(to: input.location)
+        self.dateLabel.updateText(to: input.date)
 
         let bookmarkImage = input.isBookmarked ? "icon_bookmark_fill" : "icon_bookmark"
-        bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
+        self.bookmarkButton.setImage(UIImage(named: bookmarkImage), for: .normal)
     }
 }

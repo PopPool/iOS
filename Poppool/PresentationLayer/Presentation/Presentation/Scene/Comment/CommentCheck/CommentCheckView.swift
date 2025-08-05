@@ -3,19 +3,21 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class CommentCheckView: UIView {
 
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 18, text: "코멘트 작성을 그만하시겠어요?")
+        return PPLabel(text: "코멘트 작성을 그만하시겠어요?", style: .KOb18)
     }()
 
-    private let descriptionLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 14, text: "화면을 나가실 경우 작성중인 내용은 저장되지 않아요.")
-        label.textColor = .g600
-        return label
-    }()
+    private let descriptionLabel = PPLabel(
+        text: "화면을 나가실 경우 작성중인 내용은 저장되지 않아요.",
+        style: .KOr14
+    ).then {
+        $0.textColor = .g600
+    }
 
     private let buttonStackView: UIStackView = {
         let view = UIStackView()
@@ -25,11 +27,11 @@ final class CommentCheckView: UIView {
     }()
 
     let continueButton: PPButton = {
-        return PPButton(style: .secondary, text: "계속하기")
+        return PPButton(buttonStyle: .secondary, text: "계속하기")
     }()
 
     let stopButton: PPButton = {
-        return PPButton(style: .primary, text: "그만하기")
+        return PPButton(buttonStyle: .primary, text: "그만하기")
     }()
 
     // MARK: - init

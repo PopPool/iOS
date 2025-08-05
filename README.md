@@ -8,7 +8,8 @@
   <img src="https://img.shields.io/badge/Swift-5.9-red?logo=swift"/>
   <img src="https://img.shields.io/badge/iOS-16.0+-black?logo=apple"/>
 
-  <h4>흩어져 있는 팝업스토어 정보를 제공하고 인스타그램 연동으로 부가 기능을 제공하는 서비스입니다.
+  <h4>흩어져 있는 팝업스토어 정보를 제공하고 인스타그램 연동으로 부가 기능을 제공하는 서비스입니다.</h4>
+  <h6>서버 이전 작업으로 인한 서비스 일시 중단 (7/27 ~ )</h6>
   
 </div>
 

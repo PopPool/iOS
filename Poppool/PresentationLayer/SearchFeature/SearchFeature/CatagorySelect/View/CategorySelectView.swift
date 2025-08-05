@@ -8,9 +8,7 @@ import Then
 final class CategorySelectView: UIView {
 
     // MARK: - Components
-    private let titleLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 18, text: "카테고리를 선택해주세요")
-    }()
+    private let titleLabel = PPLabel(text: "카테고리를 선택해주세요", style: .KOb18)
 
     let closeButton = UIButton().then {
         $0.setImage(UIImage(named: "icon_xmark"), for: .normal)

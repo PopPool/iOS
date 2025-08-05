@@ -9,7 +9,7 @@ public final class PPTagCollectionViewCell: UICollectionViewCell {
 
     public var disposeBag = DisposeBag()
 
-    public let titleLabel = PPLabel(style: .medium, fontSize: 11)
+    public let titleLabel = PPLabel(style: .KOm11)
 
     public let cancelButton = UIButton()
 
@@ -83,6 +83,7 @@ private extension PPTagCollectionViewCell {
     }
 }
 
+// FIXME: Chip 컴포넌트화 및 분기적용 필요 (디자인 시스템 도입 필요)
 extension PPTagCollectionViewCell {
     public func configureCell(title: String? = nil, id: Int?, isSelected: Bool = false, isCancelable: Bool = true, fontSize: CGFloat = 11, cornerRadius: CGFloat = 15.5) {
         let xmarkImage = isSelected ? UIImage(named: "icon_xmark_white") : UIImage(named: "icon_xmark_gray")

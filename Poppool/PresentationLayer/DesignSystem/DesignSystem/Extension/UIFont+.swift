@@ -21,6 +21,14 @@ public extension UIFont {
         if let font = UIFont(name: fontName, size: size) { return font } else { return registerAndGetFont(name: fontName, size: size) }
     }
 
+    static func PPFont(style: PPFontStyle) -> UIFont {
+        if let font = UIFont(name: style.fontName, size: style.size) {
+            return font
+        } else {
+            return registerAndGetFont(name: style.fontName, size: style.size)
+        }
+    }
+
     private static func registerAndGetFont(name: String, size: CGFloat) -> UIFont {
         let url = Bundle.module.url(forResource: name, withExtension: "ttf")!
         CTFontManagerRegisterFontURLs([url as CFURL] as CFArray, .process, true, nil)
