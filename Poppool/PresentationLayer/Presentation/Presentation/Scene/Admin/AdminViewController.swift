@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 import DomainInterface
 import Infrastructure
+import PresentationInterface
 
 import ReactorKit
 import RxCocoa
@@ -19,14 +20,17 @@ final class AdminViewController: BaseViewController, View {
     private var selectedFilterOption: String = "전체"
     private let nickname: String
     private let adminUseCase: AdminUseCase
+    private let detailFactory: DetailFactory
 
     // MARK: - Init
     init(
         nickname: String,
-        adminUseCase: AdminUseCase
+        adminUseCase: AdminUseCase,
+        detailFactory: DetailFactory = DetailFactoryImpl()
     ) {
         self.nickname = nickname
         self.adminUseCase = adminUseCase
+        self.detailFactory = detailFactory
         self.mainView = AdminView(frame: .zero)
         super.init()
         mainView.usernameLabel.text = nickname + "님"
@@ -39,13 +43,10 @@ final class AdminViewController: BaseViewController, View {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
-        setupMenuButton()
-
-        let logoTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLogo))
-        mainView.logoImageView.isUserInteractionEnabled = true
-        mainView.logoImageView.addGestureRecognizer(logoTapGesture)
-        mainView.tableView.register(AdminStoreCell.self, forCellReuseIdentifier: AdminStoreCell.identifier)
+        self.setUp()
+        self.setupMenuButton()
+        self.setupGestureRecognizers()
+        self.setupTableView()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -57,9 +58,11 @@ final class AdminViewController: BaseViewController, View {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
     }
+}
 
-    // MARK: - Setup
-    private func setUp() {
+// MARK: - Setup
+private extension AdminViewController {
+    func setUp() {
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -68,7 +71,7 @@ final class AdminViewController: BaseViewController, View {
         mainView.dropdownButton.addTarget(self, action: #selector(didTapDropdownButton), for: .touchUpInside)
     }
 
-    private func setupMenuButton() {
+    func setupMenuButton() {
         let editAction = UIAction(
             title: "수정",
             image: UIImage(systemName: "pencil"),
@@ -91,12 +94,29 @@ final class AdminViewController: BaseViewController, View {
         mainView.menuButton.showsMenuAsPrimaryAction = true
     }
 
-    // MARK: - Actions
-    @objc private func didTapLogo() {
+    func setupGestureRecognizers() {
+        let logoTapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapLogo))
+        mainView.logoImageView.isUserInteractionEnabled = true
+        mainView.logoImageView.addGestureRecognizer(logoTapGesture)
+
+        if let tableBgView = mainView.tableView.backgroundView {
+            let tableBackgroundTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            tableBgView.addGestureRecognizer(tableBackgroundTap)
+        }
+    }
+
+    func setupTableView() {
+        mainView.tableView.register(AdminStoreCell.self, forCellReuseIdentifier: AdminStoreCell.identifier)
+    }
+}
+
+// MARK: - Actions
+private extension AdminViewController {
+    @objc func didTapLogo() {
         navigationController?.popViewController(animated: true)
     }
 
-    @objc private func didTapDropdownButton() {
+    @objc func didTapDropdownButton() {
         let reactor = AdminBottomSheetReactor()
         let bottomSheetVC = AdminBottomSheetViewController(reactor: reactor)
 
@@ -119,7 +139,7 @@ final class AdminViewController: BaseViewController, View {
         self.adminBottomSheetVC = bottomSheetVC
     }
 
-    private func showEditOptions() {
+    func showEditOptions() {
         let alert = UIAlertController(title: "수정할 팝업스토어 선택", message: nil, preferredStyle: .actionSheet)
 
         reactor?.currentState.storeList.forEach { store in
@@ -138,7 +158,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func showDeleteOptions() {
+    func showDeleteOptions() {
         let alert = UIAlertController(title: "삭제할 팝업스토어 선택", message: nil, preferredStyle: .actionSheet)
 
         reactor?.currentState.storeList.forEach { store in
@@ -149,7 +169,6 @@ final class AdminViewController: BaseViewController, View {
 
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
 
-        // iPad support
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = mainView.menuButton
             popoverController.sourceRect = mainView.menuButton.bounds
@@ -158,7 +177,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func showDeleteConfirmation(for store: AdminStore) {
+    func showDeleteConfirmation(for store: AdminStore) {
         let alert = UIAlertController(
             title: "삭제 확인",
             message: "\(store.name)을(를) 삭제하시겠습니까?",
@@ -173,7 +192,7 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    private func editStore(_ store: AdminStore) {
+    func editStore(_ store: AdminStore) {
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
@@ -197,7 +216,7 @@ final class AdminViewController: BaseViewController, View {
             .disposed(by: disposeBag)
     }
 
-    private func deleteStore(_ store: AdminStore) {
+    func deleteStore(_ store: AdminStore) {
         adminUseCase.fetchStoreDetail(id: store.id)
             .observe(on: MainScheduler.instance)
             .subscribe(
@@ -208,7 +227,6 @@ final class AdminViewController: BaseViewController, View {
 
                     allImageUrls.append(storeDetail.mainImageUrl)
 
-                    // 다른 모든 이미지 URL 추가
                     let otherImageUrls = storeDetail.images.map { $0.imageUrl }
                     allImageUrls.append(contentsOf: otherImageUrls)
 
@@ -236,9 +254,9 @@ final class AdminViewController: BaseViewController, View {
                 }
             )
             .disposed(by: disposeBag)
-
     }
-    private func showErrorAlert(message: String) {
+
+    func showErrorAlert(message: String) {
         let alert = UIAlertController(
             title: "오류",
             message: message,
@@ -248,8 +266,15 @@ final class AdminViewController: BaseViewController, View {
         present(alert, animated: true)
     }
 
-    // MARK: - Reactor Binding
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - Reactor Binding
+extension AdminViewController {
     func bind(reactor: Reactor) {
+        // MARK: - Input
         mainView.searchInput.rx.text.orEmpty
             .distinctUntilChanged()
             .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
@@ -270,6 +295,19 @@ final class AdminViewController: BaseViewController, View {
             })
             .disposed(by: disposeBag)
 
+        mainView.tableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.view.endEditing(true)
+                guard let store = reactor.currentState.storeList[safe: indexPath.row] else { return }
+
+                let detailVC = self?.detailFactory.make(popupID: Int(store.id))
+                if let detailVC = detailVC {
+                    self?.navigationController?.pushViewController(detailVC, animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        // MARK: - Output
         reactor.state
             .map { $0.selectedStoreForEdit }
             .compactMap { $0 }
@@ -292,5 +330,11 @@ final class AdminViewController: BaseViewController, View {
                 cell.configure(with: store)
             }
             .disposed(by: disposeBag)
+    }
+}
+
+private extension Array {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }

@@ -1,12 +1,10 @@
-import UIKit
-
 import DesignSystem
 import Infrastructure
-
 import ReactorKit
 import RxCocoa
 import RxSwift
 import SnapKit
+import UIKit
 
 final class AdminBottomSheetView: UIView {
 
@@ -39,7 +37,6 @@ final class AdminBottomSheetView: UIView {
     let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "icon_xmark"), for: .normal)
-
         button.tintColor = .black
         return button
     }()
@@ -78,16 +75,12 @@ final class AdminBottomSheetView: UIView {
                 trailing: 20
             )
             section.interGroupSpacing = 16
-
             return section
         }
-
-        let collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: layout
-        )
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.isScrollEnabled = false
+        // Register cell here if needed, e.g. collectionView.register(TagSectionCell.self, forCellWithReuseIdentifier: TagSectionCell.identifiers)
         return collectionView
     }()
 
@@ -102,10 +95,7 @@ final class AdminBottomSheetView: UIView {
         )
         button.isEnabled = false
         button.contentEdgeInsets = UIEdgeInsets(
-            top: 9,
-            left: 16,
-            bottom: 9,
-            right: 12
+            top: 9, left: 16, bottom: 9, right: 12
         )
         return button
     }()
@@ -120,10 +110,7 @@ final class AdminBottomSheetView: UIView {
         )
         button.isEnabled = false
         button.contentEdgeInsets = UIEdgeInsets(
-            top: 9,
-            left: 16,
-            bottom: 9,
-            right: 12
+            top: 9, left: 16, bottom: 9, right: 12
         )
         return button
     }()
@@ -168,7 +155,7 @@ final class AdminBottomSheetView: UIView {
     private func setupConstraints() {
         containerView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(headerView.snp.top)
+            make.top.equalToSuperview()
         }
 
         headerView.snp.makeConstraints { make in
@@ -212,18 +199,40 @@ final class AdminBottomSheetView: UIView {
     }
 
     // MARK: - Public Methods
-    func updateContentVisibility(isCategorySelected: Bool) {
-        Logger.log("높이 변경 시작: \(isCategorySelected ? "카테고리" : "상태값")", category: .debug)
+    func calculateCollectionViewHeight(for items: [String]) -> CGFloat {
+        let sectionInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        let itemSpacing: CGFloat = 12
+        let lineSpacing: CGFloat = 16
 
-        let newHeight: CGFloat = isCategorySelected ? 200 : 160
+        let collectionViewWidth = UIScreen.main.bounds.width
+        let availableWidth = collectionViewWidth - sectionInsets.left - sectionInsets.right
 
-        // 애니메이션 없이 바로 적용
-        contentHeightConstraint?.update(offset: newHeight)
-        contentCollectionView.invalidateIntrinsicContentSize()
+        var currentRowWidth: CGFloat = 0
+        var numberOfRows = 1
 
-        setNeedsLayout()
-        layoutIfNeeded()
+        for (index, item) in items.enumerated() {
+            let text = item as NSString
+            let textSize = text.size(withAttributes: [
+                .font: UIFont.korFont(style: .medium, size: 13)
+            ])
+            let itemWidth = textSize.width + 32 // padding: 16 left/right each
 
-        Logger.log("높이 변경 완료", category: .debug)
+            if index == 0 {
+                currentRowWidth = itemWidth
+            } else {
+                let widthWithSpacing = currentRowWidth + itemSpacing + itemWidth
+                if widthWithSpacing > availableWidth {
+                    numberOfRows += 1
+                    currentRowWidth = itemWidth
+                } else {
+                    currentRowWidth = widthWithSpacing
+                }
+            }
+        }
+
+        let itemHeight: CGFloat = 36
+        return sectionInsets.top + sectionInsets.bottom +
+                         (CGFloat(numberOfRows) * itemHeight) +
+                         (CGFloat(max(0, numberOfRows - 1)) * lineSpacing)
     }
 }
