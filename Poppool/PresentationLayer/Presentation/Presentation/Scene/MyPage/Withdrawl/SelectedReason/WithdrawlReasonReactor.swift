@@ -110,6 +110,7 @@ final class WithdrawlReasonReactor: Reactor {
             keyChainService.deleteToken(type: .accessToken)
             keyChainService.deleteToken(type: .refreshToken)
             UserDefaultService.Key.allCases.forEach { userDefaultService.delete(keyType: $0) }
+            TokenType.allCases.forEach { keyChainService.deleteToken(type: $0) }
 
             let nextController = WithdrawlCompleteController()
             nextController.mainView.checkButton.rx.tap

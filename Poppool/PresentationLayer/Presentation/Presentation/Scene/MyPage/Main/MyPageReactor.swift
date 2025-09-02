@@ -168,6 +168,9 @@ final class MyPageReactor: Reactor {
                     UserDefaultService.Key.allCases
                         .filter { $0 != .lastLogin }
                         .forEach { self?.userDefaultService.delete(keyType: $0) }
+
+                    @Dependency var keyChainService: KeyChainService
+                    TokenType.allCases.forEach { keyChainService.deleteToken(type: $0) }
                 })
                 .andThen(Observable.just(.logout))
                 .catch { _ in Observable.empty() }
