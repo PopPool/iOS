@@ -7,36 +7,17 @@ import SnapKit
 final class SignUpStep3View: UIView {
 
     // MARK: - Components
-    let nickNameLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.textColor = .blu500
-        label.text = "하이"
-        return label
-    }()
+    let nickNameLabel = PPLabel(style: .KOb20).then {
+        $0.updateTextColor(to: .blu500)
+    }
 
-    private let titleTopLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.text = "님에 대해"
-        return label
-    }()
+    private let titleTopLabel = PPLabel(text: "님에 대해", style: .KOb20)
 
-    private let titleBottomLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.text = "조금 더 알려주시겠어요?"
-        return label
-    }()
+    private let titleBottomLabel = PPLabel(text: "조금 더 알려주시겠어요?", style: .KOb20)
 
-    private let subTitleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 16)
-        label.text = "관심이 있는 카테고리를 선택해주세요"
-        return label
-    }()
+    private let subTitleLabel = PPLabel(text: "관심이 있는 카테고리를 선택해주세요", style: .KOb16)
 
-    private let subTitleDescriptionLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12)
-        label.text = "최대 5개까지 선택할 수 있어요."
-        return label
-    }()
+    private let subTitleDescriptionLabel = PPLabel(text: "최대 5개까지 선택할 수 있어요.", style: .KOr12)
 
     let categoryCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: .init())
@@ -45,11 +26,11 @@ final class SignUpStep3View: UIView {
     }()
 
     let skipButton: PPButton = {
-        return PPButton(style: .secondary, text: "건너뛰기")
+        return PPButton(buttonStyle: .secondary, text: "건너뛰기")
     }()
 
     let completeButton: PPButton = {
-        return PPButton(style: .primary, text: "다음", disabledText: "다음")
+        return PPButton(buttonStyle: .primary, text: "다음", disabledText: "다음")
     }()
 
     private let buttonStackView: UIStackView = {

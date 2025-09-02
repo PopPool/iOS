@@ -8,7 +8,7 @@ final class AgeSelectedView: UIView {
 
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 18, text: "나이를 선택해주세요")
+        return PPLabel(text: "나이를 선택해주세요", style: .KOb18)
     }()
 
     let picker: PPPicker = {
@@ -17,11 +17,11 @@ final class AgeSelectedView: UIView {
     }()
 
     let cancelButton: PPButton = {
-        return PPButton(style: .secondary, text: "취소")
+        return PPButton(buttonStyle: .secondary, text: "취소")
     }()
 
     let completeButton: PPButton = {
-        return PPButton(style: .primary, text: "확인", disabledText: "확인")
+        return PPButton(buttonStyle: .primary, text: "확인")
     }()
 
     private let buttonStackView: UIStackView = {
