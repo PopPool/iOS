@@ -12,14 +12,10 @@ final class TagCollectionHeaderView: UICollectionReusableView {
 
     private let sectionTitleLabel = PPLabel(text: "최근 검색어", style: .KOb16)
 
-    let removeAllButton = UIButton().then {
+    let removeAllButton = PPUnderlinedTextButton(fontStyle: .KOr13, text: "모두삭제").then {
         $0.isHidden = true
-        $0.setText(to: "모두삭제", with: .KOr13)
     }
 
-    private let removeAllButtonUnderline = UIView().then {
-        $0.backgroundColor = .g1000
-    }
     // MARK: - init
 
     override init(frame: CGRect) {
@@ -45,10 +41,6 @@ private extension TagCollectionHeaderView {
         [sectionTitleLabel, removeAllButton].forEach {
             self.addSubview($0)
         }
-
-        [removeAllButtonUnderline].forEach {
-            removeAllButton.addSubview($0)
-        }
     }
 
     func setupConstraints() {
@@ -62,12 +54,6 @@ private extension TagCollectionHeaderView {
             make.trailing.equalToSuperview()
             make.centerY.equalTo(sectionTitleLabel)
             make.height.equalTo(20)
-        }
-
-        removeAllButtonUnderline.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalToSuperview()
-            make.horizontalEdges.equalToSuperview()
         }
     }
 }

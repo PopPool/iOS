@@ -4,15 +4,22 @@ import SnapKit
 
 public final class PPUnderlinedTextButton: UIButton {
 
+    private let textColor: UIColor = .g1000
+    private let disabledTextColor: UIColor = .g300
+
+    private let UnderlineView = UIView().then {
+        $0.backgroundColor = .g1000
+    }
+
     public init(
-        text: String = " ",
-        font: PPFontStyle = .KOr16,
-        color: UIColor = .g1000,
-        for controlState: UIControl.State = .normal
+        fontStyle: PPFontStyle = .KOm16,
+        text: String,
+        disabledText: String = "",
     ) {
         super.init(frame: .zero)
 
-        self.setText(to: text, with: font, color: color, for: controlState)
+        self.setText(to: text, with: fontStyle, color: textColor, for: .normal)
+        self.setText(to: disabledText.isEmpty ? text : disabledText, with: fontStyle, color: disabledTextColor, for: .disabled)
 
         self.addViews()
         self.setupConstraints()
@@ -22,8 +29,16 @@ public final class PPUnderlinedTextButton: UIButton {
         fatalError("\(#file), \(#function) Error")
     }
 
-    private let UnderlineView = UIView().then {
-        $0.backgroundColor = .g1000
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+
+        switch state {
+        case .normal:
+            UnderlineView.backgroundColor = textColor
+        case .disabled:
+            UnderlineView.backgroundColor = disabledTextColor
+        default: break
+        }
     }
 }
 
