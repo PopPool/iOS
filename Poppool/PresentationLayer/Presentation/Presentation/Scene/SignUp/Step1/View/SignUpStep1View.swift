@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class SignUpStep1View: UIView {
 
@@ -29,9 +30,13 @@ final class SignUpStep1View: UIView {
         return view
     }()
 
-    let completeButton: PPButton = {
-        return PPButton(style: .primary, text: "확인", disabledText: "확인")
-    }()
+    let completeButton = PPButton(
+        buttonStyle: .primary,
+        text: "확인",
+        disabledText: "확인"
+    ).then {
+        $0.isEnabled = false
+    }
 
     // MARK: - init
     init() {
