@@ -8,11 +8,12 @@ import Then
 final class SignUpStep1View: UIView {
 
     // MARK: - Components
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20, text: "서비스 이용을 위한\n약관을 확인해주세요")
-        label.numberOfLines = 0
-        return label
-    }()
+    private let titleLabel = PPLabel(
+        text: "서비스 이용을 위한\n약관을 확인해주세요",
+        style: .KOb20
+    ).then {
+        $0.numberOfLines = 0
+    }
 
     let totalButton: SignUpCheckBoxButton = {
         return SignUpCheckBoxButton()

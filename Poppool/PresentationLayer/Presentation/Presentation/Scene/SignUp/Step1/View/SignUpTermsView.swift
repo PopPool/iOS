@@ -15,11 +15,7 @@ final class SignUpTermsView: UIView {
         return view
     }()
 
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 14)
-        label.text = "some"
-        return label
-    }()
+    private let titleLabel = PPLabel(style: .KOr14)
 
     let righticonButton: UIButton = {
         let view = UIButton()
@@ -40,7 +36,7 @@ final class SignUpTermsView: UIView {
         super.init(frame: .zero)
         setUpConstraints()
         bind()
-        titleLabel.text = title
+        titleLabel.updateText(to: title)
     }
 
     required init?(coder: NSCoder) {
