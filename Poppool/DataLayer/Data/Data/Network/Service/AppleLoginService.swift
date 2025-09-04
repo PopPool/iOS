@@ -6,27 +6,32 @@ import RxSwift
 
 public final class AppleLoginService: NSObject, AuthServiceable {
 
-    public override init() { }
+    private let authorizationController: ASAuthorizationController
+
+    public override init() {
+        self.authorizationController = AppleLoginService.makeAuthController()
+
+        super.init()
+
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+    }
+
+    private static func makeAuthController() -> ASAuthorizationController {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        return ASAuthorizationController(authorizationRequests: [request])
+    }
 
     // 사용자 자격 증명 정보를 방출할 subject
     private var authServiceResponse = PublishSubject<AuthServiceResponse>()
 
     func fetchUserCredential() -> Observable<AuthServiceResponse> {
         self.authServiceResponse = PublishSubject<AuthServiceResponse>()
-        performRequest()
+        self.authorizationController.performRequests()
+
         return authServiceResponse
-    }
-
-    // Apple 인증 요청을 수행하는 함수
-    private func performRequest() {
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
     }
 }
 
