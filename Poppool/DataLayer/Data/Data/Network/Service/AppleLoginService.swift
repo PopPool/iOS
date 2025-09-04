@@ -9,9 +9,10 @@ public final class AppleLoginService: NSObject, AuthServiceable {
     public override init() { }
 
     // 사용자 자격 증명 정보를 방출할 subject
-    private var authServiceResponse: PublishSubject<AuthServiceResponse> = .init()
+    private var authServiceResponse = PublishSubject<AuthServiceResponse>()
 
     func fetchUserCredential() -> Observable<AuthServiceResponse> {
+        self.authServiceResponse = PublishSubject<AuthServiceResponse>()
         performRequest()
         return authServiceResponse
     }
