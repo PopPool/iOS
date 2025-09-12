@@ -3,27 +3,22 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class SignUpStep2View: UIView {
 
     // MARK: - Components
-    private let titleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20, text: "팝풀에서 사용할\n별명을 설정해볼까요?")
-        label.numberOfLines = 0
-        return label
-    }()
+    private let titleLabel = PPLabel(text: "팝풀에서 사용할\n별명을 설정해볼까요?", style: .KOb20).then {
+        $0.numberOfLines = 0
+    }
 
-    private let descriptionLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 15, text: "이후 이 별명으로 팝풀에서 활동할 예정이에요.")
-        label.textColor = .g600
-        return label
-    }()
+    private let descriptionLabel = PPLabel(text: "이후 이 별명으로 팝풀에서 활동할 예정이에요.", style: .KOr15).then {
+        $0.textColor = .g600
+    }
 
-    let completeButton: PPButton = {
-        let button = PPButton(style: .primary, text: "확인", disabledText: "다음")
-        button.isEnabled = false
-        return button
-    }()
+    let completeButton = PPButton(buttonStyle: .primary, text: "확인", disabledText: "다음").then {
+        $0.isEnabled = false
+    }
 
     let textFieldTrailingView: UIStackView = {
         let view = UIStackView()
@@ -50,44 +45,13 @@ final class SignUpStep2View: UIView {
         return button
     }()
 
-    let textDescriptionLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12)
-        label.text = "temptemp"
-        return label
-    }()
+    let textDescriptionLabel = PPLabel(style: .KOr12)
 
-    let textCountLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12)
-        label.text = "0/10자"
-        label.textColor = .g500
-        return label
-    }()
+    let textCountLabel = PPLabel(text: "0/10자", style: .KOr12).then {
+        $0.textColor = .g500
+    }
 
-    let duplicatedCheckButton: UIButton = {
-        let button = UIButton()
-        let title = "중복체크"
-        // 밑줄 및 폰트 스타일 설정
-        let attributedTitle = NSAttributedString(
-            string: title,
-            attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
-                .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
-                .foregroundColor: UIColor.g1000 // 텍스트 색상
-            ]
-        )
-        let disabledAttributedTitle = NSAttributedString(
-            string: title,
-            attributes: [
-                .font: UIFont.korFont(style: .regular, size: 13), // 폰트
-                .underlineStyle: NSUnderlineStyle.single.rawValue,  // 밑줄 스타일
-                .foregroundColor: UIColor.g300 // 텍스트 색상
-            ]
-        )
-        // 버튼에 Attributed Title 적용
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.setAttributedTitle(disabledAttributedTitle, for: .disabled)
-        return button
-    }()
+    let duplicatedCheckButton = PPUnderlinedTextButton(fontStyle: .KOr13, text: "중복체크")
 
     // MARK: - init
     init() {
@@ -126,6 +90,9 @@ private extension SignUpStep2View {
         textFieldTrailingView.addArrangedSubview(textField)
         textFieldTrailingView.addArrangedSubview(duplicatedCheckButton)
         textFieldTrailingView.addArrangedSubview(clearButton)
+        duplicatedCheckButton.snp.makeConstraints { make in
+            make.height.equalTo(20)
+        }
         clearButton.snp.makeConstraints { make in
             make.size.equalTo(16)
         }

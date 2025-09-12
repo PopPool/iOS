@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import RxCocoa
+import RxRelay
 import RxSwift
 import SnapKit
 
@@ -15,9 +16,7 @@ final class SignUpCheckBoxButton: UIView {
         return view
     }()
 
-    private let buttonLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 15, text: "약관에 모두 동의할게요")
-    }()
+    private let buttonLabel = PPLabel(text: "약관에 모두 동의할게요", style: .KOb15)
 
     let button: UIButton = {
         return UIButton()

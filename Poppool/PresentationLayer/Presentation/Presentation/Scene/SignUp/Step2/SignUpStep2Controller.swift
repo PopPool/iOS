@@ -91,8 +91,8 @@ extension SignUpStep2Controller {
 
                 // border, text, textColor set
                 owner.mainView.textFieldTrailingView.layer.borderColor = state.nickNameState.borderColor?.cgColor
-                owner.mainView.textDescriptionLabel.text = state.nickNameState.description
-                owner.mainView.textDescriptionLabel.textColor = state.nickNameState.textColor
+                owner.mainView.textDescriptionLabel.updateText(to: state.nickNameState.description)
+                owner.mainView.textDescriptionLabel.updateTextColor(to: state.nickNameState.textColor)
 
                 // clearButton, Duplicated Button set
                 owner.mainView.duplicatedCheckButton.isHidden = state.nickNameState.isHiddenCheckButton
@@ -100,14 +100,14 @@ extension SignUpStep2Controller {
 
                 // count Label set
                 if let nickName = state.nickName {
-                    owner.mainView.textCountLabel.text = "\(nickName.count) / 10자"
+                    owner.mainView.textCountLabel.updateText(to: "\(nickName.count) / 10자")
                     if nickName.count > 10 { owner.mainView.textFieldTrailingView.shake() }
                 }
                 switch state.nickNameState {
                 case .duplicated, .duplicatedActive, .korAndEng, .korAndEngActive, .length, .lengthActive:
-                    owner.mainView.textCountLabel.textColor = .re500
+                    owner.mainView.textCountLabel.updateTextColor(to: .re500)
                 default:
-                    owner.mainView.textCountLabel.textColor = .g500
+                    owner.mainView.textCountLabel.updateTextColor(to: .g500)
                 }
 
                 // completeButton isActive set

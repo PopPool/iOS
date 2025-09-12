@@ -73,14 +73,11 @@ public class PPButton: UIButton {
     ) {
         super.init(frame: .zero)
 
-        self.setTitleColor(buttonStyle.textColor, for: .normal)
-        self.setTitleColor(buttonStyle.disabledTextColor, for: .disabled)
-
         self.setBackgroundColor(buttonStyle.backgroundColor, for: .normal)
         self.setBackgroundColor(buttonStyle.disabledBackgroundColor, for: .disabled)
 
-        self.setText(to: text, with: fontStyle, for: .normal)
-        self.setText(to: disabledText, with: fontStyle, for: .disabled)
+        self.setText(to: text, with: fontStyle, color: buttonStyle.textColor, for: .normal)
+        self.setText(to: disabledText, with: fontStyle, color: buttonStyle.disabledTextColor, for: .disabled)
 
         self.layer.cornerRadius = cornerRadius
         self.clipsToBounds = true
@@ -90,7 +87,7 @@ public class PPButton: UIButton {
     public init(
         style: ButtonStyle,
         text: String,
-        disabledText: String = "",
+        disabledText: String = " ",
         font: UIFont? = .korFont(style: .medium, size: 16),
         cornerRadius: CGFloat = 4
     ) {
@@ -103,14 +100,11 @@ public class PPButton: UIButton {
             return
         }
 
-        self.setTitleColor(style.textColor, for: .normal)
-        self.setTitleColor(style.disabledTextColor, for: .disabled)
-
         self.setBackgroundColor(style.backgroundColor, for: .normal)
         self.setBackgroundColor(style.disabledBackgroundColor, for: .disabled)
 
-        self.setText(to: text, with: PPFontStyle, for: .normal)
-        self.setText(to: disabledText, with: PPFontStyle, for: .disabled)
+        self.setText(to: text, with: PPFontStyle, color: style.textColor, for: .normal)
+        self.setText(to: disabledText, with: PPFontStyle, color: style.disabledTextColor, for: .disabled)
 
         self.layer.cornerRadius = cornerRadius
         self.clipsToBounds = true

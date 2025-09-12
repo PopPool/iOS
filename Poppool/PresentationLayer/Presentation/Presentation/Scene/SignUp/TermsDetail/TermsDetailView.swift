@@ -8,7 +8,7 @@ final class TermsDetailView: UIView {
 
     // MARK: - Components
     let titleLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 15)
+        return PPLabel(style: .KOb15)
     }()
 
     let contentTextView: UITextView = {

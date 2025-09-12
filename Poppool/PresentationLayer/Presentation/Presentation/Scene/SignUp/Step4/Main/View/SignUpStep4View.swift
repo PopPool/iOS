@@ -3,46 +3,24 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class SignUpStep4View: UIView {
 
     // MARK: - Components
-    let nickNameLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.textColor = .blu500
-        label.text = "하이"
-        return label
-    }()
+    private let nickNameLabel = PPLabel(style: .KOb20).then {
+        $0.updateTextColor(to: .blu500)
+    }
 
-    private let titleTopLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.text = "님에 대해"
-        return label
-    }()
+    private let titleTopLabel = PPLabel(text: "님에 대해", style: .KOb20)
 
-    private let titleBottomLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.text = "조금 더 알려주시겠어요?"
-        return label
-    }()
+    private let titleBottomLabel = PPLabel(text: "조금 더 알려주시겠어요?", style: .KOb20)
 
-    private let subTitleLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 16)
-        label.text = "해당되시는 성별 / 나이대를 알려주세요"
-        return label
-    }()
+    private let subTitleLabel = PPLabel(text: "해당되시는 성별 / 나이대를 알려주세요", style: .KOb16)
 
-    private let subTitleDescriptionLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 12)
-        label.text = "가장 잘 맞는 팝업스토어를 소개해드릴게요."
-        return label
-    }()
+    private let subTitleDescriptionLabel = PPLabel(text: "가장 잘 맞는 팝업스토어를 소개해드릴게요.", style: .KOr12)
 
-    private let genderTitleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 13)
-        label.text = "성별"
-        return label
-    }()
+    private let genderTitleLabel = PPLabel(text: "성별", style: .KOr13)
 
     let genderSegmentControl: PPSegmentedControl = {
         return PPSegmentedControl(
@@ -52,22 +30,18 @@ final class SignUpStep4View: UIView {
         )
     }()
 
-    private let ageTitleLabel: PPLabel = {
-        let label = PPLabel(style: .regular, fontSize: 13)
-        label.text = "나이"
-        return label
-    }()
+    private let ageTitleLabel = PPLabel(text: "나이", style: .KOr13)
 
     let ageSelectedButton: AgeSelectedButton = {
         return AgeSelectedButton()
     }()
 
     let skipButton: PPButton = {
-        return PPButton(style: .secondary, text: "건너뛰기")
+        return PPButton(buttonStyle: .secondary, text: "건너뛰기")
     }()
 
     let completeButton: PPButton = {
-        return PPButton(style: .primary, text: "확인", disabledText: "확인")
+        return PPButton(buttonStyle: .primary, text: "확인", disabledText: "확인")
     }()
 
     private let buttonStackView: UIStackView = {
@@ -87,6 +61,11 @@ final class SignUpStep4View: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // FIXME: 회원 가입 과정에서 너무 많은 호출을 하고 있는 문제 수정
+    /// 원래라면 attr을 유지하는 updateText 메서드를 이용해야 스타일이 유지되는데
+    /// 여기는 오히려 text에 주입을 해줘야 스타일이 유지되고 있음
+    /// 아마 다회 호출하는 과정에서 스타일 처리에 문제가 발생하는게 아닌가 싶음
+    /// step3에 동일한 메서드 있으니 수정시 같이 수정
     func setNickName(nickName: String?) {
         nickNameLabel.text = nickName
     }

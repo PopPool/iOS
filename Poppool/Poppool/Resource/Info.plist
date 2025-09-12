@@ -2,15 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -22,8 +13,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>250725.1554</string>
 	<key>KAKAO_AUTH_APP_KEY</key>
 	<string>${KAKAO_AUTH_APP_KEY}</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -38,6 +27,11 @@
 	</array>
 	<key>NAVER_MAP_CLIENT_ID</key>
 	<string>${NAVER_MAP_CLIENT_ID}</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>POPPOOL_API_KEY</key>
 	<string>${POPPOOL_API_KEY}</string>
 	<key>POPPOOL_BASE_URL</key>
@@ -61,5 +55,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 </dict>
 </plist>

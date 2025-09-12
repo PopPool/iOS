@@ -5,6 +5,7 @@ public extension UIButton {
     func setText(
         to text: String = " ",
         with style: PPFontStyle,
+        color: UIColor = .g1000,
         for controlState: UIControl.State = .normal
     ) {
         let paragraphStyle = NSMutableParagraphStyle()
@@ -17,7 +18,8 @@ public extension UIButton {
             attributes: [
                 .font: UIFont.PPFont(style: style),
                 .paragraphStyle: paragraphStyle,
-                .baselineOffset: style.baseLineOffset
+                .baselineOffset: style.baseLineOffset,
+                .foregroundColor: color
             ]
         )
 
