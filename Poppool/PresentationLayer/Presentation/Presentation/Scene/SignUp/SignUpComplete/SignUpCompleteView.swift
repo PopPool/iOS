@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class SignUpCompleteView: UIView {
 
@@ -13,27 +14,19 @@ final class SignUpCompleteView: UIView {
         return view
     }()
 
-    private let titleTopLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 20, text: "가입완료")
-    }()
+    private let titleTopLabel = PPLabel(text: "가입완료", style: .KOb20)
 
     private let titleMiddleStackView: UIStackView = {
         return UIStackView()
     }()
 
-    let nickNameLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 20)
-        label.textColor = .blu500
-        return label
-    }()
+    let nickNameLabel = PPLabel(style: .KOb20).then {
+        $0.updateTextColor(to: .blu500)
+    }
 
-    private let nickNameSubLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 20, text: "님의")
-    }()
+    private let nickNameSubLabel = PPLabel(text: "님의", style: .KOb20)
 
-    private let titleBottomLabel: PPLabel = {
-        return PPLabel(style: .bold, fontSize: 20, text: "피드를 확인해보세요")
-    }()
+    private let titleBottomLabel = PPLabel(text: "피드를 확인해보세요", style: .KOb20)
 
     private let titleStackView: UIStackView = {
         let view = UIStackView()
@@ -43,8 +36,8 @@ final class SignUpCompleteView: UIView {
     }()
 
     let descriptionLabel: PPLabel = {
-        let label = PPLabel(style: .bold, fontSize: 15)
-        label.textColor = .g600
+        let label = PPLabel(style: .KOb15)
+        label.updateTextColor(to: .g600)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
@@ -52,7 +45,7 @@ final class SignUpCompleteView: UIView {
     }()
 
     let bottomButton: PPButton = {
-        return PPButton(style: .primary, text: "바로가기")
+        return PPButton(buttonStyle: .primary, text: "바로가기")
     }()
 
     // MARK: - init

@@ -31,6 +31,18 @@ public extension UILabel {
         self.attributedText = NSAttributedString(string: text ?? " ", attributes: attributes)
     }
 
+    /// 기존 attributed 속성을 유지하면서 텍스트 컬러만 변경합니다.
+    func updateTextColor(to color: UIColor?) {
+        if let current = self.attributedText, current.length > 0 {
+            let mutable = NSMutableAttributedString(attributedString: current)
+            let fullRange = NSRange(location: 0, length: mutable.length)
+            mutable.addAttribute(.foregroundColor, value: color ?? .g1000, range: fullRange)
+            self.attributedText = mutable
+        } else {
+            self.textColor = color
+        }
+    }
+
     /// Style이 포함된 텍스트를 적용합니다.
     func setText(to text: String?, with style: PPFontStyle) {
         let paragraphStyle = NSMutableParagraphStyle()

@@ -9,7 +9,7 @@ final class TagSectionCell: UICollectionViewCell {
 
     // MARK: - Components
     private let titleLabel: PPLabel = {
-        return PPLabel(style: .medium, fontSize: 13)
+        return PPLabel(style: .KOm13)
     }()
 
     let disposeBag = DisposeBag()
@@ -48,17 +48,15 @@ extension TagSectionCell: Inputable {
     }
 
     func injection(with input: Input) {
-        titleLabel.text = input.title
+        titleLabel.updateText(to: input.title)
         if input.isSelected {
             contentView.backgroundColor = .blu500
             contentView.layer.borderWidth = 0
-            titleLabel.textColor = .w100
-            titleLabel.font = . korFont(style: .medium, size: 13)
+            titleLabel.updateTextColor(to: .w100)
         } else {
             contentView.backgroundColor = .clear
             contentView.layer.borderWidth = 1
-            titleLabel.textColor = .g400
-            titleLabel.font = . korFont(style: .medium, size: 13)
+            titleLabel.updateTextColor(to: .g400)
         }
     }
 }

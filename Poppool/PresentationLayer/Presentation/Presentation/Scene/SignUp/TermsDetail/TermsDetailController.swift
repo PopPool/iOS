@@ -24,7 +24,7 @@ final class TermsDetailController: BaseViewController {
         ]
 
         mainView.contentTextView.attributedText = NSAttributedString(string: content ?? "", attributes: attributes)
-        mainView.titleLabel.text = title
+        mainView.titleLabel.updateText(to: title)
 
     }
 

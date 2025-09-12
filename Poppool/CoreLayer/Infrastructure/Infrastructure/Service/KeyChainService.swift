@@ -46,6 +46,10 @@ public final class KeyChainService {
                     )
                     return .success(value)
                 } else {
+                    Logger.log(
+                        "Failed to fetched \(type.rawValue) from KeyChain",
+                        category: .info
+                    )
                     return .failure(KeyChainError.dataConversionError(message: "Failed to convert data to String."))
                 }
             } else {
@@ -81,12 +85,15 @@ public final class KeyChainService {
         let status = SecItemAdd(keyChainQuery, nil)
         if status == errSecSuccess {
             Logger.log(
-                "Successfully fetched \(type.rawValue) from KeyChain: \(value)",
+                "Successfully saved \(type.rawValue) from KeyChain",
                 category: .info
-
             )
             return .success(())
         } else {
+            Logger.log(
+                "Faied to save \(type.rawValue) from KeyChain",
+                category: .info
+            )
             return .failure(KeyChainError.unhandledError(status: status))
         }
     }
@@ -113,12 +120,16 @@ public final class KeyChainService {
             )
             return .success(())
         } else {
+            Logger.log(
+                "Faied to deleted \(type.rawValue) from KeyChain",
+                category: .info
+            )
             return .failure(KeyChainError.unhandledError(status: status))
         }
     }
 }
 
-public enum TokenType: String {
+public enum TokenType: String, CaseIterable {
     case accessToken // 액세스 토큰
     case refreshToken // 리프레시 토큰
 }

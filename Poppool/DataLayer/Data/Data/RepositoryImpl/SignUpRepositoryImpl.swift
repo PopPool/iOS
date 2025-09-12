@@ -42,7 +42,7 @@ public final class SignUpRepositoryImpl: SignUpRepository {
             interestCategories: interests,
             appleAuthorizationCode: appleAuthorizationCode)
         )
-        print(endPoint)
+
         return provider.request(with: endPoint, interceptor: TokenInterceptor())
     }
 }

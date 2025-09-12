@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import SnapKit
+import Then
 
 final class AgeSelectedButton: UIView {
 
@@ -13,11 +14,9 @@ final class AgeSelectedButton: UIView {
         return view
     }()
 
-    private let defaultLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 14, text: "나이를 선택해주세요")
-        label.textColor = .g400
-        return label
-    }()
+    private let defaultLabel = PPLabel(text: "나이를 선택해주세요", style: .KOm14).then {
+        $0.textColor = .g400
+    }
 
     private let rightImageView: UIImageView = {
         let view = UIImageView()
@@ -25,17 +24,13 @@ final class AgeSelectedButton: UIView {
         return view
     }()
 
-    private let ageTitleLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 11, text: "나이")
-        label.textColor = .g400
-        return label
-    }()
+    private let ageTitleLabel = PPLabel(text: "나이", style: .KOm11).then {
+        $0.textColor = .g400
+    }
 
-    private let ageLabel: PPLabel = {
-        let label = PPLabel(style: .medium, fontSize: 14, text: "")
-        label.textColor = .g1000
-        return label
-    }()
+    private let ageLabel = PPLabel(style: .KOm14).then {
+        $0.textColor = .g1000
+    }
 
     private let verticalStackView: UIStackView = {
         let view = UIStackView()
@@ -99,7 +94,7 @@ extension AgeSelectedButton: Inputable {
     func injection(with input: Input) {
         if let age = input.age {
             verticalStackView.isHidden = false
-            ageLabel.text = "\(age)세"
+            ageLabel.updateText(to: "\(age)세")
             defaultLabel.isHidden = true
         } else {
             verticalStackView.isHidden = true

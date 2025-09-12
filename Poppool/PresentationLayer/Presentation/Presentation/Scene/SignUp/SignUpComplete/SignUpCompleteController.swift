@@ -50,15 +50,14 @@ extension SignUpCompleteController {
         reactor.state
             .withUnretained(self)
             .subscribe { (owner, state) in
+                owner.mainView.nickNameLabel.updateText(to: state.nickName)
+
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.lineHeightMultiple = 1.3
                 paragraphStyle.alignment = .center
-                owner.mainView.nickNameLabel.attributedText = NSMutableAttributedString(
-                    string: state.nickName,
-                    attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle]
-                )
-                let categoryString = state.categoryTitles.enumerated()
-                    .map { "#\($0.element)" }
+
+                let categoryString = state.categoryTitles
+                    .map { "#\($0)" }
                     .joined(separator: ", ")
 
                 let attributedText = NSMutableAttributedString(
