@@ -1,6 +1,7 @@
 import UIKit
 
 import SnapKit
+import Then
 
 public final class PPUnderlinedTextButton: UIButton {
 
@@ -14,7 +15,7 @@ public final class PPUnderlinedTextButton: UIButton {
     public init(
         fontStyle: PPFontStyle = .KOm16,
         text: String,
-        disabledText: String = "",
+        disabledText: String = ""
     ) {
         super.init(frame: .zero)
 
