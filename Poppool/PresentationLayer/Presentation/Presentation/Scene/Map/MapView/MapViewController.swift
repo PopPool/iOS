@@ -14,7 +14,9 @@ import RxGesture
 import RxSwift
 import SnapKit
 
-class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, UIGestureRecognizerDelegate {
+class MapViewController: BaseViewController, View {
+    // 최초 뷰포트 진입 여부 플래그
+    private var isFirstViewportEntry = true
     typealias Reactor = MapReactor
 
     fileprivate struct CoordinateKey: Hashable {
@@ -22,11 +24,23 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         let lng: Int
 
         init(latitude: Double, longitude: Double) {
-            self.lat = Int(latitude * 1_000_00)
-            self.lng = Int(longitude * 1_000_00)
+            self.lat = Int(latitude * Constants.coordinateMultiplier)
+             self.lng = Int(longitude * Constants.coordinateMultiplier)
         }
     }
 
+    private enum Constants {
+        static let carouselHeight: CGFloat        = 140
+        static let carouselBottomOffset: CGFloat  = -24
+        static let tooltipMarkerHeight: CGFloat   = 32
+        static let tooltipYOffset: CGFloat        = 14
+        static let coordinateMultiplier: Double   = 100_000
+        static let cameraDebounceMs: Int          = 300
+        static let swipeDuration: TimeInterval    = 0.3
+        static let panVelocityThreshold: CGFloat  = 500
+        static let middleRatio: CGFloat           = 0.3
+        static let defaultZoom: Double            = 15.0
+    }
     var currentTooltipView: UIView?
     var currentTooltipStores: [MapPopUpStore] = []
     var currentTooltipCoordinate: NMGLatLng?
@@ -182,7 +196,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     private func setupMapViewRxObservables() {
         mainView.mapView.addCameraDelegate(delegate: self)
         cameraIdle
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(Constants.cameraDebounceMs), scheduler: MainScheduler.instance)
             .map { [unowned self] in
                 let bounds = self.getVisibleBounds()
                 return MapReactor.Action.viewportChanged(
@@ -232,11 +246,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
 
         let markerPoint = self.mainView.mapView.projection.point(from: marker.position)
-        let markerHeight: CGFloat = 32
-
+        let markerHeight = Constants.tooltipMarkerHeight
         tooltipView.frame = CGRect(
             x: markerPoint.x,
-            y: markerPoint.y - markerHeight - tooltipView.frame.height - 14,
+            y: markerPoint.y - markerHeight - tooltipView.frame.height - Constants.tooltipYOffset,
             width: tooltipView.frame.width,
             height: tooltipView.frame.height
         )
@@ -257,8 +270,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         view.addSubview(carouselView)
         carouselView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(140)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
+            make.height.equalTo(Constants.carouselHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(Constants.carouselBottomOffset)
         }
         carouselView.isHidden = true
         mainView.mapView.touchDelegate = self
@@ -284,7 +297,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         mapViewTapGesture.delegate = self
     }
 
-    private let defaultZoomLevel: Double = 15.0
+    private let defaultZoomLevel: Double = Constants.defaultZoom
     private func setupPanAndSwipeGestures() {
         storeListViewController.mainView.grabberHandle.rx.swipeGesture(.up)
             .skip(1)
@@ -346,7 +359,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                     lat: location.coordinate.latitude,
                     lng: location.coordinate.longitude
-                ), zoomTo: 15.0)
+                ), zoomTo: Constants.defaultZoom)
 
                 self.mainView.mapView.moveCamera(cameraUpdate)
             }
@@ -447,7 +460,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                     lat: store.latitude,
                     lng: store.longitude
-                ), zoomTo: 15.0)
+                ), zoomTo: Constants.defaultZoom)
                 cameraUpdate.animation = .easeIn
                 cameraUpdate.animationDuration = 0.3
                 self.mainView.mapView.moveCamera(cameraUpdate)
@@ -504,7 +517,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                     let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(
                         lat: firstStore.latitude,
                         lng: firstStore.longitude
-                    ), zoomTo: 15.0)
+                    ), zoomTo: Constants.defaultZoom)
                     cameraUpdate.animation = .easeIn
                     cameraUpdate.animationDuration = 0.3
                     self.mainView.mapView.moveCamera(cameraUpdate)
@@ -515,7 +528,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
 
     // MARK: - List View Control
     private func toggleListView() {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: Constants.swipeDuration) {
             let middleOffset = -self.view.frame.height * 0.7
             self.listViewTopConstraint?.update(offset: middleOffset)
             self.modalState = .middle
@@ -612,9 +625,9 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 let middleY = view.frame.height * 0.3
                 let targetState: ModalState
 
-                if velocity.y > 500 {
+                if velocity.y > Constants.panVelocityThreshold {
                     targetState = .bottom
-                } else if velocity.y < -500 {
+                } else if velocity.y < -Constants.panVelocityThreshold {
                     targetState = .top
                 } else if currentOffset < middleY * 0.7 {
                     targetState = .top
@@ -1218,101 +1231,38 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
 
+            // 최초 진입시에만 자동 포커싱/캐러셀 동작
             reactor.state
-                   .map { $0.viewportStores }
-                   .distinctUntilChanged()
-                   .filter { !$0.isEmpty }
-                   .take(1)
-                   .observe(on: MainScheduler.instance)
-                   .subscribe(onNext: { [weak self] stores in
-                       guard let self = self else { return }
+                .map { $0.viewportStores }
+                .distinctUntilChanged()
+                .filter { !$0.isEmpty }
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { [weak self] stores in
+                    guard let self = self else { return }
+                    // 최초 진입시에만 자동 포커싱/캐러셀 동작
+                    if self.isFirstViewportEntry {
+                        self.isFirstViewportEntry = false
 
-                       if let location = self.locationManager.location {
-                           self.findAndShowNearestStore(from: location)
-                       } else if let firstStore = stores.first,
-                                 let marker = self.findMarkerForStore(for: firstStore) {
-                           _ = self.handleSingleStoreTap(marker, store: firstStore)
-                       }
+                        if let location = self.locationManager.location {
+                            self.findAndShowNearestStore(from: location)
+                        } else if let firstStore = stores.first,
+                                  let marker = self.findMarkerForStore(for: firstStore) {
+                            _ = self.handleSingleStoreTap(marker, store: firstStore)
+                        }
+                    }
+                    self.currentStores = stores
+                    self.updateMapWithClustering()
+                })
+                .disposed(by: disposeBag)
 
-                       self.currentStores = stores
-                       self.updateMapWithClustering()
-                   })
-                   .disposed(by: disposeBag)
-
+            // 지도 이동시 자동 캐러셀/포커싱 등 UI 업데이트 제거
             reactor.state
                 .map { $0.viewportStores }
                 .distinctUntilChanged()
                 .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
                 .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { [weak self] stores in
+                .subscribe(onNext: { [weak self] _ in
                     guard let self = self else { return }
-
-                    let effectiveViewport = self.getEffectiveViewport()
-                    let bounds = self.getVisibleBounds()
-
-                    let visibleStores = stores.filter { store in
-                        let storePosition = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                        return NMGLatLngBounds(southWest: bounds.southWest, northEast: bounds.northEast).contains(storePosition)
-                    }
-                    self.currentStores = visibleStores
-
-                    let currentZoom = self.mainView.mapView.zoomLevel
-                    let level = MapZoomLevel.getLevel(from: Float(currentZoom))
-
-                    if level == .detailed && !visibleStores.isEmpty {
-                        let effectiveStores = visibleStores.filter { store in
-                            let storePosition = NMGLatLng(lat: store.latitude, lng: store.longitude)
-                            return effectiveViewport.contains(storePosition)
-                        }
-
-                        self.currentCarouselStores = visibleStores
-                        self.carouselView.updateCards(visibleStores)
-                        self.carouselView.isHidden = false
-                        self.mainView.setStoreCardHidden(false, animated: true)
-
-                        if let currentMarker = self.currentMarker {
-                            if let currentStore = currentMarker.userInfo["storeData"] as? MapPopUpStore,
-                               let index = visibleStores.firstIndex(where: { $0.id == currentStore.id }) {
-                                self.carouselView.scrollToCard(index: index)
-                            } else if let storeArray = currentMarker.userInfo["storeData"] as? [MapPopUpStore],
-                                      let firstStore = storeArray.first,
-                                      let index = visibleStores.firstIndex(where: { $0.id == firstStore.id }) {
-                                self.carouselView.scrollToCard(index: index)
-                            } else {
-                                // 선택된 마커가 현재 뷰포트에 없는 경우
-                                self.updateMarkerStyle(marker: currentMarker, selected: false, isCluster: false)
-                                self.currentMarker = nil
-
-                                // 첫 번째 스토어의 마커를 선택 상태로 설정
-                                if let firstStore = visibleStores.first,
-                                   let marker = self.findMarkerForStore(for: firstStore) {
-                                    self.updateMarkerStyle(marker: marker, selected: true, isCluster: false)
-                                    self.currentMarker = marker
-                                }
-
-                                self.carouselView.scrollToCard(index: 0)
-                            }
-                        } else {
-                            if let firstStore = visibleStores.first,
-                               let marker = self.findMarkerForStore(for: firstStore) {
-                                self.updateMarkerStyle(marker: marker, selected: true, isCluster: false)
-                                self.currentMarker = marker
-                            }
-                            self.carouselView.scrollToCard(index: 0)
-                        }
-                    } else {
-                        // 클러스터 레벨이거나 마커가 없는 경우
-                        self.carouselView.isHidden = true
-                        self.carouselView.updateCards([])
-                        self.currentCarouselStores = []
-                        self.mainView.setStoreCardHidden(true, animated: true)
-
-                        if level == .detailed && visibleStores.isEmpty {
-                            // 개별 마커 레벨인데 마커가 없는 경우 토스트 표시
-                            self.showNoMarkersToast()
-                        }
-                    }
-
                     self.updateMapWithClustering()
                 })
                 .disposed(by: disposeBag)
@@ -1432,26 +1382,10 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
     }
 
         func handleMicroClusterTap(_ marker: NMFMarker, storeArray: [MapPopUpStore]) -> Bool {
-            if currentMarker == marker {
-                currentTooltipView?.removeFromSuperview()
-                currentTooltipView = nil
-                currentTooltipStores = []
-                currentTooltipCoordinate = nil
-
-                carouselView.isHidden = true
-                carouselView.updateCards([])
-                currentCarouselStores = []
-                updateMarkerStyle(marker: marker, selected: false, isCluster: false, count: storeArray.count)
-
-                currentMarker = nil
-                isMovingToMarker = false
-                return false
-            }
-
-            isMovingToMarker = true
-
             currentTooltipView?.removeFromSuperview()
             currentTooltipView = nil
+            currentTooltipStores = []
+            currentTooltipCoordinate = nil
 
             if let previousMarker = currentMarker {
                 updateMarkerStyle(marker: previousMarker, selected: false, isCluster: false)
@@ -1460,22 +1394,23 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             updateMarkerStyle(marker: marker, selected: true, isCluster: false, count: storeArray.count)
             currentMarker = marker
 
+            // 3. 캐러셀/툴팁 갱신
             currentCarouselStores = storeArray
             carouselView.updateCards(storeArray)
             carouselView.isHidden = false
             carouselView.scrollToCard(index: 0)
-
             mainView.setStoreCardHidden(false, animated: true)
+
             let cameraUpdate = NMFCameraUpdate(scrollTo: marker.position)
             cameraUpdate.animation = .easeIn
             cameraUpdate.animationDuration = 0.3
             mainView.mapView.moveCamera(cameraUpdate)
-            if storeArray.count > 1 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                    guard let self = self else { return }
-                    self.configureTooltip(for: marker, stores: storeArray)
-                    self.isMovingToMarker = false
-                }
+
+            // 4. 툴팁 갱신 및 위치 재계산
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                guard let self = self else { return }
+                self.configureTooltip(for: marker, stores: storeArray)
+                self.isMovingToMarker = false
             }
 
             return true
@@ -1486,8 +1421,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - CLLocationManagerDelegate
-    extension MapViewController {
+// MARK: - CLLocationManagerDelegate
+extension MapViewController: CLLocationManagerDelegate {
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
             guard let location = locations.last else { return }
 
@@ -1497,7 +1432,7 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             currentCarouselStores = []
 
             let position = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
-            let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: 15.0)
+            let cameraUpdate = NMFCameraUpdate(scrollTo: position, zoomTo: Constants.defaultZoom)
             mainView.mapView.moveCamera(cameraUpdate) { [weak self] _ in
                 guard let self = self else { return }
                 self.findAndShowNearestStore(from: location)
@@ -1507,8 +1442,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - NMFMapViewTouchDelegate
-    extension MapViewController {
+// MARK: - NMFMapViewTouchDelegate
+extension MapViewController: NMFMapViewTouchDelegate {
         func mapView(_ mapView: NMFMapView, didTap marker: NMFMarker) -> Bool {
             if let clusterData = marker.userInfo["clusterData"] as? ClusterMarkerData {
                 return handleRegionalClusterTap(marker, clusterData: clusterData)
@@ -1544,8 +1479,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
         }
     }
 
-    // MARK: - NMFMapViewCameraDelegate
-    extension MapViewController {
+// MARK: - NMFMapViewCameraDelegate
+extension MapViewController: NMFMapViewCameraDelegate {
         func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
             if reason == NMFMapChangedByGesture && !isMovingToMarker {
                 resetSelectedMarker()
@@ -1577,8 +1512,8 @@ class MapViewController: BaseViewController, View, CLLocationManagerDelegate, NM
             cameraIdle.onNext(())
         }
     }
-    // MARK: - UIGestureRecognizerDelegate
-    extension MapViewController {
+// MARK: - UIGestureRecognizerDelegate
+extension MapViewController: UIGestureRecognizerDelegate {
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             return true
         }
