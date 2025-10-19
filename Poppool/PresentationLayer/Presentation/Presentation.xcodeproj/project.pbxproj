@@ -11,6 +11,7 @@
 		05125BA12DB6275C001342A2 /* PanModal in Frameworks */ = {isa = PBXBuildFile; productRef = 05125BA02DB6275C001342A2 /* PanModal */; };
 		051631302DC3D1FD00A6C0D1 /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; };
 		0520B78D2E7410BF009E4BF3 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 0520B78C2E7410BF009E4BF3 /* RxRelay */; };
+		0520C7222E77999F009E4BF3 /* LoginFeatureInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0520C7212E77999F009E4BF3 /* LoginFeatureInterface.framework */; };
 		0522C1E12DB67C8300B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1E02DB67C8300B141FF /* RxSwift */; };
 		055C24D72E28FC6200AD389C /* PresentationInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05734C352DCDF6EC0093825D /* PresentationInterface.framework */; };
 		055C24E32E28FCA000AD389C /* DesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */; };
@@ -51,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0520C7212E77999F009E4BF3 /* LoginFeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LoginFeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		055C24D02E28FC3800AD389C /* PresentationTesting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PresentationTesting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C352DCDF6EC0093825D /* PresentationInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PresentationInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05734C402DCDF7190093825D /* SearchFeatureInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SearchFeatureInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +109,7 @@
 				05C1D62C2DB53A8200508FFD /* DomainInterface.framework in Frameworks */,
 				05734C3C2DCDF6FE0093825D /* PresentationInterface.framework in Frameworks */,
 				05125B982DB626E3001342A2 /* ReactorKit in Frameworks */,
+				0520C7222E77999F009E4BF3 /* LoginFeatureInterface.framework in Frameworks */,
 				05BDD5CF2DB6770300C1E192 /* Lottie in Frameworks */,
 				08B2A35B2DB66B5A00E57EFA /* FloatingPanel in Frameworks */,
 				08B2A3612DB66BAB00E57EFA /* Then in Frameworks */,
@@ -150,6 +153,7 @@
 		05C1D6292DB53A8200508FFD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0520C7212E77999F009E4BF3 /* LoginFeatureInterface.framework */,
 				05734C482DCDF7960093825D /* DesignSystem.framework */,
 				05734C402DCDF7190093825D /* SearchFeatureInterface.framework */,
 				0516312F2DC3D1FD00A6C0D1 /* DesignSystem.framework */,
