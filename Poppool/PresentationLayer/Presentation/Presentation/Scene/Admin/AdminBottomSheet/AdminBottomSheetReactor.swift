@@ -1,10 +1,3 @@
-//
-//  AdminBottomSheetReactor.swift
-//  Poppool
-//
-//  Created by 김기현 on 1/13/25.
-//
-
 import Foundation
 import ReactorKit
 
