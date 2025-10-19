@@ -353,17 +353,26 @@ final class HomeReactor: Reactor {
         } else {
             switch indexPath.section {
             case 0:
-                if let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
-                    let controller = DetailController()
-                    controller.reactor = DetailReactor(
-                        popUpID: id,
-                        userAPIUseCase: userAPIUseCase,
-                        popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
-                        commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
-                        preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
-                    )
-                    currentController.navigationController?.pushViewController(controller, animated: true)
+				if indexPath.row == 0,
+				   let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row] {
+					moveToDetail(id: id)
+				} else if indexPath.row != 0,
+				   let id = loginImageBannerSection.inputDataList.first?.idList[indexPath.row - 1] {
+					moveToDetail(id: id)
                 }
+
+				func moveToDetail(id: Int64) {
+					let controller = DetailController()
+					controller.reactor = DetailReactor(
+						popUpID: id,
+						userAPIUseCase: userAPIUseCase,
+						popUpAPIUseCase: DIContainer.resolve(PopUpAPIUseCase.self),
+						commentAPIUseCase: DIContainer.resolve(CommentAPIUseCase.self),
+						preSignedUseCase: DIContainer.resolve(PreSignedUseCase.self)
+					)
+					currentController.navigationController?.pushViewController(controller, animated: true)
+				}
+
             case 2:
                 let controller = HomeListController()
                 controller.reactor = HomeListReactor(

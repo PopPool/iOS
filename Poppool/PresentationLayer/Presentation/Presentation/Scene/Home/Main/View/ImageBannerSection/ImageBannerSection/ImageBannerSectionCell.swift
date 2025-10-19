@@ -94,11 +94,13 @@ final class ImageBannerSectionCell: UICollectionViewCell {
         playButton.isHidden = true
         isAutoBannerPlay = true
         autoScrollTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            self.contentCollectionView.scrollToItem(
-                at: .init(row: self.currentIndex + 1, section: 0),
-                at: .centeredHorizontally, animated: true
-            )
+            guard let self else { return }
+			if self.contentCollectionView.numberOfItems(inSection: 0) > 1 {
+				self.contentCollectionView.scrollToItem(
+					at: .init(row: self.currentIndex + 1, section: 0),
+					at: .centeredHorizontally, animated: true
+				)
+			}
         }
     }
 }
