@@ -11,7 +11,7 @@ final class ImageBannerSectionCell: UICollectionViewCell {
 
     var disposeBag = DisposeBag()
 
-    private var autoScrollTimer: Timer?
+    private weak var autoScrollTimer: Timer?
 
     private lazy var contentCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: compositionalLayout)
@@ -73,8 +73,13 @@ final class ImageBannerSectionCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        stopAutoScroll()
         disposeBag = DisposeBag()
         isFirstResponseAutoScroll = false
+    }
+
+    deinit {
+        stopAutoScroll()
     }
 
     // 자동 스크롤 중지 함수

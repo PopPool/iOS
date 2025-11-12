@@ -37,6 +37,12 @@ extension HomeController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
+        restartBannerAutoScroll()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopBannerAutoScroll()  // 화면을 벗어나면 스크롤 중지
     }
 }
 
@@ -127,6 +133,20 @@ extension HomeController {
                 if state.isReloadView { owner.mainView.contentCollectionView.reloadData() }
             }
             .disposed(by: disposeBag)
+    }
+
+    private func stopBannerAutoScroll() {
+        let indexPath = IndexPath(row: 0, section: 0) // 배너 섹션 인덱스
+        if let cell = mainView.contentCollectionView.cellForItem(at: indexPath) as? ImageBannerSectionCell {
+            cell.stopAutoScroll()
+        }
+    }
+
+    private func restartBannerAutoScroll() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        if let cell = mainView.contentCollectionView.cellForItem(at: indexPath) as? ImageBannerSectionCell {
+            cell.startAutoScroll()
+        }
     }
 }
 
