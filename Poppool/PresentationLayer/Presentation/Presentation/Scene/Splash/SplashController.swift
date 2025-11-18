@@ -28,7 +28,11 @@ public final class SplashController: BaseViewController {
 extension SplashController {
     public override func viewDidLoad() {
         super.viewDidLoad()
-        setUp()
+
+		self.addViews()
+		self.setupConstraints()
+		self.configureUI()
+
         setRootview()
         playAnimation()
     }
@@ -36,19 +40,29 @@ extension SplashController {
 
 // MARK: - SetUp
 private extension SplashController {
-    func setUp() {
-        view.backgroundColor = .blu500
-        view.addSubview(mainView)
-        mainView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
+
+	func addViews() {
+		[mainView].forEach {
+			view.addSubview($0)
+		}
+	}
+
+	func setupConstraints() {
+		mainView.snp.makeConstraints { make in
+			make.edges.equalTo(view.safeAreaLayoutGuide)
+		}
+	}
+
+	func configureUI() {
+		view.backgroundColor = .blu500
+	}
 
     func playAnimation() {
         mainView.animationView.play { [weak self] _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self?.changeRootView()
-            }
+			Task { @MainActor in
+				try? await Task.sleep(nanoseconds: .seconds(0.1))
+				self?.changeRootView()
+			}
         }
     }
 
@@ -59,8 +73,14 @@ private extension SplashController {
                 onNext: { (owner, response) in
                     let newAccessToken = response.accessToken ?? ""
                     let newRefreshToken = response.refreshToken ?? ""
-                    owner.keyChainService.saveToken(type: .accessToken, value: newAccessToken)
-                    owner.keyChainService.saveToken(type: .refreshToken, value: newRefreshToken)
+					owner.keyChainService.saveToken(
+						type: .accessToken,
+						value: newAccessToken
+					)
+					owner.keyChainService.saveToken(
+						type: .refreshToken,
+						value: newRefreshToken
+					)
                     @Dependency var factory: WaveTabbarFactory
                     owner.rootViewController = factory.make()
                 },
@@ -68,7 +88,10 @@ private extension SplashController {
                     guard let self = self else { return }
                     @Dependency var factory: LoginFactory
                     let loginNavigationController = UINavigationController(
-                        rootViewController: factory.make(.main, text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요")
+						rootViewController: factory.make(
+							.main,
+							text: "간편하게 SNS 로그인하고\n팝풀 서비스를 이용해보세요"
+						)
                     )
                 rootViewController = loginNavigationController
             })
@@ -80,3 +103,4 @@ private extension SplashController {
         view.window?.makeKeyAndVisible()
     }
 }
+

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0522C1D72DB67B4F00B141FF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0522C1D62DB67B4F00B141FF /* RxSwift */; };
 		05EC93D92DB6605100771CB3 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93D82DB6605100771CB3 /* RxCocoa */; };
-		05EC93DE2DB6612100771CB3 /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 05EC93DD2DB6612100771CB3 /* RxGesture */; };
 		4EBC91D32DB8039800495C3B /* OSLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EBC91D22DB8039800495C3B /* OSLog.framework */; };
 /* End PBXBuildFile section */
 
