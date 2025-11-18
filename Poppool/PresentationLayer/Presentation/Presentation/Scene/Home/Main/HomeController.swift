@@ -47,6 +47,7 @@ private extension HomeController {
         }
         mainView.contentCollectionView.delegate = self
         mainView.contentCollectionView.dataSource = self
+		mainView.contentCollectionView.contentInset.bottom = tabBarController?.tabBar.frame.height ?? 0
 
         mainView.contentCollectionView.register(
             ImageBannerSectionCell.self,

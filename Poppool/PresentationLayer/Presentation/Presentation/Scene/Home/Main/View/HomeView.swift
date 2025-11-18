@@ -6,7 +6,9 @@ final class HomeView: UIView {
 
     // MARK: - Components
     let contentCollectionView: UICollectionView = {
-        UICollectionView(frame: .zero, collectionViewLayout: .init())
+		let cv = UICollectionView(frame: .zero, collectionViewLayout: .init())
+		cv.contentInsetAdjustmentBehavior = .never
+		return cv
     }()
 
     // MARK: - init
