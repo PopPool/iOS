@@ -16,14 +16,6 @@ final class HomeController: BaseViewController, View {
 
     private var mainView = HomeView()
 
-    let homeHeaderView: HomeHeaderView = {
-        return HomeHeaderView()
-    }()
-
-    private let headerBackgroundView: UIView = UIView()
-    let backGroundblurEffect = UIBlurEffect(style: .regular)
-    lazy var backGroundblurView = UIVisualEffectView(effect: backGroundblurEffect)
-
     private var sections: [any Sectionable] = []
 }
 
@@ -83,30 +75,8 @@ private extension HomeController {
 
         view.addSubview(mainView)
         mainView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+			make.edges.equalToSuperview()
         }
-
-        view.addSubview(homeHeaderView)
-        homeHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.leading.trailing.equalToSuperview()
-        }
-
-        headerBackgroundView.addSubview(backGroundblurView)
-        backGroundblurView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        backGroundblurView.isUserInteractionEnabled = false
-        backGroundblurView.isHidden = true
-
-        view.addSubview(headerBackgroundView)
-        headerBackgroundView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(homeHeaderView.snp.bottom).offset(7)
-        }
-
-        view.bringSubviewToFront(homeHeaderView)
     }
 }
 
@@ -115,14 +85,6 @@ extension HomeController {
     func bind(reactor: Reactor) {
         rx.viewWillAppear
             .map { Reactor.Action.viewWillAppear }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        homeHeaderView.searchBarButton.rx.tap
-            .withUnretained(self)
-            .map { (owner, _) in
-                Reactor.Action.searchButtonTapped(controller: owner)
-            }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -204,15 +166,6 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource {
         }
 
         return cell
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= (307 - headerBackgroundView.frame.maxY) {
-            backGroundblurView.isHidden = true
-        } else {
-            systemStatusBarIsDark.accept(true)
-            backGroundblurView.isHidden = false
-        }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
