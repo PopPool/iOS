@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild -list:*)",
+      "Bash(cat:*)",
+      "Bash(xargs cat:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -41,4 +41,7 @@
          location = "group:Infrastructure/Infrastructure.xcodeproj">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:CLAUDE.md">
+   </FileRef>
 </Workspace>

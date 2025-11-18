@@ -1,5 +1,5 @@
 {
-  "originHash" : "893e9d5956a6d674d140654334c58c276c99001321206803c07c48415f2e6ac3",
+  "originHash" : "2586be44dbcd00f563aa76b6eb71bda45dd9cde72fae4c5f318886a092d74cae",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -11,30 +11,12 @@
       }
     },
     {
-      "identity" : "floatingpanel",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scenee/FloatingPanel.git",
-      "state" : {
-        "revision" : "b6e8928b1a3ad909e6db6a0278d286c33cfd0dc3",
-        "version" : "2.8.6"
-      }
-    },
-    {
       "identity" : "kakao-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk.git",
       "state" : {
         "revision" : "bfe2fe42f730ccfe59e85f6e9eda2f4578e9a307",
         "version" : "2.24.0"
-      }
-    },
-    {
-      "identity" : "lottie-spm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-spm.git",
-      "state" : {
-        "revision" : "8c6edf4f0fa84fe9c058600a4295eb0c01661c69",
-        "version" : "4.5.1"
       }
     },
     {
@@ -65,30 +47,12 @@
       }
     },
     {
-      "identity" : "rxdatasources",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxDataSources.git",
-      "state" : {
-        "revision" : "90c29b48b628479097fe775ed1966d75ac374518",
-        "version" : "5.0.2"
-      }
-    },
-    {
       "identity" : "rxgesture",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RxSwiftCommunity/RxGesture.git",
       "state" : {
         "revision" : "1b137c576b4aaaab949235752278956697c9e4a0",
         "version" : "4.0.4"
-      }
-    },
-    {
-      "identity" : "rxkeyboard",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxKeyboard.git",
-      "state" : {
-        "revision" : "63f6377975c962a1d89f012a6f1e5bebb2c502b7",
-        "version" : "2.0.1"
       }
     },
     {
@@ -125,15 +89,6 @@
       "state" : {
         "revision" : "ad89e53fdfec3b8d8994280fb0414b5a7b1c3e8e",
         "version" : "3.21.0"
-      }
-    },
-    {
-      "identity" : "swiftsoup",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scinfu/SwiftSoup",
-      "state" : {
-        "revision" : "bba848db50462894e7fc0891d018dfecad4ef11e",
-        "version" : "2.8.7"
       }
     },
     {
