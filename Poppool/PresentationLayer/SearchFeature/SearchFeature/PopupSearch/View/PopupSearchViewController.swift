@@ -27,12 +27,6 @@ extension PopupSearchViewController {
     public override func loadView() {
         self.view = mainView
     }
-
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        tabBarController?.tabBar.isHidden = true
-    }
 }
 
 // MARK: - Bind

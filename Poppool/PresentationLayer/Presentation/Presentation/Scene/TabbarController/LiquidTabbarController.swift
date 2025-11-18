@@ -2,6 +2,7 @@ import UIKit
 
 import DomainInterface
 import Infrastructure
+import SearchFeatureInterface
 
 class LiquidTabbarController: UITabBarController, UITabBarControllerDelegate {
 
@@ -20,6 +21,7 @@ private extension LiquidTabbarController {
 	func configureUI() {
 		self.selectedIndex = 1
 		self.tabBar.tintColor = .blu500
+		tabBarController?.tabBarMinimizeBehavior = .onScrollDown
 	}
 
 	func addSomeTabItems() {
@@ -38,6 +40,9 @@ private extension LiquidTabbarController {
 
 		let myPageController = MyPageController()
 		myPageController.reactor = MyPageReactor(userAPIUseCase: DIContainer.resolve(UserAPIUseCase.self))
+
+		@Dependency var popupSearchFactory: PopupSearchFactory
+		let popupSearchVC = popupSearchFactory.make()
 
 		let iconSize = CGSize(width: 32, height: 32)
 		// 탭바 아이템 생성
@@ -74,13 +79,18 @@ private extension LiquidTabbarController {
 				targetSize: iconSize
 			)
 		)
+		popupSearchVC.tabBarItem = UITabBarItem(
+			tabBarSystemItem: .search,
+			tag: 3
+		)
 
 		// 네비게이션 컨트롤러 설정
 		let map = UINavigationController(rootViewController: mapController)
 		let home = UINavigationController(rootViewController: homeController)
 		let myPage = UINavigationController(rootViewController: myPageController)
+		let search = UINavigationController(rootViewController: popupSearchVC)
 
-		viewControllers = [map, home, myPage]
+		viewControllers = [map, home, myPage, search]
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineHeightMultiple = 1.2  // 기본 값보다 높은 라인 간격을 설정
